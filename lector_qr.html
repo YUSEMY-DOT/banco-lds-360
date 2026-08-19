@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#142744">
+  <title>Banco LDS 360 · Lector QR</title>
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <style>
+    :root{--azul:#142744;--rojo:#a7192e;--oro:#c99a32;--gris:#eef1f5;--texto:#18243b}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:#0d1a30;color:#fff;font-family:Arial,Helvetica,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{width:min(720px,100%);background:#fff;color:var(--texto);border-radius:28px;padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.35)}
+    .head{text-align:center}
+    .head h1{margin:0;color:var(--azul);font-size:32px}
+    .head p{color:#667085;font-size:17px;line-height:1.4;margin:10px auto 22px;max-width:580px}
+    #reader{width:100%;overflow:hidden;border-radius:20px;background:#081427}
+    #status{text-align:center;color:#667085;font-size:15px;line-height:1.4;margin:16px 0 0;min-height:24px}
+    .error{color:var(--rojo)!important}
+    .success{color:#15803d!important;font-weight:700}
+    .fallback{margin-top:18px;padding:18px;border-radius:18px;background:var(--gris);text-align:center;display:none}
+    .fallback p{margin:0 0 12px;color:#667085}
+    .btn{border:0;border-radius:12px;background:var(--azul);color:#fff;padding:13px 20px;font-weight:700;font-size:16px;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--azul);border:1px solid #cbd5e1}
+    .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    input{width:min(420px,100%);height:50px;border:1px solid #ccd2da;border-radius:12px;padding:0 14px;font-size:17px}
+    .mini{margin-top:18px;text-align:center;color:#7b8494;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>Escanear código QR</h1>
+      <p>Apunta la cámara al código QR del estudiante. Al leerlo, volverás automáticamente a Banco LDS 360 Online.</p>
+    </div>
+
+    <div id="reader"></div>
+    <div id="status">Preparando cámara…</div>
+
+    <div id="fallback" class="fallback">
+      <p>Si tu dispositivo no permite abrir la cámara, también puedes ingresar el código manualmente.</p>
+      <div class="row">
+        <input id="manualCode" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
+        <button class="btn" onclick="enviarCodigoManual()">Continuar</button>
+      </div>
+    </div>
+
+    <div class="mini">Lector QR externo seguro · HTTPS</div>
+  </div>
+
+<script>
+  let scanner = null;
+  let started = false;
+
+  function getReturnUrl(){
+    const params = new URLSearchParams(location.search);
+    const r = params.get('return');
+    if(r){
+      try { return decodeURIComponent(r); } catch(e) { return r; }
+    }
+    return '';
+  }
+
+  function extractCode(raw){
+    const text = String(raw || '').trim();
+    const match = text.match(/LDS[-_ ]EST[-_ ]\d+/i);
+    if(match){
+      return match[0].replace(/_/g,'-').replace(/ /g,'-').toUpperCase();
+    }
+    return text.toUpperCase();
+  }
+
+  function sendCode(raw){
+    const code = extractCode(raw);
+    if(!code) return;
+
+    const returnUrl = getReturnUrl();
+    if(!returnUrl){
+      document.getElementById('status').textContent = 'Código leído: ' + code;
+      document.getElementById('status').className = 'success';
+      return;
+    }
+
+    let target = returnUrl;
+    const join = target.includes('?') ? '&' : '?';
+    target += join + 'codigo=' + encodeURIComponent(code);
+
+    document.getElementById('status').textContent = 'Código leído. Regresando al sistema…';
+    document.getElementById('status').className = 'success';
+
+    stopScanner();
+    setTimeout(() => location.replace(target), 450);
+  }
+
+  function setStatus(text, cls=''){
+    const s = document.getElementById('status');
+    s.textContent = text;
+    s.className = cls;
+  }
+
+  function stopScanner(){
+    try{
+      if(scanner){
+        scanner.clear().catch(()=>{});
+      }
+    }catch(e){}
+    started = false;
+  }
+
+  function startScanner(){
+    if(started) return;
+    if(typeof Html5Qrcode === 'undefined'){
+      setStatus('No se pudo cargar el lector QR. Recarga esta página.', 'error');
+      document.getElementById('fallback').style.display='block';
+      return;
+    }
+
+    scanner = new Html5Qrcode('reader');
+    started = true;
+
+    Html5Qrcode.getCameras().then(cameras => {
+      if(!cameras || !cameras.length){
+        throw new Error('No hay cámaras disponibles');
+      }
+
+      const preferred = cameras.find(c => /back|rear|environment|trasera/i.test(c.label)) || cameras[cameras.length - 1];
+
+      return scanner.start(
+        preferred.id,
+        { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
+        decodedText => sendCode(decodedText),
+        () => {}
+      );
+    }).then(() => {
+      setStatus('Cámara activa. Apunta al código QR.');
+    }).catch(err => {
+      console.error(err);
+      setStatus('No se pudo abrir la cámara. Verifica el permiso del navegador.', 'error');
+      document.getElementById('fallback').style.display='block';
+    });
+  }
+
+  function enviarCodigoManual(){
+    const code = document.getElementById('manualCode').value.trim();
+    if(!code){
+      setStatus('Ingresa un código.', 'error');
+      return;
+    }
+    sendCode(code);
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(startScanner, 350);
+  });
+</script>
+</body>
+</html>
