@@ -7,40 +7,55 @@
 
   <title>Banco LDS 360 · Lector QR</title>
 
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <!-- Lector QR -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
     :root{
       --azul:#142744;
+      --azul2:#1d3557;
       --rojo:#a7192e;
       --oro:#c99a32;
       --gris:#eef1f5;
       --texto:#18243b;
+      --verde:#15803d;
     }
 
     *{
       box-sizing:border-box;
     }
 
+    html,
     body{
       margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+    }
+
+    body{
       min-height:100vh;
       background:#0d1a30;
       color:#fff;
       font-family:Arial,Helvetica,sans-serif;
+
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:20px;
+
+      padding:18px;
     }
 
     .card{
-      width:min(720px,100%);
+      width:min(760px,100%);
       background:#fff;
       color:var(--texto);
+
       border-radius:28px;
       padding:28px;
-      box-shadow:0 25px 80px rgba(0,0,0,.35);
+
+      box-shadow:
+        0 25px 80px rgba(0,0,0,.35);
     }
 
     .head{
@@ -51,105 +66,265 @@
       margin:0;
       color:var(--azul);
       font-size:32px;
+      line-height:1.15;
     }
 
     .head p{
       color:#667085;
       font-size:17px;
-      line-height:1.4;
+      line-height:1.45;
+
       margin:10px auto 22px;
-      max-width:580px;
+
+      max-width:600px;
     }
 
+    /*
+     * CONTENEDOR DE LA CÁMARA
+     */
     #reader{
       width:100%;
+      min-height:300px;
+
       overflow:hidden;
+
       border-radius:20px;
+
       background:#081427;
+
+      position:relative;
     }
 
+    /*
+     * El video debe ocupar correctamente
+     * el espacio también en celulares.
+     */
+    #reader video{
+      width:100% !important;
+      max-width:100% !important;
+
+      height:auto !important;
+
+      display:block;
+
+      object-fit:cover;
+
+      border-radius:20px;
+    }
+
+    /*
+     * Ocultamos algunos elementos internos
+     * que no necesitamos.
+     */
+    #reader__dashboard{
+      padding:12px !important;
+    }
+
+    #reader__dashboard_section{
+      padding:0 !important;
+    }
+
+    #reader__dashboard_section_csr{
+      margin-top:8px !important;
+    }
+
+    #reader__status_span{
+      color:#fff !important;
+    }
+
+    #reader img{
+      max-width:100%;
+    }
+
+    /*
+     * ESTADO
+     */
     #status{
       text-align:center;
+
       color:#667085;
+
       font-size:15px;
       line-height:1.4;
+
       margin:16px 0 0;
+
       min-height:24px;
     }
 
     .error{
       color:var(--rojo)!important;
-    }
-
-    .success{
-      color:#15803d!important;
       font-weight:700;
     }
 
+    .success{
+      color:var(--verde)!important;
+      font-weight:700;
+    }
+
+    /*
+     * BOTONES
+     */
+    .controls{
+      margin-top:16px;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      gap:10px;
+
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:0;
+
+      border-radius:12px;
+
+      background:var(--azul);
+      color:#fff;
+
+      padding:13px 20px;
+
+      font-weight:700;
+      font-size:16px;
+
+      cursor:pointer;
+
+      min-height:48px;
+    }
+
+    .btn:hover{
+      background:var(--azul2);
+    }
+
+    .btn.secondary{
+      background:#fff;
+
+      color:var(--azul);
+
+      border:1px solid #cbd5e1;
+    }
+
+    .btn.red{
+      background:var(--rojo);
+    }
+
+    /*
+     * FALLBACK
+     */
     .fallback{
       margin-top:18px;
+
       padding:18px;
+
       border-radius:18px;
+
       background:var(--gris);
+
       text-align:center;
+
       display:none;
     }
 
     .fallback p{
       margin:0 0 12px;
+
       color:#667085;
-    }
 
-    .btn{
-      border:0;
-      border-radius:12px;
-      background:var(--azul);
-      color:#fff;
-      padding:13px 20px;
-      font-weight:700;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    .btn.secondary{
-      background:#fff;
-      color:var(--azul);
-      border:1px solid #cbd5e1;
+      line-height:1.4;
     }
 
     .row{
       display:flex;
+
       gap:10px;
+
       justify-content:center;
+
+      align-items:center;
+
       flex-wrap:wrap;
     }
 
     input{
       width:min(420px,100%);
+
       height:50px;
+
       border:1px solid #ccd2da;
+
       border-radius:12px;
+
       padding:0 14px;
+
       font-size:17px;
+
+      outline:none;
+    }
+
+    input:focus{
+      border-color:var(--azul);
+    }
+
+    /*
+     * BOTÓN DE CÁMARA
+     */
+    #btnCamera{
+      display:none;
+    }
+
+    /*
+     * CARGAR FOTO
+     */
+    #fileInput{
+      display:none;
+    }
+
+    /*
+     * INDICADOR
+     */
+    .camera-help{
+      margin-top:12px;
+
+      text-align:center;
+
+      color:#7b8494;
+
+      font-size:13px;
+
+      line-height:1.4;
     }
 
     .mini{
       margin-top:18px;
+
       text-align:center;
+
       color:#7b8494;
+
       font-size:13px;
     }
 
-    /* Ajuste para celulares */
+    /*
+     * CELULARES
+     */
     @media (max-width:600px){
+
       body{
-        padding:12px;
+        padding:10px;
+        align-items:flex-start;
       }
 
       .card{
         width:100%;
+
         border-radius:22px;
-        padding:20px;
+
+        padding:18px;
+
+        margin-top:8px;
       }
 
       .head h1{
@@ -158,51 +333,159 @@
 
       .head p{
         font-size:15px;
+
+        margin-bottom:18px;
       }
 
       #reader{
         min-height:280px;
+
+        border-radius:18px;
+      }
+
+      #reader video{
+        border-radius:18px;
+
+        width:100% !important;
+        height:auto !important;
+      }
+
+      .btn{
+        width:100%;
+
+        max-width:420px;
+      }
+
+      input{
+        width:100%;
+      }
+
+      .row{
+        flex-direction:column;
+      }
+    }
+
+    /*
+     * CELULARES MUY PEQUEÑOS
+     */
+    @media (max-width:380px){
+
+      .card{
+        padding:14px;
+      }
+
+      .head h1{
+        font-size:23px;
+      }
+
+      #reader{
+        min-height:250px;
       }
     }
   </style>
 </head>
 
+
 <body>
 
   <div class="card">
 
+    <!-- CABECERA -->
     <div class="head">
-      <h1>Escanear código QR</h1>
+
+      <h1>
+        Escanear código QR
+      </h1>
 
       <p>
         Apunta la cámara al código QR del estudiante.
-        Al leerlo, volverás automáticamente a Banco LDS 360 Online.
+        Al leerlo, volverás automáticamente a
+        Banco LDS 360 Online.
       </p>
+
     </div>
 
+
+    <!--
+      LECTOR DE CÁMARA
+    -->
     <div id="reader"></div>
 
+
+    <!-- ESTADO -->
     <div id="status">
       Preparando cámara…
     </div>
 
-    <div id="fallback" class="fallback">
+
+    <!-- CONTROLES -->
+    <div class="controls">
+
+      <button
+        id="btnCamera"
+        class="btn"
+        type="button"
+        onclick="activarCamara()"
+      >
+        📷 Activar cámara
+      </button>
+
+      <button
+        id="btnPhoto"
+        class="btn secondary"
+        type="button"
+        onclick="seleccionarFoto()"
+      >
+        🖼️ Escanear una foto
+      </button>
+
+    </div>
+
+
+    <!--
+      INPUT OCULTO PARA TOMAR FOTO
+      DESDE EL CELULAR
+    -->
+    <input
+      id="fileInput"
+      type="file"
+      accept="image/*"
+      capture="environment"
+    >
+
+
+    <div class="camera-help">
+      Si la cámara aparece negra o no se abre,
+      pulsa <b>Activar cámara</b>.
+    </div>
+
+
+    <!-- FALLBACK MANUAL -->
+    <div
+      id="fallback"
+      class="fallback"
+    >
 
       <p>
-        Si tu dispositivo no permite abrir la cámara,
-        también puedes ingresar el código manualmente.
+        También puedes ingresar manualmente
+        el código del estudiante.
       </p>
+
 
       <div class="row">
 
         <input
           id="manualCode"
+          type="text"
           placeholder="Ejemplo: LDS-EST-001"
           autocomplete="off"
+          autocapitalize="characters"
         >
+
 
         <button
           class="btn"
+          type="button"
           onclick="enviarCodigoManual()"
         >
           Continuar
@@ -211,6 +494,7 @@
       </div>
 
     </div>
+
 
     <div class="mini">
       Lector QR externo seguro · HTTPS
@@ -221,93 +505,212 @@
 
 <script>
 
+  /*
+   * ==========================================================
+   * BANCO LDS 360 ONLINE
+   * LECTOR QR
+   * ==========================================================
+   */
+
+
   let scanner = null;
+
   let started = false;
+
+  let leyendo = false;
 
 
   /*
-   * Obtiene la dirección de Banco LDS 360
-   * a la que debemos regresar después de leer el QR.
+   * ==========================================================
+   * OBTENER URL DE REGRESO
+   * ==========================================================
    */
+
   function getReturnUrl(){
 
-    const params = new URLSearchParams(location.search);
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
 
-    const r = params.get('return');
+    const r =
+      params.get('return');
 
-    if(r){
 
-      try{
-        return decodeURIComponent(r);
-      }catch(e){
-        return r;
-      }
+    if(!r){
+      return '';
+    }
+
+
+    /*
+     * URLSearchParams ya decodifica
+     * el parámetro normalmente.
+     *
+     * Intentamos además una segunda
+     * decodificación por compatibilidad.
+     */
+
+    try{
+
+      return decodeURIComponent(r);
+
+    }catch(e){
+
+      return r;
 
     }
 
-    return '';
   }
 
 
   /*
-   * Limpia y normaliza el código QR.
+   * ==========================================================
+   * NORMALIZAR CÓDIGO
+   * ==========================================================
    */
+
   function extractCode(raw){
 
-    const text = String(raw || '').trim();
+    const text =
+      String(raw || '').trim();
 
-    const match = text.match(
-      /LDS[-_ ]EST[-_ ]\d+/i
-    );
+
+    if(!text){
+      return '';
+    }
+
+
+    /*
+     * Ejemplos aceptados:
+     *
+     * LDS-EST-001
+     * LDS_EST_001
+     * LDS EST 001
+     */
+
+    const match =
+      text.match(
+        /LDS[-_ ]EST[-_ ]\d+/i
+      );
+
 
     if(match){
 
       return match[0]
         .replace(/_/g,'-')
-        .replace(/ /g,'-')
+        .replace(/\s+/g,'-')
         .toUpperCase();
 
     }
 
+
     return text.toUpperCase();
+
   }
 
 
   /*
-   * Envía el código leído
-   * nuevamente a Banco LDS 360.
+   * ==========================================================
+   * CAMBIAR MENSAJE
+   * ==========================================================
    */
+
+  function setStatus(
+    text,
+    cls=''
+  ){
+
+    const s =
+      document.getElementById(
+        'status'
+      );
+
+
+    s.textContent = text;
+
+    s.className = cls;
+
+  }
+
+
+  /*
+   * ==========================================================
+   * ENVIAR CÓDIGO A BANCO LDS 360
+   * ==========================================================
+   */
+
   function sendCode(raw){
 
-    const code = extractCode(raw);
+    /*
+     * Evitamos que el lector
+     * procese el mismo QR varias veces.
+     */
 
-    if(!code){
+    if(leyendo){
       return;
     }
 
-    const returnUrl = getReturnUrl();
+
+    const code =
+      extractCode(raw);
+
+
+    if(!code){
+
+      setStatus(
+        'No se encontró un código válido.',
+        'error'
+      );
+
+      return;
+
+    }
+
+
+    leyendo = true;
 
 
     /*
-     * Si no existe una dirección de regreso,
-     * solamente mostramos el código.
+     * Obtener dirección de regreso.
      */
+
+    const returnUrl =
+      getReturnUrl();
+
+
+    /*
+     * Si no existe return,
+     * mostramos solamente el código.
+     */
+
     if(!returnUrl){
 
-      document.getElementById('status').textContent =
-        'Código leído: ' + code;
+      setStatus(
+        'Código leído: ' + code,
+        'success'
+      );
 
-      document.getElementById('status').className =
-        'success';
+
+      leyendo = false;
 
       return;
+
     }
 
 
-    let target = returnUrl;
+    /*
+     * Construimos URL final.
+     */
+
+    let target =
+      returnUrl;
+
 
     const join =
-      target.includes('?') ? '&' : '?';
+      target.includes('?')
+        ? '&'
+        : '?';
+
 
     target +=
       join +
@@ -315,67 +718,129 @@
       encodeURIComponent(code);
 
 
-    document.getElementById('status').textContent =
-      'Código leído. Regresando al sistema…';
+    /*
+     * Mostrar mensaje.
+     */
 
-    document.getElementById('status').className =
-      'success';
+    setStatus(
+      'Código leído. Regresando al sistema…',
+      'success'
+    );
 
+
+    /*
+     * Detener cámara.
+     */
 
     stopScanner();
 
 
-    setTimeout(() => {
+    /*
+     * Pequeña pausa para que el usuario
+     * vea que el código fue reconocido.
+     */
 
-      location.replace(target);
+    setTimeout(
 
-    },450);
+      function(){
+
+        window.location.replace(
+          target
+        );
+
+      },
+
+      500
+
+    );
 
   }
 
 
   /*
-   * Cambia el mensaje debajo del lector.
+   * ==========================================================
+   * DETENER SCANNER
+   * ==========================================================
    */
-  function setStatus(text, cls=''){
 
-    const s =
-      document.getElementById('status');
-
-    s.textContent = text;
-
-    s.className = cls;
-  }
-
-
-  /*
-   * Detiene la cámara.
-   */
-  function stopScanner(){
+  async function stopScanner(){
 
     try{
 
       if(scanner){
 
-        scanner.clear().catch(() => {});
+        try{
+
+          await scanner.stop();
+
+        }catch(e){}
+
+
+        try{
+
+          await scanner.clear();
+
+        }catch(e){}
 
       }
 
-    }catch(e){}
+    }catch(e){
+
+      console.warn(
+        'Error cerrando cámara:',
+        e
+      );
+
+    }
+
 
     started = false;
+
   }
 
 
   /*
-   * INICIO DEL LECTOR QR
-   *
-   * IMPORTANTE:
-   * Usamos facingMode: "environment"
-   * para solicitar directamente la cámara
-   * trasera del teléfono.
+   * ==========================================================
+   * MOSTRAR FALLBACK
+   * ==========================================================
    */
-  function startScanner(){
+
+  function mostrarFallback(){
+
+    document.getElementById(
+      'fallback'
+    ).style.display = 'block';
+
+
+    document.getElementById(
+      'btnCamera'
+    ).style.display = 'inline-block';
+
+  }
+
+
+  /*
+   * ==========================================================
+   * OCULTAR FALLBACK
+   * ==========================================================
+   */
+
+  function ocultarFallback(){
+
+    document.getElementById(
+      'fallback'
+    ).style.display = 'none';
+
+  }
+
+
+  /*
+   * ==========================================================
+   * INICIAR SCANNER
+   * ==========================================================
+   */
+
+  async function iniciarScanner(){
 
     if(started){
       return;
@@ -383,112 +848,514 @@
 
 
     /*
-     * Comprobamos que la librería
-     * html5-qrcode haya cargado.
+     * Comprobar librería.
      */
-    if(typeof Html5Qrcode === 'undefined'){
+
+    if(
+      typeof Html5Qrcode ===
+      'undefined'
+    ){
 
       setStatus(
-        'No se pudo cargar el lector QR. Recarga esta página.',
+        'No se pudo cargar el lector QR.',
         'error'
       );
 
-      document.getElementById('fallback')
-        .style.display = 'block';
+
+      mostrarFallback();
 
       return;
+
     }
 
 
     /*
-     * Creamos el lector.
+     * Comprobar HTTPS.
      */
-    scanner = new Html5Qrcode('reader');
 
-    started = true;
+    if(
+      location.protocol !== 'https:' &&
+      location.hostname !== 'localhost'
+    ){
+
+      setStatus(
+        'La cámara necesita una conexión HTTPS.',
+        'error'
+      );
+
+
+      mostrarFallback();
+
+      return;
+
+    }
+
+
+    setStatus(
+      'Solicitando acceso a la cámara…'
+    );
 
 
     /*
-     * SOLICITAMOS DIRECTAMENTE
-     * LA CÁMARA TRASERA.
+     * Crear lector.
      */
-    scanner.start(
 
-      {
-        facingMode: "environment"
-      },
+    scanner =
+      new Html5Qrcode(
+        'reader'
+      );
 
-      {
-        fps: 10,
 
-        qrbox: {
-          width: 250,
-          height: 250
+    try{
+
+      /*
+       * Primero intentamos seleccionar
+       * directamente la cámara trasera.
+       *
+       * facingMode environment funciona
+       * especialmente bien en celulares.
+       */
+
+      await scanner.start(
+
+        {
+          facingMode: {
+            ideal: 'environment'
+          }
         },
 
-        aspectRatio: 1.0
-      },
+        {
+          fps: 10,
+
+          qrbox: function(
+            viewfinderWidth,
+            viewfinderHeight
+          ){
+
+            /*
+             * QR de aproximadamente
+             * 70% del ancho disponible.
+             */
+
+            let size =
+              Math.floor(
+                Math.min(
+                  viewfinderWidth,
+                  viewfinderHeight
+                ) * 0.70
+              );
 
 
-      /*
-       * Cuando encuentra un QR.
-       */
-      decodedText => {
+            /*
+             * Límites.
+             */
 
-        sendCode(decodedText);
+            size =
+              Math.max(
+                180,
+                Math.min(
+                  size,
+                  300
+                )
+              );
 
-      },
+
+            return {
+              width:size,
+              height:size
+            };
+
+          },
+
+          aspectRatio: 1.0,
+
+          disableFlip: false
+
+        },
+
+        /*
+         * QR ENCONTRADO
+         */
+
+        function(decodedText){
+
+          sendCode(
+            decodedText
+          );
+
+        },
+
+        /*
+         * ERROR NORMAL DE LECTURA
+         *
+         * No mostramos nada.
+         */
+
+        function(){
+
+        }
+
+      );
 
 
-      /*
-       * Mientras busca el QR.
-       * No mostramos errores de lectura
-       * continuamente.
-       */
-      () => {}
+      started = true;
 
-    )
 
-    .then(() => {
+      ocultarFallback();
+
+
+      document.getElementById(
+        'btnCamera'
+      ).style.display = 'none';
+
 
       setStatus(
         'Cámara activa. Apunta al código QR.'
       );
 
-    })
 
-    .catch(err => {
+    }catch(error){
 
       console.error(
-        'ERROR DE CÁMARA:',
-        err
+        'ERROR INICIANDO CÁMARA:',
+        error
       );
+
+
+      /*
+       * Si falló el modo environment,
+       * intentamos detectar cámaras disponibles.
+       */
+
+      try{
+
+        const cameras =
+          await Html5Qrcode.getCameras();
+
+
+        if(
+          cameras &&
+          cameras.length > 0
+        ){
+
+          /*
+           * Buscar cámara trasera.
+           */
+
+          let backCamera =
+            cameras.find(
+              camera =>
+                /back|rear|environment|trasera/i
+                  .test(
+                    camera.label || ''
+                  )
+            );
+
+
+          /*
+           * Si no encontramos una por nombre,
+           * usamos la última cámara.
+           */
+
+          if(!backCamera){
+
+            backCamera =
+              cameras[
+                cameras.length - 1
+              ];
+
+          }
+
+
+          scanner =
+            new Html5Qrcode(
+              'reader'
+            );
+
+
+          await scanner.start(
+
+            backCamera.id,
+
+            {
+              fps:10,
+
+              qrbox:function(
+                w,
+                h
+              ){
+
+                let size =
+                  Math.floor(
+                    Math.min(w,h) * 0.70
+                  );
+
+
+                size =
+                  Math.max(
+                    180,
+                    Math.min(
+                      size,
+                      300
+                    )
+                  );
+
+
+                return {
+                  width:size,
+                  height:size
+                };
+
+              },
+
+              aspectRatio:1.0,
+
+              disableFlip:false
+
+            },
+
+            function(decodedText){
+
+              sendCode(
+                decodedText
+              );
+
+            },
+
+            function(){
+
+            }
+
+          );
+
+
+          started = true;
+
+
+          ocultarFallback();
+
+
+          document.getElementById(
+            'btnCamera'
+          ).style.display = 'none';
+
+
+          setStatus(
+            'Cámara activa. Apunta al código QR.'
+          );
+
+
+          return;
+
+        }
+
+      }catch(secondError){
+
+        console.error(
+          'ERROR BUSCANDO CÁMARAS:',
+          secondError
+        );
+
+      }
+
+
+      /*
+       * Si todo falló.
+       */
 
       started = false;
 
+
       setStatus(
-        'No se pudo abrir la cámara. Verifica el permiso del navegador.',
+        'No se pudo abrir la cámara. Pulsa "Activar cámara" y acepta el permiso.',
         'error'
       );
 
-      document.getElementById('fallback')
-        .style.display = 'block';
 
-    });
+      mostrarFallback();
+
+    }
 
   }
 
 
   /*
-   * Entrada manual del código.
+   * ==========================================================
+   * ACTIVAR CÁMARA MANUALMENTE
+   * ==========================================================
    */
+
+  async function activarCamara(){
+
+    /*
+     * Si había un lector anterior,
+     * lo cerramos.
+     */
+
+    await stopScanner();
+
+
+    leyendo = false;
+
+
+    setStatus(
+      'Activando cámara…'
+    );
+
+
+    await iniciarScanner();
+
+  }
+
+
+  /*
+   * ==========================================================
+   * SELECCIONAR FOTO
+   * ==========================================================
+   */
+
+  function seleccionarFoto(){
+
+    const input =
+      document.getElementById(
+        'fileInput'
+      );
+
+
+    input.value = '';
+
+    input.click();
+
+  }
+
+
+  /*
+   * ==========================================================
+   * LEER QR DESDE UNA FOTO
+   * ==========================================================
+   */
+
+  document
+    .getElementById('fileInput')
+    .addEventListener(
+      'change',
+      async function(event){
+
+        const file =
+          event.target.files &&
+          event.target.files[0];
+
+
+        if(!file){
+          return;
+        }
+
+
+        if(
+          typeof Html5Qrcode ===
+          'undefined'
+        ){
+
+          setStatus(
+            'El lector QR todavía no ha cargado.',
+            'error'
+          );
+
+          return;
+
+        }
+
+
+        setStatus(
+          'Analizando la imagen…'
+        );
+
+
+        try{
+
+          /*
+           * Si la cámara está activa,
+           * la detenemos primero.
+           */
+
+          await stopScanner();
+
+
+          /*
+           * Crear lector temporal.
+           */
+
+          const photoScanner =
+            new Html5Qrcode(
+              'reader'
+            );
+
+
+          const result =
+            await photoScanner.scanFile(
+              file,
+              true
+            );
+
+
+          /*
+           * Limpiar lector temporal.
+           */
+
+          try{
+
+            await photoScanner.clear();
+
+          }catch(e){}
+
+
+          /*
+           * Procesar código.
+           */
+
+          sendCode(
+            result
+          );
+
+
+        }catch(error){
+
+          console.error(
+            'ERROR LEYENDO FOTO:',
+            error
+          );
+
+
+          setStatus(
+            'No se encontró un código QR en la foto.',
+            'error'
+          );
+
+
+          mostrarFallback();
+
+        }
+
+      }
+    );
+
+
+  /*
+   * ==========================================================
+   * CÓDIGO MANUAL
+   * ==========================================================
+   */
+
   function enviarCodigoManual(){
 
+    const input =
+      document.getElementById(
+        'manualCode'
+      );
+
+
     const code =
-      document
-        .getElementById('manualCode')
-        .value
-        .trim();
+      input.value.trim();
 
 
     if(!code){
@@ -498,30 +1365,71 @@
         'error'
       );
 
+      input.focus();
+
       return;
+
     }
 
 
-    sendCode(code);
+    sendCode(
+      code
+    );
 
   }
 
 
   /*
-   * Arrancamos automáticamente
-   * cuando la página termina de cargar.
+   * ==========================================================
+   * ENTER EN INPUT
+   * ==========================================================
    */
+
+  document
+    .getElementById('manualCode')
+    .addEventListener(
+      'keydown',
+      function(event){
+
+        if(
+          event.key === 'Enter'
+        ){
+
+          enviarCodigoManual();
+
+        }
+
+      }
+    );
+
+
+  /*
+   * ==========================================================
+   * INICIO AUTOMÁTICO
+   * ==========================================================
+   */
+
   window.addEventListener(
     'load',
-    () => {
+    function(){
+
+      /*
+       * Esperamos un poquito para
+       * asegurar que la librería cargó.
+       */
 
       setTimeout(
-        startScanner,
-        350
+        function(){
+
+          iniciarScanner();
+
+        },
+        700
       );
 
     }
   );
+
 
 </script>
 
