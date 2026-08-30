@@ -500,8 +500,8 @@ button{
 
   min-width:0;
 
-  height:122px;
-  min-height:122px;
+  height:128px;
+  min-height:128px;
 
   position:relative;
 
@@ -666,10 +666,7 @@ button{
   bottom:0;
 
   transform:
-    translate(
-      -50%,
-      50%
-    );
+    translateX(-50%);
 
   width:36px;
   height:36px;
@@ -1567,9 +1564,9 @@ footer{
   }
 
   .action-card{
-    height:112px;
+    height:118px;
 
-    min-height:112px;
+    min-height:118px;
 
     padding:
       9px
