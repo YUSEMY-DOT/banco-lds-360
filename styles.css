@@ -49,8 +49,8 @@ button{
 
 .topbar{
   width:100%;
-  height:88px;
-  min-height:88px;
+  height:62px;
+  min-height:62px;
 
   display:flex;
   align-items:center;
@@ -500,8 +500,8 @@ button{
 
   min-width:0;
 
-  height:128px;
-  min-height:128px;
+  height:122px;
+  min-height:122px;
 
   position:relative;
 
@@ -569,7 +569,7 @@ button{
   right:0;
   bottom:0;
 
-  height:29px;
+  height:20px;
 
   z-index:1;
 }
@@ -666,10 +666,13 @@ button{
   bottom:0;
 
   transform:
-    translateX(-50%);
+    translate(
+      -50%,
+      50%
+    );
 
-  width:36px;
-  height:36px;
+  width:32px;
+  height:32px;
 
   border:
     2px solid
@@ -687,7 +690,7 @@ button{
 
   background:var(--navy);
 
-  font-size:28px;
+  font-size:25px;
 
   line-height:1;
 
@@ -978,8 +981,8 @@ button{
 footer{
   width:100%;
 
-  height:88px;
-  min-height:88px;
+  height:62px;
+  min-height:62px;
 
   background:var(--navy);
 
@@ -1564,9 +1567,9 @@ footer{
   }
 
   .action-card{
-    height:118px;
+    height:112px;
 
-    min-height:118px;
+    min-height:112px;
 
     padding:
       9px
@@ -1626,8 +1629,8 @@ footer{
   }
 
   footer{
-    height:84px;
-    min-height:84px;
+    height:62px;
+    min-height:62px;
   }
 }
 
@@ -1693,8 +1696,8 @@ footer{
 @media(max-width:700px){
 
   .topbar{
-    height:84px;
-    min-height:84px;
+    height:62px;
+    min-height:62px;
 
     padding:
       9px
