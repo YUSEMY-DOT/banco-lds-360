@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banco LDS 360 Online</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://unpkg.com/html5-qrcode" defer></script>
+<script src="data.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="crest">LDS</div><div><strong>IEP LA SALLE DEL SUR</strong><span>Formamos personas íntegras</span></div></div>
+  <button class="admin-btn" id="adminBtn">🔒 Administrador</button>
+</header>
+<main id="home" class="hero">
+  <section class="hero-left">
+    <div class="bank-mark"><div class="bank-icon">🏛</div><div><h1>BANCO<br><em>LDS 360</em></h1><div class="online">O N L I N E</div></div></div>
+    <p class="subtitle">Sistema financiero educativo</p>
+    <h2>Consulta de forma rápida y segura<br>la información financiera del estudiante.</h2>
+    <div class="actions">
+      <button class="action-card qr" id="scanBtn"><div class="card-icon">▦</div><div><b>ESCANEAR<br><span>CÓDIGO QR</span></b><small>Escanea el código del<br>estudiante para consultar<br>su cuenta.</small></div><i>›</i></button>
+      <button class="action-card code" id="codeBtn"><div class="card-icon">⌨</div><div><b>INGRESAR<br>CÓDIGO</b><small>Ingresa el código del<br>estudiante para consultar<br>su información.</small></div><i>›</i></button>
+    </div>
+    <div class="security">🛡️ <span>Sistema seguro, confiable y diseñado para el bienestar<br>financiero de nuestra comunidad educativa.</span></div>
+  </section>
+  <section class="hero-right">
+    <div class="student-art"><div class="teacher">👩‍🏫</div><div class="kids"><div>👦🏻</div><div>👧🏻</div></div></div>
+    <div class="mini-brand"><b>🏛 BANCO<br><span>LDS 360</span></b><small>EDUCAMOS · AHORRAMOS · CREAMOS FUTURO</small></div>
+  </section>
+</main>
+<footer><div>🏫 <b>IEP LA SALLE DEL SUR</b><span>Valores que construyen<br>un mejor mañana.</span></div><div class="values"><span>🛡️ Seguro</span><span>🔐 Confiable</span><span>👥 Responsable</span><span>☆ Eficiente</span></div></footer>
+
+<div class="modal hidden" id="scannerModal"><div class="modal-card"><button class="close" data-close>×</button><h2>Escanear código QR</h2><p>Apunta la cámara al QR del estudiante.</p><div id="reader"></div><div id="scanStatus" class="status"></div></div></div>
+<div class="modal hidden" id="codeModal"><div class="modal-card small"><button class="close" data-close>×</button><h2>Ingresar código</h2><input id="codeInput" placeholder="Ej. LDS-EST-005" autocomplete="off"><button class="primary" id="findCode">Consultar estudiante</button><div id="codeStatus" class="status"></div></div></div>
+<div class="modal hidden" id="adminModal"><div class="modal-card small"><button class="close" data-close>×</button><h2>Acceso de administrador</h2><input id="pinInput" type="password" placeholder="PIN"><button class="primary" id="adminLogin">Ingresar</button><div id="adminStatus" class="status"></div></div></div>
+<div class="modal hidden" id="profileModal"><div class="modal-card profile"><button class="close" data-close>×</button><div id="profileContent"></div></div></div>
+</body></html>
