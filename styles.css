@@ -269,7 +269,6 @@ button{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   gap:14px;
@@ -332,7 +331,6 @@ button{
   display:flex;
 
   align-items:flex-end;
-
   justify-content:space-between;
 
   padding:
@@ -472,14 +470,14 @@ button{
 
 /* =========================================================
    BOTONES
-   CORRECCIÓN PRINCIPAL:
-   MÁS PEQUEÑOS DE VERDAD
+   ANCHO REALMENTE REDUCIDO
 ========================================================= */
 
 .actions{
-  width:100%;
+  width:560px !important;
 
-  max-width:560px;
+  max-width:
+    calc(100% - 80px) !important;
 
   margin:
     14px
@@ -494,13 +492,13 @@ button{
       minmax(0,1fr)
     );
 
-  gap:12px;
+  gap:14px;
 }
 
 .action-card{
-  min-width:0;
+  width:100% !important;
 
-  width:100%;
+  min-width:0;
 
   height:122px;
   min-height:122px;
@@ -585,7 +583,7 @@ button{
 }
 
 
-/* ---------- ICONO ---------- */
+/* ---------- ICONOS ---------- */
 
 .card-icon{
   width:39px;
@@ -711,9 +709,10 @@ button{
 ========================================================= */
 
 .security{
-  width:100%;
+  width:560px !important;
 
-  max-width:560px;
+  max-width:
+    calc(100% - 80px) !important;
 
   margin:
     11px
@@ -1116,6 +1115,7 @@ footer{
   max-height:92vh;
 
   overflow-x:hidden;
+
   overflow-y:auto;
 
   padding:26px;
@@ -1493,7 +1493,7 @@ footer{
 
 
 /* =========================================================
-   PANTALLA BAJA
+   ESCRITORIO CON POCA ALTURA
 ========================================================= */
 
 @media(
@@ -1558,7 +1558,10 @@ footer{
   }
 
   .actions{
-    max-width:540px;
+    width:540px !important;
+
+    max-width:
+      calc(100% - 70px) !important;
 
     margin-top:8px;
   }
@@ -1582,6 +1585,8 @@ footer{
     font-size:9px;
 
     margin-top:5px;
+
+    line-height:1.16;
   }
 
   .card-icon{
@@ -1589,7 +1594,10 @@ footer{
   }
 
   .security{
-    max-width:540px;
+    width:540px !important;
+
+    max-width:
+      calc(100% - 70px) !important;
 
     margin-top:6px;
 
@@ -1656,6 +1664,13 @@ footer{
     min-height:500px;
 
     height:500px;
+  }
+
+  .actions,
+  .security{
+    width:100% !important;
+
+    max-width:100% !important;
   }
 
   footer{
@@ -1909,18 +1924,21 @@ footer{
   /* ---------- BOTONES ---------- */
 
   .actions{
+    width:100% !important;
+
+    max-width:100% !important;
+
     grid-template-columns:1fr;
 
     gap:13px;
 
     margin-top:20px;
-
-    max-width:100%;
   }
 
   .action-card{
-    height:155px;
+    width:100% !important;
 
+    height:155px;
     min-height:155px;
 
     border-radius:20px;
@@ -1965,6 +1983,10 @@ footer{
   /* ---------- SEGURIDAD ---------- */
 
   .security{
+    width:100% !important;
+
+    max-width:100% !important;
+
     margin-top:17px;
 
     padding:
@@ -1985,7 +2007,6 @@ footer{
 
   .hero-right{
     min-height:420px;
-
     height:420px;
   }
 
@@ -2274,7 +2295,6 @@ footer{
 
   .action-card{
     height:145px;
-
     min-height:145px;
 
     padding:
