@@ -4,18 +4,21 @@
   --red:#a51018;
   --gold:#d9a63a;
   --gold2:#efc15b;
-  --white:#fff;
+  --white:#ffffff;
   --ink:#14233c;
-  --gray:#666;
-  --light:#f4f5f7;
   --border:#dfe3e8;
 }
+
+/* =========================================================
+   BASE
+========================================================= */
 
 *{
   box-sizing:border-box;
 }
 
-html{
+html,
+body{
   width:100%;
   min-height:100%;
   margin:0;
@@ -23,15 +26,14 @@ html{
   overflow-x:hidden;
 }
 
+html{
+  background:#fff;
+}
+
 body{
-  width:100%;
-  min-height:100%;
-  margin:0;
-  padding:0;
   font-family:Arial,Helvetica,sans-serif;
   color:var(--ink);
   background:#fff;
-  overflow-x:hidden;
 }
 
 button,
@@ -46,13 +48,22 @@ button{
 
 /* =========================================================
    ENCABEZADO
-   ========================================================= */
+========================================================= */
 
 .topbar{
   width:100%;
-  min-height:108px;
-  background:linear-gradient(110deg,#06172d,#0d294b);
+  height:92px;
+  min-height:92px;
+
+  background:
+    linear-gradient(
+      110deg,
+      #06172d,
+      #0d294b
+    );
+
   border-bottom:4px solid var(--gold);
+
   color:#fff;
 
   display:flex;
@@ -60,23 +71,31 @@ button{
   justify-content:space-between;
 
   gap:20px;
-  padding:12px clamp(24px,4.5vw,65px);
+
+  padding:
+    9px
+    clamp(20px,4vw,60px);
 }
 
 .brand{
   display:flex;
   align-items:center;
-  gap:16px;
+
+  gap:14px;
+
   min-width:0;
 }
 
 .school-crest{
-  width:64px;
-  height:72px;
+  width:56px;
+  height:68px;
+
+  display:block;
+
+  flex:0 0 auto;
+
   object-fit:contain;
   object-position:center;
-  display:block;
-  flex:0 0 auto;
 }
 
 .school-name{
@@ -85,40 +104,64 @@ button{
 
 .school-name strong{
   display:block;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:27px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:25px;
+
   line-height:1.05;
+
   white-space:nowrap;
 }
 
 .school-name span{
   display:block;
-  margin-top:6px;
+
+  margin-top:4px;
+
   color:var(--gold2);
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:18px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:17px;
+
   font-style:italic;
 }
 
 .admin-btn{
   flex:0 0 auto;
 
-  padding:14px 23px;
+  padding:
+    12px
+    20px;
 
-  border:1px solid rgba(255,255,255,.25);
+  border:
+    1px solid
+    rgba(255,255,255,.24);
+
   border-radius:11px;
 
   background:#203754;
+
   color:#fff;
 
   font-weight:700;
+
   cursor:pointer;
 
-  transition:.2s ease;
+  transition:
+    .2s ease;
 }
 
 .admin-btn:hover{
   background:#2a4769;
+
   transform:translateY(-1px);
 }
 
@@ -129,14 +172,25 @@ button{
 
 /* =========================================================
    PORTADA
-   ========================================================= */
+========================================================= */
 
 .hero{
   width:100%;
-  min-height:680px;
+
+  /*
+    La altura se adapta al espacio disponible de la pantalla.
+    Así evitamos que los botones queden cortados a 100 %.
+  */
+
+  height:calc(100vh - 180px);
+
+  min-height:560px;
 
   display:grid;
-  grid-template-columns:minmax(0,58%) minmax(0,42%);
+
+  grid-template-columns:
+    minmax(0,58%)
+    minmax(0,42%);
 
   background:#fff;
 }
@@ -144,20 +198,25 @@ button{
 
 /* =========================================================
    LADO IZQUIERDO
-   ========================================================= */
+========================================================= */
 
 .hero-left{
   position:relative;
+
   min-width:0;
+
   overflow:hidden;
 
   padding:
-    48px
-    clamp(28px,5vw,75px)
-    30px;
+    clamp(22px,3.2vh,34px)
+    clamp(22px,4vw,58px)
+    18px;
 
   background:
-    radial-gradient(#d8d8d8 1px,transparent 1px),
+    radial-gradient(
+      #d8d8d8 1px,
+      transparent 1px
+    ),
     #fff;
 
   background-size:8px 8px;
@@ -171,13 +230,27 @@ button{
   top:0;
   right:-1px;
 
-  width:0;
-  height:0;
+  width:85px;
+  height:100%;
 
-  border-left:90px solid transparent;
-  border-top:680px solid var(--navy);
+  background:
+    linear-gradient(
+      171deg,
+      transparent 0 46%,
+      var(--navy) 46.2% 100%
+    );
+
+  clip-path:
+    polygon(
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 100%,
+      48% 0
+    );
 
   z-index:0;
+
   pointer-events:none;
 }
 
@@ -187,43 +260,57 @@ button{
 .actions,
 .security{
   position:relative;
+
   z-index:2;
 }
 
 
 /* =========================================================
-   LOGO BANCO
-   ========================================================= */
+   LOGO BANCO LDS
+========================================================= */
 
 .bank-logo{
   width:100%;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
-  gap:24px;
+  gap:16px;
 }
 
 .bank-symbol{
-  width:125px;
-  height:108px;
+  width:102px;
+  height:88px;
 
-  flex:0 0 125px;
+  flex:0 0 102px;
 
   display:flex;
+
   flex-direction:column;
-  justify-content:flex-end;
+
   align-items:center;
+
+  justify-content:flex-end;
 }
 
 .bank-symbol .roof{
-  width:118px;
-  height:27px;
+  width:96px;
+  height:20px;
 
-  border-top:9px solid var(--navy);
-  border-left:8px solid transparent;
-  border-right:8px solid transparent;
+  border-top:
+    7px solid
+    var(--navy);
+
+  border-left:
+    7px solid
+    transparent;
+
+  border-right:
+    7px solid
+    transparent;
 
   position:relative;
 }
@@ -236,43 +323,55 @@ button{
   left:50%;
   top:-5px;
 
-  transform:translateX(-50%);
+  transform:
+    translateX(-50%);
 
   color:var(--gold);
 
-  font-size:15px;
+  font-size:13px;
 }
 
 .columns{
-  width:103px;
-  height:55px;
+  width:84px;
+  height:45px;
 
   display:flex;
+
   align-items:flex-end;
+
   justify-content:space-between;
 
-  padding:0 7px;
+  padding:
+    0
+    5px;
 }
 
 .columns i{
   display:block;
 
-  width:14px;
-  height:50px;
+  width:11px;
+  height:41px;
 
   background:var(--navy);
 
-  border-left:3px solid var(--gold);
-  border-right:3px solid var(--gold);
+  border-left:
+    2px solid
+    var(--gold);
+
+  border-right:
+    2px solid
+    var(--gold);
 }
 
 .bank-symbol .base{
-  width:126px;
-  height:11px;
+  width:102px;
+  height:10px;
 
   background:var(--navy);
 
-  border-bottom:3px solid var(--gold);
+  border-bottom:
+    3px solid
+    var(--gold);
 }
 
 .bank-title{
@@ -282,9 +381,17 @@ button{
 .bank-title h1{
   margin:0;
 
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size:clamp(50px,5vw,72px);
+  font-size:
+    clamp(
+      43px,
+      4vw,
+      60px
+    );
 
   line-height:.84;
 
@@ -298,17 +405,30 @@ button{
 }
 
 .online{
-  margin-top:16px;
+  margin-top:10px;
+
+  padding-left:9px;
 
   text-align:center;
 
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size:clamp(16px,1.5vw,23px);
+  font-size:
+    clamp(
+      15px,
+      1.35vw,
+      20px
+    );
 
-  letter-spacing:clamp(7px,1vw,14px);
-
-  padding-left:12px;
+  letter-spacing:
+    clamp(
+      6px,
+      .75vw,
+      11px
+    );
 
   color:var(--navy);
 }
@@ -316,16 +436,24 @@ button{
 
 /* =========================================================
    TEXTOS
-   ========================================================= */
+========================================================= */
 
 .subtitle{
-  margin:12px 0 22px;
+  margin:
+    8px
+    0
+    15px;
 
   text-align:center;
 
-  font-size:22px;
-
   color:#555;
+
+  font-size:
+    clamp(
+      17px,
+      1.55vw,
+      21px
+    );
 }
 
 .intro{
@@ -333,57 +461,77 @@ button{
 
   text-align:center;
 
-  font-size:clamp(18px,1.7vw,24px);
+  color:var(--navy);
 
-  line-height:1.3;
+  font-size:
+    clamp(
+      17px,
+      1.55vw,
+      21px
+    );
+
+  line-height:1.25;
 
   font-weight:700;
-
-  color:var(--navy);
 }
 
 
 /* =========================================================
    BOTONES
-   ========================================================= */
+========================================================= */
 
 .actions{
   width:100%;
-  max-width:700px;
 
-  margin:28px auto 0;
+  max-width:690px;
+
+  margin:
+    21px
+    auto
+    0;
 
   display:grid;
 
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
 
-  gap:20px;
+  gap:16px;
 }
 
 .action-card{
   min-width:0;
-  min-height:205px;
+
+  height:154px;
 
   position:relative;
 
   border:0;
-  border-radius:27px;
 
-  padding:24px 22px 43px;
+  border-radius:25px;
+
+  padding:
+    18px
+    18px
+    34px;
 
   background:#fff;
 
   box-shadow:
-    0 12px 25px rgba(0,0,0,.15),
-    0 2px 5px rgba(0,0,0,.08);
+    0 10px 22px rgba(0,0,0,.14),
+    0 2px 5px rgba(0,0,0,.07);
 
   display:grid;
 
-  grid-template-columns:65px minmax(0,1fr);
+  grid-template-columns:
+    54px
+    minmax(0,1fr);
 
   align-items:center;
 
-  gap:10px;
+  gap:8px;
 
   text-align:left;
 
@@ -397,14 +545,10 @@ button{
 }
 
 .action-card:hover{
-  transform:translateY(-3px);
+  transform:translateY(-2px);
 
   box-shadow:
-    0 17px 30px rgba(0,0,0,.19);
-}
-
-.action-card:active{
-  transform:translateY(0);
+    0 15px 28px rgba(0,0,0,.18);
 }
 
 .action-card:after{
@@ -416,7 +560,7 @@ button{
   right:0;
   bottom:0;
 
-  height:42px;
+  height:36px;
 }
 
 .action-card.qr:after{
@@ -428,13 +572,14 @@ button{
 }
 
 .card-icon{
-  width:56px;
-  height:56px;
+  width:48px;
+  height:48px;
 
   display:grid;
+
   place-items:center;
 
-  font-size:40px;
+  font-size:34px;
 
   font-weight:700;
 
@@ -451,15 +596,16 @@ button{
 
 .card-content{
   min-width:0;
+
   z-index:2;
 }
 
 .action-card b{
   display:block;
 
-  font-size:21px;
+  font-size:19px;
 
-  line-height:1.05;
+  line-height:1.02;
 }
 
 .action-card.qr b{
@@ -473,63 +619,77 @@ button{
 .action-card small{
   display:block;
 
-  margin-top:18px;
+  margin-top:12px;
 
   color:#555;
 
-  font-size:14px;
+  font-size:13px;
 
-  line-height:1.4;
+  line-height:1.35;
 }
 
-.action-card i{
+.arrow{
   position:absolute;
 
   left:50%;
   bottom:0;
 
-  transform:translate(-50%,50%);
+  transform:
+    translate(
+      -50%,
+      50%
+    );
 
-  width:46px;
-  height:46px;
+  width:40px;
+  height:40px;
 
-  border:2px solid #fff;
+  border:
+    2px solid
+    #fff;
+
   border-radius:50%;
 
   display:grid;
+
   place-items:center;
 
   z-index:4;
 
   color:#fff;
 
-  background:var(--red);
+  background:var(--navy);
 
-  font-size:39px;
+  font-size:32px;
 
   line-height:1;
 
   font-style:normal;
 }
 
-.action-card.code i{
-  background:var(--navy);
+.action-card.qr .arrow{
+  background:var(--red);
 }
 
 
 /* =========================================================
    SEGURIDAD
-   ========================================================= */
+========================================================= */
 
 .security{
   width:100%;
-  max-width:700px;
 
-  margin:27px auto 0;
+  max-width:690px;
 
-  padding:15px 20px;
+  margin:
+    16px
+    auto
+    0;
 
-  border-radius:17px;
+  padding:
+    11px
+    16px;
+
+  border-radius:15px;
 
   background:#dedfe1;
 
@@ -537,45 +697,46 @@ button{
 
   align-items:center;
 
-  gap:14px;
+  gap:11px;
 
-  font-size:16px;
+  font-size:13px;
 
-  line-height:1.3;
+  line-height:1.25;
 }
 
 .security-icon{
   flex:0 0 auto;
 
-  font-size:32px;
+  font-size:27px;
 }
 
 
 /* =========================================================
    LADO DERECHO
-   ========================================================= */
+========================================================= */
 
 .hero-right{
   position:relative;
 
   min-width:0;
-  min-height:680px;
+
+  height:100%;
 
   overflow:hidden;
 
   background:
     radial-gradient(
-      circle at 55% 35%,
+      circle at 53% 38%,
       #294b73 0%,
-      #102e50 35%,
-      #061a35 76%
+      #102e50 36%,
+      #061a35 77%
     );
 }
 
 
 /* =========================================================
    LÍNEAS DECORATIVAS
-   ========================================================= */
+========================================================= */
 
 .decorative-line{
   position:absolute;
@@ -590,44 +751,50 @@ button{
     linear-gradient(
       130deg,
       transparent 45%,
-      rgba(217,166,58,.8) 45.3%,
+      rgba(217,166,58,.78) 45.3%,
       transparent 46%,
       transparent 74%,
-      rgba(217,166,58,.75) 74.3%,
+      rgba(217,166,58,.72) 74.3%,
       transparent 74.8%
     );
 }
 
 
 /* =========================================================
-   MAESTRA
-   ========================================================= */
+   PROFESORA
+========================================================= */
 
 .teacher-img{
   position:absolute;
 
   z-index:2;
 
-  top:3%;
-  right:3%;
+  top:4%;
+  right:5%;
 
-  width:min(330px,42%);
+  width:
+    min(
+      250px,
+      34%
+    );
 
   height:auto;
 
-  max-height:58%;
+  max-height:47%;
 
   object-fit:contain;
 
-  object-position:top center;
+  object-position:
+    center
+    top;
 
-  opacity:.45;
+  opacity:.44;
 }
 
 
 /* =========================================================
    NIÑOS
-   ========================================================= */
+========================================================= */
 
 .children{
   position:absolute;
@@ -636,9 +803,10 @@ button{
 
   left:3%;
   right:3%;
-  bottom:105px;
 
-  height:61%;
+  bottom:52px;
+
+  height:59%;
 
   display:flex;
 
@@ -646,7 +814,7 @@ button{
 
   justify-content:center;
 
-  gap:7px;
+  gap:8px;
 }
 
 .boy-img,
@@ -654,13 +822,20 @@ button{
   display:block;
 
   width:auto;
+
   height:100%;
 
   object-fit:contain;
 
-  object-position:center bottom;
+  object-position:
+    center
+    bottom;
 
-  filter:drop-shadow(0 12px 8px rgba(0,0,0,.45));
+  filter:
+    drop-shadow(
+      0 10px 7px
+      rgba(0,0,0,.42)
+    );
 }
 
 .boy-img{
@@ -673,16 +848,17 @@ button{
 
 
 /* =========================================================
-   MINI MARCA
-   ========================================================= */
+   MINI LOGO
+========================================================= */
 
 .mini-brand{
   position:absolute;
 
   z-index:6;
 
-  right:6%;
-  bottom:26px;
+  right:5%;
+
+  bottom:9px;
 
   color:#fff;
 
@@ -693,25 +869,32 @@ button{
   display:flex;
 
   align-items:center;
+
   justify-content:center;
 
-  gap:10px;
+  gap:7px;
 }
 
 .mini-bank strong{
   display:block;
 
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size:28px;
+  font-size:22px;
 }
 
 .mini-bank span{
   display:block;
 
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size:28px;
+  font-size:22px;
 
   font-weight:700;
 
@@ -721,16 +904,14 @@ button{
 .mini-brand small{
   display:block;
 
-  margin-top:6px;
+  margin-top:3px;
 
-  font-size:11px;
-
-  letter-spacing:.2px;
+  font-size:8px;
 }
 
 .mini-symbol{
-  width:45px;
-  height:42px;
+  width:34px;
+  height:33px;
 
   display:flex;
 
@@ -738,31 +919,42 @@ button{
 
   justify-content:space-around;
 
-  padding:5px 3px;
+  padding:
+    3px
+    2px;
 
-  border-top:5px solid var(--gold);
-  border-bottom:5px solid var(--gold);
+  border-top:
+    4px solid
+    var(--gold);
+
+  border-bottom:
+    4px solid
+    var(--gold);
 }
 
 .mini-symbol div{
-  width:7px;
-  height:25px;
+  width:5px;
+  height:19px;
 
   background:var(--gold);
 }
 
 
 /* =========================================================
-   PIE
-   ========================================================= */
+   PIE DE PÁGINA
+========================================================= */
 
 footer{
   width:100%;
-  min-height:105px;
+
+  height:88px;
+  min-height:88px;
 
   background:var(--navy);
 
-  border-top:3px solid var(--gold);
+  border-top:
+    3px solid
+    var(--gold);
 
   color:#fff;
 
@@ -772,9 +964,11 @@ footer{
 
   justify-content:space-between;
 
-  gap:30px;
+  gap:25px;
 
-  padding:17px clamp(20px,4vw,60px);
+  padding:
+    10px
+    clamp(18px,4vw,55px);
 }
 
 .footer-school{
@@ -782,12 +976,12 @@ footer{
 
   align-items:center;
 
-  gap:15px;
+  gap:11px;
 }
 
 .footer-school img{
-  width:58px;
-  height:63px;
+  width:48px;
+  height:52px;
 
   object-fit:contain;
 
@@ -797,19 +991,22 @@ footer{
 .footer-school strong{
   display:block;
 
-  font-family:Georgia,"Times New Roman",serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size:18px;
+  font-size:15px;
 }
 
 .footer-school span{
   display:block;
 
-  margin-top:5px;
+  margin-top:3px;
 
-  font-size:14px;
+  font-size:11px;
 
-  line-height:1.25;
+  line-height:1.2;
 }
 
 .values{
@@ -821,7 +1018,7 @@ footer{
 
   flex-wrap:wrap;
 
-  gap:32px;
+  gap:22px;
 }
 
 .values div{
@@ -829,17 +1026,17 @@ footer{
 
   align-items:center;
 
-  gap:7px;
+  gap:5px;
 }
 
 .values b{
   color:var(--gold);
 
-  font-size:25px;
+  font-size:21px;
 }
 
 .values span{
-  font-size:16px;
+  font-size:13px;
 
   white-space:nowrap;
 }
@@ -847,7 +1044,7 @@ footer{
 
 /* =========================================================
    MODALES
-   ========================================================= */
+========================================================= */
 
 .modal{
   position:fixed;
@@ -856,9 +1053,15 @@ footer{
 
   z-index:1000;
 
-  padding:15px;
+  padding:10px;
 
-  background:rgba(4,17,34,.78);
+  background:
+    rgba(
+      4,
+      17,
+      34,
+      .78
+    );
 
   display:grid;
 
@@ -874,31 +1077,41 @@ footer{
 .modal-card{
   position:relative;
 
-  width:min(620px,95vw);
+  width:
+    min(
+      620px,
+      95vw
+    );
 
   max-height:92vh;
 
   overflow-x:hidden;
   overflow-y:auto;
 
-  padding:28px;
+  padding:26px;
 
   background:#fff;
 
   border-radius:22px;
 
-  box-shadow:0 25px 70px rgba(0,0,0,.35);
+  box-shadow:
+    0 25px 70px
+    rgba(0,0,0,.35);
 }
 
 .modal-card.small{
-  width:min(430px,95vw);
+  width:
+    min(
+      430px,
+      95vw
+    );
 }
 
 .close{
   position:absolute;
 
   top:8px;
-  right:13px;
+  right:12px;
 
   z-index:10;
 
@@ -919,7 +1132,11 @@ footer{
 }
 
 .modal-card h2{
-  margin:2px 45px 12px 0;
+  margin:
+    2px
+    45px
+    12px
+    0;
 
   color:var(--navy);
 
@@ -927,7 +1144,10 @@ footer{
 }
 
 .modal-card p{
-  margin:0 0 14px;
+  margin:
+    0
+    0
+    14px;
 
   font-size:17px;
 
@@ -936,19 +1156,27 @@ footer{
 
 
 /* =========================================================
-   LECTOR QR
-   ========================================================= */
+   QR
+========================================================= */
 
 #scannerModal{
-  padding:10px;
+  padding:8px;
 }
 
 #scannerModal .modal-card{
-  width:min(520px,calc(100vw - 20px));
+  width:
+    min(
+      500px,
+      calc(100vw - 16px)
+    );
 
-  max-height:calc(100vh - 20px);
+  max-height:
+    calc(100vh - 16px);
 
-  padding:23px 17px 18px;
+  padding:
+    20px
+    14px
+    16px;
 
   overflow-x:hidden;
   overflow-y:auto;
@@ -957,11 +1185,14 @@ footer{
 #scannerModal #reader{
   width:100% !important;
 
-  max-width:460px !important;
+  max-width:450px !important;
 
   min-height:0 !important;
 
-  margin:12px auto 0 !important;
+  margin:
+    10px
+    auto
+    0 !important;
 
   overflow:hidden !important;
 
@@ -979,7 +1210,7 @@ footer{
 
   height:auto !important;
 
-  max-height:52vh !important;
+  max-height:50vh !important;
 
   object-fit:cover !important;
 
@@ -1021,9 +1252,12 @@ footer{
 #scannerModal .status{
   width:100%;
 
-  max-width:460px;
+  max-width:450px;
 
-  margin:11px auto 0;
+  margin:
+    10px
+    auto
+    0;
 
   text-align:center;
 
@@ -1036,17 +1270,24 @@ footer{
 
 
 /* =========================================================
-   INPUT
-   ========================================================= */
+   INPUTS
+========================================================= */
 
 .modal-card input{
   width:100%;
 
-  padding:14px 15px;
+  padding:
+    14px
+    15px;
 
-  margin:10px 0 15px;
+  margin:
+    10px
+    0
+    15px;
 
-  border:1px solid #bfc5cc;
+  border:
+    1px solid
+    #bfc5cc;
 
   border-radius:10px;
 
@@ -1058,7 +1299,9 @@ footer{
 .modal-card input:focus{
   border-color:var(--navy);
 
-  box-shadow:0 0 0 3px rgba(7,26,52,.10);
+  box-shadow:
+    0 0 0 3px
+    rgba(7,26,52,.10);
 }
 
 .primary{
@@ -1081,8 +1324,8 @@ footer{
 
 
 /* =========================================================
-   PERFIL
-   ========================================================= */
+   PERFIL DEL ESTUDIANTE
+========================================================= */
 
 .profile-head{
   display:flex;
@@ -1121,7 +1364,9 @@ footer{
 .badge{
   display:inline-block;
 
-  padding:5px 9px;
+  padding:
+    5px
+    9px;
 
   border-radius:20px;
 
@@ -1145,7 +1390,9 @@ footer{
 }
 
 .balance{
-  margin:24px 0;
+  margin:
+    24px
+    0;
 
   padding:22px;
 
@@ -1163,6 +1410,7 @@ footer{
 
 .balance small{
   display:block;
+
   opacity:.75;
 }
 
@@ -1177,7 +1425,9 @@ footer{
 .grid{
   display:grid;
 
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:
+    1fr
+    1fr;
 
   gap:12px;
 
@@ -1187,7 +1437,9 @@ footer{
 .grid>div{
   padding:14px;
 
-  border:1px solid var(--border);
+  border:
+    1px solid
+    var(--border);
 
   border-radius:12px;
 
@@ -1212,14 +1464,104 @@ footer{
 
 
 /* =========================================================
+   PANTALLAS DE POCA ALTURA
+========================================================= */
+
+@media(max-height:700px) and (min-width:851px){
+
+  .topbar{
+    height:78px;
+    min-height:78px;
+  }
+
+  .school-crest{
+    width:46px;
+    height:56px;
+  }
+
+  .school-name strong{
+    font-size:21px;
+  }
+
+  .school-name span{
+    font-size:14px;
+  }
+
+  .hero{
+    height:calc(100vh - 156px);
+    min-height:500px;
+  }
+
+  .hero-left{
+    padding-top:18px;
+    padding-bottom:12px;
+  }
+
+  .bank-symbol{
+    transform:scale(.82);
+    transform-origin:center;
+  }
+
+  .bank-title h1{
+    font-size:45px;
+  }
+
+  .online{
+    font-size:14px;
+    letter-spacing:7px;
+  }
+
+  .subtitle{
+    font-size:18px;
+    margin-bottom:10px;
+  }
+
+  .intro{
+    font-size:18px;
+  }
+
+  .actions{
+    margin-top:15px;
+  }
+
+  .action-card{
+    height:135px;
+    min-height:135px;
+  }
+
+  .security{
+    margin-top:11px;
+    padding:9px 13px;
+    font-size:12px;
+  }
+
+  .teacher-img{
+    width:210px;
+  }
+
+  .children{
+    bottom:45px;
+    height:57%;
+  }
+
+  footer{
+    height:78px;
+    min-height:78px;
+  }
+}
+
+
+/* =========================================================
    TABLET
-   IMPORTANTE: solo cambiamos a una columna por debajo
-   de 850px, no a 1100px.
-   ========================================================= */
+========================================================= */
 
 @media(max-width:850px){
 
   .hero{
+    height:auto;
+
+    min-height:0;
+
     grid-template-columns:1fr;
   }
 
@@ -1227,11 +1569,22 @@ footer{
     display:none;
   }
 
+  .hero-left{
+    padding:
+      32px
+      28px
+      24px;
+  }
+
   .hero-right{
     min-height:500px;
+    height:500px;
   }
 
   footer{
+    height:auto;
+    min-height:90px;
+
     flex-direction:column;
 
     align-items:flex-start;
@@ -1245,41 +1598,45 @@ footer{
 
 /* =========================================================
    TABLET PEQUEÑA
-   ========================================================= */
+========================================================= */
 
 @media(max-width:700px){
 
   .topbar{
-    min-height:90px;
+    height:86px;
+    min-height:86px;
 
-    padding:12px 20px;
+    padding:
+      10px
+      18px;
   }
 
   .school-crest{
-    width:52px;
+    width:50px;
     height:58px;
   }
 
   .school-name strong{
-    font-size:21px;
+    font-size:20px;
   }
 
   .school-name span{
-    font-size:14px;
-  }
-
-  .admin-btn{
-    padding:10px 13px;
-
     font-size:13px;
   }
 
-  .hero-left{
-    padding:38px 24px;
+  .admin-btn{
+    padding:
+      10px
+      13px;
+
+    font-size:12px;
   }
 
-  .bank-logo{
-    gap:14px;
+  .hero-left{
+    padding:
+      30px
+      22px
+      22px;
   }
 
   .bank-symbol{
@@ -1288,57 +1645,74 @@ footer{
   }
 
   .bank-title h1{
-    font-size:50px;
+    font-size:48px;
   }
 
   .online{
-    font-size:17px;
-    letter-spacing:9px;
+    font-size:16px;
+    letter-spacing:8px;
   }
 
   .subtitle{
-    font-size:20px;
+    font-size:19px;
   }
 
   .intro{
-    font-size:21px;
+    font-size:20px;
   }
 
   .actions{
-    gap:16px;
+    gap:15px;
   }
 
   .action-card{
-    min-height:195px;
+    height:165px;
+  }
+
+  .hero-right{
+    min-height:500px;
+    height:500px;
+  }
+
+  .teacher-img{
+    width:255px;
+  }
+
+  .children{
+    bottom:78px;
+    height:60%;
   }
 }
 
 
 /* =========================================================
    CELULAR
-   ========================================================= */
+========================================================= */
 
 @media(max-width:600px){
 
   .topbar{
+    height:78px;
     min-height:78px;
 
-    padding:9px 12px;
+    padding:
+      8px
+      12px;
 
     gap:8px;
   }
 
   .brand{
-    gap:8px;
+    gap:7px;
   }
 
   .school-crest{
-    width:42px;
-    height:49px;
+    width:40px;
+    height:48px;
   }
 
   .school-name strong{
-    font-size:14px;
+    font-size:13px;
 
     white-space:normal;
 
@@ -1346,15 +1720,17 @@ footer{
   }
 
   .school-name span{
-    margin-top:3px;
+    font-size:9px;
 
-    font-size:10px;
+    margin-top:3px;
   }
 
   .admin-btn{
-    padding:8px 9px;
+    padding:
+      7px
+      8px;
 
-    font-size:10px;
+    font-size:9px;
   }
 
   .lock{
@@ -1362,82 +1738,97 @@ footer{
   }
 
 
+  /* ---------- PORTADA ---------- */
+
   .hero{
     display:flex;
+
     flex-direction:column;
+
+    height:auto;
+
+    min-height:0;
   }
 
   .hero-left{
-    padding:28px 15px 24px;
+    padding:
+      26px
+      14px
+      22px;
   }
 
 
-  /* ---------- BANCO ---------- */
+  /* ---------- LOGO ---------- */
 
   .bank-logo{
-    gap:6px;
+    gap:5px;
   }
 
   .bank-symbol{
-    width:66px;
-    height:65px;
+    width:62px;
+    height:61px;
 
-    flex-basis:66px;
+    flex-basis:62px;
 
     transform:none;
   }
 
   .bank-symbol .roof{
-    width:64px;
-    height:20px;
+    width:60px;
+    height:19px;
 
     border-top-width:6px;
   }
 
   .columns{
-    width:55px;
-    height:31px;
+    width:52px;
+    height:29px;
 
-    padding:0 3px;
+    padding:
+      0
+      3px;
   }
 
   .columns i{
     width:7px;
-    height:29px;
+    height:27px;
 
     border-left-width:2px;
     border-right-width:2px;
   }
 
   .bank-symbol .base{
-    width:66px;
-    height:8px;
+    width:62px;
+    height:7px;
   }
 
   .bank-title h1{
-    font-size:34px;
+    font-size:32px;
 
     letter-spacing:1px;
   }
 
   .online{
-    margin-top:9px;
+    margin-top:8px;
 
-    font-size:11px;
+    font-size:10px;
 
-    letter-spacing:5px;
+    letter-spacing:4px;
 
-    padding-left:5px;
+    padding-left:4px;
   }
 
   .subtitle{
-    margin:10px 0 18px;
+    margin:
+      9px
+      0
+      16px;
 
-    font-size:16px;
+    font-size:15px;
   }
 
   .intro{
-    font-size:17px;
+    font-size:16px;
 
     line-height:1.3;
   }
@@ -1448,76 +1839,88 @@ footer{
   .actions{
     grid-template-columns:1fr;
 
-    gap:14px;
+    gap:13px;
 
-    margin-top:22px;
+    margin-top:20px;
   }
 
   .action-card{
-    min-height:160px;
+    height:155px;
 
-    border-radius:21px;
+    min-height:155px;
 
-    padding:20px 17px 37px;
+    border-radius:20px;
 
-    grid-template-columns:56px minmax(0,1fr);
+    padding:
+      18px
+      16px
+      35px;
+
+    grid-template-columns:
+      52px
+      minmax(0,1fr);
   }
 
   .card-icon{
-    width:50px;
-    height:50px;
+    width:46px;
+    height:46px;
 
-    font-size:34px;
+    font-size:32px;
   }
 
   .action-card b{
-    font-size:19px;
+    font-size:18px;
   }
 
   .action-card small{
-    margin-top:12px;
+    margin-top:11px;
 
-    font-size:13px;
+    font-size:12px;
   }
 
-  .action-card i{
-    width:40px;
-    height:40px;
+  .arrow{
+    width:39px;
+    height:39px;
 
-    font-size:33px;
+    font-size:32px;
   }
 
 
   /* ---------- SEGURIDAD ---------- */
 
   .security{
-    margin-top:18px;
+    margin-top:17px;
 
-    padding:12px 13px;
+    padding:
+      11px
+      12px;
 
-    font-size:13px;
+    font-size:12px;
 
-    gap:9px;
+    gap:8px;
   }
 
   .security-icon{
-    font-size:27px;
+    font-size:25px;
   }
 
 
   /* ---------- LADO DERECHO ---------- */
 
   .hero-right{
-    min-height:430px;
+    min-height:420px;
+
+    height:420px;
   }
 
   .teacher-img{
     top:2%;
+
     right:2%;
 
-    width:205px;
+    width:195px;
 
-    max-height:55%;
+    max-height:53%;
 
     opacity:.4;
   }
@@ -1526,23 +1929,23 @@ footer{
     left:2%;
     right:2%;
 
-    bottom:76px;
+    bottom:67px;
 
-    height:65%;
+    height:63%;
 
-    gap:2px;
+    gap:1px;
   }
 
   .boy-img{
     width:50%;
 
-    max-width:210px;
+    max-width:205px;
   }
 
   .girl-img{
     width:46%;
 
-    max-width:195px;
+    max-width:190px;
   }
 
 
@@ -1551,72 +1954,80 @@ footer{
   .mini-brand{
     right:50%;
 
-    bottom:15px;
+    bottom:13px;
 
-    transform:translateX(50%);
+    transform:
+      translateX(50%);
 
     width:100%;
   }
 
   .mini-bank strong,
   .mini-bank span{
-    font-size:21px;
+    font-size:20px;
   }
 
   .mini-symbol{
-    width:34px;
-    height:32px;
+    width:32px;
+    height:30px;
   }
 
   .mini-symbol div{
     width:5px;
-    height:19px;
+    height:17px;
   }
 
   .mini-brand small{
-    font-size:8px;
+    font-size:7px;
   }
 
 
-  /* ---------- FOOTER ---------- */
+  /* ---------- PIE ---------- */
 
   footer{
-    padding:18px 16px;
+    height:auto;
+    min-height:0;
 
-    gap:17px;
+    padding:
+      17px
+      15px;
+
+    gap:16px;
   }
 
   .footer-school{
-    gap:10px;
+    gap:9px;
   }
 
   .footer-school img{
-    width:45px;
-    height:49px;
+    width:43px;
+    height:47px;
   }
 
   .footer-school strong{
-    font-size:14px;
+    font-size:13px;
   }
 
   .footer-school span{
-    font-size:12px;
+    font-size:11px;
   }
 
   .values{
     width:100%;
 
-    gap:12px 20px;
+    gap:
+      11px
+      18px;
 
     justify-content:flex-start;
   }
 
   .values b{
-    font-size:20px;
+    font-size:19px;
   }
 
   .values span{
-    font-size:12px;
+    font-size:11px;
   }
 
 
@@ -1627,13 +2038,21 @@ footer{
   }
 
   .modal-card{
-    width:calc(100vw - 14px);
+    width:
+      calc(
+        100vw - 14px
+      );
 
-    max-height:calc(100vh - 14px);
+    max-height:
+      calc(
+        100vh - 14px
+      );
 
     border-radius:18px;
 
-    padding:20px 13px;
+    padding:
+      20px
+      13px;
   }
 
   .modal-card h2{
@@ -1641,7 +2060,7 @@ footer{
   }
 
   .modal-card p{
-    font-size:16px;
+    font-size:15px;
   }
 
 
@@ -1652,11 +2071,20 @@ footer{
   }
 
   #scannerModal .modal-card{
-    width:calc(100vw - 14px);
+    width:
+      calc(
+        100vw - 14px
+      );
 
-    max-height:calc(100vh - 14px);
+    max-height:
+      calc(
+        100vh - 14px
+      );
 
-    padding:20px 11px 17px;
+    padding:
+      20px
+      11px
+      17px;
   }
 
   #scannerModal .modal-card h2{
@@ -1672,7 +2100,7 @@ footer{
 
     max-width:100% !important;
 
-    margin-top:10px !important;
+    margin-top:9px !important;
   }
 
   #scannerModal #reader video{
@@ -1682,21 +2110,21 @@ footer{
 
     height:auto !important;
 
-    max-height:48vh !important;
+    max-height:47vh !important;
   }
 
 
   /* ---------- PERFIL ---------- */
 
   .profile-head{
-    gap:11px;
+    gap:10px;
   }
 
   .avatar{
-    width:70px;
-    height:70px;
+    width:68px;
+    height:68px;
 
-    flex-basis:70px;
+    flex-basis:68px;
   }
 
   .profile-head h2{
@@ -1704,13 +2132,15 @@ footer{
   }
 
   .profile-head p{
-    font-size:13px;
+    font-size:12px;
   }
 
   .balance{
-    margin:18px 0;
+    margin:
+      18px
+      0;
 
-    padding:18px;
+    padding:17px;
   }
 
   .balance strong{
@@ -1727,45 +2157,50 @@ footer{
 
 /* =========================================================
    CELULAR MUY PEQUEÑO
-   ========================================================= */
+========================================================= */
 
 @media(max-width:380px){
 
   .school-name strong{
-    font-size:12px;
+    font-size:11px;
   }
 
   .school-name span{
-    font-size:9px;
+    font-size:8px;
   }
 
   .admin-btn{
-    font-size:9px;
-    padding:7px 8px;
+    font-size:8px;
+
+    padding:
+      6px
+      7px;
   }
 
   .bank-title h1{
-    font-size:30px;
+    font-size:29px;
   }
 
   .online{
-    font-size:10px;
-    letter-spacing:4px;
+    font-size:9px;
+    letter-spacing:3px;
   }
 
   .intro{
-    font-size:16px;
+    font-size:15px;
   }
 
   .action-card{
-    min-height:150px;
-  }
-
-  .teacher-img{
-    width:180px;
+    height:145px;
+    min-height:145px;
   }
 
   .hero-right{
-    min-height:400px;
+    min-height:390px;
+    height:390px;
+  }
+
+  .teacher-img{
+    width:175px;
   }
 }
