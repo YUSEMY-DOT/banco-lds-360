@@ -74,22 +74,9 @@
       min-height:280px;
     }
 
-    /*
-     * Ocultamos cualquier elemento de control
-     * que la librería pudiera generar.
-     */
-    #reader__dashboard{
-      display:none !important;
-    }
-
-    #reader__dashboard_section{
-      display:none !important;
-    }
-
-    #reader__dashboard_section_csr{
-      display:none !important;
-    }
-
+    #reader__dashboard,
+    #reader__dashboard_section,
+    #reader__dashboard_section_csr,
     #reader__dashboard_section_swaplink{
       display:none !important;
     }
@@ -120,7 +107,6 @@
     }
 
     @media (max-width:600px){
-
       body{
         padding:12px;
       }
@@ -151,31 +137,19 @@
   <div class="card">
 
     <div class="head">
-
-      <h1>
-        Escanear código QR
-      </h1>
+      <h1>Escanear código QR</h1>
 
       <p>
         Apunta la cámara al código QR del estudiante.
         Al leerlo, volverás automáticamente a Banco LDS 360 Online.
       </p>
-
     </div>
 
-
-    <!--
-      ÚNICO lector.
-      No hay botón para escanear fotos.
-      No hay selector de archivos.
-    -->
     <div id="reader"></div>
-
 
     <div id="status">
       Preparando cámara…
     </div>
-
 
     <div class="mini">
       Lector QR externo seguro · HTTPS
@@ -183,39 +157,25 @@
 
   </div>
 
-
 <script>
-
   let scanner = null;
   let scannerActivo = false;
   let codigoProcesado = false;
 
 
   /*
-   * Obtiene la dirección de Banco LDS 360
-   * a la que debemos regresar.
+   * Obtiene la dirección de Banco LDS 360.
+   *
+   * URLSearchParams ya devuelve el parámetro
+   * correctamente decodificado, por lo que NO
+   * volvemos a aplicar decodeURIComponent().
    */
   function getReturnUrl(){
 
     const params =
       new URLSearchParams(window.location.search);
 
-    const retorno =
-      params.get('return');
-
-    if(!retorno){
-      return '';
-    }
-
-    try{
-
-      return decodeURIComponent(retorno);
-
-    }catch(error){
-
-      return retorno;
-
-    }
+    return params.get('return') || '';
 
   }
 
@@ -223,7 +183,7 @@
   /*
    * Limpia el código recibido.
    *
-   * Ejemplo:
+   * Ejemplos:
    * LDS-EST-005
    * LDS_EST_005
    * lds est 005
@@ -240,10 +200,8 @@
       return '';
     }
 
-
     const match =
       text.match(/LDS[-_ ]EST[-_ ]\d+/i);
-
 
     if(match){
 
@@ -253,7 +211,6 @@
         .toUpperCase();
 
     }
-
 
     return text.toUpperCase();
 
@@ -275,7 +232,7 @@
 
 
   /*
-   * Detiene la cámara.
+   * Detiene y limpia la cámara.
    */
   async function stopScanner(){
 
@@ -286,28 +243,18 @@
     }
 
     try{
-
       await scanner.stop();
-
     }catch(error){
-
-      console.log(
-        'La cámara ya estaba detenida.'
-      );
-
+      console.log('La cámara ya estaba detenida.');
     }
 
     try{
-
       await scanner.clear();
-
     }catch(error){
-
-      console.log(
-        'No fue necesario limpiar el lector.'
-      );
-
+      console.log('No fue necesario limpiar el lector.');
     }
+
+    scanner = null;
 
   }
 
@@ -316,28 +263,23 @@
    * Envía el código nuevamente
    * a Banco LDS 360.
    */
-  function sendCode(raw){
+  async function sendCode(raw){
 
     if(codigoProcesado){
       return;
     }
 
-
     const code =
       extractCode(raw);
-
 
     if(!code){
       return;
     }
 
-
     codigoProcesado = true;
-
 
     const returnUrl =
       getReturnUrl();
-
 
     /*
      * Si no existe dirección de regreso,
@@ -350,37 +292,29 @@
         'success'
       );
 
-      stopScanner();
-
+      await stopScanner();
       return;
 
     }
 
-
-    let target =
-      returnUrl;
-
+    let target = returnUrl;
 
     const separator =
       target.includes('?')
         ? '&'
         : '?';
 
-
     target +=
       separator +
       'codigo=' +
       encodeURIComponent(code);
-
 
     setStatus(
       'Código leído. Regresando al sistema…',
       'success'
     );
 
-
-    stopScanner();
-
+    await stopScanner();
 
     /*
      * Pequeña pausa para que se vea
@@ -398,17 +332,14 @@
   /*
    * Inicia directamente la cámara.
    *
-   * IMPORTANTE:
    * facingMode: environment
-   * solicita la cámara trasera
-   * del celular.
+   * solicita preferentemente la cámara trasera.
    */
   async function startScanner(){
 
     if(scannerActivo){
       return;
     }
-
 
     /*
      * Esperamos a que html5-qrcode
@@ -420,26 +351,21 @@
         'Preparando el lector QR…'
       );
 
-
       setTimeout(
         startScanner,
         300
       );
 
-
       return;
 
     }
-
 
     try{
 
       scanner =
         new Html5Qrcode('reader');
 
-
       scannerActivo = true;
-
 
       await scanner.start(
 
@@ -463,31 +389,25 @@
 
         },
 
-
         function(decodedText){
 
           sendCode(decodedText);
 
         },
 
-
         function(errorMessage){
-
           /*
            * No mostramos errores de búsqueda.
            * Es normal que aparezcan mientras
            * la cámara está buscando un QR.
            */
-
         }
 
       );
 
-
       setStatus(
         'Cámara activa. Apunta al código QR.'
       );
-
 
     }catch(error){
 
@@ -496,9 +416,14 @@
         error
       );
 
-
       scannerActivo = false;
 
+      if(scanner){
+        try{
+          await scanner.clear();
+        }catch(e){}
+        scanner = null;
+      }
 
       setStatus(
         'No se pudo abrir la cámara. Verifica el permiso del navegador.',
