@@ -1,38 +1,393 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Banco LDS 360 Online</title>
-<link rel="stylesheet" href="styles.css">
-<script src="https://unpkg.com/html5-qrcode" defer></script>
-<script src="data.js" defer></script>
-<script src="app.js" defer></script>
-</head>
-<body>
-<header class="topbar">
-  <div class="brand"><div class="crest">LDS</div><div><strong>IEP LA SALLE DEL SUR</strong><span>Formamos personas íntegras</span></div></div>
-  <button class="admin-btn" id="adminBtn">🔒 Administrador</button>
-</header>
-<main id="home" class="hero">
-  <section class="hero-left">
-    <div class="bank-mark"><div class="bank-icon">🏛</div><div><h1>BANCO<br><em>LDS 360</em></h1><div class="online">O N L I N E</div></div></div>
-    <p class="subtitle">Sistema financiero educativo</p>
-    <h2>Consulta de forma rápida y segura<br>la información financiera del estudiante.</h2>
-    <div class="actions">
-      <button class="action-card qr" id="scanBtn"><div class="card-icon">▦</div><div><b>ESCANEAR<br><span>CÓDIGO QR</span></b><small>Escanea el código del<br>estudiante para consultar<br>su cuenta.</small></div><i>›</i></button>
-      <button class="action-card code" id="codeBtn"><div class="card-icon">⌨</div><div><b>INGRESAR<br>CÓDIGO</b><small>Ingresa el código del<br>estudiante para consultar<br>su información.</small></div><i>›</i></button>
-    </div>
-    <div class="security">🛡️ <span>Sistema seguro, confiable y diseñado para el bienestar<br>financiero de nuestra comunidad educativa.</span></div>
-  </section>
-  <section class="hero-right">
-    <div class="student-art"><div class="teacher">👩‍🏫</div><div class="kids"><div>👦🏻</div><div>👧🏻</div></div></div>
-    <div class="mini-brand"><b>🏛 BANCO<br><span>LDS 360</span></b><small>EDUCAMOS · AHORRAMOS · CREAMOS FUTURO</small></div>
-  </section>
-</main>
-<footer><div>🏫 <b>IEP LA SALLE DEL SUR</b><span>Valores que construyen<br>un mejor mañana.</span></div><div class="values"><span>🛡️ Seguro</span><span>🔐 Confiable</span><span>👥 Responsable</span><span>☆ Eficiente</span></div></footer>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071a34">
 
-<div class="modal hidden" id="scannerModal"><div class="modal-card"><button class="close" data-close>×</button><h2>Escanear código QR</h2><p>Apunta la cámara al QR del estudiante.</p><div id="reader"></div><div id="scanStatus" class="status"></div></div></div>
-<div class="modal hidden" id="codeModal"><div class="modal-card small"><button class="close" data-close>×</button><h2>Ingresar código</h2><input id="codeInput" placeholder="Ej. LDS-EST-005" autocomplete="off"><button class="primary" id="findCode">Consultar estudiante</button><div id="codeStatus" class="status"></div></div></div>
-<div class="modal hidden" id="adminModal"><div class="modal-card small"><button class="close" data-close>×</button><h2>Acceso de administrador</h2><input id="pinInput" type="password" placeholder="PIN"><button class="primary" id="adminLogin">Ingresar</button><div id="adminStatus" class="status"></div></div></div>
-<div class="modal hidden" id="profileModal"><div class="modal-card profile"><button class="close" data-close>×</button><div id="profileContent"></div></div></div>
-</body></html>
+  <title>Banco LDS 360 Online</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+<!-- =========================
+     ENCABEZADO
+========================= -->
+<header class="topbar">
+
+  <div class="brand">
+
+    <img
+      class="school-crest"
+      src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
+      alt="Escudo IEP La Salle del Sur"
+    >
+
+    <div class="school-name">
+      <strong>IEP LA SALLE DEL SUR</strong>
+      <span>Formamos personas íntegras</span>
+    </div>
+
+  </div>
+
+  <button class="admin-btn" id="adminBtn">
+    <span class="lock">🔒</span>
+    Administrador
+  </button>
+
+</header>
+
+
+<!-- =========================
+     PORTADA PRINCIPAL
+========================= -->
+<main id="home" class="hero">
+
+  <!-- LADO IZQUIERDO -->
+  <section class="hero-left">
+
+    <div class="bank-logo">
+
+      <div class="bank-symbol">
+        <div class="roof"></div>
+        <div class="columns">
+          <i></i>
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+        <div class="base"></div>
+      </div>
+
+      <div class="bank-title">
+        <h1>
+          BANCO
+          <br>
+          <span>LDS 360</span>
+        </h1>
+
+        <div class="online">
+          O N L I N E
+        </div>
+      </div>
+
+    </div>
+
+
+    <p class="subtitle">
+      Sistema financiero educativo
+    </p>
+
+    <h2 class="intro">
+      Consulta de forma rápida y segura<br>
+      la información financiera del estudiante.
+    </h2>
+
+
+    <!-- BOTONES -->
+    <div class="actions">
+
+      <button class="action-card qr" id="scanBtn">
+
+        <div class="card-icon qr-icon">
+          ▦
+        </div>
+
+        <div class="card-content">
+
+          <b>
+            ESCANEAR<br>
+            <span>CÓDIGO QR</span>
+          </b>
+
+          <small>
+            Escanea el código del<br>
+            estudiante para consultar<br>
+            su cuenta.
+          </small>
+
+        </div>
+
+        <div class="arrow">
+          ›
+        </div>
+
+      </button>
+
+
+      <button class="action-card code" id="codeBtn">
+
+        <div class="card-icon keyboard-icon">
+          ⌨
+        </div>
+
+        <div class="card-content">
+
+          <b>
+            INGRESAR<br>
+            CÓDIGO
+          </b>
+
+          <small>
+            Ingresa el código del<br>
+            estudiante para consultar<br>
+            su información.
+          </small>
+
+        </div>
+
+        <div class="arrow">
+          ›
+        </div>
+
+      </button>
+
+    </div>
+
+
+    <!-- SEGURIDAD -->
+    <div class="security">
+
+      <div class="security-icon">
+        🛡️
+      </div>
+
+      <div>
+        Sistema seguro, confiable y diseñado para el bienestar<br class="desktop">
+        financiero de nuestra comunidad educativa.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       LADO DERECHO
+  ========================= -->
+  <section class="hero-right">
+
+    <div class="decorative-line"></div>
+
+    <!-- PROFESORA -->
+    <img
+      class="teacher-img"
+      src="assets/65a7484e-5453-45af-6bcb-195dad723f3d-removebg-preview.png"
+      alt="Docente"
+    >
+
+    <!-- ESTUDIANTES -->
+    <div class="children">
+
+      <img
+        class="boy-img"
+        src="assets/photo_17_2025-01-25_10-11-15-removebg-preview.png"
+        alt="Estudiante"
+      >
+
+      <img
+        class="girl-img"
+        src="assets/photo_64_2025-01-25_10-11-15-removebg-preview.png"
+        alt="Estudiante"
+      >
+
+    </div>
+
+
+    <!-- MINI LOGO -->
+    <div class="mini-brand">
+
+      <div class="mini-bank">
+
+        <div class="mini-symbol">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+
+        <div>
+          <strong>BANCO</strong>
+          <span>LDS 360</span>
+        </div>
+
+      </div>
+
+      <small>
+        EDUCAMOS · AHORRAMOS · CREAMOS FUTURO
+      </small>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================
+     PIE DE PÁGINA
+========================= -->
+<footer>
+
+  <div class="footer-school">
+
+    <img
+      src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
+      alt="Escudo"
+    >
+
+    <div>
+      <strong>IEP LA SALLE DEL SUR</strong>
+      <span>
+        Valores que construyen<br>
+        un mejor mañana.
+      </span>
+    </div>
+
+  </div>
+
+
+  <div class="values">
+
+    <div>
+      <b>🛡️</b>
+      <span>Seguro</span>
+    </div>
+
+    <div>
+      <b>🔐</b>
+      <span>Confiable</span>
+    </div>
+
+    <div>
+      <b>👥</b>
+      <span>Responsable</span>
+    </div>
+
+    <div>
+      <b>☆</b>
+      <span>Eficiente</span>
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- =========================
+     MODAL QR
+========================= -->
+<div class="modal hidden" id="scannerModal">
+
+  <div class="modal-card scanner-card">
+
+    <button class="close" data-close>
+      ×
+    </button>
+
+    <h2>
+      Escanear código QR
+    </h2>
+
+    <p>
+      Apunta la cámara al QR del estudiante.
+    </p>
+
+    <div id="reader"></div>
+
+    <div id="scanStatus" class="status">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL CÓDIGO
+========================= -->
+<div class="modal hidden" id="codeModal">
+
+  <div class="modal-card small">
+
+    <button class="close" data-close>
+      ×
+    </button>
+
+    <h2>
+      Ingresar código
+    </h2>
+
+    <input
+      id="codeInput"
+      placeholder="Ej. LDS-EST-005"
+      autocomplete="off"
+    >
+
+    <button class="primary" id="findCode">
+      Consultar estudiante
+    </button>
+
+    <div id="codeStatus" class="status"></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL ADMINISTRADOR
+========================= -->
+<div class="modal hidden" id="adminModal">
+
+  <div class="modal-card small">
+
+    <button class="close" data-close>
+      ×
+    </button>
+
+    <h2>
+      Acceso de administrador
+    </h2>
+
+    <input
+      id="pinInput"
+      type="password"
+      placeholder="PIN"
+    >
+
+    <button class="primary" id="adminLogin">
+      Ingresar
+    </button>
+
+    <div id="adminStatus" class="status"></div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     PERFIL ESTUDIANTE
+========================= -->
+<div class="modal hidden" id="profileModal">
+
+  <div class="modal-card profile">
+
+    <button class="close" data-close>
+      ×
+    </button>
+
+    <div id="profileContent"></div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
