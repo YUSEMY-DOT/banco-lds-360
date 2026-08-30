@@ -49,8 +49,8 @@ button{
 
 .topbar{
   width:100%;
-  height:62px;
-  min-height:62px;
+  height:88px;
+  min-height:88px;
 
   display:flex;
   align-items:center;
@@ -569,7 +569,7 @@ button{
   right:0;
   bottom:0;
 
-  height:20px;
+  height:29px;
 
   z-index:1;
 }
@@ -671,8 +671,8 @@ button{
       50%
     );
 
-  width:32px;
-  height:32px;
+  width:36px;
+  height:36px;
 
   border:
     2px solid
@@ -690,7 +690,7 @@ button{
 
   background:var(--navy);
 
-  font-size:25px;
+  font-size:28px;
 
   line-height:1;
 
@@ -981,8 +981,8 @@ button{
 footer{
   width:100%;
 
-  height:62px;
-  min-height:62px;
+  height:68px;
+  min-height:68px;
 
   background:var(--navy);
 
@@ -1001,7 +1001,7 @@ footer{
   gap:20px;
 
   padding:
-    10px
+    5px
     clamp(18px,4vw,55px);
 }
 
@@ -1629,8 +1629,8 @@ footer{
   }
 
   footer{
-    height:62px;
-    min-height:62px;
+    height:68px;
+    min-height:68px;
   }
 }
 
@@ -1696,8 +1696,8 @@ footer{
 @media(max-width:700px){
 
   .topbar{
-    height:62px;
-    min-height:62px;
+    height:84px;
+    min-height:84px;
 
     padding:
       9px
@@ -2338,42 +2338,5 @@ footer{
 
   .girl-img{
     margin-left:-4px;
-  }
-}
-
-/* =========================================================
-   AJUSTE FINAL DEL PIE DE PÁGINA — SOLO ALTURA
-========================================================= */
-@media(min-width:851px){
-  footer{
-    height:58px !important;
-    min-height:58px !important;
-    padding:4px clamp(18px,4vw,55px) !important;
-    overflow:hidden !important;
-  }
-
-  .footer-school img{
-    width:38px !important;
-    height:44px !important;
-  }
-
-  .footer-school strong{
-    font-size:13px !important;
-  }
-
-  .footer-school span{
-    font-size:9px !important;
-  }
-
-  .values{
-    gap:16px !important;
-  }
-
-  .values b{
-    font-size:17px !important;
-  }
-
-  .values span{
-    font-size:11px !important;
   }
 }
