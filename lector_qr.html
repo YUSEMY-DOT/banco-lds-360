@@ -7,13 +7,12 @@
 
   <title>Banco LDS 360 · Lector QR</title>
 
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
     :root{
       --azul:#142744;
       --rojo:#a7192e;
-      --gris:#eef1f5;
       --texto:#18243b;
     }
 
@@ -71,12 +70,28 @@
       overflow:hidden;
       border-radius:20px;
       background:#081427;
-      min-height:280px;
+      min-height:300px;
     }
 
-    #reader__dashboard,
-    #reader__dashboard_section,
-    #reader__dashboard_section_csr,
+    #reader video{
+      width:100% !important;
+      height:auto !important;
+      display:block;
+      border-radius:20px;
+    }
+
+    #reader__dashboard{
+      display:none !important;
+    }
+
+    #reader__dashboard_section{
+      display:none !important;
+    }
+
+    #reader__dashboard_section_csr{
+      display:none !important;
+    }
+
     #reader__dashboard_section_swaplink{
       display:none !important;
     }
@@ -106,7 +121,8 @@
       font-size:13px;
     }
 
-    @media (max-width:600px){
+    @media(max-width:600px){
+
       body{
         padding:12px;
       }
@@ -137,12 +153,14 @@
   <div class="card">
 
     <div class="head">
+
       <h1>Escanear código QR</h1>
 
       <p>
         Apunta la cámara al código QR del estudiante.
         Al leerlo, volverás automáticamente a Banco LDS 360 Online.
       </p>
+
     </div>
 
     <div id="reader"></div>
@@ -158,298 +176,208 @@
   </div>
 
 <script>
+
+  const BANCO_URL =
+    "https://script.google.com/macros/s/AKfycbxgU6tJk-lwidPRobpgO2fsPj4UJsv5hHoqEy9uxgq6w1EsorQETDSkPtGu7AM2qFQAwA/exec";
+
+
   let scanner = null;
-  let scannerActivo = false;
-  let codigoProcesado = false;
+  let procesando = false;
 
 
-  /*
-   * Obtiene la dirección de Banco LDS 360.
-   *
-   * URLSearchParams ya devuelve el parámetro
-   * correctamente decodificado, por lo que NO
-   * volvemos a aplicar decodeURIComponent().
-   */
-  function getReturnUrl(){
+  function setStatus(text, clase = "") {
 
-    const params =
-      new URLSearchParams(window.location.search);
+    const elemento =
+      document.getElementById("status");
 
-    return params.get('return') || '';
+    elemento.textContent = text;
+    elemento.className = clase;
 
   }
 
 
-  /*
-   * Limpia el código recibido.
-   *
-   * Ejemplos:
-   * LDS-EST-005
-   * LDS_EST_005
-   * lds est 005
-   *
-   * Todo termina como:
-   * LDS-EST-005
-   */
-  function extractCode(raw){
+  function limpiarCodigo(valor) {
 
-    const text =
-      String(raw || '').trim();
+    const texto =
+      String(valor || "").trim();
 
-    if(!text){
-      return '';
+    if (!texto) {
+      return "";
     }
 
-    const match =
-      text.match(/LDS[-_ ]EST[-_ ]\d+/i);
 
-    if(match){
+    const encontrado =
+      texto.match(/LDS[-_ ]EST[-_ ]\d+/i);
 
-      return match[0]
-        .replace(/_/g,'-')
-        .replace(/ /g,'-')
+
+    if (encontrado) {
+
+      return encontrado[0]
+        .replace(/_/g, "-")
+        .replace(/ /g, "-")
         .toUpperCase();
 
     }
 
-    return text.toUpperCase();
+
+    return texto.toUpperCase();
 
   }
 
 
-  /*
-   * Muestra un mensaje.
-   */
-  function setStatus(text, clase=''){
+  function volverAlBanco(codigo) {
 
-    const status =
-      document.getElementById('status');
-
-    status.textContent = text;
-    status.className = clase;
-
-  }
-
-
-  /*
-   * Detiene y limpia la cámara.
-   */
-  async function stopScanner(){
-
-    scannerActivo = false;
-
-    if(!scanner){
+    if (procesando) {
       return;
     }
 
-    try{
-      await scanner.stop();
-    }catch(error){
-      console.log('La cámara ya estaba detenida.');
-    }
+    procesando = true;
 
-    try{
-      await scanner.clear();
-    }catch(error){
-      console.log('No fue necesario limpiar el lector.');
-    }
-
-    scanner = null;
-
-  }
-
-
-  /*
-   * Envía el código nuevamente
-   * a Banco LDS 360.
-   */
-  async function sendCode(raw){
-
-    if(codigoProcesado){
-      return;
-    }
-
-    const code =
-      extractCode(raw);
-
-    if(!code){
-      return;
-    }
-
-    codigoProcesado = true;
-
-    const returnUrl =
-      getReturnUrl();
-
-    /*
-     * Si no existe dirección de regreso,
-     * mostramos el código.
-     */
-    if(!returnUrl){
-
-      setStatus(
-        'Código leído: ' + code,
-        'success'
-      );
-
-      await stopScanner();
-      return;
-
-    }
-
-    let target = returnUrl;
-
-    const separator =
-      target.includes('?')
-        ? '&'
-        : '?';
-
-    target +=
-      separator +
-      'codigo=' +
-      encodeURIComponent(code);
 
     setStatus(
-      'Código leído. Regresando al sistema…',
-      'success'
+      "Código leído. Regresando al sistema…",
+      "success"
     );
 
-    await stopScanner();
 
-    /*
-     * Pequeña pausa para que se vea
-     * que el código fue reconocido.
-     */
-    setTimeout(function(){
+    if (scanner) {
 
-      window.location.replace(target);
+      scanner.stop()
+        .catch(function(){})
+        .finally(function(){
 
-    },450);
+          scanner.clear()
+            .catch(function(){})
+            .finally(function(){
+
+              irAlBanco(codigo);
+
+            });
+
+        });
+
+    } else {
+
+      irAlBanco(codigo);
+
+    }
 
   }
 
 
-  /*
-   * Inicia directamente la cámara.
-   *
-   * facingMode: environment
-   * solicita preferentemente la cámara trasera.
-   */
-  async function startScanner(){
+  function irAlBanco(codigo) {
 
-    if(scannerActivo){
-      return;
-    }
+    const destino =
+      BANCO_URL +
+      "?codigo=" +
+      encodeURIComponent(codigo);
 
-    /*
-     * Esperamos a que html5-qrcode
-     * haya terminado de cargar.
-     */
-    if(typeof Html5Qrcode === 'undefined'){
+    setTimeout(function(){
+
+      window.location.replace(destino);
+
+    }, 500);
+
+  }
+
+
+  function iniciarCamara() {
+
+    if (typeof Html5Qrcode === "undefined") {
 
       setStatus(
-        'Preparando el lector QR…'
-      );
-
-      setTimeout(
-        startScanner,
-        300
+        "No se pudo cargar el lector QR.",
+        "error"
       );
 
       return;
 
     }
 
-    try{
 
-      scanner =
-        new Html5Qrcode('reader');
+    scanner =
+      new Html5Qrcode("reader");
 
-      scannerActivo = true;
 
-      await scanner.start(
+    const configuracion = {
 
-        {
-          facingMode: {
-            ideal: 'environment'
-          }
-        },
+      fps: 10,
 
-        {
-          fps:10,
+      qrbox: {
+        width: 250,
+        height: 250
+      },
 
-          qrbox:{
-            width:250,
-            height:250
-          },
+      aspectRatio: 1.0,
 
-          aspectRatio:1.0,
+      disableFlip: false
 
-          disableFlip:false
+    };
 
-        },
 
-        function(decodedText){
+    scanner.start(
 
-          sendCode(decodedText);
+      {
+        facingMode: "environment"
+      },
 
-        },
+      configuracion,
 
-        function(errorMessage){
-          /*
-           * No mostramos errores de búsqueda.
-           * Es normal que aparezcan mientras
-           * la cámara está buscando un QR.
-           */
+      function(decodedText) {
+
+        const codigo =
+          limpiarCodigo(decodedText);
+
+
+        if (!codigo) {
+          return;
         }
 
-      );
+
+        volverAlBanco(codigo);
+
+      },
+
+      function(errorMessage) {
+
+        /*
+         * No mostramos los errores normales
+         * mientras busca el código QR.
+         */
+
+      }
+
+    )
+    .then(function(){
 
       setStatus(
-        'Cámara activa. Apunta al código QR.'
+        "Cámara activa. Apunta al código QR."
       );
 
-    }catch(error){
+    })
+    .catch(function(error){
 
       console.error(
-        'ERROR DE CÁMARA:',
+        "ERROR AL ABRIR LA CÁMARA:",
         error
       );
 
-      scannerActivo = false;
-
-      if(scanner){
-        try{
-          await scanner.clear();
-        }catch(e){}
-        scanner = null;
-      }
 
       setStatus(
-        'No se pudo abrir la cámara. Verifica el permiso del navegador.',
-        'error'
+        "No se pudo abrir la cámara. Permite el acceso a la cámara del navegador y vuelve a abrir esta página.",
+        "error"
       );
 
-    }
+    });
 
   }
 
 
-  /*
-   * Iniciar automáticamente.
-   *
-   * NO hay botones.
-   * NO hay selector de fotos.
-   * NO hay selección manual.
-   */
   window.addEventListener(
-    'load',
+    "load",
     function(){
 
-      setTimeout(
-        startScanner,
-        500
-      );
+      iniciarCamara();
 
     }
   );
