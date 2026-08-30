@@ -252,7 +252,6 @@ button{
 .actions,
 .security{
   position:relative;
-
   z-index:2;
 }
 
@@ -267,7 +266,6 @@ button{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   gap:14px;
@@ -330,7 +328,6 @@ button{
   display:flex;
 
   align-items:flex-end;
-
   justify-content:space-between;
 
   padding:
@@ -470,7 +467,11 @@ button{
 
 /* =========================================================
    BOTONES
-   AJUSTADOS PARA QUE TODO EL CONTENIDO ENTRE BIEN
+   AJUSTADOS PARA:
+   - MENOR ALTURA
+   - TEXTO COMPLETAMENTE DENTRO
+   - FRANJA INFERIOR SIN TAPAR TEXTO
+   - FLECHA CENTRADA EN LA FRANJA
 ========================================================= */
 
 .actions{
@@ -497,8 +498,8 @@ button{
 .action-card{
   min-width:0;
 
-  height:138px;
-  min-height:138px;
+  height:142px;
+  min-height:142px;
 
   position:relative;
 
@@ -509,7 +510,7 @@ button{
   padding:
     12px
     15px
-    39px;
+    38px;
 
   background:#fff;
 
@@ -523,7 +524,7 @@ button{
     47px
     minmax(0,1fr);
 
-  align-items:center;
+  align-items:start;
 
   gap:7px;
 
@@ -554,6 +555,9 @@ button{
   outline-offset:2px;
 }
 
+
+/* ---------- FRANJA INFERIOR ---------- */
+
 .action-card:after{
   content:"";
 
@@ -564,6 +568,8 @@ button{
   bottom:0;
 
   height:31px;
+
+  z-index:1;
 }
 
 .action-card.qr:after{
@@ -574,9 +580,14 @@ button{
   background:var(--navy);
 }
 
+
+/* ---------- ICONOS ---------- */
+
 .card-icon{
   width:42px;
   height:42px;
+
+  margin-top:8px;
 
   display:grid;
 
@@ -586,7 +597,7 @@ button{
 
   font-weight:700;
 
-  z-index:2;
+  z-index:3;
 }
 
 .qr-icon{
@@ -597,14 +608,17 @@ button{
   color:var(--navy);
 }
 
+
+/* ---------- CONTENIDO ---------- */
+
 .card-content{
   min-width:0;
 
-  align-self:start;
-
   padding-top:5px;
 
-  z-index:2;
+  padding-bottom:5px;
+
+  z-index:3;
 }
 
 .action-card b{
@@ -614,7 +628,9 @@ button{
 
   font-size:17px;
 
-  line-height:1.02;
+  line-height:1.03;
+
+  letter-spacing:0;
 }
 
 .action-card.qr b{
@@ -630,18 +646,24 @@ button{
 
   margin-top:8px;
 
+  max-width:220px;
+
   color:#555;
 
   font-size:11px;
 
-  line-height:1.22;
+  line-height:1.18;
 }
+
+
+/* ---------- FLECHA ---------- */
 
 .arrow{
   position:absolute;
 
   left:50%;
-  bottom:0;
+
+  bottom:-1px;
 
   transform:
     translate(
@@ -801,6 +823,7 @@ button{
 
 /* =========================================================
    NIÑOS
+   MÁS JUNTOS Y UN POCO MÁS ARRIBA
 ========================================================= */
 
 .children{
@@ -808,12 +831,12 @@ button{
 
   z-index:3;
 
-  left:7%;
-  right:7%;
+  left:8%;
+  right:8%;
 
-  bottom:68px;
+  bottom:76px;
 
-  height:60%;
+  height:61%;
 
   display:flex;
 
@@ -829,6 +852,7 @@ button{
   display:block;
 
   width:auto;
+
   height:100%;
 
   object-fit:contain;
@@ -847,13 +871,13 @@ button{
 .boy-img{
   max-width:47%;
 
-  margin-right:-5px;
+  margin-right:-7px;
 }
 
 .girl-img{
   max-width:44%;
 
-  margin-left:-5px;
+  margin-left:-7px;
 }
 
 
@@ -1182,7 +1206,6 @@ footer{
     16px;
 
   overflow-x:hidden;
-
   overflow-y:auto;
 }
 
@@ -1524,6 +1547,7 @@ footer{
 
   .subtitle{
     font-size:16px;
+
     margin-bottom:7px;
   }
 
@@ -1542,25 +1566,25 @@ footer{
     min-height:118px;
 
     padding:
-      12px
-      14px
+      10px
+      13px
       29px;
   }
 
   .action-card b{
-    font-size:16px;
+    font-size:15px;
   }
 
   .action-card small{
-    font-size:10px;
+    font-size:9px;
 
     margin-top:6px;
 
-    line-height:1.18;
+    line-height:1.16;
   }
 
   .card-icon{
-    font-size:27px;
+    font-size:26px;
   }
 
   .security{
@@ -1586,11 +1610,11 @@ footer{
   }
 
   .boy-img{
-    margin-right:-6px;
+    margin-right:-7px;
   }
 
   .girl-img{
-    margin-left:-6px;
+    margin-left:-7px;
   }
 
   footer{
@@ -1627,7 +1651,6 @@ footer{
 
   .hero-right{
     min-height:500px;
-
     height:500px;
   }
 
@@ -1699,21 +1722,8 @@ footer{
   }
 
   .action-card{
-    height:155px;
-    min-height:155px;
-
-    padding:
-      18px
-      16px
-      35px;
-  }
-
-  .action-card b{
-    font-size:18px;
-  }
-
-  .action-card small{
-    font-size:12px;
+    height:150px;
+    min-height:150px;
   }
 
   .hero-right{
@@ -1734,11 +1744,11 @@ footer{
   }
 
   .boy-img{
-    margin-right:-4px;
+    margin-right:-5px;
   }
 
   .girl-img{
-    margin-left:-4px;
+    margin-left:-5px;
   }
 }
 
@@ -1904,7 +1914,6 @@ footer{
 
   .action-card{
     height:155px;
-
     min-height:155px;
 
     border-radius:20px;
@@ -2000,7 +2009,7 @@ footer{
 
     max-width:205px;
 
-    margin-right:-4px;
+    margin-right:-5px;
   }
 
   .girl-img{
@@ -2008,7 +2017,7 @@ footer{
 
     max-width:190px;
 
-    margin-left:-4px;
+    margin-left:-5px;
   }
 
 
@@ -2049,7 +2058,6 @@ footer{
 
   footer{
     height:auto;
-
     min-height:0;
 
     padding:
@@ -2257,7 +2265,6 @@ footer{
 
   .action-card{
     height:145px;
-
     min-height:145px;
 
     padding:
@@ -2296,10 +2303,10 @@ footer{
   }
 
   .boy-img{
-    margin-right:-3px;
+    margin-right:-4px;
   }
 
   .girl-img{
-    margin-left:-3px;
+    margin-left:-4px;
   }
 }
