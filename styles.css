@@ -2189,3 +2189,21 @@ footer {
     margin-bottom: -24px !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — CENTRAR LAS DOS FRASES DEL BLOQUE IZQUIERDO
+   No modifica botones, imágenes, banco, seguridad ni footer.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .subtitle,
+  .hero-left .intro {
+    width: 100% !important;
+    max-width: 650px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    text-align: center !important;
+  }
+}
