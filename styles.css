@@ -1594,3 +1594,31 @@ footer {
     bottom: 0 !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO: NIÑOS TODAVÍA MÁS PEQUEÑOS
+   No cambia profesora, banco, izquierda, botones ni footer.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-right .children {
+    width: 47% !important;
+    height: 43% !important;
+    left: 50% !important;
+    bottom: 7% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .hero-right .boy-img {
+    width: 36% !important;
+    left: 5% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right .girl-img {
+    width: 33% !important;
+    right: 5% !important;
+    bottom: 0 !important;
+  }
+}
