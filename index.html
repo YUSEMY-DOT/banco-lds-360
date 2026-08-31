@@ -1,1241 +1,733 @@
-/* =========================================================
-   BANCO LDS 360 — ESTILOS PRINCIPALES
-   ========================================================= */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #071a34;
-  color: #071a34;
-  overflow-x: hidden;
-}
-
-/* =========================================================
-   ENCABEZADO
-   ========================================================= */
-
-.topbar {
-  height: 116px;
-  width: 100%;
-  background: #071a34;
-  border-bottom: 3px solid #f4b400;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 3.2%;
-  position: relative;
-  z-index: 20;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.school-crest {
-  width: 82px;
-  height: 82px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.school-name {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.school-name strong {
-  color: #ffffff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(25px, 2.4vw, 39px);
-  line-height: 1;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.school-name span {
-  margin-top: 8px;
-  color: #f4b400;
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(15px, 1.35vw, 23px);
-}
-
-.admin-btn {
-  height: 62px;
-  min-width: 250px;
-
-  padding: 0 28px;
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 22px;
-
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-
-  font-size: clamp(18px, 1.45vw, 25px);
-  font-weight: 700;
-
-  cursor: pointer;
-  transition: 0.2s ease;
-}
+<!doctype html>
+<html lang="es">
 
-.admin-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-1px);
-}
+<head>
 
-.lock {
-  font-size: 28px;
-}
+  <meta charset="utf-8">
 
-/* =========================================================
-   PORTADA
-   ========================================================= */
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
 
-.hero {
-  width: 100%;
-  height: calc(100vh - 116px - 128px);
-  min-height: 620px;
+  <meta
+    name="theme-color"
+    content="#071a34"
+  >
 
-  display: grid;
-  grid-template-columns: 51% 49%;
+  <title>Banco LDS 360 Online</title>
 
-  position: relative;
-  overflow: hidden;
-}
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
 
-/* =========================================================
-   LADO IZQUIERDO
-   ========================================================= */
+  <!-- =====================================================
+       LECTOR QR
+       ===================================================== -->
 
-.hero-left {
-  position: relative;
-  z-index: 5;
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    defer
+  ></script>
 
-  background-color: #ffffff;
 
-  /* Puntos muy sutiles, como en la imagen de referencia */
-  background-image: radial-gradient(
-    rgba(7, 26, 52, 0.14) 1px,
-    transparent 1px
-  );
+  <!-- =====================================================
+       DATOS Y APLICACIÓN
+       ===================================================== -->
 
-  background-size: 12px 12px;
+  <script
+    src="data.js"
+    defer
+  ></script>
 
-  padding: 42px 5.5% 28px;
+  <script
+    src="app.js"
+    defer
+  ></script>
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+</head>
 
-  overflow: hidden;
-}
 
-/* Forma diagonal derecha */
+<body>
 
-.hero-left::after {
-  content: "";
-  position: absolute;
 
-  top: 0;
-  right: -38px;
+  <!-- =====================================================
+       ENCABEZADO
+       ===================================================== -->
 
-  width: 75px;
-  height: 100%;
+  <header class="topbar">
 
-  background: #ffffff;
+    <div class="brand">
 
-  transform: skewX(-5deg);
+      <img
+        class="school-crest"
+        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
+        alt="Escudo IEP La Salle del Sur"
+      >
 
-  z-index: -1;
-}
+      <div class="school-name">
 
-/* =========================================================
-   LOGO BANCO
-   ========================================================= */
+        <strong>
+          IEP LA SALLE DEL SUR
+        </strong>
 
-.bank-logo {
-  width: min(620px, 92%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+        <span>
+          Formamos personas íntegras
+        </span>
 
-  gap: 26px;
+      </div>
 
-  margin-bottom: 12px;
-}
+    </div>
 
-.bank-symbol {
-  width: 150px;
-  min-width: 150px;
-  height: 145px;
 
-  position: relative;
+    <button
+      class="admin-btn"
+      id="adminBtn"
+      type="button"
+    >
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+      <span class="lock">
+        🔒
+      </span>
 
-/* Techo */
+      Administrador
 
-.roof {
-  width: 145px;
-  height: 17px;
+    </button>
 
-  background: #071a34;
+  </header>
 
-  position: relative;
 
-  margin-bottom: 8px;
-}
 
-.roof::before {
-  content: "★";
+  <!-- =====================================================
+       PORTADA PRINCIPAL
+       ===================================================== -->
 
-  position: absolute;
+  <main
+    id="home"
+    class="hero"
+  >
 
-  left: 50%;
-  top: -30px;
 
-  transform: translateX(-50%);
+    <!-- ===================================================
+         LADO IZQUIERDO
+         =================================================== -->
 
-  color: #f4b400;
+    <section class="hero-left">
 
-  font-size: 27px;
-}
 
-/* Columnas */
+      <!-- =================================================
+           LOGO BANCO LDS 360
+           ================================================= -->
 
-.columns {
-  width: 125px;
-  height: 72px;
+      <div class="bank-logo">
 
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
 
-  padding: 0 7px;
-}
+        <div class="bank-symbol">
 
-.columns i {
-  display: block;
+          <div class="roof"></div>
 
-  width: 13px;
-  height: 72px;
 
-  background: #f4b400;
+          <div class="columns">
 
-  border-left: 4px solid #071a34;
-  border-right: 4px solid #071a34;
-}
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
 
-/* Base */
+          </div>
 
-.base {
-  width: 158px;
-  height: 10px;
 
-  background: #071a34;
+          <div class="base"></div>
 
-  position: relative;
-}
+        </div>
 
-.base::after {
-  content: "";
 
-  position: absolute;
+        <div class="bank-title">
 
-  width: 158px;
-  height: 6px;
+          <h1>
+            BANCO
+            <br>
+            <span>LDS 360</span>
+          </h1>
 
-  left: 0;
-  bottom: -8px;
 
-  background: #f4b400;
-}
+          <div class="online">
+            O N L I N E
+          </div>
 
-/* =========================================================
-   TEXTO DEL BANCO
-   ========================================================= */
+        </div>
 
-.bank-title {
-  text-align: left;
-}
+      </div>
 
-.bank-title h1 {
-  font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(52px, 5vw, 82px);
 
-  line-height: 0.86;
+      <!-- =================================================
+           SUBTÍTULO
+           ================================================= -->
 
-  color: #071a34;
+      <p class="subtitle">
+        Sistema financiero educativo
+      </p>
 
-  font-weight: 700;
-}
 
-.bank-title h1 span {
-  color: #c81924;
-}
 
-.online {
-  margin-top: 12px;
+      <!-- =================================================
+           INTRODUCCIÓN
+           ================================================= -->
 
-  text-align: center;
+      <h2 class="intro">
 
-  color: #071a34;
+        Consulta de forma rápida y segura
+        <br>
 
-  font-family: Georgia, "Times New Roman", serif;
+        la información financiera del estudiante.
 
-  font-size: clamp(17px, 1.55vw, 25px);
+      </h2>
 
-  letter-spacing: 0.55em;
-}
 
-/* =========================================================
-   SUBTÍTULO
-   ========================================================= */
 
-.subtitle {
-  margin-top: 15px;
+      <!-- =================================================
+           BOTONES PRINCIPALES
+           ================================================= -->
 
-  color: #444444;
+      <div class="actions">
 
-  font-size: clamp(18px, 1.55vw, 26px);
 
-  text-align: center;
-}
+        <!-- ===============================================
+             ESCANEAR QR
+             =============================================== -->
 
-/* =========================================================
-   INTRO
-   ========================================================= */
+        <button
+          class="action-card qr"
+          id="scanBtn"
+          type="button"
+        >
 
-.intro {
-  margin-top: 17px;
+          <div class="card-icon qr-icon">
+            ▦
+          </div>
 
-  color: #071a34;
 
-  font-size: clamp(19px, 1.55vw, 27px);
+          <div class="card-content">
 
-  line-height: 1.42;
+            <b>
 
-  text-align: center;
+              ESCANEAR
+              <br>
 
-  font-weight: 700;
-}
+              <span>
+                CÓDIGO QR
+              </span>
 
-/* =========================================================
-   BOTONES
-   ========================================================= */
+            </b>
 
-.actions {
-  width: 100%;
-  max-width: 690px;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+            <small>
 
-  gap: 20px;
+              Escanea el código del
+              <br>
 
-  margin-top: 23px;
-}
+              estudiante para consultar
+              <br>
 
-.action-card {
-  min-height: 220px;
+              su cuenta.
 
-  position: relative;
+            </small>
 
-  border: none;
-  border-radius: 25px;
+          </div>
 
-  background: #ffffff;
 
-  box-shadow: 0 7px 22px rgba(0, 0, 0, 0.13);
+          <div class="arrow">
+            ›
+          </div>
 
-  overflow: hidden;
+        </button>
 
-  cursor: pointer;
 
-  text-align: left;
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
+        <!-- ===============================================
+             INGRESAR CÓDIGO
+             =============================================== -->
 
-.action-card:hover {
-  transform: translateY(-3px);
+        <button
+          class="action-card code"
+          id="codeBtn"
+          type="button"
+        >
 
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-}
+          <div class="card-icon keyboard-icon">
+            ⌨
+          </div>
 
-.card-icon {
-  position: absolute;
 
-  top: 32px;
-  left: 28px;
+          <div class="card-content">
 
-  font-size: 43px;
+            <b>
 
-  font-weight: 700;
-}
+              INGRESAR
+              <br>
 
-.qr-icon {
-  color: #bd0714;
-}
+              CÓDIGO
 
-.keyboard-icon {
-  color: #071a34;
-}
+            </b>
 
-.card-content {
-  padding: 31px 20px 65px 91px;
-}
 
-.card-content b {
-  display: block;
+            <small>
 
-  font-size: clamp(21px, 1.65vw, 28px);
+              Ingresa el código del
+              <br>
 
-  line-height: 1.02;
+              estudiante para consultar
+              <br>
 
-  color: #071a34;
-}
+              su información.
 
-.action-card.qr .card-content b {
-  color: #bd0714;
-}
+            </small>
 
-.card-content small {
-  display: block;
+          </div>
 
-  margin-top: 15px;
 
-  color: #444444;
+          <div class="arrow">
+            ›
+          </div>
 
-  font-size: clamp(14px, 1vw, 17px);
+        </button>
 
-  line-height: 1.35;
-}
+      </div>
 
-.arrow {
-  position: absolute;
 
-  left: 50%;
-  bottom: 8px;
 
-  transform: translateX(-50%);
+      <!-- =================================================
+           SEGURIDAD
+           ================================================= -->
 
-  width: 52px;
-  height: 52px;
+      <div class="security">
 
-  border-radius: 50%;
 
-  border: 3px solid #ffffff;
+        <div class="security-icon">
+          🛡️
+        </div>
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  color: #ffffff;
+        <div>
 
-  font-size: 43px;
+          Sistema seguro, confiable y diseñado para el bienestar
+          <br class="desktop">
 
-  line-height: 1;
+          financiero de nuestra comunidad educativa.
 
-  z-index: 3;
-}
+        </div>
 
-.action-card.qr::after,
-.action-card.code::after {
-  content: "";
+      </div>
 
-  position: absolute;
+    </section>
 
-  left: 0;
-  bottom: 0;
 
-  width: 100%;
-  height: 45px;
-}
 
-.action-card.qr::after {
-  background: #bd0714;
-}
+    <!-- ===================================================
+         LADO DERECHO
+         =================================================== -->
 
-.action-card.code::after {
-  background: #071a34;
-}
+    <section class="hero-right">
 
-/* =========================================================
-   SEGURIDAD
-   ========================================================= */
 
-.security {
-  width: 100%;
-  max-width: 690px;
+      <!-- =================================================
+           LÍNEA DECORATIVA
+           ================================================= -->
 
-  min-height: 72px;
+      <div class="decorative-line"></div>
 
-  margin-top: 18px;
 
-  padding: 13px 25px;
 
-  border-radius: 22px;
+      <!-- =================================================
+           BANCO GRANDE DE FONDO
+           
+           IMPORTANTE:
+           Este archivo debe existir dentro de assets.
+           ================================================= -->
 
-  background: #e5e7eb;
+      <img
+        class="bank-background"
+        src="assets/banco-lds-360.png"
+        alt="Banco LDS 360"
+      >
 
-  display: flex;
-  align-items: center;
 
-  gap: 18px;
 
-  color: #071a34;
+      <!-- =================================================
+           PROFESORA
+           ================================================= -->
 
-  font-size: clamp(13px, 1vw, 17px);
+      <img
+        class="teacher-img"
+        src="assets/assets65a7484e-5453-45af-a6cb-195dad723f3d-removebg-preview.png"
+        alt="Docente"
+      >
 
-  line-height: 1.35;
-}
 
-.security-icon {
-  font-size: 35px;
-  flex-shrink: 0;
-}
 
-/* =========================================================
-   LADO DERECHO
-   ========================================================= */
+      <!-- =================================================
+           ESTUDIANTES
+           ================================================= -->
 
-.hero-right {
-  position: relative;
+      <div class="children">
 
-  background: #08284c;
 
-  overflow: hidden;
+        <img
+          class="boy-img"
+          src="assets/assetsphoto_17_2025-01-25_10-11-15-removebg-preview.png"
+          alt="Estudiante"
+        >
 
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
 
-  isolation: isolate;
-}
+        <img
+          class="girl-img"
+          src="assets/assetsphoto_64_2025-01-25_10-11-15-removebg-preview.png"
+          alt="Estudiante"
+        >
 
-/* =========================================================
-   LÍNEAS DORADAS
-   ========================================================= */
+      </div>
 
-.hero-right::before,
-.hero-right::after {
-  content: "";
 
-  position: absolute;
 
-  width: 3px;
+      <!-- =================================================
+           MINI LOGO BANCO LDS 360
+           ================================================= -->
 
-  height: 150%;
+      <div class="mini-brand">
 
-  background: #d9a800;
 
-  transform: rotate(34deg);
+        <div class="mini-bank">
 
-  transform-origin: center;
 
-  opacity: 0.9;
+          <div class="mini-symbol">
 
-  z-index: 1;
-}
+            <div></div>
+            <div></div>
+            <div></div>
 
-.hero-right::before {
-  right: 8%;
-  top: -25%;
-}
+          </div>
 
-.hero-right::after {
-  right: 43%;
-  top: 42%;
-}
 
-/* =========================================================
-   LÍNEA DECORATIVA
-   ========================================================= */
+          <div>
 
-.decorative-line {
-  position: absolute;
+            <strong>
+              BANCO
+            </strong>
 
-  width: 100%;
-  height: 100%;
+            <span>
+              LDS 360
+            </span>
 
-  pointer-events: none;
+          </div>
 
-  z-index: 2;
-}
+        </div>
 
-/* =========================================================
-   BANCO GRANDE DE FONDO
-   ========================================================= */
 
-/*
-   IMPORTANTE:
+        <small>
+          EDUCAMOS · AHORRAMOS · CREAMOS FUTURO
+        </small>
 
-   El banco NO debe ocupar toda la pantalla.
+      </div>
 
-   Se mantiene dentro del lado derecho y detrás
-   de los personajes.
-*/
+    </section>
 
-.bank-background {
-  position: absolute;
+  </main>
 
-  z-index: 3;
 
-  width: 88%;
-  height: auto;
 
-  max-height: 78%;
+  <!-- =====================================================
+       PIE DE PÁGINA
+       ===================================================== -->
 
-  object-fit: contain;
+  <footer>
 
-  left: 50%;
-  top: 48%;
 
-  transform: translate(-50%, -50%);
+    <div class="footer-school">
 
-  opacity: 0.72;
 
-  pointer-events: none;
+      <img
+        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
+        alt="Escudo IEP La Salle del Sur"
+      >
 
-  filter: saturate(0.85) brightness(0.85);
-}
 
-/* =========================================================
-   PROFESORA
-   ========================================================= */
+      <div>
 
-.teacher-img {
-  position: absolute;
+        <strong>
+          IEP LA SALLE DEL SUR
+        </strong>
 
-  z-index: 7;
 
-  width: 35%;
-  max-width: 330px;
+        <span>
 
-  height: auto;
+          Valores que construyen
+          <br>
 
-  object-fit: contain;
+          un mejor mañana.
 
-  left: 50%;
-  top: 10%;
+        </span>
 
-  transform: translateX(-50%);
+      </div>
 
-  pointer-events: none;
-}
+    </div>
 
-/* =========================================================
-   ESTUDIANTES
-   ========================================================= */
 
-.children {
-  position: absolute;
 
-  z-index: 8;
+    <!-- =================================================
+         VALORES
+         ================================================= -->
 
-  left: 50%;
-  bottom: 7%;
+    <div class="values">
 
-  width: 76%;
 
-  height: 63%;
+      <div>
 
-  transform: translateX(-50%);
+        <b>
+          🛡️
+        </b>
 
-  pointer-events: none;
-}
+        <span>
+          Seguro
+        </span>
 
-.children img {
-  position: absolute;
+      </div>
 
-  height: auto;
 
-  object-fit: contain;
-}
+      <div>
 
-/* Niño */
+        <b>
+          🔐
+        </b>
 
-.boy-img {
-  width: 46%;
+        <span>
+          Confiable
+        </span>
 
-  left: 6%;
-  bottom: 0;
-}
+      </div>
 
-/* Niña */
 
-.girl-img {
-  width: 43%;
+      <div>
 
-  right: 4%;
-  bottom: 0;
-}
+        <b>
+          👥
+        </b>
 
-/* =========================================================
-   MINI LOGO
-   ========================================================= */
+        <span>
+          Responsable
+        </span>
 
-.mini-brand {
-  position: absolute;
+      </div>
 
-  z-index: 10;
 
-  right: 4%;
-  bottom: 4%;
+      <div>
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+        <b>
+          ☆
+        </b>
 
-  color: #ffffff;
-}
+        <span>
+          Eficiente
+        </span>
 
-.mini-bank {
-  display: flex;
+      </div>
 
-  align-items: center;
+    </div>
 
-  gap: 12px;
-}
+  </footer>
 
-.mini-symbol {
-  width: 45px;
-  height: 42px;
 
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
 
-  padding: 0 5px;
+  <!-- =====================================================
+       MODAL — ESCANEAR QR
+       ===================================================== -->
 
-  border-bottom: 5px solid #f4b400;
-}
+  <div
+    class="modal hidden"
+    id="scannerModal"
+  >
 
-.mini-symbol div {
-  width: 7px;
-  height: 30px;
 
-  background: #f4b400;
-}
+    <div class="modal-card scanner-card">
 
-.mini-bank strong,
-.mini-bank span {
-  display: block;
 
-  font-family: Georgia, "Times New Roman", serif;
+      <button
+        class="close"
+        data-close
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
 
-  line-height: 0.95;
-}
 
-.mini-bank strong {
-  font-size: 23px;
-}
+      <h2>
+        Escanear código QR
+      </h2>
 
-.mini-bank span {
-  color: #f4b400;
 
-  font-size: 25px;
+      <p>
+        Apunta la cámara al QR del estudiante.
+      </p>
 
-  font-weight: 700;
-}
 
-.mini-brand small {
-  margin-top: 7px;
+      <div id="reader"></div>
 
-  font-size: 9px;
 
-  letter-spacing: 0.02em;
-}
+      <div
+        id="scanStatus"
+        class="status"
+      ></div>
 
-/* =========================================================
-   PIE
-   ========================================================= */
+    </div>
 
-footer {
-  width: 100%;
-  height: 128px;
+  </div>
 
-  background: #071a34;
 
-  border-top: 3px solid #f4b400;
 
-  padding: 0 3.2%;
+  <!-- =====================================================
+       MODAL — INGRESAR CÓDIGO
+       ===================================================== -->
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  <div
+    class="modal hidden"
+    id="codeModal"
+  >
 
-  color: #ffffff;
 
-  position: relative;
-  z-index: 20;
-}
+    <div class="modal-card small">
 
-.footer-school {
-  display: flex;
-  align-items: center;
 
-  gap: 18px;
-}
+      <button
+        class="close"
+        data-close
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
 
-.footer-school img {
-  width: 72px;
-  height: 72px;
 
-  object-fit: contain;
-}
+      <h2>
+        Ingresar código
+      </h2>
 
-.footer-school strong {
-  display: block;
 
-  font-family: Georgia, "Times New Roman", serif;
+      <input
+        id="codeInput"
+        placeholder="Ej. LDS-EST-005"
+        autocomplete="off"
+      >
 
-  font-size: clamp(20px, 1.65vw, 27px);
-}
 
-.footer-school span {
-  display: block;
+      <button
+        class="primary"
+        id="findCode"
+        type="button"
+      >
+        Consultar estudiante
+      </button>
 
-  margin-top: 5px;
 
-  font-size: 15px;
+      <div
+        id="codeStatus"
+        class="status"
+      ></div>
 
-  line-height: 1.3;
-}
+    </div>
 
-.values {
-  display: flex;
-  align-items: center;
+  </div>
 
-  gap: 34px;
-}
 
-.values > div {
-  display: flex;
-  align-items: center;
 
-  gap: 11px;
+  <!-- =====================================================
+       MODAL — ADMINISTRADOR
+       ===================================================== -->
 
-  font-size: clamp(15px, 1.15vw, 20px);
-}
+  <div
+    class="modal hidden"
+    id="adminModal"
+  >
 
-.values b {
-  font-size: 29px;
-}
 
-/* =========================================================
-   MODALES
-   ========================================================= */
+    <div class="modal-card small">
 
-.hidden {
-  display: none !important;
-}
 
-.modal {
-  position: fixed;
+      <button
+        class="close"
+        data-close
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
 
-  inset: 0;
 
-  z-index: 100;
+      <h2>
+        Acceso de administrador
+      </h2>
 
-  background: rgba(0, 0, 0, 0.72);
 
-  display: flex;
+      <input
+        id="pinInput"
+        type="password"
+        placeholder="PIN"
+        autocomplete="off"
+      >
 
-  align-items: center;
-  justify-content: center;
 
-  padding: 20px;
-}
+      <button
+        class="primary"
+        id="adminLogin"
+        type="button"
+      >
+        Ingresar
+      </button>
 
-.modal-card {
-  width: min(620px, 95vw);
 
-  max-height: 90vh;
+      <div
+        id="adminStatus"
+        class="status"
+      ></div>
 
-  overflow-y: auto;
+    </div>
 
-  background: #ffffff;
+  </div>
 
-  border-radius: 24px;
 
-  padding: 30px;
 
-  position: relative;
+  <!-- =====================================================
+       MODAL — PERFIL DEL ESTUDIANTE
+       ===================================================== -->
 
-  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
-}
+  <div
+    class="modal hidden"
+    id="profileModal"
+  >
 
-.modal-card.small {
-  width: min(450px, 95vw);
-}
 
-.modal-card.profile {
-  width: min(850px, 95vw);
-}
+    <div class="modal-card profile">
 
-.close {
-  position: absolute;
 
-  top: 12px;
-  right: 16px;
+      <button
+        class="close"
+        data-close
+        type="button"
+        aria-label="Cerrar"
+      >
+        ×
+      </button>
 
-  border: none;
 
-  background: transparent;
+      <div id="profileContent"></div>
 
-  color: #071a34;
+    </div>
 
-  font-size: 34px;
+  </div>
 
-  cursor: pointer;
-}
 
-.modal-card h2 {
-  color: #071a34;
 
-  margin-bottom: 14px;
-}
+</body>
 
-.modal-card p {
-  color: #555;
-
-  margin-bottom: 20px;
-}
-
-#reader {
-  width: 100%;
-}
-
-.modal-card input {
-  width: 100%;
-
-  height: 50px;
-
-  padding: 0 15px;
-
-  border: 1px solid #ccd2da;
-
-  border-radius: 10px;
-
-  font-size: 17px;
-
-  margin-bottom: 15px;
-}
-
-.primary {
-  width: 100%;
-
-  min-height: 50px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #071a34;
-
-  color: #ffffff;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.status {
-  margin-top: 14px;
-
-  min-height: 20px;
-
-  color: #333;
-}
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-  .topbar {
-    height: 100px;
-  }
-
-  .school-crest {
-    width: 68px;
-    height: 68px;
-  }
-
-  .admin-btn {
-    min-width: 210px;
-    height: 56px;
-  }
-
-  .hero {
-    height: auto;
-    min-height: 760px;
-
-    grid-template-columns: 52% 48%;
-  }
-
-  .hero-left {
-    padding: 35px 4% 25px;
-  }
-
-  .bank-logo {
-    gap: 16px;
-  }
-
-  .bank-symbol {
-    transform: scale(0.85);
-    transform-origin: center;
-    margin-right: -12px;
-  }
-
-  .actions {
-    gap: 12px;
-  }
-
-  .action-card {
-    min-height: 205px;
-  }
-
-  footer {
-    height: 110px;
-  }
-
-  .values {
-    gap: 18px;
-  }
-}
-
-/* =========================================================
-   MÓVIL
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  body {
-    overflow-x: hidden;
-  }
-
-  .topbar {
-    height: auto;
-    min-height: 100px;
-
-    padding: 14px 18px;
-
-    gap: 15px;
-  }
-
-  .brand {
-    gap: 10px;
-  }
-
-  .school-crest {
-    width: 54px;
-    height: 54px;
-  }
-
-  .school-name strong {
-    font-size: 18px;
-  }
-
-  .school-name span {
-    font-size: 12px;
-    margin-top: 5px;
-  }
-
-  .admin-btn {
-    min-width: auto;
-
-    height: 48px;
-
-    padding: 0 14px;
-
-    border-radius: 14px;
-
-    font-size: 14px;
-  }
-
-  .lock {
-    font-size: 20px;
-  }
-
-  .hero {
-    display: flex;
-    flex-direction: column;
-
-    height: auto;
-    min-height: 0;
-  }
-
-  .hero-left {
-    min-height: 700px;
-
-    padding: 35px 18px;
-  }
-
-  .hero-left::after {
-    display: none;
-  }
-
-  .bank-logo {
-    width: 100%;
-
-    gap: 8px;
-
-    transform: scale(0.86);
-  }
-
-  .bank-symbol {
-    transform: scale(0.72);
-    margin-right: -30px;
-  }
-
-  .bank-title h1 {
-    font-size: 48px;
-  }
-
-  .online {
-    font-size: 15px;
-  }
-
-  .subtitle {
-    font-size: 20px;
-  }
-
-  .intro {
-    font-size: 19px;
-  }
-
-  .actions {
-    grid-template-columns: 1fr;
-
-    max-width: 430px;
-  }
-
-  .action-card {
-    min-height: 190px;
-  }
-
-  .security {
-    max-width: 430px;
-  }
-
-  .hero-right {
-    height: 620px;
-
-    min-height: 620px;
-  }
-
-  .bank-background {
-    width: 92%;
-    max-height: 62%;
-
-    top: 48%;
-  }
-
-  .teacher-img {
-    width: 35%;
-    top: 9%;
-  }
-
-  .children {
-    width: 88%;
-    height: 64%;
-    bottom: 4%;
-  }
-
-  .mini-brand {
-    right: 4%;
-    bottom: 3%;
-  }
-
-  footer {
-    height: auto;
-
-    padding: 25px 18px;
-
-    flex-direction: column;
-
-    gap: 25px;
-
-    align-items: flex-start;
-  }
-
-  .values {
-    width: 100%;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-  }
-}
-
-/* =========================================================
-   PANTALLAS MUY ALTAS
-   ========================================================= */
-
-@media (min-width: 1400px) and (min-height: 800px) {
-
-  .hero {
-    height: calc(100vh - 244px);
-  }
-
-  .hero-left {
-    padding-top: 48px;
-  }
-
-  .bank-logo {
-    transform: scale(1.02);
-  }
-
-  .teacher-img {
-    width: 33%;
-    top: 8%;
-  }
-
-  .children {
-    width: 74%;
-    height: 67%;
-    bottom: 5%;
-  }
-
-  .bank-background {
-    width: 91%;
-    max-height: 80%;
-    top: 49%;
-  }
-}
+</html>
