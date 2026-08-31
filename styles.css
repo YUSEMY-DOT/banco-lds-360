@@ -2268,3 +2268,19 @@ footer {
     margin-right: auto !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — BAJAR UN POCO LOS 3 CUADROS
+   2 botones + cuadro de seguridad.
+   Se mantienen dentro del margen inferior.
+   NO modifica ningún otro elemento.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .actions,
+  .hero-left .security {
+    transform: translateY(8px) !important;
+  }
+
+}
