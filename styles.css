@@ -1462,9 +1462,11 @@ footer {
 }
 
 /* =========================================================
-   BANCO LDS 360 — PC FINAL
-   OBJETIVO: TODO EL CONJUNTO CENTRADO Y COMPLETO EN PANTALLA
-   NO MODIFICA LA VISTA MÓVIL
+   BANCO LDS 360 — CORRECCIÓN DEFINITIVA PC/LAPTOP
+   1) Banco de fondo más GRANDE y CENTRADO
+   2) Botones bien centrados dentro del área blanca
+   3) Barra inferior MÁS DELGADA
+   4) No modifica la estructura móvil original
    ========================================================= */
 
 @media (min-width: 761px) {
@@ -1476,12 +1478,16 @@ footer {
     overflow-x: hidden;
   }
 
-  /* Encabezado compacto para dejar espacio a toda la portada */
+  /* =======================================================
+     ENCABEZADO
+     ======================================================= */
+
   .topbar {
-    width: 100%;
+    width: 100% !important;
     height: 100px !important;
     min-height: 100px !important;
     padding: 0 3.2% !important;
+    flex-shrink: 0 !important;
   }
 
   .school-crest {
@@ -1494,7 +1500,7 @@ footer {
   }
 
   .school-name strong {
-    font-size: clamp(23px, 2.1vw, 34px) !important;
+    font-size: clamp(23px, 2.15vw, 34px) !important;
   }
 
   .school-name span {
@@ -1513,12 +1519,18 @@ footer {
     font-size: 24px !important;
   }
 
-  /* Portada completa dentro del espacio disponible */
+  /* =======================================================
+     PORTADA
+     ======================================================= */
+
   .hero {
     width: 100% !important;
-    height: calc(100vh - 190px) !important;
+
+    /* Todo el bloque queda dentro de la pantalla */
+    height: calc(100vh - 170px) !important;
+
     min-height: 500px !important;
-    max-height: 600px !important;
+    max-height: 680px !important;
 
     display: grid !important;
     grid-template-columns: 51% 49% !important;
@@ -1526,134 +1538,157 @@ footer {
     overflow: hidden !important;
   }
 
-  /* -------------------------
-     LADO IZQUIERDO: CENTRADO
-     ------------------------- */
+  /* =======================================================
+     LADO BLANCO — TODO CENTRADO
+     ======================================================= */
+
   .hero-left {
     width: 100% !important;
     height: 100% !important;
     min-height: 0 !important;
 
-    padding: 18px 4% 10px !important;
+    padding: 14px 3.5% 8px !important;
 
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: flex-start !important;
 
     overflow: hidden !important;
   }
 
   .bank-logo {
-    width: min(600px, 92%) !important;
+    width: min(610px, 94%) !important;
     margin: 0 auto !important;
-    transform: scale(.84) !important;
+
+    transform: scale(.86) !important;
     transform-origin: top center !important;
   }
 
   .subtitle {
-    margin-top: -6px !important;
+    width: 100% !important;
+    margin: -6px auto 0 !important;
+
     text-align: center !important;
     font-size: clamp(16px, 1.25vw, 21px) !important;
   }
 
   .intro {
-    margin-top: 8px !important;
+    width: 100% !important;
+    margin: 8px auto 0 !important;
+
     text-align: center !important;
     font-size: clamp(16px, 1.15vw, 20px) !important;
     line-height: 1.28 !important;
   }
 
+  /* Botones dentro de la zona blanca */
   .actions {
     width: 100% !important;
     max-width: 650px !important;
-    margin: 11px auto 0 !important;
+
+    margin: 12px auto 0 !important;
 
     display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
     gap: 14px !important;
   }
 
   .action-card {
     width: 100% !important;
-    height: 122px !important;
-    min-height: 122px !important;
-    max-height: 122px !important;
+
+    height: 132px !important;
+    min-height: 132px !important;
+    max-height: 132px !important;
   }
 
   .card-icon {
-    top: 18px !important;
-    left: 20px !important;
-    font-size: 32px !important;
-  }
-
-  .card-content {
-    padding: 13px 10px 34px 62px !important;
-  }
-
-  .card-content b {
-    font-size: clamp(15px, 1.02vw, 18px) !important;
-  }
-
-  .card-content small {
-    margin-top: 5px !important;
-    font-size: clamp(9px, .68vw, 11px) !important;
-    line-height: 1.2 !important;
-  }
-
-  .arrow {
-    width: 42px !important;
-    height: 42px !important;
-    bottom: 4px !important;
+    top: 20px !important;
+    left: 21px !important;
     font-size: 34px !important;
   }
 
+  .card-content {
+    padding: 14px 10px 36px 64px !important;
+  }
+
+  .card-content b {
+    font-size: clamp(15px, 1.05vw, 19px) !important;
+    line-height: 1.02 !important;
+  }
+
+  .card-content small {
+    margin-top: 6px !important;
+    font-size: clamp(9px, .7vw, 11px) !important;
+    line-height: 1.25 !important;
+  }
+
+  .arrow {
+    width: 43px !important;
+    height: 43px !important;
+    bottom: 4px !important;
+    font-size: 35px !important;
+  }
+
+  /* Caja de seguridad también queda dentro de la zona blanca */
   .security {
     width: 100% !important;
     max-width: 650px !important;
 
-    min-height: 45px !important;
-    height: 45px !important;
+    min-height: 48px !important;
+    height: 48px !important;
 
     margin: 8px auto 0 !important;
-    padding: 6px 14px !important;
+    padding: 7px 14px !important;
 
     gap: 10px !important;
+
     font-size: clamp(9px, .7vw, 11px) !important;
     line-height: 1.2 !important;
+
+    flex-shrink: 0 !important;
   }
 
   .security-icon {
     font-size: 20px !important;
   }
 
-  /* -------------------------
-     LADO DERECHO: TODO CENTRADO
-     ------------------------- */
+  /* =======================================================
+     LADO DERECHO
+     ======================================================= */
+
   .hero-right {
     width: 100% !important;
     height: 100% !important;
     min-height: 0 !important;
-    overflow: hidden !important;
 
     position: relative !important;
+    overflow: hidden !important;
   }
 
-  /* Banco de fondo centrado dentro del lado derecho */
+  /* BANCO DE FONDO:
+     grande, centrado dentro del panel derecho,
+     y detrás de los personajes */
   .hero-right .bank-background {
-    width: 70% !important;
+    width: 84% !important;
+    height: auto !important;
+
     max-width: none !important;
-    max-height: 56% !important;
+    max-height: 70% !important;
 
     left: 50% !important;
-    top: 60% !important;
+    top: 58% !important;
 
     transform: translate(-50%, -50%) !important;
+
     object-fit: contain !important;
-    opacity: .74 !important;
+
+    opacity: .82 !important;
+
+    z-index: 3 !important;
   }
 
-  /* Profesora centrada, un poco más grande */
+  /* Profesora */
   .hero-right .teacher-img {
     width: 30% !important;
     max-width: 245px !important;
@@ -1662,10 +1697,11 @@ footer {
     top: 7% !important;
 
     transform: translateX(-50%) !important;
+
     z-index: 7 !important;
   }
 
-  /* Niños: se conservan, centrados */
+  /* Niños: conservar el tamaño que aprobaste */
   .hero-right .children {
     left: 50% !important;
     bottom: 5% !important;
@@ -1674,6 +1710,7 @@ footer {
     height: 50% !important;
 
     transform: translateX(-50%) !important;
+
     z-index: 8 !important;
   }
 
@@ -1689,7 +1726,7 @@ footer {
     bottom: 0 !important;
   }
 
-  /* Líneas muy suaves, detrás de todo */
+  /* Líneas: casi imperceptibles y detrás */
   .hero-right::before,
   .hero-right::after {
     width: 2px !important;
@@ -1697,20 +1734,23 @@ footer {
     z-index: 1 !important;
   }
 
+  /* Mini logo */
   .mini-brand {
-    right: 4% !important;
+    right: 3% !important;
     bottom: 3% !important;
     z-index: 10 !important;
   }
 
-  /* -------------------------
-     FOOTER: VISIBLE COMPLETO
-     ------------------------- */
+  /* =======================================================
+     BARRA INFERIOR — MÁS DELGADA
+     ======================================================= */
+
   footer {
     width: 100% !important;
-    height: 90px !important;
-    min-height: 90px !important;
-    max-height: 90px !important;
+
+    height: 70px !important;
+    min-height: 70px !important;
+    max-height: 70px !important;
 
     padding: 0 3.2% !important;
 
@@ -1720,41 +1760,49 @@ footer {
     justify-content: space-between !important;
 
     overflow: hidden !important;
+
     flex-shrink: 0 !important;
   }
 
   .footer-school {
-    gap: 14px !important;
+    gap: 12px !important;
+    flex-shrink: 0 !important;
   }
 
   .footer-school img {
-    width: 50px !important;
-    height: 58px !important;
+    width: 42px !important;
+    height: 50px !important;
   }
 
   .footer-school strong {
-    font-size: clamp(16px, 1.25vw, 20px) !important;
+    font-size: clamp(15px, 1.15vw, 19px) !important;
   }
 
   .footer-school span {
-    font-size: 11px !important;
+    font-size: 10px !important;
+    margin-top: 3px !important;
   }
 
   .values {
-    gap: 22px !important;
+    gap: 20px !important;
+    flex-shrink: 0 !important;
   }
 
   .values > div {
-    font-size: clamp(11px, .85vw, 14px) !important;
+    font-size: clamp(10px, .8vw, 13px) !important;
+    gap: 7px !important;
   }
 
   .values b {
-    font-size: 21px !important;
+    font-size: 19px !important;
   }
 }
 
-/* Pantallas con poco alto: compactar sin cambiar el diseño */
-@media (min-width: 761px) and (max-height: 750px) {
+/* =========================================================
+   PC CON POCA ALTURA
+   ========================================================= */
+
+@media (min-width: 761px) and (max-height: 760px) {
 
   .topbar {
     height: 88px !important;
@@ -1762,35 +1810,35 @@ footer {
   }
 
   .hero {
-    height: calc(100vh - 160px) !important;
+    height: calc(100vh - 148px) !important;
     min-height: 0 !important;
-    max-height: 540px !important;
+    max-height: 570px !important;
   }
 
   footer {
-    height: 72px !important;
-    min-height: 72px !important;
-    max-height: 72px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
   }
 
   .hero-left {
-    padding-top: 12px !important;
-    padding-bottom: 7px !important;
+    padding-top: 10px !important;
+    padding-bottom: 6px !important;
   }
 
   .bank-logo {
-    transform: scale(.74) !important;
-    margin-bottom: -12px !important;
+    transform: scale(.76) !important;
+    margin-bottom: -14px !important;
   }
 
   .subtitle {
     margin-top: -2px !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
   }
 
   .intro {
     margin-top: 6px !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
   }
 
   .actions {
@@ -1798,30 +1846,33 @@ footer {
   }
 
   .action-card {
-    height: 108px !important;
-    min-height: 108px !important;
-    max-height: 108px !important;
+    height: 106px !important;
+    min-height: 106px !important;
+    max-height: 106px !important;
   }
 
   .security {
-    height: 40px !important;
-    min-height: 40px !important;
-    margin-top: 6px !important;
+    height: 39px !important;
+    min-height: 39px !important;
+    margin-top: 5px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+
+  .hero-right .bank-background {
+    width: 82% !important;
+    max-height: 62% !important;
+    top: 58% !important;
   }
 
   .hero-right .teacher-img {
-    top: 5% !important;
     width: 28% !important;
-    max-width: 220px !important;
+    max-width: 225px !important;
+    top: 5% !important;
   }
 
   .hero-right .children {
     bottom: 3% !important;
     height: 47% !important;
-  }
-
-  .hero-right .bank-background {
-    top: 60% !important;
-    max-height: 55% !important;
   }
 }
