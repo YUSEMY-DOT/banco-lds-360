@@ -2226,3 +2226,19 @@ footer {
     text-align: center !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — ACHICAR LAS LETRAS DE ESTAS DOS FRASES
+   No cambia posición ni ningún otro elemento.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .subtitle {
+    font-size: 16px !important;
+  }
+
+  .hero-left .intro {
+    font-size: 16px !important;
+  }
+}
