@@ -1785,3 +1785,22 @@ footer {
     max-height: 96px !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — SUBIR LOS DOS BOTONES
+   NO MODIFICA NADA MÁS.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .actions {
+    transform: translateY(-28px) !important;
+  }
+}
+
+@media (min-width: 761px) and (max-height: 760px) {
+
+  .hero-left .actions {
+    transform: translateY(-22px) !important;
+  }
+}
