@@ -2207,3 +2207,22 @@ footer {
     text-align: center !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — "Sistema financiero educativo"
+   Solo se centra correctamente.
+   No modifica nada más.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .subtitle {
+    width: 100% !important;
+    max-width: 650px !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    text-align: center !important;
+  }
+}
