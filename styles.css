@@ -175,7 +175,7 @@ button{
 .hero{
   width:100%;
 
-  height:calc(100dvh - 176px);
+  height:calc(100dvh - 146px);
 
   min-height:0;
 
@@ -500,8 +500,8 @@ button{
 
   min-width:0;
 
-  height:128px;
-  min-height:128px;
+  height:122px;
+  min-height:122px;
 
   position:relative;
 
@@ -666,7 +666,10 @@ button{
   bottom:0;
 
   transform:
-    translateX(-50%);
+    translate(
+      -50%,
+      50%
+    );
 
   width:36px;
   height:36px;
@@ -1524,7 +1527,7 @@ footer{
   }
 
   .hero{
-    height:calc(100dvh - 158px);
+    height:calc(100dvh - 132px);
   }
 
   .hero-left{
@@ -1564,9 +1567,9 @@ footer{
   }
 
   .action-card{
-    height:118px;
+    height:112px;
 
-    min-height:118px;
+    min-height:112px;
 
     padding:
       9px
@@ -2335,5 +2338,49 @@ footer{
 
   .girl-img{
     margin-left:-4px;
+  }
+}
+
+/* =========================================================
+   AJUSTE FINAL — SOLO FRANJA INFERIOR
+   NO MODIFICA PORTADA, BOTONES NI PERSONAJES
+========================================================= */
+
+@media (min-width:851px){
+  footer{
+    height:58px !important;
+    min-height:58px !important;
+    padding:4px clamp(18px,4vw,55px) !important;
+  }
+
+  .footer-school{
+    gap:8px !important;
+  }
+
+  .footer-school img{
+    width:38px !important;
+    height:44px !important;
+  }
+
+  .footer-school strong{
+    font-size:13px !important;
+  }
+
+  .footer-school span{
+    margin-top:1px !important;
+    font-size:9px !important;
+    line-height:1.05 !important;
+  }
+
+  .values{
+    gap:16px !important;
+  }
+
+  .values b{
+    font-size:17px !important;
+  }
+
+  .values span{
+    font-size:11px !important;
   }
 }
