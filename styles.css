@@ -2145,3 +2145,26 @@ footer {
     margin-right: auto !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — CUADRO DE SEGURIDAD
+   Subir y encajar el cuadro.
+   NO modifica nada más.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .security {
+    position: relative !important;
+    top: -18px !important;
+    margin-bottom: -18px !important;
+  }
+}
+
+@media (min-width: 761px) and (max-height: 760px) {
+
+  .hero-left .security {
+    top: -14px !important;
+    margin-bottom: -14px !important;
+  }
+}
