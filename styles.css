@@ -1460,43 +1460,571 @@ footer {
     top: 50%;
   }
 }
+
 /* =========================================================
-   BANCO LDS 360 — CORRECCIÓN DEL DIBUJO DEL BANCO
-   SOLO PC/LAPTOP
+   BANCO LDS 360 — AJUSTE FINAL LIMPIO
+   PC/LAPTOP + CELULAR
+   Todo centrado. Sin parches duplicados.
+   ========================================================= */
+
+
+/* =========================================================
+   PC / LAPTOP
    ========================================================= */
 
 @media (min-width: 761px) {
 
-  /* El edificio queda centrado detrás de los personajes,
-     más pequeño y sin salirse por la parte inferior. */
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* Encabezado estable */
+  .topbar {
+    width: 100%;
+    height: 116px !important;
+    min-height: 116px !important;
+    flex-shrink: 0;
+  }
+
+  /* La portada ocupa exactamente el espacio entre encabezado y footer */
+  .hero {
+    width: 100% !important;
+    height: calc(100vh - 221px) !important;
+    min-height: 500px !important;
+    max-height: none !important;
+
+    display: grid !important;
+    grid-template-columns: 51% 49% !important;
+
+    overflow: hidden !important;
+  }
+
+  /* -------------------------
+     LADO IZQUIERDO CENTRADO
+     ------------------------- */
+
+  .hero-left {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+
+    padding: 18px 4% 10px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    overflow: hidden !important;
+  }
+
+  .bank-logo {
+    width: min(620px, 94%) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    transform: scale(.90) !important;
+    transform-origin: top center !important;
+    margin-bottom: 0 !important;
+  }
+
+  .bank-title {
+    text-align: left !important;
+  }
+
+  .subtitle,
+  .intro {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .subtitle {
+    margin-top: 2px !important;
+  }
+
+  .intro {
+    margin-top: 9px !important;
+    line-height: 1.30 !important;
+  }
+
+  /* Tarjetas centradas */
+  .actions {
+    width: 100% !important;
+    max-width: 660px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 12px !important;
+
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+
+  .action-card {
+    width: 100% !important;
+    height: 132px !important;
+    min-height: 132px !important;
+    max-height: 132px !important;
+  }
+
+  .card-content {
+    padding: 16px 12px 39px 70px !important;
+  }
+
+  .card-content b,
+  .card-content small {
+    text-align: left !important;
+  }
+
+  .security {
+    width: 100% !important;
+    max-width: 660px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 8px !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 7px 15px !important;
+  }
+
+  /* -------------------------
+     LADO DERECHO
+     ------------------------- */
+
+  .hero-right {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  /* Banco: centrado en el panel derecho y más abajo,
+     pero sin tocar a los niños */
   .hero-right .bank-background {
-    width: 68% !important;
+    width: 72% !important;
     height: auto !important;
-    max-height: 56% !important;
+    max-height: 60% !important;
 
     left: 50% !important;
-    top: 57% !important;
+    top: 58% !important;
 
     transform: translate(-50%, -50%) !important;
-
     object-fit: contain !important;
     opacity: .72 !important;
   }
 
-  /* Profesora: conserva el tamaño que acabamos de aprobar. */
+  /* Profesora: más grande y centrada */
   .hero-right .teacher-img {
     width: 30% !important;
     max-width: 245px !important;
+
     left: 50% !important;
     top: 8% !important;
+
     transform: translateX(-50%) !important;
+    z-index: 7 !important;
   }
 
-  /* Líneas muy, muy suaves y detrás. */
+  /* Niños: conservar la proporción que ya estaba funcionando */
+  .hero-right .children {
+    left: 50% !important;
+    bottom: 7% !important;
+
+    width: 66% !important;
+    height: 52% !important;
+
+    transform: translateX(-50%) !important;
+    z-index: 8 !important;
+  }
+
+  .hero-right .boy-img {
+    width: 44% !important;
+    left: 3% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right .girl-img {
+    width: 41% !important;
+    right: 3% !important;
+    bottom: 0 !important;
+  }
+
+  /* Líneas casi imperceptibles y detrás */
   .hero-right::before,
   .hero-right::after {
     width: 2px !important;
     opacity: .06 !important;
     z-index: 1 !important;
+  }
+
+  /* Mini logo centrado en su esquina */
+  .mini-brand {
+    right: 4% !important;
+    bottom: 4% !important;
+  }
+
+  /* Footer completo */
+  footer {
+    width: 100% !important;
+    height: 105px !important;
+    min-height: 105px !important;
+    max-height: 105px !important;
+    flex-shrink: 0 !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    overflow: hidden !important;
+  }
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .topbar {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100px !important;
+
+    padding: 14px 18px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+  .brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .school-crest {
+    width: 54px !important;
+    height: 54px !important;
+    flex: 0 0 54px !important;
+  }
+
+  .school-name {
+    min-width: 0 !important;
+  }
+
+  .school-name strong {
+    font-size: 18px !important;
+    line-height: 1.05 !important;
+    white-space: normal !important;
+  }
+
+  .school-name span {
+    font-size: 12px !important;
+    line-height: 1.05 !important;
+    margin-top: 5px !important;
+  }
+
+  .admin-btn {
+    min-width: auto !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    height: 48px !important;
+
+    padding: 0 14px !important;
+    border-radius: 14px !important;
+    gap: 7px !important;
+
+    font-size: 14px !important;
+  }
+
+  /* Una sola columna y flujo natural */
+  .hero {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    overflow: visible !important;
+  }
+
+  .hero-left {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    padding: 26px 16px 18px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+
+    overflow: visible !important;
+  }
+
+  .hero-left::after {
+    display: none !important;
+  }
+
+  /* Logo y textos centrados */
+  .bank-logo {
+    width: 100% !important;
+    max-width: 410px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    gap: 5px !important;
+    transform: none !important;
+  }
+
+  .bank-symbol {
+    transform: scale(.78) !important;
+    transform-origin: center !important;
+    margin-right: -20px !important;
+  }
+
+  .bank-title {
+    text-align: left !important;
+  }
+
+  .bank-title h1 {
+    font-size: clamp(38px, 12vw, 50px) !important;
+    line-height: .86 !important;
+  }
+
+  .online {
+    font-size: 12px !important;
+    letter-spacing: .42em !important;
+    text-align: center !important;
+  }
+
+  .subtitle {
+    width: 100% !important;
+    max-width: 430px !important;
+    margin: 9px auto 0 !important;
+    font-size: clamp(16px, 4.8vw, 20px) !important;
+    text-align: center !important;
+  }
+
+  .intro {
+    width: 100% !important;
+    max-width: 430px !important;
+    margin: 11px auto 0 !important;
+    font-size: clamp(15px, 4.4vw, 19px) !important;
+    line-height: 1.35 !important;
+    text-align: center !important;
+  }
+
+  /* Tarjetas una debajo de otra */
+  .actions {
+    width: 100% !important;
+    max-width: 430px !important;
+    margin: 16px auto 0 !important;
+
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .action-card {
+    width: 100% !important;
+    height: 155px !important;
+    min-height: 155px !important;
+    max-height: 155px !important;
+  }
+
+  .security {
+    width: 100% !important;
+    max-width: 430px !important;
+    min-height: 54px !important;
+    height: auto !important;
+    margin: 11px auto 0 !important;
+  }
+
+  /* Panel derecho debajo del contenido */
+  .hero-right {
+    width: 100% !important;
+    height: 430px !important;
+    min-height: 430px !important;
+    max-height: 430px !important;
+
+    overflow: hidden !important;
+  }
+
+  .bank-background {
+    width: 82% !important;
+    max-height: 58% !important;
+
+    left: 50% !important;
+    top: 53% !important;
+
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .teacher-img {
+    width: 31% !important;
+    max-width: none !important;
+
+    left: 50% !important;
+    top: 6% !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  .children {
+    width: 78% !important;
+    height: 58% !important;
+
+    left: 50% !important;
+    bottom: 3% !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  .boy-img {
+    width: 39% !important;
+    left: 5% !important;
+    bottom: 0 !important;
+  }
+
+  .girl-img {
+    width: 36% !important;
+    right: 5% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right::before,
+  .hero-right::after {
+    width: 2px !important;
+    opacity: .06 !important;
+    z-index: 1 !important;
+  }
+
+  .mini-brand {
+    right: 3% !important;
+    bottom: 3% !important;
+    transform: scale(.78) !important;
+    transform-origin: bottom right !important;
+  }
+
+  footer {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    padding: 20px 14px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 18px !important;
+  }
+
+  .footer-school {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .values {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .values > div {
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 11px !important;
+  }
+}
+
+
+/* =========================================================
+   CELULARES MUY PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .topbar {
+    min-height: 88px !important;
+    padding: 10px 11px !important;
+  }
+
+  .school-crest {
+    width: 43px !important;
+    height: 43px !important;
+    flex-basis: 43px !important;
+  }
+
+  .school-name strong {
+    font-size: 15px !important;
+  }
+
+  .school-name span {
+    font-size: 9px !important;
+  }
+
+  .admin-btn {
+    height: 40px !important;
+    padding: 0 9px !important;
+    font-size: 11px !important;
+  }
+
+  .hero-left {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .bank-title h1 {
+    font-size: 36px !important;
+  }
+
+  .online {
+    font-size: 10px !important;
+  }
+
+  .subtitle {
+    font-size: 15px !important;
+  }
+
+  .intro {
+    font-size: 14px !important;
+  }
+
+  .action-card {
+    height: 145px !important;
+    min-height: 145px !important;
+    max-height: 145px !important;
+  }
+
+  .hero-right {
+    height: 390px !important;
+    min-height: 390px !important;
+    max-height: 390px !important;
   }
 }
