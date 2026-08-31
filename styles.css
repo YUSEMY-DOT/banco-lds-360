@@ -2051,3 +2051,38 @@ footer {
     display: none !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — BOTONES MÁS ANGOSTOS
+   Mantener letras y QR.
+   NO modificar nada más.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .actions {
+    width: 100% !important;
+    max-width: 560px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .hero-left .action-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Mantener visibles las letras */
+  .hero-left .action-card .card-content b,
+  .hero-left .action-card .card-content small {
+    display: block !important;
+  }
+
+  /* Mantener visibles los iconos QR/teclado */
+  .hero-left .action-card .card-icon {
+    display: block !important;
+  }
+}
