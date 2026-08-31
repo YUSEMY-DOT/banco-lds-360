@@ -1980,3 +1980,229 @@ footer {
     min-height: 390px !important;
   }
 }
+/* =========================================================
+   AJUSTE EXCLUSIVO PC / LAPTOP
+   NO AFECTA CELULAR
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* Encabezado */
+  .topbar {
+    height: 116px !important;
+    min-height: 116px !important;
+    flex-shrink: 0;
+  }
+
+  /* PORTADA */
+  .hero {
+    width: 100% !important;
+    height: calc(100vh - 221px) !important;
+    min-height: 500px !important;
+    max-height: none !important;
+
+    display: grid !important;
+    grid-template-columns: 51% 49% !important;
+
+    overflow: hidden !important;
+  }
+
+  /* LADO IZQUIERDO */
+  .hero-left {
+    height: 100% !important;
+    min-height: 0 !important;
+
+    padding: 18px 4% 10px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+
+    overflow: hidden !important;
+  }
+
+  /* Logo Banco LDS 360 */
+  .bank-logo {
+    width: min(600px, 94%) !important;
+    margin-bottom: 0 !important;
+
+    transform: scale(.88) !important;
+    transform-origin: top center !important;
+  }
+
+  .subtitle {
+    margin-top: 0 !important;
+    font-size: clamp(17px, 1.4vw, 22px) !important;
+  }
+
+  .intro {
+    margin-top: 9px !important;
+    font-size: clamp(17px, 1.25vw, 21px) !important;
+    line-height: 1.3 !important;
+  }
+
+  /* TARJETAS */
+  .actions {
+    width: 100% !important;
+    max-width: 690px !important;
+
+    margin-top: 11px !important;
+
+    gap: 14px !important;
+  }
+
+  .action-card {
+    height: 132px !important;
+    min-height: 132px !important;
+  }
+
+  .card-icon {
+    top: 24px !important;
+    left: 23px !important;
+    font-size: 36px !important;
+  }
+
+  .card-content {
+    padding: 16px 12px 39px 70px !important;
+  }
+
+  .card-content b {
+    font-size: clamp(16px, 1.15vw, 20px) !important;
+  }
+
+  .card-content small {
+    margin-top: 6px !important;
+    font-size: clamp(10px, .75vw, 12px) !important;
+    line-height: 1.25 !important;
+  }
+
+  .arrow {
+    width: 45px !important;
+    height: 45px !important;
+    bottom: 5px !important;
+    font-size: 36px !important;
+  }
+
+  /* SEGURIDAD */
+  .security {
+    width: 100% !important;
+    max-width: 690px !important;
+
+    min-height: 48px !important;
+
+    margin-top: 8px !important;
+
+    padding: 7px 15px !important;
+
+    font-size: clamp(10px, .78vw, 12px) !important;
+    line-height: 1.25 !important;
+
+    flex-shrink: 0 !important;
+  }
+
+  .security-icon {
+    font-size: 22px !important;
+  }
+
+  /* LADO DERECHO */
+  .hero-right {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+  }
+
+  /* Banco */
+  .bank-background {
+    width: 78% !important;
+    max-height: 68% !important;
+
+    left: 50% !important;
+    top: 51% !important;
+
+    transform: translate(-50%, -50%) !important;
+  }
+
+  /* Profesora */
+  .teacher-img {
+    width: 25% !important;
+    max-width: 210px !important;
+
+    left: 50% !important;
+    top: 5% !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  /* Niños */
+  .children {
+    left: 50% !important;
+    bottom: 4% !important;
+
+    width: 61% !important;
+    height: 46% !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  .boy-img {
+    width: 43% !important;
+    left: 3% !important;
+    bottom: 0 !important;
+  }
+
+  .girl-img {
+    width: 40% !important;
+    right: 3% !important;
+    bottom: 0 !important;
+  }
+
+  /* Líneas: suaves y detrás */
+  .hero-right::before,
+  .hero-right::after {
+    opacity: .22 !important;
+    z-index: 1 !important;
+  }
+
+  /* Mini logo */
+  .mini-brand {
+    right: 4% !important;
+    bottom: 4% !important;
+    z-index: 10 !important;
+  }
+
+  /* FOOTER */
+  footer {
+    width: 100% !important;
+    height: 105px !important;
+    min-height: 105px !important;
+    max-height: 105px !important;
+
+    flex-shrink: 0 !important;
+
+    padding: 0 3.2% !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    overflow: hidden !important;
+  }
+
+  .footer-school {
+    flex-shrink: 0;
+  }
+
+  .values {
+    flex-shrink: 0;
+  }
+}
