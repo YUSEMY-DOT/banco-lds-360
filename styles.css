@@ -1622,3 +1622,66 @@ footer {
     bottom: 0 !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO: NIÑOS MÁS PEQUEÑOS Y A LA ALTURA DE LA MAESTRA
+   No cambia profesora, banco, izquierda, botones ni footer.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-right .children {
+    width: 45% !important;
+    height: 40% !important;
+
+    left: 50% !important;
+    bottom: 7% !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  .hero-right .boy-img {
+    width: 34% !important;
+    left: 5% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right .girl-img {
+    width: 31% !important;
+    right: 5% !important;
+    bottom: 0 !important;
+  }
+}
+
+/* =========================================================
+   ÚLTIMO AJUSTE — SOLO LOS NIÑOS
+   Más grandes y con los pies alineados con la maestra.
+   No cambia maestra, banco, izquierda ni barra inferior.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-right .children {
+    width: 56% !important;
+    height: 58% !important;
+
+    left: 50% !important;
+    bottom: 0 !important;
+
+    transform: translateX(-50%) !important;
+
+    z-index: 8 !important;
+  }
+
+  .hero-right .boy-img {
+    width: 42% !important;
+    left: 4% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right .girl-img {
+    width: 39% !important;
+    right: 4% !important;
+    bottom: 0 !important;
+  }
+}
