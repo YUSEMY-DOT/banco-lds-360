@@ -2122,3 +2122,26 @@ footer {
     white-space: normal !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — CENTRAR LOS NOMBRES DE LAS SECCIONES
+   No modifica ningún otro elemento.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .subtitle {
+    text-align: center !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-left .intro {
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 650px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
