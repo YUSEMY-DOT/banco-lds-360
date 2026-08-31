@@ -1,2418 +1,1520 @@
-:root{
-  --navy:#071a34;
-  --navy2:#0d294c;
-  --red:#a51018;
-  --gold:#d9a63a;
-  --gold2:#efc15b;
-  --white:#fff;
-  --ink:#14233c;
-  --border:#dfe3e8;
+/* =========================================================
+   BANCO LDS 360 ONLINE
+   STYLES.CSS COMPLETO
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+  --navy: #071a34;
+  --navy-2: #0b2445;
+  --navy-3: #102e54;
+
+  --red: #b80f1a;
+  --red-dark: #9f0d17;
+
+  --gold: #f0b323;
+  --gold-dark: #d99a12;
+
+  --white: #ffffff;
+  --light: #f7f8fa;
+  --gray: #dedfe2;
+  --gray-text: #555555;
+
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  --header-height: 118px;
+  --footer-height: 124px;
 }
 
 
 /* =========================================================
-   BASE
-========================================================= */
+   RESET
+   ========================================================= */
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
-body{
-  width:100%;
-  min-height:100%;
-  margin:0;
-  padding:0;
-  overflow-x:hidden;
+body {
+  width: 100%;
+  min-height: 100%;
 }
 
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  color:var(--ink);
-  background:#fff;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--navy);
+  color: var(--navy);
+  overflow-x: hidden;
 }
 
 button,
-input{
-  font:inherit;
-}
-
-button{
-  -webkit-tap-highlight-color:transparent;
+input {
+  font-family: inherit;
 }
 
 
 /* =========================================================
-   ENCABEZADO
-========================================================= */
+   BARRA SUPERIOR
+   ========================================================= */
 
-.topbar{
-  width:100%;
-  height:88px;
-  min-height:88px;
+.topbar {
+  width: 100%;
+  height: var(--header-height);
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  background: var(--navy);
 
-  gap:18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  padding:
-    8px
-    clamp(18px,4vw,58px);
+  padding: 0 4%;
 
-  color:#fff;
+  border-bottom: 3px solid var(--gold);
 
-  background:
-    linear-gradient(
-      110deg,
-      #06172d,
-      #0d294b
-    );
-
-  border-bottom:
-    3px solid
-    var(--gold);
+  position: relative;
+  z-index: 20;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  min-width:0;
+
+/* =========================================================
+   MARCA DEL COLEGIO
+   ========================================================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
-.school-crest{
-  width:54px;
-  height:64px;
+.school-crest {
+  width: 68px;
+  height: 82px;
 
-  flex:0 0 auto;
+  object-fit: contain;
 
-  display:block;
-
-  object-fit:contain;
-  object-position:center;
+  flex-shrink: 0;
 }
 
-.school-name{
-  min-width:0;
+.school-name {
+  display: flex;
+  flex-direction: column;
+
+  color: var(--white);
 }
 
-.school-name strong{
-  display:block;
+.school-name strong {
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  font-size: clamp(25px, 2vw, 38px);
+  line-height: 1;
 
-  font-size:24px;
-
-  line-height:1;
-
-  white-space:nowrap;
+  letter-spacing: 0.3px;
 }
 
-.school-name span{
-  display:block;
+.school-name span {
+  margin-top: 8px;
 
-  margin-top:5px;
+  color: var(--gold);
 
-  color:var(--gold2);
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  font-size: clamp(15px, 1.25vw, 22px);
 
-  font-size:16px;
-
-  font-style:italic;
+  font-style: italic;
 }
 
-.admin-btn{
-  flex:0 0 auto;
 
-  padding:
-    11px
-    19px;
+/* =========================================================
+   BOTÓN ADMINISTRADOR
+   ========================================================= */
 
-  border:
-    1px solid
-    rgba(255,255,255,.24);
+.admin-btn {
+  min-width: 250px;
+  height: 62px;
 
-  border-radius:11px;
+  border-radius: 18px;
 
-  background:#203754;
+  border: 1px solid rgba(255, 255, 255, 0.28);
 
-  color:#fff;
+  background: rgba(255, 255, 255, 0.08);
 
-  font-weight:700;
+  color: white;
 
-  cursor:pointer;
+  font-size: 22px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
   transition:
-    background .2s ease,
-    transform .2s ease;
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.admin-btn:hover{
-  background:#2a4769;
-
-  transform:translateY(-1px);
+.admin-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
-.lock{
-  margin-right:6px;
+.lock {
+  font-size: 25px;
 }
 
 
 /* =========================================================
    PORTADA
-========================================================= */
+   ========================================================= */
 
-.hero{
-  width:100%;
+.hero {
+  width: 100%;
 
-  height:calc(100dvh - 176px);
+  min-height: calc(
+    100vh - var(--header-height) - var(--footer-height)
+  );
 
-  min-height:0;
+  display: grid;
 
-  display:grid;
+  grid-template-columns: 58% 42%;
 
-  grid-template-columns:
-    minmax(0,58%)
-    minmax(0,42%);
-
-  overflow:hidden;
-
-  background:#fff;
+  position: relative;
 }
 
 
 /* =========================================================
    LADO IZQUIERDO
-========================================================= */
+   ========================================================= */
 
-.hero-left{
-  position:relative;
+.hero-left {
+  position: relative;
 
-  min-width:0;
+  background-color: #ffffff;
 
-  overflow:hidden;
+  background-image:
+    radial-gradient(
+      #c9c9c9 1px,
+      transparent 1px
+    );
+
+  background-size: 9px 9px;
 
   padding:
-    clamp(16px,2.5vh,28px)
-    clamp(20px,3.7vw,52px)
-    12px;
+    clamp(35px, 4vh, 55px)
+    clamp(50px, 6vw, 100px)
+    30px;
 
-  background:
-    radial-gradient(
-      #d8d8d8 1px,
-      transparent 1px
-    ),
-    #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  background-size:8px 8px;
+  justify-content: flex-start;
+
+  overflow: hidden;
+
+  z-index: 5;
 }
 
-.hero-left:after{
-  content:"";
 
-  position:absolute;
+/* =========================================================
+   LOGO BANCO
+   ========================================================= */
 
-  top:0;
-  right:0;
+.bank-logo {
+  display: flex;
 
-  width:84px;
-  height:100%;
+  align-items: center;
+  justify-content: center;
+
+  gap: 28px;
+
+  margin-top: 5px;
+
+  width: 100%;
+}
+
+.bank-symbol {
+  width: 125px;
+  height: 125px;
+
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+.bank-symbol .roof {
+  position: absolute;
+
+  top: 10px;
+  left: 8px;
+
+  width: 110px;
+  height: 12px;
+
+  background: var(--navy);
+
+  border-radius: 3px;
+}
+
+.bank-symbol .roof::after {
+  content: "";
+
+  position: absolute;
+
+  width: 8px;
+  height: 8px;
+
+  background: var(--gold);
+
+  border-radius: 50%;
+
+  top: -12px;
+  left: 51px;
+}
+
+.columns {
+  position: absolute;
+
+  top: 35px;
+  left: 16px;
+
+  width: 95px;
+  height: 58px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.columns i {
+  width: 12px;
+  height: 55px;
 
   background:
     linear-gradient(
-      171deg,
-      transparent 0 46%,
-      var(--navy) 46.2% 100%
+      to right,
+      var(--gold) 0 28%,
+      var(--navy) 28% 72%,
+      var(--gold) 72% 100%
     );
 
-  clip-path:
-    polygon(
-      100% 0,
-      100% 100%,
-      0 100%,
-      48% 0
-    );
-
-  z-index:0;
-
-  pointer-events:none;
+  display: block;
 }
 
-.bank-logo,
-.subtitle,
-.intro,
-.actions,
-.security{
-  position:relative;
+.bank-symbol .base {
+  position: absolute;
 
-  z-index:2;
+  left: 4px;
+  bottom: 12px;
+
+  width: 118px;
+  height: 10px;
+
+  background: var(--gold);
+
+  border-top: 5px solid var(--navy);
 }
 
 
 /* =========================================================
-   LOGO BANCO LDS
-========================================================= */
+   TEXTO BANCO
+   ========================================================= */
 
-.bank-logo{
-  width:100%;
+.bank-title h1 {
+  font-family: Georgia, "Times New Roman", serif;
 
-  display:flex;
+  font-size: clamp(60px, 5.3vw, 98px);
 
-  align-items:center;
-  justify-content:center;
+  line-height: 0.82;
 
-  gap:14px;
+  color: var(--navy);
+
+  font-weight: 700;
+
+  letter-spacing: -2px;
 }
 
-.bank-symbol{
-  width:96px;
-  height:82px;
-
-  flex:0 0 96px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:flex-end;
-
-  align-items:center;
+.bank-title h1 span {
+  color: var(--red);
 }
 
-.bank-symbol .roof{
-  width:91px;
-  height:19px;
+.online {
+  margin-top: 18px;
 
-  border-top:
-    6px solid
-    var(--navy);
+  text-align: center;
 
-  border-left:
-    6px solid
-    transparent;
+  font-size: clamp(16px, 1.4vw, 24px);
 
-  border-right:
-    6px solid
-    transparent;
+  letter-spacing: 11px;
 
-  position:relative;
-}
+  color: var(--navy);
 
-.bank-symbol .roof:after{
-  content:"★";
-
-  position:absolute;
-
-  top:-4px;
-  left:50%;
-
-  transform:
-    translateX(-50%);
-
-  color:var(--gold);
-
-  font-size:12px;
-}
-
-.columns{
-  width:80px;
-  height:41px;
-
-  display:flex;
-
-  align-items:flex-end;
-  justify-content:space-between;
-
-  padding:
-    0
-    5px;
-}
-
-.columns i{
-  display:block;
-
-  width:10px;
-  height:38px;
-
-  background:var(--navy);
-
-  border-left:
-    2px solid
-    var(--gold);
-
-  border-right:
-    2px solid
-    var(--gold);
-}
-
-.bank-symbol .base{
-  width:96px;
-  height:9px;
-
-  background:var(--navy);
-
-  border-bottom:
-    3px solid
-    var(--gold);
-}
-
-.bank-title{
-  min-width:0;
-}
-
-.bank-title h1{
-  margin:0;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:
-    clamp(
-      40px,
-      3.7vw,
-      56px
-    );
-
-  line-height:.83;
-
-  letter-spacing:1.5px;
-
-  color:var(--navy);
-}
-
-.bank-title h1 span{
-  color:var(--red);
-}
-
-.online{
-  margin-top:8px;
-
-  padding-left:7px;
-
-  text-align:center;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:
-    clamp(
-      13px,
-      1.2vw,
-      18px
-    );
-
-  letter-spacing:
-    clamp(
-      5px,
-      .7vw,
-      9px
-    );
-
-  color:var(--navy);
+  padding-left: 11px;
 }
 
 
 /* =========================================================
-   TEXTOS
-========================================================= */
+   SUBTÍTULO
+   ========================================================= */
 
-.subtitle{
-  margin:
-    6px
-    0
-    11px;
+.subtitle {
+  margin-top: 25px;
 
-  text-align:center;
+  color: #444;
 
-  font-size:
-    clamp(
-      16px,
-      1.4vw,
-      20px
-    );
+  font-size: clamp(20px, 1.5vw, 28px);
 
-  color:#555;
-}
-
-.intro{
-  margin:0;
-
-  text-align:center;
-
-  color:var(--navy);
-
-  font-size:
-    clamp(
-      16px,
-      1.45vw,
-      20px
-    );
-
-  line-height:1.22;
-
-  font-weight:700;
+  text-align: center;
 }
 
 
 /* =========================================================
-   BOTONES
-   ANCHO REALMENTE REDUCIDO
-========================================================= */
+   INTRO
+   ========================================================= */
 
-.actions{
-  width:560px !important;
+.intro {
+  margin-top: 12px;
 
-  max-width:
-    calc(100% - 80px) !important;
+  color: var(--navy);
 
-  margin:
-    14px
-    auto
-    0;
+  font-size: clamp(20px, 1.55vw, 29px);
 
-  display:grid;
+  line-height: 1.28;
 
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
+  text-align: center;
 
-  gap:14px;
+  font-weight: 700;
 }
 
-.action-card{
-  width:100% !important;
 
-  min-width:0;
+/* =========================================================
+   BOTONES PRINCIPALES
+   ========================================================= */
 
-  height:128px;
-  min-height:128px;
+.actions {
+  width: 100%;
 
-  position:relative;
+  max-width: 850px;
 
-  border:0;
+  margin-top: 24px;
 
-  border-radius:21px;
+  display: grid;
 
-  padding:
-    11px
-    13px
-    34px;
+  grid-template-columns: 1fr 1fr;
 
-  background:#fff;
+  gap: 20px;
+}
 
-  box-shadow:
-    0 7px 17px
-    rgba(0,0,0,.12);
 
-  display:grid;
+/* =========================================================
+   TARJETAS
+   ========================================================= */
 
-  grid-template-columns:
-    43px
-    minmax(0,1fr);
+.action-card {
+  height: 180px;
 
-  align-items:start;
+  position: relative;
 
-  gap:6px;
+  border: none;
 
-  text-align:left;
+  border-radius: 25px;
 
-  cursor:pointer;
+  background: white;
 
-  overflow:hidden;
+  box-shadow: var(--shadow);
+
+  overflow: hidden;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  padding: 25px 25px 52px;
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.action-card:hover{
-  transform:translateY(-2px);
+.action-card:hover {
+  transform: translateY(-3px);
 
   box-shadow:
-    0 12px 23px
-    rgba(0,0,0,.16);
+    0 12px 28px rgba(0, 0, 0, 0.2);
 }
 
-.action-card:focus-visible{
-  outline:
-    3px solid
-    var(--gold);
-
-  outline-offset:2px;
+.action-card.qr {
+  border-bottom: 43px solid var(--red);
 }
 
-
-/* ---------- FRANJA ---------- */
-
-.action-card:after{
-  content:"";
-
-  position:absolute;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  height:29px;
-
-  z-index:1;
-}
-
-.action-card.qr:after{
-  background:var(--red);
-}
-
-.action-card.code:after{
-  background:var(--navy);
+.action-card.code {
+  border-bottom: 43px solid var(--navy);
 }
 
 
-/* ---------- ICONOS ---------- */
+/* =========================================================
+   ICONOS
+   ========================================================= */
 
-.card-icon{
-  width:39px;
-  height:39px;
+.card-icon {
+  position: absolute;
 
-  margin-top:7px;
+  left: 27px;
+  top: 28px;
 
-  display:grid;
+  font-size: 38px;
 
-  place-items:center;
-
-  font-size:27px;
-
-  font-weight:700;
-
-  z-index:3;
+  font-weight: 700;
 }
 
-.qr-icon{
-  color:var(--red);
+.qr-icon {
+  color: var(--red);
 }
 
-.keyboard-icon{
-  color:var(--navy);
+.keyboard-icon {
+  color: var(--navy);
 }
 
 
-/* ---------- CONTENIDO ---------- */
+/* =========================================================
+   CONTENIDO TARJETAS
+   ========================================================= */
 
-.card-content{
-  min-width:0;
-
-  padding-top:5px;
-
-  padding-bottom:4px;
-
-  z-index:3;
+.card-content {
+  margin-left: 75px;
 }
 
-.action-card b{
-  display:block;
+.card-content b {
+  display: block;
 
-  margin:0;
+  color: var(--red);
 
-  font-size:16px;
+  font-size: clamp(20px, 1.55vw, 28px);
 
-  line-height:1.02;
+  line-height: 0.95;
 }
 
-.action-card.qr b{
-  color:var(--red);
+.action-card.code .card-content b {
+  color: var(--navy);
 }
 
-.action-card.code b{
-  color:var(--navy);
-}
+.card-content small {
+  display: block;
 
-.action-card small{
-  display:block;
+  margin-top: 12px;
 
-  margin-top:7px;
+  color: #555;
 
-  max-width:185px;
+  font-size: clamp(13px, 1vw, 17px);
 
-  color:#555;
-
-  font-size:10px;
-
-  line-height:1.2;
+  line-height: 1.15;
 }
 
 
-/* ---------- FLECHA ---------- */
+/* =========================================================
+   FLECHA
+   ========================================================= */
 
-.arrow{
-  position:absolute;
+.arrow {
+  position: absolute;
 
-  left:50%;
+  bottom: -29px;
 
-  bottom:0;
+  left: 50%;
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
 
-  width:36px;
-  height:36px;
+  width: 48px;
+  height: 48px;
 
-  border:
-    2px solid
-    #fff;
+  border-radius: 50%;
 
-  border-radius:50%;
+  border: 3px solid white;
 
-  display:grid;
+  color: white;
 
-  place-items:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  z-index:5;
+  font-size: 42px;
 
-  color:#fff;
+  line-height: 1;
 
-  background:var(--navy);
-
-  font-size:28px;
-
-  line-height:1;
-
-  font-style:normal;
-
-  pointer-events:none;
-}
-
-.action-card.qr .arrow{
-  background:var(--red);
+  z-index: 3;
 }
 
 
 /* =========================================================
    SEGURIDAD
-========================================================= */
+   ========================================================= */
 
-.security{
-  width:560px !important;
+.security {
+  width: 100%;
 
-  max-width:
-    calc(100% - 80px) !important;
+  max-width: 850px;
 
-  margin:
-    11px
-    auto
-    0;
+  min-height: 70px;
 
-  padding:
-    9px
-    13px;
+  margin-top: 14px;
 
-  border-radius:14px;
+  border-radius: 20px;
 
-  background:#dedfe1;
+  background: #dedfe2;
 
-  display:flex;
+  display: flex;
 
-  align-items:center;
+  align-items: center;
 
-  gap:9px;
+  gap: 20px;
 
-  font-size:12px;
+  padding: 12px 25px;
 
-  line-height:1.2;
+  color: var(--navy);
+
+  font-size: clamp(14px, 1.05vw, 18px);
+
+  line-height: 1.25;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-.security-icon{
-  flex:0 0 auto;
+.security-icon {
+  font-size: 32px;
 
-  font-size:23px;
+  flex-shrink: 0;
 }
 
 
 /* =========================================================
    LADO DERECHO
-   BANCO REAL COMO FONDO
-========================================================= */
+   ========================================================= */
 
-.hero-right{
-  position:relative;
+.hero-right {
+  position: relative;
 
-  min-width:0;
-
-  height:100%;
-
-  overflow:hidden;
+  overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at 50% 42%,
-      #23476f 0%,
-      #102e50 38%,
-      #061a35 78%
+    linear-gradient(
+      135deg,
+      #092443 0%,
+      #071a34 100%
     );
+
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+
+  border-bottom: 3px solid var(--gold);
+
+  isolation: isolate;
 }
 
 
 /* =========================================================
-   BANCO
-   QUEDA DETRÁS DE TODOS LOS PERSONAJES
-========================================================= */
+   BANCO DE FONDO
+   ========================================================= */
 
-.bank-background{
-  position:absolute;
+/*
+   IMPORTANTE:
 
-  z-index:1;
+   Esta imagen queda DETRÁS de la profesora
+   y de los niños gracias al z-index.
+*/
 
-  left:50%;
-  top:50%;
+.bank-background {
+  position: absolute;
 
-  transform:translate(-50%,-50%);
+  z-index: 1;
 
-  width:78%;
+  width: 78%;
 
-  max-width:720px;
+  max-width: 620px;
 
-  height:auto;
+  height: auto;
 
-  max-height:82%;
+  left: 50%;
 
-  object-fit:contain;
+  top: 47%;
 
-  object-position:center;
+  transform: translate(-50%, -50%);
 
-  opacity:.55;
+  opacity: 0.43;
 
-  pointer-events:none;
+  object-fit: contain;
 
-  filter:
-    drop-shadow(
-      0 5px 10px
-      rgba(0,0,0,.12)
-    );
+  pointer-events: none;
+
+  user-select: none;
 }
 
 
-.decorative-line{
-  position:absolute;
+/* =========================================================
+   LÍNEAS DECORATIVAS
+   ========================================================= */
 
-  inset:0;
+.decorative-line {
+  position: absolute;
 
-  z-index:5;
+  z-index: 2;
 
-  pointer-events:none;
+  width: 3px;
 
-  background:
-    linear-gradient(
-      130deg,
-      transparent 45%,
-      rgba(217,166,58,.78) 45.3%,
-      transparent 46%,
-      transparent 74%,
-      rgba(217,166,58,.72) 74.3%,
-      transparent 74.8%
-    );
+  height: 150%;
+
+  background: var(--gold);
+
+  opacity: 0.75;
+
+  transform:
+    rotate(37deg)
+    translateY(-15%);
+
+  right: 21%;
+
+  top: -20%;
+
+  box-shadow:
+    0 0 3px rgba(240, 179, 35, 0.4);
+}
+
+.hero-right::after {
+  content: "";
+
+  position: absolute;
+
+  z-index: 2;
+
+  width: 3px;
+
+  height: 150%;
+
+  background: var(--gold);
+
+  opacity: 0.75;
+
+  transform:
+    rotate(37deg)
+    translateY(-15%);
+
+  right: -8%;
+
+  top: 20%;
+
+  pointer-events: none;
 }
 
 
 /* =========================================================
    PROFESORA
-   GRANDE Y DELANTE DEL BANCO
-========================================================= */
+   ========================================================= */
 
-.teacher-img{
-  position:absolute;
+.teacher-img {
+  position: absolute;
 
-  z-index:3;
+  z-index: 4;
 
-  top:3%;
+  /*
+     GRANDE Y HACIA ARRIBA
+  */
 
-  left:50%;
+  width: 48%;
 
-  transform:translateX(-50%);
+  max-width: 430px;
 
-  width:
-    min(
-      335px,
-      48%
-    );
+  min-width: 250px;
 
-  height:auto;
+  height: auto;
 
-  max-height:88%;
+  left: 50%;
 
-  object-fit:contain;
+  top: 2%;
 
-  object-position:
-    center
-    top;
+  transform: translateX(-50%);
 
-  opacity:1;
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
 
   filter:
     drop-shadow(
-      0 10px 8px
-      rgba(0,0,0,.28)
+      0 10px 12px rgba(0, 0, 0, 0.35)
     );
 }
 
 
 /* =========================================================
    NIÑOS
-   DELANTE DE LA PROFESORA Y DEL BANCO
-========================================================= */
+   ========================================================= */
 
-.children{
-  position:absolute;
+.children {
+  position: absolute;
 
-  z-index:4;
+  z-index: 5;
 
-  left:5%;
-  right:5%;
+  left: 50%;
 
-  bottom:34px;
+  bottom: 5%;
 
-  height:73%;
+  transform: translateX(-50%);
 
-  display:flex;
+  width: 75%;
 
-  align-items:flex-end;
+  height: 60%;
 
-  justify-content:center;
+  display: flex;
 
-  gap:0;
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 3%;
+
+  pointer-events: none;
 }
 
-.boy-img,
-.girl-img{
-  display:block;
+.children img {
+  width: 43%;
 
-  width:auto;
+  max-width: 300px;
 
-  height:100%;
+  height: auto;
 
-  object-fit:contain;
-
-  object-position:
-    center
-    bottom;
+  object-fit: contain;
 
   filter:
     drop-shadow(
-      0 9px 6px
-      rgba(0,0,0,.42)
+      0 10px 10px rgba(0, 0, 0, 0.35)
     );
 }
 
-.boy-img{
-  max-width:52%;
 
-  margin-right:-12px;
+/* =========================================================
+   POSICIÓN INDIVIDUAL NIÑOS
+   ========================================================= */
+
+.boy-img {
+  transform: translateY(2%);
 }
 
-.girl-img{
-  max-width:49%;
-
-  margin-left:-12px;
+.girl-img {
+  transform: translateY(0);
 }
 
 
 /* =========================================================
-   MINI LOGO
-========================================================= */
+   MINI LOGO BANCO LDS 360
+   ========================================================= */
 
-.mini-brand{
-  position:absolute;
+.mini-brand {
+  position: absolute;
 
-  z-index:6;
+  z-index: 8;
 
-  right:4.5%;
+  right: 4%;
 
-  bottom:8px;
+  bottom: 3%;
 
-  color:#fff;
+  color: white;
 
-  text-align:center;
+  text-align: right;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  pointer-events: none;
 }
 
-.mini-bank{
-  display:flex;
+.mini-bank {
+  display: flex;
 
-  align-items:center;
+  align-items: center;
 
-  justify-content:center;
-
-  gap:6px;
+  gap: 12px;
 }
 
-.mini-bank strong{
-  display:block;
+.mini-symbol {
+  width: 50px;
+  height: 48px;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  display: flex;
 
-  font-size:21px;
+  align-items: flex-end;
+
+  justify-content: space-around;
+
+  border-bottom: 5px solid var(--gold);
+
+  padding: 0 5px 3px;
 }
 
-.mini-bank span{
-  display:block;
+.mini-symbol div {
+  width: 8px;
+  height: 32px;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+  background: var(--gold);
 
-  font-size:21px;
-
-  font-weight:700;
-
-  color:var(--gold2);
+  border-left: 3px solid var(--navy);
+  border-right: 3px solid var(--navy);
 }
 
-.mini-brand small{
-  display:block;
+.mini-bank strong {
+  display: block;
 
-  margin-top:3px;
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-size:7px;
+  font-size: 25px;
+
+  line-height: 1;
 }
 
-.mini-symbol{
-  width:32px;
-  height:31px;
+.mini-bank span {
+  display: block;
 
-  display:flex;
+  font-family: Georgia, "Times New Roman", serif;
 
-  align-items:flex-end;
+  color: var(--gold);
 
-  justify-content:space-around;
+  font-size: 26px;
 
-  padding:
-    3px
-    2px;
+  font-weight: 700;
 
-  border-top:
-    4px solid
-    var(--gold);
-
-  border-bottom:
-    4px solid
-    var(--gold);
+  line-height: 1;
 }
 
-.mini-symbol div{
-  width:5px;
-  height:18px;
+.mini-brand small {
+  margin-top: 7px;
 
-  background:var(--gold);
+  font-size: 10px;
+
+  white-space: nowrap;
 }
 
 
 /* =========================================================
-   PIE DE PÁGINA
-========================================================= */
+   FOOTER
+   ========================================================= */
 
-footer{
-  width:100%;
+footer {
+  width: 100%;
 
-  height:88px;
-  min-height:88px;
+  min-height: var(--footer-height);
 
-  background:var(--navy);
+  background: var(--navy);
 
-  border-top:
-    3px solid
-    var(--gold);
+  color: white;
 
-  color:#fff;
+  display: flex;
 
-  display:flex;
+  align-items: center;
 
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:20px;
+  justify-content: space-between;
 
   padding:
-    10px
-    clamp(18px,4vw,55px);
+    18px
+    4%;
+
+  position: relative;
+
+  z-index: 20;
 }
 
-.footer-school{
-  display:flex;
 
-  align-items:center;
+/* =========================================================
+   FOOTER COLEGIO
+   ========================================================= */
 
-  gap:10px;
+.footer-school {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
 }
 
-.footer-school img{
-  width:46px;
-  height:51px;
+.footer-school img {
+  width: 68px;
+  height: 78px;
 
-  flex:0 0 auto;
-
-  object-fit:contain;
+  object-fit: contain;
 }
 
-.footer-school strong{
-  display:block;
+.footer-school div {
+  display: flex;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:14px;
+  flex-direction: column;
 }
 
-.footer-school span{
-  display:block;
+.footer-school strong {
+  font-family: Georgia, "Times New Roman", serif;
 
-  margin-top:3px;
-
-  font-size:10px;
-
-  line-height:1.2;
+  font-size: clamp(19px, 1.5vw, 27px);
 }
 
-.values{
-  display:flex;
+.footer-school span {
+  margin-top: 6px;
 
-  align-items:center;
+  font-size: clamp(13px, 1vw, 17px);
 
-  justify-content:flex-end;
-
-  flex-wrap:wrap;
-
-  gap:18px;
+  line-height: 1.2;
 }
 
-.values div{
-  display:flex;
 
-  align-items:center;
+/* =========================================================
+   VALORES
+   ========================================================= */
 
-  gap:5px;
+.values {
+  display: flex;
+
+  align-items: center;
+
+  gap: clamp(25px, 3vw, 55px);
 }
 
-.values b{
-  color:var(--gold);
+.values > div {
+  display: flex;
 
-  font-size:19px;
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: clamp(15px, 1.2vw, 21px);
+
+  white-space: nowrap;
 }
 
-.values span{
-  font-size:12px;
-
-  white-space:nowrap;
+.values b {
+  font-size: 29px;
 }
 
 
 /* =========================================================
    MODALES
-========================================================= */
+   ========================================================= */
 
-.modal{
-  position:fixed;
+.modal {
+  position: fixed;
 
-  inset:0;
+  inset: 0;
 
-  z-index:1000;
-
-  padding:10px;
+  z-index: 100;
 
   background:
-    rgba(4,17,34,.78);
+    rgba(3, 13, 27, 0.78);
 
-  display:grid;
+  display: flex;
 
-  place-items:center;
+  align-items: center;
+  justify-content: center;
 
-  overflow:auto;
+  padding: 20px;
+
+  backdrop-filter: blur(4px);
 }
 
-.hidden{
-  display:none !important;
+.modal.hidden {
+  display: none;
 }
 
-.modal-card{
-  position:relative;
+.modal-card {
+  position: relative;
 
-  width:
-    min(
-      620px,
-      95vw
-    );
+  width: min(700px, 95vw);
 
-  max-height:92vh;
+  max-height: 90vh;
 
-  overflow-x:hidden;
+  overflow-y: auto;
 
-  overflow-y:auto;
+  background: white;
 
-  padding:26px;
+  border-radius: 22px;
 
-  background:#fff;
-
-  border-radius:22px;
+  padding: 35px;
 
   box-shadow:
-    0 25px 70px
-    rgba(0,0,0,.35);
+    0 25px 70px rgba(0, 0, 0, 0.4);
 }
 
-.modal-card.small{
-  width:
-    min(
-      430px,
-      95vw
-    );
+.modal-card.small {
+  width: min(480px, 95vw);
 }
 
-.close{
-  position:absolute;
-
-  top:8px;
-  right:12px;
-
-  width:42px;
-  height:42px;
-
-  border:0;
-
-  background:transparent;
-
-  color:#111;
-
-  font-size:34px;
-
-  line-height:1;
-
-  cursor:pointer;
+.modal-card.profile {
+  width: min(850px, 95vw);
 }
 
-.modal-card h2{
-  margin:
-    2px
-    45px
-    12px
-    0;
+.modal-card h2 {
+  color: var(--navy);
 
-  color:var(--navy);
+  font-family: Georgia, "Times New Roman", serif;
 
-  font-size:28px;
+  margin-bottom: 15px;
+
+  font-size: 28px;
 }
 
-.modal-card p{
-  margin:
-    0
-    0
-    14px;
+.modal-card p {
+  color: #555;
 
-  font-size:17px;
-
-  line-height:1.35;
+  margin-bottom: 20px;
 }
 
 
 /* =========================================================
-   LECTOR QR
-========================================================= */
+   CERRAR MODAL
+   ========================================================= */
 
-#scannerModal{
-  padding:8px;
+.close {
+  position: absolute;
+
+  top: 12px;
+  right: 16px;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #555;
+
+  font-size: 32px;
+
+  cursor: pointer;
+
+  border-radius: 50%;
 }
 
-#scannerModal .modal-card{
-  width:
-    min(
-      500px,
-      calc(100vw - 16px)
-    );
-
-  max-height:
-    calc(100vh - 16px);
-
-  padding:
-    20px
-    14px
-    16px;
-
-  overflow-x:hidden;
-
-  overflow-y:auto;
-}
-
-#scannerModal #reader{
-  width:100% !important;
-
-  max-width:450px !important;
-
-  min-height:0 !important;
-
-  margin:
-    10px
-    auto
-    0 !important;
-
-  overflow:hidden !important;
-
-  border-radius:12px;
-
-  background:#111;
-}
-
-#scannerModal #reader video{
-  display:block !important;
-
-  width:100% !important;
-
-  max-width:100% !important;
-
-  height:auto !important;
-
-  max-height:50vh !important;
-
-  object-fit:cover !important;
-
-  border-radius:12px;
-}
-
-#scannerModal #reader__scan_region{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  overflow:hidden !important;
-}
-
-#scannerModal #reader__scan_region video{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  height:auto !important;
-}
-
-#scannerModal #reader__dashboard,
-#scannerModal #reader__dashboard_section,
-#scannerModal #reader__dashboard_section_csr{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  overflow:hidden !important;
-}
-
-#scannerModal #reader img{
-  max-width:100% !important;
-
-  height:auto !important;
-}
-
-#scannerModal .status{
-  width:100%;
-
-  max-width:450px;
-
-  margin:
-    10px
-    auto
-    0;
-
-  text-align:center;
-
-  color:var(--red);
-
-  font-size:15px;
-
-  line-height:1.35;
+.close:hover {
+  background: #eeeeee;
 }
 
 
 /* =========================================================
    INPUTS
-========================================================= */
+   ========================================================= */
 
-.modal-card input{
-  width:100%;
+.modal-card input {
+  width: 100%;
 
-  padding:
-    14px
-    15px;
+  height: 52px;
 
-  margin:
-    10px
-    0
-    15px;
+  border: 1px solid #c8c8c8;
 
-  border:
-    1px solid
-    #bfc5cc;
+  border-radius: 10px;
 
-  border-radius:10px;
+  padding: 0 15px;
 
-  outline:none;
+  font-size: 17px;
 
-  background:#fff;
+  outline: none;
+
+  margin-bottom: 15px;
 }
 
-.modal-card input:focus{
-  border-color:var(--navy);
+.modal-card input:focus {
+  border-color: var(--navy);
 
   box-shadow:
-    0 0 0 3px
-    rgba(7,26,52,.10);
+    0 0 0 3px rgba(7, 26, 52, 0.1);
 }
 
-.primary{
-  width:100%;
 
-  padding:14px;
+/* =========================================================
+   BOTÓN PRINCIPAL MODAL
+   ========================================================= */
 
-  border:0;
+.primary {
+  width: 100%;
 
-  border-radius:10px;
+  min-height: 52px;
 
-  background:var(--navy);
+  border: none;
 
-  color:#fff;
+  border-radius: 10px;
 
-  font-weight:700;
+  background: var(--navy);
 
-  cursor:pointer;
+  color: white;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.primary:hover {
+  background: var(--navy-2);
+}
+
+
+/* =========================================================
+   ESTADOS
+   ========================================================= */
+
+.status {
+  margin-top: 15px;
+
+  min-height: 20px;
+
+  font-size: 15px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   LECTOR QR
+   ========================================================= */
+
+#reader {
+  width: 100%;
+
+  max-width: 500px;
+
+  margin: 20px auto;
 }
 
 
 /* =========================================================
    PERFIL
-========================================================= */
+   ========================================================= */
 
-.profile-head{
-  display:flex;
-
-  align-items:center;
-
-  gap:18px;
-}
-
-.avatar{
-  width:92px;
-  height:92px;
-
-  flex:0 0 92px;
-
-  overflow:hidden;
-
-  border-radius:50%;
-
-  background:#e8edf4;
-
-  display:grid;
-
-  place-items:center;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-
-  display:block;
-
-  object-fit:cover;
-}
-
-.badge{
-  display:inline-block;
-
-  padding:
-    5px
-    9px;
-
-  border-radius:20px;
-
-  background:#e9eff7;
-
-  color:var(--navy);
-
-  font-size:12px;
-
-  font-weight:700;
-}
-
-.profile-head h2{
-  margin:6px 0;
-}
-
-.profile-head p{
-  margin:0;
-
-  color:#666;
-}
-
-.balance{
-  margin:
-    24px
-    0;
-
-  padding:22px;
-
-  border-radius:18px;
-
-  color:#fff;
-
-  background:
-    linear-gradient(
-      120deg,
-      var(--navy),
-      #193a62
-    );
-}
-
-.balance small{
-  display:block;
-
-  opacity:.75;
-}
-
-.balance strong{
-  display:block;
-
-  margin-top:6px;
-
-  font-size:32px;
-}
-
-.grid{
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:12px;
-
-  margin-bottom:22px;
-}
-
-.grid>div{
-  padding:14px;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:12px;
-
-  background:#fff;
-}
-
-.grid span{
-  display:block;
-
-  color:#666;
-
-  font-size:13px;
-}
-
-.grid b{
-  display:block;
-
-  margin-top:6px;
-
-  color:var(--navy);
+#profileContent {
+  width: 100%;
 }
 
 
 /* =========================================================
-   ESCRITORIO CON POCA ALTURA
-========================================================= */
+   ESCRITORIO GRANDE
+   ========================================================= */
 
-@media(
-  max-height:720px
-) and (
-  min-width:851px
-){
+@media (min-width: 1500px) {
 
-  .topbar{
-    height:74px;
-    min-height:74px;
+  .hero-left {
+    padding-left: 7%;
+    padding-right: 7%;
   }
 
-  .school-crest{
-    width:45px;
-    height:53px;
+  .teacher-img {
+    width: 51%;
+    max-width: 500px;
+
+    top: 0;
   }
 
-  .school-name strong{
-    font-size:20px;
+  .children {
+    width: 78%;
+
+    bottom: 4%;
   }
 
-  .school-name span{
-    font-size:13px;
+  .children img {
+    max-width: 330px;
   }
 
-  .admin-btn{
-    padding:
-      9px
-      15px;
+  .bank-background {
+    width: 82%;
+
+    max-width: 700px;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  :root {
+    --header-height: 105px;
+    --footer-height: 110px;
   }
 
-  .hero{
-    height:calc(100dvh - 158px);
+  .topbar {
+    padding: 0 3%;
   }
 
-  .hero-left{
-    padding-top:13px;
-    padding-bottom:8px;
+  .school-crest {
+    width: 58px;
+    height: 70px;
   }
 
-  .bank-symbol{
-    transform:scale(.82);
+  .admin-btn {
+    min-width: 220px;
+    height: 56px;
+
+    font-size: 19px;
   }
 
-  .bank-title h1{
-    font-size:43px;
+  .hero {
+    grid-template-columns: 58% 42%;
   }
 
-  .online{
-    font-size:13px;
+  .hero-left {
+    padding-left: 5%;
+    padding-right: 5%;
   }
 
-  .subtitle{
-    font-size:16px;
-
-    margin-bottom:7px;
+  .bank-logo {
+    gap: 18px;
   }
 
-  .intro{
-    font-size:17px;
+  .bank-symbol {
+    transform: scale(0.85);
   }
 
-  .actions{
-    width:540px !important;
-
-    max-width:
-      calc(100% - 70px) !important;
-
-    margin-top:8px;
+  .actions {
+    gap: 15px;
   }
 
-  .action-card{
-    height:118px;
-
-    min-height:118px;
-
-    padding:
-      9px
-      12px
-      28px;
+  .action-card {
+    height: 170px;
   }
 
-  .action-card b{
-    font-size:15px;
+  .teacher-img {
+    width: 53%;
   }
 
-  .action-card small{
-    font-size:9px;
-
-    margin-top:5px;
-
-    line-height:1.16;
-  }
-
-  .card-icon{
-    font-size:25px;
-  }
-
-  .security{
-    width:540px !important;
-
-    max-width:
-      calc(100% - 70px) !important;
-
-    margin-top:6px;
-
-    padding:
-      7px
-      12px;
-
-    font-size:10px;
-  }
-
-  .bank-background{
-    width:82%;
-    max-width:620px;
-    max-height:78%;
-    opacity:.50;
-  }
-
-  .teacher-img{
-    width:250px;
-    max-height:84%;
-    top:2%;
-  }
-
-  .children{
-    bottom:25px;
-    height:70%;
-    gap:0;
-  }
-
-  .boy-img{
-    margin-right:-7px;
-  }
-
-  .girl-img{
-    margin-left:-7px;
-  }
-
-  footer{
-    height:84px;
-    min-height:84px;
+  .children {
+    width: 82%;
   }
 }
 
 
 /* =========================================================
    TABLET
-========================================================= */
+   ========================================================= */
 
-@media(max-width:850px){
+@media (max-width: 900px) {
 
-  .hero{
-    height:auto;
-
-    min-height:0;
-
-    grid-template-columns:1fr;
+  :root {
+    --header-height: auto;
+    --footer-height: auto;
   }
 
-  .hero-left:after{
-    display:none;
+  .topbar {
+    min-height: 105px;
+
+    padding: 15px 4%;
+
+    gap: 15px;
   }
 
-  .hero-left{
-    padding:
-      30px
-      25px
-      22px;
+  .school-name strong {
+    font-size: 23px;
   }
 
-  .hero-right{
-    min-height:500px;
-
-    height:500px;
+  .school-name span {
+    font-size: 14px;
   }
 
-  .actions,
-  .security{
-    width:100% !important;
+  .admin-btn {
+    min-width: 175px;
 
-    max-width:100% !important;
+    font-size: 16px;
   }
 
-  footer{
-    height:auto;
-
-    min-height:90px;
-
-    flex-direction:column;
-
-    align-items:flex-start;
+  .hero {
+    grid-template-columns: 1fr;
   }
 
-  .values{
-    justify-content:flex-start;
-  }
-}
+  .hero-left {
+    min-height: auto;
 
-
-/* =========================================================
-   TABLET PEQUEÑA
-========================================================= */
-
-@media(max-width:700px){
-
-  .topbar{
-    height:84px;
-    min-height:84px;
-
-    padding:
-      9px
-      17px;
+    padding-top: 35px;
+    padding-bottom: 35px;
   }
 
-  .school-crest{
-    width:50px;
-    height:57px;
+  .hero-right {
+    min-height: 650px;
   }
 
-  .school-name strong{
-    font-size:20px;
+  .teacher-img {
+    width: 42%;
+
+    top: 2%;
   }
 
-  .school-name span{
-    font-size:13px;
+  .children {
+    width: 55%;
+
+    height: 65%;
+
+    bottom: 6%;
   }
 
-  .admin-btn{
-    padding:
-      9px
-      12px;
-
-    font-size:12px;
+  .children img {
+    width: 45%;
   }
 
-  .hero-left{
-    padding:
-      28px
-      21px
-      22px;
+  footer {
+    padding: 20px 4%;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
   }
 
-  .bank-title h1{
-    font-size:47px;
-  }
+  .values {
+    width: 100%;
 
-  .actions{
-    gap:14px;
-  }
+    justify-content: center;
 
-  .action-card{
-    height:150px;
-    min-height:150px;
-  }
-
-  .hero-right{
-    min-height:500px;
-    height:500px;
-  }
-
-  .bank-background{
-    width:88%;
-    max-width:560px;
-    max-height:78%;
-    opacity:.50;
-  }
-
-  .teacher-img{
-    width:285px;
-    max-height:86%;
-    top:2%;
-  }
-
-  .children{
-    bottom:55px;
-    height:67%;
-    gap:0;
-  }
-
-  .boy-img{
-    margin-right:-5px;
-  }
-
-  .girl-img{
-    margin-left:-5px;
+    flex-wrap: wrap;
   }
 }
 
 
 /* =========================================================
-   CELULAR
-========================================================= */
+   MÓVIL
+   ========================================================= */
 
-@media(max-width:600px){
+@media (max-width: 600px) {
 
-  .topbar{
-    height:78px;
-    min-height:78px;
+  .topbar {
+    flex-direction: column;
 
-    padding:
-      8px
-      12px;
+    align-items: stretch;
 
-    gap:8px;
+    text-align: center;
   }
 
-  .brand{
-    gap:7px;
+  .brand {
+    justify-content: center;
   }
 
-  .school-crest{
-    width:40px;
-    height:48px;
+  .admin-btn {
+    width: 100%;
   }
 
-  .school-name strong{
-    font-size:13px;
+  .bank-logo {
+    flex-direction: column;
 
-    white-space:normal;
-
-    line-height:1.05;
-  }
-
-  .school-name span{
-    margin-top:3px;
-
-    font-size:9px;
-  }
-
-  .admin-btn{
-    padding:
-      7px
-      8px;
-
-    font-size:9px;
-  }
-
-  .lock{
-    margin-right:2px;
-  }
-
-
-  /* ---------- PORTADA ---------- */
-
-  .hero{
-    display:flex;
-
-    flex-direction:column;
-
-    height:auto;
-
-    min-height:0;
-  }
-
-  .hero-left{
-    padding:
-      26px
-      14px
-      22px;
-  }
-
-
-  /* ---------- LOGO ---------- */
-
-  .bank-logo{
-    gap:5px;
-  }
-
-  .bank-symbol{
-    width:62px;
-    height:61px;
-
-    flex-basis:62px;
-
-    transform:none;
-  }
-
-  .bank-symbol .roof{
-    width:60px;
-    height:19px;
-
-    border-top-width:6px;
-  }
-
-  .columns{
-    width:52px;
-    height:29px;
-
-    padding:
-      0
-      3px;
-  }
-
-  .columns i{
-    width:7px;
-    height:27px;
-
-    border-left-width:2px;
-    border-right-width:2px;
-  }
-
-  .bank-symbol .base{
-    width:62px;
-    height:7px;
-  }
-
-  .bank-title h1{
-    font-size:32px;
-
-    letter-spacing:1px;
-  }
-
-  .online{
-    margin-top:8px;
-
-    font-size:10px;
-
-    letter-spacing:4px;
-
-    padding-left:4px;
-  }
-
-  .subtitle{
-    margin:
-      9px
-      0
-      16px;
-
-    font-size:15px;
-  }
-
-  .intro{
-    font-size:16px;
-
-    line-height:1.3;
-  }
-
-
-  /* ---------- BOTONES ---------- */
-
-  .actions{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    grid-template-columns:1fr;
-
-    gap:13px;
-
-    margin-top:20px;
-  }
-
-  .action-card{
-    width:100% !important;
-
-    height:155px;
-    min-height:155px;
-
-    border-radius:20px;
-
-    padding:
-      18px
-      16px
-      35px;
-
-    grid-template-columns:
-      52px
-      minmax(0,1fr);
-  }
-
-  .card-icon{
-    width:46px;
-    height:46px;
-
-    font-size:32px;
-  }
-
-  .action-card b{
-    font-size:18px;
-  }
-
-  .action-card small{
-    margin-top:11px;
-
-    font-size:12px;
-
-    line-height:1.28;
-  }
-
-  .arrow{
-    width:39px;
-    height:39px;
-
-    font-size:32px;
-  }
-
-
-  /* ---------- SEGURIDAD ---------- */
-
-  .security{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    margin-top:17px;
-
-    padding:
-      11px
-      12px;
-
-    font-size:12px;
-
-    gap:8px;
-  }
-
-  .security-icon{
-    font-size:25px;
-  }
-
-
-  /* ---------- LADO DERECHO ---------- */
-
-  .hero-right{
-    min-height:420px;
-    height:420px;
+    gap: 0;
   }
 
-  .bank-background{
-    width:92%;
-    max-width:500px;
-    max-height:76%;
-    opacity:.48;
-  }
-
-  .teacher-img{
-    top:2%;
-
-    left:50%;
-
-    right:auto;
-
-    width:215px;
-
-    max-height:78%;
-
-    opacity:1;
-  }
-
-  .children{
-    left:3%;
-    right:3%;
-
-    bottom:58px;
-
-    height:65%;
-
-    gap:0;
-  }
-
-  .boy-img{
-    width:51%;
-
-    max-width:205px;
-
-    margin-right:-8px;
-  }
-
-  .girl-img{
-    width:47%;
-
-    max-width:190px;
-
-    margin-left:-8px;
-  }
-
-
-  /* ---------- MINI LOGO ---------- */
-
-  .mini-brand{
-    right:50%;
-
-    bottom:13px;
-
-    transform:
-      translateX(50%);
-
-    width:100%;
-  }
-
-  .mini-bank strong,
-  .mini-bank span{
-    font-size:20px;
-  }
-
-  .mini-symbol{
-    width:32px;
-    height:30px;
-  }
-
-  .mini-symbol div{
-    width:5px;
-    height:17px;
-  }
-
-  .mini-brand small{
-    font-size:7px;
-  }
-
-
-  /* ---------- PIE ---------- */
-
-  footer{
-    height:auto;
-
-    min-height:0;
-
-    padding:
-      17px
-      15px;
-
-    gap:16px;
-  }
-
-  .footer-school{
-    gap:9px;
-  }
-
-  .footer-school img{
-    width:43px;
-    height:47px;
-  }
-
-  .footer-school strong{
-    font-size:13px;
-  }
-
-  .footer-school span{
-    font-size:11px;
-  }
-
-  .values{
-    width:100%;
-
-    gap:
-      11px
-      18px;
-
-    justify-content:flex-start;
-  }
-
-  .values b{
-    font-size:19px;
-  }
-
-  .values span{
-    font-size:11px;
-  }
-
-
-  /* ---------- MODALES ---------- */
-
-  .modal{
-    padding:7px;
-  }
-
-  .modal-card{
-    width:
-      calc(
-        100vw - 14px
-      );
-
-    max-height:
-      calc(
-        100vh - 14px
-      );
-
-    border-radius:18px;
-
-    padding:
-      20px
-      13px;
-  }
-
-  .modal-card h2{
-    font-size:24px;
-  }
-
-  .modal-card p{
-    font-size:15px;
-  }
+  .bank-symbol {
+    transform: scale(0.7);
 
-
-  /* ---------- QR ---------- */
-
-  #scannerModal{
-    padding:7px;
-  }
-
-  #scannerModal .modal-card{
-    width:
-      calc(
-        100vw - 14px
-      );
-
-    max-height:
-      calc(
-        100vh - 14px
-      );
-
-    padding:
-      20px
-      11px
-      17px;
-  }
-
-  #scannerModal .modal-card h2{
-    font-size:24px;
+    margin-bottom: -15px;
   }
 
-  #scannerModal .modal-card p{
-    font-size:15px;
-  }
-
-  #scannerModal #reader{
-    width:100% !important;
-
-    max-width:100% !important;
+  .bank-title h1 {
+    font-size: 58px;
 
-    margin-top:9px !important;
+    text-align: center;
   }
 
-  #scannerModal #reader video{
-    width:100% !important;
+  .online {
+    font-size: 14px;
 
-    max-width:100% !important;
-
-    height:auto !important;
-
-    max-height:47vh !important;
+    letter-spacing: 7px;
   }
-
 
-  /* ---------- PERFIL ---------- */
-
-  .profile-head{
-    gap:10px;
+  .intro br {
+    display: none;
   }
 
-  .avatar{
-    width:68px;
-    height:68px;
-
-    flex-basis:68px;
+  .actions {
+    grid-template-columns: 1fr;
   }
 
-  .profile-head h2{
-    font-size:20px;
+  .action-card {
+    height: 170px;
   }
 
-  .profile-head p{
-    font-size:12px;
+  .security {
+    align-items: flex-start;
   }
-
-  .balance{
-    margin:
-      18px
-      0;
 
-    padding:17px;
+  .desktop {
+    display: none;
   }
 
-  .balance strong{
-    font-size:27px;
+  .hero-right {
+    min-height: 570px;
   }
 
-  .grid{
-    grid-template-columns:1fr;
+  .bank-background {
+    width: 92%;
 
-    gap:9px;
+    top: 52%;
   }
-}
 
+  .teacher-img {
+    width: 53%;
 
-/* =========================================================
-   CELULAR MUY PEQUEÑO
-========================================================= */
-
-@media(max-width:380px){
-
-  .school-name strong{
-    font-size:11px;
+    top: 3%;
   }
 
-  .school-name span{
-    font-size:8px;
-  }
+  .children {
+    width: 82%;
 
-  .admin-btn{
-    font-size:8px;
+    height: 58%;
 
-    padding:
-      6px
-      7px;
+    bottom: 6%;
   }
 
-  .bank-title h1{
-    font-size:29px;
+  .children img {
+    width: 44%;
   }
 
-  .online{
-    font-size:9px;
+  .mini-brand {
+    right: 3%;
 
-    letter-spacing:3px;
+    bottom: 2%;
   }
 
-  .intro{
-    font-size:15px;
+  .mini-bank strong {
+    font-size: 18px;
   }
 
-  .action-card{
-    height:145px;
-    min-height:145px;
-
-    padding:
-      15px
-      14px
-      34px;
+  .mini-bank span {
+    font-size: 19px;
   }
 
-  .action-card b{
-    font-size:17px;
+  .mini-symbol {
+    width: 36px;
+    height: 35px;
   }
 
-  .action-card small{
-    font-size:11px;
-
-    margin-top:8px;
-
-    line-height:1.22;
-  }
-
-  .hero-right{
-    min-height:390px;
-    height:390px;
+  .mini-brand small {
+    font-size: 7px;
   }
 
-  .bank-background{
-    width:94%;
-    max-height:74%;
-    opacity:.45;
-  }
+  footer {
+    flex-direction: column;
 
-  .teacher-img{
-    width:190px;
-    max-height:76%;
-  }
+    align-items: center;
 
-  .children{
-    bottom:53px;
-    height:63%;
-    gap:0;
+    text-align: center;
   }
 
-  .boy-img{
-    margin-right:-4px;
+  .footer-school {
+    justify-content: center;
   }
 
-  .girl-img{
-    margin-left:-4px;
+  .values {
+    gap: 18px;
   }
 }
