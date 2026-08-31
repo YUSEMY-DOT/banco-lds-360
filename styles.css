@@ -1461,14 +1461,29 @@ footer {
   }
 }
 /* =========================================================
-   AJUSTE FINAL — SOLO PROFESORA Y LÍNEAS EN PC/LAPTOP
-   La izquierda y el resto del encuadre se mantienen.
-   No modifica celular.
+   BANCO LDS 360 — CORRECCIÓN DEL DIBUJO DEL BANCO
+   SOLO PC/LAPTOP
    ========================================================= */
 
 @media (min-width: 761px) {
 
-  /* Profesora: más grande y un poco más abajo */
+  /* El edificio queda centrado detrás de los personajes,
+     más pequeño y sin salirse por la parte inferior. */
+  .hero-right .bank-background {
+    width: 68% !important;
+    height: auto !important;
+    max-height: 56% !important;
+
+    left: 50% !important;
+    top: 57% !important;
+
+    transform: translate(-50%, -50%) !important;
+
+    object-fit: contain !important;
+    opacity: .72 !important;
+  }
+
+  /* Profesora: conserva el tamaño que acabamos de aprobar. */
   .hero-right .teacher-img {
     width: 30% !important;
     max-width: 245px !important;
@@ -1477,12 +1492,11 @@ footer {
     transform: translateX(-50%) !important;
   }
 
-  /* Líneas doradas: muchísimo más suaves y siempre detrás */
+  /* Líneas muy, muy suaves y detrás. */
   .hero-right::before,
   .hero-right::after {
     width: 2px !important;
-    opacity: 0.07 !important;
+    opacity: .06 !important;
     z-index: 1 !important;
   }
-
 }
