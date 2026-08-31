@@ -2284,3 +2284,16 @@ footer {
   }
 
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — BAJAR UN POQUITO EL CUADRO DE SEGURIDAD
+   NO modifica ningún otro elemento.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .security {
+    transform: translateY(14px) !important;
+  }
+
+}
