@@ -1,17 +1,6 @@
 /* =========================================================
-   BANCO LDS 360
-   STYLES.CSS COMPLETO
+   BANCO LDS 360 — ESTILOS PRINCIPALES
    ========================================================= */
-
-:root {
-  --navy: #061a35;
-  --navy2: #0b2c4f;
-  --red: #b80d18;
-  --gold: #f2b51d;
-  --white: #ffffff;
-  --gray: #e1e2e4;
-  --text: #333333;
-}
 
 * {
   box-sizing: border-box;
@@ -27,368 +16,301 @@ body {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: var(--navy);
-  color: var(--navy);
+  background: #071a34;
+  color: #071a34;
   overflow-x: hidden;
 }
-
 
 /* =========================================================
    ENCABEZADO
    ========================================================= */
 
 .topbar {
-  width: 100%;
   height: 118px;
-  min-height: 118px;
-
-  background: var(--navy);
+  width: 100%;
+  background: #071a34;
+  border-bottom: 3px solid #f5b400;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 3.2%;
-
-  border-bottom: 3px solid var(--gold);
-
-  position: relative;
-  z-index: 50;
+  padding: 0 42px;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-width: 0;
+  gap: 18px;
 }
 
 .school-crest {
-  width: 70px;
-  height: 84px;
+  width: 76px;
+  height: 82px;
   object-fit: contain;
-  flex-shrink: 0;
+  display: block;
 }
 
 .school-name {
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  gap: 5px;
 }
 
 .school-name strong {
   color: white;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 32px;
-  line-height: 1.05;
-  white-space: nowrap;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .school-name span {
-  color: var(--gold);
+  color: #f5b400;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 19px;
+  font-size: 20px;
   font-style: italic;
-  margin-top: 7px;
+  font-weight: 700;
 }
 
 .admin-btn {
-  min-width: 260px;
-  height: 64px;
+  height: 70px;
+  min-width: 270px;
 
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.28);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
 
-  background: rgba(255,255,255,.06);
-
+  background: rgba(255, 255, 255, 0.07);
   color: white;
 
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 25px;
+  font-weight: 700;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 15px;
 
   cursor: pointer;
-
-  transition: .2s ease;
-
-  flex-shrink: 0;
 }
 
 .admin-btn:hover {
-  background: rgba(255,255,255,.12);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .lock {
-  font-size: 27px;
+  font-size: 29px;
 }
 
-
 /* =========================================================
-   PORTADA PRINCIPAL
+   PORTADA
    ========================================================= */
 
 .hero {
   width: 100%;
+  height: 650px;
 
-  height: calc(100vh - 242px);
-  min-height: 650px;
-
-  display: grid;
-  grid-template-columns: 52% 48%;
-
-  position: relative;
+  display: flex;
+  overflow: hidden;
 }
-
 
 /* =========================================================
    LADO IZQUIERDO
    ========================================================= */
 
 .hero-left {
-  position: relative;
-  z-index: 10;
+  width: 51%;
+  height: 100%;
 
-  background-color: white;
+  background-color: #ffffff;
 
-  background-image:
-    radial-gradient(
-      #c7c7c7 1px,
-      transparent 1px
-    );
+  /* Puntitos MUY sutiles */
+  background-image: radial-gradient(
+    rgba(7, 26, 52, 0.12) 1px,
+    transparent 1px
+  );
 
-  background-size: 9px 9px;
+  background-size: 10px 10px;
 
-  padding: 36px 5% 20px;
+  padding: 38px 55px 30px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  overflow: hidden;
+  position: relative;
+  z-index: 5;
 }
 
-
-/*
-   TERMINACIÓN DIAGONAL DEL LADO IZQUIERDO
-*/
+/* Forma inclinada en el borde */
 
 .hero-left::after {
   content: "";
-
   position: absolute;
-
-  right: -1px;
   top: 0;
+  right: -45px;
 
-  width: 0;
-  height: 0;
+  width: 75px;
+  height: 100%;
 
-  border-left: 75px solid transparent;
-  border-top: 650px solid var(--navy);
+  background: #ffffff;
 
-  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
 
-  z-index: 0;
+  z-index: -1;
 }
-
-
-/*
-   TODO EL CONTENIDO DEL LADO IZQUIERDO
-   QUEDA ENCIMA DE LA DECORACIÓN
-*/
-
-.bank-logo,
-.subtitle,
-.intro,
-.actions,
-.security {
-  position: relative;
-  z-index: 2;
-}
-
 
 /* =========================================================
    LOGO BANCO LDS 360
    ========================================================= */
 
 .bank-logo {
-  width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 22px;
+  gap: 24px;
+
+  width: 100%;
+  max-width: 590px;
+
+  margin-top: 0;
 }
 
-
-/* Símbolo del banco */
-
 .bank-symbol {
-  width: 112px;
-  height: 112px;
+  width: 155px;
+  height: 150px;
 
   position: relative;
-
   flex-shrink: 0;
 }
 
 .bank-symbol .roof {
   position: absolute;
-
-  left: 4px;
+  left: 12px;
   top: 13px;
 
-  width: 104px;
-  height: 13px;
+  width: 130px;
+  height: 25px;
 
-  background: var(--navy);
+  background: #071a34;
 }
 
 .bank-symbol .roof::before {
-  content: "";
+  content: "★";
 
   position: absolute;
 
-  left: 42px;
-  top: -18px;
+  left: 50%;
+  top: -31px;
 
-  width: 16px;
-  height: 16px;
+  transform: translateX(-50%);
 
-  background: var(--gold);
+  color: #f5b400;
 
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 38%,
-    69% 60%,
-    79% 100%,
-    50% 76%,
-    21% 100%,
-    31% 60%,
-    2% 38%,
-    39% 35%
-  );
+  font-size: 27px;
 }
 
-.columns {
+.bank-symbol .columns {
   position: absolute;
 
-  left: 12px;
-  top: 41px;
+  left: 22px;
+  top: 51px;
 
-  width: 88px;
-  height: 55px;
+  width: 110px;
+  height: 70px;
 
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
+  align-items: stretch;
 }
 
-.columns i {
+.bank-symbol .columns i {
   display: block;
 
-  width: 12px;
-  height: 53px;
+  width: 13px;
 
-  background:
-    linear-gradient(
-      to right,
-      var(--gold) 0 25%,
-      var(--navy) 25% 75%,
-      var(--gold) 75% 100%
-    );
+  background: #f5b400;
+
+  border-left: 4px solid #071a34;
+  border-right: 4px solid #071a34;
 }
 
 .bank-symbol .base {
   position: absolute;
 
-  left: 1px;
-  bottom: 4px;
+  left: 8px;
+  bottom: 7px;
 
-  width: 110px;
-  height: 12px;
+  width: 140px;
+  height: 13px;
 
-  background: var(--navy);
+  background: #071a34;
 
-  border-bottom: 5px solid var(--gold);
+  border-bottom: 7px solid #f5b400;
 }
-
 
 /* =========================================================
    TEXTO DEL LOGO
    ========================================================= */
 
 .bank-title {
-  flex-shrink: 0;
+  text-align: left;
 }
 
 .bank-title h1 {
-  margin: 0;
-
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(58px, 5vw, 76px);
+  font-size: 70px;
 
-  line-height: .83;
+  line-height: 0.88;
 
-  color: var(--navy);
+  color: #071a34;
 
   font-weight: 700;
 
-  letter-spacing: 1px;
+  white-space: nowrap;
 }
 
 .bank-title h1 span {
-  color: var(--red);
+  color: #c51f27;
 }
 
 .online {
-  margin-top: 14px;
+  margin-top: 15px;
 
   text-align: center;
-
-  color: var(--navy);
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 18px;
+  font-size: 21px;
 
-  letter-spacing: 9px;
+  letter-spacing: 13px;
 
-  padding-left: 9px;
+  color: #071a34;
+
+  padding-left: 12px;
 }
 
-
 /* =========================================================
-   SUBTÍTULO
+   TEXTOS PRINCIPALES
    ========================================================= */
 
 .subtitle {
-  margin: 15px 0 12px;
+  margin-top: 20px;
 
-  color: #4c4c4c;
+  color: #555;
 
-  font-size: 23px;
+  font-size: 24px;
 
   text-align: center;
 }
 
-
-/* =========================================================
-   INTRODUCCIÓN
-   ========================================================= */
-
 .intro {
-  margin-top: 4px;
+  margin-top: 14px;
 
-  color: var(--navy);
+  color: #071a34;
 
   font-size: 25px;
 
@@ -399,37 +321,35 @@ body {
   font-weight: 700;
 }
 
-
 /* =========================================================
    BOTONES
    ========================================================= */
 
 .actions {
   width: 100%;
-  max-width: 680px;
+  max-width: 650px;
 
-  margin-top: 20px;
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
+  display: flex;
 
   gap: 22px;
+
+  margin-top: 25px;
 }
 
 .action-card {
-  height: 225px;
-
   position: relative;
+
+  flex: 1;
+
+  height: 185px;
 
   border: none;
 
   border-radius: 22px;
 
-  background: white;
+  background: #ffffff;
 
-  box-shadow:
-    0 8px 25px rgba(0,0,0,.15);
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
 
   overflow: hidden;
 
@@ -437,71 +357,53 @@ body {
 
   cursor: pointer;
 
-  padding: 25px;
+  padding: 27px 24px 55px;
 
-  transition: .2s ease;
+  display: flex;
+
+  gap: 18px;
 }
 
 .action-card:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.20);
 }
 
 .action-card.qr {
-  border-bottom: 45px solid var(--red);
+  border-bottom: 48px solid #c90008;
 }
 
 .action-card.code {
-  border-bottom: 45px solid var(--navy);
+  border-bottom: 48px solid #071f46;
 }
 
-
-/* =========================================================
-   ICONOS DE LOS BOTONES
-   ========================================================= */
-
 .card-icon {
-  position: absolute;
+  font-size: 37px;
 
-  left: 25px;
-  top: 32px;
+  font-weight: 700;
 
-  font-size: 38px;
-
-  font-weight: bold;
+  line-height: 1;
 }
 
 .qr-icon {
-  color: var(--red);
+  color: #c90008;
 }
 
 .keyboard-icon {
-  color: var(--navy);
-}
-
-
-/* =========================================================
-   CONTENIDO BOTONES
-   ========================================================= */
-
-.card-content {
-  margin-left: 68px;
+  color: #071a34;
 }
 
 .card-content b {
   display: block;
 
-  color: var(--red);
+  font-size: 25px;
 
-  font-size: 24px;
+  line-height: 0.98;
 
-  line-height: .98;
+  color: #c90008;
 }
 
 .action-card.code .card-content b {
-  color: var(--navy);
+  color: #071a34;
 }
 
 .card-content small {
@@ -509,46 +411,40 @@ body {
 
   margin-top: 15px;
 
-  color: #4d4d4d;
+  color: #444;
 
   font-size: 15px;
 
-  line-height: 1.3;
+  line-height: 1.25;
 }
-
-
-/* =========================================================
-   FLECHA
-   ========================================================= */
 
 .arrow {
   position: absolute;
 
-  bottom: -27px;
-
   left: 50%;
+  bottom: -35px;
 
   transform: translateX(-50%);
 
-  width: 53px;
-  height: 53px;
-
-  border-radius: 50%;
+  width: 54px;
+  height: 54px;
 
   border: 3px solid white;
+
+  border-radius: 50%;
 
   color: white;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  font-size: 40px;
+  font-size: 38px;
 
-  z-index: 5;
+  line-height: 1;
+
+  z-index: 3;
 }
-
 
 /* =========================================================
    SEGURIDAD
@@ -556,59 +452,53 @@ body {
 
 .security {
   width: 100%;
-  max-width: 680px;
+  max-width: 650px;
 
   min-height: 70px;
 
-  margin-top: 16px;
+  margin-top: 15px;
 
-  border-radius: 19px;
+  padding: 10px 22px;
 
-  background: var(--gray);
+  border-radius: 20px;
+
+  background: #e7e8ea;
 
   display: flex;
 
   align-items: center;
 
-  gap: 16px;
-
-  padding: 11px 23px;
-
-  color: var(--navy);
+  gap: 17px;
 
   font-size: 15px;
 
-  line-height: 1.3;
+  line-height: 1.25;
+
+  color: #071a34;
 }
 
 .security-icon {
-  font-size: 31px;
+  font-size: 32px;
 
   flex-shrink: 0;
 }
-
 
 /* =========================================================
    LADO DERECHO
    ========================================================= */
 
 .hero-right {
+  width: 49%;
+  height: 100%;
+
   position: relative;
 
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      135deg,
-      #0b2c4f,
-      #061a35
-    );
+  background: #071f3d;
 
-  border-left: 1px solid rgba(255,255,255,.2);
-
-  isolation: isolate;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 
 /* =========================================================
    LÍNEAS DORADAS
@@ -617,84 +507,58 @@ body {
 .decorative-line {
   position: absolute;
 
-  z-index: 1;
-
-  width: 3px;
-  height: 160%;
-
-  background: var(--gold);
-
-  opacity: .8;
-
-  transform: rotate(37deg);
-
-  right: 22%;
-  top: -25%;
+  inset: 0;
 
   pointer-events: none;
+
+  z-index: 0;
+
+  background:
+    linear-gradient(
+      126deg,
+      transparent 0%,
+      transparent 53%,
+      rgba(245, 180, 0, 0.9) 53.2%,
+      rgba(245, 180, 0, 0.9) 53.5%,
+      transparent 53.7%
+    ),
+    linear-gradient(
+      126deg,
+      transparent 0%,
+      transparent 83%,
+      rgba(245, 180, 0, 0.9) 83.2%,
+      rgba(245, 180, 0, 0.9) 83.5%,
+      transparent 83.7%
+    );
 }
-
-.hero-right::after {
-  content: "";
-
-  position: absolute;
-
-  z-index: 1;
-
-  width: 3px;
-  height: 160%;
-
-  background: var(--gold);
-
-  opacity: .8;
-
-  transform: rotate(37deg);
-
-  right: -9%;
-  top: 20%;
-
-  pointer-events: none;
-}
-
 
 /* =========================================================
    BANCO GRANDE DE FONDO
-   =========================================================
-
-   ESTE ES EL CAMBIO PRINCIPAL.
-
-   El banco:
-   - queda detrás
-   - ocupa buena parte del panel
-   - sube hacia la parte superior
-   - no tapa el contenido
-*/
+   ========================================================= */
 
 .bank-background {
   position: absolute;
 
-  z-index: 2;
+  z-index: 1;
 
-  width: 92%;
+  width: 82%;
 
-  max-width: 690px;
+  max-width: 720px;
 
   height: auto;
 
   left: 50%;
+
   top: 43%;
 
   transform: translate(-50%, -50%);
 
   object-fit: contain;
 
-  opacity: .96;
+  opacity: 0.95;
 
   pointer-events: none;
-
-  user-select: none;
 }
-
 
 /* =========================================================
    PROFESORA
@@ -703,51 +567,43 @@ body {
 .teacher-img {
   position: absolute;
 
-  z-index: 5;
+  z-index: 3;
 
-  width: 39%;
+  width: 38%;
 
-  max-width: 315px;
+  max-width: 330px;
 
   height: auto;
 
   left: 50%;
 
-  top: 8%;
+  top: 25px;
 
   transform: translateX(-50%);
 
   object-fit: contain;
 
   pointer-events: none;
-
-  user-select: none;
-
-  filter:
-    drop-shadow(
-      0 9px 10px rgba(0,0,0,.35)
-    );
 }
 
-
 /* =========================================================
-   NIÑOS
+   ESTUDIANTES
    ========================================================= */
 
 .children {
   position: absolute;
 
-  z-index: 6;
+  z-index: 4;
 
   left: 50%;
 
-  bottom: 7%;
+  bottom: -8px;
 
   transform: translateX(-50%);
 
-  width: 69%;
+  width: 76%;
 
-  height: 57%;
+  height: 68%;
 
   display: flex;
 
@@ -755,51 +611,41 @@ body {
 
   justify-content: center;
 
-  gap: 1%;
+  gap: 4px;
+}
+
+.children img {
+  height: 100%;
+
+  width: auto;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
 
   pointer-events: none;
 }
 
-.children img {
-  width: 44%;
-
-  max-width: 255px;
-
-  height: auto;
-
-  object-fit: contain;
-
-  filter:
-    drop-shadow(
-      0 9px 10px rgba(0,0,0,.4)
-    );
-}
-
 .boy-img {
-  transform: translateY(1%);
+  max-width: 46%;
 }
 
 .girl-img {
-  transform: translateY(0);
+  max-width: 46%;
 }
 
-
 /* =========================================================
-   MINI LOGO BANCO
+   MINI LOGO
    ========================================================= */
 
 .mini-brand {
   position: absolute;
 
-  z-index: 15;
+  z-index: 6;
 
-  right: 4%;
+  right: 25px;
 
-  bottom: 4%;
-
-  color: white;
-
-  text-align: right;
+  bottom: 22px;
 
   display: flex;
 
@@ -807,7 +653,7 @@ body {
 
   align-items: flex-end;
 
-  pointer-events: none;
+  color: white;
 }
 
 .mini-bank {
@@ -820,7 +666,7 @@ body {
 
 .mini-symbol {
   width: 48px;
-  height: 45px;
+  height: 47px;
 
   display: flex;
 
@@ -828,66 +674,57 @@ body {
 
   justify-content: space-around;
 
-  border-bottom: 5px solid var(--gold);
-
-  padding: 0 4px 3px;
+  border-bottom: 5px solid #f5b400;
 }
 
 .mini-symbol div {
-  width: 8px;
+  width: 7px;
   height: 30px;
 
-  background: var(--gold);
-
-  border-left: 2px solid var(--navy);
-  border-right: 2px solid var(--navy);
+  background: #f5b400;
 }
 
-.mini-bank strong {
-  display: block;
-
-  font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 27px;
-
-  line-height: 1;
-}
-
+.mini-bank strong,
 .mini-bank span {
   display: block;
 
-  color: var(--gold);
-
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 29px;
+  line-height: 0.95;
+}
+
+.mini-bank strong {
+  font-size: 27px;
+}
+
+.mini-bank span {
+  color: #f5b400;
+
+  font-size: 25px;
 
   font-weight: 700;
-
-  line-height: 1;
 }
 
 .mini-brand small {
-  margin-top: 5px;
+  margin-top: 6px;
 
-  font-size: 8px;
+  font-size: 9px;
 
   white-space: nowrap;
 }
-
 
 /* =========================================================
    FOOTER
    ========================================================= */
 
 footer {
+  height: 150px;
+
   width: 100%;
 
-  height: 124px;
+  background: #071a34;
 
-  background: var(--navy);
-
-  color: white;
+  border-top: 3px solid #f5b400;
 
   display: flex;
 
@@ -895,13 +732,7 @@ footer {
 
   justify-content: space-between;
 
-  padding: 15px 3.2%;
-
-  position: relative;
-
-  z-index: 30;
-
-  border-top: 3px solid var(--gold);
+  padding: 0 42px;
 }
 
 .footer-school {
@@ -909,12 +740,13 @@ footer {
 
   align-items: center;
 
-  gap: 16px;
+  gap: 18px;
 }
 
 .footer-school img {
-  width: 67px;
-  height: 76px;
+  width: 70px;
+
+  height: 80px;
 
   object-fit: contain;
 }
@@ -923,51 +755,49 @@ footer {
   display: flex;
 
   flex-direction: column;
+
+  gap: 5px;
 }
 
 .footer-school strong {
+  color: white;
+
   font-family: Georgia, "Times New Roman", serif;
 
   font-size: 24px;
 }
 
 .footer-school span {
-  margin-top: 5px;
+  color: white;
 
-  font-size: 14px;
+  font-size: 15px;
 
   line-height: 1.25;
 }
-
-
-/* =========================================================
-   VALORES
-   ========================================================= */
 
 .values {
   display: flex;
 
   align-items: center;
 
-  gap: 35px;
+  gap: 42px;
 }
 
-.values > div {
+.values div {
   display: flex;
 
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
+
+  color: white;
 
   font-size: 17px;
-
-  white-space: nowrap;
 }
 
 .values b {
   font-size: 28px;
 }
-
 
 /* =========================================================
    MODALES
@@ -978,9 +808,9 @@ footer {
 
   inset: 0;
 
-  z-index: 100;
+  z-index: 1000;
 
-  background: rgba(3,13,27,.78);
+  background: rgba(0, 0, 0, 0.65);
 
   display: flex;
 
@@ -989,8 +819,6 @@ footer {
   justify-content: center;
 
   padding: 20px;
-
-  backdrop-filter: blur(4px);
 }
 
 .modal.hidden {
@@ -1000,7 +828,7 @@ footer {
 .modal-card {
   position: relative;
 
-  width: min(700px, 95vw);
+  width: min(650px, 95vw);
 
   max-height: 90vh;
 
@@ -1008,627 +836,293 @@ footer {
 
   background: white;
 
-  border-radius: 22px;
+  border-radius: 20px;
 
-  padding: 35px;
+  padding: 30px;
 
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.4);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
 }
 
 .modal-card.small {
-  width: min(480px, 95vw);
+  width: min(430px, 95vw);
 }
 
 .modal-card.profile {
-  width: min(850px, 95vw);
+  width: min(700px, 95vw);
 }
-
-.modal-card h2 {
-  color: var(--navy);
-
-  font-family: Georgia, "Times New Roman", serif;
-
-  margin-bottom: 15px;
-
-  font-size: 28px;
-}
-
-.modal-card p {
-  color: #555;
-
-  margin-bottom: 20px;
-}
-
-
-/* =========================================================
-   CERRAR
-   ========================================================= */
 
 .close {
   position: absolute;
 
-  top: 12px;
-  right: 16px;
+  right: 15px;
 
-  width: 40px;
-  height: 40px;
+  top: 10px;
 
   border: none;
 
   background: transparent;
 
-  color: #555;
+  font-size: 35px;
 
-  font-size: 32px;
+  color: #333;
 
   cursor: pointer;
-
-  border-radius: 50%;
 }
 
-.close:hover {
-  background: #eee;
-}
-
-
-/* =========================================================
-   INPUT
-   ========================================================= */
-
-.modal-card input {
-  width: 100%;
-
-  height: 52px;
-
-  border: 1px solid #c8c8c8;
-
-  border-radius: 10px;
-
-  padding: 0 15px;
-
-  font-size: 17px;
-
-  outline: none;
+.modal-card h2 {
+  color: #071a34;
 
   margin-bottom: 15px;
 }
 
-.modal-card input:focus {
-  border-color: var(--navy);
-
-  box-shadow:
-    0 0 0 3px rgba(7,26,52,.1);
+.modal-card p {
+  margin-bottom: 20px;
 }
 
+.modal-card input {
+  width: 100%;
 
-/* =========================================================
-   BOTÓN MODAL
-   ========================================================= */
+  height: 50px;
+
+  padding: 0 15px;
+
+  border: 1px solid #bbb;
+
+  border-radius: 10px;
+
+  font-size: 17px;
+
+  margin-bottom: 15px;
+}
 
 .primary {
   width: 100%;
 
-  min-height: 52px;
+  height: 50px;
 
   border: none;
 
   border-radius: 10px;
 
-  background: var(--navy);
+  background: #071a34;
 
   color: white;
 
-  font-size: 17px;
+  font-size: 16px;
 
   font-weight: 700;
 
   cursor: pointer;
-
-  transition: .2s ease;
 }
-
-.primary:hover {
-  background: var(--navy2);
-}
-
-
-/* =========================================================
-   ESTADO
-   ========================================================= */
 
 .status {
   margin-top: 15px;
-
-  min-height: 20px;
-
-  font-size: 15px;
-
-  line-height: 1.4;
 }
-
-
-/* =========================================================
-   LECTOR QR
-   ========================================================= */
 
 #reader {
   width: 100%;
-
   max-width: 500px;
-
-  margin: 20px auto;
+  margin: 0 auto;
 }
 
-
 /* =========================================================
-   TABLET / PANTALLAS MEDIANAS
+   RESPONSIVE
    ========================================================= */
 
 @media (max-width: 1200px) {
 
   .topbar {
-    height: 105px;
-    min-height: 105px;
-  }
-
-  .school-crest {
-    width: 62px;
-    height: 76px;
+    padding: 0 30px;
   }
 
   .school-name strong {
-    font-size: 28px;
-  }
-
-  .school-name span {
-    font-size: 17px;
-  }
-
-  .admin-btn {
-    min-width: 220px;
-    height: 58px;
-    font-size: 19px;
-  }
-
-  .hero {
-    grid-template-columns: 53% 47%;
-    min-height: 620px;
-    height: calc(100vh - 229px);
-  }
-
-  .bank-symbol {
-    width: 95px;
-    height: 95px;
-  }
-
-  .bank-symbol .roof {
-    width: 88px;
-  }
-
-  .columns {
-    width: 76px;
-    height: 48px;
-  }
-
-  .columns i {
-    height: 46px;
-  }
-
-  .bank-symbol .base {
-    width: 94px;
+    font-size: 27px;
   }
 
   .bank-title h1 {
-    font-size: 58px;
+    font-size: 60px;
   }
 
-  .subtitle {
-    font-size: 20px;
+  .bank-symbol {
+    transform: scale(0.9);
   }
 
-  .intro {
-    font-size: 21px;
-  }
-
-  .actions {
-    max-width: 620px;
-    gap: 16px;
-  }
-
-  .action-card {
-    height: 205px;
-  }
-
-  .card-content b {
-    font-size: 21px;
-  }
-
-  .card-content small {
-    font-size: 14px;
-  }
-
-  .bank-background {
-    width: 94%;
-    top: 42%;
+  .hero-left {
+    padding-left: 35px;
+    padding-right: 35px;
   }
 
   .teacher-img {
-    width: 39%;
-    max-width: 280px;
-    top: 7%;
+    width: 40%;
   }
 
   .children {
-    width: 72%;
-    height: 55%;
-  }
-
-  .children img {
-    width: 45%;
-  }
-
-  .values {
-    gap: 20px;
-  }
-
-  .values > div {
-    font-size: 15px;
+    width: 82%;
   }
 }
 
-
 /* =========================================================
-   TABLET PEQUEÑA
+   TABLET
    ========================================================= */
 
 @media (max-width: 900px) {
 
   .topbar {
-    height: 95px;
-    min-height: 95px;
-    padding: 0 18px;
+    height: 105px;
   }
 
   .school-crest {
-    width: 55px;
-    height: 68px;
+    width: 62px;
+    height: 70px;
   }
 
   .school-name strong {
-    font-size: 23px;
+    font-size: 22px;
   }
 
   .school-name span {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .admin-btn {
-    min-width: 180px;
-    height: 52px;
-    font-size: 16px;
+    min-width: 190px;
+    height: 58px;
+    font-size: 19px;
   }
 
   .hero {
     height: auto;
-    min-height: 0;
-    grid-template-columns: 1fr;
+    min-height: 900px;
+    flex-direction: column;
+  }
+
+  .hero-left,
+  .hero-right {
+    width: 100%;
   }
 
   .hero-left {
-    min-height: 680px;
-    padding: 34px 25px 25px;
+    min-height: 610px;
   }
 
   .hero-left::after {
-    border-top-width: 680px;
+    display: none;
   }
 
   .hero-right {
-    min-height: 620px;
     height: 620px;
-  }
-
-  .bank-logo {
-    gap: 15px;
-  }
-
-  .bank-title h1 {
-    font-size: 58px;
-  }
-
-  .actions {
-    max-width: 700px;
-  }
-
-  .bank-background {
-    width: 78%;
-    top: 42%;
-  }
-
-  .teacher-img {
-    width: 31%;
-    max-width: 270px;
-    top: 6%;
-  }
-
-  .children {
-    width: 58%;
-    height: 56%;
-    bottom: 8%;
-  }
-
-  .children img {
-    width: 44%;
-    max-width: 245px;
   }
 
   footer {
     height: auto;
-    min-height: 135px;
-    flex-direction: column;
-    gap: 18px;
-    padding: 18px;
+    min-height: 150px;
+    padding: 25px;
+    gap: 30px;
+  }
+
+  .values {
+    gap: 20px;
   }
 }
 
-
 /* =========================================================
-   MÓVIL
+   CELULAR
    ========================================================= */
 
 @media (max-width: 600px) {
 
   .topbar {
-    height: 78px;
-    min-height: 78px;
-
-    padding: 7px 12px;
-
-    gap: 8px;
+    height: auto;
+    min-height: 95px;
+    padding: 12px 15px;
   }
 
   .brand {
-    gap: 7px;
+    gap: 10px;
   }
 
   .school-crest {
-    width: 40px;
-    height: 50px;
+    width: 50px;
+    height: 58px;
   }
 
   .school-name strong {
-    font-size: 13px;
-    line-height: 1.05;
-    white-space: normal;
-  }
-
-  .school-name span {
-    margin-top: 3px;
-    font-size: 9px;
-  }
-
-  .admin-btn {
-    min-width: 0;
-
-    height: 42px;
-
-    padding: 5px 9px;
-
-    font-size: 10px;
-
-    border-radius: 12px;
-  }
-
-  .lock {
-    font-size: 18px;
-  }
-
-
-  /* ---------- PORTADA ---------- */
-
-  .hero {
-    display: flex;
-    flex-direction: column;
-
-    height: auto;
-    min-height: 0;
-  }
-
-  .hero-left {
-    min-height: 0;
-
-    padding:
-      27px
-      14px
-      22px;
-  }
-
-  .hero-left::after {
-    border-top-width: 0;
-    border-left-width: 0;
-  }
-
-
-  /* ---------- LOGO ---------- */
-
-  .bank-logo {
-    gap: 6px;
-  }
-
-  .bank-symbol {
-    width: 62px;
-    height: 62px;
-  }
-
-  .bank-symbol .roof {
-    left: 2px;
-    top: 8px;
-    width: 58px;
-    height: 8px;
-  }
-
-  .bank-symbol .roof::before {
-    left: 22px;
-    top: -11px;
-    width: 11px;
-    height: 11px;
-  }
-
-  .columns {
-    left: 7px;
-    top: 25px;
-    width: 49px;
-    height: 29px;
-  }
-
-  .columns i {
-    width: 7px;
-    height: 28px;
-  }
-
-  .bank-symbol .base {
-    left: 1px;
-    bottom: 3px;
-    width: 60px;
-    height: 7px;
-    border-bottom-width: 3px;
-  }
-
-  .bank-title h1 {
-    font-size: 35px;
-    letter-spacing: 0;
-  }
-
-  .online {
-    margin-top: 8px;
-    font-size: 10px;
-    letter-spacing: 5px;
-    padding-left: 5px;
-  }
-
-  .subtitle {
-    margin: 12px 0 15px;
     font-size: 16px;
   }
 
-  .intro {
-    font-size: 17px;
-    line-height: 1.3;
-  }
-
-
-  /* ---------- BOTONES ---------- */
-
-  .actions {
-    grid-template-columns: 1fr;
-
-    gap: 14px;
-
-    margin-top: 20px;
-  }
-
-  .action-card {
-    height: 150px;
-    min-height: 150px;
-
-    border-radius: 20px;
-
-    padding: 20px 17px 37px;
-  }
-
-  .card-icon {
-    left: 19px;
-    top: 27px;
-    font-size: 31px;
-  }
-
-  .card-content {
-    margin-left: 54px;
-  }
-
-  .card-content b {
-    font-size: 19px;
-  }
-
-  .card-content small {
-    margin-top: 10px;
-    font-size: 13px;
-  }
-
-  .arrow {
-    width: 40px;
-    height: 40px;
-
-    bottom: -21px;
-
-    font-size: 31px;
-  }
-
-
-  /* ---------- SEGURIDAD ---------- */
-
-  .security {
-    margin-top: 15px;
-
-    padding: 11px 13px;
-
-    gap: 9px;
-
+  .school-name span {
     font-size: 12px;
   }
 
-  .security-icon {
-    font-size: 26px;
+  .admin-btn {
+    min-width: auto;
+    width: 55px;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 0;
   }
 
+  .lock {
+    font-size: 25px;
+  }
 
-  /* ---------- LADO DERECHO ---------- */
+  .hero-left {
+    padding: 30px 18px 25px;
+  }
+
+  .bank-logo {
+    gap: 8px;
+    transform: scale(0.78);
+    transform-origin: top center;
+    margin-bottom: -25px;
+  }
+
+  .bank-symbol {
+    width: 125px;
+  }
+
+  .bank-title h1 {
+    font-size: 48px;
+  }
+
+  .online {
+    font-size: 16px;
+    letter-spacing: 8px;
+  }
+
+  .subtitle {
+    font-size: 19px;
+  }
+
+  .intro {
+    font-size: 20px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .action-card {
+    width: 100%;
+  }
 
   .hero-right {
-    min-height: 500px;
-    height: 500px;
-  }
-
-  .bank-background {
-    width: 94%;
-    max-width: none;
-
-    top: 40%;
+    height: 520px;
   }
 
   .teacher-img {
-    width: 35%;
-    max-width: 220px;
-
-    top: 6%;
+    width: 42%;
+    top: 20px;
   }
 
   .children {
-    width: 67%;
-    height: 58%;
-
-    bottom: 8%;
-  }
-
-  .children img {
-    width: 46%;
-    max-width: 210px;
+    width: 90%;
+    height: 65%;
   }
 
   .mini-brand {
-    right: 3%;
-    bottom: 3%;
-  }
-
-  .mini-symbol {
-    width: 38px;
-    height: 36px;
-  }
-
-  .mini-symbol div {
-    width: 6px;
-    height: 25px;
+    right: 12px;
+    bottom: 15px;
   }
 
   .mini-bank strong {
@@ -1636,132 +1130,18 @@ footer {
   }
 
   .mini-bank span {
-    font-size: 21px;
+    font-size: 18px;
   }
-
-  .mini-brand small {
-    font-size: 6px;
-  }
-
-
-  /* ---------- FOOTER ---------- */
 
   footer {
-    padding: 16px 13px;
-
+    flex-direction: column;
     align-items: flex-start;
-
-    min-height: 170px;
-  }
-
-  .footer-school {
-    gap: 9px;
-  }
-
-  .footer-school img {
-    width: 48px;
-    height: 56px;
-  }
-
-  .footer-school strong {
-    font-size: 16px;
-  }
-
-  .footer-school span {
-    font-size: 11px;
   }
 
   .values {
     width: 100%;
-
-    justify-content: flex-start;
-
+    justify-content: space-between;
+    gap: 10px;
     flex-wrap: wrap;
-
-    gap: 13px;
-  }
-
-  .values > div {
-    font-size: 12px;
-  }
-
-  .values b {
-    font-size: 21px;
-  }
-
-
-  /* ---------- MODALES ---------- */
-
-  .modal {
-    padding: 12px;
-  }
-
-  .modal-card {
-    padding: 25px 18px;
-    border-radius: 18px;
-  }
-
-  .modal-card h2 {
-    font-size: 23px;
-  }
-}
-
-
-/* =========================================================
-   PANTALLAS MUY PEQUEÑAS
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-  .school-name strong {
-    font-size: 12px;
-  }
-
-  .school-name span {
-    font-size: 8px;
-  }
-
-  .admin-btn {
-    font-size: 9px;
-    padding: 5px 7px;
-  }
-
-  .bank-symbol {
-    width: 55px;
-    height: 55px;
-  }
-
-  .bank-symbol .roof {
-    width: 52px;
-  }
-
-  .columns {
-    width: 44px;
-  }
-
-  .bank-symbol .base {
-    width: 53px;
-  }
-
-  .bank-title h1 {
-    font-size: 30px;
-  }
-
-  .online {
-    font-size: 9px;
-    letter-spacing: 4px;
-  }
-
-  .hero-right {
-    height: 450px;
-    min-height: 450px;
-  }
-
-  .teacher-img {
-    width: 38%;
-  }
-
-  .children {
-    width: 72%;
   }
 }
