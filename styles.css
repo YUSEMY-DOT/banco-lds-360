@@ -2242,3 +2242,29 @@ footer {
     font-size: 16px !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — FRASES DE LA PARTE BLANCA
+   Solo reducir tamaño y mantener centradas.
+   NO cambia posición ni ningún otro elemento.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .subtitle {
+    font-size: 14px !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-left .intro {
+    font-size: 14px !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 650px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
