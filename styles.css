@@ -1566,3 +1566,31 @@ footer {
     z-index: 10 !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO: HACER MÁS PEQUEÑOS SOLO LOS NIÑOS
+   No cambia banco, profesora, izquierda ni footer.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-right .children {
+    width: 58% !important;
+    height: 50% !important;
+    left: 50% !important;
+    bottom: 7% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .hero-right .boy-img {
+    width: 40% !important;
+    left: 3% !important;
+    bottom: 0 !important;
+  }
+
+  .hero-right .girl-img {
+    width: 37% !important;
+    right: 3% !important;
+    bottom: 0 !important;
+  }
+}
