@@ -1,40 +1,181 @@
 /* =========================================================
-   AJUSTE FINAL — BANCO LDS 360
+   CORRECCIÓN FINAL DE COMPOSICIÓN
    ========================================================= */
 
-/* PANEL DERECHO */
-.hero-right {
-  position: relative !important;
-  overflow: hidden !important;
-  isolation: isolate !important;
+/* ---------- PORTADA ---------- */
+
+.hero {
+  height: calc(100vh - 244px);
+  min-height: 620px;
+  grid-template-columns: 52% 48%;
+  overflow: hidden;
+}
+
+/* ---------- LADO IZQUIERDO ---------- */
+
+.hero-left {
+  padding: 34px 4.5% 24px;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+/* Evita que el logo BANCO LDS 360 se comprima */
+
+.bank-logo {
+  width: 100%;
+  max-width: 700px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 24px;
+
+  margin: 0 auto 12px;
+
+  transform: none;
+}
+
+/* Símbolo del banco */
+
+.bank-symbol {
+  flex: 0 0 155px;
+
+  width: 155px;
+  min-width: 155px;
+
+  height: 150px;
+
+  transform: none;
+
+  margin: 0;
+}
+
+/* Texto del banco */
+
+.bank-title {
+  flex: 0 0 auto;
+  width: auto;
+
+  min-width: 390px;
+
+  text-align: left;
+}
+
+.bank-title h1 {
+  white-space: nowrap;
+
+  font-size: clamp(50px, 4.8vw, 76px);
+
+  line-height: 0.88;
+}
+
+.bank-title h1 span {
+  white-space: nowrap;
+}
+
+.online {
+  white-space: nowrap;
+  text-align: center;
+
+  font-size: 20px;
+
+  letter-spacing: 0.52em;
+}
+
+/* ---------- TEXTO IZQUIERDO ---------- */
+
+.subtitle {
+  margin-top: 12px;
+
+  font-size: 24px;
+
+  text-align: center;
+}
+
+.intro {
+  margin-top: 15px;
+
+  font-size: 25px;
+
+  line-height: 1.38;
+
+  text-align: center;
+}
+
+/* ---------- TARJETAS ---------- */
+
+.actions {
+  width: 100%;
+  max-width: 650px;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+
+  margin-top: 22px;
+}
+
+.action-card {
+  min-height: 210px;
+}
+
+.card-content {
+  padding: 30px 15px 60px 90px;
+}
+
+/* ---------- SEGURIDAD ---------- */
+
+.security {
+  width: 100%;
+  max-width: 650px;
+
+  min-height: 70px;
+
+  margin-top: 16px;
 }
 
 /* =========================================================
-   BANCO GRANDE DE FONDO
+   LADO DERECHO
+   ========================================================= */
+
+.hero-right {
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+}
+
+/* =========================================================
+   BANCO DE FONDO
    ========================================================= */
 
 .bank-background {
-  display: block !important;
-  position: absolute !important;
+  position: absolute;
 
-  z-index: 1 !important;
+  z-index: 2;
 
-  width: 88% !important;
-  height: auto !important;
+  width: 78%;
 
-  max-width: none !important;
-  max-height: none !important;
+  height: auto;
 
-  left: 50% !important;
-  top: 48% !important;
+  max-width: none;
+  max-height: none;
 
-  transform: translate(-50%, -50%) !important;
+  left: 50%;
+  top: 57%;
 
-  object-fit: contain !important;
+  transform: translate(-50%, -50%);
 
-  opacity: 1 !important;
+  object-fit: contain;
 
-  pointer-events: none !important;
+  opacity: 0.72;
+
+  pointer-events: none;
 }
 
 /* =========================================================
@@ -42,83 +183,70 @@
    ========================================================= */
 
 .teacher-img {
-  display: block !important;
-  position: absolute !important;
+  position: absolute;
 
-  z-index: 3 !important;
+  z-index: 7;
 
-  width: 30% !important;
-  height: auto !important;
+  width: 31%;
 
-  max-width: 300px !important;
+  max-width: 285px;
 
-  left: 50% !important;
-  top: 7% !important;
+  height: auto;
 
-  transform: translateX(-50%) !important;
+  left: 50%;
+  top: 7%;
 
-  object-fit: contain !important;
+  transform: translateX(-50%);
 
-  pointer-events: none !important;
+  object-fit: contain;
+
+  pointer-events: none;
 }
 
 /* =========================================================
-   GRUPO DE NIÑOS
+   NIÑOS
    ========================================================= */
 
 .children {
-  display: block !important;
-  position: absolute !important;
+  position: absolute;
 
-  z-index: 4 !important;
+  z-index: 8;
 
-  width: 74% !important;
-  height: 67% !important;
+  width: 76%;
+  height: 67%;
 
-  left: 50% !important;
-  bottom: 1% !important;
+  left: 50%;
+  bottom: 3%;
 
-  transform: translateX(-50%) !important;
+  transform: translateX(-50%);
 
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
-/* =========================================================
-   NIÑO
-   ========================================================= */
+.children img {
+  position: absolute;
 
-.children .boy-img {
-  display: block !important;
-  position: absolute !important;
+  height: auto;
 
-  z-index: 5 !important;
-
-  width: 47% !important;
-  height: auto !important;
-
-  left: 0 !important;
-  bottom: 0 !important;
-
-  object-fit: contain !important;
+  object-fit: contain;
 }
 
-/* =========================================================
-   NIÑA
-   ========================================================= */
+/* Niño */
 
-.children .girl-img {
-  display: block !important;
-  position: absolute !important;
+.boy-img {
+  width: 46%;
 
-  z-index: 5 !important;
+  left: 3%;
+  bottom: 0;
+}
 
-  width: 44% !important;
-  height: auto !important;
+/* Niña */
 
-  right: 0 !important;
-  bottom: 0 !important;
+.girl-img {
+  width: 43%;
 
-  object-fit: contain !important;
+  right: 3%;
+  bottom: 0;
 }
 
 /* =========================================================
@@ -126,65 +254,86 @@
    ========================================================= */
 
 .mini-brand {
-  position: absolute !important;
+  z-index: 12;
 
-  z-index: 10 !important;
-
-  right: 4% !important;
-  bottom: 3% !important;
+  right: 4%;
+  bottom: 3%;
 }
 
 /* =========================================================
-   MANTENER LA DIVISIÓN CORRECTA
+   PANTALLAS GRANDES
    ========================================================= */
 
-.hero {
-  grid-template-columns: 52% 48% !important;
-  overflow: hidden !important;
+@media (min-width: 1400px) {
+
+  .hero {
+    grid-template-columns: 52% 48%;
+  }
+
+  .hero-left {
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  .bank-logo {
+    max-width: 720px;
+  }
+
+  .bank-symbol {
+    flex-basis: 160px;
+    width: 160px;
+    min-width: 160px;
+  }
+
+  .bank-title {
+    min-width: 420px;
+  }
+
+  .bank-title h1 {
+    font-size: 76px;
+  }
+
+  .bank-background {
+    width: 79%;
+
+    top: 56%;
+  }
+
+  .teacher-img {
+    width: 31%;
+    max-width: 300px;
+
+    top: 7%;
+  }
+
+  .children {
+    width: 78%;
+    height: 68%;
+
+    bottom: 2%;
+  }
+
+  .boy-img {
+    width: 45%;
+  }
+
+  .girl-img {
+    width: 42%;
+  }
 }
 
 /* =========================================================
-   LOGO BANCO DE LA IZQUIERDA
-   NO DEJAR QUE SE ROMPA
+   EVITA QUE EL LOGO SE ROMPA
    ========================================================= */
 
-.bank-logo {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
-
-  align-items: center !important;
-  justify-content: center !important;
-
-  gap: 20px !important;
-
-  width: 100% !important;
-  max-width: 700px !important;
-
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-.bank-symbol {
-  flex: 0 0 150px !important;
-
-  width: 150px !important;
-  min-width: 150px !important;
-}
-
-.bank-title {
-  flex: 0 0 auto !important;
-  min-width: 390px !important;
-}
-
-.bank-title h1 {
-  white-space: nowrap !important;
-}
-
-.bank-title h1 span {
-  white-space: nowrap !important;
-}
-
+.bank-logo,
+.bank-title,
+.bank-title h1,
+.bank-title h1 span,
 .online {
-  white-space: nowrap !important;
+  overflow: visible;
+}
+
+.bank-title h1 br {
+  display: block;
 }
