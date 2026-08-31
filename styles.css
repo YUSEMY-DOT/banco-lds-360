@@ -1869,3 +1869,114 @@ footer {
     grid-template-columns: 1fr 1fr !important;
   }
 }
+/* =========================================================
+   AJUSTE FINAL DE ENCUADRE
+   No modifica el diseño original
+   ========================================================= */
+
+/* -------------------------
+   LAPTOP / PC
+   ------------------------- */
+
+@media (min-width: 761px) {
+
+  .hero {
+    height: calc(100vh - 221px);
+    min-height: 0;
+    max-height: none;
+  }
+
+  .hero-left {
+    min-height: 0;
+    height: 100%;
+    padding-top: 24px;
+    padding-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .bank-logo {
+    margin-bottom: 2px;
+    transform: scale(.92);
+    transform-origin: top center;
+  }
+
+  .subtitle {
+    margin-top: 3px;
+  }
+
+  .intro {
+    margin-top: 10px;
+  }
+
+  .actions {
+    margin-top: 12px;
+  }
+
+  .action-card {
+    min-height: 135px;
+    height: 135px;
+  }
+
+  .security {
+    margin-top: 9px;
+    min-height: 50px;
+  }
+
+  .hero-right {
+    height: 100%;
+  }
+}
+
+
+/* -------------------------
+   CELULAR
+   ------------------------- */
+
+@media (max-width: 760px) {
+
+  .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .hero-left {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-right {
+    width: 100%;
+    height: 430px !important;
+    min-height: 430px !important;
+    max-height: none !important;
+    overflow: hidden !important;
+  }
+
+  footer {
+    width: 100%;
+    height: auto !important;
+  }
+}
+
+
+/* -------------------------
+   CELULARES MUY PEQUEÑOS
+   ------------------------- */
+
+@media (max-width: 390px) {
+
+  .hero-right {
+    height: 390px !important;
+    min-height: 390px !important;
+  }
+}
