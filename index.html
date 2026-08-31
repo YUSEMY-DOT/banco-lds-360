@@ -1,1466 +1,1241 @@
-<!doctype html>
-<html lang="es">
+/* =========================================================
+   BANCO LDS 360 — ESTILOS PRINCIPALES
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #071a34;
+  color: #071a34;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.topbar {
+  height: 116px;
+  width: 100%;
+  background: #071a34;
+  border-bottom: 3px solid #f4b400;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 3.2%;
+  position: relative;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.school-crest {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.school-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.school-name strong {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(25px, 2.4vw, 39px);
+  line-height: 1;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.school-name span {
+  margin-top: 8px;
+  color: #f4b400;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(15px, 1.35vw, 23px);
+}
+
+.admin-btn {
+  height: 62px;
+  min-width: 250px;
+
+  padding: 0 28px;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  font-size: clamp(18px, 1.45vw, 25px);
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
 
-<head>
+.admin-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
 
-  <meta charset="utf-8">
+.lock {
+  font-size: 28px;
+}
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
+/* =========================================================
+   PORTADA
+   ========================================================= */
 
-  <meta
-    name="theme-color"
-    content="#071a34"
-  >
+.hero {
+  width: 100%;
+  height: calc(100vh - 116px - 128px);
+  min-height: 620px;
 
-  <title>Banco LDS 360 Online</title>
+  display: grid;
+  grid-template-columns: 51% 49%;
 
-  <link
-    rel="stylesheet"
-    href="styles.css"
-  >
+  position: relative;
+  overflow: hidden;
+}
 
-  <!-- =====================================================
-       LECTOR QR
-       ===================================================== -->
+/* =========================================================
+   LADO IZQUIERDO
+   ========================================================= */
 
-  <script
-    src="https://unpkg.com/html5-qrcode"
-    defer
-  ></script>
+.hero-left {
+  position: relative;
+  z-index: 5;
 
+  background-color: #ffffff;
 
-  <!-- =====================================================
-       DATOS Y APLICACIÓN
-       ===================================================== -->
+  /* Puntos muy sutiles, como en la imagen de referencia */
+  background-image: radial-gradient(
+    rgba(7, 26, 52, 0.14) 1px,
+    transparent 1px
+  );
 
-  <script
-    src="data.js"
-    defer
-  ></script>
+  background-size: 12px 12px;
 
-  <script
-    src="app.js"
-    defer
-  ></script>
+  padding: 42px 5.5% 28px;
 
-</head>
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
+  overflow: hidden;
+}
 
-<body>
+/* Forma diagonal derecha */
 
+.hero-left::after {
+  content: "";
+  position: absolute;
 
-  <!-- =====================================================
-       ENCABEZADO
-       ===================================================== -->
+  top: 0;
+  right: -38px;
 
-  <header class="topbar">
+  width: 75px;
+  height: 100%;
 
-    <div class="brand">
+  background: #ffffff;
 
-      <img
-        class="school-crest"
-        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
-        alt="Escudo IEP La Salle del Sur"
-      >
+  transform: skewX(-5deg);
 
-      <div class="school-name">
+  z-index: -1;
+}
 
-        <strong>
-          IEP LA SALLE DEL SUR
-        </strong>
+/* =========================================================
+   LOGO BANCO
+   ========================================================= */
 
-        <span>
-          Formamos personas íntegras
-        </span>
+.bank-logo {
+  width: min(620px, 92%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      </div>
+  gap: 26px;
 
-    </div>
+  margin-bottom: 12px;
+}
 
+.bank-symbol {
+  width: 150px;
+  min-width: 150px;
+  height: 145px;
 
-    <button
-      class="admin-btn"
-      id="adminBtn"
-      type="button"
-    >
+  position: relative;
 
-      <span class="lock">
-        🔒
-      </span>
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-      Administrador
+/* Techo */
 
-    </button>
+.roof {
+  width: 145px;
+  height: 17px;
 
-  </header>
+  background: #071a34;
 
+  position: relative;
 
+  margin-bottom: 8px;
+}
 
-  <!-- =====================================================
-       PORTADA PRINCIPAL
-       ===================================================== -->
+.roof::before {
+  content: "★";
 
-  <main
-    id="home"
-    class="hero"
-  >
+  position: absolute;
 
+  left: 50%;
+  top: -30px;
 
-    <!-- ===================================================
-         LADO IZQUIERDO
-         =================================================== -->
+  transform: translateX(-50%);
 
-    <section class="hero-left">
+  color: #f4b400;
 
+  font-size: 27px;
+}
 
-      <!-- =================================================
-           LOGO BANCO LDS 360
-           ================================================= -->
+/* Columnas */
 
-      <div class="bank-logo">
+.columns {
+  width: 125px;
+  height: 72px;
 
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
 
-        <div class="bank-symbol">
+  padding: 0 7px;
+}
 
-          <div class="roof"></div>
+.columns i {
+  display: block;
 
+  width: 13px;
+  height: 72px;
 
-          <div class="columns">
+  background: #f4b400;
 
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
+  border-left: 4px solid #071a34;
+  border-right: 4px solid #071a34;
+}
 
-          </div>
+/* Base */
 
+.base {
+  width: 158px;
+  height: 10px;
 
-          <div class="base"></div>
+  background: #071a34;
 
-        </div>
+  position: relative;
+}
 
+.base::after {
+  content: "";
 
-        <div class="bank-title">
+  position: absolute;
 
-          <h1>
-            BANCO
-            <br>
-            <span>LDS 360</span>
-          </h1>
+  width: 158px;
+  height: 6px;
 
+  left: 0;
+  bottom: -8px;
 
-          <div class="online">
-            O N L I N E
-          </div>
+  background: #f4b400;
+}
 
-        </div>
+/* =========================================================
+   TEXTO DEL BANCO
+   ========================================================= */
 
-      </div>
+.bank-title {
+  text-align: left;
+}
 
+.bank-title h1 {
+  font-family: Georgia, "Times New Roman", serif;
 
+  font-size: clamp(52px, 5vw, 82px);
 
-      <!-- =================================================
-           SUBTÍTULO
-           ================================================= -->
+  line-height: 0.86;
 
-      <p class="subtitle">
-        Sistema financiero educativo
-      </p>
+  color: #071a34;
 
+  font-weight: 700;
+}
 
+.bank-title h1 span {
+  color: #c81924;
+}
 
-      <!-- =================================================
-           INTRODUCCIÓN
-           ================================================= -->
+.online {
+  margin-top: 12px;
 
-      <h2 class="intro">
+  text-align: center;
 
-        Consulta de forma rápida y segura
-        <br>
+  color: #071a34;
 
-        la información financiera del estudiante.
+  font-family: Georgia, "Times New Roman", serif;
 
-      </h2>
+  font-size: clamp(17px, 1.55vw, 25px);
 
+  letter-spacing: 0.55em;
+}
 
+/* =========================================================
+   SUBTÍTULO
+   ========================================================= */
 
-      <!-- =================================================
-           BOTONES PRINCIPALES
-           ================================================= -->
+.subtitle {
+  margin-top: 15px;
 
-      <div class="actions">
+  color: #444444;
 
+  font-size: clamp(18px, 1.55vw, 26px);
 
-        <!-- ===============================================
-             ESCANEAR QR
-             =============================================== -->
+  text-align: center;
+}
 
-        <button
-          class="action-card qr"
-          id="scanBtn"
-          type="button"
-        >
+/* =========================================================
+   INTRO
+   ========================================================= */
 
-          <div class="card-icon qr-icon">
-            ▦
-          </div>
+.intro {
+  margin-top: 17px;
 
+  color: #071a34;
 
-          <div class="card-content">
+  font-size: clamp(19px, 1.55vw, 27px);
 
-            <b>
+  line-height: 1.42;
 
-              ESCANEAR
-              <br>
+  text-align: center;
 
-              <span>
-                CÓDIGO QR
-              </span>
+  font-weight: 700;
+}
 
-            </b>
+/* =========================================================
+   BOTONES
+   ========================================================= */
 
+.actions {
+  width: 100%;
+  max-width: 690px;
 
-            <small>
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 
-              Escanea el código del
-              <br>
+  gap: 20px;
 
-              estudiante para consultar
-              <br>
+  margin-top: 23px;
+}
 
-              su cuenta.
+.action-card {
+  min-height: 220px;
 
-            </small>
+  position: relative;
 
-          </div>
+  border: none;
+  border-radius: 25px;
 
+  background: #ffffff;
 
-          <div class="arrow">
-            ›
-          </div>
+  box-shadow: 0 7px 22px rgba(0, 0, 0, 0.13);
 
-        </button>
+  overflow: hidden;
 
+  cursor: pointer;
 
+  text-align: left;
 
-        <!-- ===============================================
-             INGRESAR CÓDIGO
-             =============================================== -->
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
 
-        <button
-          class="action-card code"
-          id="codeBtn"
-          type="button"
-        >
+.action-card:hover {
+  transform: translateY(-3px);
 
-          <div class="card-icon keyboard-icon">
-            ⌨
-          </div>
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
 
+.card-icon {
+  position: absolute;
 
-          <div class="card-content">
+  top: 32px;
+  left: 28px;
 
-            <b>
+  font-size: 43px;
 
-              INGRESAR
-              <br>
+  font-weight: 700;
+}
 
-              CÓDIGO
+.qr-icon {
+  color: #bd0714;
+}
 
-            </b>
+.keyboard-icon {
+  color: #071a34;
+}
 
+.card-content {
+  padding: 31px 20px 65px 91px;
+}
 
-            <small>
+.card-content b {
+  display: block;
 
-              Ingresa el código del
-              <br>
+  font-size: clamp(21px, 1.65vw, 28px);
 
-              estudiante para consultar
-              <br>
+  line-height: 1.02;
 
-              su información.
+  color: #071a34;
+}
 
-            </small>
+.action-card.qr .card-content b {
+  color: #bd0714;
+}
 
-          </div>
+.card-content small {
+  display: block;
 
+  margin-top: 15px;
 
-          <div class="arrow">
-            ›
-          </div>
+  color: #444444;
 
-        </button>
+  font-size: clamp(14px, 1vw, 17px);
 
-      </div>
+  line-height: 1.35;
+}
 
+.arrow {
+  position: absolute;
 
+  left: 50%;
+  bottom: 8px;
 
-      <!-- =================================================
-           SEGURIDAD
-           ================================================= -->
+  transform: translateX(-50%);
 
-      <div class="security">
+  width: 52px;
+  height: 52px;
 
+  border-radius: 50%;
 
-        <div class="security-icon">
-          🛡️
-        </div>
+  border: 3px solid #ffffff;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-        <div>
+  color: #ffffff;
 
-          Sistema seguro, confiable y diseñado para el bienestar
-          <br class="desktop">
+  font-size: 43px;
 
-          financiero de nuestra comunidad educativa.
+  line-height: 1;
 
-        </div>
+  z-index: 3;
+}
 
-      </div>
+.action-card.qr::after,
+.action-card.code::after {
+  content: "";
 
-    </section>
+  position: absolute;
 
+  left: 0;
+  bottom: 0;
 
+  width: 100%;
+  height: 45px;
+}
 
-    <!-- ===================================================
-         LADO DERECHO
-         =================================================== -->
+.action-card.qr::after {
+  background: #bd0714;
+}
 
-    <section class="hero-right">
+.action-card.code::after {
+  background: #071a34;
+}
 
+/* =========================================================
+   SEGURIDAD
+   ========================================================= */
 
-      <!-- =================================================
-           LÍNEA DECORATIVA
-           ================================================= -->
+.security {
+  width: 100%;
+  max-width: 690px;
 
-      <div class="decorative-line"></div>
+  min-height: 72px;
 
+  margin-top: 18px;
 
+  padding: 13px 25px;
 
-      <!-- =================================================
-           BANCO GRANDE DE FONDO
-           
-           IMPORTANTE:
-           Este archivo debe existir dentro de assets.
-           ================================================= -->
+  border-radius: 22px;
 
-      <img
-        class="bank-background"
-        src="assets/banco-lds-360.png"
-        alt="Banco LDS 360"
-      >
+  background: #e5e7eb;
 
+  display: flex;
+  align-items: center;
 
+  gap: 18px;
 
-      <!-- =================================================
-           PROFESORA
-           ================================================= -->
+  color: #071a34;
 
-      <img
-        class="teacher-img"
-        src="assets/assets65a7484e-5453-45af-a6cb-195dad723f3d-removebg-preview.png"
-        alt="Docente"
-      >
+  font-size: clamp(13px, 1vw, 17px);
 
+  line-height: 1.35;
+}
 
+.security-icon {
+  font-size: 35px;
+  flex-shrink: 0;
+}
 
-      <!-- =================================================
-           ESTUDIANTES
-           ================================================= -->
+/* =========================================================
+   LADO DERECHO
+   ========================================================= */
 
-      <div class="children">
+.hero-right {
+  position: relative;
 
+  background: #08284c;
 
-        <img
-          class="boy-img"
-          src="assets/assetsphoto_17_2025-01-25_10-11-15-removebg-preview.png"
-          alt="Estudiante"
-        >
+  overflow: hidden;
 
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
 
-        <img
-          class="girl-img"
-          src="assets/assetsphoto_64_2025-01-25_10-11-15-removebg-preview.png"
-          alt="Estudiante"
-        >
+  isolation: isolate;
+}
 
-      </div>
+/* =========================================================
+   LÍNEAS DORADAS
+   ========================================================= */
 
+.hero-right::before,
+.hero-right::after {
+  content: "";
 
+  position: absolute;
 
-      <!-- =================================================
-           MINI LOGO BANCO LDS 360
-           ================================================= -->
+  width: 3px;
 
-      <div class="mini-brand">
+  height: 150%;
 
+  background: #d9a800;
 
-        <div class="mini-bank">
+  transform: rotate(34deg);
 
+  transform-origin: center;
 
-          <div class="mini-symbol">
+  opacity: 0.9;
 
-            <div></div>
-            <div></div>
-            <div></div>
+  z-index: 1;
+}
 
-          </div>
+.hero-right::before {
+  right: 8%;
+  top: -25%;
+}
 
+.hero-right::after {
+  right: 43%;
+  top: 42%;
+}
 
-          <div>
+/* =========================================================
+   LÍNEA DECORATIVA
+   ========================================================= */
 
-            <strong>
-              BANCO
-            </strong>
+.decorative-line {
+  position: absolute;
 
-            <span>
-              LDS 360
-            </span>
+  width: 100%;
+  height: 100%;
 
-          </div>
+  pointer-events: none;
 
-        </div>
+  z-index: 2;
+}
 
+/* =========================================================
+   BANCO GRANDE DE FONDO
+   ========================================================= */
 
-        <small>
-          EDUCAMOS · AHORRAMOS · CREAMOS FUTURO
-        </small>
+/*
+   IMPORTANTE:
 
-      </div>
+   El banco NO debe ocupar toda la pantalla.
 
-    </section>
+   Se mantiene dentro del lado derecho y detrás
+   de los personajes.
+*/
 
-  </main>
+.bank-background {
+  position: absolute;
 
+  z-index: 3;
 
+  width: 88%;
+  height: auto;
 
-  <!-- =====================================================
-       PIE DE PÁGINA
-       ===================================================== -->
+  max-height: 78%;
 
-  <footer>
+  object-fit: contain;
 
+  left: 50%;
+  top: 48%;
 
-    <div class="footer-school">
+  transform: translate(-50%, -50%);
 
+  opacity: 0.72;
 
-      <img
-        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
-        alt="Escudo IEP La Salle del Sur"
-      >
+  pointer-events: none;
 
+  filter: saturate(0.85) brightness(0.85);
+}
 
-      <div>
+/* =========================================================
+   PROFESORA
+   ========================================================= */
 
-        <strong>
-          IEP LA SALLE DEL SUR
-        </strong>
+.teacher-img {
+  position: absolute;
 
+  z-index: 7;
 
-        <span>
+  width: 35%;
+  max-width: 330px;
 
-          Valores que construyen
-          <br>
+  height: auto;
 
-          un mejor mañana.
+  object-fit: contain;
 
-        </span>
+  left: 50%;
+  top: 10%;
 
-      </div>
+  transform: translateX(-50%);
 
-    </div>
+  pointer-events: none;
+}
 
+/* =========================================================
+   ESTUDIANTES
+   ========================================================= */
 
+.children {
+  position: absolute;
 
-    <!-- =================================================
-         VALORES
-         ================================================= -->
+  z-index: 8;
 
-    <div class="values">
+  left: 50%;
+  bottom: 7%;
 
+  width: 76%;
 
-      <div>
+  height: 63%;
 
-        <b>
-          🛡️
-        </b>
+  transform: translateX(-50%);
 
-        <span>
-          Seguro
-        </span>
+  pointer-events: none;
+}
 
-      </div>
+.children img {
+  position: absolute;
 
+  height: auto;
 
-      <div>
+  object-fit: contain;
+}
 
-        <b>
-          🔐
-        </b>
+/* Niño */
 
-        <span>
-          Confiable
-        </span>
+.boy-img {
+  width: 46%;
 
-      </div>
+  left: 6%;
+  bottom: 0;
+}
 
+/* Niña */
 
-      <div>
+.girl-img {
+  width: 43%;
 
-        <b>
-          👥
-        </b>
+  right: 4%;
+  bottom: 0;
+}
 
-        <span>
-          Responsable
-        </span>
+/* =========================================================
+   MINI LOGO
+   ========================================================= */
 
-      </div>
+.mini-brand {
+  position: absolute;
 
+  z-index: 10;
 
-      <div>
+  right: 4%;
+  bottom: 4%;
 
-        <b>
-          ☆
-        </b>
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 
-        <span>
-          Eficiente
-        </span>
+  color: #ffffff;
+}
 
-      </div>
+.mini-bank {
+  display: flex;
 
-    </div>
+  align-items: center;
 
-  </footer>
+  gap: 12px;
+}
 
+.mini-symbol {
+  width: 45px;
+  height: 42px;
 
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 
-  <!-- =====================================================
-       MODAL — ESCANEAR QR
-       ===================================================== -->
+  padding: 0 5px;
 
-  <div
-    class="modal hidden"
-    id="scannerModal"
-  >
+  border-bottom: 5px solid #f4b400;
+}
 
+.mini-symbol div {
+  width: 7px;
+  height: 30px;
 
-    <div class="modal-card scanner-card">
+  background: #f4b400;
+}
 
+.mini-bank strong,
+.mini-bank span {
+  display: block;
 
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
+  font-family: Georgia, "Times New Roman", serif;
 
+  line-height: 0.95;
+}
 
-      <h2>
-        Escanear código QR
-      </h2>
+.mini-bank strong {
+  font-size: 23px;
+}
 
+.mini-bank span {
+  color: #f4b400;
 
-      <p>
-        Apunta la cámara al QR del estudiante.
-      </p>
+  font-size: 25px;
 
+  font-weight: 700;
+}
 
-      <div id="reader"></div>
+.mini-brand small {
+  margin-top: 7px;
 
+  font-size: 9px;
 
-      <div
-        id="scanStatus"
-        class="status"
-      ></div>
+  letter-spacing: 0.02em;
+}
 
-    </div>
+/* =========================================================
+   PIE
+   ========================================================= */
 
-  </div>
+footer {
+  width: 100%;
+  height: 128px;
 
+  background: #071a34;
 
+  border-top: 3px solid #f4b400;
 
-  <!-- =====================================================
-       MODAL — INGRESAR CÓDIGO
-       ===================================================== -->
+  padding: 0 3.2%;
 
-  <div
-    class="modal hidden"
-    id="codeModal"
-  >
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  color: #ffffff;
 
-    <div class="modal-card small">
+  position: relative;
+  z-index: 20;
+}
 
+.footer-school {
+  display: flex;
+  align-items: center;
 
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
+  gap: 18px;
+}
 
+.footer-school img {
+  width: 72px;
+  height: 72px;
 
-      <h2>
-        Ingresar código
-      </h2>
+  object-fit: contain;
+}
 
+.footer-school strong {
+  display: block;
 
-      <input
-        id="codeInput"
-        placeholder="Ej. LDS-EST-005"
-        autocomplete="off"
-      >
+  font-family: Georgia, "Times New Roman", serif;
 
+  font-size: clamp(20px, 1.65vw, 27px);
+}
 
-      <button
-        class="primary"
-        id="findCode"
-        type="button"
-      >
-        Consultar estudiante
-      </button>
+.footer-school span {
+  display: block;
 
+  margin-top: 5px;
 
-      <div
-        id="codeStatus"
-        class="status"
-      ></div>
+  font-size: 15px;
 
-    </div>
+  line-height: 1.3;
+}
 
-  </div>
+.values {
+  display: flex;
+  align-items: center;
 
+  gap: 34px;
+}
 
+.values > div {
+  display: flex;
+  align-items: center;
 
-  <!-- =====================================================
-       MODAL — ADMINISTRADOR
-       ===================================================== -->
+  gap: 11px;
 
-  <div
-    class="modal hidden"
-    id="adminModal"
-  >
+  font-size: clamp(15px, 1.15vw, 20px);
+}
 
+.values b {
+  font-size: 29px;
+}
 
-    <div class="modal-card small">
+/* =========================================================
+   MODALES
+   ========================================================= */
 
+.hidden {
+  display: none !important;
+}
 
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
+.modal {
+  position: fixed;
 
+  inset: 0;
 
-      <h2>
-        Acceso de administrador
-      </h2>
+  z-index: 100;
 
+  background: rgba(0, 0, 0, 0.72);
 
-      <input
-        id="pinInput"
-        type="password"
-        placeholder="PIN"
-        autocomplete="off"
-      >
+  display: flex;
 
+  align-items: center;
+  justify-content: center;
 
-      <button
-        class="primary"
-        id="adminLogin"
-        type="button"
-      >
-        Ingresar
-      </button>
+  padding: 20px;
+}
 
+.modal-card {
+  width: min(620px, 95vw);
 
-      <div
-        id="adminStatus"
-        class="status"
-      ></div>
+  max-height: 90vh;
 
-    </div>
+  overflow-y: auto;
 
-  </div>
+  background: #ffffff;
 
+  border-radius: 24px;
 
+  padding: 30px;
 
-  <!-- =====================================================
-       MODAL — PERFIL DEL ESTUDIANTE
-       ===================================================== -->
+  position: relative;
 
-  <div
-    class="modal hidden"
-    id="profileModal"
-  >
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+}
 
+.modal-card.small {
+  width: min(450px, 95vw);
+}
 
-    <div class="modal-card profile">
+.modal-card.profile {
+  width: min(850px, 95vw);
+}
 
+.close {
+  position: absolute;
 
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
+  top: 12px;
+  right: 16px;
 
+  border: none;
 
-      <div id="profileContent"></div>
+  background: transparent;
 
-    </div>
+  color: #071a34;
 
-  </div>
+  font-size: 34px;
 
+  cursor: pointer;
+}
 
+.modal-card h2 {
+  color: #071a34;
 
-</body>
+  margin-bottom: 14px;
+}
 
-</html>
-<!doctype html>
-<html lang="es">
+.modal-card p {
+  color: #555;
 
-<head>
+  margin-bottom: 20px;
+}
 
-  <meta charset="utf-8">
+#reader {
+  width: 100%;
+}
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
+.modal-card input {
+  width: 100%;
 
-  <meta
-    name="theme-color"
-    content="#071a34"
-  >
+  height: 50px;
 
-  <title>Banco LDS 360 Online</title>
+  padding: 0 15px;
 
-  <link
-    rel="stylesheet"
-    href="styles.css"
-  >
+  border: 1px solid #ccd2da;
 
-  <!-- =====================================================
-       LECTOR QR
-       ===================================================== -->
+  border-radius: 10px;
 
-  <script
-    src="https://unpkg.com/html5-qrcode"
-    defer
-  ></script>
+  font-size: 17px;
 
+  margin-bottom: 15px;
+}
 
-  <!-- =====================================================
-       DATOS Y APLICACIÓN
-       ===================================================== -->
+.primary {
+  width: 100%;
 
-  <script
-    src="data.js"
-    defer
-  ></script>
+  min-height: 50px;
 
-  <script
-    src="app.js"
-    defer
-  ></script>
+  border: none;
 
-</head>
+  border-radius: 10px;
 
+  background: #071a34;
 
-<body>
+  color: #ffffff;
 
+  font-size: 16px;
 
-  <!-- =====================================================
-       ENCABEZADO
-       ===================================================== -->
+  font-weight: 700;
 
-  <header class="topbar">
+  cursor: pointer;
+}
 
-    <div class="brand">
+.status {
+  margin-top: 14px;
 
-      <img
-        class="school-crest"
-        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
-        alt="Escudo IEP La Salle del Sur"
-      >
+  min-height: 20px;
 
-      <div class="school-name">
+  color: #333;
+}
 
-        <strong>
-          IEP LA SALLE DEL SUR
-        </strong>
+/* =========================================================
+   TABLET
+   ========================================================= */
 
-        <span>
-          Formamos personas íntegras
-        </span>
+@media (max-width: 1100px) {
 
-      </div>
+  .topbar {
+    height: 100px;
+  }
 
-    </div>
+  .school-crest {
+    width: 68px;
+    height: 68px;
+  }
 
+  .admin-btn {
+    min-width: 210px;
+    height: 56px;
+  }
 
-    <button
-      class="admin-btn"
-      id="adminBtn"
-      type="button"
-    >
+  .hero {
+    height: auto;
+    min-height: 760px;
 
-      <span class="lock">
-        🔒
-      </span>
+    grid-template-columns: 52% 48%;
+  }
 
-      Administrador
+  .hero-left {
+    padding: 35px 4% 25px;
+  }
 
-    </button>
+  .bank-logo {
+    gap: 16px;
+  }
 
-  </header>
+  .bank-symbol {
+    transform: scale(0.85);
+    transform-origin: center;
+    margin-right: -12px;
+  }
 
+  .actions {
+    gap: 12px;
+  }
 
+  .action-card {
+    min-height: 205px;
+  }
 
-  <!-- =====================================================
-       PORTADA PRINCIPAL
-       ===================================================== -->
+  footer {
+    height: 110px;
+  }
 
-  <main
-    id="home"
-    class="hero"
-  >
+  .values {
+    gap: 18px;
+  }
+}
 
+/* =========================================================
+   MÓVIL
+   ========================================================= */
 
-    <!-- ===================================================
-         LADO IZQUIERDO
-         =================================================== -->
+@media (max-width: 760px) {
 
-    <section class="hero-left">
+  body {
+    overflow-x: hidden;
+  }
 
+  .topbar {
+    height: auto;
+    min-height: 100px;
 
-      <!-- =================================================
-           LOGO BANCO LDS 360
-           ================================================= -->
+    padding: 14px 18px;
 
-      <div class="bank-logo">
+    gap: 15px;
+  }
 
+  .brand {
+    gap: 10px;
+  }
 
-        <div class="bank-symbol">
+  .school-crest {
+    width: 54px;
+    height: 54px;
+  }
 
-          <div class="roof"></div>
+  .school-name strong {
+    font-size: 18px;
+  }
 
+  .school-name span {
+    font-size: 12px;
+    margin-top: 5px;
+  }
 
-          <div class="columns">
+  .admin-btn {
+    min-width: auto;
 
-            <i></i>
-            <i></i>
-            <i></i>
-            <i></i>
+    height: 48px;
 
-          </div>
+    padding: 0 14px;
 
+    border-radius: 14px;
 
-          <div class="base"></div>
+    font-size: 14px;
+  }
 
-        </div>
+  .lock {
+    font-size: 20px;
+  }
 
+  .hero {
+    display: flex;
+    flex-direction: column;
 
-        <div class="bank-title">
+    height: auto;
+    min-height: 0;
+  }
 
-          <h1>
-            BANCO
-            <br>
-            <span>LDS 360</span>
-          </h1>
+  .hero-left {
+    min-height: 700px;
 
+    padding: 35px 18px;
+  }
 
-          <div class="online">
-            O N L I N E
-          </div>
+  .hero-left::after {
+    display: none;
+  }
 
-        </div>
+  .bank-logo {
+    width: 100%;
 
-      </div>
+    gap: 8px;
 
+    transform: scale(0.86);
+  }
 
+  .bank-symbol {
+    transform: scale(0.72);
+    margin-right: -30px;
+  }
 
-      <!-- =================================================
-           SUBTÍTULO
-           ================================================= -->
+  .bank-title h1 {
+    font-size: 48px;
+  }
 
-      <p class="subtitle">
-        Sistema financiero educativo
-      </p>
+  .online {
+    font-size: 15px;
+  }
 
+  .subtitle {
+    font-size: 20px;
+  }
 
+  .intro {
+    font-size: 19px;
+  }
 
-      <!-- =================================================
-           INTRODUCCIÓN
-           ================================================= -->
+  .actions {
+    grid-template-columns: 1fr;
 
-      <h2 class="intro">
+    max-width: 430px;
+  }
 
-        Consulta de forma rápida y segura
-        <br>
+  .action-card {
+    min-height: 190px;
+  }
 
-        la información financiera del estudiante.
+  .security {
+    max-width: 430px;
+  }
 
-      </h2>
+  .hero-right {
+    height: 620px;
 
+    min-height: 620px;
+  }
 
+  .bank-background {
+    width: 92%;
+    max-height: 62%;
 
-      <!-- =================================================
-           BOTONES PRINCIPALES
-           ================================================= -->
+    top: 48%;
+  }
 
-      <div class="actions">
+  .teacher-img {
+    width: 35%;
+    top: 9%;
+  }
 
+  .children {
+    width: 88%;
+    height: 64%;
+    bottom: 4%;
+  }
 
-        <!-- ===============================================
-             ESCANEAR QR
-             =============================================== -->
+  .mini-brand {
+    right: 4%;
+    bottom: 3%;
+  }
 
-        <button
-          class="action-card qr"
-          id="scanBtn"
-          type="button"
-        >
+  footer {
+    height: auto;
 
-          <div class="card-icon qr-icon">
-            ▦
-          </div>
+    padding: 25px 18px;
 
+    flex-direction: column;
 
-          <div class="card-content">
+    gap: 25px;
 
-            <b>
+    align-items: flex-start;
+  }
 
-              ESCANEAR
-              <br>
+  .values {
+    width: 100%;
 
-              <span>
-                CÓDIGO QR
-              </span>
+    justify-content: space-between;
 
-            </b>
+    gap: 10px;
 
+    flex-wrap: wrap;
+  }
+}
 
-            <small>
+/* =========================================================
+   PANTALLAS MUY ALTAS
+   ========================================================= */
 
-              Escanea el código del
-              <br>
+@media (min-width: 1400px) and (min-height: 800px) {
 
-              estudiante para consultar
-              <br>
+  .hero {
+    height: calc(100vh - 244px);
+  }
 
-              su cuenta.
+  .hero-left {
+    padding-top: 48px;
+  }
 
-            </small>
+  .bank-logo {
+    transform: scale(1.02);
+  }
 
-          </div>
+  .teacher-img {
+    width: 33%;
+    top: 8%;
+  }
 
+  .children {
+    width: 74%;
+    height: 67%;
+    bottom: 5%;
+  }
 
-          <div class="arrow">
-            ›
-          </div>
-
-        </button>
-
-
-
-        <!-- ===============================================
-             INGRESAR CÓDIGO
-             =============================================== -->
-
-        <button
-          class="action-card code"
-          id="codeBtn"
-          type="button"
-        >
-
-          <div class="card-icon keyboard-icon">
-            ⌨
-          </div>
-
-
-          <div class="card-content">
-
-            <b>
-
-              INGRESAR
-              <br>
-
-              CÓDIGO
-
-            </b>
-
-
-            <small>
-
-              Ingresa el código del
-              <br>
-
-              estudiante para consultar
-              <br>
-
-              su información.
-
-            </small>
-
-          </div>
-
-
-          <div class="arrow">
-            ›
-          </div>
-
-        </button>
-
-      </div>
-
-
-
-      <!-- =================================================
-           SEGURIDAD
-           ================================================= -->
-
-      <div class="security">
-
-
-        <div class="security-icon">
-          🛡️
-        </div>
-
-
-        <div>
-
-          Sistema seguro, confiable y diseñado para el bienestar
-          <br class="desktop">
-
-          financiero de nuestra comunidad educativa.
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-
-    <!-- ===================================================
-         LADO DERECHO
-         =================================================== -->
-
-    <section class="hero-right">
-
-
-      <!-- =================================================
-           LÍNEA DECORATIVA
-           ================================================= -->
-
-      <div class="decorative-line"></div>
-
-
-
-      <!-- =================================================
-           BANCO GRANDE DE FONDO
-           
-           IMPORTANTE:
-           Este archivo debe existir dentro de assets.
-           ================================================= -->
-
-      <img
-        class="bank-background"
-        src="assets/banco-lds-360.png"
-        alt="Banco LDS 360"
-      >
-
-
-
-      <!-- =================================================
-           PROFESORA
-           ================================================= -->
-
-      <img
-        class="teacher-img"
-        src="assets/assets65a7484e-5453-45af-a6cb-195dad723f3d-removebg-preview.png"
-        alt="Docente"
-      >
-
-
-
-      <!-- =================================================
-           ESTUDIANTES
-           ================================================= -->
-
-      <div class="children">
-
-
-        <img
-          class="boy-img"
-          src="assets/assetsphoto_17_2025-01-25_10-11-15-removebg-preview.png"
-          alt="Estudiante"
-        >
-
-
-        <img
-          class="girl-img"
-          src="assets/assetsphoto_64_2025-01-25_10-11-15-removebg-preview.png"
-          alt="Estudiante"
-        >
-
-      </div>
-
-
-
-      <!-- =================================================
-           MINI LOGO BANCO LDS 360
-           ================================================= -->
-
-      <div class="mini-brand">
-
-
-        <div class="mini-bank">
-
-
-          <div class="mini-symbol">
-
-            <div></div>
-            <div></div>
-            <div></div>
-
-          </div>
-
-
-          <div>
-
-            <strong>
-              BANCO
-            </strong>
-
-            <span>
-              LDS 360
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <small>
-          EDUCAMOS · AHORRAMOS · CREAMOS FUTURO
-        </small>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-
-  <!-- =====================================================
-       PIE DE PÁGINA
-       ===================================================== -->
-
-  <footer>
-
-
-    <div class="footer-school">
-
-
-      <img
-        src="assets/photo_13_2025-01-25_10-11-15-removebg-preview.png"
-        alt="Escudo IEP La Salle del Sur"
-      >
-
-
-      <div>
-
-        <strong>
-          IEP LA SALLE DEL SUR
-        </strong>
-
-
-        <span>
-
-          Valores que construyen
-          <br>
-
-          un mejor mañana.
-
-        </span>
-
-      </div>
-
-    </div>
-
-
-
-    <!-- =================================================
-         VALORES
-         ================================================= -->
-
-    <div class="values">
-
-
-      <div>
-
-        <b>
-          🛡️
-        </b>
-
-        <span>
-          Seguro
-        </span>
-
-      </div>
-
-
-      <div>
-
-        <b>
-          🔐
-        </b>
-
-        <span>
-          Confiable
-        </span>
-
-      </div>
-
-
-      <div>
-
-        <b>
-          👥
-        </b>
-
-        <span>
-          Responsable
-        </span>
-
-      </div>
-
-
-      <div>
-
-        <b>
-          ☆
-        </b>
-
-        <span>
-          Eficiente
-        </span>
-
-      </div>
-
-    </div>
-
-  </footer>
-
-
-
-  <!-- =====================================================
-       MODAL — ESCANEAR QR
-       ===================================================== -->
-
-  <div
-    class="modal hidden"
-    id="scannerModal"
-  >
-
-
-    <div class="modal-card scanner-card">
-
-
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-
-      <h2>
-        Escanear código QR
-      </h2>
-
-
-      <p>
-        Apunta la cámara al QR del estudiante.
-      </p>
-
-
-      <div id="reader"></div>
-
-
-      <div
-        id="scanStatus"
-        class="status"
-      ></div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       MODAL — INGRESAR CÓDIGO
-       ===================================================== -->
-
-  <div
-    class="modal hidden"
-    id="codeModal"
-  >
-
-
-    <div class="modal-card small">
-
-
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-
-      <h2>
-        Ingresar código
-      </h2>
-
-
-      <input
-        id="codeInput"
-        placeholder="Ej. LDS-EST-005"
-        autocomplete="off"
-      >
-
-
-      <button
-        class="primary"
-        id="findCode"
-        type="button"
-      >
-        Consultar estudiante
-      </button>
-
-
-      <div
-        id="codeStatus"
-        class="status"
-      ></div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       MODAL — ADMINISTRADOR
-       ===================================================== -->
-
-  <div
-    class="modal hidden"
-    id="adminModal"
-  >
-
-
-    <div class="modal-card small">
-
-
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-
-      <h2>
-        Acceso de administrador
-      </h2>
-
-
-      <input
-        id="pinInput"
-        type="password"
-        placeholder="PIN"
-        autocomplete="off"
-      >
-
-
-      <button
-        class="primary"
-        id="adminLogin"
-        type="button"
-      >
-        Ingresar
-      </button>
-
-
-      <div
-        id="adminStatus"
-        class="status"
-      ></div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       MODAL — PERFIL DEL ESTUDIANTE
-       ===================================================== -->
-
-  <div
-    class="modal hidden"
-    id="profileModal"
-  >
-
-
-    <div class="modal-card profile">
-
-
-      <button
-        class="close"
-        data-close
-        type="button"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-
-      <div id="profileContent"></div>
-
-    </div>
-
-  </div>
-
-
-
-</body>
-
-</html>
+  .bank-background {
+    width: 91%;
+    max-height: 80%;
+    top: 49%;
+  }
+}
