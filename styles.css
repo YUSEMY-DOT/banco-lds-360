@@ -1,1246 +1,1424 @@
-/* =========================================================
-   BANCO LDS 360 — ESTILOS PRINCIPALES
-   ========================================================= */
+:root{
+  --navy:#071a34;
+  --navy2:#0d294c;
+  --red:#b20d18;
+  --gold:#e4a817;
+  --gold2:#f2bd35;
+  --white:#fff;
+  --ink:#10213d;
+}
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* =========================================================
+   BASE
+========================================================= */
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 html,
-body {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
+body{
+  width:100%;
+  height:100%;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #071a34;
-  color: #071a34;
-  overflow-x: hidden;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#fff;
+  color:var(--ink);
+  overflow-x:hidden;
 }
+
+button,
+input{
+  font:inherit;
+}
+
 
 /* =========================================================
    ENCABEZADO
-   ========================================================= */
+========================================================= */
 
-.topbar {
-  height: 116px;
-  width: 100%;
-  background: #071a34;
-  border-bottom: 3px solid #f4b400;
+.topbar{
+  width:100%;
+  height:110px;
+  min-height:110px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding:
+    8px
+    3.2vw;
 
-  padding: 0 3.2%;
-  position: relative;
-  z-index: 20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:var(--navy);
+
+  border-bottom:3px solid var(--gold);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  min-width:0;
 }
 
-.school-crest {
-  width: 82px;
-  height: 82px;
-  object-fit: contain;
-  flex-shrink: 0;
+.school-crest{
+  width:68px;
+  height:78px;
+
+  flex:0 0 auto;
+
+  object-fit:contain;
 }
 
-.school-name {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.school-name{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
-.school-name strong {
-  color: #ffffff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(25px, 2.4vw, 39px);
-  line-height: 1;
-  font-weight: 700;
-  white-space: nowrap;
+.school-name strong{
+  color:#fff;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:30px;
+  line-height:1;
+
+  white-space:nowrap;
 }
 
-.school-name span {
-  margin-top: 8px;
-  color: #f4b400;
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(15px, 1.35vw, 23px);
+.school-name span{
+  margin-top:6px;
+
+  color:var(--gold2);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:18px;
+  font-style:italic;
+  font-weight:700;
 }
 
-.admin-btn {
-  height: 62px;
-  min-width: 250px;
+.admin-btn{
+  flex:0 0 auto;
 
-  padding: 0 28px;
+  min-width:245px;
+  height:58px;
 
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 22px;
+  padding:0 24px;
 
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:18px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
+  background:rgba(255,255,255,.07);
 
-  font-size: clamp(18px, 1.45vw, 25px);
-  font-weight: 700;
+  color:#fff;
 
-  cursor: pointer;
-  transition: 0.2s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:12px;
+
+  font-size:21px;
+  font-weight:700;
+
+  cursor:pointer;
 }
 
-.admin-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-1px);
+.lock{
+  font-size:26px;
 }
 
-.lock {
-  font-size: 28px;
-}
 
 /* =========================================================
    PORTADA
-   ========================================================= */
+========================================================= */
 
-.hero {
-  width: 100%;
-  height: calc(100vh - 116px - 128px);
-  min-height: 0;
-  flex: 1 1 auto;
+.hero{
+  width:100%;
 
-  display: grid;
-  grid-template-columns: 51% 49%;
+  height:calc(100vh - 210px);
+  min-height:555px;
 
-  position: relative;
-  overflow: hidden;
+  display:grid;
+
+  grid-template-columns:53% 47%;
+
+  overflow:hidden;
 }
+
 
 /* =========================================================
    LADO IZQUIERDO
-   ========================================================= */
+========================================================= */
 
-.hero-left {
-  position: relative;
-  z-index: 5;
+.hero-left{
+  position:relative;
 
-  background-color: #ffffff;
+  min-width:0;
+  min-height:0;
 
-  /* Puntos muy sutiles, como en la imagen de referencia */
-  background-image: radial-gradient(
-    rgba(7, 26, 52, 0.14) 1px,
-    transparent 1px
-  );
+  overflow:hidden;
 
-  background-size: 12px 12px;
+  padding:
+    28px
+    4vw
+    18px;
 
-  padding: 42px 5.5% 28px;
+  background:
+    radial-gradient(
+      #d9dde2 1px,
+      transparent 1px
+    ),
+    #fff;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  overflow: hidden;
+  background-size:13px 13px;
 }
 
-/* Forma diagonal derecha */
 
-.hero-left::after {
-  content: "";
-  position: absolute;
+/* DIAGONAL */
 
-  top: 0;
-  right: -38px;
+.hero-left::after{
+  content:"";
 
-  width: 75px;
-  height: 100%;
+  position:absolute;
 
-  background: #ffffff;
+  top:0;
+  right:-1px;
 
-  transform: skewX(-5deg);
+  width:75px;
+  height:100%;
 
-  z-index: -1;
+  background:var(--navy);
+
+  clip-path:
+    polygon(
+      100% 0,
+      100% 100%,
+      0 100%,
+      45% 0
+    );
+
+  z-index:0;
 }
+
+
+/* CONTENIDO */
+
+.bank-logo,
+.subtitle,
+.intro,
+.actions,
+.security{
+  position:relative;
+  z-index:2;
+}
+
 
 /* =========================================================
-   LOGO BANCO
-   ========================================================= */
+   LOGO BANCO LDS 360
+========================================================= */
 
-.bank-logo {
-  width: min(620px, 92%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.bank-logo{
+  width:100%;
 
-  gap: 26px;
+  display:flex;
 
-  margin-bottom: 12px;
+  align-items:center;
+  justify-content:center;
+
+  gap:18px;
 }
 
-.bank-symbol {
-  width: 150px;
-  min-width: 150px;
-  height: 145px;
 
-  position: relative;
+/* SIMBOLO */
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.bank-symbol{
+  width:125px;
+  min-width:125px;
+  height:118px;
+
+  position:relative;
+
+  flex:0 0 125px;
 }
 
-/* Techo */
+.bank-symbol .roof{
+  position:absolute;
 
-.roof {
-  width: 145px;
-  height: 17px;
+  left:4px;
+  top:8px;
 
-  background: #071a34;
+  width:117px;
+  height:19px;
 
-  position: relative;
-
-  margin-bottom: 8px;
+  background:var(--navy);
 }
 
-.roof::before {
-  content: "★";
+.bank-symbol .roof::before{
+  content:"★";
 
-  position: absolute;
+  position:absolute;
 
-  left: 50%;
-  top: -30px;
+  left:50%;
+  top:-22px;
 
-  transform: translateX(-50%);
+  transform:translateX(-50%);
 
-  color: #f4b400;
+  color:var(--gold);
 
-  font-size: 27px;
+  font-size:22px;
 }
 
-/* Columnas */
+.columns{
+  position:absolute;
 
-.columns {
-  width: 125px;
-  height: 72px;
+  left:13px;
+  top:37px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  width:99px;
+  height:58px;
 
-  padding: 0 7px;
+  display:flex;
+  justify-content:space-between;
 }
 
-.columns i {
-  display: block;
+.columns i{
+  display:block;
 
-  width: 13px;
-  height: 72px;
+  width:12px;
+  height:58px;
 
-  background: #f4b400;
+  background:var(--gold);
 
-  border-left: 4px solid #071a34;
-  border-right: 4px solid #071a34;
+  border-left:
+    3px solid
+    var(--navy);
+
+  border-right:
+    3px solid
+    var(--navy);
 }
 
-/* Base */
+.bank-symbol .base{
+  position:absolute;
 
-.base {
-  width: 158px;
-  height: 10px;
+  left:0;
+  bottom:3px;
 
-  background: #071a34;
+  width:124px;
+  height:10px;
 
-  position: relative;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--navy) 0 55%,
+      var(--gold) 55% 100%
+    );
 }
 
-.base::after {
-  content: "";
 
-  position: absolute;
+/* TEXTO */
 
-  width: 158px;
-  height: 6px;
+.bank-title{
+  min-width:0;
 
-  left: 0;
-  bottom: -8px;
-
-  background: #f4b400;
+  text-align:left;
 }
+
+.bank-title h1{
+  margin:0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:58px;
+
+  line-height:.86;
+
+  color:var(--navy);
+
+  white-space:nowrap;
+}
+
+.bank-title h1 span{
+  color:var(--red);
+}
+
+.online{
+  margin-top:9px;
+
+  text-align:center;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:17px;
+
+  letter-spacing:9px;
+
+  color:var(--navy);
+
+  white-space:nowrap;
+}
+
 
 /* =========================================================
-   TEXTO DEL BANCO
-   ========================================================= */
+   TEXTOS
+========================================================= */
 
-.bank-title {
-  text-align: left;
+.subtitle{
+  margin:
+    10px
+    0
+    12px;
+
+  text-align:center;
+
+  color:#555;
+
+  font-size:20px;
 }
 
-.bank-title h1 {
-  font-family: Georgia, "Times New Roman", serif;
+.intro{
+  margin:0;
 
-  font-size: clamp(52px, 5vw, 82px);
+  text-align:center;
 
-  line-height: 0.86;
+  color:var(--navy);
 
-  color: #071a34;
+  font-size:21px;
 
-  font-weight: 700;
+  line-height:1.3;
+
+  font-weight:700;
 }
 
-.bank-title h1 span {
-  color: #c81924;
-}
-
-.online {
-  margin-top: 12px;
-
-  text-align: center;
-
-  color: #071a34;
-
-  font-family: Georgia, "Times New Roman", serif;
-
-  font-size: clamp(17px, 1.55vw, 25px);
-
-  letter-spacing: 0.55em;
-}
-
-/* =========================================================
-   SUBTÍTULO
-   ========================================================= */
-
-.subtitle {
-  margin-top: 15px;
-
-  color: #444444;
-
-  font-size: clamp(18px, 1.55vw, 26px);
-
-  text-align: center;
-}
-
-/* =========================================================
-   INTRO
-   ========================================================= */
-
-.intro {
-  margin-top: 17px;
-
-  color: #071a34;
-
-  font-size: clamp(19px, 1.55vw, 27px);
-
-  line-height: 1.42;
-
-  text-align: center;
-
-  font-weight: 700;
-}
 
 /* =========================================================
    BOTONES
-   ========================================================= */
+========================================================= */
 
-.actions {
-  width: 100%;
-  max-width: 690px;
+.actions{
+  width:100%;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  max-width:650px;
 
-  gap: 20px;
+  margin:
+    18px
+    auto
+    0;
 
-  margin-top: 23px;
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:18px;
 }
 
-.action-card {
-  min-height: 220px;
+.action-card{
+  position:relative;
 
-  position: relative;
+  height:160px;
+  min-height:160px;
 
-  border: none;
-  border-radius: 25px;
+  padding:
+    22px
+    18px
+    42px;
 
-  background: #ffffff;
+  display:flex;
+  align-items:flex-start;
 
-  box-shadow: 0 7px 22px rgba(0, 0, 0, 0.13);
+  gap:16px;
 
-  overflow: hidden;
+  background:#fff;
 
-  cursor: pointer;
+  border:none;
 
-  text-align: left;
+  border-radius:21px;
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.12);
+
+  overflow:hidden;
+
+  cursor:pointer;
 }
 
-.action-card:hover {
-  transform: translateY(-3px);
+.card-icon{
+  flex:0 0 auto;
 
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  font-size:32px;
+
+  line-height:1;
 }
 
-.card-icon {
-  position: absolute;
-
-  top: 32px;
-  left: 28px;
-
-  font-size: 43px;
-
-  font-weight: 700;
+.qr-icon{
+  color:var(--red);
 }
 
-.qr-icon {
-  color: #bd0714;
+.keyboard-icon{
+  color:var(--navy);
 }
 
-.keyboard-icon {
-  color: #071a34;
+.card-content{
+  min-width:0;
 }
 
-.card-content {
-  padding: 31px 20px 65px 91px;
+.card-content b{
+  display:block;
+
+  font-size:20px;
+
+  line-height:1;
+
+  color:var(--navy);
 }
 
-.card-content b {
-  display: block;
-
-  font-size: clamp(21px, 1.65vw, 28px);
-
-  line-height: 1.02;
-
-  color: #071a34;
+.action-card.qr .card-content b{
+  color:var(--red);
 }
 
-.action-card.qr .card-content b {
-  color: #bd0714;
+.card-content small{
+  display:block;
+
+  margin-top:10px;
+
+  max-width:190px;
+
+  font-size:12px;
+
+  line-height:1.25;
+
+  color:#555;
 }
 
-.card-content small {
-  display: block;
 
-  margin-top: 15px;
+/* FRANJA */
 
-  color: #444444;
+.action-card::after{
+  content:"";
 
-  font-size: clamp(14px, 1vw, 17px);
+  position:absolute;
 
-  line-height: 1.35;
+  left:0;
+  right:0;
+  bottom:0;
+
+  height:38px;
+
+  background:var(--navy);
 }
 
-.arrow {
-  position: absolute;
-
-  left: 50%;
-  bottom: 8px;
-
-  transform: translateX(-50%);
-
-  width: 52px;
-  height: 52px;
-
-  border-radius: 50%;
-
-  border: 3px solid #ffffff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #ffffff;
-
-  font-size: 43px;
-
-  line-height: 1;
-
-  z-index: 3;
+.action-card.qr::after{
+  background:var(--red);
 }
 
-.action-card.qr::after,
-.action-card.code::after {
-  content: "";
 
-  position: absolute;
+/* FLECHA */
 
-  left: 0;
-  bottom: 0;
+.arrow{
+  position:absolute;
 
-  width: 100%;
-  height: 45px;
+  left:50%;
+  bottom:0;
+
+  transform:
+    translate(
+      -50%,
+      50%
+    );
+
+  width:46px;
+  height:46px;
+
+  border:
+    2px solid
+    #fff;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  z-index:5;
+
+  color:#fff;
+
+  font-size:32px;
+
+  background:var(--navy);
 }
 
-.action-card.qr::after {
-  background: #bd0714;
+.action-card.qr .arrow{
+  background:var(--red);
 }
 
-.action-card.code::after {
-  background: #071a34;
-}
 
 /* =========================================================
    SEGURIDAD
-   ========================================================= */
+========================================================= */
 
-.security {
-  width: 100%;
-  max-width: 690px;
+.security{
+  width:100%;
 
-  min-height: 72px;
+  max-width:650px;
 
-  margin-top: 18px;
+  height:62px;
 
-  padding: 13px 25px;
+  margin:
+    13px
+    auto
+    0;
 
-  border-radius: 22px;
+  padding:
+    8px
+    16px;
 
-  background: #e5e7eb;
+  border-radius:17px;
 
-  display: flex;
-  align-items: center;
+  background:#dedfe1;
 
-  gap: 18px;
+  display:flex;
 
-  color: #071a34;
+  align-items:center;
 
-  font-size: clamp(13px, 1vw, 17px);
+  gap:12px;
 
-  line-height: 1.35;
+  color:var(--navy);
+
+  font-size:12px;
+
+  line-height:1.2;
 }
 
-.security-icon {
-  font-size: 35px;
-  flex-shrink: 0;
+.security-icon{
+  font-size:25px;
+
+  flex:0 0 auto;
 }
+
 
 /* =========================================================
    LADO DERECHO
-   ========================================================= */
+========================================================= */
 
-.hero-right {
-  position: relative;
+.hero-right{
+  position:relative;
 
-  background: #08284c;
+  min-width:0;
+  min-height:0;
 
-  overflow: hidden;
+  height:100%;
 
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  overflow:hidden;
 
-  isolation: isolate;
+  background:
+    linear-gradient(
+      145deg,
+      #12375d 0%,
+      #0c2c4d 45%,
+      #061a35 100%
+    );
+
+  isolation:isolate;
 }
 
+
 /* =========================================================
-   LÍNEAS DORADAS
-   ========================================================= */
+   LÍNEAS
+========================================================= */
 
 .hero-right::before,
-.hero-right::after {
-  content: "";
+.hero-right::after{
+  content:"";
 
-  position: absolute;
+  position:absolute;
 
-  width: 3px;
+  width:3px;
+  height:145%;
 
-  height: 150%;
+  background:var(--gold);
 
-  background: #d9a800;
+  transform:rotate(35deg);
 
-  transform: rotate(34deg);
+  opacity:.85;
 
-  transform-origin: center;
+  z-index:6;
 
-  opacity: 0.9;
-
-  z-index: 1;
+  pointer-events:none;
 }
 
-.hero-right::before {
-  right: 8%;
-  top: -25%;
+.hero-right::before{
+  right:10%;
+  top:-28%;
 }
 
-.hero-right::after {
-  right: 43%;
-  top: 42%;
+.hero-right::after{
+  left:8%;
+  bottom:-30%;
 }
+
 
 /* =========================================================
-   LÍNEA DECORATIVA
-   ========================================================= */
+   BANCO DE FONDO
+========================================================= */
 
-.decorative-line {
-  position: absolute;
+.bank-background{
+  position:absolute;
 
-  width: 100%;
-  height: 100%;
+  z-index:1;
 
-  pointer-events: none;
+  width:82%;
 
-  z-index: 2;
+  height:auto;
+
+  max-width:760px;
+
+  left:50%;
+  top:46%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  object-fit:contain;
+
+  opacity:.88;
+
+  pointer-events:none;
 }
 
-/* =========================================================
-   BANCO GRANDE DE FONDO
-   ========================================================= */
-
-/*
-   IMPORTANTE:
-
-   El banco NO debe ocupar toda la pantalla.
-
-   Se mantiene dentro del lado derecho y detrás
-   de los personajes.
-*/
-
-.bank-background {
-  position: absolute;
-
-  z-index: 3;
-
-  width: 82%;
-  height: auto;
-
-  max-height: 70%;
-
-  object-fit: contain;
-
-  left: 50%;
-  top: 48%;
-
-  transform: translate(-50%, -50%);
-
-  opacity: 0.72;
-
-  pointer-events: none;
-
-  filter: saturate(0.85) brightness(0.85);
-}
 
 /* =========================================================
    PROFESORA
-   ========================================================= */
+========================================================= */
 
-.teacher-img {
-  position: absolute;
+.teacher-img{
+  position:absolute;
 
-  z-index: 7;
+  z-index:3;
 
-  width: 30%;
-  max-width: 290px;
+  width:27%;
 
-  height: auto;
+  max-width:245px;
 
-  object-fit: contain;
+  height:auto;
 
-  left: 50%;
-  top: 10%;
+  left:50%;
+  top:7%;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 
-  pointer-events: none;
+  object-fit:contain;
+
+  pointer-events:none;
+
+  filter:
+    drop-shadow(
+      0 8px 8px
+      rgba(0,0,0,.35)
+    );
 }
+
 
 /* =========================================================
-   ESTUDIANTES
-   ========================================================= */
+   NIÑOS — MÁS PEQUEÑOS
+========================================================= */
 
-.children {
-  position: absolute;
+.children{
+  position:absolute;
 
-  z-index: 8;
+  z-index:4;
 
-  left: 50%;
-  bottom: 5%;
+  left:15%;
+  right:15%;
 
-  width: 62%;
+  bottom:5%;
 
-  height: 48%;
+  height:52%;
 
-  transform: translateX(-50%);
+  display:flex;
 
-  pointer-events: none;
+  align-items:flex-end;
+  justify-content:center;
+
+  gap:0;
+
+  pointer-events:none;
 }
 
-.children img {
-  position: absolute;
+.children img{
+  width:auto;
+  height:100%;
 
-  height: auto;
+  object-fit:contain;
 
-  object-fit: contain;
+  object-position:center bottom;
+
+  filter:
+    drop-shadow(
+      0 8px 7px
+      rgba(0,0,0,.38)
+    );
 }
 
-/* Niño */
+.boy-img{
+  max-width:45%;
 
-.boy-img {
-  width: 41%;
-
-  left: 7%;
-  bottom: 0;
+  margin-right:-5px;
 }
 
-/* Niña */
+.girl-img{
+  max-width:42%;
 
-.girl-img {
-  width: 39%;
-
-  right: 7%;
-  bottom: 0;
+  margin-left:-5px;
 }
+
 
 /* =========================================================
    MINI LOGO
-   ========================================================= */
+========================================================= */
 
-.mini-brand {
-  position: absolute;
+.mini-brand{
+  position:absolute;
 
-  z-index: 10;
+  z-index:10;
 
-  right: 4%;
-  bottom: 4%;
+  right:4%;
+  bottom:3%;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  color:#fff;
 
-  color: #ffffff;
+  text-align:right;
 }
 
-.mini-bank {
-  display: flex;
+.mini-bank{
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  gap: 12px;
+  gap:8px;
 }
 
-.mini-symbol {
-  width: 45px;
-  height: 42px;
+.mini-symbol{
+  width:38px;
+  height:36px;
 
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display:flex;
 
-  padding: 0 5px;
+  align-items:flex-end;
 
-  border-bottom: 5px solid #f4b400;
+  justify-content:space-around;
+
+  border-bottom:
+    4px solid
+    var(--gold);
 }
 
-.mini-symbol div {
-  width: 7px;
-  height: 30px;
+.mini-symbol div{
+  width:6px;
+  height:24px;
 
-  background: #f4b400;
+  background:var(--gold);
 }
 
-.mini-bank strong,
-.mini-bank span {
-  display: block;
+.mini-bank strong{
+  display:block;
 
-  font-family: Georgia, "Times New Roman", serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  line-height: 0.95;
+  font-size:21px;
+
+  line-height:.9;
 }
 
-.mini-bank strong {
-  font-size: 23px;
+.mini-bank span{
+  display:block;
+
+  margin-top:3px;
+
+  color:var(--gold2);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:21px;
+
+  font-weight:700;
+
+  line-height:.9;
 }
 
-.mini-bank span {
-  color: #f4b400;
+.mini-brand small{
+  display:block;
 
-  font-size: 25px;
+  margin-top:4px;
 
-  font-weight: 700;
+  font-size:7px;
+
+  white-space:nowrap;
 }
 
-.mini-brand small {
-  margin-top: 7px;
-
-  font-size: 9px;
-
-  letter-spacing: 0.02em;
-}
 
 /* =========================================================
-   PIE
-   ========================================================= */
+   FOOTER
+========================================================= */
 
-footer {
-  width: 100%;
-  height: 128px;
+footer{
+  width:100%;
 
-  background: #071a34;
+  height:100px;
+  min-height:100px;
 
-  border-top: 3px solid #f4b400;
+  padding:
+    8px
+    3.2vw;
 
-  padding: 0 3.2%;
+  display:flex;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items:center;
+  justify-content:space-between;
 
-  color: #ffffff;
+  background:var(--navy);
 
-  position: relative;
-  z-index: 20;
+  border-top:
+    3px solid
+    var(--gold);
+
+  color:#fff;
 }
 
-.footer-school {
-  display: flex;
-  align-items: center;
+.footer-school{
+  display:flex;
 
-  gap: 18px;
+  align-items:center;
+
+  gap:13px;
 }
 
-.footer-school img {
-  width: 72px;
-  height: 72px;
+.footer-school img{
+  width:58px;
+  height:66px;
 
-  object-fit: contain;
+  object-fit:contain;
 }
 
-.footer-school strong {
-  display: block;
+.footer-school strong{
+  display:block;
 
-  font-family: Georgia, "Times New Roman", serif;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  font-size: clamp(20px, 1.65vw, 27px);
+  font-size:19px;
 }
 
-.footer-school span {
-  display: block;
+.footer-school span{
+  display:block;
 
-  margin-top: 5px;
+  margin-top:4px;
 
-  font-size: 15px;
+  font-size:11px;
 
-  line-height: 1.3;
+  line-height:1.2;
 }
 
-.values {
-  display: flex;
-  align-items: center;
+.values{
+  display:flex;
 
-  gap: 34px;
+  align-items:center;
+
+  gap:28px;
 }
 
-.values > div {
-  display: flex;
-  align-items: center;
+.values > div{
+  display:flex;
 
-  gap: 11px;
+  align-items:center;
 
-  font-size: clamp(15px, 1.15vw, 20px);
+  gap:8px;
+
+  white-space:nowrap;
+
+  font-size:14px;
 }
 
-.values b {
-  font-size: 29px;
+.values b{
+  font-size:23px;
 }
+
 
 /* =========================================================
-   MODALES
-   ========================================================= */
+   AJUSTE PARA PANTALLAS GRANDES
+========================================================= */
 
-.hidden {
-  display: none !important;
+@media (min-width:1400px){
+
+  .hero{
+    grid-template-columns:53% 47%;
+  }
+
+  .bank-title h1{
+    font-size:62px;
+  }
+
+  .bank-background{
+    width:84%;
+    top:46%;
+  }
+
+  .teacher-img{
+    width:28%;
+    max-width:260px;
+    top:6%;
+  }
+
+  .children{
+    left:17%;
+    right:17%;
+
+    height:49%;
+    bottom:5%;
+  }
+
+  .boy-img{
+    max-width:43%;
+  }
+
+  .girl-img{
+    max-width:40%;
+  }
 }
 
-.modal {
-  position: fixed;
 
-  inset: 0;
+/* =========================================================
+   PANTALLAS CON POCA ALTURA
+========================================================= */
 
-  z-index: 100;
+@media (
+  min-width:851px
+) and (
+  max-height:760px
+){
 
-  background: rgba(0, 0, 0, 0.72);
+  .topbar{
+    height:92px;
+    min-height:92px;
+  }
 
-  display: flex;
+  .school-crest{
+    width:58px;
+    height:66px;
+  }
 
-  align-items: center;
-  justify-content: center;
+  .school-name strong{
+    font-size:25px;
+  }
 
-  padding: 20px;
+  .school-name span{
+    font-size:15px;
+  }
+
+  .admin-btn{
+    height:52px;
+    min-width:215px;
+    font-size:18px;
+  }
+
+  .hero{
+    height:calc(100vh - 182px);
+    min-height:0;
+  }
+
+  .hero-left{
+    padding:
+      20px
+      3vw
+      12px;
+  }
+
+  .bank-symbol{
+    transform:scale(.82);
+    transform-origin:center;
+    margin-right:-14px;
+  }
+
+  .bank-title h1{
+    font-size:49px;
+  }
+
+  .online{
+    font-size:14px;
+    letter-spacing:7px;
+  }
+
+  .subtitle{
+    font-size:18px;
+    margin:
+      5px
+      0
+      8px;
+  }
+
+  .intro{
+    font-size:18px;
+  }
+
+  .actions{
+    margin-top:13px;
+  }
+
+  .action-card{
+    height:125px;
+    min-height:125px;
+
+    padding:
+      12px
+      13px
+      33px;
+  }
+
+  .card-icon{
+    font-size:28px;
+  }
+
+  .card-content b{
+    font-size:17px;
+  }
+
+  .card-content small{
+    font-size:10px;
+    margin-top:6px;
+  }
+
+  .action-card::after{
+    height:29px;
+  }
+
+  .arrow{
+    width:36px;
+    height:36px;
+
+    font-size:26px;
+  }
+
+  .security{
+    height:52px;
+    min-height:52px;
+
+    margin-top:7px;
+
+    font-size:10px;
+  }
+
+  .security-icon{
+    font-size:21px;
+  }
+
+  .bank-background{
+    width:81%;
+    top:45%;
+  }
+
+  .teacher-img{
+    width:26%;
+    max-width:210px;
+    top:5%;
+  }
+
+  .children{
+    height:48%;
+    bottom:4%;
+    left:17%;
+    right:17%;
+  }
+
+  .boy-img{
+    max-width:42%;
+  }
+
+  .girl-img{
+    max-width:39%;
+  }
+
+  footer{
+    height:90px;
+    min-height:90px;
+  }
+
+  .footer-school img{
+    width:48px;
+    height:56px;
+  }
+
+  .footer-school strong{
+    font-size:16px;
+  }
+
+  .footer-school span{
+    font-size:10px;
+  }
+
+  .values{
+    gap:20px;
+  }
+
+  .values > div{
+    font-size:11px;
+  }
+
+  .values b{
+    font-size:20px;
+  }
 }
 
-.modal-card {
-  width: min(620px, 95vw);
-
-  max-height: 90vh;
-
-  overflow-y: auto;
-
-  background: #ffffff;
-
-  border-radius: 24px;
-
-  padding: 30px;
-
-  position: relative;
-
-  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
-}
-
-.modal-card.small {
-  width: min(450px, 95vw);
-}
-
-.modal-card.profile {
-  width: min(850px, 95vw);
-}
-
-.close {
-  position: absolute;
-
-  top: 12px;
-  right: 16px;
-
-  border: none;
-
-  background: transparent;
-
-  color: #071a34;
-
-  font-size: 34px;
-
-  cursor: pointer;
-}
-
-.modal-card h2 {
-  color: #071a34;
-
-  margin-bottom: 14px;
-}
-
-.modal-card p {
-  color: #555;
-
-  margin-bottom: 20px;
-}
-
-#reader {
-  width: 100%;
-}
-
-.modal-card input {
-  width: 100%;
-
-  height: 50px;
-
-  padding: 0 15px;
-
-  border: 1px solid #ccd2da;
-
-  border-radius: 10px;
-
-  font-size: 17px;
-
-  margin-bottom: 15px;
-}
-
-.primary {
-  width: 100%;
-
-  min-height: 50px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #071a34;
-
-  color: #ffffff;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.status {
-  margin-top: 14px;
-
-  min-height: 20px;
-
-  color: #333;
-}
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 1100px) {
+@media(max-width:850px){
 
-  .topbar {
-    height: 100px;
+  .hero{
+    height:auto;
+    min-height:0;
+
+    grid-template-columns:1fr;
   }
 
-  .school-crest {
-    width: 68px;
-    height: 68px;
+  .hero-left::after{
+    display:none;
   }
 
-  .admin-btn {
-    min-width: 210px;
-    height: 56px;
+  .hero-left{
+    min-height:650px;
   }
 
-  .hero {
-    height: calc(100vh - 100px - 110px);
-    min-height: 0;
-
-    grid-template-columns: 52% 48%;
+  .hero-right{
+    height:560px;
+    min-height:560px;
   }
 
-  .hero-left {
-    padding: 35px 4% 25px;
+  .bank-background{
+    width:82%;
   }
 
-  .bank-logo {
-    gap: 16px;
+  .teacher-img{
+    width:30%;
   }
 
-  .bank-symbol {
-    transform: scale(0.85);
-    transform-origin: center;
-    margin-right: -12px;
-  }
+  .children{
+    left:10%;
+    right:10%;
 
-  .actions {
-    gap: 12px;
-  }
-
-  .action-card {
-    min-height: 205px;
-  }
-
-  footer {
-    height: 110px;
-  }
-
-  .values {
-    gap: 18px;
+    height:55%;
   }
 }
+
 
 /* =========================================================
    MÓVIL
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 760px) {
+@media(max-width:600px){
 
-  body {
-    overflow-x: hidden;
+  .topbar{
+    height:78px;
+    min-height:78px;
+
+    padding:
+      7px
+      12px;
   }
 
-  .topbar {
-    height: auto;
-    min-height: 100px;
-
-    padding: 14px 18px;
-
-    gap: 15px;
+  .school-crest{
+    width:40px;
+    height:48px;
   }
 
-  .brand {
-    gap: 10px;
+  .brand{
+    gap:7px;
   }
 
-  .school-crest {
-    width: 54px;
-    height: 54px;
+  .school-name strong{
+    font-size:13px;
+
+    white-space:normal;
   }
 
-  .school-name strong {
-    font-size: 18px;
+  .school-name span{
+    font-size:9px;
+
+    margin-top:3px;
   }
 
-  .school-name span {
-    font-size: 12px;
-    margin-top: 5px;
+  .admin-btn{
+    min-width:auto;
+
+    height:43px;
+
+    padding:
+      7px
+      9px;
+
+    border-radius:11px;
+
+    font-size:10px;
   }
 
-  .admin-btn {
-    min-width: auto;
-
-    height: 48px;
-
-    padding: 0 14px;
-
-    border-radius: 14px;
-
-    font-size: 14px;
+  .lock{
+    font-size:17px;
   }
 
-  .lock {
-    font-size: 20px;
+  .hero{
+    display:flex;
+
+    flex-direction:column;
+
+    height:auto;
+
+    min-height:0;
   }
 
-  .hero {
-    display: flex;
-    flex-direction: column;
-
-    height: auto;
-    min-height: 0;
+  .hero-left{
+    padding:
+      25px
+      14px
+      22px;
   }
 
-  .hero-left {
-    min-height: 700px;
-
-    padding: 35px 18px;
+  .bank-logo{
+    gap:5px;
   }
 
-  .hero-left::after {
-    display: none;
+  .bank-symbol{
+    width:62px;
+    min-width:62px;
+    height:60px;
+    flex-basis:62px;
+
+    transform:scale(.9);
+    transform-origin:center;
   }
 
-  .bank-logo {
-    width: 100%;
-
-    gap: 8px;
-
-    transform: scale(0.86);
+  .bank-symbol .roof{
+    width:59px;
   }
 
-  .bank-symbol {
-    transform: scale(0.72);
-    margin-right: -30px;
+  .columns{
+    width:50px;
+    height:28px;
   }
 
-  .bank-title h1 {
-    font-size: 48px;
+  .columns i{
+    width:6px;
+    height:27px;
   }
 
-  .online {
-    font-size: 15px;
+  .bank-symbol .base{
+    width:61px;
   }
 
-  .subtitle {
-    font-size: 20px;
+  .bank-title h1{
+    font-size:30px;
   }
 
-  .intro {
-    font-size: 19px;
+  .online{
+    font-size:9px;
+    letter-spacing:4px;
   }
 
-  .actions {
-    grid-template-columns: 1fr;
-
-    max-width: 430px;
+  .subtitle{
+    font-size:15px;
   }
 
-  .action-card {
-    min-height: 190px;
+  .intro{
+    font-size:16px;
   }
 
-  .security {
-    max-width: 430px;
+  .actions{
+    grid-template-columns:1fr;
   }
 
-  .hero-right {
-    height: 620px;
-
-    min-height: 620px;
+  .hero-right{
+    height:470px;
+    min-height:470px;
   }
 
-  .bank-background {
-    width: 92%;
-    max-height: 62%;
-
-    top: 48%;
+  .bank-background{
+    width:92%;
+    top:45%;
   }
 
-  .teacher-img {
-    width: 35%;
-    top: 9%;
+  .teacher-img{
+    width:34%;
+    max-width:190px;
   }
 
-  .children {
-    width: 88%;
-    height: 64%;
-    bottom: 4%;
+  .children{
+    left:12%;
+    right:12%;
+    height:55%;
+    bottom:6%;
   }
 
-  .mini-brand {
-    right: 4%;
-    bottom: 3%;
+  .boy-img{
+    max-width:43%;
   }
 
-  footer {
-    height: auto;
-
-    padding: 25px 18px;
-
-    flex-direction: column;
-
-    gap: 25px;
-
-    align-items: flex-start;
+  .girl-img{
+    max-width:40%;
   }
 
-  .values {
-    width: 100%;
+  footer{
+    height:auto;
+    min-height:145px;
 
-    justify-content: space-between;
+    padding:
+      15px
+      12px;
 
-    gap: 10px;
+    flex-direction:column;
 
-    flex-wrap: wrap;
-  }
-}
+    align-items:flex-start;
 
-/* =========================================================
-   PANTALLAS MUY ALTAS
-   ========================================================= */
-
-@media (min-width: 1400px) and (min-height: 800px) {
-
-  .hero {
-    height: calc(100vh - 244px);
+    gap:15px;
   }
 
-  .hero-left {
-    padding-top: 48px;
-  }
-
-  .bank-logo {
-    transform: scale(1.02);
-  }
-
-  .teacher-img {
-    width: 33%;
-    top: 8%;
-  }
-
-  .children {
-    width: 62%;
-    height: 50%;
-    bottom: 5%;
-  }
-
-  .bank-background {
-    width: 91%;
-    max-height: 80%;
-    top: 49%;
+  .values{
+    width:100%;
+    gap:15px;
+    flex-wrap:wrap;
   }
 }
