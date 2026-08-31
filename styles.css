@@ -1884,44 +1884,31 @@ footer {
 }
 
 /* =========================================================
-   ÚNICO CAMBIO — CONTENIDO INTERNO DE LOS BOTONES
-   Las tarjetas NO cambian de posición ni de tamaño.
+   ÚNICO CAMBIO — LETRAS INTERNAS DE LOS BOTONES
+   NO cambia la posición ni el tamaño de las tarjetas.
    ========================================================= */
 
 @media (min-width: 761px) {
 
-  .hero-left .action-card {
-    position: relative !important;
-    overflow: hidden !important;
-  }
-
-  /* Iconos bien contenidos dentro de la tarjeta */
-  .hero-left .action-card .card-icon {
-    top: 20px !important;
-    left: 20px !important;
-    font-size: 29px !important;
-    line-height: 1 !important;
-    z-index: 2 !important;
-  }
-
-  /* Contenido: título + descripción quedan por encima
-     de la franja inferior */
   .hero-left .action-card .card-content {
-    position: relative !important;
-    z-index: 2 !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 45px) !important;
 
-    padding: 13px 10px 50px 61px !important;
+    padding: 15px 10px 4px 62px !important;
     margin: 0 !important;
 
-    overflow: visible !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .hero-left .action-card .card-content b {
     display: block !important;
-
     margin: 0 !important;
 
-    font-size: 17px !important;
+    font-size: 16px !important;
     line-height: 1.02 !important;
 
     white-space: normal !important;
@@ -1929,56 +1916,32 @@ footer {
 
   .hero-left .action-card .card-content small {
     display: block !important;
+    margin-top: 4px !important;
 
-    margin-top: 7px !important;
     max-width: 205px !important;
 
-    font-size: 10px !important;
-    line-height: 1.18 !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
 
     white-space: normal !important;
-  }
-
-  /* Franja y flecha permanecen en su sitio */
-  .hero-left .action-card.qr::after,
-  .hero-left .action-card.code::after {
-    z-index: 1 !important;
-  }
-
-  .hero-left .action-card .arrow {
-    z-index: 4 !important;
-
-    width: 42px !important;
-    height: 42px !important;
-
-    bottom: 4px !important;
-
-    font-size: 34px !important;
+    overflow: hidden !important;
   }
 }
 
-/* Pantalla con poca altura: solo comprime el texto interno */
 @media (min-width: 761px) and (max-height: 760px) {
 
-  .hero-left .action-card .card-icon {
-    top: 17px !important;
-    left: 18px !important;
-    font-size: 27px !important;
-  }
-
   .hero-left .action-card .card-content {
-    padding: 10px 9px 48px 57px !important;
+    padding: 11px 8px 3px 58px !important;
   }
 
   .hero-left .action-card .card-content b {
-    font-size: 15px !important;
-    line-height: 1.02 !important;
+    font-size: 14px !important;
   }
 
   .hero-left .action-card .card-content small {
-    margin-top: 5px !important;
+    margin-top: 3px !important;
     max-width: 185px !important;
-    font-size: 9px !important;
+    font-size: 8.5px !important;
     line-height: 1.12 !important;
   }
 }
