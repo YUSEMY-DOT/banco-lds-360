@@ -1462,236 +1462,56 @@ footer {
 }
 
 /* =========================================================
-   BANCO LDS 360 — CORRECCIÓN DEFINITIVA PC/LAPTOP
-   1) Banco de fondo más GRANDE y CENTRADO
-   2) Botones bien centrados dentro del área blanca
-   3) Barra inferior MÁS DELGADA
-   4) No modifica la estructura móvil original
+   BANCO LDS 360 — COMPOSICIÓN DERECHA FINAL
+   PC / LAPTOP
+   - Profesora un poco más grande
+   - Niños más pequeños
+   - Todo el grupo centrado en la zona azul
+   - Banco de fondo mucho más grande y centrado
+   - No cambia la parte blanca ni el diseño móvil
    ========================================================= */
 
-@media (min-width: 761px) {
+@media (min-width: 1101px) {
 
-  html,
-  body {
-    width: 100%;
-    min-width: 0;
-    overflow-x: hidden;
-  }
-
-  /* =======================================================
-     ENCABEZADO
-     ======================================================= */
-
-  .topbar {
-    width: 100% !important;
-    height: 100px !important;
-    min-height: 100px !important;
-    padding: 0 3.2% !important;
-    flex-shrink: 0 !important;
-  }
-
-  .school-crest {
-    width: 68px !important;
-    height: 68px !important;
-  }
-
-  .brand {
-    gap: 16px !important;
-  }
-
-  .school-name strong {
-    font-size: clamp(23px, 2.15vw, 34px) !important;
-  }
-
-  .school-name span {
-    font-size: clamp(13px, 1.2vw, 19px) !important;
-    margin-top: 6px !important;
-  }
-
-  .admin-btn {
-    height: 52px !important;
-    min-width: 215px !important;
-    padding: 0 22px !important;
-    font-size: clamp(16px, 1.25vw, 21px) !important;
-  }
-
-  .lock {
-    font-size: 24px !important;
-  }
-
-  /* =======================================================
-     PORTADA
-     ======================================================= */
-
-  .hero {
-    width: 100% !important;
-
-    /* Todo el bloque queda dentro de la pantalla */
-    height: calc(100vh - 170px) !important;
-
-    min-height: 500px !important;
-    max-height: 680px !important;
-
-    display: grid !important;
-    grid-template-columns: 51% 49% !important;
-
-    overflow: hidden !important;
-  }
-
-  /* =======================================================
-     LADO BLANCO — TODO CENTRADO
-     ======================================================= */
-
-  .hero-left {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-
-    padding: 14px 3.5% 8px !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-
-    overflow: hidden !important;
-  }
-
-  .bank-logo {
-    width: min(610px, 94%) !important;
-    margin: 0 auto !important;
-
-    transform: scale(.86) !important;
-    transform-origin: top center !important;
-  }
-
-  .subtitle {
-    width: 100% !important;
-    margin: -6px auto 0 !important;
-
-    text-align: center !important;
-    font-size: clamp(16px, 1.25vw, 21px) !important;
-  }
-
-  .intro {
-    width: 100% !important;
-    margin: 8px auto 0 !important;
-
-    text-align: center !important;
-    font-size: clamp(16px, 1.15vw, 20px) !important;
-    line-height: 1.28 !important;
-  }
-
-  /* Botones dentro de la zona blanca */
-  .actions {
-    width: 100% !important;
-    max-width: 650px !important;
-
-    margin: 12px auto 0 !important;
-
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-
-    gap: 14px !important;
-  }
-
-  .action-card {
-    width: 100% !important;
-
-    height: 132px !important;
-    min-height: 132px !important;
-    max-height: 132px !important;
-  }
-
-  .card-icon {
-    top: 20px !important;
-    left: 21px !important;
-    font-size: 34px !important;
-  }
-
-  .card-content {
-    padding: 14px 10px 36px 64px !important;
-  }
-
-  .card-content b {
-    font-size: clamp(15px, 1.05vw, 19px) !important;
-    line-height: 1.02 !important;
-  }
-
-  .card-content small {
-    margin-top: 6px !important;
-    font-size: clamp(9px, .7vw, 11px) !important;
-    line-height: 1.25 !important;
-  }
-
-  .arrow {
-    width: 43px !important;
-    height: 43px !important;
-    bottom: 4px !important;
-    font-size: 35px !important;
-  }
-
-  /* Caja de seguridad también queda dentro de la zona blanca */
-  .security {
-    width: 100% !important;
-    max-width: 650px !important;
-
-    min-height: 48px !important;
-    height: 48px !important;
-
-    margin: 8px auto 0 !important;
-    padding: 7px 14px !important;
-
-    gap: 10px !important;
-
-    font-size: clamp(9px, .7vw, 11px) !important;
-    line-height: 1.2 !important;
-
-    flex-shrink: 0 !important;
-  }
-
-  .security-icon {
-    font-size: 20px !important;
-  }
-
-  /* =======================================================
-     LADO DERECHO
-     ======================================================= */
+  /* ---------------------------------------------------------
+     PANEL DERECHO
+     --------------------------------------------------------- */
 
   .hero-right {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-
     position: relative !important;
     overflow: hidden !important;
   }
 
-  /* BANCO DE FONDO:
-     grande, centrado dentro del panel derecho,
-     y detrás de los personajes */
-  .hero-right .bank-background {
-    width: 84% !important;
-    height: auto !important;
+  /* ---------------------------------------------------------
+     BANCO DE FONDO
+     Grande, centrado y detrás de los personajes
+     --------------------------------------------------------- */
 
+  .hero-right .bank-background {
+    width: 94% !important;
+    height: auto !important;
     max-width: none !important;
-    max-height: 70% !important;
+    max-height: 78% !important;
 
     left: 50% !important;
-    top: 58% !important;
+    top: 60% !important;
 
     transform: translate(-50%, -50%) !important;
 
     object-fit: contain !important;
-
     opacity: .82 !important;
 
     z-index: 3 !important;
   }
 
-  /* Profesora */
+  /* ---------------------------------------------------------
+     PROFESORA
+     Un poco más grande que cada niño y centrada
+     --------------------------------------------------------- */
+
   .hero-right .teacher-img {
-    width: 30% !important;
-    max-width: 245px !important;
+    width: 32% !important;
+    max-width: 270px !important;
 
     left: 50% !important;
     top: 7% !important;
@@ -1701,13 +1521,17 @@ footer {
     z-index: 7 !important;
   }
 
-  /* Niños: conservar el tamaño que aprobaste */
+  /* ---------------------------------------------------------
+     NIÑOS
+     Más pequeños que la profesora y juntos en el centro
+     --------------------------------------------------------- */
+
   .hero-right .children {
     left: 50% !important;
-    bottom: 5% !important;
+    bottom: 4% !important;
 
-    width: 66% !important;
-    height: 50% !important;
+    width: 58% !important;
+    height: 46% !important;
 
     transform: translateX(-50%) !important;
 
@@ -1715,18 +1539,22 @@ footer {
   }
 
   .hero-right .boy-img {
-    width: 44% !important;
-    left: 3% !important;
+    width: 40% !important;
+    left: 4% !important;
     bottom: 0 !important;
   }
 
   .hero-right .girl-img {
-    width: 41% !important;
-    right: 3% !important;
+    width: 37% !important;
+    right: 4% !important;
     bottom: 0 !important;
   }
 
-  /* Líneas: casi imperceptibles y detrás */
+  /* ---------------------------------------------------------
+     LÍNEAS DORADAS
+     Apenas visibles y siempre detrás
+     --------------------------------------------------------- */
+
   .hero-right::before,
   .hero-right::after {
     width: 2px !important;
@@ -1734,145 +1562,14 @@ footer {
     z-index: 1 !important;
   }
 
-  /* Mini logo */
+  /* ---------------------------------------------------------
+     LOGO INFERIOR DEL BANCO
+     Centrado visualmente en su zona, sin alterar personajes
+     --------------------------------------------------------- */
+
   .mini-brand {
-    right: 3% !important;
+    right: 3.5% !important;
     bottom: 3% !important;
     z-index: 10 !important;
-  }
-
-  /* =======================================================
-     BARRA INFERIOR — MÁS DELGADA
-     ======================================================= */
-
-  footer {
-    width: 100% !important;
-
-    height: 70px !important;
-    min-height: 70px !important;
-    max-height: 70px !important;
-
-    padding: 0 3.2% !important;
-
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-
-    overflow: hidden !important;
-
-    flex-shrink: 0 !important;
-  }
-
-  .footer-school {
-    gap: 12px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .footer-school img {
-    width: 42px !important;
-    height: 50px !important;
-  }
-
-  .footer-school strong {
-    font-size: clamp(15px, 1.15vw, 19px) !important;
-  }
-
-  .footer-school span {
-    font-size: 10px !important;
-    margin-top: 3px !important;
-  }
-
-  .values {
-    gap: 20px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .values > div {
-    font-size: clamp(10px, .8vw, 13px) !important;
-    gap: 7px !important;
-  }
-
-  .values b {
-    font-size: 19px !important;
-  }
-}
-
-/* =========================================================
-   PC CON POCA ALTURA
-   ========================================================= */
-
-@media (min-width: 761px) and (max-height: 760px) {
-
-  .topbar {
-    height: 88px !important;
-    min-height: 88px !important;
-  }
-
-  .hero {
-    height: calc(100vh - 148px) !important;
-    min-height: 0 !important;
-    max-height: 570px !important;
-  }
-
-  footer {
-    height: 60px !important;
-    min-height: 60px !important;
-    max-height: 60px !important;
-  }
-
-  .hero-left {
-    padding-top: 10px !important;
-    padding-bottom: 6px !important;
-  }
-
-  .bank-logo {
-    transform: scale(.76) !important;
-    margin-bottom: -14px !important;
-  }
-
-  .subtitle {
-    margin-top: -2px !important;
-    font-size: 15px !important;
-  }
-
-  .intro {
-    margin-top: 6px !important;
-    font-size: 15px !important;
-  }
-
-  .actions {
-    margin-top: 8px !important;
-  }
-
-  .action-card {
-    height: 106px !important;
-    min-height: 106px !important;
-    max-height: 106px !important;
-  }
-
-  .security {
-    height: 39px !important;
-    min-height: 39px !important;
-    margin-top: 5px !important;
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
-  }
-
-  .hero-right .bank-background {
-    width: 82% !important;
-    max-height: 62% !important;
-    top: 58% !important;
-  }
-
-  .hero-right .teacher-img {
-    width: 28% !important;
-    max-width: 225px !important;
-    top: 5% !important;
-  }
-
-  .hero-right .children {
-    bottom: 3% !important;
-    height: 47% !important;
   }
 }
