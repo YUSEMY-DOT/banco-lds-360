@@ -2088,30 +2088,37 @@ footer {
 }
 
 /* =========================================================
-   ÚNICO CAMBIO — SUBTÍTULO E INTRO
-   "Sistema financiero educativo"
-   "Consulta de forma rápida y segura..."
-   Centrar y subir ligeramente.
-   NO modifica ningún otro elemento.
+   ÚNICO CAMBIO — CENTRAR Y ENCAJAR LOS DOS TEXTOS
+   No mueve botones ni modifica imágenes/figuras.
    ========================================================= */
 
 @media (min-width: 761px) {
 
   .hero-left .subtitle {
     width: 100% !important;
+    margin: 0 auto !important;
     text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+
     position: relative !important;
-    top: -8px !important;
+    top: -10px !important;
+
+    font-size: 18px !important;
+    line-height: 1.15 !important;
   }
 
   .hero-left .intro {
     width: 100% !important;
+    max-width: 640px !important;
+
+    margin: 3px auto 0 !important;
     text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+
     position: relative !important;
-    top: -8px !important;
+    top: -10px !important;
+
+    font-size: 18px !important;
+    line-height: 1.20 !important;
+
+    white-space: normal !important;
   }
 }
