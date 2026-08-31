@@ -1462,14 +1462,9 @@ footer {
 }
 
 /* =========================================================
-   BANCO LDS 360 — AJUSTE FINAL LIMPIO
-   PC/LAPTOP + CELULAR
-   Todo centrado. Sin parches duplicados.
-   ========================================================= */
-
-
-/* =========================================================
-   PC / LAPTOP
+   BANCO LDS 360 — PC FINAL
+   OBJETIVO: TODO EL CONJUNTO CENTRADO Y COMPLETO EN PANTALLA
+   NO MODIFICA LA VISTA MÓVIL
    ========================================================= */
 
 @media (min-width: 761px) {
@@ -1481,20 +1476,49 @@ footer {
     overflow-x: hidden;
   }
 
-  /* Encabezado estable */
+  /* Encabezado compacto para dejar espacio a toda la portada */
   .topbar {
     width: 100%;
-    height: 116px !important;
-    min-height: 116px !important;
-    flex-shrink: 0;
+    height: 100px !important;
+    min-height: 100px !important;
+    padding: 0 3.2% !important;
   }
 
-  /* La portada ocupa exactamente el espacio entre encabezado y footer */
+  .school-crest {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .brand {
+    gap: 16px !important;
+  }
+
+  .school-name strong {
+    font-size: clamp(23px, 2.1vw, 34px) !important;
+  }
+
+  .school-name span {
+    font-size: clamp(13px, 1.2vw, 19px) !important;
+    margin-top: 6px !important;
+  }
+
+  .admin-btn {
+    height: 52px !important;
+    min-width: 215px !important;
+    padding: 0 22px !important;
+    font-size: clamp(16px, 1.25vw, 21px) !important;
+  }
+
+  .lock {
+    font-size: 24px !important;
+  }
+
+  /* Portada completa dentro del espacio disponible */
   .hero {
     width: 100% !important;
-    height: calc(100vh - 221px) !important;
+    height: calc(100vh - 190px) !important;
     min-height: 500px !important;
-    max-height: none !important;
+    max-height: 600px !important;
 
     display: grid !important;
     grid-template-columns: 51% 49% !important;
@@ -1503,9 +1527,8 @@ footer {
   }
 
   /* -------------------------
-     LADO IZQUIERDO CENTRADO
+     LADO IZQUIERDO: CENTRADO
      ------------------------- */
-
   .hero-left {
     width: 100% !important;
     height: 100% !important;
@@ -1522,41 +1545,29 @@ footer {
   }
 
   .bank-logo {
-    width: min(620px, 94%) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    transform: scale(.90) !important;
+    width: min(600px, 92%) !important;
+    margin: 0 auto !important;
+    transform: scale(.84) !important;
     transform-origin: top center !important;
-    margin-bottom: 0 !important;
-  }
-
-  .bank-title {
-    text-align: left !important;
-  }
-
-  .subtitle,
-  .intro {
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
   }
 
   .subtitle {
-    margin-top: 2px !important;
+    margin-top: -6px !important;
+    text-align: center !important;
+    font-size: clamp(16px, 1.25vw, 21px) !important;
   }
 
   .intro {
-    margin-top: 9px !important;
-    line-height: 1.30 !important;
+    margin-top: 8px !important;
+    text-align: center !important;
+    font-size: clamp(16px, 1.15vw, 20px) !important;
+    line-height: 1.28 !important;
   }
 
-  /* Tarjetas centradas */
   .actions {
     width: 100% !important;
-    max-width: 660px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 12px !important;
+    max-width: 650px !important;
+    margin: 11px auto 0 !important;
 
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
@@ -1565,77 +1576,102 @@ footer {
 
   .action-card {
     width: 100% !important;
-    height: 132px !important;
-    min-height: 132px !important;
-    max-height: 132px !important;
+    height: 122px !important;
+    min-height: 122px !important;
+    max-height: 122px !important;
+  }
+
+  .card-icon {
+    top: 18px !important;
+    left: 20px !important;
+    font-size: 32px !important;
   }
 
   .card-content {
-    padding: 16px 12px 39px 70px !important;
+    padding: 13px 10px 34px 62px !important;
   }
 
-  .card-content b,
+  .card-content b {
+    font-size: clamp(15px, 1.02vw, 18px) !important;
+  }
+
   .card-content small {
-    text-align: left !important;
+    margin-top: 5px !important;
+    font-size: clamp(9px, .68vw, 11px) !important;
+    line-height: 1.2 !important;
+  }
+
+  .arrow {
+    width: 42px !important;
+    height: 42px !important;
+    bottom: 4px !important;
+    font-size: 34px !important;
   }
 
   .security {
     width: 100% !important;
-    max-width: 660px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 8px !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    padding: 7px 15px !important;
+    max-width: 650px !important;
+
+    min-height: 45px !important;
+    height: 45px !important;
+
+    margin: 8px auto 0 !important;
+    padding: 6px 14px !important;
+
+    gap: 10px !important;
+    font-size: clamp(9px, .7vw, 11px) !important;
+    line-height: 1.2 !important;
+  }
+
+  .security-icon {
+    font-size: 20px !important;
   }
 
   /* -------------------------
-     LADO DERECHO
+     LADO DERECHO: TODO CENTRADO
      ------------------------- */
-
   .hero-right {
     width: 100% !important;
     height: 100% !important;
     min-height: 0 !important;
     overflow: hidden !important;
+
     position: relative !important;
   }
 
-  /* Banco: centrado en el panel derecho y más abajo,
-     pero sin tocar a los niños */
+  /* Banco de fondo centrado dentro del lado derecho */
   .hero-right .bank-background {
-    width: 72% !important;
-    height: auto !important;
-    max-height: 60% !important;
+    width: 70% !important;
+    max-width: none !important;
+    max-height: 56% !important;
 
     left: 50% !important;
-    top: 58% !important;
+    top: 60% !important;
 
     transform: translate(-50%, -50%) !important;
     object-fit: contain !important;
-    opacity: .72 !important;
+    opacity: .74 !important;
   }
 
-  /* Profesora: más grande y centrada */
+  /* Profesora centrada, un poco más grande */
   .hero-right .teacher-img {
     width: 30% !important;
     max-width: 245px !important;
 
     left: 50% !important;
-    top: 8% !important;
+    top: 7% !important;
 
     transform: translateX(-50%) !important;
     z-index: 7 !important;
   }
 
-  /* Niños: conservar la proporción que ya estaba funcionando */
+  /* Niños: se conservan, centrados */
   .hero-right .children {
     left: 50% !important;
-    bottom: 7% !important;
+    bottom: 5% !important;
 
     width: 66% !important;
-    height: 52% !important;
+    height: 50% !important;
 
     transform: translateX(-50%) !important;
     z-index: 8 !important;
@@ -1653,378 +1689,139 @@ footer {
     bottom: 0 !important;
   }
 
-  /* Líneas casi imperceptibles y detrás */
+  /* Líneas muy suaves, detrás de todo */
   .hero-right::before,
   .hero-right::after {
     width: 2px !important;
-    opacity: .06 !important;
+    opacity: .045 !important;
     z-index: 1 !important;
   }
 
-  /* Mini logo centrado en su esquina */
   .mini-brand {
     right: 4% !important;
-    bottom: 4% !important;
+    bottom: 3% !important;
+    z-index: 10 !important;
   }
 
-  /* Footer completo */
+  /* -------------------------
+     FOOTER: VISIBLE COMPLETO
+     ------------------------- */
   footer {
     width: 100% !important;
-    height: 105px !important;
-    min-height: 105px !important;
-    max-height: 105px !important;
+    height: 90px !important;
+    min-height: 90px !important;
+    max-height: 90px !important;
+
+    padding: 0 3.2% !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    overflow: hidden !important;
     flex-shrink: 0 !important;
-
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-
-    overflow: hidden !important;
-  }
-}
-
-
-/* =========================================================
-   CELULAR
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  html,
-  body {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    overflow-x: hidden;
-  }
-
-  .topbar {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 100px !important;
-
-    padding: 14px 18px !important;
-
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-  }
-
-  .brand {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-  }
-
-  .school-crest {
-    width: 54px !important;
-    height: 54px !important;
-    flex: 0 0 54px !important;
-  }
-
-  .school-name {
-    min-width: 0 !important;
-  }
-
-  .school-name strong {
-    font-size: 18px !important;
-    line-height: 1.05 !important;
-    white-space: normal !important;
-  }
-
-  .school-name span {
-    font-size: 12px !important;
-    line-height: 1.05 !important;
-    margin-top: 5px !important;
-  }
-
-  .admin-btn {
-    min-width: auto !important;
-    flex: 0 0 auto !important;
-    width: auto !important;
-    height: 48px !important;
-
-    padding: 0 14px !important;
-    border-radius: 14px !important;
-    gap: 7px !important;
-
-    font-size: 14px !important;
-  }
-
-  /* Una sola columna y flujo natural */
-  .hero {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-
-    overflow: visible !important;
-  }
-
-  .hero-left {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    padding: 26px 16px 18px !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-
-    overflow: visible !important;
-  }
-
-  .hero-left::after {
-    display: none !important;
-  }
-
-  /* Logo y textos centrados */
-  .bank-logo {
-    width: 100% !important;
-    max-width: 410px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-
-    gap: 5px !important;
-    transform: none !important;
-  }
-
-  .bank-symbol {
-    transform: scale(.78) !important;
-    transform-origin: center !important;
-    margin-right: -20px !important;
-  }
-
-  .bank-title {
-    text-align: left !important;
-  }
-
-  .bank-title h1 {
-    font-size: clamp(38px, 12vw, 50px) !important;
-    line-height: .86 !important;
-  }
-
-  .online {
-    font-size: 12px !important;
-    letter-spacing: .42em !important;
-    text-align: center !important;
-  }
-
-  .subtitle {
-    width: 100% !important;
-    max-width: 430px !important;
-    margin: 9px auto 0 !important;
-    font-size: clamp(16px, 4.8vw, 20px) !important;
-    text-align: center !important;
-  }
-
-  .intro {
-    width: 100% !important;
-    max-width: 430px !important;
-    margin: 11px auto 0 !important;
-    font-size: clamp(15px, 4.4vw, 19px) !important;
-    line-height: 1.35 !important;
-    text-align: center !important;
-  }
-
-  /* Tarjetas una debajo de otra */
-  .actions {
-    width: 100% !important;
-    max-width: 430px !important;
-    margin: 16px auto 0 !important;
-
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-  }
-
-  .action-card {
-    width: 100% !important;
-    height: 155px !important;
-    min-height: 155px !important;
-    max-height: 155px !important;
-  }
-
-  .security {
-    width: 100% !important;
-    max-width: 430px !important;
-    min-height: 54px !important;
-    height: auto !important;
-    margin: 11px auto 0 !important;
-  }
-
-  /* Panel derecho debajo del contenido */
-  .hero-right {
-    width: 100% !important;
-    height: 430px !important;
-    min-height: 430px !important;
-    max-height: 430px !important;
-
-    overflow: hidden !important;
-  }
-
-  .bank-background {
-    width: 82% !important;
-    max-height: 58% !important;
-
-    left: 50% !important;
-    top: 53% !important;
-
-    transform: translate(-50%, -50%) !important;
-  }
-
-  .teacher-img {
-    width: 31% !important;
-    max-width: none !important;
-
-    left: 50% !important;
-    top: 6% !important;
-
-    transform: translateX(-50%) !important;
-  }
-
-  .children {
-    width: 78% !important;
-    height: 58% !important;
-
-    left: 50% !important;
-    bottom: 3% !important;
-
-    transform: translateX(-50%) !important;
-  }
-
-  .boy-img {
-    width: 39% !important;
-    left: 5% !important;
-    bottom: 0 !important;
-  }
-
-  .girl-img {
-    width: 36% !important;
-    right: 5% !important;
-    bottom: 0 !important;
-  }
-
-  .hero-right::before,
-  .hero-right::after {
-    width: 2px !important;
-    opacity: .06 !important;
-    z-index: 1 !important;
-  }
-
-  .mini-brand {
-    right: 3% !important;
-    bottom: 3% !important;
-    transform: scale(.78) !important;
-    transform-origin: bottom right !important;
-  }
-
-  footer {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-
-    padding: 20px 14px !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 18px !important;
   }
 
   .footer-school {
-    width: 100% !important;
-    justify-content: center !important;
-    text-align: center !important;
+    gap: 14px !important;
+  }
+
+  .footer-school img {
+    width: 50px !important;
+    height: 58px !important;
+  }
+
+  .footer-school strong {
+    font-size: clamp(16px, 1.25vw, 20px) !important;
+  }
+
+  .footer-school span {
+    font-size: 11px !important;
   }
 
   .values {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
+    gap: 22px !important;
   }
 
   .values > div {
-    justify-content: center !important;
-    text-align: center !important;
-    font-size: 11px !important;
+    font-size: clamp(11px, .85vw, 14px) !important;
+  }
+
+  .values b {
+    font-size: 21px !important;
   }
 }
 
-
-/* =========================================================
-   CELULARES MUY PEQUEÑOS
-   ========================================================= */
-
-@media (max-width: 390px) {
+/* Pantallas con poco alto: compactar sin cambiar el diseño */
+@media (min-width: 761px) and (max-height: 750px) {
 
   .topbar {
+    height: 88px !important;
     min-height: 88px !important;
-    padding: 10px 11px !important;
   }
 
-  .school-crest {
-    width: 43px !important;
-    height: 43px !important;
-    flex-basis: 43px !important;
+  .hero {
+    height: calc(100vh - 160px) !important;
+    min-height: 0 !important;
+    max-height: 540px !important;
   }
 
-  .school-name strong {
-    font-size: 15px !important;
-  }
-
-  .school-name span {
-    font-size: 9px !important;
-  }
-
-  .admin-btn {
-    height: 40px !important;
-    padding: 0 9px !important;
-    font-size: 11px !important;
+  footer {
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
   }
 
   .hero-left {
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    padding-top: 12px !important;
+    padding-bottom: 7px !important;
   }
 
-  .bank-title h1 {
-    font-size: 36px !important;
-  }
-
-  .online {
-    font-size: 10px !important;
+  .bank-logo {
+    transform: scale(.74) !important;
+    margin-bottom: -12px !important;
   }
 
   .subtitle {
-    font-size: 15px !important;
+    margin-top: -2px !important;
+    font-size: 16px !important;
   }
 
   .intro {
-    font-size: 14px !important;
+    margin-top: 6px !important;
+    font-size: 16px !important;
+  }
+
+  .actions {
+    margin-top: 8px !important;
   }
 
   .action-card {
-    height: 145px !important;
-    min-height: 145px !important;
-    max-height: 145px !important;
+    height: 108px !important;
+    min-height: 108px !important;
+    max-height: 108px !important;
   }
 
-  .hero-right {
-    height: 390px !important;
-    min-height: 390px !important;
-    max-height: 390px !important;
+  .security {
+    height: 40px !important;
+    min-height: 40px !important;
+    margin-top: 6px !important;
+  }
+
+  .hero-right .teacher-img {
+    top: 5% !important;
+    width: 28% !important;
+    max-width: 220px !important;
+  }
+
+  .hero-right .children {
+    bottom: 3% !important;
+    height: 47% !important;
+  }
+
+  .hero-right .bank-background {
+    top: 60% !important;
+    max-height: 55% !important;
   }
 }
