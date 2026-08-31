@@ -1,351 +1,1784 @@
-/* =========================================================
-   AJUSTE FINAL BANCO LDS 360
-   DISEÑO COMO LA IMAGEN DE REFERENCIA
-   ========================================================= */
+:root{
+  --navy:#071a34;
+  --navy2:#0d294c;
+  --red:#b20d18;
+  --gold:#e4a817;
+  --gold2:#f2bd35;
+  --white:#ffffff;
+  --ink:#10213d;
+  --gray:#555;
+}
 
-/* ---------- PROPORCIÓN GENERAL ---------- */
+/* =========================================================
+   BASE
+========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:#fff;
+  overflow-x:hidden;
+}
+
+img{
+  max-width:100%;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.topbar{
+  width:100%;
+  height:118px;
+  min-height:118px;
+
+  padding:18px 3.2vw;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:var(--navy);
+
+  border-bottom:4px solid var(--gold);
+
+  color:#fff;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  min-width:0;
+}
+
+.school-crest{
+  width:76px;
+  height:86px;
+
+  object-fit:contain;
+  object-position:center;
+
+  flex:0 0 auto;
+}
+
+.school-name{
+  min-width:0;
+}
+
+.school-name strong{
+  display:block;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:31px;
+  line-height:1.05;
+
+  color:#fff;
+
+  white-space:nowrap;
+}
+
+.school-name span{
+  display:block;
+
+  margin-top:7px;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:19px;
+  font-style:italic;
+
+  color:var(--gold2);
+}
+
+.admin-btn{
+  flex:0 0 auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  min-width:250px;
+
+  padding:17px 27px;
+
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:18px;
+
+  background:rgba(255,255,255,.07);
+
+  color:#fff;
+
+  font-size:22px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+}
+
+.admin-btn:hover{
+  background:rgba(255,255,255,.13);
+  transform:translateY(-1px);
+}
+
+.lock{
+  font-size:27px;
+  line-height:1;
+}
+
+
+/* =========================================================
+   PORTADA
+========================================================= */
 
 .hero{
+  width:100%;
+
+  min-height:680px;
+  height:calc(100vh - 118px - 108px);
+
+  display:grid;
+
   grid-template-columns:
     minmax(0,53%)
-    minmax(0,47%) !important;
+    minmax(0,47%);
 
-  overflow:hidden !important;
+  overflow:hidden;
+
+  background:#fff;
 }
 
 
-/* ---------- LADO IZQUIERDO ---------- */
+/* =========================================================
+   LADO IZQUIERDO
+========================================================= */
 
 .hero-left{
-  position:relative !important;
-  overflow:hidden !important;
+  position:relative;
+
+  min-width:0;
+  min-height:680px;
 
   padding:
-    clamp(18px,2.2vh,26px)
-    clamp(22px,3.2vw,48px)
-    12px !important;
+    38px
+    4vw
+    28px;
 
-  /* PUNTOS MÁS SUTILES */
+  overflow:hidden;
+
   background:
     radial-gradient(
-      #d9dde2 1px,
-      transparent 1px
+      circle,
+      #d7dce1 1.15px,
+      transparent 1.3px
     ),
-    #fff !important;
+    #fff;
 
-  background-size:
-    13px 13px !important;
+  background-size:13px 13px;
 }
 
 
-/* Mantener la división diagonal */
-.hero-left:after{
-  z-index:0 !important;
+/* DIAGONAL */
+
+.hero-left::after{
+  content:"";
+
+  position:absolute;
+
+  z-index:0;
+
+  top:0;
+  right:-1px;
+
+  width:0;
+  height:0;
+
+  border-left:
+    90px solid transparent;
+
+  border-top:
+    680px solid var(--navy);
+
+  pointer-events:none;
 }
 
 
-/* El contenido queda delante */
+/* CONTENIDO DEL LADO IZQUIERDO */
+
 .bank-logo,
 .subtitle,
 .intro,
 .actions,
 .security{
-  position:relative !important;
-  z-index:5 !important;
+  position:relative;
+  z-index:2;
 }
 
 
 /* =========================================================
-   BANCO GRANDE DE FONDO
-   ========================================================= */
+   LOGO BANCO LDS 360
+========================================================= */
+
+.bank-logo{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:24px;
+
+  margin:0 auto;
+}
+
+
+/* SÍMBOLO */
+
+.bank-symbol{
+  position:relative;
+
+  width:150px;
+  height:145px;
+
+  flex:0 0 150px;
+}
+
+
+/* TECHO */
+
+.bank-symbol .roof{
+  position:absolute;
+
+  left:7px;
+  top:17px;
+
+  width:136px;
+  height:23px;
+
+  background:var(--navy);
+
+  border-top:
+    7px solid var(--gold);
+
+  clip-path:polygon(
+    50% 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+
+/* ESTRELLA */
+
+.bank-symbol::before{
+  content:"★";
+
+  position:absolute;
+
+  left:50%;
+  top:-5px;
+
+  transform:translateX(-50%);
+
+  color:var(--gold);
+
+  font-size:27px;
+
+  z-index:3;
+}
+
+
+/* COLUMNAS */
+
+.columns{
+  position:absolute;
+
+  left:18px;
+  top:47px;
+
+  width:114px;
+  height:73px;
+
+  display:flex;
+
+  justify-content:space-between;
+  align-items:stretch;
+}
+
+.columns i{
+  display:block;
+
+  width:15px;
+  height:73px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--gold) 0 35%,
+      var(--navy) 35% 65%,
+      var(--gold) 65% 100%
+    );
+
+  border-top:
+    5px solid var(--navy);
+
+  border-bottom:
+    5px solid var(--navy);
+}
+
+
+/* BASE */
+
+.bank-symbol .base{
+  position:absolute;
+
+  left:4px;
+  bottom:8px;
+
+  width:142px;
+  height:13px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      var(--navy) 0 55%,
+      var(--gold) 55% 100%
+    );
+}
+
+
+/* TEXTO BANCO */
+
+.bank-title{
+  min-width:0;
+}
+
+.bank-title h1{
+  margin:0;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:62px;
+  line-height:.84;
+
+  letter-spacing:1px;
+
+  color:var(--navy);
+
+  white-space:nowrap;
+}
+
+.bank-title h1 span{
+  color:var(--red);
+}
+
+.online{
+  margin-top:14px;
+
+  padding-left:12px;
+
+  text-align:center;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:19px;
+
+  letter-spacing:12px;
+
+  color:var(--navy);
+}
+
+
+/* =========================================================
+   SUBTÍTULO
+========================================================= */
+
+.subtitle{
+  margin:
+    15px
+    0
+    17px;
+
+  text-align:center;
+
+  font-size:23px;
+
+  line-height:1.2;
+
+  color:#555;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.intro{
+  margin:
+    0
+    auto
+    22px;
+
+  max-width:650px;
+
+  text-align:center;
+
+  font-size:27px;
+
+  line-height:1.28;
+
+  color:var(--navy);
+
+  font-weight:700;
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.actions{
+  width:100%;
+
+  max-width:650px;
+
+  margin:
+    0
+    auto
+    0;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:20px;
+}
+
+
+/* TARJETA */
+
+.action-card{
+  position:relative;
+
+  height:235px;
+  min-height:235px;
+
+  padding:
+    30px
+    25px
+    50px;
+
+  display:flex;
+  align-items:flex-start;
+
+  gap:20px;
+
+  text-align:left;
+
+  border:0;
+
+  border-radius:25px;
+
+  background:#fff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(0,0,0,.10);
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+.action-card:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 9px 25px
+    rgba(0,0,0,.16);
+}
+
+
+/* ICONOS */
+
+.card-icon{
+  flex:0 0 auto;
+
+  font-size:39px;
+
+  line-height:1;
+
+  font-weight:700;
+}
+
+.qr-icon{
+  color:var(--red);
+}
+
+.keyboard-icon{
+  color:var(--navy);
+}
+
+
+/* CONTENIDO */
+
+.card-content{
+  min-width:0;
+}
+
+.card-content b{
+  display:block;
+
+  font-size:25px;
+
+  line-height:1.02;
+
+  color:var(--navy);
+}
+
+.action-card.qr .card-content b{
+  color:var(--red);
+}
+
+.card-content small{
+  display:block;
+
+  margin-top:17px;
+
+  max-width:190px;
+
+  font-size:14px;
+
+  line-height:1.35;
+
+  color:#555;
+}
+
+
+/* FRANJA INFERIOR */
+
+.action-card::after{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  height:45px;
+
+  background:var(--navy);
+}
+
+.action-card.qr::after{
+  background:var(--red);
+}
+
+
+/* FLECHA */
+
+.arrow{
+  position:absolute;
+
+  z-index:5;
+
+  left:50%;
+  bottom:-1px;
+
+  transform:translate(-50%,50%);
+
+  width:58px;
+  height:58px;
+
+  display:grid;
+  place-items:center;
+
+  border:
+    3px solid #fff;
+
+  border-radius:50%;
+
+  background:var(--navy);
+
+  color:#fff;
+
+  font-size:39px;
+
+  line-height:1;
+
+  font-weight:400;
+
+  pointer-events:none;
+}
+
+.action-card.qr .arrow{
+  background:var(--red);
+}
+
+
+/* =========================================================
+   SEGURIDAD
+========================================================= */
+
+.security{
+  width:100%;
+  max-width:650px;
+
+  margin:
+    18px
+    auto
+    0;
+
+  padding:
+    13px
+    18px;
+
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  border-radius:18px;
+
+  background:#dedfe1;
+
+  color:var(--navy);
+
+  font-size:14px;
+
+  line-height:1.3;
+}
+
+.security-icon{
+  flex:0 0 auto;
+
+  font-size:31px;
+}
+
+
+/* =========================================================
+   LADO DERECHO
+========================================================= */
 
 .hero-right{
-  position:relative !important;
+  position:relative;
 
-  min-width:0 !important;
-  width:100% !important;
-  height:100% !important;
+  min-width:0;
+  min-height:680px;
 
-  overflow:hidden !important;
-}
+  overflow:hidden;
 
-
-/* IMAGEN DEL BANCO */
-
-.bank-background{
-  position:absolute !important;
-
-  display:block !important;
-
-  z-index:1 !important;
-
-  width:88% !important;
-  height:auto !important;
-
-  max-width:none !important;
-  max-height:none !important;
-
-  left:50% !important;
-  top:9% !important;
-
-  transform:translateX(-50%) !important;
-
-  object-fit:contain !important;
-  object-position:center center !important;
-
-  opacity:1 !important;
-
-  pointer-events:none !important;
+  background:
+    linear-gradient(
+      145deg,
+      #12395f 0%,
+      #0b2b4d 48%,
+      #061a35 100%
+    );
 }
 
 
 /* =========================================================
-   LÍNEAS DORADAS
-   ========================================================= */
+   BANCO DE FONDO
+========================================================= */
+
+.bank-background{
+  position:absolute;
+
+  z-index:1;
+
+  display:block;
+
+  width:88%;
+  height:auto;
+
+  max-width:none;
+
+  left:50%;
+  top:8%;
+
+  transform:
+    translateX(-50%);
+
+  object-fit:contain;
+  object-position:center center;
+
+  opacity:1;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   LÍNEAS DECORATIVAS
+========================================================= */
 
 .decorative-line{
-  position:absolute !important;
+  position:absolute;
 
-  inset:0 !important;
+  inset:0;
 
-  z-index:4 !important;
+  z-index:6;
 
-  pointer-events:none !important;
+  pointer-events:none;
+
+  overflow:hidden;
+}
+
+.decorative-line::before,
+.decorative-line::after{
+  content:"";
+
+  position:absolute;
+
+  width:2px;
+
+  height:145%;
+
+  background:var(--gold);
+
+  transform:rotate(36deg);
+
+  opacity:.95;
+}
+
+.decorative-line::before{
+  right:9%;
+  top:-28%;
+}
+
+.decorative-line::after{
+  left:7%;
+  bottom:-30%;
 }
 
 
 /* =========================================================
    PROFESORA
-   ========================================================= */
+========================================================= */
 
 .teacher-img{
-  position:absolute !important;
+  position:absolute;
 
-  z-index:3 !important;
+  z-index:3;
 
-  top:6% !important;
-  right:50% !important;
+  display:block;
 
-  transform:translateX(50%) !important;
+  width:255px;
 
-  width:min(255px,36%) !important;
+  max-width:40%;
+  max-height:65%;
 
-  height:auto !important;
+  height:auto;
 
-  max-width:none !important;
-  max-height:64% !important;
+  left:50%;
+  top:7%;
 
-  object-fit:contain !important;
-  object-position:center top !important;
+  transform:
+    translateX(-50%);
 
-  opacity:1 !important;
+  object-fit:contain;
+  object-position:center top;
+
+  opacity:1;
+
+  pointer-events:none;
 }
 
 
 /* =========================================================
    NIÑOS
-   ========================================================= */
+========================================================= */
 
 .children{
-  position:absolute !important;
+  position:absolute;
 
-  z-index:5 !important;
+  z-index:5;
 
-  left:4% !important;
-  right:4% !important;
+  left:3%;
+  right:3%;
 
-  bottom:54px !important;
+  bottom:46px;
 
-  height:65% !important;
+  height:61%;
 
-  display:flex !important;
+  display:flex;
 
-  align-items:flex-end !important;
-  justify-content:center !important;
+  align-items:flex-end;
+  justify-content:center;
 
-  gap:0 !important;
+  gap:0;
+
+  pointer-events:none;
 }
-
 
 .boy-img,
 .girl-img{
-  display:block !important;
+  display:block;
 
-  width:auto !important;
-  height:100% !important;
+  width:auto;
+  height:100%;
 
-  object-fit:contain !important;
-  object-position:center bottom !important;
+  max-width:48%;
+
+  object-fit:contain;
+  object-position:center bottom;
 
   filter:
     drop-shadow(
-      0 9px 6px
+      0 9px 7px
       rgba(0,0,0,.42)
-    ) !important;
+    );
 }
-
 
 .boy-img{
-  max-width:48% !important;
-
-  margin-right:-8px !important;
+  margin-right:-8px;
 }
 
-
 .girl-img{
-  max-width:45% !important;
-
-  margin-left:-8px !important;
+  margin-left:-8px;
 }
 
 
 /* =========================================================
    MINI LOGO
-   ========================================================= */
+========================================================= */
 
 .mini-brand{
-  position:absolute !important;
+  position:absolute;
 
-  z-index:10 !important;
+  z-index:10;
 
-  right:4% !important;
-  bottom:8px !important;
+  right:4%;
+  bottom:13px;
+
+  text-align:left;
+
+  color:#fff;
+}
+
+.mini-bank{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+}
+
+.mini-symbol{
+  display:flex;
+
+  align-items:flex-end;
+
+  gap:3px;
+
+  height:28px;
+}
+
+.mini-symbol div{
+  display:block;
+
+  width:7px;
+  height:22px;
+
+  background:var(--gold);
+}
+
+.mini-bank strong{
+  display:block;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:21px;
+
+  line-height:.9;
+}
+
+.mini-bank span{
+  display:block;
+
+  margin-top:3px;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:20px;
+  font-weight:700;
+
+  color:var(--gold2);
+}
+
+.mini-brand small{
+  display:block;
+
+  margin-top:4px;
+
+  font-size:7px;
+
+  white-space:nowrap;
 }
 
 
 /* =========================================================
-   ESCRITORIO
-   ========================================================= */
+   PIE
+========================================================= */
 
-@media(
-  min-width:851px
-){
+footer{
+  width:100%;
 
-  .hero{
-    grid-template-columns:
-      minmax(0,53%)
-      minmax(0,47%) !important;
-  }
+  height:108px;
+  min-height:108px;
 
-  .bank-background{
-    width:88% !important;
-    top:8% !important;
-  }
+  padding:
+    15px
+    3vw;
 
-  .teacher-img{
-    width:min(255px,36%) !important;
-    top:5% !important;
-  }
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-  .children{
-    height:64% !important;
-    bottom:54px !important;
-  }
+  background:var(--navy);
 
+  border-top:4px solid var(--gold);
+
+  color:#fff;
+}
+
+.footer-school{
+  display:flex;
+  align-items:center;
+
+  gap:14px;
+}
+
+.footer-school img{
+  width:65px;
+  height:78px;
+
+  object-fit:contain;
+}
+
+.footer-school strong{
+  display:block;
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:21px;
+}
+
+.footer-school span{
+  display:block;
+
+  margin-top:4px;
+
+  font-size:14px;
+
+  line-height:1.15;
+}
+
+.values{
+  display:flex;
+  align-items:center;
+
+  gap:38px;
+}
+
+.values > div{
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+  white-space:nowrap;
+
+  font-size:17px;
+}
+
+.values b{
+  font-size:28px;
+
+  line-height:1;
+}
+
+.values > div:last-child b{
+  color:var(--gold);
 }
 
 
 /* =========================================================
-   PANTALLAS GRANDES
-   ========================================================= */
+   MODALES
+========================================================= */
 
-@media(
-  min-width:1200px
-){
+.modal{
+  position:fixed;
 
-  .bank-background{
-    width:91% !important;
-    top:7% !important;
-  }
+  inset:0;
 
-  .teacher-img{
-    width:255px !important;
-    top:5% !important;
-  }
+  z-index:1000;
 
-  .children{
-    height:66% !important;
-    bottom:54px !important;
-  }
+  display:flex;
 
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(0,0,0,.65);
 }
 
+.modal.hidden{
+  display:none;
+}
 
-/* =========================================================
-   PANTALLAS CON POCA ALTURA
-   ========================================================= */
+.modal-card{
+  position:relative;
 
-@media(
-  min-width:851px
-) and (
-  max-height:720px
-){
+  width:min(620px,100%);
 
-  .hero{
-    grid-template-columns:
-      minmax(0,53%)
-      minmax(0,47%) !important;
-  }
+  max-height:90vh;
 
-  .bank-background{
-    width:86% !important;
-    top:7% !important;
-  }
+  overflow:auto;
 
-  .teacher-img{
-    width:215px !important;
-    top:4% !important;
-  }
+  padding:30px;
 
-  .children{
-    height:60% !important;
-    bottom:48px !important;
-  }
+  border-radius:20px;
 
+  background:#fff;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.35);
+}
+
+.modal-card.small{
+  width:min(430px,100%);
+}
+
+.modal-card.profile{
+  width:min(800px,100%);
+}
+
+.close{
+  position:absolute;
+
+  right:15px;
+  top:10px;
+
+  width:40px;
+  height:40px;
+
+  border:0;
+
+  background:transparent;
+
+  color:#333;
+
+  font-size:32px;
+
+  cursor:pointer;
+}
+
+.modal-card h2{
+  margin:
+    0
+    0
+    10px;
+
+  color:var(--navy);
+
+  font-family:Georgia,
+    "Times New Roman",
+    serif;
+}
+
+.modal-card p{
+  color:#555;
+}
+
+#reader{
+  width:100%;
+
+  max-width:500px;
+
+  margin:20px auto;
+}
+
+.modal-card input{
+  width:100%;
+
+  margin:
+    15px
+    0;
+
+  padding:13px 15px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:10px;
+
+  outline:none;
+}
+
+.modal-card input:focus{
+  border-color:var(--navy);
+}
+
+.primary{
+  width:100%;
+
+  padding:13px 18px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:var(--navy);
+
+  color:#fff;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.status{
+  margin-top:12px;
+
+  min-height:20px;
 }
 
 
 /* =========================================================
    TABLET
-   ========================================================= */
+========================================================= */
 
-@media(max-width:850px){
+@media(max-width:1100px){
+
+  .topbar{
+    height:105px;
+    min-height:105px;
+  }
+
+  .school-crest{
+    width:65px;
+    height:73px;
+  }
+
+  .school-name strong{
+    font-size:26px;
+  }
+
+  .school-name span{
+    font-size:16px;
+  }
+
+  .admin-btn{
+    min-width:210px;
+    padding:14px 20px;
+    font-size:19px;
+  }
 
   .hero{
-    grid-template-columns:1fr !important;
+    height:auto;
+    min-height:650px;
+  }
+
+  .hero-left{
+    min-height:650px;
+    padding:
+      32px
+      25px
+      25px;
+  }
+
+  .bank-symbol{
+    width:125px;
+    height:125px;
+    flex-basis:125px;
+  }
+
+  .bank-symbol .roof{
+    width:114px;
+  }
+
+  .columns{
+    width:96px;
+    left:15px;
+  }
+
+  .bank-symbol .base{
+    width:120px;
+  }
+
+  .bank-title h1{
+    font-size:51px;
+  }
+
+  .online{
+    font-size:16px;
+    letter-spacing:9px;
+  }
+
+  .subtitle{
+    font-size:20px;
+  }
+
+  .intro{
+    font-size:22px;
+  }
+
+  .action-card{
+    height:205px;
+    min-height:205px;
+    padding:24px 18px 45px;
+  }
+
+  .card-content b{
+    font-size:21px;
+  }
+
+  .teacher-img{
+    width:225px;
+  }
+
+  .children{
+    height:57%;
+  }
+
+  .values{
+    gap:20px;
+  }
+
+  .values > div{
+    font-size:14px;
+  }
+}
+
+
+/* =========================================================
+   ALTURA PEQUEÑA
+========================================================= */
+
+@media(
+  min-width:851px
+) and (max-height:760px){
+
+  .topbar{
+    height:95px;
+    min-height:95px;
+  }
+
+  .school-crest{
+    width:58px;
+    height:65px;
+  }
+
+  .school-name strong{
+    font-size:24px;
+  }
+
+  .school-name span{
+    font-size:15px;
+  }
+
+  .admin-btn{
+    padding:12px 20px;
+    font-size:18px;
+  }
+
+  .hero{
+    min-height:560px;
+    height:calc(100vh - 95px - 90px);
+  }
+
+  .hero-left,
+  .hero-right{
+    min-height:560px;
+  }
+
+  .hero-left{
+    padding:
+      25px
+      3vw
+      18px;
+  }
+
+  .bank-symbol{
+    transform:scale(.82);
+    transform-origin:center;
+    margin-right:-15px;
+  }
+
+  .bank-title h1{
+    font-size:47px;
+  }
+
+  .subtitle{
+    margin:8px 0 12px;
+    font-size:18px;
+  }
+
+  .intro{
+    margin-bottom:14px;
+    font-size:19px;
+  }
+
+  .actions{
+    gap:12px;
+  }
+
+  .action-card{
+    height:175px;
+    min-height:175px;
+    padding:19px 15px 42px;
+  }
+
+  .card-icon{
+    font-size:31px;
+  }
+
+  .card-content b{
+    font-size:18px;
+  }
+
+  .card-content small{
+    margin-top:10px;
+    font-size:11px;
+  }
+
+  .security{
+    margin-top:10px;
+    padding:8px 12px;
+    font-size:11px;
+  }
+
+  .security-icon{
+    font-size:22px;
   }
 
   .bank-background{
-    width:88% !important;
-    top:8% !important;
+    width:87%;
+    top:7%;
   }
 
+  .teacher-img{
+    width:205px;
+    top:4%;
+  }
+
+  .children{
+    height:59%;
+    bottom:39px;
+  }
+
+  footer{
+    height:90px;
+    min-height:90px;
+  }
+
+  .footer-school img{
+    width:52px;
+    height:62px;
+  }
+
+  .footer-school strong{
+    font-size:17px;
+  }
+
+  .footer-school span{
+    font-size:11px;
+  }
+
+  .values{
+    gap:18px;
+  }
+
+  .values > div{
+    font-size:12px;
+  }
+
+  .values b{
+    font-size:23px;
+  }
 }
 
 
 /* =========================================================
    MÓVIL
-   ========================================================= */
+========================================================= */
 
-@media(max-width:600px){
+@media(max-width:850px){
+
+  .topbar{
+    height:82px;
+    min-height:82px;
+
+    padding:
+      8px
+      14px;
+  }
+
+  .brand{
+    gap:9px;
+  }
+
+  .school-crest{
+    width:45px;
+    height:56px;
+  }
+
+  .school-name strong{
+    font-size:15px;
+    white-space:normal;
+  }
+
+  .school-name span{
+    margin-top:3px;
+    font-size:10px;
+  }
+
+  .admin-btn{
+    min-width:auto;
+
+    padding:
+      9px
+      11px;
+
+    border-radius:11px;
+
+    font-size:11px;
+  }
+
+  .lock{
+    font-size:16px;
+  }
+
+  .hero{
+    display:flex;
+    flex-direction:column;
+
+    height:auto;
+
+    min-height:0;
+  }
 
   .hero-left{
-    background-size:13px 13px !important;
+    min-height:0;
+
+    padding:
+      28px
+      16px
+      25px;
+  }
+
+  .hero-left::after{
+    display:none;
+  }
+
+  .bank-logo{
+    gap:7px;
+  }
+
+  .bank-symbol{
+    width:70px;
+    height:68px;
+    flex-basis:70px;
+  }
+
+  .bank-symbol .roof{
+    left:3px;
+    top:10px;
+    width:64px;
+    height:15px;
+    border-top-width:4px;
+  }
+
+  .bank-symbol::before{
+    top:-5px;
+    font-size:16px;
+  }
+
+  .columns{
+    left:9px;
+    top:29px;
+    width:52px;
+    height:31px;
+  }
+
+  .columns i{
+    width:7px;
+    height:31px;
+    border-top-width:2px;
+    border-bottom-width:2px;
+  }
+
+  .bank-symbol .base{
+    left:2px;
+    bottom:3px;
+    width:66px;
+    height:7px;
+  }
+
+  .bank-title h1{
+    font-size:31px;
+    line-height:.88;
+  }
+
+  .online{
+    margin-top:7px;
+    padding-left:4px;
+    font-size:10px;
+    letter-spacing:5px;
+  }
+
+  .subtitle{
+    margin:
+      12px
+      0
+      14px;
+
+    font-size:16px;
+  }
+
+  .intro{
+    margin-bottom:18px;
+
+    font-size:17px;
+
+    line-height:1.3;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+
+    gap:13px;
+
+    max-width:100%;
+  }
+
+  .action-card{
+    height:150px;
+    min-height:150px;
+
+    padding:
+      20px
+      16px
+      43px;
+
+    border-radius:18px;
+  }
+
+  .card-icon{
+    font-size:30px;
+  }
+
+  .card-content b{
+    font-size:20px;
+  }
+
+  .card-content small{
+    margin-top:9px;
+    font-size:11px;
+  }
+
+  .security{
+    max-width:100%;
+
+    margin-top:13px;
+
+    font-size:11px;
+  }
+
+  .hero-right{
+    min-height:500px;
+    height:500px;
   }
 
   .bank-background{
-    width:92% !important;
-    top:8% !important;
+    width:88%;
+    top:8%;
   }
 
   .teacher-img{
-    width:230px !important;
-    top:4% !important;
+    width:220px;
+    max-width:50%;
+    max-height:78%;
+
+    top:5%;
   }
 
   .children{
-    height:60% !important;
-    bottom:70px !important;
+    height:61%;
+    bottom:38px;
   }
 
+  footer{
+    height:auto;
+    min-height:95px;
+
+    padding:
+      12px
+      14px;
+
+    gap:15px;
+
+    flex-direction:column;
+  }
+
+  .values{
+    width:100%;
+
+    justify-content:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+  }
+
+  .values > div{
+    font-size:12px;
+  }
+
+  .values b{
+    font-size:22px;
+  }
+
+  .footer-school{
+    align-self:flex-start;
+  }
+
+  .footer-school img{
+    width:45px;
+    height:54px;
+  }
+
+  .footer-school strong{
+    font-size:16px;
+  }
+
+  .footer-school span{
+    font-size:10px;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL PEQUEÑO
+========================================================= */
+
+@media(max-width:500px){
+
+  .school-name strong{
+    font-size:13px;
+  }
+
+  .school-name span{
+    font-size:9px;
+  }
+
+  .admin-btn{
+    padding:8px;
+    font-size:10px;
+  }
+
+  .bank-title h1{
+    font-size:27px;
+  }
+
+  .bank-symbol{
+    transform:scale(.88);
+    transform-origin:left center;
+
+    margin-right:-7px;
+  }
+
+  .subtitle{
+    font-size:15px;
+  }
+
+  .intro{
+    font-size:16px;
+  }
+
+  .hero-right{
+    min-height:440px;
+    height:440px;
+  }
+
+  .bank-background{
+    width:92%;
+    top:9%;
+  }
+
+  .teacher-img{
+    width:190px;
+  }
+
+  .children{
+    height:59%;
+    bottom:34px;
+  }
+
+  .mini-brand{
+    right:3%;
+    bottom:8px;
+  }
+
+  .mini-bank strong{
+    font-size:16px;
+  }
+
+  .mini-bank span{
+    font-size:15px;
+  }
+
+  .mini-brand small{
+    font-size:5px;
+  }
 }
