@@ -1,20 +1,16 @@
 /* =========================================================
-   BANCO LDS 360 - STYLES.CSS
+   BANCO LDS 360
+   ESTILOS PRINCIPALES
    ========================================================= */
 
 :root {
-  --navy: #071a34;
-  --navy-light: #0b2547;
-  --red: #b80f1a;
-  --gold: #f0b323;
+  --navy: #061a35;
+  --navy2: #09294b;
+  --red: #b80d18;
+  --gold: #f2b51d;
   --white: #ffffff;
-  --gray: #dedfe2;
+  --gray: #e1e2e4;
 }
-
-
-/* =========================================================
-   RESET
-   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -41,8 +37,8 @@ body {
    ========================================================= */
 
 .topbar {
+  height: 124px;
   width: 100%;
-  height: 118px;
 
   background: var(--navy);
 
@@ -50,23 +46,24 @@ body {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 4%;
+  padding: 0 3.2%;
 
   border-bottom: 3px solid var(--gold);
 
   position: relative;
-  z-index: 20;
+  z-index: 30;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .school-crest {
-  width: 68px;
-  height: 82px;
+  width: 72px;
+  height: 88px;
+
   object-fit: contain;
 }
 
@@ -80,21 +77,21 @@ body {
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(25px, 2vw, 37px);
+  font-size: 34px;
 
   line-height: 1;
 }
 
 .school-name span {
-  margin-top: 7px;
-
   color: var(--gold);
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(15px, 1.2vw, 21px);
+  font-size: 20px;
 
   font-style: italic;
+
+  margin-top: 8px;
 }
 
 
@@ -103,31 +100,31 @@ body {
    ========================================================= */
 
 .admin-btn {
-  min-width: 250px;
-  height: 62px;
+  min-width: 275px;
+  height: 70px;
 
-  border-radius: 18px;
+  border-radius: 19px;
 
   border: 1px solid rgba(255,255,255,.28);
 
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.06);
 
   color: white;
 
-  font-size: 21px;
+  font-size: 23px;
   font-weight: bold;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 12px;
+  gap: 13px;
 
   cursor: pointer;
 }
 
 .lock {
-  font-size: 25px;
+  font-size: 28px;
 }
 
 
@@ -138,13 +135,13 @@ body {
 .hero {
   width: 100%;
 
-  height: calc(100vh - 118px - 124px);
+  height: calc(100vh - 248px);
 
-  min-height: 600px;
+  min-height: 650px;
 
   display: grid;
 
-  grid-template-columns: 58% 42%;
+  grid-template-columns: 52% 48%;
 
   position: relative;
 }
@@ -157,17 +154,19 @@ body {
 .hero-left {
   position: relative;
 
+  z-index: 10;
+
   background-color: white;
 
   background-image:
     radial-gradient(
-      #c9c9c9 1px,
+      #c7c7c7 1px,
       transparent 1px
     );
 
   background-size: 9px 9px;
 
-  padding: 35px 6% 20px;
+  padding: 40px 5% 22px;
 
   display: flex;
 
@@ -176,8 +175,6 @@ body {
   align-items: center;
 
   overflow: hidden;
-
-  z-index: 5;
 }
 
 
@@ -194,14 +191,12 @@ body {
 
   justify-content: center;
 
-  gap: 25px;
-
-  margin-top: 0;
+  gap: 28px;
 }
 
 .bank-symbol {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
 
   position: relative;
 
@@ -211,39 +206,50 @@ body {
 .bank-symbol .roof {
   position: absolute;
 
-  top: 10px;
-  left: 7px;
+  left: 5px;
+  top: 14px;
 
-  width: 96px;
-  height: 10px;
+  width: 110px;
+  height: 13px;
 
   background: var(--navy);
 }
 
-.bank-symbol .roof::after {
+.bank-symbol .roof::before {
   content: "";
 
   position: absolute;
 
-  width: 8px;
-  height: 8px;
+  left: 43px;
+  top: -18px;
+
+  width: 15px;
+  height: 15px;
 
   background: var(--gold);
 
-  border-radius: 50%;
-
-  top: -12px;
-  left: 44px;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 38%,
+    69% 60%,
+    79% 100%,
+    50% 76%,
+    21% 100%,
+    31% 60%,
+    2% 38%,
+    39% 35%
+  );
 }
 
 .columns {
   position: absolute;
 
-  top: 32px;
-  left: 15px;
+  left: 13px;
+  top: 43px;
 
-  width: 82px;
-  height: 52px;
+  width: 94px;
+  height: 57px;
 
   display: flex;
 
@@ -253,10 +259,10 @@ body {
 }
 
 .columns i {
-  width: 11px;
-  height: 50px;
-
   display: block;
+
+  width: 12px;
+  height: 55px;
 
   background:
     linear-gradient(
@@ -270,28 +276,28 @@ body {
 .bank-symbol .base {
   position: absolute;
 
-  left: 4px;
-  bottom: 10px;
+  left: 2px;
+  bottom: 5px;
 
-  width: 104px;
-  height: 9px;
+  width: 116px;
+  height: 12px;
 
-  background: var(--gold);
+  background: var(--navy);
 
-  border-top: 4px solid var(--navy);
+  border-bottom: 5px solid var(--gold);
 }
 
 
 /* =========================================================
-   TÍTULO BANCO
+   TEXTO BANCO
    ========================================================= */
 
 .bank-title h1 {
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(58px, 5vw, 88px);
+  font-size: clamp(62px, 5vw, 82px);
 
-  line-height: .84;
+  line-height: .82;
 
   color: var(--navy);
 
@@ -309,7 +315,7 @@ body {
 
   color: var(--navy);
 
-  font-size: clamp(15px, 1.3vw, 22px);
+  font-size: 19px;
 
   letter-spacing: 10px;
 
@@ -322,28 +328,28 @@ body {
    ========================================================= */
 
 .subtitle {
-  margin-top: 22px;
+  margin-top: 20px;
 
-  color: #444;
+  color: #4c4c4c;
 
-  font-size: clamp(19px, 1.4vw, 26px);
+  font-size: 25px;
 
   text-align: center;
 }
 
 
 /* =========================================================
-   INTRO
+   INTRODUCCIÓN
    ========================================================= */
 
 .intro {
-  margin-top: 10px;
+  margin-top: 12px;
 
   color: var(--navy);
 
-  font-size: clamp(19px, 1.45vw, 27px);
+  font-size: 26px;
 
-  line-height: 1.25;
+  line-height: 1.35;
 
   text-align: center;
 
@@ -358,30 +364,30 @@ body {
 .actions {
   width: 100%;
 
-  max-width: 780px;
+  max-width: 720px;
 
-  margin-top: 22px;
+  margin-top: 23px;
 
   display: grid;
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 18px;
+  gap: 24px;
 }
 
 .action-card {
-  height: 176px;
+  height: 240px;
 
   position: relative;
 
   border: none;
 
-  border-radius: 24px;
+  border-radius: 23px;
 
   background: white;
 
   box-shadow:
-    0 7px 20px rgba(0,0,0,.14);
+    0 8px 25px rgba(0,0,0,.15);
 
   overflow: hidden;
 
@@ -389,33 +395,24 @@ body {
 
   cursor: pointer;
 
-  padding: 24px 22px 48px;
+  padding: 25px;
 }
 
 .action-card.qr {
-  border-bottom: 42px solid var(--red);
+  border-bottom: 46px solid var(--red);
 }
 
 .action-card.code {
-  border-bottom: 42px solid var(--navy);
+  border-bottom: 46px solid var(--navy);
 }
-
-.action-card:hover {
-  transform: translateY(-2px);
-}
-
-
-/* =========================================================
-   ICONOS
-   ========================================================= */
 
 .card-icon {
   position: absolute;
 
-  left: 25px;
-  top: 27px;
+  left: 27px;
+  top: 33px;
 
-  font-size: 35px;
+  font-size: 39px;
 
   font-weight: bold;
 }
@@ -428,11 +425,6 @@ body {
   color: var(--navy);
 }
 
-
-/* =========================================================
-   CONTENIDO BOTONES
-   ========================================================= */
-
 .card-content {
   margin-left: 70px;
 }
@@ -442,9 +434,9 @@ body {
 
   color: var(--red);
 
-  font-size: clamp(19px, 1.45vw, 26px);
+  font-size: 25px;
 
-  line-height: .95;
+  line-height: .98;
 }
 
 .action-card.code .card-content b {
@@ -454,13 +446,13 @@ body {
 .card-content small {
   display: block;
 
-  margin-top: 11px;
+  margin-top: 16px;
 
-  color: #555;
+  color: #4d4d4d;
 
-  font-size: clamp(13px, .95vw, 16px);
+  font-size: 16px;
 
-  line-height: 1.15;
+  line-height: 1.3;
 }
 
 
@@ -471,14 +463,14 @@ body {
 .arrow {
   position: absolute;
 
-  bottom: -27px;
+  bottom: -30px;
 
   left: 50%;
 
   transform: translateX(-50%);
 
-  width: 46px;
-  height: 46px;
+  width: 55px;
+  height: 55px;
 
   border-radius: 50%;
 
@@ -492,9 +484,9 @@ body {
 
   justify-content: center;
 
-  font-size: 38px;
+  font-size: 42px;
 
-  z-index: 3;
+  z-index: 5;
 }
 
 
@@ -505,13 +497,13 @@ body {
 .security {
   width: 100%;
 
-  max-width: 780px;
+  max-width: 720px;
 
-  min-height: 66px;
+  min-height: 72px;
 
-  margin-top: 13px;
+  margin-top: 18px;
 
-  border-radius: 19px;
+  border-radius: 20px;
 
   background: var(--gray);
 
@@ -521,17 +513,17 @@ body {
 
   gap: 18px;
 
-  padding: 10px 23px;
+  padding: 12px 25px;
 
   color: var(--navy);
 
-  font-size: clamp(13px, 1vw, 17px);
+  font-size: 16px;
 
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .security-icon {
-  font-size: 30px;
+  font-size: 32px;
 
   flex-shrink: 0;
 }
@@ -549,50 +541,13 @@ body {
   background:
     linear-gradient(
       135deg,
-      #0b294b 0%,
-      #071a34 100%
+      #0b2c4f,
+      #061a35
     );
 
   border-left: 1px solid rgba(255,255,255,.2);
 
   isolation: isolate;
-}
-
-
-/* =========================================================
-   BANCO DE FONDO
-   ========================================================= */
-
-.bank-background {
-  position: absolute;
-
-  z-index: 1;
-
-  width: 72%;
-
-  max-width: 560px;
-
-  height: auto;
-
-  left: 50%;
-
-  /*
-     EL BANCO SUBE
-     para que se vea detrás
-     de la profesora y los niños.
-  */
-
-  top: 48%;
-
-  transform: translate(-50%, -50%);
-
-  opacity: .40;
-
-  object-fit: contain;
-
-  pointer-events: none;
-
-  user-select: none;
 }
 
 
@@ -603,21 +558,21 @@ body {
 .decorative-line {
   position: absolute;
 
-  z-index: 2;
+  z-index: 1;
 
   width: 3px;
 
-  height: 150%;
+  height: 160%;
 
   background: var(--gold);
 
-  opacity: .75;
+  opacity: .8;
 
   transform: rotate(37deg);
 
-  right: 21%;
+  right: 22%;
 
-  top: -20%;
+  top: -25%;
 }
 
 .hero-right::after {
@@ -625,23 +580,58 @@ body {
 
   position: absolute;
 
-  z-index: 2;
+  z-index: 1;
 
   width: 3px;
 
-  height: 150%;
+  height: 160%;
 
   background: var(--gold);
 
-  opacity: .75;
+  opacity: .8;
 
   transform: rotate(37deg);
 
-  right: -8%;
+  right: -9%;
 
   top: 20%;
+}
+
+
+/* =========================================================
+   BANCO DE FONDO
+   ========================================================= */
+
+/*
+   IMPORTANTE:
+   Esta clase corresponde a la imagen grande
+   del banco que debe estar DETRÁS.
+*/
+
+.bank-background {
+  position: absolute;
+
+  z-index: 2;
+
+  width: 94%;
+
+  max-width: 720px;
+
+  height: auto;
+
+  left: 50%;
+
+  top: 48%;
+
+  transform: translate(-50%, -50%);
+
+  object-fit: contain;
+
+  opacity: .95;
 
   pointer-events: none;
+
+  user-select: none;
 }
 
 
@@ -649,33 +639,20 @@ body {
    PROFESORA
    ========================================================= */
 
-/*
-   AQUÍ ESTÁ EL CAMBIO PRINCIPAL.
-
-   La profesora NO debe ocupar casi toda
-   la pantalla.
-
-   Queda grande, pero dejando espacio
-   para los niños y para que se vea
-   el banco detrás.
-*/
-
 .teacher-img {
   position: absolute;
 
-  z-index: 4;
+  z-index: 5;
 
-  width: 42%;
+  width: 43%;
 
-  max-width: 350px;
-
-  min-width: 210px;
+  max-width: 355px;
 
   height: auto;
 
   left: 50%;
 
-  top: 4%;
+  top: 8%;
 
   transform: translateX(-50%);
 
@@ -687,7 +664,7 @@ body {
 
   filter:
     drop-shadow(
-      0 9px 11px rgba(0,0,0,.35)
+      0 9px 10px rgba(0,0,0,.35)
     );
 }
 
@@ -699,17 +676,17 @@ body {
 .children {
   position: absolute;
 
-  z-index: 5;
+  z-index: 6;
 
   left: 50%;
 
-  bottom: 5%;
+  bottom: 7%;
 
   transform: translateX(-50%);
 
-  width: 78%;
+  width: 68%;
 
-  height: 57%;
+  height: 58%;
 
   display: flex;
 
@@ -723,9 +700,9 @@ body {
 }
 
 .children img {
-  width: 42%;
+  width: 47%;
 
-  max-width: 280px;
+  max-width: 275px;
 
   height: auto;
 
@@ -733,17 +710,12 @@ body {
 
   filter:
     drop-shadow(
-      0 9px 10px rgba(0,0,0,.35)
+      0 9px 10px rgba(0,0,0,.4)
     );
 }
 
-
-/* =========================================================
-   NIÑOS - POSICIONES
-   ========================================================= */
-
 .boy-img {
-  transform: translateY(2%);
+  transform: translateY(1%);
 }
 
 .girl-img {
@@ -752,17 +724,17 @@ body {
 
 
 /* =========================================================
-   MINI LOGO
+   MINI LOGO BANCO
    ========================================================= */
 
 .mini-brand {
   position: absolute;
 
-  z-index: 10;
+  z-index: 15;
 
   right: 4%;
 
-  bottom: 3%;
+  bottom: 5%;
 
   color: white;
 
@@ -782,12 +754,12 @@ body {
 
   align-items: center;
 
-  gap: 10px;
+  gap: 12px;
 }
 
 .mini-symbol {
-  width: 45px;
-  height: 44px;
+  width: 52px;
+  height: 48px;
 
   display: flex;
 
@@ -801,9 +773,9 @@ body {
 }
 
 .mini-symbol div {
-  width: 7px;
+  width: 8px;
 
-  height: 30px;
+  height: 32px;
 
   background: var(--gold);
 
@@ -817,7 +789,7 @@ body {
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 24px;
+  font-size: 29px;
 
   line-height: 1;
 }
@@ -829,7 +801,7 @@ body {
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 25px;
+  font-size: 30px;
 
   font-weight: 700;
 
@@ -864,29 +836,26 @@ footer {
 
   justify-content: space-between;
 
-  padding: 15px 4%;
+  padding: 15px 3.2%;
 
   position: relative;
 
-  z-index: 20;
+  z-index: 30;
+
+  border-top: 3px solid var(--gold);
 }
-
-
-/* =========================================================
-   FOOTER COLEGIO
-   ========================================================= */
 
 .footer-school {
   display: flex;
 
   align-items: center;
 
-  gap: 16px;
+  gap: 18px;
 }
 
 .footer-school img {
-  width: 64px;
-  height: 74px;
+  width: 70px;
+  height: 80px;
 
   object-fit: contain;
 }
@@ -900,15 +869,15 @@ footer {
 .footer-school strong {
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: clamp(18px, 1.4vw, 25px);
+  font-size: 25px;
 }
 
 .footer-school span {
   margin-top: 5px;
 
-  font-size: clamp(12px, .95vw, 16px);
+  font-size: 15px;
 
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 
@@ -921,7 +890,7 @@ footer {
 
   align-items: center;
 
-  gap: clamp(20px, 3vw, 50px);
+  gap: 38px;
 }
 
 .values > div {
@@ -929,15 +898,15 @@ footer {
 
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
-  font-size: clamp(14px, 1.1vw, 19px);
+  font-size: 18px;
 
   white-space: nowrap;
 }
 
 .values b {
-  font-size: 27px;
+  font-size: 29px;
 }
 
 
@@ -1075,7 +1044,7 @@ footer {
 
 
 /* =========================================================
-   BOTÓN MODAL
+   BOTÓN
    ========================================================= */
 
 .primary {
@@ -1115,7 +1084,7 @@ footer {
 
 
 /* =========================================================
-   QR
+   LECTOR QR
    ========================================================= */
 
 #reader {
@@ -1128,171 +1097,42 @@ footer {
 
 
 /* =========================================================
-   PERFIL
-   ========================================================= */
-
-#profileContent {
-  width: 100%;
-}
-
-
-/* =========================================================
-   PANTALLAS GRANDES
-   ========================================================= */
-
-@media (min-width: 1500px) {
-
-  .teacher-img {
-    width: 40%;
-    max-width: 390px;
-
-    top: 3%;
-  }
-
-  .children {
-    width: 76%;
-
-    bottom: 5%;
-  }
-
-  .children img {
-    max-width: 300px;
-  }
-
-  .bank-background {
-    width: 74%;
-
-    max-width: 590px;
-
-    top: 48%;
-  }
-}
-
-
-/* =========================================================
-   LAPTOP
-   ========================================================= */
-
-@media (max-width: 1200px) {
-
-  .topbar {
-    height: 105px;
-  }
-
-  .hero {
-    height: calc(100vh - 105px - 110px);
-  }
-
-  footer {
-    height: 110px;
-  }
-
-  .school-crest {
-    width: 58px;
-    height: 70px;
-  }
-
-  .admin-btn {
-    min-width: 215px;
-
-    height: 56px;
-
-    font-size: 18px;
-  }
-
-  .hero-left {
-    padding-left: 4%;
-    padding-right: 4%;
-  }
-
-  .bank-logo {
-    gap: 15px;
-  }
-
-  .bank-symbol {
-    transform: scale(.85);
-  }
-
-  .actions {
-    gap: 14px;
-  }
-
-  .action-card {
-    height: 165px;
-  }
-
-  .teacher-img {
-    width: 40%;
-
-    max-width: 300px;
-  }
-
-  .children {
-    width: 80%;
-  }
-
-  .children img {
-    max-width: 245px;
-  }
-}
-
-
-/* =========================================================
    TABLET
    ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
 
-  .topbar {
-    min-height: 105px;
-
-    height: auto;
-
-    padding: 14px 4%;
+  .school-name strong {
+    font-size: 28px;
   }
 
-  .hero {
-    height: auto;
-
-    grid-template-columns: 1fr;
+  .admin-btn {
+    min-width: 220px;
+    font-size: 19px;
   }
 
-  .hero-left {
-    min-height: 700px;
+  .bank-title h1 {
+    font-size: 62px;
   }
 
-  .hero-right {
-    min-height: 650px;
+  .intro {
+    font-size: 21px;
+  }
+
+  .action-card {
+    height: 205px;
   }
 
   .teacher-img {
-    width: 38%;
-
-    top: 3%;
+    width: 42%;
   }
 
   .children {
-    width: 55%;
-
-    height: 60%;
-  }
-
-  footer {
-    height: auto;
-
-    min-height: 110px;
-
-    flex-wrap: wrap;
-
-    gap: 20px;
+    width: 75%;
   }
 
   .values {
-    width: 100%;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
+    gap: 20px;
   }
 }
 
@@ -1301,89 +1141,57 @@ footer {
    MÓVIL
    ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
   .topbar {
-    flex-direction: column;
+    height: auto;
+
+    min-height: 120px;
+
+    padding: 15px;
 
     gap: 15px;
-
-    text-align: center;
   }
 
-  .brand {
-    justify-content: center;
+  .hero {
+    height: auto;
+
+    grid-template-columns: 1fr;
   }
 
-  .admin-btn {
-    width: 100%;
+  .hero-left {
+    min-height: 720px;
   }
 
-  .bank-logo {
-    flex-direction: column;
-
-    gap: 0;
-  }
-
-  .bank-symbol {
-    transform: scale(.7);
-  }
-
-  .bank-title h1 {
-    font-size: 55px;
-
-    text-align: center;
-  }
-
-  .online {
-    font-size: 13px;
-
-    letter-spacing: 7px;
+  .hero-right {
+    min-height: 650px;
   }
 
   .actions {
     grid-template-columns: 1fr;
   }
 
-  .hero-right {
-    min-height: 570px;
-  }
-
-  .bank-background {
-    width: 90%;
-
-    top: 50%;
-  }
-
   .teacher-img {
-    width: 48%;
-
-    top: 4%;
+    width: 43%;
   }
 
   .children {
-    width: 80%;
-
-    height: 57%;
-
-    bottom: 6%;
-  }
-
-  .children img {
-    width: 44%;
-  }
-
-  .mini-brand {
-    right: 3%;
+    width: 65%;
   }
 
   footer {
+    height: auto;
+
+    min-height: 150px;
+
     flex-direction: column;
 
-    text-align: center;
+    gap: 20px;
   }
 
-  .footer-school {
+  .values {
+    flex-wrap: wrap;
+
     justify-content: center;
   }
 }
