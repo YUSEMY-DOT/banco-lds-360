@@ -797,19 +797,17 @@ button{
 
   top:2%;
 
-  right:50%;
-
-  transform:translateX(50%);
+  right:5%;
 
   width:
     min(
-      270px,
-      38%
+      220px,
+      31%
     );
 
   height:auto;
 
-  max-height:55%;
+  max-height:43%;
 
   object-fit:contain;
 
