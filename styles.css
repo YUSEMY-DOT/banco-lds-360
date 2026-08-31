@@ -2297,3 +2297,15 @@ footer {
   }
 
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — SUBIR UN POQUITO LOS DOS BOTONES
+   No modifica nada más.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .actions {
+    transform: translateY(-10px) !important;
+  }
+}
