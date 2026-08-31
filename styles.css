@@ -1,5 +1,6 @@
 /* =========================================================
-   BANCO LDS 360 — ESTILOS PRINCIPALES
+   BANCO LDS 360 ONLINE
+   ESTILO FINAL
    ========================================================= */
 
 * {
@@ -11,7 +12,7 @@
 html,
 body {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -26,8 +27,8 @@ body {
    ========================================================= */
 
 .topbar {
-  height: 118px;
   width: 100%;
+  height: 125px;
   background: #071a34;
   border-bottom: 3px solid #f5b400;
 
@@ -35,7 +36,7 @@ body {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 42px;
+  padding: 0 45px;
 }
 
 .brand {
@@ -45,10 +46,9 @@ body {
 }
 
 .school-crest {
-  width: 76px;
+  width: 72px;
   height: 82px;
   object-fit: contain;
-  display: block;
 }
 
 .school-name {
@@ -58,129 +58,134 @@ body {
 }
 
 .school-name strong {
-  color: white;
+  color: #fff;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 32px;
-  line-height: 1;
+  font-size: 31px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  line-height: 1;
 }
 
 .school-name span {
   color: #f5b400;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 20px;
+  font-size: 19px;
   font-style: italic;
   font-weight: 700;
 }
 
 .admin-btn {
-  height: 70px;
   min-width: 270px;
+  height: 64px;
 
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.25);
 
-  background: rgba(255, 255, 255, 0.07);
-  color: white;
+  background: rgba(255,255,255,.06);
+  color: #fff;
 
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 700;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 14px;
 
   cursor: pointer;
 }
 
 .admin-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255,255,255,.12);
 }
 
 .lock {
-  font-size: 29px;
+  font-size: 27px;
 }
 
 /* =========================================================
-   PORTADA
+   HERO
    ========================================================= */
 
 .hero {
   width: 100%;
-  height: 650px;
+  height: 745px;
 
   display: flex;
+
   overflow: hidden;
 }
 
 /* =========================================================
-   LADO IZQUIERDO
+   PANEL IZQUIERDO
    ========================================================= */
 
 .hero-left {
   width: 51%;
   height: 100%;
 
-  background-color: #ffffff;
+  position: relative;
+  z-index: 10;
 
-  /* Puntitos MUY sutiles */
+  background-color: #fff;
+
+  /* Puntos muy discretos */
   background-image: radial-gradient(
-    rgba(7, 26, 52, 0.12) 1px,
-    transparent 1px
+    rgba(7,26,52,.11) .8px,
+    transparent .8px
   );
 
-  background-size: 10px 10px;
+  background-size: 9px 9px;
 
-  padding: 38px 55px 30px;
+  padding: 42px 48px 25px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  position: relative;
-  z-index: 5;
 }
 
-/* Forma inclinada en el borde */
+/* Borde diagonal */
 
 .hero-left::after {
   content: "";
-  position: absolute;
-  top: 0;
-  right: -45px;
 
-  width: 75px;
+  position: absolute;
+
+  top: 0;
+  right: -40px;
+
+  width: 65px;
   height: 100%;
 
-  background: #ffffff;
+  background: #fff;
 
-  clip-path: polygon(0 0, 100% 0, 70% 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    65% 100%,
+    0 100%
+  );
 
   z-index: -1;
 }
 
 /* =========================================================
-   LOGO BANCO LDS 360
+   LOGO BANCO
    ========================================================= */
 
 .bank-logo {
+  width: 100%;
+  max-width: 570px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  gap: 24px;
-
-  width: 100%;
-  max-width: 590px;
-
-  margin-top: 0;
+  gap: 20px;
 }
 
 .bank-symbol {
-  width: 155px;
-  height: 150px;
+  width: 130px;
+  height: 135px;
 
   position: relative;
   flex-shrink: 0;
@@ -188,11 +193,12 @@ body {
 
 .bank-symbol .roof {
   position: absolute;
-  left: 12px;
-  top: 13px;
 
-  width: 130px;
-  height: 25px;
+  top: 14px;
+  left: 10px;
+
+  width: 110px;
+  height: 21px;
 
   background: #071a34;
 }
@@ -203,56 +209,53 @@ body {
   position: absolute;
 
   left: 50%;
-  top: -31px;
+  top: -29px;
 
   transform: translateX(-50%);
 
   color: #f5b400;
 
-  font-size: 27px;
+  font-size: 24px;
 }
 
 .bank-symbol .columns {
   position: absolute;
 
-  left: 22px;
-  top: 51px;
+  left: 18px;
+  top: 47px;
 
-  width: 110px;
-  height: 70px;
+  width: 94px;
+  height: 66px;
 
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
 }
 
 .bank-symbol .columns i {
-  display: block;
-
-  width: 13px;
+  width: 12px;
 
   background: #f5b400;
 
-  border-left: 4px solid #071a34;
-  border-right: 4px solid #071a34;
+  border-left: 3px solid #071a34;
+  border-right: 3px solid #071a34;
 }
 
 .bank-symbol .base {
   position: absolute;
 
-  left: 8px;
-  bottom: 7px;
+  left: 6px;
+  bottom: 6px;
 
-  width: 140px;
-  height: 13px;
+  width: 118px;
+  height: 12px;
 
   background: #071a34;
 
-  border-bottom: 7px solid #f5b400;
+  border-bottom: 6px solid #f5b400;
 }
 
 /* =========================================================
-   TEXTO DEL LOGO
+   TEXTO BANCO LDS 360
    ========================================================= */
 
 .bank-title {
@@ -262,13 +265,11 @@ body {
 .bank-title h1 {
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 70px;
+  font-size: 65px;
 
-  line-height: 0.88;
+  line-height: .88;
 
   color: #071a34;
-
-  font-weight: 700;
 
   white-space: nowrap;
 }
@@ -278,23 +279,23 @@ body {
 }
 
 .online {
-  margin-top: 15px;
+  margin-top: 13px;
 
   text-align: center;
 
-  font-family: Georgia, "Times New Roman", serif;
-
-  font-size: 21px;
-
-  letter-spacing: 13px;
-
   color: #071a34;
 
-  padding-left: 12px;
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 19px;
+
+  letter-spacing: 12px;
+
+  padding-left: 10px;
 }
 
 /* =========================================================
-   TEXTOS PRINCIPALES
+   TEXTOS
    ========================================================= */
 
 .subtitle {
@@ -302,7 +303,7 @@ body {
 
   color: #555;
 
-  font-size: 24px;
+  font-size: 23px;
 
   text-align: center;
 }
@@ -314,7 +315,7 @@ body {
 
   font-size: 25px;
 
-  line-height: 1.35;
+  line-height: 1.3;
 
   text-align: center;
 
@@ -341,27 +342,27 @@ body {
 
   flex: 1;
 
-  height: 185px;
+  height: 180px;
 
   border: none;
 
-  border-radius: 22px;
+  border-radius: 21px;
 
-  background: #ffffff;
+  background: #fff;
 
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 15px rgba(0,0,0,.13);
 
   overflow: hidden;
+
+  padding: 25px 23px 52px;
+
+  display: flex;
+
+  gap: 17px;
 
   text-align: left;
 
   cursor: pointer;
-
-  padding: 27px 24px 55px;
-
-  display: flex;
-
-  gap: 18px;
 }
 
 .action-card:hover {
@@ -369,19 +370,17 @@ body {
 }
 
 .action-card.qr {
-  border-bottom: 48px solid #c90008;
+  border-bottom: 47px solid #c90008;
 }
 
 .action-card.code {
-  border-bottom: 48px solid #071f46;
+  border-bottom: 47px solid #071f46;
 }
 
 .card-icon {
-  font-size: 37px;
-
-  font-weight: 700;
-
+  font-size: 36px;
   line-height: 1;
+  font-weight: 700;
 }
 
 .qr-icon {
@@ -395,9 +394,9 @@ body {
 .card-content b {
   display: block;
 
-  font-size: 25px;
+  font-size: 24px;
 
-  line-height: 0.98;
+  line-height: .98;
 
   color: #c90008;
 }
@@ -409,11 +408,11 @@ body {
 .card-content small {
   display: block;
 
-  margin-top: 15px;
+  margin-top: 14px;
 
   color: #444;
 
-  font-size: 15px;
+  font-size: 14px;
 
   line-height: 1.25;
 }
@@ -422,28 +421,26 @@ body {
   position: absolute;
 
   left: 50%;
-  bottom: -35px;
+  bottom: -34px;
 
   transform: translateX(-50%);
 
   width: 54px;
   height: 54px;
 
-  border: 3px solid white;
+  border: 3px solid #fff;
 
   border-radius: 50%;
 
-  color: white;
+  color: #fff;
+
+  font-size: 37px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 38px;
-
-  line-height: 1;
-
-  z-index: 3;
+  z-index: 5;
 }
 
 /* =========================================================
@@ -454,37 +451,36 @@ body {
   width: 100%;
   max-width: 650px;
 
-  min-height: 70px;
+  height: 70px;
 
   margin-top: 15px;
 
-  padding: 10px 22px;
+  padding: 9px 20px;
 
   border-radius: 20px;
 
-  background: #e7e8ea;
+  background: #e5e6e8;
 
   display: flex;
 
   align-items: center;
 
-  gap: 17px;
+  gap: 16px;
+
+  color: #071a34;
 
   font-size: 15px;
 
   line-height: 1.25;
-
-  color: #071a34;
 }
 
 .security-icon {
-  font-size: 32px;
-
+  font-size: 31px;
   flex-shrink: 0;
 }
 
 /* =========================================================
-   LADO DERECHO
+   PANEL DERECHO
    ========================================================= */
 
 .hero-right {
@@ -495,9 +491,9 @@ body {
 
   overflow: hidden;
 
-  background: #071f3d;
+  background: #082344;
 
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255,255,255,.15);
 }
 
 /* =========================================================
@@ -509,31 +505,31 @@ body {
 
   inset: 0;
 
-  pointer-events: none;
-
   z-index: 0;
+
+  pointer-events: none;
 
   background:
     linear-gradient(
-      126deg,
+      127deg,
       transparent 0%,
-      transparent 53%,
-      rgba(245, 180, 0, 0.9) 53.2%,
-      rgba(245, 180, 0, 0.9) 53.5%,
-      transparent 53.7%
+      transparent 62%,
+      #e9ad00 62.2%,
+      #e9ad00 62.45%,
+      transparent 62.7%
     ),
     linear-gradient(
-      126deg,
+      127deg,
       transparent 0%,
-      transparent 83%,
-      rgba(245, 180, 0, 0.9) 83.2%,
-      rgba(245, 180, 0, 0.9) 83.5%,
-      transparent 83.7%
+      transparent 88%,
+      #e9ad00 88.2%,
+      #e9ad00 88.45%,
+      transparent 88.7%
     );
 }
 
 /* =========================================================
-   BANCO GRANDE DE FONDO
+   BANCO DE FONDO
    ========================================================= */
 
 .bank-background {
@@ -541,27 +537,27 @@ body {
 
   z-index: 1;
 
-  width: 82%;
+  width: 91%;
 
-  max-width: 720px;
+  max-width: 760px;
 
   height: auto;
 
   left: 50%;
 
-  top: 43%;
+  top: 52%;
 
   transform: translate(-50%, -50%);
 
-  object-fit: contain;
+  opacity: .95;
 
-  opacity: 0.95;
+  object-fit: contain;
 
   pointer-events: none;
 }
 
 /* =========================================================
-   PROFESORA
+   MAESTRA
    ========================================================= */
 
 .teacher-img {
@@ -569,15 +565,15 @@ body {
 
   z-index: 3;
 
-  width: 38%;
+  width: 31%;
 
-  max-width: 330px;
+  max-width: 285px;
 
   height: auto;
 
   left: 50%;
 
-  top: 25px;
+  top: 65px;
 
   transform: translateX(-50%);
 
@@ -587,7 +583,7 @@ body {
 }
 
 /* =========================================================
-   ESTUDIANTES
+   NIÑOS
    ========================================================= */
 
 .children {
@@ -597,13 +593,13 @@ body {
 
   left: 50%;
 
-  bottom: -8px;
+  bottom: 45px;
 
   transform: translateX(-50%);
 
-  width: 76%;
+  width: 74%;
 
-  height: 68%;
+  height: 58%;
 
   display: flex;
 
@@ -611,7 +607,7 @@ body {
 
   justify-content: center;
 
-  gap: 4px;
+  gap: 0;
 }
 
 .children img {
@@ -621,17 +617,15 @@ body {
 
   object-fit: contain;
 
-  flex-shrink: 0;
-
   pointer-events: none;
 }
 
 .boy-img {
-  max-width: 46%;
+  max-width: 48%;
 }
 
 .girl-img {
-  max-width: 46%;
+  max-width: 48%;
 }
 
 /* =========================================================
@@ -641,11 +635,11 @@ body {
 .mini-brand {
   position: absolute;
 
-  z-index: 6;
+  z-index: 8;
 
   right: 25px;
 
-  bottom: 22px;
+  bottom: 25px;
 
   display: flex;
 
@@ -653,7 +647,7 @@ body {
 
   align-items: flex-end;
 
-  color: white;
+  color: #fff;
 }
 
 .mini-bank {
@@ -665,16 +659,16 @@ body {
 }
 
 .mini-symbol {
-  width: 48px;
-  height: 47px;
+  width: 45px;
+  height: 45px;
+
+  border-bottom: 5px solid #f5b400;
 
   display: flex;
 
   align-items: flex-end;
 
   justify-content: space-around;
-
-  border-bottom: 5px solid #f5b400;
 }
 
 .mini-symbol div {
@@ -690,25 +684,25 @@ body {
 
   font-family: Georgia, "Times New Roman", serif;
 
-  line-height: 0.95;
+  line-height: .95;
 }
 
 .mini-bank strong {
-  font-size: 27px;
+  font-size: 25px;
 }
 
 .mini-bank span {
   color: #f5b400;
 
-  font-size: 25px;
+  font-size: 23px;
 
   font-weight: 700;
 }
 
 .mini-brand small {
-  margin-top: 6px;
+  margin-top: 5px;
 
-  font-size: 9px;
+  font-size: 8px;
 
   white-space: nowrap;
 }
@@ -718,9 +712,8 @@ body {
    ========================================================= */
 
 footer {
-  height: 150px;
-
   width: 100%;
+  height: 145px;
 
   background: #071a34;
 
@@ -740,13 +733,12 @@ footer {
 
   align-items: center;
 
-  gap: 18px;
+  gap: 17px;
 }
 
 .footer-school img {
-  width: 70px;
-
-  height: 80px;
+  width: 68px;
+  height: 78px;
 
   object-fit: contain;
 }
@@ -760,15 +752,15 @@ footer {
 }
 
 .footer-school strong {
-  color: white;
+  color: #fff;
 
   font-family: Georgia, "Times New Roman", serif;
 
-  font-size: 24px;
+  font-size: 23px;
 }
 
 .footer-school span {
-  color: white;
+  color: #fff;
 
   font-size: 15px;
 
@@ -780,7 +772,7 @@ footer {
 
   align-items: center;
 
-  gap: 42px;
+  gap: 38px;
 }
 
 .values div {
@@ -788,15 +780,15 @@ footer {
 
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 
-  color: white;
+  color: #fff;
 
   font-size: 17px;
 }
 
 .values b {
-  font-size: 28px;
+  font-size: 27px;
 }
 
 /* =========================================================
@@ -810,7 +802,7 @@ footer {
 
   z-index: 1000;
 
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0,0,0,.65);
 
   display: flex;
 
@@ -828,34 +820,33 @@ footer {
 .modal-card {
   position: relative;
 
-  width: min(650px, 95vw);
+  width: min(650px,95vw);
 
   max-height: 90vh;
 
   overflow-y: auto;
 
-  background: white;
+  background: #fff;
 
   border-radius: 20px;
 
   padding: 30px;
 
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 15px 50px rgba(0,0,0,.35);
 }
 
 .modal-card.small {
-  width: min(430px, 95vw);
+  width: min(430px,95vw);
 }
 
 .modal-card.profile {
-  width: min(700px, 95vw);
+  width: min(700px,95vw);
 }
 
 .close {
   position: absolute;
 
   right: 15px;
-
   top: 10px;
 
   border: none;
@@ -871,7 +862,6 @@ footer {
 
 .modal-card h2 {
   color: #071a34;
-
   margin-bottom: 15px;
 }
 
@@ -906,7 +896,7 @@ footer {
 
   background: #071a34;
 
-  color: white;
+  color: #fff;
 
   font-size: 16px;
 
@@ -922,11 +912,11 @@ footer {
 #reader {
   width: 100%;
   max-width: 500px;
-  margin: 0 auto;
+  margin: auto;
 }
 
 /* =========================================================
-   RESPONSIVE
+   PANTALLAS MEDIANAS
    ========================================================= */
 
 @media (max-width: 1200px) {
@@ -939,25 +929,34 @@ footer {
     font-size: 27px;
   }
 
+  .school-name span {
+    font-size: 17px;
+  }
+
+  .bank-logo {
+    transform: scale(.92);
+    transform-origin: top center;
+    margin-bottom: -8px;
+  }
+
   .bank-title h1 {
-    font-size: 60px;
+    font-size: 59px;
   }
 
-  .bank-symbol {
-    transform: scale(0.9);
-  }
-
-  .hero-left {
-    padding-left: 35px;
-    padding-right: 35px;
+  .intro {
+    font-size: 22px;
   }
 
   .teacher-img {
-    width: 40%;
+    width: 32%;
   }
 
   .children {
-    width: 82%;
+    width: 78%;
+  }
+
+  .values {
+    gap: 25px;
   }
 }
 
@@ -967,32 +966,8 @@ footer {
 
 @media (max-width: 900px) {
 
-  .topbar {
-    height: 105px;
-  }
-
-  .school-crest {
-    width: 62px;
-    height: 70px;
-  }
-
-  .school-name strong {
-    font-size: 22px;
-  }
-
-  .school-name span {
-    font-size: 16px;
-  }
-
-  .admin-btn {
-    min-width: 190px;
-    height: 58px;
-    font-size: 19px;
-  }
-
   .hero {
     height: auto;
-    min-height: 900px;
     flex-direction: column;
   }
 
@@ -1002,7 +977,7 @@ footer {
   }
 
   .hero-left {
-    min-height: 610px;
+    min-height: 650px;
   }
 
   .hero-left::after {
@@ -1010,18 +985,13 @@ footer {
   }
 
   .hero-right {
-    height: 620px;
+    height: 600px;
   }
 
   footer {
     height: auto;
-    min-height: 150px;
     padding: 25px;
-    gap: 30px;
-  }
-
-  .values {
-    gap: 20px;
+    gap: 25px;
   }
 }
 
@@ -1032,18 +1002,13 @@ footer {
 @media (max-width: 600px) {
 
   .topbar {
-    height: auto;
-    min-height: 95px;
-    padding: 12px 15px;
-  }
-
-  .brand {
-    gap: 10px;
+    height: 95px;
+    padding: 10px 15px;
   }
 
   .school-crest {
     width: 50px;
-    height: 58px;
+    height: 60px;
   }
 
   .school-name strong {
@@ -1055,39 +1020,24 @@ footer {
   }
 
   .admin-btn {
-    min-width: auto;
-    width: 55px;
+    min-width: 52px;
+    width: 52px;
     height: 50px;
-    border-radius: 14px;
     font-size: 0;
   }
 
-  .lock {
-    font-size: 25px;
-  }
-
   .hero-left {
-    padding: 30px 18px 25px;
+    padding: 30px 18px;
   }
 
   .bank-logo {
-    gap: 8px;
-    transform: scale(0.78);
+    transform: scale(.75);
     transform-origin: top center;
-    margin-bottom: -25px;
-  }
-
-  .bank-symbol {
-    width: 125px;
+    margin-bottom: -30px;
   }
 
   .bank-title h1 {
     font-size: 48px;
-  }
-
-  .online {
-    font-size: 16px;
-    letter-spacing: 8px;
   }
 
   .subtitle {
@@ -1095,42 +1045,24 @@ footer {
   }
 
   .intro {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .actions {
     flex-direction: column;
   }
 
-  .action-card {
-    width: 100%;
-  }
-
   .hero-right {
-    height: 520px;
+    height: 540px;
   }
 
   .teacher-img {
-    width: 42%;
-    top: 20px;
+    width: 35%;
   }
 
   .children {
-    width: 90%;
-    height: 65%;
-  }
-
-  .mini-brand {
-    right: 12px;
-    bottom: 15px;
-  }
-
-  .mini-bank strong {
-    font-size: 20px;
-  }
-
-  .mini-bank span {
-    font-size: 18px;
+    width: 88%;
+    height: 60%;
   }
 
   footer {
@@ -1141,7 +1073,6 @@ footer {
   .values {
     width: 100%;
     justify-content: space-between;
-    gap: 10px;
     flex-wrap: wrap;
   }
 }
