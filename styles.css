@@ -2168,3 +2168,24 @@ footer {
     margin-bottom: -14px !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — SUBIR UN POCO MÁS EL CUADRO DE SEGURIDAD
+   NO modifica nada más.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .security {
+    top: -28px !important;
+    margin-bottom: -28px !important;
+  }
+}
+
+@media (min-width: 761px) and (max-height: 760px) {
+
+  .hero-left .security {
+    top: -24px !important;
+    margin-bottom: -24px !important;
+  }
+}
