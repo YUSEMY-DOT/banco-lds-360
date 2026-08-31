@@ -2018,3 +2018,36 @@ footer {
     font-size: 8.5px !important;
   }
 }
+
+/* =========================================================
+   ÚNICO CAMBIO — BOTONES
+   - Más cortos de LARGO (ancho)
+   - Quitar las letras internas
+   - NO cambiar la altura
+   - NO mover ni cambiar ningún otro elemento
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .hero-left .actions {
+    width: 100% !important;
+    max-width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .hero-left .action-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Quitar únicamente los textos internos */
+  .hero-left .action-card .card-content b,
+  .hero-left .action-card .card-content small {
+    display: none !important;
+  }
+}
