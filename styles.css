@@ -2309,3 +2309,19 @@ footer {
     transform: translateY(-10px) !important;
   }
 }
+.modal-card.profile {
+  width: min(1100px, calc(100vw - 40px)) !important;
+  max-width: calc(100vw - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+.modal-card.profile img {
+  width: 400px !important;
+  height: 400px !important;
+  max-width: 100% !important;
+  max-height: 45vh !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
