@@ -2536,3 +2536,117 @@ footer {
     width: 100% !important;
   }
 }
+/* ===== FICHA ALUMNO — FOTO GRANDE + DATOS A LA DERECHA ===== */
+
+.modal-card.profile {
+  width: min(900px, calc(100vw - 40px)) !important;
+  max-width: 900px !important;
+  max-height: calc(100vh - 40px) !important;
+  padding: 24px !important;
+
+  display: grid !important;
+  grid-template-columns: 330px 1fr !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 28px !important;
+  align-items: start !important;
+
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* FOTO GRANDE A LA IZQUIERDA */
+.modal-card.profile img {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+
+  width: 330px !important;
+  height: 330px !important;
+  max-width: 330px !important;
+  max-height: 330px !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 12px !important;
+}
+
+/* DATOS A LA DERECHA */
+.modal-card.profile .info {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  display: block !important;
+}
+
+/* NOMBRE */
+.modal-card.profile h2 {
+  font-size: 25px !important;
+  line-height: 1.15 !important;
+  margin: 4px 0 8px !important;
+}
+
+/* GRADO */
+.modal-card.profile .sub {
+  font-size: 17px !important;
+  line-height: 1.3 !important;
+  margin: 0 0 18px !important;
+}
+
+/* DATOS */
+.modal-card.profile ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+}
+
+/* BOTÓN DEBAJO DE FOTO + DATOS */
+.modal-card.profile .btn-admin {
+  grid-column: 1 / 3 !important;
+  grid-row: 2 !important;
+
+  width: 100% !important;
+  margin-top: 22px !important;
+
+  padding: 13px 16px !important;
+  font-size: 17px !important;
+}
+
+/* PANTALLA PEQUEÑA */
+@media (max-width: 700px) {
+  .modal-card.profile {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+
+    gap: 16px !important;
+    padding: 18px !important;
+  }
+
+  .modal-card.profile img {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    width: 240px !important;
+    height: 240px !important;
+    max-width: 240px !important;
+    max-height: 240px !important;
+
+    justify-self: center !important;
+  }
+
+  .modal-card.profile .info {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .modal-card.profile .btn-admin {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+  }
+}
