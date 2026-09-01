@@ -2432,3 +2432,107 @@ footer {
     width: 100% !important;
   }
 }
+/* ===== AJUSTE FINAL: MODAL DEL ESTUDIANTE ===== */
+
+.modal-card.profile {
+  width: min(92vw, 880px) !important;
+  max-width: 880px !important;
+  max-height: 90vh !important;
+  padding: 22px 24px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 24px !important;
+  border-radius: 16px !important;
+}
+
+/* FOTO */
+.modal-card.profile img {
+  width: 220px !important;
+  height: 220px !important;
+  min-width: 220px !important;
+  min-height: 220px !important;
+  max-width: 220px !important;
+  max-height: 220px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+/* INFORMACIÓN DEL ALUMNO */
+.modal-card.profile .info {
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+/* NOMBRE */
+.modal-card.profile h2 {
+  font-size: clamp(20px, 2.2vw, 24px) !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* GRADO Y SECCIÓN */
+.modal-card.profile .sub {
+  font-size: clamp(14px, 1.4vw, 16px) !important;
+  margin: 0 0 14px 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* DATOS */
+.modal-card.profile ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 0 18px 0 !important;
+  font-size: clamp(14px, 1.4vw, 16px) !important;
+  line-height: 1.6 !important;
+}
+
+/* BOTÓN DEBAJO DE TODO EL CONTENIDO */
+.modal-card.profile .btn-admin {
+  width: 100% !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  margin-top: 0 !important;
+}
+
+/* ===== CELULAR / PANTALLA PEQUEÑA ===== */
+
+@media (max-width: 768px) {
+  .modal-card.profile {
+    width: calc(100vw - 30px) !important;
+    max-width: calc(100vw - 30px) !important;
+    padding: 18px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+  }
+
+  .modal-card.profile img {
+    width: 180px !important;
+    height: 180px !important;
+    min-width: 180px !important;
+    min-height: 180px !important;
+    max-width: 180px !important;
+    max-height: 180px !important;
+  }
+
+  .modal-card.profile .info {
+    width: 100% !important;
+  }
+
+  .modal-card.profile h2 {
+    font-size: 20px !important;
+  }
+
+  .modal-card.profile .btn-admin {
+    width: 100% !important;
+  }
+}
