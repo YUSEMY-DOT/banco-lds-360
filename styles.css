@@ -2810,3 +2810,79 @@ footer {
     width: 100% !important;
   }
 }
+/* ===== AJUSTE FINAL: VENTANA INTERNA DEL ALUMNO ===== */
+
+#profileContent {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 480px minmax(0, 1fr) !important;
+    gap: 38px !important;
+    align-items: start !important;
+    box-sizing: border-box !important;
+}
+
+/* FOTO: izquierda */
+#profileContent > img {
+    width: 480px !important;
+    height: 480px !important;
+    max-width: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 18px !important;
+}
+
+/* DATOS: derecha */
+#profileContent > div {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Evita que textos se partan palabra por palabra */
+#profileContent h1,
+#profileContent h2,
+#profileContent h3,
+#profileContent p,
+#profileContent span,
+#profileContent strong {
+    max-width: none !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
+/* Nombre */
+#profileContent h1,
+#profileContent h2 {
+    white-space: normal !important;
+}
+
+/* Datos financieros */
+#profileContent p {
+    width: 100% !important;
+}
+
+/* BOTÓN debajo de los datos */
+#profileContent button {
+    grid-column: 2 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* ===== PANTALLAS PEQUEÑAS ===== */
+@media (max-width: 900px) {
+    #profileContent {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    #profileContent > img {
+        width: 100% !important;
+        height: 320px !important;
+    }
+
+    #profileContent button {
+        grid-column: 1 !important;
+    }
+}
