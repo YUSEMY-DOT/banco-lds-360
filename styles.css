@@ -2604,3 +2604,209 @@ footer {
     grid-row: 3 !important;
   }
 }
+/* =========================================================
+   CORRECCIÓN DEFINITIVA — FICHA DEL ALUMNO
+   SOLO MODIFICA LA VENTANA INTERNA DEL ALUMNO
+   FOTO IZQUIERDA + DATOS DERECHA + BOTÓN ABAJO
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  /* Ventana */
+  #profileModal .modal-card.profile {
+    width: min(960px, calc(100vw - 40px)) !important;
+    max-width: 960px !important;
+    max-height: calc(100vh - 40px) !important;
+    padding: 24px !important;
+    overflow: hidden !important;
+  }
+
+  /* CONTENIDO REAL DE LA FICHA */
+  #profileModal #profileContent {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+
+    grid-template-rows: auto auto auto auto !important;
+
+    column-gap: 28px !important;
+    row-gap: 12px !important;
+
+    align-items: start !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* El encabezado deja de ser una fila propia */
+  #profileModal #profileContent .profile-head {
+    display: contents !important;
+  }
+
+  /* FOTO — IZQUIERDA */
+  #profileModal #profileContent .avatar {
+    grid-column: 1 !important;
+    grid-row: 1 / 4 !important;
+
+    width: 300px !important;
+    height: 300px !important;
+
+    overflow: hidden !important;
+    border-radius: 14px !important;
+  }
+
+  #profileModal #profileContent .avatar img {
+    width: 300px !important;
+    height: 300px !important;
+
+    min-width: 300px !important;
+    min-height: 300px !important;
+
+    max-width: 300px !important;
+    max-height: 300px !important;
+
+    object-fit: cover !important;
+    object-position: center !important;
+
+    display: block !important;
+  }
+
+  /* CÓDIGO + NOMBRE + GRADO — DERECHA */
+  #profileModal #profileContent .profile-head > div:last-child {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* SALDO — DERECHA */
+  #profileModal #profileContent .balance {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* DATOS — DERECHA */
+  #profileModal #profileContent .grid {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+
+    width: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 3px !important;
+
+    margin: 0 !important;
+  }
+
+  /* BOTÓN — DEBAJO DE TODO */
+  #profileModal #profileContent > button.primary {
+    grid-column: 1 / -1 !important;
+    grid-row: 4 !important;
+
+    width: 100% !important;
+
+    min-height: 48px !important;
+
+    margin: 8px 0 0 0 !important;
+
+    padding: 11px 16px !important;
+
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* NOMBRE */
+  #profileModal #profileContent h2 {
+    font-size: 25px !important;
+    line-height: 1.1 !important;
+
+    margin: 3px 0 8px 0 !important;
+  }
+
+  /* GRADO */
+  #profileModal #profileContent .profile-head p {
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+
+    margin: 0 !important;
+  }
+
+  /* SALDO */
+  #profileModal #profileContent .balance small {
+    font-size: 15px !important;
+  }
+
+  #profileModal #profileContent .balance strong {
+    font-size: 18px !important;
+  }
+
+  /* DATOS */
+  #profileModal #profileContent .grid > div {
+    font-size: 15px !important;
+    line-height: 1.35 !important;
+
+    margin: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  #profileModal .modal-card.profile {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    max-height: calc(100vh - 24px) !important;
+
+    padding: 18px !important;
+
+    overflow-y: auto !important;
+  }
+
+  #profileModal #profileContent {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  #profileModal #profileContent .profile-head {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  #profileModal #profileContent .avatar {
+    width: min(260px, 75vw) !important;
+    height: min(260px, 75vw) !important;
+
+    margin: 0 auto !important;
+  }
+
+  #profileModal #profileContent .avatar img {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    object-fit: cover !important;
+  }
+
+  #profileModal #profileContent .balance,
+  #profileModal #profileContent .grid,
+  #profileModal #profileContent > button.primary {
+    width: 100% !important;
+  }
+}
