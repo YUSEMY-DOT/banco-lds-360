@@ -2337,3 +2337,238 @@ footer{
     margin-left:-4px;
   }
 }
+
+/* =========================================================
+   FICHA DEL ALUMNO — CORRECCIÓN AISLADA
+   IMPORTANTE: estas reglas SOLO afectan #profileModal.
+   NO modifican la portada, encabezado, botones ni pie.
+   FOTO IZQUIERDA / DATOS DERECHA / BOTÓN DEBAJO
+   ========================================================= */
+
+@media (min-width: 761px){
+  #profileModal .modal-card.profile{
+    width: min(1100px, calc(100vw - 48px));
+    max-width: 1100px;
+    max-height: calc(100vh - 36px);
+    padding: 30px 34px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #profileModal #profileContent{
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 400px minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    column-gap: 36px;
+    row-gap: 14px;
+    align-items: start;
+  }
+
+  /* El encabezado aporta la foto + bloque de identidad. */
+  #profileModal #profileContent .profile-head{
+    display: contents;
+  }
+
+  /* FOTO: siempre columna izquierda. */
+  #profileModal #profileContent .avatar{
+    grid-column: 1;
+    grid-row: 1 / 5;
+    width: 400px;
+    height: 400px;
+    min-width: 0;
+    min-height: 0;
+    flex: none;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  #profileModal #profileContent .avatar img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  /* IDENTIDAD: columna derecha. */
+  #profileModal #profileContent .profile-head > div:last-child{
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+  }
+
+  #profileModal #profileContent .profile-head h2{
+    width: 100%;
+    margin: 4px 0 10px;
+    color: var(--navy);
+    font-size: 34px;
+    line-height: 1.08;
+    font-weight: 800;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  #profileModal #profileContent .profile-head p{
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.3;
+    color: #666;
+    white-space: normal;
+  }
+
+  /* SALDO: debajo de la identidad, a la derecha. */
+  #profileModal #profileContent .balance{
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 20px 22px;
+  }
+
+  #profileModal #profileContent .balance strong{
+    font-size: 30px;
+    line-height: 1.15;
+  }
+
+  /* DATOS: debajo del saldo, a la derecha. */
+  #profileModal #profileContent .grid{
+    grid-column: 2;
+    grid-row: 3;
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+  }
+
+  #profileModal #profileContent .grid > div{
+    min-width: 0;
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  #profileModal #profileContent .grid span{
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  #profileModal #profileContent .grid b{
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  /* BOTÓN: debajo de todos los datos, nunca al costado de la foto. */
+  #profileModal #profileContent > button.primary{
+    grid-column: 2;
+    grid-row: 4;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 14px 18px;
+    min-height: 50px;
+  }
+}
+
+/* =========================================================
+   MÓVIL — SOLO FICHA DEL ALUMNO
+   ========================================================= */
+
+@media (max-width: 760px){
+  #profileModal .modal-card.profile{
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
+    padding: 18px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #profileModal #profileContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #profileModal #profileContent .profile-head{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  #profileModal #profileContent .avatar{
+    width: min(320px, 82vw);
+    height: min(320px, 82vw);
+    min-width: 0;
+    min-height: 0;
+    flex: none;
+    margin: 0 auto;
+    border-radius: 18px;
+  }
+
+  #profileModal #profileContent .avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #profileModal #profileContent .profile-head > div:last-child,
+  #profileModal #profileContent .balance,
+  #profileModal #profileContent .grid,
+  #profileModal #profileContent > button.primary{
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  #profileModal #profileContent .profile-head h2{
+    font-size: 25px;
+    line-height: 1.1;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  #profileModal #profileContent .profile-head p{
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  #profileModal #profileContent .balance{
+    margin: 0;
+    padding: 17px;
+  }
+
+  #profileModal #profileContent .grid{
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin: 0;
+  }
+
+  #profileModal #profileContent > button.primary{
+    margin: 0;
+  }
+}
+
+@media (max-width: 380px){
+  #profileModal #profileContent .avatar{
+    width: min(280px, 78vw);
+    height: min(280px, 78vw);
+  }
+
+  #profileModal #profileContent .profile-head h2{
+    font-size: 22px;
+  }
+}
