@@ -2811,78 +2811,74 @@ footer {
   }
 }
 /* =========================================================
-   CORRECCIÓN FINAL — SOLO FICHA INTERNA DEL ALUMNO
-   NO MODIFICA LA PORTADA DEL BANCO
-   FOTO IZQUIERDA + DATOS DERECHA + BOTÓN DEBAJO
+   CORRECCIÓN V2 — SOLO FICHA INTERNA DEL ALUMNO
+   PORTADA INTACTA
+   FOTO IZQUIERDA / DATOS DERECHA / BOTÓN ABAJO
    ========================================================= */
 
 @media (min-width: 761px) {
 
   #profileModal .modal-card.profile {
-    width: min(960px, calc(100vw - 40px)) !important;
-    max-width: 960px !important;
+    width: min(1100px, calc(100vw - 60px)) !important;
+    max-width: 1100px !important;
     max-height: calc(100vh - 40px) !important;
-    padding: 24px !important;
+    padding: 28px 36px !important;
     box-sizing: border-box !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
   }
 
-  /* CONTENEDOR REAL DE LA FICHA */
   #profileModal #profileContent {
     width: 100% !important;
     max-width: 100% !important;
 
     display: grid !important;
-    grid-template-columns: 360px minmax(0, 1fr) !important;
+    grid-template-columns: 430px minmax(0, 1fr) !important;
     grid-template-rows: auto auto auto auto !important;
 
-    column-gap: 28px !important;
-    row-gap: 12px !important;
+    column-gap: 38px !important;
+    row-gap: 14px !important;
 
     align-items: start !important;
     box-sizing: border-box !important;
   }
 
-  /* El encabezado deja de ocupar una fila completa.
-     Sus dos hijos pasan a ser elementos del GRID principal. */
   #profileModal #profileContent .profile-head {
     display: contents !important;
   }
 
-  /* FOTO — IZQUIERDA */
+  /* FOTO IZQUIERDA */
   #profileModal #profileContent .avatar {
     grid-column: 1 !important;
     grid-row: 1 / 4 !important;
 
-    width: 360px !important;
-    height: 360px !important;
-    min-width: 360px !important;
-    min-height: 360px !important;
+    width: 430px !important;
+    height: 430px !important;
+    min-width: 430px !important;
+    min-height: 430px !important;
 
     margin: 0 !important;
     padding: 0 !important;
 
     overflow: hidden !important;
-    border-radius: 16px !important;
+    border-radius: 18px !important;
     box-sizing: border-box !important;
   }
 
   #profileModal #profileContent .avatar img {
     display: block !important;
-
-    width: 360px !important;
-    height: 360px !important;
-    min-width: 360px !important;
-    min-height: 360px !important;
-    max-width: 360px !important;
-    max-height: 360px !important;
+    width: 430px !important;
+    height: 430px !important;
+    min-width: 430px !important;
+    min-height: 430px !important;
+    max-width: 430px !important;
+    max-height: 430px !important;
 
     object-fit: cover !important;
     object-position: center !important;
   }
 
-  /* DATOS PRINCIPALES — DERECHA */
+  /* COLUMNA DERECHA */
   #profileModal #profileContent .profile-head > div:last-child {
     grid-column: 2 !important;
     grid-row: 1 !important;
@@ -2895,30 +2891,32 @@ footer {
   }
 
   #profileModal #profileContent .profile-head .badge {
-    display: inline-block !important;
+    display: block !important;
+    width: max-content !important;
     max-width: 100% !important;
+
+    margin: 0 0 8px 0 !important;
+
+    font-size: 17px !important;
+    line-height: 1.2 !important;
 
     white-space: nowrap !important;
     word-break: normal !important;
     overflow-wrap: normal !important;
-
-    font-size: 15px !important;
-    line-height: 1.2 !important;
-    margin: 0 0 6px 0 !important;
   }
 
   #profileModal #profileContent h2 {
     width: 100% !important;
     max-width: none !important;
 
-    margin: 0 0 8px 0 !important;
+    margin: 0 0 10px 0 !important;
 
-    font-size: 28px !important;
+    font-size: clamp(25px, 2.5vw, 32px) !important;
     line-height: 1.08 !important;
 
     white-space: normal !important;
     word-break: normal !important;
-    overflow-wrap: normal !important;
+    overflow-wrap: break-word !important;
   }
 
   #profileModal #profileContent .profile-head p {
@@ -2927,7 +2925,7 @@ footer {
 
     margin: 0 !important;
 
-    font-size: 18px !important;
+    font-size: 19px !important;
     line-height: 1.25 !important;
 
     white-space: normal !important;
@@ -2935,7 +2933,7 @@ footer {
     overflow-wrap: normal !important;
   }
 
-  /* SALDO — DERECHA */
+  /* SALDO */
   #profileModal #profileContent .balance {
     grid-column: 2 !important;
     grid-row: 2 !important;
@@ -2957,15 +2955,15 @@ footer {
 
   #profileModal #profileContent .balance strong {
     display: inline !important;
-    margin-left: 8px !important;
+    margin-left: 10px !important;
 
-    font-size: 22px !important;
+    font-size: 23px !important;
     line-height: 1.2 !important;
 
     white-space: nowrap !important;
   }
 
-  /* DATOS FINANCIEROS — DERECHA */
+  /* TODOS LOS DATOS EN UNA COLUMNA DERECHA ANCHA */
   #profileModal #profileContent .grid {
     grid-column: 2 !important;
     grid-row: 3 !important;
@@ -2976,8 +2974,7 @@ footer {
 
     display: flex !important;
     flex-direction: column !important;
-
-    gap: 5px !important;
+    gap: 6px !important;
 
     margin: 0 !important;
     padding: 0 !important;
@@ -2992,12 +2989,12 @@ footer {
     display: flex !important;
     align-items: baseline !important;
     justify-content: flex-start !important;
-    gap: 8px !important;
+    gap: 10px !important;
 
     margin: 0 !important;
     padding: 0 !important;
 
-    font-size: 16px !important;
+    font-size: 17px !important;
     line-height: 1.3 !important;
 
     white-space: normal !important;
@@ -3010,38 +3007,42 @@ footer {
   #profileModal #profileContent .grid > div span {
     display: inline !important;
     flex: 0 1 auto !important;
+    min-width: 0 !important;
     max-width: none !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
   }
 
   #profileModal #profileContent .grid > div b {
     display: inline !important;
     flex: 0 0 auto !important;
 
+    font-size: 17px !important;
     white-space: nowrap !important;
-    font-size: 16px !important;
   }
 
-  /* BOTÓN — DEBAJO DE LOS DATOS, EN LA COLUMNA DERECHA */
+  /* BOTÓN DEBAJO DE LOS DATOS */
   #profileModal #profileContent > button.primary {
     grid-column: 2 !important;
     grid-row: 4 !important;
 
     width: 100% !important;
-    min-height: 48px !important;
+    min-height: 50px !important;
 
-    margin: 8px 0 0 0 !important;
-    padding: 11px 16px !important;
+    margin: 10px 0 0 0 !important;
+    padding: 12px 18px !important;
 
     box-sizing: border-box !important;
 
-    font-size: 16px !important;
+    font-size: 17px !important;
     line-height: 1.2 !important;
   }
 }
 
 
 /* =========================================================
-   TABLET / CELULAR
+   CELULAR / TABLET
    ========================================================= */
 
 @media (max-width: 760px) {
@@ -3064,21 +3065,19 @@ footer {
 
     display: flex !important;
     flex-direction: column !important;
-
     gap: 10px !important;
   }
 
   #profileModal #profileContent .profile-head {
     display: flex !important;
     flex-direction: column !important;
-
     width: 100% !important;
     gap: 8px !important;
   }
 
   #profileModal #profileContent .avatar {
-    width: min(260px, 72vw) !important;
-    height: min(260px, 72vw) !important;
+    width: min(300px, 80vw) !important;
+    height: min(300px, 80vw) !important;
 
     min-width: 0 !important;
     min-height: 0 !important;
@@ -3107,7 +3106,7 @@ footer {
   }
 
   #profileModal #profileContent h2 {
-    font-size: 23px !important;
+    font-size: 24px !important;
     line-height: 1.1 !important;
   }
 
@@ -3115,16 +3114,7 @@ footer {
     font-size: 16px !important;
   }
 
-  #profileModal #profileContent .balance small {
-    font-size: 15px !important;
-  }
-
-  #profileModal #profileContent .balance strong {
-    font-size: 18px !important;
-  }
-
   #profileModal #profileContent .grid > div {
     font-size: 15px !important;
-    line-height: 1.3 !important;
   }
 }
