@@ -1,2574 +1,1273 @@
-:root{
-  --navy:#071a34;
-  --navy2:#0d294c;
-  --red:#a51018;
-  --gold:#d9a63a;
-  --gold2:#efc15b;
-  --white:#fff;
-  --ink:#14233c;
-  --border:#dfe3e8;
+/**
+ * BANCO LDS 360 — BACKEND GOOGLE APPS SCRIPT
+ * =========================================================
+ * Backend para Google Sheets + frontend publicado en GitHub.
+ *
+ * BASE DE DATOS:
+ *   ESTUDIANTES
+ *   CAJA
+ *   MOVIMIENTOS
+ *   CUENTAS
+ *   DASHBOARD
+ *
+ * El backend conserva la base de datos existente y calcula
+ * las cuentas por CÓDIGO LDS, no por posición de fila.
+ *
+ * Reglas educativas tomadas de la guía La Salle 360:
+ * - Ingreso mensual base: LDS 1,130
+ * - Gastos mensuales: LDS 760
+ * - Disponible de referencia: LDS 370
+ * - Bonificaciones y consecuencias según el catálogo incluido.
+ * =========================================================
+ */
+
+// =========================================================
+// CONFIGURACIÓN
+// =========================================================
+
+var CONFIG = {
+  NOMBRE_SISTEMA: 'BANCO LDS 360 ONLINE',
+  MONEDA: 'LDS',
+  INGRESO_BASE: 1130,
+
+  HOJAS: {
+    ESTUDIANTES: 'ESTUDIANTES',
+    CAJA: 'CAJA',
+    MOVIMIENTOS: 'MOVIMIENTOS',
+    CUENTAS: 'CUENTAS',
+    DASHBOARD: 'DASHBOARD'
+  },
+
+  // Si el proyecto está vinculado a la hoja, se usa getActiveSpreadsheet().
+  // Si no lo está, colocar aquí el ID de la hoja de cálculo.
+  SPREADSHEET_ID: '',
+
+  // Se recomienda guardar el PIN real en Propiedades del script:
+  // ADMIN_PIN = 360LDS
+  PIN_DEFAULT: '360LDS'
+};
+
+
+// =========================================================
+// CATÁLOGOS DE LA GUÍA
+// =========================================================
+
+var CATALOGO = {
+  gastos: [
+    { concepto: 'Vivienda', monto: 180, icono: '🏠' },
+    { concepto: 'Alimentación', monto: 180, icono: '🍎' },
+    { concepto: 'Educación', monto: 100, icono: '📚' },
+    { concepto: 'Electricidad', monto: 20, icono: '💡' },
+    { concepto: 'Agua', monto: 20, icono: '💧' },
+    { concepto: 'Transporte', monto: 60, icono: '🚌' },
+    { concepto: 'Comunicación', monto: 30, icono: '📱' },
+    { concepto: 'Salud', monto: 30, icono: '🩺' },
+    { concepto: 'Recreación', monto: 40, icono: '🎨' },
+    { concepto: 'Ahorro programado', monto: 100, icono: '🐷' }
+  ],
+
+  bonificaciones: [
+    { concepto: 'Puntualidad destacada', monto: 20, icono: '⏰' },
+    { concepto: 'Responsabilidad destacada', monto: 20, icono: '📋' },
+    { concepto: 'Colaboración', monto: 10, icono: '🤝' },
+    { concepto: 'Actividad con excelencia', monto: 15, icono: '⭐' },
+    { concepto: 'Perseverancia', monto: 15, icono: '💪' },
+    { concepto: 'Participación destacada', monto: 10, icono: '🙋' },
+    { concepto: 'Acción de servicio', monto: 10, icono: '❤️' },
+    { concepto: 'Logro excepcional', monto: 30, icono: '🏆' },
+    { concepto: 'Bono 360', monto: 30, icono: '🌟' }
+  ],
+
+  consecuencias: [
+    { concepto: 'No cumplir una responsabilidad', monto: 20, icono: '⚠️' },
+    { concepto: 'No entregar actividad acordada', monto: 15, icono: '📄' },
+    { concepto: 'Llegar tarde', monto: 30, icono: '⏰' },
+    { concepto: 'No contar con el material solicitado', monto: 10, icono: '🎒' },
+    { concepto: 'Dañar un material', monto: null, icono: '🛠️', nota: 'Pago o reposición' },
+    {
+      concepto: 'Incumplir un acuerdo',
+      monto: 50,
+      icono: '🤝',
+      nota: 'Requiere recordatorio, diálogo, llamada de atención y comunicación previa.'
+    }
+  ],
+
+  usosSaldo: [
+    { concepto: 'Ahorrar más', icono: '🐷' },
+    { concepto: 'Alcanzar metas', icono: '🎯' },
+    { concepto: 'Fondo de emergencia', icono: '🛡️' },
+    { concepto: 'Usarlo en actividades', icono: '🛍️' },
+    { concepto: 'Mantenerlo disponible', icono: '👛' }
+  ]
+};
+
+
+// =========================================================
+// APLICACIÓN WEB / API
+// =========================================================
+
+function doGet(e) {
+  try {
+    var params = (e && e.parameter) || {};
+    var accion = String(params.accion || params.action || 'info').trim();
+
+    var respuesta = procesarGET(accion, params);
+    return salidaJSON(respuesta);
+
+  } catch (error) {
+    return salidaJSON({
+      correcto: false,
+      error: error && error.message ? error.message : String(error)
+    });
+  }
 }
 
 
-/* =========================================================
-   BASE
-========================================================= */
+function doPost(e) {
+  try {
+    var datos = parsePost(e);
+    var accion = String(
+      datos.accion || datos.action || 'registrarMovimiento'
+    ).trim();
 
-*{
-  box-sizing:border-box;
-}
+    var respuesta = procesarPOST(accion, datos);
+    return salidaJSON(respuesta);
 
-html,
-body{
-  width:100%;
-  min-height:100%;
-  margin:0;
-  padding:0;
-  overflow-x:hidden;
-}
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  color:var(--ink);
-  background:#fff;
-}
-
-button,
-input{
-  font:inherit;
-}
-
-button{
-  -webkit-tap-highlight-color:transparent;
+  } catch (error) {
+    return salidaJSON({
+      correcto: false,
+      error: error && error.message ? error.message : String(error)
+    });
+  }
 }
 
 
-/* =========================================================
-   ENCABEZADO
-========================================================= */
+function salidaJSON(objeto) {
+  return ContentService
+    .createTextOutput(JSON.stringify(objeto))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-.topbar{
-  width:100%;
-  height:88px;
-  min-height:88px;
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+function parsePost(e) {
+  if (!e) return {};
 
-  gap:18px;
+  if (e.postData && e.postData.contents) {
+    var texto = String(e.postData.contents || '').trim();
 
-  padding:
-    8px
-    clamp(18px,4vw,58px);
+    if (texto) {
+      try {
+        return JSON.parse(texto);
+      } catch (ignorado) {
+        // Continúa con e.parameter.
+      }
+    }
+  }
 
-  color:#fff;
+  return e.parameter || {};
+}
 
-  background:
-    linear-gradient(
-      110deg,
-      #06172d,
-      #0d294b
+
+function procesarGET(accion, params) {
+  switch (accion.toLowerCase()) {
+
+    case 'info':
+      return obtenerInformacionSistema();
+
+    case 'estudiantes':
+      return {
+        correcto: true,
+        estudiantes: obtenerListaEstudiantes()
+      };
+
+    case 'estudiante':
+    case 'buscar':
+      return buscarEstudianteCompleto(params.codigo);
+
+    case 'cuenta':
+      return {
+        correcto: true,
+        cuenta: obtenerCuenta(params.codigo)
+      };
+
+    case 'movimientos':
+      return {
+        correcto: true,
+        movimientos: obtenerMovimientos(params.codigo)
+      };
+
+    case 'dashboard':
+      return {
+        correcto: true,
+        dashboard: obtenerDashboard()
+      };
+
+    case 'catalogo':
+    case 'reglas':
+      return {
+        correcto: true,
+        catalogo: CATALOGO
+      };
+
+    case 'prueba':
+      return pruebaSistema();
+
+    default:
+      return {
+        correcto: false,
+        error: 'Acción GET no reconocida.'
+      };
+  }
+}
+
+
+function procesarPOST(accion, datos) {
+  switch (accion.toLowerCase()) {
+
+    case 'login':
+    case 'verificaradmin':
+      return {
+        correcto: verificarAdministrador(datos.pin)
+      };
+
+    case 'registrarmovimiento':
+    case 'movimiento':
+      return registrarMovimiento(datos);
+
+    case 'registrarcaja':
+    case 'caja':
+      return registrarCaja(datos);
+
+    case 'crearcuentas':
+      return crearCuentasFaltantes();
+
+    default:
+      return {
+        correcto: false,
+        error: 'Acción POST no reconocida.'
+      };
+  }
+}
+
+
+// =========================================================
+// HOJA DE CÁLCULO
+// =========================================================
+
+function obtenerLibro() {
+  if (CONFIG.SPREADSHEET_ID) {
+    return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  }
+
+  var activo = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (!activo) {
+    throw new Error(
+      'No hay hoja activa. Configure CONFIG.SPREADSHEET_ID.'
+    );
+  }
+
+  return activo;
+}
+
+
+function obtenerHoja(nombre) {
+  var hoja = obtenerLibro().getSheetByName(nombre);
+
+  if (!hoja) {
+    throw new Error('No se encontró la hoja: ' + nombre);
+  }
+
+  return hoja;
+}
+
+
+function obtenerDatos(nombreHoja) {
+  var hoja = obtenerHoja(nombreHoja);
+  var ultimaFila = hoja.getLastRow();
+  var ultimaColumna = hoja.getLastColumn();
+
+  if (!ultimaFila || !ultimaColumna) return [];
+
+  return hoja
+    .getRange(1, 1, ultimaFila, ultimaColumna)
+    .getValues();
+}
+
+
+function normalizarEncabezado(valor) {
+  return String(valor || '')
+    .trim()
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+
+function mapaEncabezados(fila) {
+  var mapa = {};
+
+  for (var i = 0; i < fila.length; i++) {
+    var clave = normalizarEncabezado(fila[i]);
+
+    if (clave) {
+      mapa[clave] = i;
+    }
+  }
+
+  return mapa;
+}
+
+
+function buscarIndice(mapa, nombres, defecto) {
+  for (var i = 0; i < nombres.length; i++) {
+    var clave = normalizarEncabezado(nombres[i]);
+
+    if (mapa[clave] !== undefined) {
+      return mapa[clave];
+    }
+  }
+
+  return defecto;
+}
+
+
+// =========================================================
+// ESTUDIANTES
+// =========================================================
+
+function obtenerListaEstudiantes() {
+  var datos = obtenerDatos(CONFIG.HOJAS.ESTUDIANTES);
+
+  if (datos.length < 2) return [];
+
+  var mapa = mapaEncabezados(datos[0]);
+
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 0);
+  var iNombre = buscarIndice(mapa, ['NOMBRE', 'NOMBRES'], 1);
+  var iApellidos = buscarIndice(mapa, ['APELLIDOS', 'APELLIDO'], 2);
+  var iGrado = buscarIndice(mapa, ['GRADO'], 3);
+  var iSeccion = buscarIndice(mapa, ['SECCION', 'SECCIÓN'], 4);
+  var iFoto = buscarIndice(mapa, ['FOTO', 'FOTOGRAFIA', 'FOTOGRAFÍA', 'URL FOTO', 'FOTO URL'], -1);
+
+  var resultado = [];
+
+  for (var i = 1; i < datos.length; i++) {
+    var fila = datos[i];
+    var codigo = normalizarCodigo(fila[iCodigo]);
+
+    if (!codigo) continue;
+
+    resultado.push({
+      codigo: codigo,
+      nombres: String(fila[iNombre] || ''),
+      apellidos: String(fila[iApellidos] || ''),
+      grado: String(fila[iGrado] || ''),
+      seccion: String(fila[iSeccion] || ''),
+      foto: iFoto >= 0 ? String(fila[iFoto] || '') : ''
+    });
+  }
+
+  return resultado;
+}
+
+
+function buscarEstudiante(codigo) {
+  codigo = normalizarCodigo(codigo);
+
+  if (!codigo) {
+    return {
+      encontrado: false,
+      mensaje: 'Ingrese el código del estudiante.'
+    };
+  }
+
+  var lista = obtenerListaEstudiantes();
+
+  for (var i = 0; i < lista.length; i++) {
+    if (lista[i].codigo === codigo) {
+      return {
+        encontrado: true,
+        estudiante: lista[i]
+      };
+    }
+  }
+
+  return {
+    encontrado: false,
+    mensaje: 'Estudiante no encontrado.'
+  };
+}
+
+
+function buscarEstudianteCompleto(codigo) {
+  var estudiante = buscarEstudiante(codigo);
+
+  if (!estudiante.encontrado) {
+    return estudiante;
+  }
+
+  return {
+    correcto: true,
+    encontrado: true,
+    estudiante: estudiante.estudiante,
+    cuenta: obtenerCuenta(codigo),
+    movimientos: obtenerMovimientos(codigo),
+    catalogo: CATALOGO
+  };
+}
+
+
+function normalizarCodigo(codigo) {
+  return String(codigo || '')
+    .trim()
+    .toUpperCase()
+    .replace(/[.\s]+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+
+// =========================================================
+// ADMINISTRADOR
+// =========================================================
+
+function obtenerPINAdministrador() {
+  var props = PropertiesService
+    .getScriptProperties()
+    .getProperty('ADMIN_PIN');
+
+  if (props) return String(props);
+
+  // Compatibilidad con una hoja CONFIG!B2 si existe.
+  var libro = obtenerLibro();
+  var hojaConfig = libro.getSheetByName('CONFIG');
+
+  if (hojaConfig) {
+    var valor = hojaConfig.getRange('B2').getDisplayValue();
+
+    if (String(valor).trim()) {
+      return String(valor).trim();
+    }
+  }
+
+  return CONFIG.PIN_DEFAULT;
+}
+
+
+function verificarAdministrador(pin) {
+  return String(pin || '') === obtenerPINAdministrador();
+}
+
+
+// =========================================================
+// CUENTAS
+// =========================================================
+
+function obtenerCuenta(codigo) {
+  codigo = normalizarCodigo(codigo);
+
+  var estudiante = buscarEstudiante(codigo);
+
+  var cuentaVacia = {
+    existe: false,
+    codigo: codigo,
+    nombres: estudiante.encontrado ? estudiante.estudiante.nombres : '',
+    apellidos: estudiante.encontrado ? estudiante.estudiante.apellidos : '',
+    grado: estudiante.encontrado ? estudiante.estudiante.grado : '',
+    seccion: estudiante.encontrado ? estudiante.estudiante.seccion : '',
+    ingresoBase: CONFIG.INGRESO_BASE,
+    ingresos: 0,
+    bonificaciones: 0,
+    egresos: 0,
+    ahorro: 0,
+    consecuencias: 0,
+    saldo: CONFIG.INGRESO_BASE
+  };
+
+  if (!codigo) return cuentaVacia;
+
+  var hoja = obtenerHoja(CONFIG.HOJAS.CUENTAS);
+  var datos = hoja.getDataRange().getValues();
+
+  if (datos.length < 2) return cuentaVacia;
+
+  var mapa = mapaEncabezados(datos[0]);
+
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 0);
+  var iSaldo = buscarIndice(mapa, ['SALDO DISPONIBLE', 'SALDO'], 1);
+  var iAhorro = buscarIndice(mapa, ['AHORRO'], 2);
+  var iBonos = buscarIndice(mapa, ['BONIFICACIONES'], 3);
+  var iConsecuencias = buscarIndice(mapa, ['CONSECUENCIAS'], 4);
+  var iIngresoBase = buscarIndice(
+    mapa,
+    ['SUELDO BASE', 'INGRESO BASE', 'INGRESO MENSUAL BASE'],
+    -1
+  );
+  var iIngresos = buscarIndice(
+    mapa,
+    ['INGRESOS ADICIONALES', 'INGRESOS'],
+    -1
+  );
+  var iEgresos = buscarIndice(mapa, ['EGRESOS'], -1);
+
+  for (var i = 1; i < datos.length; i++) {
+    var fila = datos[i];
+
+    if (normalizarCodigo(fila[iCodigo]) !== codigo) {
+      continue;
+    }
+
+    var resultado = JSON.parse(JSON.stringify(cuentaVacia));
+
+    resultado.existe = true;
+    resultado.ingresoBase =
+      iIngresoBase >= 0
+        ? numero(fila[iIngresoBase])
+        : CONFIG.INGRESO_BASE;
+
+    resultado.ingresos =
+      iIngresos >= 0 ? numero(fila[iIngresos]) : 0;
+
+    resultado.bonificaciones = numero(fila[iBonos]);
+    resultado.egresos =
+      iEgresos >= 0 ? numero(fila[iEgresos]) : 0;
+    resultado.ahorro = numero(fila[iAhorro]);
+    resultado.consecuencias = numero(fila[iConsecuencias]);
+
+    // El saldo se recalcula desde los movimientos acumulados.
+    // Esto evita errores por saldos arrastrados o fórmulas rotas.
+    resultado.saldo = calcularSaldo(resultado);
+
+    return resultado;
+  }
+
+  return cuentaVacia;
+}
+
+
+function calcularSaldo(cuenta) {
+  return redondear(
+    numero(cuenta.ingresoBase) +
+    numero(cuenta.ingresos) +
+    numero(cuenta.bonificaciones) -
+    numero(cuenta.egresos) -
+    numero(cuenta.ahorro) -
+    numero(cuenta.consecuencias)
+  );
+}
+
+
+function crearCuenta(codigo) {
+  codigo = normalizarCodigo(codigo);
+
+  if (!codigo) {
+    throw new Error('Debe ingresar un código.');
+  }
+
+  var cuenta = obtenerCuenta(codigo);
+
+  if (cuenta.existe) {
+    return {
+      correcto: true,
+      mensaje: 'La cuenta ya existe.'
+    };
+  }
+
+  var hoja = obtenerHoja(CONFIG.HOJAS.CUENTAS);
+
+  asegurarCabecerasCuenta(hoja);
+
+  var datos = hoja.getDataRange().getValues();
+  var mapa = mapaEncabezados(datos[0]);
+
+  var cantidadColumnas = Math.max(6, datos[0].length);
+  var fila = new Array(cantidadColumnas).fill('');
+
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 0);
+  var iSaldo = buscarIndice(mapa, ['SALDO DISPONIBLE', 'SALDO'], 1);
+  var iAhorro = buscarIndice(mapa, ['AHORRO'], 2);
+  var iBonos = buscarIndice(mapa, ['BONIFICACIONES'], 3);
+  var iConsecuencias = buscarIndice(mapa, ['CONSECUENCIAS'], 4);
+  var iActualizado = buscarIndice(
+    mapa,
+    ['ACTUALIZADO', 'ULTIMA ACTUALIZACION', 'ÚLTIMA ACTUALIZACIÓN'],
+    5
+  );
+
+  fila[iCodigo] = codigo;
+  fila[iSaldo] = CONFIG.INGRESO_BASE;
+  fila[iAhorro] = 0;
+  fila[iBonos] = 0;
+  fila[iConsecuencias] = 0;
+  fila[iActualizado] = new Date();
+
+  hoja.appendRow(fila);
+
+  return {
+    correcto: true,
+    mensaje: 'Cuenta creada correctamente.'
+  };
+}
+
+
+function asegurarCabecerasCuenta(hoja) {
+  if (hoja.getLastRow() > 0 && hoja.getLastColumn() > 0) {
+    return;
+  }
+
+  hoja
+    .getRange(1, 1, 1, 6)
+    .setValues([[
+      'CODIGO',
+      'SALDO',
+      'AHORRO',
+      'BONIFICACIONES',
+      'CONSECUENCIAS',
+      'ACTUALIZADO'
+    ]]);
+}
+
+
+// =========================================================
+// MOVIMIENTOS
+// =========================================================
+
+function obtenerMovimientos(codigo) {
+  codigo = normalizarCodigo(codigo);
+
+  if (!codigo) return [];
+
+  var datos = obtenerDatos(CONFIG.HOJAS.MOVIMIENTOS);
+
+  if (datos.length < 2) return [];
+
+  var mapa = mapaEncabezados(datos[0]);
+
+  var iID = buscarIndice(mapa, ['ID'], 0);
+  var iFecha = buscarIndice(mapa, ['FECHA'], 1);
+  var iPeriodo = buscarIndice(mapa, ['PERIODO'], 2);
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 3);
+  var iTipo = buscarIndice(mapa, ['TIPO'], 4);
+  var iConcepto = buscarIndice(mapa, ['CONCEPTO'], 5);
+  var iMonto = buscarIndice(mapa, ['MONTO LDS', 'MONTO'], 6);
+  var iResponsable = buscarIndice(mapa, ['RESPONSABLE', 'USUARIO'], 7);
+  var iObservacion = buscarIndice(
+    mapa,
+    ['OBSERVACION', 'OBSERVACIÓN'],
+    8
+  );
+
+  var resultado = [];
+
+  for (var i = 1; i < datos.length; i++) {
+    var fila = datos[i];
+
+    if (normalizarCodigo(fila[iCodigo]) !== codigo) {
+      continue;
+    }
+
+    resultado.push({
+      id: fila[iID],
+      fecha: formatearFecha(fila[iFecha]),
+      periodo: String(fila[iPeriodo] || ''),
+      codigo: normalizarCodigo(fila[iCodigo]),
+      tipo: String(fila[iTipo] || ''),
+      concepto: String(fila[iConcepto] || ''),
+      monto: numero(fila[iMonto]),
+      responsable: String(fila[iResponsable] || ''),
+      observacion: String(fila[iObservacion] || '')
+    });
+  }
+
+  return resultado.reverse();
+}
+
+
+function registrarMovimiento(datos) {
+  datos = datos || {};
+
+  var codigo = normalizarCodigo(datos.codigo);
+  var tipo = normalizarTipo(datos.tipo);
+  var concepto = String(
+    datos.concepto || datos.descripcion || ''
+  ).trim();
+  var monto = numero(datos.monto);
+  var responsable = String(
+    datos.responsable || datos.usuario || 'WEB'
+  ).trim();
+  var observacion = String(
+    datos.observacion || ''
+  ).trim();
+
+  validarCodigo(codigo);
+  validarTipo(tipo);
+
+  if (!monto || monto <= 0) {
+    throw new Error('El monto debe ser mayor que cero.');
+  }
+
+  if (!concepto) {
+    throw new Error('Debe ingresar el concepto.');
+  }
+
+  var estudiante = buscarEstudiante(codigo);
+
+  if (!estudiante.encontrado) {
+    throw new Error('El estudiante no existe.');
+  }
+
+  // La consecuencia de LDS 50 requiere proceso previo.
+  if (
+    tipo === 'CONSECUENCIA' &&
+    monto === 50 &&
+    !datos.atencionPrevia
+  ) {
+    throw new Error(
+      'La consecuencia de LDS 50 requiere recordatorio, diálogo, llamada de atención y comunicación previa.'
+    );
+  }
+
+  crearCuenta(codigo);
+
+  var hoja = obtenerHoja(CONFIG.HOJAS.MOVIMIENTOS);
+  asegurarCabecerasMovimientos(hoja);
+
+  var mapa = mapaEncabezados(
+    hoja.getRange(
+      1,
+      1,
+      1,
+      hoja.getLastColumn()
+    ).getValues()[0]
+  );
+
+  var id = siguienteIDMovimiento(hoja, mapa);
+
+  var filaNueva = new Array(
+    Math.max(hoja.getLastColumn(), 10)
+  ).fill('');
+
+  var iID = buscarIndice(mapa, ['ID'], 0);
+  var iFecha = buscarIndice(mapa, ['FECHA'], 1);
+  var iPeriodo = buscarIndice(mapa, ['PERIODO'], 2);
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 3);
+  var iTipo = buscarIndice(mapa, ['TIPO'], 4);
+  var iConcepto = buscarIndice(mapa, ['CONCEPTO'], 5);
+  var iMonto = buscarIndice(mapa, ['MONTO LDS', 'MONTO'], 6);
+  var iResponsable = buscarIndice(
+    mapa,
+    ['RESPONSABLE', 'USUARIO'],
+    7
+  );
+  var iObservacion = buscarIndice(
+    mapa,
+    ['OBSERVACION', 'OBSERVACIÓN'],
+    8
+  );
+
+  filaNueva[iID] = id;
+  filaNueva[iFecha] = new Date();
+  filaNueva[iPeriodo] = periodoActual();
+  filaNueva[iCodigo] = codigo;
+  filaNueva[iTipo] = tipo;
+  filaNueva[iConcepto] = concepto;
+  filaNueva[iMonto] = monto;
+  filaNueva[iResponsable] = responsable;
+  filaNueva[iObservacion] = observacion;
+
+  hoja.appendRow(filaNueva);
+
+  actualizarCuentaDesdeMovimientos(codigo);
+
+  return {
+    correcto: true,
+    mensaje: 'Movimiento registrado correctamente.',
+    cuenta: obtenerCuenta(codigo),
+    movimiento: {
+      codigo: codigo,
+      tipo: tipo,
+      concepto: concepto,
+      monto: monto
+    }
+  };
+}
+
+
+function asegurarCabecerasMovimientos(hoja) {
+  if (hoja.getLastRow() > 0 && hoja.getLastColumn() > 0) {
+    return;
+  }
+
+  hoja
+    .getRange(1, 1, 1, 9)
+    .setValues([[
+      'ID',
+      'FECHA',
+      'PERIODO',
+      'CODIGO',
+      'TIPO',
+      'CONCEPTO',
+      'MONTO LDS',
+      'RESPONSABLE',
+      'OBSERVACION'
+    ]]);
+}
+
+
+function siguienteIDMovimiento(hoja, mapa) {
+  if (hoja.getLastRow() < 2) return 1;
+
+  var iID = buscarIndice(mapa, ['ID'], 0);
+  var datos = hoja.getDataRange().getValues();
+
+  var maximo = 0;
+
+  for (var i = 1; i < datos.length; i++) {
+    var valor = parseInt(datos[i][iID], 10);
+
+    if (!isNaN(valor) && valor > maximo) {
+      maximo = valor;
+    }
+  }
+
+  return maximo + 1;
+}
+
+
+// =========================================================
+// RECÁLCULO DE CUENTA
+// =========================================================
+
+function actualizarCuentaDesdeMovimientos(codigo) {
+  codigo = normalizarCodigo(codigo);
+
+  crearCuenta(codigo);
+
+  var estudiante = buscarEstudiante(codigo);
+  var movimientos = obtenerMovimientos(codigo);
+
+  var cuenta = {
+    ingresoBase: CONFIG.INGRESO_BASE,
+    ingresos: 0,
+    bonificaciones: 0,
+    egresos: 0,
+    ahorro: 0,
+    consecuencias: 0
+  };
+
+  for (var i = 0; i < movimientos.length; i++) {
+    var m = movimientos[i];
+
+    if (m.tipo === 'INGRESO') {
+      cuenta.ingresos += m.monto;
+    }
+
+    if (m.tipo === 'EGRESO') {
+      cuenta.egresos += m.monto;
+    }
+
+    if (m.tipo === 'AHORRO') {
+      cuenta.ahorro += m.monto;
+    }
+
+    if (m.tipo === 'BONIFICACION') {
+      cuenta.bonificaciones += m.monto;
+    }
+
+    if (m.tipo === 'CONSECUENCIA') {
+      cuenta.consecuencias += m.monto;
+    }
+  }
+
+  cuenta.saldo = calcularSaldo(cuenta);
+
+  var hoja = obtenerHoja(CONFIG.HOJAS.CUENTAS);
+  var datos = hoja.getDataRange().getValues();
+  var mapa = mapaEncabezados(datos[0]);
+
+  var iCodigo = buscarIndice(mapa, ['CODIGO', 'CÓDIGO'], 0);
+  var iSaldo = buscarIndice(mapa, ['SALDO DISPONIBLE', 'SALDO'], 1);
+  var iAhorro = buscarIndice(mapa, ['AHORRO'], 2);
+  var iBonos = buscarIndice(mapa, ['BONIFICACIONES'], 3);
+  var iConsecuencias = buscarIndice(mapa, ['CONSECUENCIAS'], 4);
+  var iIngresoBase = buscarIndice(
+    mapa,
+    ['SUELDO BASE', 'INGRESO BASE', 'INGRESO MENSUAL BASE'],
+    -1
+  );
+  var iIngresos = buscarIndice(
+    mapa,
+    ['INGRESOS ADICIONALES', 'INGRESOS'],
+    -1
+  );
+  var iEgresos = buscarIndice(mapa, ['EGRESOS'], -1);
+  var iActualizado = buscarIndice(
+    mapa,
+    ['ACTUALIZADO', 'ULTIMA ACTUALIZACION', 'ÚLTIMA ACTUALIZACIÓN'],
+    -1
+  );
+
+  var filaEncontrada = -1;
+
+  for (var j = 1; j < datos.length; j++) {
+    if (
+      normalizarCodigo(datos[j][iCodigo]) === codigo
+    ) {
+      filaEncontrada = j + 1;
+      break;
+    }
+  }
+
+  if (filaEncontrada < 0) {
+    return crearCuenta(codigo);
+  }
+
+  hoja.getRange(
+    filaEncontrada,
+    iSaldo + 1
+  ).setValue(cuenta.saldo);
+
+  hoja.getRange(
+    filaEncontrada,
+    iAhorro + 1
+  ).setValue(cuenta.ahorro);
+
+  hoja.getRange(
+    filaEncontrada,
+    iBonos + 1
+  ).setValue(cuenta.bonificaciones);
+
+  hoja.getRange(
+    filaEncontrada,
+    iConsecuencias + 1
+  ).setValue(cuenta.consecuencias);
+
+  if (iIngresoBase >= 0) {
+    hoja.getRange(
+      filaEncontrada,
+      iIngresoBase + 1
+    ).setValue(CONFIG.INGRESO_BASE);
+  }
+
+  if (iIngresos >= 0) {
+    hoja.getRange(
+      filaEncontrada,
+      iIngresos + 1
+    ).setValue(cuenta.ingresos);
+  }
+
+  if (iEgresos >= 0) {
+    hoja.getRange(
+      filaEncontrada,
+      iEgresos + 1
+    ).setValue(cuenta.egresos);
+  }
+
+  if (iActualizado >= 0) {
+    hoja.getRange(
+      filaEncontrada,
+      iActualizado + 1
+    ).setValue(new Date());
+  }
+
+  return {
+    correcto: true,
+    cuenta: cuenta
+  };
+}
+
+
+// =========================================================
+// CAJA
+// =========================================================
+
+function registrarCaja(datos) {
+  datos = datos || {};
+
+  var tipo = normalizarTipo(datos.tipo);
+  var monto = numero(datos.monto);
+  var descripcion = String(
+    datos.concepto || datos.descripcion || ''
+  ).trim();
+  var responsable = String(
+    datos.responsable || 'WEB'
+  ).trim();
+
+  validarTipo(tipo);
+
+  if (!monto || monto <= 0) {
+    throw new Error('El monto debe ser mayor que cero.');
+  }
+
+  if (!descripcion) {
+    throw new Error('Debe ingresar una descripción.');
+  }
+
+  var hoja = obtenerHoja(CONFIG.HOJAS.CAJA);
+  asegurarCabecerasCaja(hoja);
+
+  var columnas = mapaEncabezados(
+    hoja.getRange(
+      1,
+      1,
+      1,
+      hoja.getLastColumn()
+    ).getValues()[0]
+  );
+
+  var fila = new Array(
+    Math.max(hoja.getLastColumn(), 5)
+  ).fill('');
+
+  fila[buscarIndice(columnas, ['FECHA'], 0)] = new Date();
+  fila[buscarIndice(columnas, ['TIPO'], 1)] = tipo;
+  fila[buscarIndice(columnas, ['MONTO', 'MONTO LDS'], 2)] = monto;
+  fila[buscarIndice(columnas, ['DESCRIPCION', 'DESCRIPCIÓN'], 3)] = descripcion;
+  fila[buscarIndice(columnas, ['RESPONSABLE', 'USUARIO'], 4)] = responsable;
+
+  hoja.appendRow(fila);
+
+  return {
+    correcto: true,
+    mensaje: 'Movimiento de caja registrado.'
+  };
+}
+
+
+function asegurarCabecerasCaja(hoja) {
+  if (hoja.getLastRow() > 0 && hoja.getLastColumn() > 0) {
+    return;
+  }
+
+  hoja
+    .getRange(1, 1, 1, 5)
+    .setValues([[
+      'FECHA',
+      'TIPO',
+      'MONTO',
+      'DESCRIPCION',
+      'RESPONSABLE'
+    ]]);
+}
+
+
+// =========================================================
+// DASHBOARD
+// =========================================================
+
+function obtenerDashboard() {
+  var estudiantes = obtenerListaEstudiantes();
+  var movimientos = obtenerDatos(CONFIG.HOJAS.MOVIMIENTOS);
+  var cuentas = obtenerDatos(CONFIG.HOJAS.CUENTAS);
+
+  var totalIngresos = 0;
+  var totalEgresos = 0;
+  var totalAhorros = 0;
+  var totalBonificaciones = 0;
+  var totalConsecuencias = 0;
+  var saldoGeneral = 0;
+
+  if (movimientos.length >= 2) {
+    var mapaMov = mapaEncabezados(movimientos[0]);
+
+    var iTipo = buscarIndice(mapaMov, ['TIPO'], 4);
+    var iMonto = buscarIndice(
+      mapaMov,
+      ['MONTO LDS', 'MONTO'],
+      6
     );
 
-  border-bottom:
-    3px solid
-    var(--gold);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  min-width:0;
-}
-
-.school-crest{
-  width:54px;
-  height:64px;
-
-  flex:0 0 auto;
-
-  display:block;
-
-  object-fit:contain;
-  object-position:center;
-}
-
-.school-name{
-  min-width:0;
-}
-
-.school-name strong{
-  display:block;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:24px;
-
-  line-height:1;
-
-  white-space:nowrap;
-}
-
-.school-name span{
-  display:block;
-
-  margin-top:5px;
-
-  color:var(--gold2);
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:16px;
-
-  font-style:italic;
-}
-
-.admin-btn{
-  flex:0 0 auto;
-
-  padding:
-    11px
-    19px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.24);
-
-  border-radius:11px;
-
-  background:#203754;
-
-  color:#fff;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:
-    background .2s ease,
-    transform .2s ease;
-}
-
-.admin-btn:hover{
-  background:#2a4769;
-
-  transform:translateY(-1px);
-}
-
-.lock{
-  margin-right:6px;
-}
-
-
-/* =========================================================
-   PORTADA
-========================================================= */
-
-.hero{
-  width:100%;
-
-  height:calc(100dvh - 176px);
-
-  min-height:0;
-
-  display:grid;
-
-  grid-template-columns:
-    minmax(0,58%)
-    minmax(0,42%);
-
-  overflow:hidden;
-
-  background:#fff;
-}
-
-
-/* =========================================================
-   LADO IZQUIERDO
-========================================================= */
-
-.hero-left{
-  position:relative;
-
-  min-width:0;
-
-  overflow:hidden;
-
-  padding:
-    clamp(16px,2.5vh,28px)
-    clamp(20px,3.7vw,52px)
-    12px;
-
-  background:
-    radial-gradient(
-      #d8d8d8 1px,
-      transparent 1px
-    ),
-    #fff;
-
-  background-size:8px 8px;
-}
-
-.hero-left:after{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  right:0;
-
-  width:84px;
-  height:100%;
-
-  background:
-    linear-gradient(
-      171deg,
-      transparent 0 46%,
-      var(--navy) 46.2% 100%
-    );
-
-  clip-path:
-    polygon(
-      100% 0,
-      100% 100%,
-      0 100%,
-      48% 0
-    );
-
-  z-index:0;
-
-  pointer-events:none;
-}
-
-.bank-logo,
-.subtitle,
-.intro,
-.actions,
-.security{
-  position:relative;
-
-  z-index:2;
-}
-
-
-/* =========================================================
-   LOGO BANCO LDS
-========================================================= */
-
-.bank-logo{
-  width:100%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  gap:14px;
-}
-
-.bank-symbol{
-  width:96px;
-  height:82px;
-
-  flex:0 0 96px;
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:flex-end;
-
-  align-items:center;
-}
-
-.bank-symbol .roof{
-  width:91px;
-  height:19px;
-
-  border-top:
-    6px solid
-    var(--navy);
-
-  border-left:
-    6px solid
-    transparent;
-
-  border-right:
-    6px solid
-    transparent;
-
-  position:relative;
-}
-
-.bank-symbol .roof:after{
-  content:"★";
-
-  position:absolute;
-
-  top:-4px;
-  left:50%;
-
-  transform:
-    translateX(-50%);
-
-  color:var(--gold);
-
-  font-size:12px;
-}
-
-.columns{
-  width:80px;
-  height:41px;
-
-  display:flex;
-
-  align-items:flex-end;
-  justify-content:space-between;
-
-  padding:
-    0
-    5px;
-}
-
-.columns i{
-  display:block;
-
-  width:10px;
-  height:38px;
-
-  background:var(--navy);
-
-  border-left:
-    2px solid
-    var(--gold);
-
-  border-right:
-    2px solid
-    var(--gold);
-}
-
-.bank-symbol .base{
-  width:96px;
-  height:9px;
-
-  background:var(--navy);
-
-  border-bottom:
-    3px solid
-    var(--gold);
-}
-
-.bank-title{
-  min-width:0;
-}
-
-.bank-title h1{
-  margin:0;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:
-    clamp(
-      40px,
-      3.7vw,
-      56px
-    );
-
-  line-height:.83;
-
-  letter-spacing:1.5px;
-
-  color:var(--navy);
-}
-
-.bank-title h1 span{
-  color:var(--red);
-}
-
-.online{
-  margin-top:8px;
-
-  padding-left:7px;
-
-  text-align:center;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:
-    clamp(
-      13px,
-      1.2vw,
-      18px
-    );
-
-  letter-spacing:
-    clamp(
-      5px,
-      .7vw,
-      9px
-    );
-
-  color:var(--navy);
-}
-
-
-/* =========================================================
-   TEXTOS
-========================================================= */
-
-.subtitle{
-  margin:
-    6px
-    0
-    11px;
-
-  text-align:center;
-
-  font-size:
-    clamp(
-      16px,
-      1.4vw,
-      20px
-    );
-
-  color:#555;
-}
-
-.intro{
-  margin:0;
-
-  text-align:center;
-
-  color:var(--navy);
-
-  font-size:
-    clamp(
-      16px,
-      1.45vw,
-      20px
-    );
-
-  line-height:1.22;
-
-  font-weight:700;
-}
-
-
-/* =========================================================
-   BOTONES
-   ANCHO REALMENTE REDUCIDO
-========================================================= */
-
-.actions{
-  width:560px !important;
-
-  max-width:
-    calc(100% - 80px) !important;
-
-  margin:
-    14px
-    auto
-    0;
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
-
-  gap:14px;
-}
-
-.action-card{
-  width:100% !important;
-
-  min-width:0;
-
-  height:128px;
-  min-height:128px;
-
-  position:relative;
-
-  border:0;
-
-  border-radius:21px;
-
-  padding:
-    11px
-    13px
-    34px;
-
-  background:#fff;
-
-  box-shadow:
-    0 7px 17px
-    rgba(0,0,0,.12);
-
-  display:grid;
-
-  grid-template-columns:
-    43px
-    minmax(0,1fr);
-
-  align-items:start;
-
-  gap:6px;
-
-  text-align:left;
-
-  cursor:pointer;
-
-  overflow:hidden;
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
-}
-
-.action-card:hover{
-  transform:translateY(-2px);
-
-  box-shadow:
-    0 12px 23px
-    rgba(0,0,0,.16);
-}
-
-.action-card:focus-visible{
-  outline:
-    3px solid
-    var(--gold);
-
-  outline-offset:2px;
-}
-
-
-/* ---------- FRANJA ---------- */
-
-.action-card:after{
-  content:"";
-
-  position:absolute;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  height:29px;
-
-  z-index:1;
-}
-
-.action-card.qr:after{
-  background:var(--red);
-}
-
-.action-card.code:after{
-  background:var(--navy);
-}
-
-
-/* ---------- ICONOS ---------- */
-
-.card-icon{
-  width:39px;
-  height:39px;
-
-  margin-top:7px;
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:27px;
-
-  font-weight:700;
-
-  z-index:3;
-}
-
-.qr-icon{
-  color:var(--red);
-}
-
-.keyboard-icon{
-  color:var(--navy);
-}
-
-
-/* ---------- CONTENIDO ---------- */
-
-.card-content{
-  min-width:0;
-
-  padding-top:5px;
-
-  padding-bottom:4px;
-
-  z-index:3;
-}
-
-.action-card b{
-  display:block;
-
-  margin:0;
-
-  font-size:16px;
-
-  line-height:1.02;
-}
-
-.action-card.qr b{
-  color:var(--red);
-}
-
-.action-card.code b{
-  color:var(--navy);
-}
-
-.action-card small{
-  display:block;
-
-  margin-top:7px;
-
-  max-width:185px;
-
-  color:#555;
-
-  font-size:10px;
-
-  line-height:1.2;
-}
-
-
-/* ---------- FLECHA ---------- */
-
-.arrow{
-  position:absolute;
-
-  left:50%;
-
-  bottom:0;
-
-  transform:
-    translateX(-50%);
-
-  width:36px;
-  height:36px;
-
-  border:
-    2px solid
-    #fff;
-
-  border-radius:50%;
-
-  display:grid;
-
-  place-items:center;
-
-  z-index:5;
-
-  color:#fff;
-
-  background:var(--navy);
-
-  font-size:28px;
-
-  line-height:1;
-
-  font-style:normal;
-
-  pointer-events:none;
-}
-
-.action-card.qr .arrow{
-  background:var(--red);
-}
-
-
-/* =========================================================
-   SEGURIDAD
-========================================================= */
-
-.security{
-  width:560px !important;
-
-  max-width:
-    calc(100% - 80px) !important;
-
-  margin:
-    11px
-    auto
-    0;
-
-  padding:
-    9px
-    13px;
-
-  border-radius:14px;
-
-  background:#dedfe1;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:9px;
-
-  font-size:12px;
-
-  line-height:1.2;
-}
-
-.security-icon{
-  flex:0 0 auto;
-
-  font-size:23px;
-}
-
-
-/* =========================================================
-   LADO DERECHO
-========================================================= */
-
-.hero-right{
-  position:relative;
-
-  min-width:0;
-
-  height:100%;
-
-  overflow:hidden;
-
-  background:
-    radial-gradient(
-      circle at 53% 37%,
-      #294b73 0%,
-      #102e50 34%,
-      #061a35 77%
-    );
-}
-
-.decorative-line{
-  position:absolute;
-
-  inset:0;
-
-  z-index:1;
-
-  pointer-events:none;
-
-  background:
-    linear-gradient(
-      130deg,
-      transparent 45%,
-      rgba(217,166,58,.78) 45.3%,
-      transparent 46%,
-      transparent 74%,
-      rgba(217,166,58,.72) 74.3%,
-      transparent 74.8%
-    );
-}
-
-
-/* =========================================================
-   PROFESORA
-========================================================= */
-
-.teacher-img{
-  position:absolute;
-
-  z-index:2;
-
-  top:2%;
-
-  right:5%;
-
-  width:
-    min(
-      220px,
-      31%
-    );
-
-  height:auto;
-
-  max-height:43%;
-
-  object-fit:contain;
-
-  object-position:
-    center
-    top;
-
-  opacity:.44;
-}
-
-
-/* =========================================================
-   NIÑOS
-========================================================= */
-
-.children{
-  position:absolute;
-
-  z-index:3;
-
-  left:8%;
-  right:8%;
-
-  bottom:68px;
-
-  height:61%;
-
-  display:flex;
-
-  align-items:flex-end;
-
-  justify-content:center;
-
-  gap:0;
-}
-
-.boy-img,
-.girl-img{
-  display:block;
-
-  width:auto;
-
-  height:100%;
-
-  object-fit:contain;
-
-  object-position:
-    center
-    bottom;
-
-  filter:
-    drop-shadow(
-      0 9px 6px
-      rgba(0,0,0,.42)
-    );
-}
-
-.boy-img{
-  max-width:47%;
-
-  margin-right:-7px;
-}
-
-.girl-img{
-  max-width:44%;
-
-  margin-left:-7px;
-}
-
-
-/* =========================================================
-   MINI LOGO
-========================================================= */
-
-.mini-brand{
-  position:absolute;
-
-  z-index:6;
-
-  right:4.5%;
-
-  bottom:8px;
-
-  color:#fff;
-
-  text-align:center;
-}
-
-.mini-bank{
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  gap:6px;
-}
-
-.mini-bank strong{
-  display:block;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:21px;
-}
-
-.mini-bank span{
-  display:block;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:21px;
-
-  font-weight:700;
-
-  color:var(--gold2);
-}
-
-.mini-brand small{
-  display:block;
-
-  margin-top:3px;
-
-  font-size:7px;
-}
-
-.mini-symbol{
-  width:32px;
-  height:31px;
-
-  display:flex;
-
-  align-items:flex-end;
-
-  justify-content:space-around;
-
-  padding:
-    3px
-    2px;
-
-  border-top:
-    4px solid
-    var(--gold);
-
-  border-bottom:
-    4px solid
-    var(--gold);
-}
-
-.mini-symbol div{
-  width:5px;
-  height:18px;
-
-  background:var(--gold);
-}
-
-
-/* =========================================================
-   PIE DE PÁGINA
-========================================================= */
-
-footer{
-  width:100%;
-
-  height:88px;
-  min-height:88px;
-
-  background:var(--navy);
-
-  border-top:
-    3px solid
-    var(--gold);
-
-  color:#fff;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:20px;
-
-  padding:
-    10px
-    clamp(18px,4vw,55px);
-}
-
-.footer-school{
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-}
-
-.footer-school img{
-  width:46px;
-  height:51px;
-
-  flex:0 0 auto;
-
-  object-fit:contain;
-}
-
-.footer-school strong{
-  display:block;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size:14px;
-}
-
-.footer-school span{
-  display:block;
-
-  margin-top:3px;
-
-  font-size:10px;
-
-  line-height:1.2;
-}
-
-.values{
-  display:flex;
-
-  align-items:center;
-
-  justify-content:flex-end;
-
-  flex-wrap:wrap;
-
-  gap:18px;
-}
-
-.values div{
-  display:flex;
-
-  align-items:center;
-
-  gap:5px;
-}
-
-.values b{
-  color:var(--gold);
-
-  font-size:19px;
-}
-
-.values span{
-  font-size:12px;
-
-  white-space:nowrap;
-}
-
-
-/* =========================================================
-   MODALES
-========================================================= */
-
-.modal{
-  position:fixed;
-
-  inset:0;
-
-  z-index:1000;
-
-  padding:10px;
-
-  background:
-    rgba(4,17,34,.78);
-
-  display:grid;
-
-  place-items:center;
-
-  overflow:auto;
-}
-
-.hidden{
-  display:none !important;
-}
-
-.modal-card{
-  position:relative;
-
-  width:
-    min(
-      620px,
-      95vw
-    );
-
-  max-height:92vh;
-
-  overflow-x:hidden;
-
-  overflow-y:auto;
-
-  padding:26px;
-
-  background:#fff;
-
-  border-radius:22px;
-
-  box-shadow:
-    0 25px 70px
-    rgba(0,0,0,.35);
-}
-
-.modal-card.small{
-  width:
-    min(
-      430px,
-      95vw
-    );
-}
-
-.close{
-  position:absolute;
-
-  top:8px;
-  right:12px;
-
-  width:42px;
-  height:42px;
-
-  border:0;
-
-  background:transparent;
-
-  color:#111;
-
-  font-size:34px;
-
-  line-height:1;
-
-  cursor:pointer;
-}
-
-.modal-card h2{
-  margin:
-    2px
-    45px
-    12px
-    0;
-
-  color:var(--navy);
-
-  font-size:28px;
-}
-
-.modal-card p{
-  margin:
-    0
-    0
-    14px;
-
-  font-size:17px;
-
-  line-height:1.35;
-}
-
-
-/* =========================================================
-   LECTOR QR
-========================================================= */
-
-#scannerModal{
-  padding:8px;
-}
-
-#scannerModal .modal-card{
-  width:
-    min(
-      500px,
-      calc(100vw - 16px)
-    );
-
-  max-height:
-    calc(100vh - 16px);
-
-  padding:
-    20px
-    14px
-    16px;
-
-  overflow-x:hidden;
-
-  overflow-y:auto;
-}
-
-#scannerModal #reader{
-  width:100% !important;
-
-  max-width:450px !important;
-
-  min-height:0 !important;
-
-  margin:
-    10px
-    auto
-    0 !important;
-
-  overflow:hidden !important;
-
-  border-radius:12px;
-
-  background:#111;
-}
-
-#scannerModal #reader video{
-  display:block !important;
-
-  width:100% !important;
-
-  max-width:100% !important;
-
-  height:auto !important;
-
-  max-height:50vh !important;
-
-  object-fit:cover !important;
-
-  border-radius:12px;
-}
-
-#scannerModal #reader__scan_region{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  overflow:hidden !important;
-}
-
-#scannerModal #reader__scan_region video{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  height:auto !important;
-}
-
-#scannerModal #reader__dashboard,
-#scannerModal #reader__dashboard_section,
-#scannerModal #reader__dashboard_section_csr{
-  width:100% !important;
-
-  max-width:100% !important;
-
-  overflow:hidden !important;
-}
-
-#scannerModal #reader img{
-  max-width:100% !important;
-
-  height:auto !important;
-}
-
-#scannerModal .status{
-  width:100%;
-
-  max-width:450px;
-
-  margin:
-    10px
-    auto
-    0;
-
-  text-align:center;
-
-  color:var(--red);
-
-  font-size:15px;
-
-  line-height:1.35;
-}
-
-
-/* =========================================================
-   INPUTS
-========================================================= */
-
-.modal-card input{
-  width:100%;
-
-  padding:
-    14px
-    15px;
-
-  margin:
-    10px
-    0
-    15px;
-
-  border:
-    1px solid
-    #bfc5cc;
-
-  border-radius:10px;
-
-  outline:none;
-
-  background:#fff;
-}
-
-.modal-card input:focus{
-  border-color:var(--navy);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(7,26,52,.10);
-}
-
-.primary{
-  width:100%;
-
-  padding:14px;
-
-  border:0;
-
-  border-radius:10px;
-
-  background:var(--navy);
-
-  color:#fff;
-
-  font-weight:700;
-
-  cursor:pointer;
-}
-
-
-/* =========================================================
-   PERFIL
-========================================================= */
-
-.profile-head{
-  display:flex;
-
-  align-items:center;
-
-  gap:18px;
-}
-
-.avatar{
-  width:92px;
-  height:92px;
-
-  flex:0 0 92px;
-
-  overflow:hidden;
-
-  border-radius:50%;
-
-  background:#e8edf4;
-
-  display:grid;
-
-  place-items:center;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-
-  display:block;
-
-  object-fit:cover;
-}
-
-.badge{
-  display:inline-block;
-
-  padding:
-    5px
-    9px;
-
-  border-radius:20px;
-
-  background:#e9eff7;
-
-  color:var(--navy);
-
-  font-size:12px;
-
-  font-weight:700;
-}
-
-.profile-head h2{
-  margin:6px 0;
-}
-
-.profile-head p{
-  margin:0;
-
-  color:#666;
-}
-
-.balance{
-  margin:
-    24px
-    0;
-
-  padding:22px;
-
-  border-radius:18px;
-
-  color:#fff;
-
-  background:
-    linear-gradient(
-      120deg,
-      var(--navy),
-      #193a62
-    );
-}
-
-.balance small{
-  display:block;
-
-  opacity:.75;
-}
-
-.balance strong{
-  display:block;
-
-  margin-top:6px;
-
-  font-size:32px;
-}
-
-.grid{
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:12px;
-
-  margin-bottom:22px;
-}
-
-.grid>div{
-  padding:14px;
-
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:12px;
-
-  background:#fff;
-}
-
-.grid span{
-  display:block;
-
-  color:#666;
-
-  font-size:13px;
-}
-
-.grid b{
-  display:block;
-
-  margin-top:6px;
-
-  color:var(--navy);
-}
-
-
-/* =========================================================
-   ESCRITORIO CON POCA ALTURA
-========================================================= */
-
-@media(
-  max-height:720px
-) and (
-  min-width:851px
-){
-
-  .topbar{
-    height:74px;
-    min-height:74px;
-  }
-
-  .school-crest{
-    width:45px;
-    height:53px;
-  }
-
-  .school-name strong{
-    font-size:20px;
-  }
-
-  .school-name span{
-    font-size:13px;
-  }
-
-  .admin-btn{
-    padding:
-      9px
-      15px;
-  }
-
-  .hero{
-    height:calc(100dvh - 158px);
-  }
-
-  .hero-left{
-    padding-top:13px;
-    padding-bottom:8px;
-  }
-
-  .bank-symbol{
-    transform:scale(.82);
-  }
-
-  .bank-title h1{
-    font-size:43px;
-  }
-
-  .online{
-    font-size:13px;
-  }
-
-  .subtitle{
-    font-size:16px;
-
-    margin-bottom:7px;
-  }
-
-  .intro{
-    font-size:17px;
-  }
-
-  .actions{
-    width:540px !important;
-
-    max-width:
-      calc(100% - 70px) !important;
-
-    margin-top:8px;
-  }
-
-  .action-card{
-    height:118px;
-
-    min-height:118px;
-
-    padding:
-      9px
-      12px
-      28px;
-  }
-
-  .action-card b{
-    font-size:15px;
-  }
-
-  .action-card small{
-    font-size:9px;
-
-    margin-top:5px;
-
-    line-height:1.16;
-  }
-
-  .card-icon{
-    font-size:25px;
-  }
-
-  .security{
-    width:540px !important;
-
-    max-width:
-      calc(100% - 70px) !important;
-
-    margin-top:6px;
-
-    padding:
-      7px
-      12px;
-
-    font-size:10px;
-  }
-
-  .teacher-img{
-    width:195px;
-  }
-
-  .children{
-    bottom:52px;
-
-    height:56%;
-
-    gap:0;
-  }
-
-  .boy-img{
-    margin-right:-7px;
-  }
-
-  .girl-img{
-    margin-left:-7px;
-  }
-
-  footer{
-    height:84px;
-    min-height:84px;
-  }
-}
-
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media(max-width:850px){
-
-  .hero{
-    height:auto;
-
-    min-height:0;
-
-    grid-template-columns:1fr;
-  }
-
-  .hero-left:after{
-    display:none;
-  }
-
-  .hero-left{
-    padding:
-      30px
-      25px
-      22px;
-  }
-
-  .hero-right{
-    min-height:500px;
-
-    height:500px;
-  }
-
-  .actions,
-  .security{
-    width:100% !important;
-
-    max-width:100% !important;
-  }
-
-  footer{
-    height:auto;
-
-    min-height:90px;
-
-    flex-direction:column;
-
-    align-items:flex-start;
-  }
-
-  .values{
-    justify-content:flex-start;
-  }
-}
-
-
-/* =========================================================
-   TABLET PEQUEÑA
-========================================================= */
-
-@media(max-width:700px){
-
-  .topbar{
-    height:84px;
-    min-height:84px;
-
-    padding:
-      9px
-      17px;
-  }
-
-  .school-crest{
-    width:50px;
-    height:57px;
-  }
-
-  .school-name strong{
-    font-size:20px;
-  }
-
-  .school-name span{
-    font-size:13px;
-  }
-
-  .admin-btn{
-    padding:
-      9px
-      12px;
-
-    font-size:12px;
-  }
-
-  .hero-left{
-    padding:
-      28px
-      21px
-      22px;
-  }
-
-  .bank-title h1{
-    font-size:47px;
-  }
-
-  .actions{
-    gap:14px;
-  }
-
-  .action-card{
-    height:150px;
-    min-height:150px;
-  }
-
-  .hero-right{
-    min-height:500px;
-    height:500px;
-  }
-
-  .teacher-img{
-    width:255px;
-  }
-
-  .children{
-    bottom:82px;
-
-    height:60%;
-
-    gap:0;
-  }
-
-  .boy-img{
-    margin-right:-5px;
-  }
-
-  .girl-img{
-    margin-left:-5px;
-  }
-}
-
-
-/* =========================================================
-   CELULAR
-========================================================= */
-
-@media(max-width:600px){
-
-  .topbar{
-    height:78px;
-    min-height:78px;
-
-    padding:
-      8px
-      12px;
-
-    gap:8px;
-  }
-
-  .brand{
-    gap:7px;
-  }
-
-  .school-crest{
-    width:40px;
-    height:48px;
-  }
-
-  .school-name strong{
-    font-size:13px;
-
-    white-space:normal;
-
-    line-height:1.05;
-  }
-
-  .school-name span{
-    margin-top:3px;
-
-    font-size:9px;
-  }
-
-  .admin-btn{
-    padding:
-      7px
-      8px;
-
-    font-size:9px;
-  }
-
-  .lock{
-    margin-right:2px;
-  }
-
-
-  /* ---------- PORTADA ---------- */
-
-  .hero{
-    display:flex;
-
-    flex-direction:column;
-
-    height:auto;
-
-    min-height:0;
-  }
-
-  .hero-left{
-    padding:
-      26px
-      14px
-      22px;
-  }
-
-
-  /* ---------- LOGO ---------- */
-
-  .bank-logo{
-    gap:5px;
-  }
-
-  .bank-symbol{
-    width:62px;
-    height:61px;
-
-    flex-basis:62px;
-
-    transform:none;
-  }
-
-  .bank-symbol .roof{
-    width:60px;
-    height:19px;
-
-    border-top-width:6px;
-  }
-
-  .columns{
-    width:52px;
-    height:29px;
-
-    padding:
-      0
-      3px;
-  }
-
-  .columns i{
-    width:7px;
-    height:27px;
-
-    border-left-width:2px;
-    border-right-width:2px;
-  }
-
-  .bank-symbol .base{
-    width:62px;
-    height:7px;
-  }
-
-  .bank-title h1{
-    font-size:32px;
-
-    letter-spacing:1px;
-  }
-
-  .online{
-    margin-top:8px;
-
-    font-size:10px;
-
-    letter-spacing:4px;
-
-    padding-left:4px;
-  }
-
-  .subtitle{
-    margin:
-      9px
-      0
-      16px;
-
-    font-size:15px;
-  }
-
-  .intro{
-    font-size:16px;
-
-    line-height:1.3;
-  }
-
-
-  /* ---------- BOTONES ---------- */
-
-  .actions{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    grid-template-columns:1fr;
-
-    gap:13px;
-
-    margin-top:20px;
-  }
-
-  .action-card{
-    width:100% !important;
-
-    height:155px;
-    min-height:155px;
-
-    border-radius:20px;
-
-    padding:
-      18px
-      16px
-      35px;
-
-    grid-template-columns:
-      52px
-      minmax(0,1fr);
-  }
-
-  .card-icon{
-    width:46px;
-    height:46px;
-
-    font-size:32px;
-  }
-
-  .action-card b{
-    font-size:18px;
-  }
-
-  .action-card small{
-    margin-top:11px;
-
-    font-size:12px;
-
-    line-height:1.28;
-  }
-
-  .arrow{
-    width:39px;
-    height:39px;
-
-    font-size:32px;
-  }
-
-
-  /* ---------- SEGURIDAD ---------- */
-
-  .security{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    margin-top:17px;
-
-    padding:
-      11px
-      12px;
-
-    font-size:12px;
-
-    gap:8px;
-  }
-
-  .security-icon{
-    font-size:25px;
-  }
-
-
-  /* ---------- LADO DERECHO ---------- */
-
-  .hero-right{
-    min-height:420px;
-    height:420px;
-  }
-
-  .teacher-img{
-    top:2%;
-
-    right:2%;
-
-    width:195px;
-
-    max-height:53%;
-
-    opacity:.4;
-  }
-
-  .children{
-    left:4%;
-    right:4%;
-
-    bottom:67px;
-
-    height:63%;
-
-    gap:0;
-  }
-
-  .boy-img{
-    width:50%;
-
-    max-width:205px;
-
-    margin-right:-5px;
-  }
-
-  .girl-img{
-    width:46%;
-
-    max-width:190px;
-
-    margin-left:-5px;
-  }
-
-
-  /* ---------- MINI LOGO ---------- */
-
-  .mini-brand{
-    right:50%;
-
-    bottom:13px;
-
-    transform:
-      translateX(50%);
-
-    width:100%;
-  }
-
-  .mini-bank strong,
-  .mini-bank span{
-    font-size:20px;
-  }
-
-  .mini-symbol{
-    width:32px;
-    height:30px;
-  }
-
-  .mini-symbol div{
-    width:5px;
-    height:17px;
-  }
-
-  .mini-brand small{
-    font-size:7px;
-  }
-
-
-  /* ---------- PIE ---------- */
-
-  footer{
-    height:auto;
-
-    min-height:0;
-
-    padding:
-      17px
-      15px;
-
-    gap:16px;
-  }
-
-  .footer-school{
-    gap:9px;
-  }
-
-  .footer-school img{
-    width:43px;
-    height:47px;
-  }
-
-  .footer-school strong{
-    font-size:13px;
-  }
-
-  .footer-school span{
-    font-size:11px;
-  }
-
-  .values{
-    width:100%;
-
-    gap:
-      11px
-      18px;
-
-    justify-content:flex-start;
-  }
-
-  .values b{
-    font-size:19px;
-  }
-
-  .values span{
-    font-size:11px;
-  }
-
-
-  /* ---------- MODALES ---------- */
-
-  .modal{
-    padding:7px;
-  }
-
-  .modal-card{
-    width:
-      calc(
-        100vw - 14px
+    for (var i = 1; i < movimientos.length; i++) {
+      var tipo = normalizarTipo(
+        movimientos[i][iTipo]
       );
 
-    max-height:
-      calc(
-        100vh - 14px
+      var monto = numero(
+        movimientos[i][iMonto]
       );
 
-    border-radius:18px;
-
-    padding:
-      20px
-      13px;
+      if (tipo === 'INGRESO') totalIngresos += monto;
+      if (tipo === 'EGRESO') totalEgresos += monto;
+      if (tipo === 'AHORRO') totalAhorros += monto;
+      if (tipo === 'BONIFICACION') totalBonificaciones += monto;
+      if (tipo === 'CONSECUENCIA') totalConsecuencias += monto;
+    }
   }
 
-  .modal-card h2{
-    font-size:24px;
-  }
+  if (cuentas.length >= 2) {
+    var mapaCue = mapaEncabezados(cuentas[0]);
+    var iSaldo = buscarIndice(
+      mapaCue,
+      ['SALDO DISPONIBLE', 'SALDO'],
+      1
+    );
 
-  .modal-card p{
-    font-size:15px;
-  }
-
-
-  /* ---------- QR ---------- */
-
-  #scannerModal{
-    padding:7px;
-  }
-
-  #scannerModal .modal-card{
-    width:
-      calc(
-        100vw - 14px
+    for (var j = 1; j < cuentas.length; j++) {
+      saldoGeneral += numero(
+        cuentas[j][iSaldo]
       );
-
-    max-height:
-      calc(
-        100vh - 14px
-      );
-
-    padding:
-      20px
-      11px
-      17px;
+    }
   }
 
-  #scannerModal .modal-card h2{
-    font-size:24px;
-  }
+  var ingresoBaseTotal =
+    estudiantes.length * CONFIG.INGRESO_BASE;
 
-  #scannerModal .modal-card p{
-    font-size:15px;
-  }
-
-  #scannerModal #reader{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    margin-top:9px !important;
-  }
-
-  #scannerModal #reader video{
-    width:100% !important;
-
-    max-width:100% !important;
-
-    height:auto !important;
-
-    max-height:47vh !important;
-  }
+  return {
+    estudiantes: estudiantes.length,
+    ingresoBaseTotal: ingresoBaseTotal,
+    totalIngresos: redondear(totalIngresos),
+    totalEgresos: redondear(totalEgresos),
+    totalAhorros: redondear(totalAhorros),
+    totalBonificaciones: redondear(totalBonificaciones),
+    totalConsecuencias: redondear(totalConsecuencias),
+    saldoGeneral: redondear(saldoGeneral)
+  };
+}
 
 
-  /* ---------- PERFIL ---------- */
+// =========================================================
+// UTILIDADES / REGLAS
+// =========================================================
 
-  .profile-head{
-    gap:10px;
-  }
-
-  .avatar{
-    width:68px;
-    height:68px;
-
-    flex-basis:68px;
-  }
-
-  .profile-head h2{
-    font-size:20px;
-  }
-
-  .profile-head p{
-    font-size:12px;
-  }
-
-  .balance{
-    margin:
-      18px
-      0;
-
-    padding:17px;
-  }
-
-  .balance strong{
-    font-size:27px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-
-    gap:9px;
+function validarCodigo(codigo) {
+  if (!/^LDS-EST-\d{3}$/.test(codigo)) {
+    throw new Error(
+      'Código LDS no válido. Use LDS-EST-001 a LDS-EST-030.'
+    );
   }
 }
 
 
-/* =========================================================
-   CELULAR MUY PEQUEÑO
-========================================================= */
+function validarTipo(tipo) {
+  var permitidos = [
+    'INGRESO',
+    'EGRESO',
+    'AHORRO',
+    'BONIFICACION',
+    'CONSECUENCIA'
+  ];
 
-@media(max-width:380px){
-
-  .school-name strong{
-    font-size:11px;
-  }
-
-  .school-name span{
-    font-size:8px;
-  }
-
-  .admin-btn{
-    font-size:8px;
-
-    padding:
-      6px
-      7px;
-  }
-
-  .bank-title h1{
-    font-size:29px;
-  }
-
-  .online{
-    font-size:9px;
-
-    letter-spacing:3px;
-  }
-
-  .intro{
-    font-size:15px;
-  }
-
-  .action-card{
-    height:145px;
-    min-height:145px;
-
-    padding:
-      15px
-      14px
-      34px;
-  }
-
-  .action-card b{
-    font-size:17px;
-  }
-
-  .action-card small{
-    font-size:11px;
-
-    margin-top:8px;
-
-    line-height:1.22;
-  }
-
-  .hero-right{
-    min-height:390px;
-    height:390px;
-  }
-
-  .teacher-img{
-    width:175px;
-  }
-
-  .children{
-    bottom:62px;
-
-    height:61%;
-
-    gap:0;
-  }
-
-  .boy-img{
-    margin-right:-4px;
-  }
-
-  .girl-img{
-    margin-left:-4px;
+  if (permitidos.indexOf(tipo) === -1) {
+    throw new Error(
+      'Tipo de movimiento no válido.'
+    );
   }
 }
 
-/* =========================================================
-   FICHA DEL ALUMNO — CORRECCIÓN AISLADA
-   IMPORTANTE: estas reglas SOLO afectan #profileModal.
-   NO modifican la portada, encabezado, botones ni pie.
-   FOTO IZQUIERDA / DATOS DERECHA / BOTÓN DEBAJO
-   ========================================================= */
 
-@media (min-width: 761px){
-  #profileModal .modal-card.profile{
-    width: min(1100px, calc(100vw - 48px));
-    max-width: 1100px;
-    max-height: calc(100vh - 36px);
-    padding: 30px 34px;
-    overflow-x: hidden;
-    overflow-y: auto;
+function normalizarTipo(tipo) {
+  var t = normalizarEncabezado(tipo);
+
+  if (t === 'BONIFICACION' || t === 'BONIFICACIONES') {
+    return 'BONIFICACION';
   }
 
-  #profileModal #profileContent{
-    width: 100%;
-    max-width: 100%;
-    display: grid;
-    grid-template-columns: 400px minmax(0, 1fr);
-    grid-template-rows: auto auto auto auto;
-    column-gap: 36px;
-    row-gap: 14px;
-    align-items: start;
+  if (t === 'CONSECUENCIA' || t === 'CONSECUENCIAS') {
+    return 'CONSECUENCIA';
   }
 
-  /* El encabezado aporta la foto + bloque de identidad. */
-  #profileModal #profileContent .profile-head{
-    display: contents;
-  }
-
-  /* FOTO: siempre columna izquierda. */
-  #profileModal #profileContent .avatar{
-    grid-column: 1;
-    grid-row: 1 / 5;
-    width: 400px;
-    height: 400px;
-    min-width: 0;
-    min-height: 0;
-    flex: none;
-    border-radius: 18px;
-    overflow: hidden;
-  }
-
-  #profileModal #profileContent .avatar img{
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-width: 0;
-    min-height: 0;
-    max-width: none;
-    max-height: none;
-    object-fit: cover;
-  }
-
-  /* IDENTIDAD: columna derecha. */
-  #profileModal #profileContent .profile-head > div:last-child{
-    grid-column: 2;
-    grid-row: 1;
-    width: 100%;
-    min-width: 0;
-    align-self: start;
-  }
-
-  #profileModal #profileContent .profile-head h2{
-    width: 100%;
-    margin: 4px 0 10px;
-    color: var(--navy);
-    font-size: 34px;
-    line-height: 1.08;
-    font-weight: 800;
-    white-space: normal;
-    word-break: normal;
-    overflow-wrap: normal;
-  }
-
-  #profileModal #profileContent .profile-head p{
-    margin: 0;
-    font-size: 19px;
-    line-height: 1.3;
-    color: #666;
-    white-space: normal;
-  }
-
-  /* SALDO: debajo de la identidad, a la derecha. */
-  #profileModal #profileContent .balance{
-    grid-column: 2;
-    grid-row: 2;
-    width: 100%;
-    min-width: 0;
-    margin: 0;
-    padding: 20px 22px;
-  }
-
-  #profileModal #profileContent .balance strong{
-    font-size: 30px;
-    line-height: 1.15;
-  }
-
-  /* DATOS: debajo del saldo, a la derecha. */
-  #profileModal #profileContent .grid{
-    grid-column: 2;
-    grid-row: 3;
-    width: 100%;
-    min-width: 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin: 0;
-  }
-
-  #profileModal #profileContent .grid > div{
-    min-width: 0;
-    padding: 12px 14px;
-    font-size: 15px;
-    line-height: 1.3;
-  }
-
-  #profileModal #profileContent .grid span{
-    font-size: 13px;
-    line-height: 1.2;
-  }
-
-  #profileModal #profileContent .grid b{
-    font-size: 16px;
-    line-height: 1.25;
-  }
-
-  /* BOTÓN: debajo de todos los datos, nunca al costado de la foto. */
-  #profileModal #profileContent > button.primary{
-    grid-column: 2;
-    grid-row: 4;
-    width: 100%;
-    min-width: 0;
-    margin: 0;
-    padding: 14px 18px;
-    min-height: 50px;
-  }
+  return t;
 }
 
-/* =========================================================
-   MÓVIL — SOLO FICHA DEL ALUMNO
-   ========================================================= */
 
-@media (max-width: 760px){
-  #profileModal .modal-card.profile{
-    width: calc(100vw - 20px);
-    max-width: calc(100vw - 20px);
-    max-height: calc(100vh - 20px);
-    padding: 18px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+function numero(valor) {
+  var n = Number(valor);
 
-  #profileModal #profileContent{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  #profileModal #profileContent .profile-head{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 12px;
-  }
-
-  #profileModal #profileContent .avatar{
-    width: min(320px, 82vw);
-    height: min(320px, 82vw);
-    min-width: 0;
-    min-height: 0;
-    flex: none;
-    margin: 0 auto;
-    border-radius: 18px;
-  }
-
-  #profileModal #profileContent .avatar img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  #profileModal #profileContent .profile-head > div:last-child,
-  #profileModal #profileContent .balance,
-  #profileModal #profileContent .grid,
-  #profileModal #profileContent > button.primary{
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  #profileModal #profileContent .profile-head h2{
-    font-size: 25px;
-    line-height: 1.1;
-    white-space: normal;
-    word-break: normal;
-    overflow-wrap: normal;
-  }
-
-  #profileModal #profileContent .profile-head p{
-    font-size: 16px;
-    line-height: 1.3;
-  }
-
-  #profileModal #profileContent .balance{
-    margin: 0;
-    padding: 17px;
-  }
-
-  #profileModal #profileContent .grid{
-    grid-template-columns: 1fr;
-    gap: 9px;
-    margin: 0;
-  }
-
-  #profileModal #profileContent > button.primary{
-    margin: 0;
-  }
+  return isNaN(n) ? 0 : n;
 }
 
-@media (max-width: 380px){
-  #profileModal #profileContent .avatar{
-    width: min(280px, 78vw);
-    height: min(280px, 78vw);
+
+function redondear(valor) {
+  return Math.round(
+    numero(valor) * 100
+  ) / 100;
+}
+
+
+function periodoActual() {
+  var zona = Session.getScriptTimeZone() || 'America/Lima';
+
+  return Utilities.formatDate(
+    new Date(),
+    zona,
+    'yyyy-MM'
+  );
+}
+
+
+function formatearFecha(valor) {
+  if (!valor) return '';
+
+  if (
+    Object.prototype.toString.call(valor) ===
+    '[object Date]'
+  ) {
+    return Utilities.formatDate(
+      valor,
+      Session.getScriptTimeZone() || 'America/Lima',
+      'yyyy-MM-dd HH:mm:ss'
+    );
   }
 
-  #profileModal #profileContent .profile-head h2{
-    font-size: 22px;
+  return String(valor);
+}
+
+
+// =========================================================
+// CREACIÓN / MANTENIMIENTO
+// =========================================================
+
+function crearCuentasFaltantes() {
+  var estudiantes = obtenerListaEstudiantes();
+  var creadas = 0;
+
+  for (var i = 0; i < estudiantes.length; i++) {
+    var antes = obtenerCuenta(
+      estudiantes[i].codigo
+    );
+
+    if (!antes.existe) {
+      crearCuenta(estudiantes[i].codigo);
+      creadas++;
+    }
   }
+
+  return {
+    correcto: true,
+    creadas: creadas,
+    mensaje: 'Cuentas preparadas correctamente.'
+  };
+}
+
+
+function pruebaSistema() {
+  var libro = obtenerLibro();
+
+  return {
+    correcto: true,
+    conectado: true,
+    archivo: libro.getName(),
+    hojas: libro
+      .getSheets()
+      .map(function(hoja) {
+        return hoja.getName();
+      }),
+    fecha: new Date()
+  };
+}
+
+
+function obtenerInformacionSistema() {
+  return {
+    correcto: true,
+    nombre: CONFIG.NOMBRE_SISTEMA,
+    moneda: CONFIG.MONEDA,
+    ingresoBase: CONFIG.INGRESO_BASE,
+    gastosGuia: 760,
+    disponibleReferencia: 370,
+    estudiantesEsperados: 30,
+    rangoCodigos: 'LDS-EST-001 a LDS-EST-030',
+    catalogo: CATALOGO,
+    fecha: new Date()
+  };
 }
