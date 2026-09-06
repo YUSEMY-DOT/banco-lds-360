@@ -6,7 +6,11 @@
 
   <title>Banco LDS 360 | IEP La Salle del Sur</title>
 
+  <!-- LECTOR QR -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -20,7 +24,10 @@
       min-height: 100vh;
     }
 
-    /* ENCABEZADO */
+    /* =====================================================
+       ENCABEZADO
+    ===================================================== */
+
     .header {
       height: 130px;
       background: #071d3a;
@@ -69,7 +76,10 @@
       white-space: nowrap;
     }
 
-    /* CONTENIDO */
+    /* =====================================================
+       CONTENIDO
+    ===================================================== */
+
     .main {
       min-height: calc(100vh - 130px);
       display: grid;
@@ -140,7 +150,10 @@
       margin: auto;
     }
 
-    /* BOTONES */
+    /* =====================================================
+       BOTONES
+    ===================================================== */
+
     .buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -223,7 +236,10 @@
       line-height: 1;
     }
 
-    /* PERSONAJES */
+    /* =====================================================
+       PERSONAJES
+    ===================================================== */
+
     .right {
       background: #092b52;
       position: relative;
@@ -235,10 +251,27 @@
     }
 
     .characters {
-      width: 90%;
-      height: 90%;
+      width: 100%;
+      height: 92%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .character {
+      height: 82%;
+      width: auto;
       object-fit: contain;
-      object-position: bottom center;
+      object-position: bottom;
+    }
+
+    .character.girl {
+      height: 88%;
+    }
+
+    .character.teacher {
+      height: 76%;
     }
 
     .security {
@@ -252,10 +285,264 @@
       text-align: center;
       font-weight: bold;
       color: #071d3a;
+      z-index: 5;
     }
 
-    /* RESPONSIVE */
+    /* =====================================================
+       MODALES
+    ===================================================== */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      width: min(900px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      padding: 30px;
+      position: relative;
+    }
+
+    .modal h2 {
+      color: #071d3a;
+      margin-bottom: 20px;
+      font-family: Georgia, serif;
+    }
+
+    .close {
+      position: absolute;
+      right: 18px;
+      top: 15px;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #071d3a;
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    /* =====================================================
+       CÓDIGO
+    ===================================================== */
+
+    .code-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .code-form input {
+      flex: 1;
+      border: 2px solid #d8dee8;
+      border-radius: 15px;
+      padding: 16px;
+      font-size: 18px;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .code-form input:focus {
+      border-color: #071d3a;
+    }
+
+    .primary-button {
+      border: none;
+      border-radius: 15px;
+      padding: 16px 24px;
+      background: #071d3a;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .primary-button:hover {
+      opacity: .9;
+    }
+
+    /* =====================================================
+       QR
+    ===================================================== */
+
+    #reader {
+      width: min(500px, 100%);
+      margin: 20px auto;
+    }
+
+    .scanner-status {
+      text-align: center;
+      font-weight: bold;
+      color: #071d3a;
+      margin-top: 10px;
+    }
+
+    /* =====================================================
+       PERFIL
+    ===================================================== */
+
+    #profileContent {
+      margin-top: 10px;
+    }
+
+    .lds-student-card {
+      display: grid;
+      gap: 22px;
+    }
+
+    .lds-student-photo {
+      text-align: center;
+    }
+
+    .lds-student-photo img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #f4c400;
+    }
+
+    .lds-photo-placeholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: #e8edf3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      font-size: 60px;
+    }
+
+    .lds-student-info {
+      text-align: center;
+    }
+
+    .lds-student-info h2 {
+      margin-bottom: 12px;
+      color: #071d3a;
+    }
+
+    .lds-student-info p {
+      margin: 5px 0;
+    }
+
+    .lds-account {
+      background: #071d3a;
+      color: white;
+      border-radius: 22px;
+      padding: 22px;
+    }
+
+    .lds-account h3 {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .lds-account-row,
+    .lds-account-balance {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+
+    .lds-account-balance {
+      border-bottom: none;
+      font-size: 22px;
+      color: #f4c400;
+    }
+
+    .lds-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .lds-actions button {
+      border: none;
+      border-radius: 18px;
+      padding: 17px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .lds-actions button:first-child {
+      background: #198754;
+    }
+
+    .lds-actions button:last-child {
+      background: #cf142b;
+    }
+
+    .lds-movimientos {
+      background: #f4f6f9;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .lds-movimientos h3 {
+      margin-bottom: 15px;
+      color: #071d3a;
+    }
+
+    .lds-movimiento {
+      background: white;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5px 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .lds-movimiento small {
+      display: block;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    .lds-sin-movimientos {
+      text-align: center;
+      color: #666;
+    }
+
+    /* =====================================================
+       MENSAJE DE CONEXIÓN
+    ===================================================== */
+
+    .connection-status {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 22px;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
     @media (max-width: 900px) {
+
       .header {
         height: auto;
         min-height: 100px;
@@ -278,9 +565,11 @@
       .left {
         padding: 40px 5%;
       }
+
     }
 
     @media (max-width: 600px) {
+
       .header {
         padding: 15px;
       }
@@ -318,20 +607,37 @@
       .right {
         min-height: 400px;
       }
+
+      .code-form {
+        flex-direction: column;
+      }
+
+      .lds-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .lds-movimiento {
+        grid-template-columns: 1fr;
+      }
+
     }
+
   </style>
 </head>
 
 <body>
 
-  <!-- ENCABEZADO -->
+  <!-- =====================================================
+       ENCABEZADO
+  ====================================================== -->
+
   <header class="header">
 
     <div class="institution">
 
       <img
         class="shield"
-        src="assets/escudo.png"
+        src="assets/insignia.png"
         alt="Escudo IEP La Salle del Sur"
       >
 
@@ -349,7 +655,10 @@
   </header>
 
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- =====================================================
+       CONTENIDO PRINCIPAL
+  ====================================================== -->
+
   <main class="main">
 
     <section class="left">
@@ -382,9 +691,14 @@
 
 
       <!-- BOTONES -->
+
       <div class="buttons">
 
-        <button class="button qr" onclick="abrirEscaner()">
+        <button
+          class="button qr"
+          type="button"
+          onclick="abrirEscaner()"
+        >
 
           <div class="button-content">
 
@@ -407,7 +721,11 @@
         </button>
 
 
-        <button class="button code" onclick="ingresarCodigo()">
+        <button
+          class="button code"
+          type="button"
+          onclick="ingresarCodigo()"
+        >
 
           <div class="button-content">
 
@@ -431,17 +749,41 @@
 
       </div>
 
+      <div
+        id="connectionStatus"
+        class="connection-status"
+      ></div>
+
     </section>
 
 
-    <!-- PERSONAJES -->
+    <!-- ===================================================
+         PERSONAJES
+    ==================================================== -->
+
     <section class="right">
 
-      <img
-        class="characters"
-        src="assets/personajes.png"
-        alt="Estudiantes La Salle"
-      >
+      <div class="characters">
+
+        <img
+          class="character"
+          src="assets/niño.png"
+          alt="Estudiante"
+        >
+
+        <img
+          class="character girl"
+          src="assets/niña.png"
+          alt="Estudiante"
+        >
+
+        <img
+          class="character teacher"
+          src="assets/profesora.png"
+          alt="Profesora"
+        >
+
+      </div>
 
       <div class="security">
         🛡️ Sistema seguro, confiable y diseñado para el bienestar financiero de nuestros estudiantes.
@@ -452,19 +794,423 @@
   </main>
 
 
+  <!-- =====================================================
+       MODAL INGRESAR CÓDIGO
+  ====================================================== -->
+
+  <div
+    id="codeOverlay"
+    class="overlay"
+  >
+
+    <div class="modal">
+
+      <button
+        class="close"
+        type="button"
+        onclick="cerrarCodigo()"
+      >
+        ×
+      </button>
+
+      <h2>🔢 Ingresar código del estudiante</h2>
+
+      <p>
+        Escribe el código que aparece en la tarjeta del estudiante.
+      </p>
+
+      <div class="code-form">
+
+        <input
+          id="codigoInput"
+          type="text"
+          placeholder="Ejemplo: LDS-EST-001"
+          autocomplete="off"
+          spellcheck="false"
+        >
+
+        <button
+          class="primary-button"
+          type="button"
+          onclick="buscarDesdeCodigo()"
+        >
+          CONSULTAR
+        </button>
+
+      </div>
+
+      <div
+        id="codeMessage"
+        class="connection-status"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MODAL QR
+  ====================================================== -->
+
+  <div
+    id="scannerOverlay"
+    class="overlay"
+  >
+
+    <div class="modal">
+
+      <button
+        class="close"
+        type="button"
+        onclick="cerrarEscaner()"
+      >
+        ×
+      </button>
+
+      <h2>📷 Escanear código QR</h2>
+
+      <p>
+        Apunta la cámara al código QR del estudiante.
+      </p>
+
+      <div id="reader"></div>
+
+      <div
+        id="scannerStatus"
+        class="scanner-status"
+      >
+        Preparando cámara...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MODAL PERFIL
+  ====================================================== -->
+
+  <div
+    id="profileOverlay"
+    class="overlay"
+  >
+
+    <div class="modal">
+
+      <button
+        class="close"
+        type="button"
+        onclick="cerrarPerfil()"
+      >
+        ×
+      </button>
+
+      <h2>🏦 Cuenta Banco LDS 360</h2>
+
+      <div id="profileContent"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       APP.JS
+  ====================================================== -->
+
+  <script src="app.js"></script>
+
+
+  <!-- =====================================================
+       FUNCIONES DE INTERFAZ
+  ====================================================== -->
+
   <script>
 
-    function abrirEscaner() {
-      alert("Aquí conectaremos el escáner QR automático 📷");
-    }
+    let lectorQR = null;
+
+
+    /* =====================================================
+       INGRESAR CÓDIGO
+    ===================================================== */
 
     function ingresarCodigo() {
-      const codigo = prompt("Ingrese el código del estudiante:");
 
-      if (codigo) {
-        alert("Código recibido: " + codigo);
-      }
+      document
+        .getElementById("codeOverlay")
+        .classList.add("active");
+
+      setTimeout(function() {
+
+        document
+          .getElementById("codigoInput")
+          .focus();
+
+      }, 100);
+
     }
+
+
+    function cerrarCodigo() {
+
+      document
+        .getElementById("codeOverlay")
+        .classList.remove("active");
+
+    }
+
+
+    async function buscarDesdeCodigo() {
+
+      const input =
+        document.getElementById("codigoInput");
+
+      const codigo =
+        input.value.trim().toUpperCase();
+
+      const mensaje =
+        document.getElementById("codeMessage");
+
+      if (!codigo) {
+
+        mensaje.textContent =
+          "⚠️ Ingresa un código.";
+
+        return;
+
+      }
+
+      mensaje.textContent =
+        "🔎 Consultando...";
+
+      const resultado =
+        await consultarEstudiante(codigo);
+
+      if (resultado) {
+
+        mensaje.textContent =
+          "✅ Estudiante encontrado.";
+
+        cerrarCodigo();
+
+      } else {
+
+        mensaje.textContent =
+          "❌ No se encontró el estudiante.";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ENTER EN CÓDIGO
+    ===================================================== */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter" &&
+          document
+            .getElementById("codeOverlay")
+            .classList.contains("active")
+        ) {
+
+          buscarDesdeCodigo();
+
+        }
+
+        if (event.key === "Escape") {
+
+          cerrarCodigo();
+          cerrarEscaner();
+          cerrarPerfil();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       ESCÁNER QR
+    ===================================================== */
+
+    async function abrirEscaner() {
+
+      document
+        .getElementById("scannerOverlay")
+        .classList.add("active");
+
+      const estado =
+        document.getElementById("scannerStatus");
+
+      estado.textContent =
+        "📷 Activando cámara...";
+
+      try {
+
+        lectorQR = new Html5Qrcode("reader");
+
+        await lectorQR.start(
+
+          {
+            facingMode: "environment"
+          },
+
+          {
+            fps: 10,
+            qrbox: {
+              width: 250,
+              height: 250
+            }
+          },
+
+          async function(codigoEscaneado) {
+
+            const codigo =
+              String(codigoEscaneado)
+                .trim()
+                .toUpperCase();
+
+            estado.textContent =
+              "✅ Código detectado: " + codigo;
+
+            await detenerEscaner();
+
+            await consultarEstudiante(codigo);
+
+          },
+
+          function(errorMessage) {
+
+            /*
+             * Los errores normales de lectura se ignoran.
+             * La cámara continúa buscando el QR.
+             */
+
+          }
+
+        );
+
+        estado.textContent =
+          "📷 Apunta la cámara al código QR.";
+
+      } catch (error) {
+
+        console.error(
+          "Error cámara QR:",
+          error
+        );
+
+        estado.textContent =
+          "❌ No se pudo activar la cámara. Revisa el permiso del navegador.";
+
+      }
+
+    }
+
+
+    async function detenerEscaner() {
+
+      if (!lectorQR) {
+        return;
+      }
+
+      try {
+
+        if (lectorQR.isScanning) {
+          await lectorQR.stop();
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "No fue necesario detener el lector:",
+          error
+        );
+
+      }
+
+      try {
+
+        lectorQR.clear();
+
+      } catch (error) {}
+
+      lectorQR = null;
+
+    }
+
+
+    async function cerrarEscaner() {
+
+      await detenerEscaner();
+
+      document
+        .getElementById("scannerOverlay")
+        .classList.remove("active");
+
+      document
+        .getElementById("scannerStatus")
+        .textContent =
+          "Preparando cámara...";
+
+    }
+
+
+    /* =====================================================
+       PERFIL
+    ===================================================== */
+
+    function abrirPerfil() {
+
+      document
+        .getElementById("profileOverlay")
+        .classList.add("active");
+
+    }
+
+
+    function cerrarPerfil() {
+
+      document
+        .getElementById("profileOverlay")
+        .classList.remove("active");
+
+    }
+
+
+    /* =====================================================
+       ESTADO DE CONEXIÓN
+    ===================================================== */
+
+    window.addEventListener(
+      "load",
+      function() {
+
+        const parametros =
+          new URLSearchParams(
+            window.location.search
+          );
+
+        const codigo =
+          parametros.get("codigo");
+
+        if (codigo) {
+
+          consultarEstudiante(
+            codigo
+          );
+
+        }
+
+      }
+    );
 
   </script>
 
