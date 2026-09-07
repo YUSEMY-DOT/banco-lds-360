@@ -8,7 +8,6 @@ const BANCO_LDS_API_URL =
   "https://script.google.com/macros/s/AKfycbyybdIHgP7-e7wklexc5koIw1atMWxIIFrrzZGHYB4g2Vr8Q3zakdL4Zhs8FRrWNADu/exec";
 
 let estudianteActual = null;
-let fotoIntento = 0;
 
 
 // ============================================================
@@ -22,76 +21,82 @@ async function consultarEstudiante(codigo) {
     .toUpperCase();
 
   if (!codigo) {
-    mostrarMensaje("Ingresa un código de estudiante.");
-    return null;
+    alert("Ingrese el código del estudiante.");
+    return;
   }
 
   try {
 
-    mostrarMensaje("Consultando Banco LDS 360...");
-
     const url =
       BANCO_LDS_API_URL +
       "?codigo=" +
-      encodeURIComponent(codigo);
+      encodeURIComponent(codigo) +
+      "&t=" +
+      Date.now();
 
-    const respuesta = await fetch(url, {
-      method: "GET",
-      cache: "no-store"
-    });
+    const respuesta =
+      await fetch(url, {
+        method: "GET",
+        cache: "no-store"
+      });
 
     if (!respuesta.ok) {
       throw new Error(
-        "No se pudo conectar con Banco LDS 360."
+        "Error de conexión con Banco LDS 360."
       );
     }
 
-    const datos = await respuesta.json();
+    const datos =
+      await respuesta.json();
+
+    console.log(
+      "Respuesta Banco LDS 360:",
+      datos
+    );
 
     if (!datos.ok) {
-      throw new Error(
+
+      alert(
         datos.mensaje ||
-        "Error en Banco LDS 360."
+        "Ocurrió un error."
       );
+
+      return;
     }
 
     if (!datos.encontrado) {
 
-      mostrarMensaje(
-        "No se encontró el estudiante: " +
+      alert(
+        "No se encontró el estudiante:\n\n" +
         codigo
       );
 
-      return null;
+      return;
     }
 
-    estudianteActual = datos;
+    estudianteActual =
+      datos;
 
-    mostrarEstudiante(datos);
-
-    return datos;
+    mostrarFichaEstudiante(
+      datos
+    );
 
   } catch (error) {
 
-    console.error(
-      "Error Banco LDS 360:",
-      error
-    );
+    console.error(error);
 
-    mostrarMensaje(
-      "❌ No se pudo conectar con Banco LDS 360."
+    alert(
+      "No se pudo conectar con Banco LDS 360."
     );
-
-    return null;
   }
 }
 
 
 // ============================================================
-// MOSTRAR ESTUDIANTE
+// MOSTRAR FICHA
 // ============================================================
 
-function mostrarEstudiante(datos) {
+function mostrarFichaEstudiante(datos) {
 
   const estudiante =
     datos.estudiante || {};
@@ -102,9 +107,6 @@ function mostrarEstudiante(datos) {
   const movimientos =
     datos.movimientos || [];
 
-  const codigo =
-    estudiante.codigo || "";
-
   const nombre =
     estudiante.nombreCompleto ||
     (
@@ -112,6 +114,9 @@ function mostrarEstudiante(datos) {
       " " +
       String(estudiante.apellido || "")
     ).trim();
+
+  const codigo =
+    estudiante.codigo || "";
 
   const grado =
     estudiante.grado || "";
@@ -122,24 +127,37 @@ function mostrarEstudiante(datos) {
   const docente =
     estudiante.docente || "";
 
-  const fotoPrincipal =
-    estudiante.fotoUrl ||
-    estudiante.foto ||
-    "";
-
-  const fotoAlternativa =
-    estudiante.foto ||
-    estudiante.fotoUrl ||
-    "";
-
   const ingresos =
-    Number(cuenta.totalIngresos || 0);
+    Number(
+      cuenta.totalIngresos || 0
+    );
 
   const egresos =
-    Number(cuenta.totalEgresos || 0);
+    Number(
+      cuenta.totalEgresos || 0
+    );
 
   const saldo =
-    Number(cuenta.saldoActual || 0);
+    Number(
+      cuenta.saldoActual || 0
+    );
+
+
+  // ----------------------------------------------------------
+  // OBTENER FOTO
+  // ----------------------------------------------------------
+
+  const foto =
+    prepararURLFoto(
+      estudiante.fotoUrl ||
+      estudiante.foto ||
+      ""
+    );
+
+
+  // ----------------------------------------------------------
+  // CONTENEDOR
+  // ----------------------------------------------------------
 
   const contenedor =
     document.getElementById(
@@ -149,440 +167,735 @@ function mostrarEstudiante(datos) {
   if (!contenedor) {
 
     console.error(
-      "No existe #profileContent."
+      "No existe el elemento #profileContent."
     );
 
     return;
   }
 
-  fotoIntento = 0;
+
+  // ----------------------------------------------------------
+  // HTML COMPLETO
+  // ----------------------------------------------------------
 
   contenedor.innerHTML = `
 
-    <div class="lds-profile">
+    <div class="lds-ficha">
 
-      <!-- ==========================================
-           CABECERA DEL ESTUDIANTE
-      =========================================== -->
 
-      <div class="lds-profile-header">
+      <!-- ================================================
+           ENCABEZADO
+      ================================================= -->
 
-        <div class="lds-photo-container">
+      <div class="lds-ficha-top">
 
-          <div class="lds-photo-frame">
+        <div class="lds-ficha-titulo">
 
-            <img
-              id="ldsStudentPhoto"
-              src="${escaparHTML(fotoPrincipal)}"
-              alt="Foto de ${escaparHTML(nombre)}"
-              class="lds-student-photo"
-              onerror="manejarErrorFoto(this, '${escaparJS(fotoAlternativa)}')"
-            >
+          <span class="lds-bank-icon">
+            🏦
+          </span>
 
-            <div
-              id="ldsPhotoFallback"
-              class="lds-photo-fallback"
-              style="display:none;"
-            >
-              <div class="lds-photo-icon">
-                👤
-              </div>
+          <div>
 
-              <span>
-                Foto no disponible
-              </span>
-            </div>
+            <h2>
+              Cuenta Banco LDS 360
+            </h2>
+
+            <p>
+              IEP LA SALLE DEL SUR
+            </p>
 
           </div>
 
-          <div class="lds-photo-label">
+        </div>
+
+
+        <button
+          type="button"
+          class="lds-cerrar"
+          onclick="cerrarFicha()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- ================================================
+           DATOS DEL ESTUDIANTE
+      ================================================= -->
+
+      <div class="lds-student-header">
+
+
+        <!-- FOTO -->
+
+        <div class="lds-photo-column">
+
+          <div class="lds-photo-circle">
+
+            ${
+              foto
+              ?
+              `
+                <img
+                  src="${escaparHTML(foto)}"
+                  alt="Foto del estudiante"
+                  class="lds-student-photo"
+                  onerror="fotoNoDisponible(this)"
+                >
+              `
+              :
+              `
+                <div class="lds-photo-placeholder">
+                  <span>👤</span>
+                  <small>Foto no disponible</small>
+                </div>
+              `
+            }
+
+          </div>
+
+
+          <div class="lds-photo-caption">
             ESTUDIANTE LDS
           </div>
 
         </div>
 
 
-        <div class="lds-student-data">
+        <!-- INFORMACIÓN -->
 
-          <div class="lds-student-name">
+        <div class="lds-student-info">
+
+          <h1>
             ${escaparHTML(nombre)}
-          </div>
+          </h1>
 
-          <div class="lds-code">
+
+          <div class="lds-student-code">
             ${escaparHTML(codigo)}
           </div>
 
-          <div class="lds-student-details">
 
-            <div class="lds-detail">
-              <span>🎓</span>
+          <div class="lds-info-grid">
+
+
+            <div class="lds-info-item">
+
+              <div class="lds-info-icon">
+                🎓
+              </div>
+
               <div>
-                <small>Grado</small>
+
+                <span>
+                  Grado
+                </span>
+
                 <strong>
                   ${escaparHTML(grado)}
                 </strong>
+
               </div>
+
             </div>
 
-            <div class="lds-detail">
-              <span>🏫</span>
+
+            <div class="lds-info-item">
+
+              <div class="lds-info-icon">
+                🏫
+              </div>
+
               <div>
-                <small>Sección</small>
+
+                <span>
+                  Sección
+                </span>
+
                 <strong>
                   ${escaparHTML(seccion)}
                 </strong>
+
               </div>
+
             </div>
 
-            <div class="lds-detail">
-              <span>👩‍🏫</span>
+
+            <div class="lds-info-item">
+
+              <div class="lds-info-icon">
+                👩‍🏫
+              </div>
+
               <div>
-                <small>Docente</small>
+
+                <span>
+                  Docente
+                </span>
+
                 <strong>
                   ${escaparHTML(docente)}
                 </strong>
+
               </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================
+           CUENTA LDS
+      ================================================= -->
+
+      <section class="lds-account">
+
+        <div class="lds-account-heading">
+
+          <span>
+            💰
+          </span>
+
+          <strong>
+            CUENTA LDS
+          </strong>
+
+        </div>
+
+
+        <div class="lds-account-grid">
+
+
+          <!-- INGRESOS -->
+
+          <div class="lds-money income">
+
+            <div class="lds-money-icon">
+              ↑
+            </div>
+
+            <div class="lds-money-info">
+
+              <span>
+                Total ingresos
+              </span>
+
+              <strong>
+                ${formatearLDS(ingresos)} LDS
+              </strong>
+
             </div>
 
           </div>
 
+
+          <!-- EGRESOS -->
+
+          <div class="lds-money expense">
+
+            <div class="lds-money-icon">
+              ↓
+            </div>
+
+            <div class="lds-money-info">
+
+              <span>
+                Total egresos
+              </span>
+
+              <strong>
+                ${formatearLDS(egresos)} LDS
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- SALDO -->
+
+          <div class="lds-money balance">
+
+            <div class="lds-money-icon">
+              🪙
+            </div>
+
+            <div class="lds-money-info">
+
+              <span>
+                Saldo actual
+              </span>
+
+              <strong>
+                ${formatearLDS(saldo)} LDS
+              </strong>
+
+            </div>
+
+          </div>
+
+
         </div>
+
+      </section>
+
+
+      <!-- ================================================
+           BOTONES
+      ================================================= -->
+
+      <div class="lds-actions">
+
+
+        <button
+          type="button"
+          class="lds-action cobrar"
+          onclick="abrirOperacion('INGRESO')"
+        >
+
+          <span class="lds-action-icon">
+            💰
+          </span>
+
+          <span class="lds-action-text">
+
+            <strong>
+              COBRAR
+            </strong>
+
+            <small>
+              Registrar ingreso
+            </small>
+
+          </span>
+
+        </button>
+
+
+        <button
+          type="button"
+          class="lds-action pagar"
+          onclick="abrirOperacion('EGRESO')"
+        >
+
+          <span class="lds-action-icon">
+            💸
+          </span>
+
+          <span class="lds-action-text">
+
+            <strong>
+              PAGAR
+            </strong>
+
+            <small>
+              Registrar egreso
+            </small>
+
+          </span>
+
+        </button>
+
 
       </div>
 
 
-      <!-- ==========================================
-           CUENTA
-      =========================================== -->
+      <!-- ================================================
+           MOVIMIENTOS
+      ================================================= -->
 
-      <div class="lds-account-card">
+      <section class="lds-movimientos">
 
-        <div class="lds-account-title">
-          <span>💰</span>
-          <strong>CUENTA LDS</strong>
-        </div>
+        <div class="lds-movimientos-header">
 
-
-        <div class="lds-account-values">
-
-          <div class="lds-money-box">
+          <div>
 
             <span>
-              Ingresos
-            </span>
-
-            <strong class="income">
-              +${formatearLDS(ingresos)} LDS
-            </strong>
-
-          </div>
-
-
-          <div class="lds-money-box">
-
-            <span>
-              Egresos
-            </span>
-
-            <strong class="expense">
-              -${formatearLDS(egresos)} LDS
-            </strong>
-
-          </div>
-
-
-          <div class="lds-money-box balance">
-
-            <span>
-              Saldo actual
+              📋
             </span>
 
             <strong>
-              ${formatearLDS(saldo)} LDS
+              MOVIMIENTOS
             </strong>
 
           </div>
 
-        </div>
-
-      </div>
-
-
-      <!-- ==========================================
-           OPERACIONES
-      =========================================== -->
-
-      <div class="lds-operation-buttons">
-
-        <button
-          type="button"
-          class="lds-operation income-button"
-          onclick="abrirOperacion('INGRESO')"
-        >
-          <span>💰</span>
-          <div>
-            <strong>COBRAR</strong>
-            <small>Registrar ingreso</small>
-          </div>
-        </button>
-
-
-        <button
-          type="button"
-          class="lds-operation expense-button"
-          onclick="abrirOperacion('EGRESO')"
-        >
-          <span>💸</span>
-          <div>
-            <strong>PAGAR</strong>
-            <small>Registrar egreso</small>
-          </div>
-        </button>
-
-      </div>
-
-
-      <!-- ==========================================
-           MOVIMIENTOS
-      =========================================== -->
-
-      <div class="lds-movements-card">
-
-        <div class="lds-movements-title">
-
-          <span>📋</span>
-
-          <strong>
-            MOVIMIENTOS
-          </strong>
-
-          <span class="lds-movement-count">
+          <span class="lds-contador">
             ${movimientos.length}
           </span>
 
         </div>
 
-        <div class="lds-movements-list">
 
-          ${generarMovimientosHTML(movimientos)}
+        <div class="lds-lista-movimientos">
+
+          ${
+            movimientos.length
+            ?
+            movimientos.map(
+              generarMovimiento
+            ).join("")
+            :
+            `
+              <div class="lds-sin-movimientos">
+
+                <span>
+                  📭
+                </span>
+
+                <strong>
+                  No hay movimientos
+                </strong>
+
+                <small>
+                  Esta cuenta todavía no tiene operaciones.
+                </small>
+
+              </div>
+            `
+          }
 
         </div>
 
-      </div>
-
-    </div>
-  `;
-
-  agregarEstilosFicha();
-
-  abrirPerfil();
-
-}
+      </section>
 
 
-// ============================================================
-// FOTO
-// ============================================================
+      <!-- ================================================
+           PIE
+      ================================================= -->
 
-function manejarErrorFoto(imagen, fotoAlternativa) {
-
-  fotoIntento++;
-
-  if (
-    fotoIntento === 1 &&
-    fotoAlternativa &&
-    imagen.src !== fotoAlternativa
-  ) {
-
-    imagen.src = fotoAlternativa;
-
-    return;
-  }
-
-  imagen.style.display = "none";
-
-  const fallback =
-    document.getElementById(
-      "ldsPhotoFallback"
-    );
-
-  if (fallback) {
-    fallback.style.display = "flex";
-  }
-}
-
-
-// ============================================================
-// MOVIMIENTOS
-// ============================================================
-
-function generarMovimientosHTML(movimientos) {
-
-  if (!movimientos.length) {
-
-    return `
-      <div class="lds-empty-movements">
-
-        <div>
-          📭
-        </div>
-
-        <strong>
-          Sin movimientos registrados
-        </strong>
+      <div class="lds-security">
 
         <span>
-          Esta cuenta todavía no tiene operaciones.
+          🛡️
+        </span>
+
+        <span>
+          Sistema seguro, confiable y diseñado para
+          el bienestar financiero de nuestros estudiantes.
         </span>
 
       </div>
-    `;
-  }
-
-  return movimientos.map(
-    function(movimiento) {
-
-      const tipo =
-        movimiento.tipoMovimiento ||
-        movimiento.tipo ||
-        "";
-
-      const concepto =
-        movimiento.concepto ||
-        "Sin concepto";
-
-      const monto =
-        Number(
-          movimiento.monto ||
-          movimiento.montoLDS ||
-          0
-        );
-
-      const fecha =
-        movimiento.timestamp ||
-        movimiento.fecha ||
-        "";
-
-      const responsable =
-        movimiento.responsable ||
-        "";
-
-      const observacion =
-        movimiento.observacion ||
-        "";
-
-      const esIngreso =
-        String(tipo)
-          .toUpperCase() === "INGRESO";
-
-      const clase =
-        esIngreso
-          ? "movement-income"
-          : "movement-expense";
-
-      const signo =
-        esIngreso
-          ? "+"
-          : "-";
-
-      const icono =
-        esIngreso
-          ? "💰"
-          : "💸";
-
-      return `
-
-        <div class="lds-movement ${clase}">
-
-          <div class="lds-movement-icon">
-            ${icono}
-          </div>
 
 
-          <div class="lds-movement-main">
+    </div>
 
-            <strong>
-              ${escaparHTML(concepto)}
-            </strong>
-
-            <span>
-              ${escaparHTML(
-                formatearFecha(fecha)
-              )}
-            </span>
-
-            ${
-              responsable
-                ? `
-                  <small>
-                    Responsable:
-                    ${escaparHTML(responsable)}
-                  </small>
-                `
-                : ""
-            }
-
-            ${
-              observacion
-                ? `
-                  <small>
-                    ${escaparHTML(observacion)}
-                  </small>
-                `
-                : ""
-            }
-
-          </div>
+  `;
 
 
-          <div class="lds-movement-amount">
+  agregarEstilosFicha();
 
-            <strong>
-              ${signo}${formatearLDS(monto)}
-              LDS
-            </strong>
-
-            <span>
-              ${escaparHTML(tipo)}
-            </span>
-
-          </div>
-
-        </div>
-      `;
-    }
-  ).join("");
+  abrirFicha();
 
 }
 
 
 // ============================================================
-// BUSCAR POR CÓDIGO
+// PREPARAR FOTO DE GOOGLE DRIVE
 // ============================================================
 
-async function buscarPorCodigo() {
+function prepararURLFoto(url) {
 
-  const input =
-    document.getElementById(
-      "codigoInput"
-    ) ||
-    document.getElementById(
-      "codeInput"
+  if (!url) {
+    return "";
+  }
+
+  url = String(url).trim();
+
+  // ----------------------------------------------------------
+  // Si es enlace de Google Drive con ID
+  // ----------------------------------------------------------
+
+  let match =
+    url.match(
+      /\/d\/([a-zA-Z0-9_-]+)/
     );
 
-  if (!input) {
+  if (!match) {
 
-    mostrarMensaje(
-      "No se encontró el campo de código."
+    match =
+      url.match(
+        /id=([a-zA-Z0-9_-]+)/
+      );
+
+  }
+
+
+  if (match && match[1]) {
+
+    const id =
+      match[1];
+
+    /*
+      Thumbnail de Google Drive.
+
+      Es mucho más estable para mostrar
+      imágenes dentro de la página que
+      /uc?export=view
+    */
+
+    return (
+      "https://drive.google.com/thumbnail" +
+      "?id=" +
+      encodeURIComponent(id) +
+      "&sz=w600"
     );
+  }
 
+
+  return url;
+}
+
+
+// ============================================================
+// FOTO NO DISPONIBLE
+// ============================================================
+
+function fotoNoDisponible(img) {
+
+  const contenedor =
+    img.parentElement;
+
+  if (!contenedor) {
     return;
   }
 
-  const codigo =
-    input.value.trim();
+  contenedor.innerHTML = `
 
-  await consultarEstudiante(codigo);
+    <div class="lds-photo-placeholder">
+
+      <span>
+        👤
+      </span>
+
+      <small>
+        Foto no disponible
+      </small>
+
+    </div>
+
+  `;
+}
+
+
+// ============================================================
+// MOVIMIENTO
+// ============================================================
+
+function generarMovimiento(movimiento) {
+
+  const tipo =
+    String(
+      movimiento.tipoMovimiento ||
+      movimiento.tipo ||
+      ""
+    ).toUpperCase();
+
+  const esIngreso =
+    tipo === "INGRESO";
+
+  const concepto =
+    movimiento.concepto ||
+    "Sin concepto";
+
+  const monto =
+    Number(
+      movimiento.monto ||
+      movimiento.montoLDS ||
+      0
+    );
+
+  const responsable =
+    movimiento.responsable ||
+    "";
+
+  const observacion =
+    movimiento.observacion ||
+    "";
+
+  const fecha =
+    movimiento.timestamp ||
+    movimiento.fecha ||
+    "";
+
+  const clase =
+    esIngreso
+      ? "mov-ingreso"
+      : "mov-egreso";
+
+  const signo =
+    esIngreso
+      ? "+"
+      : "-";
+
+  const icono =
+    esIngreso
+      ? "💰"
+      : "💸";
+
+
+  return `
+
+    <article class="lds-movimiento ${clase}">
+
+
+      <div class="lds-mov-icon">
+
+        ${icono}
+
+      </div>
+
+
+      <div class="lds-mov-info">
+
+        <strong>
+          ${escaparHTML(concepto)}
+        </strong>
+
+        <span>
+          ${escaparHTML(
+            formatearFecha(fecha)
+          )}
+        </span>
+
+        ${
+          responsable
+          ?
+          `
+            <small>
+              👤 Responsable:
+              ${escaparHTML(responsable)}
+            </small>
+          `
+          :
+          ""
+        }
+
+        ${
+          observacion
+          ?
+          `
+            <small>
+              📝 ${escaparHTML(observacion)}
+            </small>
+          `
+          :
+          ""
+        }
+
+      </div>
+
+
+      <div class="lds-mov-monto">
+
+        <strong>
+          ${signo}${formatearLDS(monto)} LDS
+        </strong>
+
+        <span>
+          ${escaparHTML(tipo)}
+        </span>
+
+      </div>
+
+
+    </article>
+
+  `;
+}
+
+
+// ============================================================
+// ABRIR / CERRAR FICHA
+// ============================================================
+
+function abrirFicha() {
+
+  const overlay =
+    document.getElementById(
+      "profileOverlay"
+    );
+
+  if (overlay) {
+
+    overlay.classList.add(
+      "active"
+    );
+
+  }
+
+}
+
+
+function cerrarFicha() {
+
+  const overlay =
+    document.getElementById(
+      "profileOverlay"
+    );
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+// Compatibilidad con código anterior
+
+function abrirPerfil() {
+  abrirFicha();
+}
+
+function cerrarPerfil() {
+  cerrarFicha();
+}
+
+
+// ============================================================
+// INGRESAR CÓDIGO
+// ============================================================
+
+function ingresarCodigo() {
+
+  const codigo =
+    prompt(
+      "Ingrese el código del estudiante:"
+    );
+
+  if (!codigo) {
+    return;
+  }
+
+  consultarEstudiante(
+    codigo
+  );
+}
+
+
+// ============================================================
+// ESCÁNER QR
+// ============================================================
+
+function abrirEscaner() {
+
+  alert(
+    "📷 Escáner QR\n\n" +
+    "El módulo de escaneo se conectará " +
+    "con la ficha del estudiante."
+  );
+
 }
 
 
@@ -594,88 +907,57 @@ function abrirOperacion(tipo) {
 
   if (!estudianteActual) {
 
-    mostrarMensaje(
-      "Primero selecciona un estudiante."
+    alert(
+      "Primero seleccione un estudiante."
     );
 
     return;
   }
 
   const estudiante =
-    estudianteActual.estudiante
-      .nombreCompleto;
+    estudianteActual.estudiante || {};
+
+  const cuenta =
+    estudianteActual.cuenta || {};
+
+  const nombre =
+    estudiante.nombreCompleto || "";
 
   const codigo =
-    estudianteActual.estudiante
-      .codigo;
+    estudiante.codigo || "";
 
   const saldo =
     Number(
-      estudianteActual.cuenta
-        ?.saldoActual || 0
+      cuenta.saldoActual || 0
     );
 
-  const titulo =
-    tipo === "INGRESO"
-      ? "COBRAR"
-      : "PAGAR";
 
-  const mensaje =
-    tipo === "INGRESO"
-      ? "Registrar un ingreso para:"
-      : "Registrar un pago para:";
+  if (tipo === "INGRESO") {
 
-  alert(
-    titulo +
-    "\n\n" +
-    mensaje +
-    "\n" +
-    estudiante +
-    "\n\n" +
-    "Código: " +
-    codigo +
-    "\n" +
-    "Saldo actual: " +
-    formatearLDS(saldo) +
-    " LDS"
-  );
-
-}
-
-
-// ============================================================
-// PERFIL
-// ============================================================
-
-function abrirPerfil() {
-
-  const modal =
-    document.getElementById(
-      "profileOverlay"
+    alert(
+      "💰 COBRAR\n\n" +
+      "Estudiante:\n" +
+      nombre +
+      "\n\nCódigo: " +
+      codigo +
+      "\n\n" +
+      "Aquí conectaremos el formulario " +
+      "real para registrar el ingreso."
     );
 
-  if (modal) {
+  } else {
 
-    modal.classList.add(
-      "active"
-    );
-
-  }
-
-}
-
-
-function cerrarPerfil() {
-
-  const modal =
-    document.getElementById(
-      "profileOverlay"
-    );
-
-  if (modal) {
-
-    modal.classList.remove(
-      "active"
+    alert(
+      "💸 PAGAR\n\n" +
+      "Estudiante:\n" +
+      nombre +
+      "\n\nCódigo: " +
+      codigo +
+      "\n\nSaldo disponible: " +
+      formatearLDS(saldo) +
+      " LDS\n\n" +
+      "Aquí conectaremos el formulario " +
+      "real para registrar el egreso."
     );
 
   }
@@ -684,65 +966,14 @@ function cerrarPerfil() {
 
 
 // ============================================================
-// MENSAJES
-// ============================================================
-
-function mostrarMensaje(mensaje) {
-
-  console.log(
-    "Banco LDS 360:",
-    mensaje
-  );
-
-  const elementos = [
-
-    document.getElementById(
-      "connectionStatus"
-    ),
-
-    document.getElementById(
-      "codeMessage"
-    ),
-
-    document.getElementById(
-      "mensaje"
-    ),
-
-    document.getElementById(
-      "message"
-    ),
-
-    document.getElementById(
-      "status"
-    )
-
-  ];
-
-  const elemento =
-    elementos.find(
-      function(el) {
-        return el !== null;
-      }
-    );
-
-  if (elemento) {
-    elemento.textContent =
-      mensaje;
-  }
-
-}
-
-
-// ============================================================
-// FORMATO LDS
+// FORMATO DINERO
 // ============================================================
 
 function formatearLDS(numero) {
 
-  const valor =
-    Number(numero || 0);
-
-  return valor.toLocaleString(
+  return Number(
+    numero || 0
+  ).toLocaleString(
     "es-PE",
     {
       minimumFractionDigits: 2,
@@ -765,12 +996,12 @@ function formatearFecha(fecha) {
 
   try {
 
-    const d =
+    const fechaObjeto =
       new Date(fecha);
 
     if (
       isNaN(
-        d.getTime()
+        fechaObjeto.getTime()
       )
     ) {
 
@@ -778,7 +1009,7 @@ function formatearFecha(fecha) {
 
     }
 
-    return d.toLocaleString(
+    return fechaObjeto.toLocaleString(
       "es-PE",
       {
         dateStyle: "short",
@@ -796,7 +1027,7 @@ function formatearFecha(fecha) {
 
 
 // ============================================================
-// ESCAPAR HTML
+// SEGURIDAD HTML
 // ============================================================
 
 function escaparHTML(valor) {
@@ -829,51 +1060,20 @@ function escaparHTML(valor) {
 
 
 // ============================================================
-// ESCAPAR JAVASCRIPT
-// ============================================================
-
-function escaparJS(valor) {
-
-  return String(
-    valor ?? ""
-  )
-    .replace(
-      /\\/g,
-      "\\\\"
-    )
-    .replace(
-      /'/g,
-      "\\'"
-    )
-    .replace(
-      /"/g,
-      '\\"'
-    )
-    .replace(
-      /\n/g,
-      "\\n"
-    )
-    .replace(
-      /\r/g,
-      "\\r"
-    );
-
-}
-
-
-// ============================================================
-// ESTILOS DE LA FICHA
+// ESTILOS COMPLETOS DE LA FICHA
 // ============================================================
 
 function agregarEstilosFicha() {
 
   if (
     document.getElementById(
-      "ldsProfileStyles"
+      "estilosBancoLDS360"
     )
   ) {
+
     return;
   }
+
 
   const style =
     document.createElement(
@@ -881,489 +1081,1061 @@ function agregarEstilosFicha() {
     );
 
   style.id =
-    "ldsProfileStyles";
+    "estilosBancoLDS360";
+
 
   style.textContent = `
 
-    /* ============================================
-       PERFIL BANCO LDS 360
-    ============================================ */
+    /* =====================================================
+       FICHA PRINCIPAL
+    ===================================================== */
 
-    .lds-profile {
+    .lds-ficha {
+
       width: 100%;
-      max-width: 760px;
+
+      max-width: 1050px;
+
       margin: 0 auto;
+
+      padding: 20px 28px 30px;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: #071d3a;
+
     }
 
 
-    /* ============================================
+    /* =====================================================
        CABECERA
-    ============================================ */
+    ===================================================== */
 
-    .lds-profile-header {
-      display: grid;
-      grid-template-columns: 190px 1fr;
-      gap: 28px;
-      align-items: center;
-      padding: 8px 8px 25px;
-    }
+    .lds-ficha-top {
 
-
-    /* ============================================
-       FOTO
-    ============================================ */
-
-    .lds-photo-container {
-      text-align: center;
-    }
-
-    .lds-photo-frame {
-      width: 170px;
-      height: 170px;
-      margin: 0 auto;
-      border-radius: 50%;
-      padding: 6px;
-      background: #f4c400;
-      box-shadow:
-        0 8px 25px rgba(7,29,58,.18);
-      overflow: hidden;
       display: flex;
+
       align-items: center;
-      justify-content: center;
+
+      justify-content: space-between;
+
+      margin-bottom: 25px;
+
     }
+
+
+    .lds-ficha-titulo {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+    }
+
+
+    .lds-bank-icon {
+
+      font-size: 36px;
+
+    }
+
+
+    .lds-ficha-titulo h2 {
+
+      margin: 0;
+
+      font-family: Georgia, serif;
+
+      font-size: 27px;
+
+      color: #071d3a;
+
+    }
+
+
+    .lds-ficha-titulo p {
+
+      margin: 3px 0 0;
+
+      color: #777;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 3px;
+
+    }
+
+
+    .lds-cerrar {
+
+      width: 48px;
+
+      height: 48px;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background: #071d3a;
+
+      color: white;
+
+      font-size: 34px;
+
+      line-height: 1;
+
+      cursor: pointer;
+
+    }
+
+
+    .lds-cerrar:hover {
+
+      transform: scale(1.05);
+
+    }
+
+
+    /* =====================================================
+       ESTUDIANTE
+    ===================================================== */
+
+    .lds-student-header {
+
+      display: grid;
+
+      grid-template-columns:
+        245px
+        1fr;
+
+      gap: 35px;
+
+      align-items: center;
+
+      padding: 5px 20px 30px;
+
+    }
+
+
+    /* =====================================================
+       FOTO
+    ===================================================== */
+
+    .lds-photo-column {
+
+      text-align: center;
+
+    }
+
+
+    .lds-photo-circle {
+
+      width: 210px;
+
+      height: 210px;
+
+      margin: 0 auto;
+
+      padding: 6px;
+
+      border-radius: 50%;
+
+      background: #f4c400;
+
+      box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.15);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
 
     .lds-student-photo {
-      width: 158px;
-      height: 158px;
+
+      width: 198px;
+
+      height: 198px;
+
       border-radius: 50%;
+
       object-fit: cover;
+
       display: block;
+
       background: #eef2f6;
+
     }
 
-    .lds-photo-fallback {
-      width: 158px;
-      height: 158px;
+
+    .lds-photo-placeholder {
+
+      width: 198px;
+
+      height: 198px;
+
       border-radius: 50%;
+
       background: #eef2f6;
-      color: #071d3a;
-      align-items: center;
-      justify-content: center;
+
+      display: flex;
+
       flex-direction: column;
-      gap: 5px;
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-    }
 
-    .lds-photo-icon {
-      font-size: 55px;
-    }
+      align-items: center;
 
-    .lds-photo-label {
-      margin-top: 9px;
-      font-size: 11px;
-      font-weight: 900;
-      color: #6b7280;
-      letter-spacing: 1.5px;
-    }
+      justify-content: center;
 
-
-    /* ============================================
-       DATOS DEL ESTUDIANTE
-    ============================================ */
-
-    .lds-student-data {
-      min-width: 0;
-    }
-
-    .lds-student-name {
       color: #071d3a;
-      font-family: Georgia, serif;
-      font-size: clamp(23px, 3vw, 34px);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 7px;
+
+      gap: 6px;
+
     }
 
-    .lds-code {
-      display: inline-block;
-      background: #eef2f6;
-      color: #071d3a;
-      border-radius: 20px;
-      padding: 6px 14px;
+
+    .lds-photo-placeholder span {
+
+      font-size: 70px;
+
+    }
+
+
+    .lds-photo-placeholder small {
+
       font-size: 13px;
+
       font-weight: 800;
-      margin-bottom: 18px;
-    }
 
-    .lds-student-details {
-      display: grid;
-      gap: 10px;
-    }
-
-    .lds-detail {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .lds-detail > span {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: #f4f6f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .lds-detail div {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .lds-detail small {
-      color: #7b8490;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .lds-detail strong {
-      color: #071d3a;
-      font-size: 14px;
     }
 
 
-    /* ============================================
-       CUENTA
-    ============================================ */
+    .lds-photo-caption {
 
-    .lds-account-card {
-      background: #071d3a;
-      border-radius: 24px;
-      padding: 22px;
-      color: white;
-      box-shadow:
-        0 10px 25px rgba(7,29,58,.18);
-    }
+      margin-top: 12px;
 
-    .lds-account-title {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      margin-bottom: 18px;
-    }
+      color: #687284;
 
-    .lds-account-values {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.25fr;
-      gap: 10px;
-    }
-
-    .lds-money-box {
-      background: rgba(255,255,255,.08);
-      border-radius: 15px;
-      padding: 13px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .lds-money-box span {
       font-size: 12px;
-      opacity: .8;
+
+      font-weight: 900;
+
+      letter-spacing: 2px;
+
     }
 
-    .lds-money-box strong {
-      font-size: 17px;
-    }
 
-    .lds-money-box .income {
-      color: #67e8a3;
-    }
+    /* =====================================================
+       DATOS
+    ===================================================== */
 
-    .lds-money-box .expense {
-      color: #ff8794;
-    }
+    .lds-student-info h1 {
 
-    .lds-money-box.balance {
-      background: #f4c400;
+      margin: 0 0 10px;
+
+      font-family: Georgia, serif;
+
+      font-size: clamp(
+        25px,
+        3vw,
+        40px
+      );
+
+      line-height: 1.08;
+
       color: #071d3a;
-    }
 
-    .lds-money-box.balance span {
-      opacity: 1;
-      font-weight: 700;
-    }
-
-    .lds-money-box.balance strong {
-      font-size: 21px;
     }
 
 
-    /* ============================================
-       BOTONES
-    ============================================ */
+    .lds-student-code {
 
-    .lds-operation-buttons {
+      display: inline-block;
+
+      padding: 8px 15px;
+
+      border-radius: 25px;
+
+      background: #edf2f7;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .lds-info-grid {
+
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin: 18px 0;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 12px;
+
     }
 
-    .lds-operation {
-      border: none;
-      border-radius: 18px;
-      padding: 15px 18px;
-      color: white;
-      cursor: pointer;
+
+    .lds-info-item {
+
+      min-height: 78px;
+
+      padding: 12px;
+
+      border-radius: 17px;
+
+      background: #f4f6f9;
+
       display: flex;
+
       align-items: center;
+
+      gap: 10px;
+
+    }
+
+
+    .lds-info-icon {
+
+      width: 40px;
+
+      height: 40px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      display: flex;
+
+      align-items: center;
+
       justify-content: center;
-      gap: 12px;
+
+      font-size: 21px;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .lds-info-item div:last-child {
+
+      min-width: 0;
+
+    }
+
+
+    .lds-info-item span {
+
+      display: block;
+
+      color: #7a8390;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      margin-bottom: 3px;
+
+    }
+
+
+    .lds-info-item strong {
+
+      display: block;
+
+      color: #071d3a;
+
+      font-size: 14px;
+
+      line-height: 1.1;
+
+    }
+
+
+    /* =====================================================
+       CUENTA
+    ===================================================== */
+
+    .lds-account {
+
+      padding: 25px;
+
+      border-radius: 27px;
+
+      background: #071d3a;
+
+      box-shadow:
+        0 10px 30px
+        rgba(7,29,58,.17);
+
+    }
+
+
+    .lds-account-heading {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 10px;
+
+      color: white;
+
+      font-size: 20px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .lds-account-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 13px;
+
+    }
+
+
+    .lds-money {
+
+      border-radius: 19px;
+
+      padding: 18px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+      background:
+        rgba(255,255,255,.08);
+
+      color: white;
+
+    }
+
+
+    .lds-money.balance {
+
+      background: #f4c400;
+
+      color: #071d3a;
+
+    }
+
+
+    .lds-money-icon {
+
+      width: 48px;
+
+      height: 48px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.15);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 28px;
+
+      font-weight: 900;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .income .lds-money-icon {
+
+      background: #18a765;
+
+    }
+
+
+    .expense .lds-money-icon {
+
+      background: #cf142b;
+
+    }
+
+
+    .lds-money-info span {
+
+      display: block;
+
+      font-size: 12px;
+
+      opacity: .8;
+
+      margin-bottom: 4px;
+
+    }
+
+
+    .lds-money-info strong {
+
+      font-size: 22px;
+
+    }
+
+
+    .income .lds-money-info strong {
+
+      color: #55e49a;
+
+    }
+
+
+    .expense .lds-money-info strong {
+
+      color: #ff7d8b;
+
+    }
+
+
+    .balance .lds-money-info strong {
+
+      color: #071d3a;
+
+    }
+
+
+    /* =====================================================
+       BOTONES
+    ===================================================== */
+
+    .lds-actions {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 15px;
+
+      margin: 18px 0;
+
+    }
+
+
+    .lds-action {
+
+      border: none;
+
+      border-radius: 19px;
+
+      padding: 17px 25px;
+
+      color: white;
+
+      cursor: pointer;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 13px;
+
       transition:
         transform .2s,
         box-shadow .2s;
+
     }
 
-    .lds-operation:hover {
-      transform: translateY(-2px);
+
+    .lds-action:hover {
+
+      transform:
+        translateY(-2px);
+
       box-shadow:
-        0 8px 18px rgba(0,0,0,.16);
+        0 8px 20px
+        rgba(0,0,0,.15);
+
     }
 
-    .lds-operation > span {
-      font-size: 25px;
-    }
 
-    .lds-operation div {
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-    }
+    .lds-action.cobrar {
 
-    .lds-operation strong {
-      font-size: 17px;
-    }
-
-    .lds-operation small {
-      font-size: 11px;
-      opacity: .85;
-      margin-top: 2px;
-    }
-
-    .income-button {
       background: #198754;
+
     }
 
-    .expense-button {
+
+    .lds-action.pagar {
+
       background: #cf142b;
+
     }
 
 
-    /* ============================================
-       MOVIMIENTOS
-    ============================================ */
+    .lds-action-icon {
 
-    .lds-movements-card {
-      background: #f4f6f9;
-      border-radius: 22px;
-      padding: 18px;
+      font-size: 27px;
+
     }
 
-    .lds-movements-title {
+
+    .lds-action-text {
+
       display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #071d3a;
-      margin-bottom: 13px;
-      font-size: 16px;
+
+      flex-direction: column;
+
+      text-align: left;
+
     }
 
-    .lds-movement-count {
-      margin-left: auto;
-      min-width: 25px;
-      height: 25px;
-      padding: 0 8px;
-      border-radius: 20px;
-      background: #071d3a;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    .lds-action-text strong {
+
+      font-size: 18px;
+
+    }
+
+
+    .lds-action-text small {
+
       font-size: 11px;
+
+      opacity: .85;
+
+      margin-top: 2px;
+
     }
 
-    .lds-movement {
-      display: grid;
-      grid-template-columns: 42px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      background: white;
-      border-radius: 15px;
-      padding: 13px;
-      margin-bottom: 9px;
-      box-shadow:
-        0 2px 8px rgba(0,0,0,.05);
+
+    /* =====================================================
+       MOVIMIENTOS
+    ===================================================== */
+
+    .lds-movimientos {
+
+      padding: 20px;
+
+      border-radius: 23px;
+
+      background: #f3f6fa;
+
     }
 
-    .lds-movement:last-child {
-      margin-bottom: 0;
-    }
 
-    .lds-movement-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
+    .lds-movimientos-header {
+
       display: flex;
+
       align-items: center;
+
+      justify-content: space-between;
+
+      margin-bottom: 13px;
+
+    }
+
+
+    .lds-movimientos-header > div {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      color: #071d3a;
+
+      font-size: 17px;
+
+    }
+
+
+    .lds-contador {
+
+      width: 29px;
+
+      height: 29px;
+
+      border-radius: 50%;
+
+      background: #1672d4;
+
+      color: white;
+
+      display: flex;
+
+      align-items: center;
+
       justify-content: center;
-      font-size: 20px;
-    }
 
-    .movement-income .lds-movement-icon {
-      background: #e8f8ef;
-    }
-
-    .movement-expense .lds-movement-icon {
-      background: #ffedf0;
-    }
-
-    .lds-movement-main {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .lds-movement-main strong {
-      color: #071d3a;
-      font-size: 13px;
-    }
-
-    .lds-movement-main span {
-      color: #7b8490;
-      font-size: 10px;
-    }
-
-    .lds-movement-main small {
-      color: #7b8490;
-      font-size: 9px;
-    }
-
-    .lds-movement-amount {
-      text-align: right;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .lds-movement-amount strong {
-      font-size: 14px;
-    }
-
-    .movement-income .lds-movement-amount strong {
-      color: #198754;
-    }
-
-    .movement-expense .lds-movement-amount strong {
-      color: #cf142b;
-    }
-
-    .lds-movement-amount span {
-      color: #7b8490;
-      font-size: 9px;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-
-
-    /* ============================================
-       SIN MOVIMIENTOS
-    ============================================ */
-
-    .lds-empty-movements {
-      text-align: center;
-      padding: 25px;
-      color: #6b7280;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .lds-empty-movements div {
-      font-size: 30px;
-    }
-
-    .lds-empty-movements strong {
-      color: #071d3a;
-    }
-
-    .lds-empty-movements span {
       font-size: 12px;
+
+      font-weight: 900;
+
     }
 
 
-    /* ============================================
+    .lds-lista-movimientos {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 9px;
+
+    }
+
+
+    .lds-movimiento {
+
+      display: grid;
+
+      grid-template-columns:
+        50px
+        1fr
+        auto;
+
+      align-items: center;
+
+      gap: 13px;
+
+      padding: 14px;
+
+      border-radius: 16px;
+
+      background: white;
+
+      box-shadow:
+        0 2px 9px
+        rgba(0,0,0,.05);
+
+    }
+
+
+    .lds-mov-icon {
+
+      width: 46px;
+
+      height: 46px;
+
+      border-radius: 14px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 22px;
+
+    }
+
+
+    .mov-ingreso .lds-mov-icon {
+
+      background: #dcf8e9;
+
+    }
+
+
+    .mov-egreso .lds-mov-icon {
+
+      background: #ffe5e9;
+
+    }
+
+
+    .lds-mov-info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 3px;
+
+      min-width: 0;
+
+    }
+
+
+    .lds-mov-info strong {
+
+      color: #071d3a;
+
+      font-size: 14px;
+
+    }
+
+
+    .lds-mov-info span {
+
+      color: #778190;
+
+      font-size: 10px;
+
+    }
+
+
+    .lds-mov-info small {
+
+      color: #778190;
+
+      font-size: 9px;
+
+    }
+
+
+    .lds-mov-monto {
+
+      text-align: right;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 4px;
+
+    }
+
+
+    .lds-mov-monto strong {
+
+      font-size: 15px;
+
+    }
+
+
+    .mov-ingreso .lds-mov-monto strong {
+
+      color: #198754;
+
+    }
+
+
+    .mov-egreso .lds-mov-monto strong {
+
+      color: #cf142b;
+
+    }
+
+
+    .lds-mov-monto span {
+
+      font-size: 9px;
+
+      font-weight: 900;
+
+      color: #778190;
+
+    }
+
+
+    /* =====================================================
+       SIN MOVIMIENTOS
+    ===================================================== */
+
+    .lds-sin-movimientos {
+
+      padding: 30px;
+
+      text-align: center;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 5px;
+
+      color: #6f7885;
+
+    }
+
+
+    .lds-sin-movimientos span {
+
+      font-size: 30px;
+
+    }
+
+
+    .lds-sin-movimientos strong {
+
+      color: #071d3a;
+
+    }
+
+
+    .lds-sin-movimientos small {
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       SEGURIDAD
+    ===================================================== */
+
+    .lds-security {
+
+      margin-top: 18px;
+
+      padding: 15px 20px;
+
+      border-radius: 20px;
+
+      background: #f1f5fa;
+
+      color: #17477f;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 9px;
+
+      text-align: center;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+    }
+
+
+    .lds-security span:first-child {
+
+      font-size: 20px;
+
+    }
+
+
+    /* =====================================================
        RESPONSIVE
-    ============================================ */
+    ===================================================== */
 
-    @media (max-width: 650px) {
+    @media(max-width: 800px) {
 
-      .lds-profile-header {
+      .lds-student-header {
+
         grid-template-columns: 1fr;
+
         text-align: center;
+
       }
 
-      .lds-student-details {
+
+      .lds-info-grid {
+
+        grid-template-columns: 1fr;
+
         text-align: left;
+
       }
 
-      .lds-account-values {
-        grid-template-columns: 1fr 1fr;
+
+      .lds-account-grid {
+
+        grid-template-columns: 1fr;
+
       }
 
-      .lds-money-box.balance {
-        grid-column: 1 / -1;
+
+      .lds-money.balance {
+
+        order: -1;
+
       }
 
     }
 
 
-    @media (max-width: 500px) {
+    @media(max-width: 600px) {
 
-      .lds-operation-buttons {
+      .lds-ficha {
+
+        padding: 15px;
+
+      }
+
+
+      .lds-student-header {
+
+        padding-left: 0;
+
+        padding-right: 0;
+
+      }
+
+
+      .lds-actions {
+
         grid-template-columns: 1fr;
+
       }
 
-      .lds-movement {
-        grid-template-columns: 38px 1fr;
+
+      .lds-movimiento {
+
+        grid-template-columns:
+          45px
+          1fr;
+
       }
 
-      .lds-movement-amount {
+
+      .lds-mov-monto {
+
         grid-column: 2;
+
         text-align: left;
+
         flex-direction: row;
+
         align-items: center;
-        gap: 8px;
+
       }
 
-      .lds-account-values {
-        grid-template-columns: 1fr;
-      }
 
-      .lds-money-box.balance {
-        grid-column: auto;
+      .lds-ficha-titulo h2 {
+
+        font-size: 21px;
+
       }
 
     }
 
   `;
+
 
   document.head.appendChild(
     style
@@ -1373,7 +2145,7 @@ function agregarEstilosFicha() {
 
 
 // ============================================================
-// CARGAR CÓDIGO DESDE URL
+// CARGAR CÓDIGO DESDE LA URL
 // ============================================================
 
 function cargarCodigoDesdeURL() {
@@ -1406,8 +2178,10 @@ document.addEventListener(
   function() {
 
     console.log(
-      "🏦 Banco LDS 360 iniciado."
+      "🏦 Banco LDS 360 iniciado correctamente."
     );
+
+    cargarCodigoDesdeURL();
 
   }
 );
@@ -1420,20 +2194,26 @@ document.addEventListener(
 window.consultarEstudiante =
   consultarEstudiante;
 
-window.buscarPorCodigo =
-  buscarPorCodigo;
+window.mostrarFichaEstudiante =
+  mostrarFichaEstudiante;
+
+window.ingresarCodigo =
+  ingresarCodigo;
+
+window.abrirEscaner =
+  abrirEscaner;
 
 window.abrirOperacion =
   abrirOperacion;
+
+window.abrirFicha =
+  abrirFicha;
+
+window.cerrarFicha =
+  cerrarFicha;
 
 window.abrirPerfil =
   abrirPerfil;
 
 window.cerrarPerfil =
   cerrarPerfil;
-
-window.mostrarEstudiante =
-  mostrarEstudiante;
-
-window.manejarErrorFoto =
-  manejarErrorFoto;
