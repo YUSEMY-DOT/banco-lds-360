@@ -75,9 +75,6 @@ async function consultarEstudiante(codigo) {
 
 // ============================================================
 // MOSTRAR FICHA
-// IMPORTANTE:
-// NO CREA OTRO ENCABEZADO NI OTRO BOTÓN X.
-// SOLO LLENA profileContent.
 // ============================================================
 
 function mostrarFichaEstudiante(datos) {
@@ -163,7 +160,7 @@ function mostrarFichaEstudiante(datos) {
 
         <div class="lds-photo-column">
 
-          <div class="lds-photo-circle">
+          <div class="lds-photo-frame">
 
             ${htmlFoto}
 
@@ -901,999 +898,629 @@ function escaparHTML(valor) {
 
 function agregarEstilosFicha() {
 
-  if (
-    document.getElementById(
-      "estilosBancoLDS360"
-    )
-  ) {
-    return;
-  }
+  if (document.getElementById("estilosBancoLDS360")) return;
 
-
-  const style =
-    document.createElement("style");
-
-  style.id =
-    "estilosBancoLDS360";
-
+  const style = document.createElement("style");
+  style.id = "estilosBancoLDS360";
 
   style.textContent = `
+    /* ============================================================
+       BANCO LDS 360 — FICHA RESPONSIVE
+       Controlamos la ventana completa y el contenido interno.
+    ============================================================ */
 
-    /* ======================================================
-       CONTENEDOR
-    ====================================================== */
+    #profileOverlay {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      padding: 18px !important;
+      margin: 0 !important;
+      display: none !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      z-index: 9999 !important;
+      background: rgba(2,12,27,.78) !important;
+      backdrop-filter: blur(3px);
+    }
+
+    #profileOverlay.active {
+      display: flex !important;
+    }
+
+    #profileOverlay #profileContent {
+      width: min(1120px, calc(100vw - 36px)) !important;
+      max-width: 1120px !important;
+      height: min(900px, calc(100dvh - 36px)) !important;
+      max-height: calc(100dvh - 36px) !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      border-radius: 28px !important;
+      background: #ffffff !important;
+      box-shadow: 0 24px 70px rgba(0,0,0,.35) !important;
+      scrollbar-width: thin;
+    }
+
+    #profileOverlay #profileContent::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #profileOverlay #profileContent::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #profileOverlay #profileContent::-webkit-scrollbar-thumb {
+      background: #c7d0dc;
+      border-radius: 20px;
+    }
 
     .lds-profile {
-
       width: 100%;
-
-      max-width: 1080px;
-
+      max-width: 1120px;
       margin: 0 auto;
-
-      padding: 20px 25px 30px;
-
+      padding: 28px 32px 32px;
       color: #071d3a;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-
-    /* ======================================================
-       ESTUDIANTE
-    ====================================================== */
+    /* ---------- ESTUDIANTE ---------- */
 
     .lds-student-header {
-
       display: grid;
-
-      grid-template-columns:
-        230px
-        minmax(0, 1fr);
-
-      gap: 35px;
-
+      grid-template-columns: 310px minmax(0,1fr);
+      gap: 32px;
       align-items: center;
-
       margin-bottom: 25px;
-
     }
 
-
-    /* ======================================================
-       FOTO
-    ====================================================== */
+    /* ---------- FOTO RECTANGULAR ---------- */
 
     .lds-photo-column {
-
       text-align: center;
-
+      min-width: 0;
     }
 
-
-    .lds-photo-circle {
-
-      width: 190px;
-
-      height: 190px;
-
+    .lds-photo-frame {
+      width: 290px;
+      height: 225px;
       margin: 0 auto;
-
       padding: 6px;
-
-      border-radius: 50%;
-
+      border-radius: 27px;
       background: #f4c400;
-
-      box-shadow:
-        0 7px 22px
-        rgba(0,0,0,.15);
-
+      box-shadow: 0 9px 25px rgba(7,29,58,.18);
       overflow: hidden;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
     }
 
-
-    .lds-student-photo {
-
-      width: 178px;
-
-      height: 178px;
-
-      border-radius: 50%;
-
+    .lds-student-photo,
+    .lds-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 21px;
       object-fit: cover;
-
+      object-position: center;
       display: block;
-
       background: #eef2f6;
-
     }
-
 
     .lds-photo-placeholder {
-
-      width: 178px;
-
-      height: 178px;
-
-      border-radius: 50%;
-
-      background: #eef2f6;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       flex-direction: column;
-
-      gap: 6px;
-
+      gap: 7px;
     }
-
 
     .lds-photo-placeholder span {
-
-      font-size: 55px;
-
+      font-size: 62px;
     }
-
 
     .lds-photo-placeholder small {
-
-      font-size: 12px;
-
+      font-size: 13px;
       font-weight: 800;
-
     }
-
 
     .lds-photo-caption {
-
       margin-top: 10px;
-
       color: #687284;
-
       font-size: 12px;
-
       font-weight: 900;
-
       letter-spacing: 2px;
-
     }
 
-
-    /* ======================================================
-       DATOS
-    ====================================================== */
+    /* ---------- DATOS ---------- */
 
     .lds-student-info {
-
       min-width: 0;
-
     }
-
 
     .lds-student-info h1 {
-
-      margin: 0 0 10px;
-
+      margin: 0 0 11px;
       font-family: Georgia, serif;
-
-      font-size: clamp(
-        25px,
-        3vw,
-        39px
-      );
-
-      line-height: 1.08;
-
+      font-size: clamp(28px,3vw,42px);
+      line-height: 1.06;
       color: #071d3a;
-
+      overflow-wrap: anywhere;
     }
-
 
     .lds-student-code {
-
       display: inline-block;
-
       background: #edf2f7;
-
       border-radius: 25px;
-
-      padding: 8px 15px;
-
+      padding: 9px 16px;
       margin-bottom: 18px;
-
       font-size: 14px;
-
       font-weight: 900;
-
     }
-
 
     .lds-info-list {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-      gap: 10px;
-
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 12px;
     }
-
 
     .lds-info-item {
-
       min-width: 0;
-
-      min-height: 68px;
-
-      padding: 11px;
-
-      border-radius: 16px;
-
+      min-height: 88px;
+      padding: 13px;
+      border-radius: 18px;
       background: #f4f6f9;
-
       display: flex;
-
       align-items: center;
-
-      gap: 9px;
-
+      gap: 11px;
     }
 
+    /* ---------- ICONOS GRANDES ---------- */
 
     .lds-info-icon {
-
-      width: 38px;
-
-      height: 38px;
-
-      flex: 0 0 38px;
-
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
       border-radius: 50%;
-
-      background: white;
-
+      background: #ffffff;
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      font-size: 19px;
-
+      font-size: 29px;
+      box-shadow: 0 3px 10px rgba(7,29,58,.08);
     }
-
 
     .lds-info-item span {
-
       display: block;
-
       color: #7a8390;
-
-      font-size: 10px;
-
+      font-size: 11px;
       font-weight: 700;
-
-      margin-bottom: 3px;
-
+      margin-bottom: 4px;
     }
-
 
     .lds-info-item strong {
-
       display: block;
-
       color: #071d3a;
-
-      font-size: 13px;
-
-      line-height: 1.15;
-
+      font-size: 14px;
+      line-height: 1.2;
       word-break: break-word;
-
     }
 
-
-    /* ======================================================
-       CUENTA
-    ====================================================== */
+    /* ---------- CUENTA ---------- */
 
     .lds-account {
-
       background: #071d3a;
-
-      border-radius: 27px;
-
-      padding: 22px;
-
-      box-shadow:
-        0 9px 25px
-        rgba(7,29,58,.15);
-
+      border-radius: 25px;
+      padding: 20px;
+      box-shadow: 0 9px 25px rgba(7,29,58,.15);
     }
-
 
     .lds-account-title {
-
       text-align: center;
-
       color: white;
-
-      font-size: 21px;
-
+      font-size: 23px;
       font-weight: 900;
-
-      margin-bottom: 18px;
-
+      margin-bottom: 16px;
     }
-
 
     .lds-account-grid {
-
       display: grid;
-
-      grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-      gap: 13px;
-
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 12px;
     }
-
 
     .lds-money {
-
       min-width: 0;
-
-      padding: 17px;
-
-      border-radius: 19px;
-
+      min-height: 94px;
+      padding: 15px;
+      border-radius: 18px;
       background: rgba(255,255,255,.08);
-
       color: white;
-
       display: flex;
-
       align-items: center;
-
-      gap: 13px;
-
+      gap: 12px;
     }
-
 
     .lds-money.balance {
-
       background: #f4c400;
-
       color: #071d3a;
-
     }
-
 
     .lds-money-icon {
-
-      width: 47px;
-
-      height: 47px;
-
-      flex: 0 0 47px;
-
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
       border-radius: 50%;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      font-size: 28px;
-
+      font-size: 31px;
       font-weight: 900;
-
     }
-
 
     .income .lds-money-icon {
-
       background: #18a765;
-
     }
-
 
     .expense .lds-money-icon {
-
       background: #cf142b;
-
     }
-
 
     .balance .lds-money-icon {
-
-      background: rgba(255,255,255,.25);
-
+      background: rgba(255,255,255,.27);
     }
-
 
     .lds-money span {
-
       display: block;
-
       font-size: 11px;
-
-      opacity: .8;
-
+      opacity: .82;
       margin-bottom: 4px;
-
     }
-
 
     .lds-money strong {
-
       display: block;
-
       font-size: 21px;
-
+      white-space: nowrap;
     }
-
 
     .income strong {
-
       color: #55e49a;
-
     }
-
 
     .expense strong {
-
       color: #ff7d8b;
-
     }
-
 
     .balance strong {
-
       color: #071d3a;
-
     }
 
-
-    /* ======================================================
-       BOTONES
-    ====================================================== */
+    /* ---------- COBRAR / PAGAR ---------- */
 
     .lds-actions {
-
       display: grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
+      grid-template-columns: 1fr 1fr;
       gap: 15px;
-
-      margin: 17px 0;
-
+      margin: 16px 0;
     }
 
-
     .lds-action {
-
       border: none;
-
-      border-radius: 19px;
-
+      border-radius: 18px;
       min-height: 78px;
-
       padding: 14px 22px;
-
       color: white;
-
       cursor: pointer;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      gap: 12px;
-
+      gap: 13px;
       transition:
         transform .2s,
         box-shadow .2s;
-
     }
-
 
     .lds-action:hover {
-
-      transform:
-        translateY(-2px);
-
-      box-shadow:
-        0 7px 18px
-        rgba(0,0,0,.16);
-
+      transform: translateY(-2px);
+      box-shadow: 0 7px 18px rgba(0,0,0,.16);
     }
-
 
     .lds-action.cobrar {
-
       background: #198754;
-
     }
-
 
     .lds-action.pagar {
-
       background: #cf142b;
-
     }
-
 
     .lds-action-icon {
-
-      font-size: 26px;
-
+      font-size: 32px;
+      line-height: 1;
     }
-
 
     .lds-action-text {
-
       display: flex;
-
       flex-direction: column;
-
       text-align: left;
-
     }
-
 
     .lds-action-text strong {
-
-      font-size: 18px;
-
+      font-size: 20px;
     }
-
 
     .lds-action-text small {
-
       font-size: 11px;
-
-      opacity: .85;
-
+      opacity: .88;
       margin-top: 2px;
-
     }
 
-
-    /* ======================================================
-       MOVIMIENTOS
-    ====================================================== */
+    /* ---------- MOVIMIENTOS ---------- */
 
     .lds-movimientos {
-
       background: #f3f6fa;
-
-      border-radius: 22px;
-
-      padding: 18px;
-
+      border-radius: 21px;
+      padding: 17px;
     }
-
 
     .lds-movimientos-header {
-
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
-      margin-bottom: 12px;
-
+      margin-bottom: 11px;
       color: #071d3a;
-
       font-size: 17px;
-
     }
-
 
     .lds-contador {
-
-      width: 29px;
-
-      height: 29px;
-
+      width: 31px;
+      height: 31px;
       border-radius: 50%;
-
       background: #1672d4;
-
       color: white;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       font-size: 12px;
-
       font-weight: 900;
-
     }
-
 
     .lds-lista-movimientos {
-
       display: flex;
-
       flex-direction: column;
-
-      gap: 9px;
-
+      gap: 8px;
     }
-
 
     .lds-movimiento {
-
       display: grid;
-
-      grid-template-columns:
-        50px
-        minmax(0, 1fr)
-        auto;
-
+      grid-template-columns: 50px minmax(0,1fr) auto;
       align-items: center;
-
-      gap: 12px;
-
-      padding: 13px;
-
-      border-radius: 16px;
-
+      gap: 11px;
+      padding: 12px;
+      border-radius: 15px;
       background: white;
-
-      box-shadow:
-        0 2px 8px
-        rgba(0,0,0,.05);
-
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
     }
-
 
     .lds-mov-icon {
-
       width: 45px;
-
       height: 45px;
-
-      border-radius: 14px;
-
+      border-radius: 13px;
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      font-size: 21px;
-
+      font-size: 22px;
     }
-
 
     .mov-ingreso .lds-mov-icon {
-
       background: #dcf8e9;
-
     }
-
 
     .mov-egreso .lds-mov-icon {
-
       background: #ffe5e9;
-
     }
-
 
     .lds-mov-info {
-
       min-width: 0;
-
       display: flex;
-
       flex-direction: column;
-
       gap: 3px;
-
     }
-
 
     .lds-mov-info strong {
-
       font-size: 14px;
-
       color: #071d3a;
-
       word-break: break-word;
-
     }
 
-
-    .lds-mov-info span {
-
-      color: #778190;
-
-      font-size: 10px;
-
-    }
-
-
+    .lds-mov-info span,
     .lds-mov-info small {
-
       color: #778190;
-
-      font-size: 9px;
-
+      font-size: 10px;
     }
-
 
     .lds-mov-monto {
-
       text-align: right;
-
       display: flex;
-
       flex-direction: column;
-
       gap: 3px;
-
     }
-
 
     .lds-mov-monto strong {
-
       font-size: 15px;
-
     }
-
 
     .mov-ingreso .lds-mov-monto strong {
-
       color: #198754;
-
     }
-
 
     .mov-egreso .lds-mov-monto strong {
-
       color: #cf142b;
-
     }
-
 
     .lds-mov-monto span {
-
       color: #778190;
-
       font-size: 9px;
-
       font-weight: 900;
-
     }
-
-
-    /* ======================================================
-       SIN MOVIMIENTOS
-    ====================================================== */
 
     .lds-sin-movimientos {
-
-      padding: 28px;
-
+      padding: 25px;
       text-align: center;
-
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
-
       gap: 5px;
-
       color: #6f7885;
-
     }
-
 
     .lds-sin-movimientos span {
-
       font-size: 30px;
-
     }
-
 
     .lds-sin-movimientos strong {
-
       color: #071d3a;
-
     }
-
 
     .lds-sin-movimientos small {
-
       font-size: 11px;
-
     }
 
-
-    /* ======================================================
-       SEGURIDAD
-    ====================================================== */
+    /* ---------- SEGURIDAD ---------- */
 
     .lds-security {
-
-      margin-top: 15px;
-
-      padding: 13px 18px;
-
-      border-radius: 18px;
-
+      margin-top: 13px;
+      padding: 12px 17px;
+      border-radius: 17px;
       background: #f1f5fa;
-
       color: #17477f;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       gap: 8px;
-
       text-align: center;
-
       font-size: 11px;
-
       font-weight: 700;
+    }
+
+    /* ---------- TABLET ---------- */
+
+    @media (max-width: 900px) {
+
+      #profileOverlay {
+        padding: 12px !important;
+      }
+
+      #profileOverlay #profileContent {
+        width: calc(100vw - 24px) !important;
+        height: calc(100dvh - 24px) !important;
+        max-height: calc(100dvh - 24px) !important;
+        border-radius: 23px !important;
+      }
+
+      .lds-profile {
+        padding: 22px;
+      }
+
+      .lds-student-header {
+        grid-template-columns: 240px minmax(0,1fr);
+        gap: 22px;
+      }
+
+      .lds-photo-frame {
+        width: 225px;
+        height: 175px;
+      }
+
+      .lds-info-list {
+        grid-template-columns: 1fr;
+      }
 
     }
 
 
-    /* ======================================================
-       TABLET
-    ====================================================== */
+    /* ---------- CELULAR ---------- */
 
-    @media(max-width: 850px) {
+    @media (max-width: 600px) {
+
+      #profileOverlay {
+        padding: 0 !important;
+      }
+
+      #profileOverlay #profileContent {
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+      }
+
+      .lds-profile {
+        padding: 16px 13px 24px;
+      }
 
       .lds-student-header {
-
-        grid-template-columns: 190px minmax(0,1fr);
-
-        gap: 22px;
-
+        grid-template-columns: 1fr;
+        gap: 17px;
+        text-align: center;
       }
 
-
-      .lds-photo-circle {
-
-        width: 170px;
-
-        height: 170px;
-
+      .lds-photo-frame {
+        width: min(90vw,330px);
+        height: min(64vw,235px);
+        border-radius: 23px;
       }
-
 
       .lds-student-photo,
       .lds-photo-placeholder {
-
-        width: 158px;
-
-        height: 158px;
-
+        border-radius: 17px;
       }
-
-
-      .lds-info-list {
-
-        grid-template-columns: 1fr;
-
-      }
-
-    }
-
-
-    /* ======================================================
-       CELULAR
-    ====================================================== */
-
-    @media(max-width: 600px) {
-
-      .lds-profile {
-
-        padding: 15px;
-
-      }
-
-
-      .lds-student-header {
-
-        grid-template-columns: 1fr;
-
-        text-align: center;
-
-      }
-
 
       .lds-student-info h1 {
-
         font-size: 27px;
-
       }
-
 
       .lds-info-list {
-
         text-align: left;
-
       }
 
+      .lds-info-icon {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+        font-size: 28px;
+      }
 
       .lds-account-grid {
-
         grid-template-columns: 1fr;
-
       }
-
 
       .lds-actions {
-
         grid-template-columns: 1fr;
-
       }
 
+      .lds-money-icon {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+      }
 
       .lds-movimiento {
-
-        grid-template-columns:
-          45px
-          minmax(0,1fr);
-
+        grid-template-columns: 45px minmax(0,1fr);
       }
 
-
       .lds-mov-monto {
-
         grid-column: 2;
-
         text-align: left;
-
         flex-direction: row;
-
         align-items: center;
-
       }
 
     }
 
   `;
 
-
   document.head.appendChild(style);
-
 }
 
 
