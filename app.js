@@ -34,59 +34,40 @@ async function consultarEstudiante(codigo) {
       "&t=" +
       Date.now();
 
-    const respuesta =
-      await fetch(url, {
-        method: "GET",
-        cache: "no-store"
-      });
+    const respuesta = await fetch(url, {
+      method: "GET",
+      cache: "no-store"
+    });
 
     if (!respuesta.ok) {
-      throw new Error(
-        "Error de conexión con Banco LDS 360."
-      );
+      throw new Error("No se pudo conectar con Banco LDS 360.");
     }
 
-    const datos =
-      await respuesta.json();
+    const datos = await respuesta.json();
 
-    console.log(
-      "Respuesta Banco LDS 360:",
-      datos
-    );
+    console.log("Banco LDS 360:", datos);
 
     if (!datos.ok) {
-
-      alert(
-        datos.mensaje ||
-        "Ocurrió un error."
-      );
-
+      alert(datos.mensaje || "Ocurrió un error.");
       return;
     }
 
     if (!datos.encontrado) {
-
-      alert(
-        "No se encontró el estudiante:\n\n" +
-        codigo
-      );
-
+      alert("No se encontró el estudiante:\n\n" + codigo);
       return;
     }
 
-    estudianteActual =
-      datos;
+    estudianteActual = datos;
 
-    mostrarFichaEstudiante(
-      datos
-    );
+    mostrarFichaEstudiante(datos);
 
   } catch (error) {
 
-    console.error(error);
+    console.error("Error Banco LDS 360:", error);
 
     alert(
-      "No se pudo conectar con Banco LDS 360."
+      "No se pudo conectar con Banco LDS 360.\n\n" +
+      "Verifica tu conexión a Internet."
     );
   }
 }
@@ -94,18 +75,16 @@ async function consultarEstudiante(codigo) {
 
 // ============================================================
 // MOSTRAR FICHA
+// IMPORTANTE:
+// NO CREA OTRO ENCABEZADO NI OTRO BOTÓN X.
+// SOLO LLENA profileContent.
 // ============================================================
 
 function mostrarFichaEstudiante(datos) {
 
-  const estudiante =
-    datos.estudiante || {};
-
-  const cuenta =
-    datos.cuenta || {};
-
-  const movimientos =
-    datos.movimientos || [];
+  const estudiante = datos.estudiante || {};
+  const cuenta = datos.cuenta || {};
+  const movimientos = datos.movimientos || [];
 
   const nombre =
     estudiante.nombreCompleto ||
@@ -115,114 +94,66 @@ function mostrarFichaEstudiante(datos) {
       String(estudiante.apellido || "")
     ).trim();
 
-  const codigo =
-    estudiante.codigo || "";
+  const codigo = estudiante.codigo || "";
+  const grado = estudiante.grado || "";
+  const seccion = estudiante.seccion || "";
+  const docente = estudiante.docente || "";
 
-  const grado =
-    estudiante.grado || "";
+  const ingresos = Number(cuenta.totalIngresos || 0);
+  const egresos = Number(cuenta.totalEgresos || 0);
+  const saldo = Number(cuenta.saldoActual || 0);
 
-  const seccion =
-    estudiante.seccion || "";
-
-  const docente =
-    estudiante.docente || "";
-
-  const ingresos =
-    Number(
-      cuenta.totalIngresos || 0
-    );
-
-  const egresos =
-    Number(
-      cuenta.totalEgresos || 0
-    );
-
-  const saldo =
-    Number(
-      cuenta.saldoActual || 0
-    );
-
-
-  // ----------------------------------------------------------
-  // OBTENER FOTO
-  // ----------------------------------------------------------
-
-  const foto =
-    prepararURLFoto(
-      estudiante.fotoUrl ||
-      estudiante.foto ||
-      ""
-    );
-
-
-  // ----------------------------------------------------------
-  // CONTENEDOR
-  // ----------------------------------------------------------
+  const foto = prepararURLFoto(
+    estudiante.fotoUrl ||
+    estudiante.foto ||
+    ""
+  );
 
   const contenedor =
-    document.getElementById(
-      "profileContent"
-    );
+    document.getElementById("profileContent");
 
   if (!contenedor) {
 
     console.error(
-      "No existe el elemento #profileContent."
+      "No existe el elemento profileContent en index.html."
     );
 
     return;
   }
 
 
-  // ----------------------------------------------------------
-  // HTML COMPLETO
-  // ----------------------------------------------------------
+  // ==========================================================
+  // FOTO
+  // ==========================================================
+
+  const htmlFoto = foto
+    ? `
+      <img
+        src="${escaparHTML(foto)}"
+        alt="Foto de ${escaparHTML(nombre)}"
+        class="lds-student-photo"
+        onerror="fotoNoDisponible(this)"
+      >
+    `
+    : `
+      <div class="lds-photo-placeholder">
+        <span>👤</span>
+        <small>Foto no disponible</small>
+      </div>
+    `;
+
+
+  // ==========================================================
+  // FICHA
+  // ==========================================================
 
   contenedor.innerHTML = `
 
-    <div class="lds-ficha">
+    <div class="lds-profile">
 
 
       <!-- ================================================
-           ENCABEZADO
-      ================================================= -->
-
-      <div class="lds-ficha-top">
-
-        <div class="lds-ficha-titulo">
-
-          <span class="lds-bank-icon">
-            🏦
-          </span>
-
-          <div>
-
-            <h2>
-              Cuenta Banco LDS 360
-            </h2>
-
-            <p>
-              IEP LA SALLE DEL SUR
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <button
-          type="button"
-          class="lds-cerrar"
-          onclick="cerrarFicha()"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <!-- ================================================
-           DATOS DEL ESTUDIANTE
+           INFORMACIÓN DEL ESTUDIANTE
       ================================================= -->
 
       <div class="lds-student-header">
@@ -234,28 +165,9 @@ function mostrarFichaEstudiante(datos) {
 
           <div class="lds-photo-circle">
 
-            ${
-              foto
-              ?
-              `
-                <img
-                  src="${escaparHTML(foto)}"
-                  alt="Foto del estudiante"
-                  class="lds-student-photo"
-                  onerror="fotoNoDisponible(this)"
-                >
-              `
-              :
-              `
-                <div class="lds-photo-placeholder">
-                  <span>👤</span>
-                  <small>Foto no disponible</small>
-                </div>
-              `
-            }
+            ${htmlFoto}
 
           </div>
-
 
           <div class="lds-photo-caption">
             ESTUDIANTE LDS
@@ -264,7 +176,7 @@ function mostrarFichaEstudiante(datos) {
         </div>
 
 
-        <!-- INFORMACIÓN -->
+        <!-- DATOS -->
 
         <div class="lds-student-info">
 
@@ -272,14 +184,15 @@ function mostrarFichaEstudiante(datos) {
             ${escaparHTML(nombre)}
           </h1>
 
-
           <div class="lds-student-code">
             ${escaparHTML(codigo)}
           </div>
 
 
-          <div class="lds-info-grid">
+          <div class="lds-info-list">
 
+
+            <!-- GRADO -->
 
             <div class="lds-info-item">
 
@@ -302,6 +215,8 @@ function mostrarFichaEstudiante(datos) {
             </div>
 
 
+            <!-- SECCIÓN -->
+
             <div class="lds-info-item">
 
               <div class="lds-info-icon">
@@ -322,6 +237,8 @@ function mostrarFichaEstudiante(datos) {
 
             </div>
 
+
+            <!-- DOCENTE -->
 
             <div class="lds-info-item">
 
@@ -357,16 +274,8 @@ function mostrarFichaEstudiante(datos) {
 
       <section class="lds-account">
 
-        <div class="lds-account-heading">
-
-          <span>
-            💰
-          </span>
-
-          <strong>
-            CUENTA LDS
-          </strong>
-
+        <div class="lds-account-title">
+          💰 &nbsp; CUENTA LDS
         </div>
 
 
@@ -381,7 +290,7 @@ function mostrarFichaEstudiante(datos) {
               ↑
             </div>
 
-            <div class="lds-money-info">
+            <div>
 
               <span>
                 Total ingresos
@@ -404,7 +313,7 @@ function mostrarFichaEstudiante(datos) {
               ↓
             </div>
 
-            <div class="lds-money-info">
+            <div>
 
               <span>
                 Total egresos
@@ -427,7 +336,7 @@ function mostrarFichaEstudiante(datos) {
               🪙
             </div>
 
-            <div class="lds-money-info">
+            <div>
 
               <span>
                 Saldo actual
@@ -448,7 +357,7 @@ function mostrarFichaEstudiante(datos) {
 
 
       <!-- ================================================
-           BOTONES
+           COBRAR / PAGAR
       ================================================= -->
 
       <div class="lds-actions">
@@ -513,18 +422,14 @@ function mostrarFichaEstudiante(datos) {
 
       <section class="lds-movimientos">
 
+
         <div class="lds-movimientos-header">
 
           <div>
-
-            <span>
-              📋
-            </span>
-
+            📋 &nbsp;
             <strong>
               MOVIMIENTOS
             </strong>
-
           </div>
 
           <span class="lds-contador">
@@ -537,13 +442,9 @@ function mostrarFichaEstudiante(datos) {
         <div class="lds-lista-movimientos">
 
           ${
-            movimientos.length
-            ?
-            movimientos.map(
-              generarMovimiento
-            ).join("")
-            :
-            `
+            movimientos.length > 0
+            ? movimientos.map(generarMovimiento).join("")
+            : `
               <div class="lds-sin-movimientos">
 
                 <span>
@@ -564,22 +465,21 @@ function mostrarFichaEstudiante(datos) {
 
         </div>
 
+
       </section>
 
 
       <!-- ================================================
-           PIE
+           SEGURIDAD
       ================================================= -->
 
       <div class="lds-security">
 
-        <span>
-          🛡️
-        </span>
+        🛡️
 
         <span>
-          Sistema seguro, confiable y diseñado para
-          el bienestar financiero de nuestros estudiantes.
+          Sistema seguro, confiable y diseñado para el
+          bienestar financiero de nuestros estudiantes.
         </span>
 
       </div>
@@ -593,12 +493,11 @@ function mostrarFichaEstudiante(datos) {
   agregarEstilosFicha();
 
   abrirFicha();
-
 }
 
 
 // ============================================================
-// PREPARAR FOTO DE GOOGLE DRIVE
+// FOTO DE GOOGLE DRIVE
 // ============================================================
 
 function prepararURLFoto(url) {
@@ -609,37 +508,21 @@ function prepararURLFoto(url) {
 
   url = String(url).trim();
 
-  // ----------------------------------------------------------
-  // Si es enlace de Google Drive con ID
-  // ----------------------------------------------------------
-
-  let match =
-    url.match(
-      /\/d\/([a-zA-Z0-9_-]+)/
-    );
+  let match = url.match(
+    /\/d\/([a-zA-Z0-9_-]+)/
+  );
 
   if (!match) {
 
-    match =
-      url.match(
-        /id=([a-zA-Z0-9_-]+)/
-      );
+    match = url.match(
+      /id=([a-zA-Z0-9_-]+)/
+    );
 
   }
 
-
   if (match && match[1]) {
 
-    const id =
-      match[1];
-
-    /*
-      Thumbnail de Google Drive.
-
-      Es mucho más estable para mostrar
-      imágenes dentro de la página que
-      /uc?export=view
-    */
+    const id = match[1];
 
     return (
       "https://drive.google.com/thumbnail" +
@@ -649,25 +532,21 @@ function prepararURLFoto(url) {
     );
   }
 
-
   return url;
 }
 
 
 // ============================================================
-// FOTO NO DISPONIBLE
+// FOTO CON ERROR
 // ============================================================
 
 function fotoNoDisponible(img) {
 
-  const contenedor =
-    img.parentElement;
-
-  if (!contenedor) {
+  if (!img || !img.parentElement) {
     return;
   }
 
-  contenedor.innerHTML = `
+  img.parentElement.innerHTML = `
 
     <div class="lds-photo-placeholder">
 
@@ -691,34 +570,29 @@ function fotoNoDisponible(img) {
 
 function generarMovimiento(movimiento) {
 
-  const tipo =
-    String(
-      movimiento.tipoMovimiento ||
-      movimiento.tipo ||
-      ""
-    ).toUpperCase();
+  const tipo = String(
+    movimiento.tipoMovimiento ||
+    movimiento.tipo ||
+    ""
+  ).toUpperCase();
 
-  const esIngreso =
-    tipo === "INGRESO";
+  const esIngreso = tipo === "INGRESO";
 
   const concepto =
     movimiento.concepto ||
     "Sin concepto";
 
-  const monto =
-    Number(
-      movimiento.monto ||
-      movimiento.montoLDS ||
-      0
-    );
+  const monto = Number(
+    movimiento.monto ||
+    movimiento.montoLDS ||
+    0
+  );
 
   const responsable =
-    movimiento.responsable ||
-    "";
+    movimiento.responsable || "";
 
   const observacion =
-    movimiento.observacion ||
-    "";
+    movimiento.observacion || "";
 
   const fecha =
     movimiento.timestamp ||
@@ -747,9 +621,7 @@ function generarMovimiento(movimiento) {
 
 
       <div class="lds-mov-icon">
-
         ${icono}
-
       </div>
 
 
@@ -759,35 +631,37 @@ function generarMovimiento(movimiento) {
           ${escaparHTML(concepto)}
         </strong>
 
-        <span>
-          ${escaparHTML(
-            formatearFecha(fecha)
-          )}
-        </span>
+        ${
+          fecha
+          ? `
+            <span>
+              ${escaparHTML(
+                formatearFecha(fecha)
+              )}
+            </span>
+          `
+          : ""
+        }
 
         ${
           responsable
-          ?
-          `
+          ? `
             <small>
               👤 Responsable:
               ${escaparHTML(responsable)}
             </small>
           `
-          :
-          ""
+          : ""
         }
 
         ${
           observacion
-          ?
-          `
+          ? `
             <small>
               📝 ${escaparHTML(observacion)}
             </small>
           `
-          :
-          ""
+          : ""
         }
 
       </div>
@@ -819,44 +693,29 @@ function generarMovimiento(movimiento) {
 function abrirFicha() {
 
   const overlay =
-    document.getElementById(
-      "profileOverlay"
-    );
+    document.getElementById("profileOverlay");
 
   if (overlay) {
-
-    overlay.classList.add(
-      "active"
-    );
-
+    overlay.classList.add("active");
   }
-
 }
 
 
 function cerrarFicha() {
 
   const overlay =
-    document.getElementById(
-      "profileOverlay"
-    );
+    document.getElementById("profileOverlay");
 
   if (overlay) {
-
-    overlay.classList.remove(
-      "active"
-    );
-
+    overlay.classList.remove("active");
   }
-
 }
 
-
-// Compatibilidad con código anterior
 
 function abrirPerfil() {
   abrirFicha();
 }
+
 
 function cerrarPerfil() {
   cerrarFicha();
@@ -878,9 +737,7 @@ function ingresarCodigo() {
     return;
   }
 
-  consultarEstudiante(
-    codigo
-  );
+  consultarEstudiante(codigo);
 }
 
 
@@ -891,16 +748,16 @@ function ingresarCodigo() {
 function abrirEscaner() {
 
   alert(
-    "📷 Escáner QR\n\n" +
-    "El módulo de escaneo se conectará " +
-    "con la ficha del estudiante."
+    "📷 ESCÁNER QR\n\n" +
+    "El escáner QR se conectará con " +
+    "la ficha del estudiante."
   );
 
 }
 
 
 // ============================================================
-// OPERACIONES
+// COBRAR / PAGAR
 // ============================================================
 
 function abrirOperacion(tipo) {
@@ -941,8 +798,8 @@ function abrirOperacion(tipo) {
       "\n\nCódigo: " +
       codigo +
       "\n\n" +
-      "Aquí conectaremos el formulario " +
-      "real para registrar el ingreso."
+      "El formulario real de COBRAR " +
+      "lo conectaremos en el siguiente paso."
     );
 
   } else {
@@ -956,8 +813,8 @@ function abrirOperacion(tipo) {
       "\n\nSaldo disponible: " +
       formatearLDS(saldo) +
       " LDS\n\n" +
-      "Aquí conectaremos el formulario " +
-      "real para registrar el egreso."
+      "El formulario real de PAGAR " +
+      "lo conectaremos en el siguiente paso."
     );
 
   }
@@ -966,14 +823,12 @@ function abrirOperacion(tipo) {
 
 
 // ============================================================
-// FORMATO DINERO
+// FORMATO LDS
 // ============================================================
 
 function formatearLDS(numero) {
 
-  return Number(
-    numero || 0
-  ).toLocaleString(
+  return Number(numero || 0).toLocaleString(
     "es-PE",
     {
       minimumFractionDigits: 2,
@@ -996,20 +851,18 @@ function formatearFecha(fecha) {
 
   try {
 
-    const fechaObjeto =
+    const objeto =
       new Date(fecha);
 
     if (
       isNaN(
-        fechaObjeto.getTime()
+        objeto.getTime()
       )
     ) {
-
       return String(fecha);
-
     }
 
-    return fechaObjeto.toLocaleString(
+    return objeto.toLocaleString(
       "es-PE",
       {
         dateStyle: "short",
@@ -1032,35 +885,18 @@ function formatearFecha(fecha) {
 
 function escaparHTML(valor) {
 
-  return String(
-    valor ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+  return String(valor ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
 
 // ============================================================
-// ESTILOS COMPLETOS DE LA FICHA
+// ESTILOS
 // ============================================================
 
 function agregarEstilosFicha() {
@@ -1070,15 +906,12 @@ function agregarEstilosFicha() {
       "estilosBancoLDS360"
     )
   ) {
-
     return;
   }
 
 
   const style =
-    document.createElement(
-      "style"
-    );
+    document.createElement("style");
 
   style.id =
     "estilosBancoLDS360";
@@ -1086,147 +919,54 @@ function agregarEstilosFicha() {
 
   style.textContent = `
 
-    /* =====================================================
-       FICHA PRINCIPAL
-    ===================================================== */
+    /* ======================================================
+       CONTENEDOR
+    ====================================================== */
 
-    .lds-ficha {
+    .lds-profile {
 
       width: 100%;
 
-      max-width: 1050px;
+      max-width: 1080px;
 
       margin: 0 auto;
 
-      padding: 20px 28px 30px;
+      padding: 20px 25px 30px;
+
+      color: #071d3a;
 
       font-family:
         Arial,
         Helvetica,
         sans-serif;
 
-      color: #071d3a;
-
     }
 
 
-    /* =====================================================
-       CABECERA
-    ===================================================== */
-
-    .lds-ficha-top {
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      margin-bottom: 25px;
-
-    }
-
-
-    .lds-ficha-titulo {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 14px;
-
-    }
-
-
-    .lds-bank-icon {
-
-      font-size: 36px;
-
-    }
-
-
-    .lds-ficha-titulo h2 {
-
-      margin: 0;
-
-      font-family: Georgia, serif;
-
-      font-size: 27px;
-
-      color: #071d3a;
-
-    }
-
-
-    .lds-ficha-titulo p {
-
-      margin: 3px 0 0;
-
-      color: #777;
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      letter-spacing: 3px;
-
-    }
-
-
-    .lds-cerrar {
-
-      width: 48px;
-
-      height: 48px;
-
-      border: none;
-
-      border-radius: 50%;
-
-      background: #071d3a;
-
-      color: white;
-
-      font-size: 34px;
-
-      line-height: 1;
-
-      cursor: pointer;
-
-    }
-
-
-    .lds-cerrar:hover {
-
-      transform: scale(1.05);
-
-    }
-
-
-    /* =====================================================
+    /* ======================================================
        ESTUDIANTE
-    ===================================================== */
+    ====================================================== */
 
     .lds-student-header {
 
       display: grid;
 
       grid-template-columns:
-        245px
-        1fr;
+        230px
+        minmax(0, 1fr);
 
       gap: 35px;
 
       align-items: center;
 
-      padding: 5px 20px 30px;
+      margin-bottom: 25px;
 
     }
 
 
-    /* =====================================================
+    /* ======================================================
        FOTO
-    ===================================================== */
+    ====================================================== */
 
     .lds-photo-column {
 
@@ -1237,9 +977,9 @@ function agregarEstilosFicha() {
 
     .lds-photo-circle {
 
-      width: 210px;
+      width: 190px;
 
-      height: 210px;
+      height: 190px;
 
       margin: 0 auto;
 
@@ -1250,8 +990,10 @@ function agregarEstilosFicha() {
       background: #f4c400;
 
       box-shadow:
-        0 8px 25px
+        0 7px 22px
         rgba(0,0,0,.15);
+
+      overflow: hidden;
 
       display: flex;
 
@@ -1259,16 +1001,14 @@ function agregarEstilosFicha() {
 
       justify-content: center;
 
-      overflow: hidden;
-
     }
 
 
     .lds-student-photo {
 
-      width: 198px;
+      width: 178px;
 
-      height: 198px;
+      height: 178px;
 
       border-radius: 50%;
 
@@ -1283,9 +1023,9 @@ function agregarEstilosFicha() {
 
     .lds-photo-placeholder {
 
-      width: 198px;
+      width: 178px;
 
-      height: 198px;
+      height: 178px;
 
       border-radius: 50%;
 
@@ -1293,13 +1033,11 @@ function agregarEstilosFicha() {
 
       display: flex;
 
-      flex-direction: column;
-
       align-items: center;
 
       justify-content: center;
 
-      color: #071d3a;
+      flex-direction: column;
 
       gap: 6px;
 
@@ -1308,14 +1046,14 @@ function agregarEstilosFicha() {
 
     .lds-photo-placeholder span {
 
-      font-size: 70px;
+      font-size: 55px;
 
     }
 
 
     .lds-photo-placeholder small {
 
-      font-size: 13px;
+      font-size: 12px;
 
       font-weight: 800;
 
@@ -1324,7 +1062,7 @@ function agregarEstilosFicha() {
 
     .lds-photo-caption {
 
-      margin-top: 12px;
+      margin-top: 10px;
 
       color: #687284;
 
@@ -1337,9 +1075,16 @@ function agregarEstilosFicha() {
     }
 
 
-    /* =====================================================
+    /* ======================================================
        DATOS
-    ===================================================== */
+    ====================================================== */
+
+    .lds-student-info {
+
+      min-width: 0;
+
+    }
+
 
     .lds-student-info h1 {
 
@@ -1350,7 +1095,7 @@ function agregarEstilosFicha() {
       font-size: clamp(
         25px,
         3vw,
-        40px
+        39px
       );
 
       line-height: 1.08;
@@ -1364,40 +1109,42 @@ function agregarEstilosFicha() {
 
       display: inline-block;
 
-      padding: 8px 15px;
+      background: #edf2f7;
 
       border-radius: 25px;
 
-      background: #edf2f7;
+      padding: 8px 15px;
+
+      margin-bottom: 18px;
 
       font-size: 14px;
 
       font-weight: 900;
 
-      margin-bottom: 20px;
-
     }
 
 
-    .lds-info-grid {
+    .lds-info-list {
 
       display: grid;
 
       grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3, minmax(0, 1fr));
 
-      gap: 12px;
+      gap: 10px;
 
     }
 
 
     .lds-info-item {
 
-      min-height: 78px;
+      min-width: 0;
 
-      padding: 12px;
+      min-height: 68px;
 
-      border-radius: 17px;
+      padding: 11px;
+
+      border-radius: 16px;
 
       background: #f4f6f9;
 
@@ -1405,16 +1152,18 @@ function agregarEstilosFicha() {
 
       align-items: center;
 
-      gap: 10px;
+      gap: 9px;
 
     }
 
 
     .lds-info-icon {
 
-      width: 40px;
+      width: 38px;
 
-      height: 40px;
+      height: 38px;
+
+      flex: 0 0 38px;
 
       border-radius: 50%;
 
@@ -1426,16 +1175,7 @@ function agregarEstilosFicha() {
 
       justify-content: center;
 
-      font-size: 21px;
-
-      flex-shrink: 0;
-
-    }
-
-
-    .lds-info-item div:last-child {
-
-      min-width: 0;
+      font-size: 19px;
 
     }
 
@@ -1446,7 +1186,7 @@ function agregarEstilosFicha() {
 
       color: #7a8390;
 
-      font-size: 11px;
+      font-size: 10px;
 
       font-weight: 700;
 
@@ -1461,47 +1201,45 @@ function agregarEstilosFicha() {
 
       color: #071d3a;
 
-      font-size: 14px;
+      font-size: 13px;
 
-      line-height: 1.1;
+      line-height: 1.15;
+
+      word-break: break-word;
 
     }
 
 
-    /* =====================================================
+    /* ======================================================
        CUENTA
-    ===================================================== */
+    ====================================================== */
 
     .lds-account {
 
-      padding: 25px;
+      background: #071d3a;
 
       border-radius: 27px;
 
-      background: #071d3a;
+      padding: 22px;
 
       box-shadow:
-        0 10px 30px
-        rgba(7,29,58,.17);
+        0 9px 25px
+        rgba(7,29,58,.15);
 
     }
 
 
-    .lds-account-heading {
+    .lds-account-title {
 
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      gap: 10px;
+      text-align: center;
 
       color: white;
 
-      font-size: 20px;
+      font-size: 21px;
 
-      margin-bottom: 20px;
+      font-weight: 900;
+
+      margin-bottom: 18px;
 
     }
 
@@ -1511,7 +1249,7 @@ function agregarEstilosFicha() {
       display: grid;
 
       grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3, minmax(0, 1fr));
 
       gap: 13px;
 
@@ -1520,20 +1258,21 @@ function agregarEstilosFicha() {
 
     .lds-money {
 
+      min-width: 0;
+
+      padding: 17px;
+
       border-radius: 19px;
 
-      padding: 18px;
+      background: rgba(255,255,255,.08);
+
+      color: white;
 
       display: flex;
 
       align-items: center;
 
-      gap: 14px;
-
-      background:
-        rgba(255,255,255,.08);
-
-      color: white;
+      gap: 13px;
 
     }
 
@@ -1549,13 +1288,13 @@ function agregarEstilosFicha() {
 
     .lds-money-icon {
 
-      width: 48px;
+      width: 47px;
 
-      height: 48px;
+      height: 47px;
+
+      flex: 0 0 47px;
 
       border-radius: 50%;
-
-      background: rgba(255,255,255,.15);
 
       display: flex;
 
@@ -1566,8 +1305,6 @@ function agregarEstilosFicha() {
       font-size: 28px;
 
       font-weight: 900;
-
-      flex-shrink: 0;
 
     }
 
@@ -1586,11 +1323,18 @@ function agregarEstilosFicha() {
     }
 
 
-    .lds-money-info span {
+    .balance .lds-money-icon {
+
+      background: rgba(255,255,255,.25);
+
+    }
+
+
+    .lds-money span {
 
       display: block;
 
-      font-size: 12px;
+      font-size: 11px;
 
       opacity: .8;
 
@@ -1599,37 +1343,39 @@ function agregarEstilosFicha() {
     }
 
 
-    .lds-money-info strong {
+    .lds-money strong {
 
-      font-size: 22px;
+      display: block;
+
+      font-size: 21px;
 
     }
 
 
-    .income .lds-money-info strong {
+    .income strong {
 
       color: #55e49a;
 
     }
 
 
-    .expense .lds-money-info strong {
+    .expense strong {
 
       color: #ff7d8b;
 
     }
 
 
-    .balance .lds-money-info strong {
+    .balance strong {
 
       color: #071d3a;
 
     }
 
 
-    /* =====================================================
+    /* ======================================================
        BOTONES
-    ===================================================== */
+    ====================================================== */
 
     .lds-actions {
 
@@ -1640,7 +1386,7 @@ function agregarEstilosFicha() {
 
       gap: 15px;
 
-      margin: 18px 0;
+      margin: 17px 0;
 
     }
 
@@ -1651,7 +1397,9 @@ function agregarEstilosFicha() {
 
       border-radius: 19px;
 
-      padding: 17px 25px;
+      min-height: 78px;
+
+      padding: 14px 22px;
 
       color: white;
 
@@ -1663,7 +1411,7 @@ function agregarEstilosFicha() {
 
       justify-content: center;
 
-      gap: 13px;
+      gap: 12px;
 
       transition:
         transform .2s,
@@ -1678,8 +1426,8 @@ function agregarEstilosFicha() {
         translateY(-2px);
 
       box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.15);
+        0 7px 18px
+        rgba(0,0,0,.16);
 
     }
 
@@ -1700,7 +1448,7 @@ function agregarEstilosFicha() {
 
     .lds-action-icon {
 
-      font-size: 27px;
+      font-size: 26px;
 
     }
 
@@ -1734,17 +1482,17 @@ function agregarEstilosFicha() {
     }
 
 
-    /* =====================================================
+    /* ======================================================
        MOVIMIENTOS
-    ===================================================== */
+    ====================================================== */
 
     .lds-movimientos {
 
-      padding: 20px;
-
-      border-radius: 23px;
-
       background: #f3f6fa;
+
+      border-radius: 22px;
+
+      padding: 18px;
 
     }
 
@@ -1757,18 +1505,7 @@ function agregarEstilosFicha() {
 
       justify-content: space-between;
 
-      margin-bottom: 13px;
-
-    }
-
-
-    .lds-movimientos-header > div {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 9px;
+      margin-bottom: 12px;
 
       color: #071d3a;
 
@@ -1819,21 +1556,21 @@ function agregarEstilosFicha() {
 
       grid-template-columns:
         50px
-        1fr
+        minmax(0, 1fr)
         auto;
 
       align-items: center;
 
-      gap: 13px;
+      gap: 12px;
 
-      padding: 14px;
+      padding: 13px;
 
       border-radius: 16px;
 
       background: white;
 
       box-shadow:
-        0 2px 9px
+        0 2px 8px
         rgba(0,0,0,.05);
 
     }
@@ -1841,9 +1578,9 @@ function agregarEstilosFicha() {
 
     .lds-mov-icon {
 
-      width: 46px;
+      width: 45px;
 
-      height: 46px;
+      height: 45px;
 
       border-radius: 14px;
 
@@ -1853,7 +1590,7 @@ function agregarEstilosFicha() {
 
       justify-content: center;
 
-      font-size: 22px;
+      font-size: 21px;
 
     }
 
@@ -1874,22 +1611,24 @@ function agregarEstilosFicha() {
 
     .lds-mov-info {
 
+      min-width: 0;
+
       display: flex;
 
       flex-direction: column;
 
       gap: 3px;
 
-      min-width: 0;
-
     }
 
 
     .lds-mov-info strong {
 
+      font-size: 14px;
+
       color: #071d3a;
 
-      font-size: 14px;
+      word-break: break-word;
 
     }
 
@@ -1920,7 +1659,7 @@ function agregarEstilosFicha() {
 
       flex-direction: column;
 
-      gap: 4px;
+      gap: 3px;
 
     }
 
@@ -1948,28 +1687,30 @@ function agregarEstilosFicha() {
 
     .lds-mov-monto span {
 
+      color: #778190;
+
       font-size: 9px;
 
       font-weight: 900;
 
-      color: #778190;
-
     }
 
 
-    /* =====================================================
+    /* ======================================================
        SIN MOVIMIENTOS
-    ===================================================== */
+    ====================================================== */
 
     .lds-sin-movimientos {
 
-      padding: 30px;
+      padding: 28px;
 
       text-align: center;
 
       display: flex;
 
       flex-direction: column;
+
+      align-items: center;
 
       gap: 5px;
 
@@ -1999,17 +1740,17 @@ function agregarEstilosFicha() {
     }
 
 
-    /* =====================================================
+    /* ======================================================
        SEGURIDAD
-    ===================================================== */
+    ====================================================== */
 
     .lds-security {
 
-      margin-top: 18px;
+      margin-top: 15px;
 
-      padding: 15px 20px;
+      padding: 13px 18px;
 
-      border-radius: 20px;
+      border-radius: 18px;
 
       background: #f1f5fa;
 
@@ -2021,29 +1762,72 @@ function agregarEstilosFicha() {
 
       justify-content: center;
 
-      gap: 9px;
+      gap: 8px;
 
       text-align: center;
 
-      font-size: 12px;
+      font-size: 11px;
 
       font-weight: 700;
 
     }
 
 
-    .lds-security span:first-child {
+    /* ======================================================
+       TABLET
+    ====================================================== */
 
-      font-size: 20px;
+    @media(max-width: 850px) {
+
+      .lds-student-header {
+
+        grid-template-columns: 190px minmax(0,1fr);
+
+        gap: 22px;
+
+      }
+
+
+      .lds-photo-circle {
+
+        width: 170px;
+
+        height: 170px;
+
+      }
+
+
+      .lds-student-photo,
+      .lds-photo-placeholder {
+
+        width: 158px;
+
+        height: 158px;
+
+      }
+
+
+      .lds-info-list {
+
+        grid-template-columns: 1fr;
+
+      }
 
     }
 
 
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
+    /* ======================================================
+       CELULAR
+    ====================================================== */
 
-    @media(max-width: 800px) {
+    @media(max-width: 600px) {
+
+      .lds-profile {
+
+        padding: 15px;
+
+      }
+
 
       .lds-student-header {
 
@@ -2054,9 +1838,14 @@ function agregarEstilosFicha() {
       }
 
 
-      .lds-info-grid {
+      .lds-student-info h1 {
 
-        grid-template-columns: 1fr;
+        font-size: 27px;
+
+      }
+
+
+      .lds-info-list {
 
         text-align: left;
 
@@ -2066,33 +1855,6 @@ function agregarEstilosFicha() {
       .lds-account-grid {
 
         grid-template-columns: 1fr;
-
-      }
-
-
-      .lds-money.balance {
-
-        order: -1;
-
-      }
-
-    }
-
-
-    @media(max-width: 600px) {
-
-      .lds-ficha {
-
-        padding: 15px;
-
-      }
-
-
-      .lds-student-header {
-
-        padding-left: 0;
-
-        padding-right: 0;
 
       }
 
@@ -2108,7 +1870,7 @@ function agregarEstilosFicha() {
 
         grid-template-columns:
           45px
-          1fr;
+          minmax(0,1fr);
 
       }
 
@@ -2125,27 +1887,18 @@ function agregarEstilosFicha() {
 
       }
 
-
-      .lds-ficha-titulo h2 {
-
-        font-size: 21px;
-
-      }
-
     }
 
   `;
 
 
-  document.head.appendChild(
-    style
-  );
+  document.head.appendChild(style);
 
 }
 
 
 // ============================================================
-// CARGAR CÓDIGO DESDE LA URL
+// CARGAR CÓDIGO DESDE ?codigo=
 // ============================================================
 
 function cargarCodigoDesdeURL() {
@@ -2159,11 +1912,7 @@ function cargarCodigoDesdeURL() {
     parametros.get("codigo");
 
   if (codigo) {
-
-    consultarEstudiante(
-      codigo
-    );
-
+    consultarEstudiante(codigo);
   }
 
 }
@@ -2178,7 +1927,7 @@ document.addEventListener(
   function() {
 
     console.log(
-      "🏦 Banco LDS 360 iniciado correctamente."
+      "🏦 Banco LDS 360 iniciado."
     );
 
     cargarCodigoDesdeURL();
@@ -2217,3 +1966,6 @@ window.abrirPerfil =
 
 window.cerrarPerfil =
   cerrarPerfil;
+
+window.fotoNoDisponible =
+  fotoNoDisponible;
