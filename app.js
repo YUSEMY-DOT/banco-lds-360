@@ -498,7 +498,7 @@ function mostrarFichaEstudiante(datos) {
 
                 <span>
                   📭
-                </span>
+                                  </span>
 
                 <strong>
                   No hay movimientos
@@ -579,8 +579,9 @@ function prepararURLFoto(url) {
   if (match && match[1]) {
 
     return (
-      "https://drive.google.com/thumbnail?id=" +
-      match[1] +
+      "https://drive.google.com/thumbnail" +
+      "?id=" +
+      encodeURIComponent(match[1]) +
       "&sz=w600"
     );
 
@@ -595,44 +596,31 @@ function prepararURLFoto(url) {
 // FOTO NO DISPONIBLE
 // ============================================================
 
-function fotoNoDisponible(imagen) {
+function fotoNoDisponible(img) {
 
-  if (!imagen) {
+  if (
+    !img ||
+    !img.parentElement
+  ) {
     return;
   }
 
-  const padre =
-    imagen.parentElement;
 
-  if (!padre) {
-    return;
-  }
+  img.parentElement.innerHTML = `
 
-  padre.innerHTML = `
     <div class="lds-photo-placeholder">
-      <span>👤</span>
-      <small>Foto no disponible</small>
+
+      <span>
+        👤
+      </span>
+
+      <small>
+        Foto no disponible
+      </small>
+
     </div>
+
   `;
-}
-
-
-// ============================================================
-// FORMATEAR LDS
-// ============================================================
-
-function formatearLDS(valor) {
-
-  const numero =
-    Number(valor || 0);
-
-  return numero.toLocaleString(
-    "es-PE",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }
-  );
 }
 
 
@@ -640,21 +628,26 @@ function formatearLDS(valor) {
 // GENERAR MOVIMIENTO
 // ============================================================
 
-function generarMovimiento(movimiento) {
+function generarMovimiento(
+  movimiento
+) {
 
   const tipo =
     String(
-      movimiento.tipo ||
       movimiento.tipoMovimiento ||
+      movimiento.tipo ||
       ""
     ).toUpperCase();
 
-  const ingreso =
+
+  const esIngreso =
     tipo === "INGRESO";
+
 
   const concepto =
     movimiento.concepto ||
     "Sin concepto";
+
 
   const monto =
     Number(
@@ -663,13 +656,16 @@ function generarMovimiento(movimiento) {
       0
     );
 
+
   const responsable =
     movimiento.responsable ||
     "";
 
+
   const observacion =
     movimiento.observacion ||
     "";
+
 
   const fecha =
     movimiento.timestamp ||
@@ -677,12 +673,34 @@ function generarMovimiento(movimiento) {
     "";
 
 
-  return `
-    <div class="lds-movimiento">
+  const clase =
+    esIngreso
+      ? "mov-ingreso"
+      : "mov-egreso";
 
-      <div class="lds-mov-icon ${ingreso ? "ingreso" : "egreso"}">
-        ${ingreso ? "↑" : "↓"}
+
+  const signo =
+    esIngreso
+      ? "+"
+      : "-";
+
+
+  const icono =
+    esIngreso
+      ? "💰"
+      : "💸";
+
+
+  return `
+
+    <article
+      class="lds-movimiento ${clase}"
+    >
+
+      <div class="lds-mov-icon">
+        ${icono}
       </div>
+
 
       <div class="lds-mov-info">
 
@@ -690,25 +708,37 @@ function generarMovimiento(movimiento) {
           ${escaparHTML(concepto)}
         </strong>
 
-        <span>
-          ${escaparHTML(formatearFecha(fecha))}
-        </span>
+
+        ${
+          fecha
+            ? `
+              <span>
+                ${escaparHTML(
+                  formatearFecha(fecha)
+                )}
+              </span>
+            `
+            : ""
+        }
+
 
         ${
           responsable
             ? `
               <small>
-                Responsable:
+                👤 Responsable:
                 ${escaparHTML(responsable)}
               </small>
             `
             : ""
         }
 
+
         ${
           observacion
             ? `
               <small>
+                📝
                 ${escaparHTML(observacion)}
               </small>
             `
@@ -717,18 +747,651 @@ function generarMovimiento(movimiento) {
 
       </div>
 
-      <div class="lds-mov-monto ${ingreso ? "ingreso" : "egreso"}">
+
+      <div class="lds-mov-monto">
 
         <strong>
-          ${ingreso ? "+" : "-"}
-          ${formatearLDS(monto)}
-          LDS
+          ${signo}${formatearLDS(monto)} LDS
         </strong>
+
+        <span>
+          ${escaparHTML(tipo)}
+        </span>
 
       </div>
 
+
+    </article>
+
+  `;
+}
+// ============================================================
+// ABRIR FICHA
+// ============================================================
+
+function abrirFicha() {
+
+  const overlay =
+    document.getElementById(
+      "profileOverlay"
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.add(
+      "active"
+    );
+
+
+    document.documentElement
+      .classList.add(
+        "lds-modal-open"
+      );
+
+
+    document.body.classList.add(
+      "lds-modal-open"
+    );
+
+  }
+}
+
+
+// ============================================================
+// CERRAR FICHA
+// ============================================================
+
+function cerrarFicha() {
+
+  const overlay =
+    document.getElementById(
+      "profileOverlay"
+    );
+
+
+  if (overlay) {
+
+    overlay.classList.remove(
+      "active"
+    );
+
+
+    document.documentElement
+      .classList.remove(
+        "lds-modal-open"
+      );
+
+
+    document.body.classList.remove(
+      "lds-modal-open"
+    );
+
+  }
+}
+
+
+// ============================================================
+// PERFIL
+// ============================================================
+
+function abrirPerfil() {
+  abrirFicha();
+}
+
+
+function cerrarPerfil() {
+  cerrarFicha();
+}
+
+
+// ============================================================
+// INGRESAR CÓDIGO
+// ============================================================
+
+function ingresarCodigo() {
+
+  const codigo =
+    prompt(
+      "Ingrese el código del estudiante:"
+    );
+
+
+  if (!codigo) {
+    return;
+  }
+
+
+  consultarEstudiante(
+    codigo
+  );
+}
+
+
+// ============================================================
+// ESCÁNER QR
+// ============================================================
+
+function abrirEscaner() {
+
+  alert(
+    "📷 ESCÁNER QR\n\n" +
+    "El escáner QR se conectará " +
+    "con la ficha del estudiante."
+  );
+
+}
+
+
+// ============================================================
+// COBRAR / PAGAR
+// ============================================================
+
+async function cargarConceptosOperacion(tipo, select) {
+  if (!select) return false;
+
+  select.innerHTML = '<option value="">Cargando conceptos...</option>';
+  select.disabled = true;
+
+  try {
+    const url =
+      BANCO_LDS_API_URL +
+      '?accion=opciones&t=' +
+      Date.now();
+
+    const respuesta = await fetch(url, {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+    if (!respuesta.ok) {
+      throw new Error('No se pudo cargar CONFIG_OPCIONES.');
+    }
+
+    const datos = await respuesta.json();
+
+    if (!datos.ok || !Array.isArray(datos.opciones)) {
+      throw new Error(datos.mensaje || 'CONFIG_OPCIONES no devolvió un catálogo válido.');
+    }
+
+    const grupos = {};
+
+    datos.opciones.forEach(fila => {
+      Object.keys(fila || {}).forEach(clave => {
+        const valor = String(fila[clave] == null ? '' : fila[clave]).trim();
+        if (!valor) return;
+
+        const tipoOpcion = clasificarConceptoOperacion(clave, valor);
+        if (tipoOpcion !== tipo) return;
+
+        const nombreGrupo = nombreGrupoConcepto(clave);
+        if (!grupos[nombreGrupo]) grupos[nombreGrupo] = [];
+        if (!grupos[nombreGrupo].includes(valor)) {
+          grupos[nombreGrupo].push(valor);
+        }
+      });
+    });
+
+    select.innerHTML = '<option value="">Seleccione un concepto</option>';
+
+    Object.keys(grupos).forEach(grupo => {
+      const valores = grupos[grupo];
+      if (!valores.length) return;
+
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = grupo;
+
+      valores.forEach(valor => {
+        const option = document.createElement('option');
+        option.value = valor;
+        option.textContent = valor;
+        optgroup.appendChild(option);
+      });
+
+      select.appendChild(optgroup);
+    });
+
+    const otro = document.createElement('option');
+    otro.value = 'Otro...';
+    otro.textContent = 'Otro...';
+    select.appendChild(otro);
+
+    if (select.options.length <= 2) {
+      throw new Error(
+        'No hay conceptos configurados para ' +
+        (tipo === 'INGRESO' ? 'COBRAR' : 'PAGAR') +
+        ' en CONFIG_OPCIONES.'
+      );
+    }
+
+    select.disabled = false;
+    return true;
+
+  } catch (error) {
+    console.error('Error cargando CONFIG_OPCIONES:', error);
+    select.innerHTML = '<option value="">No se pudieron cargar los conceptos</option>';
+
+    const mensaje = document.getElementById('operacionMensaje');
+    if (mensaje) {
+      mensaje.textContent = error.message || 'No se pudieron cargar los conceptos.';
+      mensaje.className = 'lds-operacion-mensaje error';
+    }
+
+    return false;
+  }
+}
+
+function clasificarConceptoOperacion(clave, valor) {
+  const categoria = String(clave || '').trim().toUpperCase();
+  const texto = String(valor || '').trim().toUpperCase();
+
+  if (categoria === 'INGRESOS_Y_SUELDOS') return 'INGRESO';
+  if (categoria === 'PREMIOS_Y_BONIFICACIONES') return 'INGRESO';
+
+  if (categoria === 'AHORROS_E_INVERSIONES') {
+    if (texto.indexOf('RETIRO DE AHORROS') === 0) return 'INGRESO';
+    return 'EGRESO';
+  }
+
+  if (categoria === 'PAGOS_Y_GASTOS') return 'EGRESO';
+  if (categoria === 'SANCIONES_Y_MULTAS') return 'EGRESO';
+  if (categoria === 'COSTOS_Y_OTROS') return 'EGRESO';
+
+  return '';
+  function nombreGrupoConcepto(clave) {
+  const nombres = {
+    INGRESOS_Y_SUELDOS: 'INGRESOS Y SUELDOS',
+    PREMIOS_Y_BONIFICACIONES: 'PREMIOS Y BONIFICACIONES',
+    AHORROS_E_INVERSIONES: 'AHORROS E INVERSIONES',
+    PAGOS_Y_GASTOS: 'PAGOS Y GASTOS',
+    SANCIONES_Y_MULTAS: 'SANCIONES Y MULTAS',
+    COSTOS_Y_OTROS: 'COSTOS Y OTROS'
+  };
+
+  return nombres[String(clave || '').trim().toUpperCase()] || String(clave || 'OTROS');
+}
+
+// ============================================================
+// COBRAR / PAGAR
+// ============================================================
+
+async function abrirOperacion(tipo) {
+  tipo = String(tipo || '').toUpperCase();
+
+  if (!estudianteActual || !estudianteActual.estudiante) {
+    alert('Primero seleccione un estudiante.');
+    return;
+  }
+
+  if (tipo !== 'INGRESO' && tipo !== 'EGRESO') {
+    alert('Tipo de operación no válido.');
+    return;
+  }
+
+  const estudiante = estudianteActual.estudiante || {};
+  const cuenta = estudianteActual.cuenta || {};
+  const nombre = estudiante.nombreCompleto || '';
+  const codigo = estudiante.codigo || '';
+  const saldo = Number(cuenta.saldoActual || 0);
+
+  const titulo = tipo === 'INGRESO' ? '💰 COBRAR' : '💸 PAGAR';
+  const textoTipo = tipo === 'INGRESO' ? 'Registrar ingreso' : 'Registrar egreso';
+
+  const anterior = document.getElementById('operacionLDS360');
+  if (anterior) anterior.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'operacionLDS360';
+  overlay.innerHTML = `
+    <div class="lds-operacion-box" role="dialog" aria-modal="true" aria-labelledby="tituloOperacionLDS">
+      <button type="button" class="lds-operacion-cerrar" onclick="cerrarOperacion()" aria-label="Cerrar">×</button>
+
+      <div class="lds-operacion-head">
+        <div class="lds-operacion-icon">${tipo === 'INGRESO' ? '💰' : '💸'}</div>
+        <div>
+          <h2 id="tituloOperacionLDS">${titulo}</h2>
+          <p>${escaparHTML(nombre)}</p>
+          <small>${escaparHTML(codigo)}</small>
+        </div>
+      </div>
+
+      <div class="lds-operacion-saldo">
+        <span>Saldo actual</span>
+        <strong>${formatearLDS(saldo)} LDS</strong>
+      </div>
+
+      <form onsubmit="guardarOperacion(event, '${tipo}')" autocomplete="off">
+        <label for="operacionConcepto">Concepto</label>
+        <select id="operacionConcepto" name="concepto" required disabled>
+          <option value="">Cargando conceptos...</option>
+        </select>
+
+        <div id="operacionConceptoOtroWrap" style="display:none;">
+          <label for="operacionConceptoOtro">Especifique el concepto</label>
+          <input id="operacionConceptoOtro" name="conceptoOtro" type="text" maxlength="150" placeholder="Escriba el concepto">
+        </div>
+
+        <label for="operacionMonto">Monto LDS</label>
+        <input id="operacionMonto" name="monto" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="0.00">
+
+        <label for="operacionResponsable">Responsable</label>
+        <input id="operacionResponsable" name="responsable" type="text" maxlength="100" required placeholder="Nombre del responsable">
+
+        <label for="operacionObservacion">Observación</label>
+        <textarea id="operacionObservacion" name="observacion" maxlength="300" rows="3" placeholder="Observación (opcional)"></textarea>
+
+        <div id="operacionMensaje" class="lds-operacion-mensaje" aria-live="polite">
+          Cargando conceptos desde CONFIG_OPCIONES...
+        </div>
+
+        <button id="operacionGuardar" type="submit" class="lds-operacion-guardar" disabled>
+          ${textoTipo}
+        </button>
+      </form>
     </div>
   `;
+
+  document.body.appendChild(overlay);
+  agregarEstilosOperacion();
+
+  const concepto = document.getElementById('operacionConcepto');
+  const boton = document.getElementById('operacionGuardar');
+  const mensaje = document.getElementById('operacionMensaje');
+
+  if (concepto) {
+    concepto.addEventListener('change', function () {
+      const wrap = document.getElementById('operacionConceptoOtroWrap');
+      const otro = document.getElementById('operacionConceptoOtro');
+      const esOtro = this.value === 'Otro...';
+
+      if (wrap) wrap.style.display = esOtro ? 'block' : 'none';
+      if (otro) {
+        otro.required = esOtro;
+        if (!esOtro) otro.value = '';
+        if (esOtro) otro.focus();
+      }
+    });
+  }
+
+  const cargado = await cargarConceptosOperacion(tipo, concepto);
+
+  if (cargado) {
+    if (mensaje) {
+      mensaje.textContent = 'Conceptos cargados desde CONFIG_OPCIONES.';
+      mensaje.className = 'lds-operacion-mensaje';
+    }
+    if (boton) boton.disabled = false;
+  } else {
+    if (boton) boton.disabled = true;
+  }
+
+  setTimeout(() => {
+    const monto = document.getElementById('operacionMonto');
+    if (monto) monto.focus();
+  }, 50);
+}
+
+function cerrarOperacion() {
+  const modal = document.getElementById('operacionLDS360');
+  if (modal) modal.remove();
+}
+
+async function guardarOperacion(event, tipo) {
+  event.preventDefault();
+
+  if (!estudianteActual || !estudianteActual.estudiante) {
+    alert('No hay un estudiante seleccionado.');
+    return;
+  }
+
+  const estudiante = estudianteActual.estudiante || {};
+  const cuenta = estudianteActual.cuenta || {};
+  const codigo = estudiante.codigo || '';
+  const saldo = Number(cuenta.saldoActual || 0);
+
+  const conceptoSelect = document.getElementById('operacionConcepto');
+  const conceptoOtro = document.getElementById('operacionConceptoOtro');
+  const montoInput = document.getElementById('operacionMonto');
+  const responsableInput = document.getElementById('operacionResponsable');
+  const observacionInput = document.getElementById('operacionObservacion');
+  const boton = document.getElementById('operacionGuardar');
+  const mensaje = document.getElementById('operacionMensaje');
+
+  let concepto = conceptoSelect ? conceptoSelect.value.trim() : '';
+  const monto = Number(montoInput ? montoInput.value : 0);
+  const responsable = responsableInput ? responsableInput.value.trim() : '';
+  const observacion = observacionInput ? observacionInput.value.trim() : '';
+
+  if (concepto === 'Otro...') {
+    concepto = conceptoOtro ? conceptoOtro.value.trim() : '';
+  }
+
+  if (!concepto) {
+    mostrarMensajeOperacion('Seleccione o escriba un concepto.', true);
+    return;
+  }
+
+  if (!Number.isFinite(monto) || monto <= 0) {
+    mostrarMensajeOperacion('El monto debe ser mayor que 0.', true);
+    return;
+  }
+
+  if (!responsable) {
+    mostrarMensajeOperacion('Ingrese el responsable.', true);
+    return;
+  }
+
+  if (tipo === 'EGRESO' && monto > saldo) {
+    mostrarMensajeOperacion(
+      'No se puede registrar el pago. El monto supera el saldo disponible de ' + formatearLDS(saldo) + ' LDS.',
+      true
+    );
+    return;
+  }
+
+  if (boton) {
+    boton.disabled = true;
+    boton.textContent = 'Guardando...';
+  }
+  mostrarMensajeOperacion('Registrando movimiento...', false);
+
+  try {
+    const parametros = new URLSearchParams();
+    parametros.set('accion', 'registrarmovimiento');
+    parametros.set('codigo', codigo);
+    parametros.set('tipo', tipo);
+    parametros.set('concepto', concepto);
+    parametros.set('monto', String(monto));
+    parametros.set('responsable', responsable);
+    parametros.set('observacion', observacion);
+    parametros.set('t', Date.now());
+
+    const respuesta = await fetch(BANCO_LDS_API_URL + '?' + parametros.toString(), {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+    if (!respuesta.ok) {
+      throw new Error('El servidor no respondió correctamente.');
+    }
+
+    const datos = await respuesta.json();
+    console.log('Resultado registrar movimiento:', datos);
+
+    if (!datos.ok || datos.exito === false) {
+      throw new Error(datos.mensaje || 'No se pudo registrar el movimiento.');
+    }
+
+    cerrarOperacion();
+    alert(
+      (tipo === 'INGRESO' ? '💰 Ingreso' : '💸 Egreso') +
+      ' registrado correctamente.\n\n' +
+      'Estudiante: ' + (estudiante.nombreCompleto || '') + '\n' +
+      'Monto: ' + formatearLDS(monto) + ' LDS\n' +
+      'Concepto: ' + concepto
+    );
+
+    await consultarEstudiante(codigo);
+  } catch (error) {
+    console.error('Error al registrar movimiento:', error);
+    mostrarMensajeOperacion(error.message || 'No se pudo registrar el movimiento.', true);
+    if (boton) {
+      boton.disabled = false;
+      boton.textContent = tipo === 'INGRESO' ? 'Registrar ingreso' : 'Registrar egreso';
+    }
+  }
+}
+
+function mostrarMensajeOperacion(texto, error) {
+  const mensaje = document.getElementById('operacionMensaje');
+  if (!mensaje) return;
+  mensaje.textContent = texto || '';
+  mensaje.className = 'lds-operacion-mensaje ' + (error ? 'error' : 'info');
+}
+
+function agregarEstilosOperacion() {
+  if (document.getElementById('estilosOperacionLDS360')) return;
+
+  const style = document.createElement('style');
+  style.id = 'estilosOperacionLDS360';
+  style.textContent = `
+    #operacionLDS360 {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(2, 12, 27, .78);
+      backdrop-filter: blur(4px);
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    #operacionLDS360 * { box-sizing: border-box; }
+    .lds-operacion-box {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: calc(100dvh - 36px);
+      overflow-y: auto;
+      padding: 30px;
+      border-radius: 26px;
+      background: #fff;
+      color: #071d3a;
+      box-shadow: 0 25px 80px rgba(0,0,0,.38);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .lds-operacion-cerrar {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: #eef2f6;
+      color: #071d3a;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .lds-operacion-head {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding-right: 45px;
+      margin-bottom: 20px;
+    }
+    .lds-operacion-icon {
+      width: 58px;
+      height: 58px;
+      min-width: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f4c400;
+      font-size: 30px;
+    }
+    .lds-operacion-head h2 { margin: 0 0 4px; font-size: 27px; }
+    .lds-operacion-head p { margin: 0 0 3px; font-weight: 800; overflow-wrap: anywhere; }
+    .lds-operacion-head small { color: #687284; font-weight: 800; }
+    .lds-operacion-saldo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 17px;
+      margin-bottom: 20px;
+      border-radius: 17px;
+      background: #071d3a;
+      color: #fff;
+    }
+    .lds-operacion-saldo span { opacity: .8; font-size: 13px; }
+    .lds-operacion-saldo strong { color: #f4c400; font-size: 20px; white-space: nowrap; }
+    .lds-operacion-box form { display: grid; gap: 8px; }
+    .lds-operacion-box label { margin-top: 7px; font-size: 13px; font-weight: 900; }
+    .lds-operacion-box input,
+    .lds-operacion-box select,
+    .lds-operacion-box textarea {
+      width: 100%;
+      border: 1px solid #d5dce5;
+      border-radius: 12px;
+      padding: 12px 13px;
+      background: #fff;
+      color: #071d3a;
+      font: inherit;
+      outline: none;
+    }
+    .lds-operacion-box input:focus,
+    .lds-operacion-box select:focus,
+    .lds-operacion-box textarea:focus { border-color: #071d3a; box-shadow: 0 0 0 3px rgba(7,29,58,.08); }
+    .lds-operacion-box textarea { resize: vertical; min-height: 80px; }
+    .lds-operacion-mensaje { min-height: 20px; padding-top: 4px; font-size: 13px; font-weight: 800; }
+    .lds-operacion-mensaje.error { color: #c51f35; }
+    .lds-operacion-mensaje.info { color: #526174; }
+    .lds-operacion-guardar {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 14px;
+      background: #071d3a;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .lds-operacion-guardar:hover { opacity: .94; }
+    .lds-operacion-guardar:disabled { opacity: .55; cursor: wait; }
+    @media (max-width: 600px) {
+      #operacionLDS360 { padding: 0; align-items: stretch; }
+      .lds-operacion-box { width: 100%; max-height: 100dvh; border-radius: 0; padding: 24px 16px 25px; }
+      .lds-operacion-head h2 { font-size: 24px; }
+      .lds-operacion-saldo { align-items: flex-start; flex-direction: column; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// ============================================================
+// FORMATEAR LDS
+// ============================================================
+
+function formatearLDS(
+  numero
+) {
+
+  return Number(
+    numero || 0
+  ).toLocaleString(
+    "es-PE",
+    {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }
+  );
+
 }
 
 
@@ -736,26 +1399,33 @@ function generarMovimiento(movimiento) {
 // FORMATEAR FECHA
 // ============================================================
 
-function formatearFecha(fecha) {
+function formatearFecha(
+  fecha
+) {
 
   if (!fecha) {
     return "";
   }
+
 
   try {
 
     const objeto =
       new Date(fecha);
 
+
     if (
       isNaN(
         objeto.getTime()
       )
     ) {
+
       return String(
         fecha
       );
+
     }
+
 
     return objeto.toLocaleString(
       "es-PE",
@@ -773,6 +1443,7 @@ function formatearFecha(fecha) {
     );
 
   }
+
 }
 
 
@@ -780,7 +1451,9 @@ function formatearFecha(fecha) {
 // SEGURIDAD HTML
 // ============================================================
 
-function escaparHTML(valor) {
+function escaparHTML(
+  valor
+) {
 
   return String(
     valor ?? ""
@@ -810,1435 +1483,6 @@ function escaparHTML(valor) {
 
 
 // ============================================================
-// INGRESAR CÓDIGO
-// ============================================================
-
-function ingresarCodigo() {
-
-  const codigo =
-    prompt(
-      "Ingrese el código del estudiante:"
-    );
-
-  if (!codigo) {
-    return;
-  }
-
-
-  consultarEstudiante(
-    codigo
-  );
-}
-
-
-// ============================================================
-// ABRIR FICHA
-// ============================================================
-
-function abrirFicha() {
-
-  const overlay =
-    document.getElementById(
-      "profileOverlay"
-    );
-
-  if (!overlay) {
-    return;
-  }
-
-  overlay.classList.add(
-    "active"
-  );
-
-  document.documentElement.classList.add(
-    "lds-modal-open"
-  );
-
-  document.body.classList.add(
-    "lds-modal-open"
-  );
-}
-
-
-// ============================================================
-// CERRAR FICHA
-// ============================================================
-
-function cerrarFicha() {
-
-  const overlay =
-    document.getElementById(
-      "profileOverlay"
-    );
-
-  if (!overlay) {
-    return;
-  }
-
-  overlay.classList.remove(
-    "active"
-  );
-
-  document.documentElement.classList.remove(
-    "lds-modal-open"
-  );
-
-  document.body.classList.remove(
-    "lds-modal-open"
-  );
-}
-
-
-// ============================================================
-// ABRIR PERFIL
-// ============================================================
-
-function abrirPerfil() {
-  abrirFicha();
-}
-
-
-// ============================================================
-// CERRAR PERFIL
-// ============================================================
-
-function cerrarPerfil() {
-  cerrarFicha();
-}
-
-
-// ============================================================
-// COBRAR / PAGAR
-// ============================================================
-
-function abrirOperacion(tipo) {
-
-  tipo =
-    String(
-      tipo || ""
-    ).toUpperCase();
-
-
-  if (
-    !estudianteActual ||
-    !estudianteActual.estudiante
-  ) {
-
-    alert(
-      "Primero seleccione un estudiante."
-    );
-
-    return;
-  }
-
-
-  if (
-    tipo !== "INGRESO" &&
-    tipo !== "EGRESO"
-  ) {
-
-    alert(
-      "Tipo de operación no válido."
-    );
-
-    return;
-  }
-
-
-  const estudiante =
-    estudianteActual.estudiante ||
-    {};
-
-  const cuenta =
-    estudianteActual.cuenta ||
-    {};
-
-  const nombre =
-    estudiante.nombreCompleto ||
-    "";
-
-  const codigo =
-    estudiante.codigo ||
-    "";
-
-  const saldo =
-    Number(
-      cuenta.saldoActual || 0
-    );
-
-
-  const conceptosIngreso = [
-
-    "Ingreso Sueldo Base Mensual",
-
-    "Ingreso Sueldo por Rol de Liderazgo",
-
-    "Ingreso Bono por desempeño",
-
-    "Bono por uniforme impecable",
-
-    "Bono participación destacada en clase",
-
-    "Puntualidad destacada",
-
-    "Responsabilidad destacada",
-
-    "Colaboración",
-
-    "Actividad con excelencia",
-
-    "Perseverancia",
-
-    "Participación destacada",
-
-    "Acción de servicio",
-
-    "Logro excepcional",
-
-    "Bono 360",
-
-    "Otro..."
-
-  ];
-
-
-  const conceptosEgreso = [
-
-    "Pago compra tienda escolar/cafetín",
-
-    "Pago servicios del aula: Agua/Energía",
-
-    "Multa por uniforme",
-
-    "Incumplimiento de tareas",
-
-    "Llegada tarde",
-
-    "Dañar un material",
-
-    "Incumplir un acuerdo",
-
-    "Otro..."
-
-  ];
-
-
-  const conceptos =
-    tipo === "INGRESO"
-      ? conceptosIngreso
-      : conceptosEgreso;
-
-
-  const titulo =
-    tipo === "INGRESO"
-      ? "💰 COBRAR"
-      : "💸 PAGAR";
-
-
-  const textoTipo =
-    tipo === "INGRESO"
-      ? "Registrar ingreso"
-      : "Registrar egreso";
-
-
-  const anterior =
-    document.getElementById(
-      "operacionLDS360"
-    );
-
-
-  if (anterior) {
-    anterior.remove();
-  }
-
-
-  const overlay =
-    document.createElement(
-      "div"
-    );
-
-
-  overlay.id =
-    "operacionLDS360";
-
-
-  overlay.innerHTML = `
-
-    <div
-      class="lds-operacion-box"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="tituloOperacionLDS"
-    >
-
-      <button
-        type="button"
-        class="lds-operacion-cerrar"
-        onclick="cerrarOperacion()"
-        aria-label="Cerrar"
-      >
-        ×
-      </button>
-
-
-      <div class="lds-operacion-head">
-
-        <div class="lds-operacion-icon">
-
-          ${
-            tipo === "INGRESO"
-              ? "💰"
-              : "💸"
-          }
-
-        </div>
-
-
-        <div>
-
-          <h2 id="tituloOperacionLDS">
-            ${titulo}
-          </h2>
-
-          <p>
-            ${escaparHTML(nombre)}
-          </p>
-
-          <small>
-            ${escaparHTML(codigo)}
-          </small>
-
-        </div>
-
-      </div>
-
-
-      <div class="lds-operacion-saldo">
-
-        <span>
-          Saldo actual
-        </span>
-
-        <strong>
-          ${formatearLDS(saldo)} LDS
-        </strong>
-
-      </div>
-
-
-      <form
-        onsubmit="guardarOperacion(event, '${tipo}')"
-        autocomplete="off"
-      >
-
-        <label for="operacionConcepto">
-          Concepto
-        </label>
-
-        <select
-          id="operacionConcepto"
-          name="concepto"
-          required
-        >
-
-          <option value="">
-            Seleccione un concepto
-          </option>
-
-          ${
-            conceptos
-              .map(
-                c =>
-                  `
-                  <option value="${escaparHTML(c)}">
-                    ${escaparHTML(c)}
-                  </option>
-                  `
-              )
-              .join("")
-          }
-
-        </select>
-
-
-        <div
-          id="operacionConceptoOtroWrap"
-          style="display:none;"
-        >
-
-          <label for="operacionConceptoOtro">
-            Especifique el concepto
-          </label>
-
-          <input
-            id="operacionConceptoOtro"
-            name="conceptoOtro"
-            type="text"
-            maxlength="150"
-            placeholder="Escriba el concepto"
-          >
-
-        </div>
-
-
-        <label for="operacionMonto">
-          Monto LDS
-        </label>
-
-        <input
-          id="operacionMonto"
-          name="monto"
-          type="number"
-          min="0.01"
-          step="0.01"
-          inputmode="decimal"
-          required
-          placeholder="0.00"
-        >
-
-
-        <label for="operacionResponsable">
-          Responsable
-        </label>
-
-        <input
-          id="operacionResponsable"
-          name="responsable"
-          type="text"
-          maxlength="100"
-          required
-          placeholder="Nombre del responsable"
-        >
-
-
-        <label for="operacionObservacion">
-          Observación
-        </label>
-
-        <textarea
-          id="operacionObservacion"
-          name="observacion"
-          maxlength="300"
-          rows="3"
-          placeholder="Observación (opcional)"
-        ></textarea>
-
-
-        <div
-          id="operacionMensaje"
-          class="lds-operacion-mensaje"
-          aria-live="polite"
-        ></div>
-
-
-        <button
-          id="operacionGuardar"
-          type="submit"
-          class="lds-operacion-guardar"
-        >
-
-          ${textoTipo}
-
-        </button>
-
-      </form>
-
-    </div>
-
-  `;
-
-
-  document.body.appendChild(
-    overlay
-  );
-
-
-  agregarEstilosOperacion();
-
-
-  const concepto =
-    document.getElementById(
-      "operacionConcepto"
-    );
-
-
-  if (concepto) {
-
-    concepto.addEventListener(
-      "change",
-      function() {
-
-        const wrap =
-          document.getElementById(
-            "operacionConceptoOtroWrap"
-          );
-
-        const otro =
-          document.getElementById(
-            "operacionConceptoOtro"
-          );
-
-
-        const esOtro =
-          this.value === "Otro...";
-
-
-        if (wrap) {
-
-          wrap.style.display =
-            esOtro
-              ? "block"
-              : "none";
-
-        }
-
-
-        if (otro) {
-
-          otro.required =
-            esOtro;
-
-
-          if (!esOtro) {
-            otro.value = "";
-          }
-
-
-          if (esOtro) {
-            otro.focus();
-          }
-
-        }
-
-      }
-    );
-
-  }
-
-
-  setTimeout(
-    () => {
-
-      const monto =
-        document.getElementById(
-          "operacionMonto"
-        );
-
-      if (monto) {
-        monto.focus();
-      }
-
-    },
-    50
-  );
-
-}
-
-
-// ============================================================
-// CERRAR OPERACIÓN
-// ============================================================
-
-function cerrarOperacion() {
-
-  const modal =
-    document.getElementById(
-      "operacionLDS360"
-    );
-
-  if (modal) {
-    modal.remove();
-  }
-
-}
-
-
-// ============================================================
-// GUARDAR OPERACIÓN
-// ============================================================
-
-async function guardarOperacion(
-  event,
-  tipo
-) {
-
-  event.preventDefault();
-
-
-  if (
-    !estudianteActual ||
-    !estudianteActual.estudiante
-  ) {
-
-    alert(
-      "No hay un estudiante seleccionado."
-    );
-
-    return;
-  }
-
-
-  const estudiante =
-    estudianteActual.estudiante ||
-    {};
-
-  const cuenta =
-    estudianteActual.cuenta ||
-    {};
-
-  const codigo =
-    estudiante.codigo ||
-    "";
-
-  const saldo =
-    Number(
-      cuenta.saldoActual || 0
-    );
-
-
-  const conceptoSelect =
-    document.getElementById(
-      "operacionConcepto"
-    );
-
-  const conceptoOtro =
-    document.getElementById(
-      "operacionConceptoOtro"
-    );
-
-  const montoInput =
-    document.getElementById(
-      "operacionMonto"
-    );
-
-  const responsableInput =
-    document.getElementById(
-      "operacionResponsable"
-    );
-
-  const observacionInput =
-    document.getElementById(
-      "operacionObservacion"
-    );
-
-  const boton =
-    document.getElementById(
-      "operacionGuardar"
-    );
-
-  const mensaje =
-    document.getElementById(
-      "operacionMensaje"
-    );
-
-
-  let concepto =
-    conceptoSelect
-      ? conceptoSelect.value.trim()
-      : "";
-
-
-  const monto =
-    Number(
-      montoInput
-        ? montoInput.value
-        : 0
-    );
-
-
-  const responsable =
-    responsableInput
-      ? responsableInput.value.trim()
-      : "";
-
-
-  const observacion =
-    observacionInput
-      ? observacionInput.value.trim()
-      : "";
-
-
-  if (
-    concepto === "Otro..."
-  ) {
-
-    concepto =
-      conceptoOtro
-        ? conceptoOtro.value.trim()
-        : "";
-
-  }
-
-
-  if (!concepto) {
-
-    mostrarMensajeOperacion(
-      "Seleccione o escriba un concepto.",
-      true
-    );
-
-    return;
-  }
-
-
-  if (
-    !Number.isFinite(monto) ||
-    monto <= 0
-  ) {
-
-    mostrarMensajeOperacion(
-      "El monto debe ser mayor que 0.",
-      true
-    );
-
-    return;
-  }
-
-
-  if (!responsable) {
-
-    mostrarMensajeOperacion(
-      "Ingrese el responsable.",
-      true
-    );
-
-    return;
-  }
-
-
-  if (
-    tipo === "EGRESO" &&
-    monto > saldo
-  ) {
-
-    mostrarMensajeOperacion(
-      "No se puede registrar el pago. El monto supera el saldo disponible de " +
-      formatearLDS(saldo) +
-      " LDS.",
-      true
-    );
-
-    return;
-  }
-
-
-  if (boton) {
-
-    boton.disabled =
-      true;
-
-    boton.textContent =
-      "Guardando...";
-
-  }
-
-
-  mostrarMensajeOperacion(
-    "Registrando movimiento...",
-    false
-  );
-
-
-  try {
-
-    const parametros =
-      new URLSearchParams();
-
-
-    parametros.set(
-      "accion",
-      "registrarmovimiento"
-    );
-
-
-    parametros.set(
-      "codigo",
-      codigo
-    );
-
-
-    parametros.set(
-      "tipo",
-      tipo
-    );
-
-
-    parametros.set(
-      "concepto",
-      concepto
-    );
-
-
-    parametros.set(
-      "monto",
-      String(monto)
-    );
-
-
-    parametros.set(
-      "responsable",
-      responsable
-    );
-
-
-    parametros.set(
-      "observacion",
-      observacion
-    );
-
-
-    parametros.set(
-      "t",
-      Date.now()
-    );
-
-
-    const respuesta =
-      await fetch(
-        BANCO_LDS_API_URL +
-        "?" +
-        parametros.toString(),
-        {
-          method: "GET",
-          cache: "no-store"
-        }
-      );
-
-
-    if (!respuesta.ok) {
-
-      throw new Error(
-        "El servidor no respondió correctamente."
-      );
-
-    }
-
-
-    const datos =
-      await respuesta.json();
-
-
-    console.log(
-      "Resultado registrar movimiento:",
-      datos
-    );
-
-
-    if (
-      !datos.ok ||
-      datos.exito === false
-    ) {
-
-      throw new Error(
-        datos.mensaje ||
-        "No se pudo registrar el movimiento."
-      );
-
-    }
-
-
-    cerrarOperacion();
-
-
-    alert(
-
-      (
-        tipo === "INGRESO"
-          ? "💰 Ingreso"
-          : "💸 Egreso"
-      ) +
-
-      " registrado correctamente.\n\n" +
-
-      "Estudiante: " +
-      (
-        estudiante.nombreCompleto ||
-        ""
-      ) +
-
-      "\n" +
-
-      "Monto: " +
-      formatearLDS(monto) +
-      " LDS\n" +
-
-      "Concepto: " +
-      concepto
-
-    );
-
-
-    await consultarEstudiante(
-      codigo
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "Error al registrar movimiento:",
-      error
-    );
-
-
-    mostrarMensajeOperacion(
-      error.message ||
-      "No se pudo registrar el movimiento.",
-      true
-    );
-
-
-    if (boton) {
-
-      boton.disabled =
-        false;
-
-      boton.textContent =
-        tipo === "INGRESO"
-          ? "Registrar ingreso"
-          : "Registrar egreso";
-
-    }
-
-  }
-
-}
-
-
-// ============================================================
-// MENSAJE OPERACIÓN
-// ============================================================
-
-function mostrarMensajeOperacion(
-  texto,
-  error
-) {
-
-  const mensaje =
-    document.getElementById(
-      "operacionMensaje"
-    );
-
-
-  if (!mensaje) {
-    return;
-  }
-
-
-  mensaje.textContent =
-    texto || "";
-
-
-  mensaje.className =
-    "lds-operacion-mensaje " +
-    (
-      error
-        ? "error"
-        : "info"
-    );
-
-}
-
-
-// ============================================================
-// ESTILOS OPERACIÓN
-// ============================================================
-
-function agregarEstilosOperacion() {
-
-  if (
-    document.getElementById(
-      "estilosOperacionLDS360"
-    )
-  ) {
-    return;
-  }
-
-
-  const style =
-    document.createElement(
-      "style"
-    );
-
-
-  style.id =
-    "estilosOperacionLDS360";
-
-
-  style.textContent = `
-
-    #operacionLDS360 {
-
-      position: fixed;
-
-      inset: 0;
-
-      z-index: 100000;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      padding: 20px;
-
-      background:
-        rgba(2,12,27,.78);
-
-      backdrop-filter:
-        blur(4px);
-
-    }
-
-
-    .lds-operacion-box {
-
-      width: min(
-        560px,
-        100%
-      );
-
-      max-height:
-        calc(100dvh - 40px);
-
-      overflow-y:
-        auto;
-
-      position: relative;
-
-      padding: 28px;
-
-      border-radius:
-        26px;
-
-      background:
-        #ffffff;
-
-      box-shadow:
-        0 25px 80px
-        rgba(0,0,0,.35);
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    }
-
-
-    .lds-operacion-cerrar {
-
-      position:
-        absolute;
-
-      top:
-        12px;
-
-      right:
-        14px;
-
-      width:
-        40px;
-
-      height:
-        40px;
-
-      border:
-        none;
-
-      border-radius:
-        50%;
-
-      background:
-        #edf2f7;
-
-      color:
-        #071d3a;
-
-      font-size:
-        28px;
-
-      line-height:
-        1;
-
-      cursor:
-        pointer;
-
-    }
-
-
-    .lds-operacion-head {
-
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      gap:
-        15px;
-
-      padding-right:
-        45px;
-
-      margin-bottom:
-        20px;
-
-    }
-
-
-    .lds-operacion-icon {
-
-      width:
-        62px;
-
-      height:
-        62px;
-
-      min-width:
-        62px;
-
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        center;
-
-      border-radius:
-        18px;
-
-      background:
-        #071d3a;
-
-      font-size:
-        31px;
-
-    }
-
-
-    .lds-operacion-head h2 {
-
-      margin:
-        0 0 4px;
-
-      color:
-        #071d3a;
-
-      font-size:
-        27px;
-
-    }
-
-
-    .lds-operacion-head p {
-
-      margin:
-        0;
-
-      color:
-        #24364d;
-
-      font-weight:
-        800;
-
-    }
-
-
-    .lds-operacion-head small {
-
-      display:
-        block;
-
-      margin-top:
-        4px;
-
-      color:
-        #778294;
-
-      font-weight:
-        700;
-
-    }
-
-
-    .lds-operacion-saldo {
-
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        space-between;
-
-      gap:
-        12px;
-
-      margin-bottom:
-        20px;
-
-      padding:
-        15px 18px;
-
-      border-radius:
-        17px;
-
-      background:
-        #071d3a;
-
-      color:
-        #ffffff;
-
-    }
-
-
-    .lds-operacion-saldo span {
-
-      font-size:
-        13px;
-
-      opacity:
-        .82;
-
-    }
-
-
-    .lds-operacion-saldo strong {
-
-      color:
-        #f4c400;
-
-      font-size:
-        20px;
-
-    }
-
-
-    .lds-operacion-box form {
-
-      display:
-        grid;
-
-      gap:
-        9px;
-
-    }
-
-
-    .lds-operacion-box label {
-
-      color:
-        #071d3a;
-
-      font-size:
-        13px;
-
-      font-weight:
-        900;
-
-      margin-top:
-        5px;
-
-    }
-
-
-    .lds-operacion-box input,
-    .lds-operacion-box select,
-    .lds-operacion-box textarea {
-
-      width:
-        100%;
-
-      box-sizing:
-        border-box;
-
-      padding:
-        12px 13px;
-
-      border:
-        1px solid
-        #d5dce5;
-
-      border-radius:
-        12px;
-
-      background:
-        #ffffff;
-
-      color:
-        #071d3a;
-
-      font:
-        inherit;
-
-      outline:
-        none;
-
-    }
-
-
-    .lds-operacion-box input:focus,
-    .lds-operacion-box select:focus,
-    .lds-operacion-box textarea:focus {
-
-      border-color:
-        #071d3a;
-
-      box-shadow:
-        0 0 0 3px
-        rgba(7,29,58,.08);
-
-    }
-
-
-    .lds-operacion-box textarea {
-
-      resize:
-        vertical;
-
-      min-height:
-        85px;
-
-    }
-
-
-    .lds-operacion-mensaje {
-
-      min-height:
-        20px;
-
-      margin-top:
-        3px;
-
-      font-size:
-        13px;
-
-      font-weight:
-        800;
-
-    }
-
-
-    .lds-operacion-mensaje.error {
-
-      color:
-        #cf142b;
-
-    }
-
-
-    .lds-operacion-mensaje.info {
-
-      color:
-        #176b49;
-
-    }
-
-
-    .lds-operacion-guardar {
-
-      width:
-        100%;
-
-      min-height:
-        52px;
-
-      margin-top:
-        7px;
-
-      border:
-        none;
-
-      border-radius:
-        14px;
-
-      background:
-        #071d3a;
-
-      color:
-        #ffffff;
-
-      font-size:
-        16px;
-
-      font-weight:
-        900;
-
-      cursor:
-        pointer;
-
-    }
-
-
-    .lds-operacion-guardar:hover {
-
-      opacity:
-        .92;
-
-    }
-
-
-    .lds-operacion-guardar:disabled {
-
-      opacity:
-        .55;
-
-      cursor:
-        wait;
-
-    }
-
-
-    @media (
-      max-width: 600px
-    ) {
-
-      #operacionLDS360 {
-
-        padding:
-          0;
-
-      }
-
-
-      .lds-operacion-box {
-
-        width:
-          100vw;
-
-        max-width:
-          100vw;
-
-        height:
-          100dvh;
-
-        max-height:
-          100dvh;
-
-        border-radius:
-          0;
-
-        padding:
-          22px 15px 28px;
-
-      }
-
-    }
-
-  `;
-
-
-  document.head.appendChild(
-    style
-  );
-
-}
-// ============================================================
 // ESTILOS COMPLETOS DE LA FICHA
 // ============================================================
 
@@ -2249,11 +1493,10 @@ function agregarEstilosFicha() {
       "estilosBancoLDS360"
     )
   ) {
+
     return;
   }
-
-
-  const style =
+    const style =
     document.createElement(
       "style"
     );
@@ -2753,6 +1996,1283 @@ function agregarEstilosFicha() {
 
       display: block;
 
+      color: #071d3a;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      line-height: 1.2;
+
+      overflow-wrap: anywhere;
+
+      word-break: break-word;
+
+    }
+
+
+    /* ==========================================================
+       CUENTA
+    ========================================================== */
+
+    .lds-account {
+
+      width: 100% !important;
+
+      max-width: 100% !important;
+
+      min-width: 0 !important;
+
+      margin:
+        0 0 25px !important;
+
+      padding:
+        20px !important;
+
+      border-radius:
+        23px !important;
+
+      background:
+        #f7f9fb !important;
+
+      border:
+        1px solid #e8edf2 !important;
+
+    }
+
+
+    .lds-account-title {
+
+      margin:
+        0 0 15px !important;
+
+      color:
+        #071d3a;
+
+      font-size:
+        15px;
+
+      font-weight:
+        900;
+
+      letter-spacing:
+        .5px;
+
+    }
+
+
+    .lds-account-grid {
+
+      width: 100% !important;
+
+      display: grid !important;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0, 1fr)
+        ) !important;
+
+      gap:
+        12px !important;
+
+    }
+
+
+    .lds-money {
+
+      min-width: 0 !important;
+
+      padding:
+        16px !important;
+
+      border-radius:
+        18px !important;
+
+      display:
+        flex !important;
+
+      align-items:
+        center !important;
+
+      gap:
+        11px !important;
+
+      overflow:
+        hidden !important;
+
+    }
+
+
+    .lds-money.income {
+
+      background:
+        #eef9f1 !important;
+
+    }
+
+
+    .lds-money.expense {
+
+      background:
+        #fff1f1 !important;
+
+    }
+
+
+    .lds-money.balance {
+
+      background:
+        #fff9df !important;
+
+    }
+
+
+    .lds-money-icon {
+
+      width:
+        45px !important;
+
+      height:
+        45px !important;
+
+      min-width:
+        45px !important;
+
+      border-radius:
+        50% !important;
+
+      background:
+        #ffffff !important;
+
+      display:
+        flex !important;
+
+      align-items:
+        center !important;
+
+      justify-content:
+        center !important;
+
+      font-size:
+        22px !important;
+
+    }
+
+
+    .lds-money-data {
+
+      min-width:
+        0 !important;
+
+      overflow:
+        hidden !important;
+
+    }
+
+
+    .lds-money-data span {
+
+      display:
+        block;
+
+      margin-bottom:
+        4px;
+
+      color:
+        #687284;
+
+      font-size:
+        11px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    .lds-money-data strong {
+
+      display:
+        block;
+
+      color:
+        #071d3a;
+
+      font-size:
+        clamp(
+          15px,
+          1.8vw,
+          21px
+        );
+
+      font-weight:
+        900;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    /* ==========================================================
+       ACCIONES
+    ========================================================== */
+
+    .lds-actions {
+
+      width:
+        100% !important;
+
+      max-width:
+        100% !important;
+
+      display:
+        grid !important;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        ) !important;
+
+      gap:
+        14px !important;
+
+      margin:
+        0 0 25px !important;
+
+    }
+
+
+    .lds-action {
+
+      min-width:
+        0 !important;
+
+      min-height:
+        88px !important;
+
+      padding:
+        15px 18px !important;
+
+      border:
+        0 !important;
+
+      border-radius:
+        20px !important;
+
+      display:
+        flex !important;
+
+      align-items:
+        center !important;
+
+      gap:
+        13px !important;
+
+      cursor:
+        pointer !important;
+
+      transition:
+        transform .15s ease,
+        box-shadow .15s ease !important;
+
+      text-align:
+        left !important;
+
+    }
+
+
+    .lds-action:hover {
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .lds-action.cobrar {
+
+      background:
+        #eaf8ee !important;
+
+      color:
+        #176b35 !important;
+
+      box-shadow:
+        0 7px 18px
+        rgba(23,107,53,.10) !important;
+
+    }
+
+
+    .lds-action.pagar {
+
+      background:
+        #fff0f0 !important;
+
+      color:
+        #a91d2e !important;
+
+      box-shadow:
+        0 7px 18px
+        rgba(169,29,46,.10) !important;
+
+    }
+
+
+    .lds-action-icon {
+
+      width:
+        54px !important;
+
+      height:
+        54px !important;
+
+      min-width:
+        54px !important;
+
+      border-radius:
+        50% !important;
+
+      background:
+        #ffffff !important;
+
+      display:
+        flex !important;
+
+      align-items:
+        center !important;
+
+      justify-content:
+        center !important;
+
+      font-size:
+        27px !important;
+
+    }
+
+
+    .lds-action-text {
+
+      min-width:
+        0 !important;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        4px;
+
+    }
+
+
+    .lds-action-text strong {
+
+      font-size:
+        17px;
+
+      font-weight:
+        900;
+
+    }
+
+
+    .lds-action-text small {
+
+      font-size:
+        11px;
+
+      opacity:
+        .75;
+
+      font-weight:
+        700;
+
+    }
+
+
+    /* ==========================================================
+       MOVIMIENTOS
+    ========================================================== */
+
+    .lds-movimientos {
+
+      width:
+        100% !important;
+
+      max-width:
+        100% !important;
+
+      min-width:
+        0 !important;
+
+    }
+
+
+    .lds-movimientos-header {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        10px;
+
+      margin:
+        0 0 12px;
+
+      color:
+        #071d3a;
+
+      font-size:
+        15px;
+
+      font-weight:
+        900;
+
+    }
+
+
+    .lds-contador {
+
+      min-width:
+        28px;
+
+      height:
+        28px;
+
+      padding:
+        0 8px;
+
+      border-radius:
+        20px;
+
+      background:
+        #edf2f7;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      font-size:
+        12px;
+
+      font-weight:
+        900;
+
+    }
+
+
+    .lds-lista-movimientos {
+
+      display:
+        grid;
+
+      gap:
+        9px;
+
+    }
+
+
+    .lds-movimiento {
+
+      width:
+        100% !important;
+
+      min-width:
+        0 !important;
+
+      display:
+        grid !important;
+
+      grid-template-columns:
+        44px
+        minmax(0,1fr)
+        auto !important;
+
+      align-items:
+        center !important;
+
+      gap:
+        11px !important;
+
+      padding:
+        12px !important;
+
+      border-radius:
+        16px !important;
+
+      overflow:
+        hidden !important;
+
+    }
+
+
+    .lds-movimiento.mov-ingreso {
+
+      background:
+        #f0faf3 !important;
+
+    }
+
+
+    .lds-movimiento.mov-egreso {
+
+      background:
+        #fff3f3 !important;
+
+    }
+
+
+    .lds-mov-icon {
+
+      width:
+        44px;
+
+      height:
+        44px;
+
+      border-radius:
+        50%;
+
+      background:
+        #ffffff;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      font-size:
+        21px;
+
+    }
+
+
+    .lds-mov-info {
+
+      min-width:
+        0;
+
+      overflow:
+        hidden;
+
+    }
+
+
+    .lds-mov-info strong {
+
+      display:
+        block;
+
+      color:
+        #071d3a;
+
+      font-size:
+        13px;
+
+      font-weight:
+        900;
+
+      line-height:
+        1.25;
+
+      overflow-wrap:
+        anywhere;
+
+    }
+
+
+    .lds-mov-info span {
+
+      display:
+        block;
+
+      margin-top:
+        3px;
+
+      color:
+        #7a8390;
+
+      font-size:
+        10px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    .lds-mov-info small {
+
+      display:
+        block;
+
+      margin-top:
+        3px;
+
+      color:
+        #687284;
+
+      font-size:
+        10px;
+
+      overflow-wrap:
+        anywhere;
+
+    }
+
+
+    .lds-mov-monto {
+
+      text-align:
+        right;
+
+      min-width:
+        95px;
+
+    }
+
+
+    .lds-mov-monto strong {
+
+      display:
+        block;
+
+      font-size:
+        14px;
+
+      font-weight:
+        900;
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    .mov-ingreso
+    .lds-mov-monto strong {
+
+      color:
+        #176b35;
+
+    }
+
+
+    .mov-egreso
+    .lds-mov-monto strong {
+
+      color:
+        #a91d2e;
+
+    }
+
+
+    .lds-mov-monto span {
+
+      display:
+        block;
+
+      margin-top:
+        3px;
+
+      color:
+        #7a8390;
+
+      font-size:
+        9px;
+
+      font-weight:
+        800;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    /* ==========================================================
+       SIN MOVIMIENTOS
+    ========================================================== */
+
+    .lds-sin-movimientos {
+
+      padding:
+        30px 20px;
+
+      border-radius:
+        18px;
+
+      background:
+        #f7f9fb;
+
+      text-align:
+        center;
+
+      color:
+        #687284;
+
+    }
+
+
+    .lds-sin-movimientos span {
+
+      display:
+        block;
+
+      margin-bottom:
+        7px;
+
+      font-size:
+        35px;
+
+    }
+
+
+    .lds-sin-movimientos strong {
+
+      display:
+        block;
+
+      color:
+        #071d3a;
+
+      font-size:
+        14px;
+
+    }
+
+
+    .lds-sin-movimientos small {
+
+      display:
+        block;
+
+      margin-top:
+        4px;
+
+      font-size:
+        11px;
+
+    }
+
+
+    /* ==========================================================
+       SEGURIDAD
+    ========================================================== */
+
+    .lds-security {
+
+      margin-top:
+        22px;
+
+      padding:
+        12px 14px;
+
+      border-radius:
+        14px;
+
+      background:
+        #f7f9fb;
+
+      color:
+        #687284;
+
+      display:
+        flex;
+
+      align-items:
+        flex-start;
+
+      gap:
+        8px;
+
+      font-size:
+        10px;
+
+      line-height:
+        1.4;
+
+    }
+
+
+    .lds-security span:first-child {
+
+      font-size:
+        15px;
+
+      line-height:
+        1;
+
+    }
+
+
+    /* ==========================================================
+       TABLET
+    ========================================================== */
+
+    @media (
+      max-width: 850px
+    ) {
+
+      #profileOverlay {
+
+        padding:
+          10px !important;
+
+      }
+
+
+      #profileOverlay #profileContent {
+
+        width:
+          calc(100vw - 20px) !important;
+
+        max-width:
+          calc(100vw - 20px) !important;
+
+        height:
+          calc(100dvh - 20px) !important;
+
+        max-height:
+          calc(100dvh - 20px) !important;
+
+        border-radius:
+          22px !important;
+
+      }
+
+
+      .lds-profile {
+
+        padding:
+          22px !important;
+
+      }
+
+
+      .lds-student-header {
+
+        grid-template-columns:
+          200px
+          minmax(0,1fr) !important;
+
+        gap:
+          20px !important;
+
+      }
+
+
+      .lds-photo-frame {
+
+        width:
+          200px !important;
+
+        height:
+          170px !important;
+
+      }
+
+
+      .lds-info-list {
+
+        grid-template-columns:
+          1fr !important;
+
+      }
+
+
+      .lds-info-item {
+
+        min-height:
+          64px !important;
+
+      }
+
+
+      .lds-account-grid {
+
+        grid-template-columns:
+          1fr !important;
+
+      }
+
+
+      .lds-money-data strong {
+
+        font-size:
+          18px;
+
+      }
+
+    }
+
+
+    /* ==========================================================
+       CELULAR
+    ========================================================== */
+
+    @media (
+      max-width: 600px
+    ) {
+
+      #profileOverlay {
+
+        padding:
+          0 !important;
+
+        align-items:
+          stretch !important;
+
+      }
+
+
+      #profileOverlay #profileContent {
+
+        width:
+          100vw !important;
+
+        max-width:
+          100vw !important;
+
+        height:
+          100dvh !important;
+
+        max-height:
+          100dvh !important;
+
+        border-radius:
+          0 !important;
+
+      }
+
+
+      .lds-profile {
+
+        padding:
+          18px 14px 25px !important;
+
+      }
+
+
+      .lds-student-header {
+
+        grid-template-columns:
+          1fr !important;
+
+        gap:
+          15px !important;
+
+        margin-bottom:
+          18px !important;
+
+      }
+
+
+      .lds-photo-frame {
+
+        width:
+          min(
+            240px,
+            80vw
+          ) !important;
+
+        height:
+          min(
+            190px,
+            65vw
+          ) !important;
+
+      }
+
+
+      .lds-student-info h1 {
+
+        font-size:
+          27px !important;
+
+      }
+
+
+      .lds-student-code {
+
+        font-size:
+          12px;
+
+      }
+
+
+      .lds-actions {
+
+        grid-template-columns:
+          1fr !important;
+
+      }
+
+
+      .lds-action {
+
+        min-height:
+          76px !important;
+
+      }
+
+
+      .lds-movimiento {
+
+        grid-template-columns:
+          40px
+          minmax(0,1fr) !important;
+
+        align-items:
+          start !important;
+
+      }
+
+
+      .lds-mov-icon {
+
+        width:
+          40px;
+
+        height:
+          40px;
+
+      }
+
+
+      .lds-mov-monto {
+
+        grid-column:
+          2;
+
+        min-width:
+          0;
+
+        text-align:
+          left;
+
+        margin-top:
+          3px;
+
+      }
+
+
+      .lds-mov-monto strong {
+
+        font-size:
+          13px;
+
+      }
+
+
+      .lds-security {
+
+        font-size:
+          9px;
+
+      }
+
+    }
+
+
+    /* ==========================================================
+       PANTALLAS MUY PEQUEÑAS
+    ========================================================== */
+
+    @media (
+      max-width: 380px
+    ) {
+
+      .lds-profile {
+
+        padding:
+          14px 10px 20px !important;
+
+      }
+
+
+      .lds-photo-frame {
+
+        width:
+          210px !important;
+
+        height:
+          165px !important;
+
+      }
+
+
+      .lds-student-info h1 {
+
+        font-size:
+          23px !important;
+
+      }
+
+
+      .lds-money {
+
+        padding:
+          12px !important;
+
+      }
+
+
+      .lds-money-icon {
+
+        width:
+          39px !important;
+
+        height:
+          39px !important;
+
+        min-width:
+          39px !important;
+
+      }
+
+    }
+
+  `;
+
+
+  document.head.appendChild(
+    style
+  );
+
+}
+
+
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    console.log(
+      "Banco LDS 360 iniciado correctamente."
+    );
+
+
+    const inputCodigo =
+      document.getElementById(
+        "codigoInput"
+      );
+
+
+    if (inputCodigo) {
+
+      inputCodigo.addEventListener(
+        "keydown",
+        function (event) {
+
+          if (
+            event.key === "Enter"
+          ) {
+
+            event.preventDefault();
+
+            consultarEstudiante(
+              inputCodigo.value
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    const cerrarOverlay =
+      document.getElementById(
+        "profileOverlay"
+      );
+
+
+    if (cerrarOverlay) {
+
+      cerrarOverlay.addEventListener(
+        "click",
+        function (event) {
+
+          if (
+            event.target ===
+            cerrarOverlay
+          ) {
+
+            cerrarFicha();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          const operacion =
+            document.getElementById(
+              "operacionLDS360"
+            );
+
+
+          if (operacion) {
+
+            cerrarOperacion();
+
+            return;
+
+          }
+
+
+          cerrarFicha();
+
+        }
+
+      }
+    );
+
+  }
+);
+
+
+// ============================================================
+// FIN DEL APP.JS
+// ============================================================
+      display: block;
+
       width: 100%;
 
       max-width: 100%;
@@ -2979,510 +3499,12 @@ function agregarEstilosFicha() {
 
     }
 
-
-    /* ==========================================================
-       BOTONES COBRAR / PAGAR
-    ========================================================== */
-
-    .lds-actions {
-
-      width: 100% !important;
-
-      display: grid !important;
-
-      grid-template-columns:
-        repeat(
-          2,
-          minmax(0,1fr)
-        ) !important;
-
-      gap: 12px !important;
-
-      margin-top: 18px !important;
-
-    }
-
-
-    .lds-action {
-
-      width: 100% !important;
-
-      min-width: 0 !important;
-
-      min-height: 76px !important;
-
-      padding: 12px 16px !important;
-
-      border: none !important;
-
-      border-radius: 20px !important;
-
-      display: flex !important;
-
-      align-items: center !important;
-
-      justify-content: center !important;
-
-      gap: 12px !important;
-
-      cursor: pointer !important;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif !important;
-
-      transition:
-        transform .15s ease,
-        box-shadow .15s ease,
-        opacity .15s ease !important;
-
-    }
-
-
-    .lds-action:hover {
-
-      transform:
-        translateY(-2px);
-
-      box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.15);
-
-    }
-
-
-    .lds-action:active {
-
-      transform:
-        translateY(0);
-
-    }
-
-
-    .lds-action.cobrar {
-
-      background:
-        #18a765 !important;
-
-      color:
-        #ffffff !important;
-
-    }
-
-
-    .lds-action.pagar {
-
-      background:
-        #cf142b !important;
-
-      color:
-        #ffffff !important;
-
-    }
-
-
-    .lds-action-icon {
-
-      width: 48px;
-
-      height: 48px;
-
-      min-width: 48px;
-
-      border-radius: 50%;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      background:
-        rgba(255,255,255,.18);
-
-      font-size: 25px;
-
-    }
-
-
-    .lds-action-text {
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: flex-start;
-
-      min-width: 0;
-
-    }
-
-
-    .lds-action-text strong {
-
-      font-size: 18px;
-
-      line-height: 1.1;
-
-    }
-
-
-    .lds-action-text small {
-
-      margin-top: 4px;
-
-      font-size: 11px;
-
-      opacity: .86;
-
-    }
-
-
-    /* ==========================================================
-       MOVIMIENTOS
-    ========================================================== */
-
-    .lds-movimientos {
-
-      width: 100% !important;
-
-      max-width: 100% !important;
-
-      min-width: 0 !important;
-
-      margin-top: 22px !important;
-
-    }
-
-
-    .lds-movimientos-header {
-
-      width: 100%;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 10px;
-
-      margin-bottom: 10px;
-
-      color: #071d3a;
-
-      font-size: 17px;
-
-    }
-
-
-    .lds-contador {
-
-      min-width: 30px;
-
-      height: 30px;
-
-      padding: 0 8px;
-
-      border-radius: 15px;
-
-      display: inline-flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      background: #edf2f7;
-
-      color: #071d3a;
-
-      font-size: 12px;
-
-      font-weight: 900;
-
-    }
-
-
-    .lds-lista-movimientos {
-
-      width: 100%;
-
-      display: grid;
-
-      gap: 8px;
-
-    }
-
-
-    .lds-movimiento {
-
-      width: 100%;
-
-      min-width: 0;
-
-      display: grid;
-
-      grid-template-columns:
-        45px
-        minmax(0,1fr)
-        auto;
-
-      align-items: center;
-
-      gap: 10px;
-
-      padding: 11px;
-
-      border-radius: 16px;
-
-      background: #f4f6f9;
-
-      overflow: hidden;
-
-    }
-
-
-    .lds-mov-icon {
-
-      width: 42px;
-
-      height: 42px;
-
-      min-width: 42px;
-
-      border-radius: 50%;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      color: #ffffff;
-
-      font-size: 22px;
-
-      font-weight: 900;
-
-    }
-
-
-    .lds-mov-icon.ingreso {
-
-      background: #18a765;
-
-    }
-
-
-    .lds-mov-icon.egreso {
-
-      background: #cf142b;
-
-    }
-
-
-    .lds-mov-info {
-
-      min-width: 0;
-
-      overflow: hidden;
-
-    }
-
-
-    .lds-mov-info strong {
-
-      display: block;
-
-      color: #071d3a;
-
-      font-size: 13px;
-
-      line-height: 1.2;
-
-      overflow-wrap: anywhere;
-
-      word-break: break-word;
-
-    }
-
-
-    .lds-mov-info span {
-
-      display: block;
-
-      margin-top: 3px;
-
-      color: #6f7885;
-
-      font-size: 10px;
-
-    }
-
-
-    .lds-mov-info small {
-
-      display: block;
-
-      margin-top: 3px;
-
-      color: #6f7885;
-
-      font-size: 10px;
-
-      overflow-wrap: anywhere;
-
-      word-break: break-word;
-
-    }
-
-
-    .lds-mov-monto {
-
-      max-width: 150px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: flex-end;
-
-      text-align: right;
-
-      overflow-wrap: anywhere;
-
-    }
-
-
-    .lds-mov-monto strong {
-
-      font-size: 14px;
-
-      white-space: nowrap;
-
-    }
-
-
-    .lds-mov-monto.ingreso strong {
-
-      color: #18a765;
-
-    }
-
-
-    .lds-mov-monto.egreso strong {
-
-      color: #cf142b;
-
-    }
-
-
-    /* ==========================================================
-       SIN MOVIMIENTOS
-    ========================================================== */
-
-    .lds-sin-movimientos {
-
-      width: 100%;
-
-      min-height: 120px;
-
-      padding: 20px;
-
-      border-radius: 18px;
-
-      background: #f4f6f9;
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: center;
-
-      justify-content: center;
-
-      text-align: center;
-
-      gap: 5px;
-
-      color: #687284;
-
-    }
-
-
-    .lds-sin-movimientos span {
-
-      font-size: 30px;
-
-    }
-
-
-    .lds-sin-movimientos strong {
-
-      color: #071d3a;
-
-      font-size: 14px;
-
-    }
-
-
-    .lds-sin-movimientos small {
-
-      font-size: 11px;
-
-    }
-
-
-    /* ==========================================================
-       SEGURIDAD
-    ========================================================== */
-
-    .lds-security {
-
-      width: 100%;
-
-      margin-top: 18px;
-
-      padding-top: 13px;
-
-      border-top:
-        1px solid
-        #e4e8ed;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      gap: 7px;
-
-      color: #778294;
-
-      font-size: 11px;
-
-      line-height: 1.35;
-
-      text-align: center;
-
-    }
-
-
-    .lds-security span:first-child {
-
-      flex:
-        0 0 auto;
-
-    }
-
   `;
 
 
   document.head.appendChild(
     style
   );
-
 }
 
 
@@ -3751,7 +3773,6 @@ function agregarEstilosFicha() {
 
 
       .lds-student-header {
-
         grid-template-columns:
           1fr !important;
 
@@ -4008,3 +4029,106 @@ function agregarEstilosFicha() {
   );
 
 })();
+
+
+// ============================================================
+// CARGAR CÓDIGO DESDE ?codigo=
+// ============================================================
+
+function cargarCodigoDesdeURL() {
+
+  const parametros =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const codigo =
+    parametros.get(
+      "codigo"
+    );
+
+
+  if (codigo) {
+
+    consultarEstudiante(
+      codigo
+    );
+
+  }
+
+}
+
+
+// ============================================================
+// INICIO
+// ============================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    console.log(
+      "🏦 Banco LDS 360 iniciado correctamente."
+    );
+
+
+    cargarCodigoDesdeURL();
+
+  }
+);
+
+
+// ============================================================
+// FUNCIONES GLOBALES
+// ============================================================
+
+window.consultarEstudiante =
+  consultarEstudiante;
+
+
+window.mostrarFichaEstudiante =
+  mostrarFichaEstudiante;
+
+
+window.ingresarCodigo =
+  ingresarCodigo;
+
+
+window.abrirEscaner =
+  abrirEscaner;
+
+
+window.abrirOperacion =
+  abrirOperacion;
+
+window.cerrarOperacion =
+  cerrarOperacion;
+
+window.guardarOperacion =
+  guardarOperacion;
+
+
+window.abrirFicha =
+  abrirFicha;
+
+
+window.cerrarFicha =
+  cerrarFicha;
+
+
+window.abrirPerfil =
+  abrirPerfil;
+
+
+window.cerrarPerfil =
+  cerrarPerfil;
+
+
+window.fotoNoDisponible =
+  fotoNoDisponible;
+
+
+// ============================================================
+// FIN APP.JS
+// ============================================================
