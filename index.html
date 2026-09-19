@@ -1414,6 +1414,21 @@ grid-template-columns: 1fr;
 #portadaLDS360 .zona-qr-real{left:7.7% !important;top:64.1% !important;width:16.2% !important;height:7.5% !important;}
 #portadaLDS360 .zona-codigo-real{left:26.4% !important;top:64.1% !important;width:16.2% !important;height:7.5% !important;}
 #portadaLDS360 .zona-boton-real:focus-visible{outline:3px solid #f4c400 !important;outline-offset:2px !important;}
+
+/* PASO 1 — limpiar únicamente la portada: eliminar objetos sueltos */
+#portadaLDS360 .portada-banco-fondo,
+#portadaLDS360 .portada-personajes,
+#portadaLDS360 .portada-personajes img,
+#portadaLDS360 .portada-nina,
+#portadaLDS360 .portada-nino,
+#portadaLDS360 .portada-profesora,
+#portadaLDS360 .portada-marca-final,
+#portadaLDS360 > img:not(.portada-fondo-nueva) {
+  display:none !important;
+}
+#portadaLDS360 {
+  overflow:hidden !important;
+}
 </style>
 
 </head>
