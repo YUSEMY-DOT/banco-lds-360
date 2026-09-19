@@ -932,44 +932,27 @@
 
         opciones.forEach(function(item) {
 
-          let categoria = "";
-          let concepto = "";
-
           Object.keys(item).forEach(function(clave) {
 
-            const claveNormalizada =
-              String(clave)
-                .trim()
-                .toUpperCase();
+            const categoria =
+              String(clave || "").trim();
 
-            const valor =
+            const concepto =
               String(item[clave] || "").trim();
 
-            if (!valor) {
+            if (!categoria || !concepto) {
               return;
             }
 
-            if (claveNormalizada.includes("CATEGORIA")) {
-              categoria = valor;
+            if (!categorias[categoria]) {
+              categorias[categoria] = [];
             }
 
-            if (claveNormalizada.includes("CONCEPTO")) {
-              concepto = valor;
+            if (categorias[categoria].indexOf(concepto) === -1) {
+              categorias[categoria].push(concepto);
             }
 
           });
-
-          if (!categoria || !concepto) {
-            return;
-          }
-
-          if (!categorias[categoria]) {
-            categorias[categoria] = [];
-          }
-
-          if (categorias[categoria].indexOf(concepto) === -1) {
-            categorias[categoria].push(concepto);
-          }
 
         });
 
@@ -982,7 +965,6 @@
     );
 
   }
-
 
   function normalizarCategoria(categoria) {
 
