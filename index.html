@@ -1431,6 +1431,34 @@ grid-template-columns: 1fr;
 }
 </style>
 
+
+<style id="LDS360_PORTADA_LIMPIEZA_ABSOLUTA">
+/* SOLO PORTADA: elimina cualquier objeto visual antiguo que haya quedado fuera de la portada */
+html, body { margin:0 !important; padding:0 !important; width:100% !important; min-height:100% !important; }
+body { overflow:hidden !important; }
+body > *:not(#portadaLDS360):not(#sistemaPrincipal):not(script):not(style) {
+  display:none !important;
+}
+#portadaLDS360 {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100vh !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  z-index:999999 !important;
+}
+#portadaLDS360::before,
+#portadaLDS360::after { content:none !important; display:none !important; }
+/* Si alguna versión anterior dejó estos objetos en el DOM, se ocultan globalmente. */
+.portada-banco-fondo, .portada-personajes, .portada-personajes img,
+.portada-nina, .portada-nino, .portada-profesora, .portada-marca-final,
+.portada-fondo-nueva, .portada-fondo-exacto { display:none !important; }
+#sistemaPrincipal { display:none !important; }
+</style>
+
 </head>
 
 
