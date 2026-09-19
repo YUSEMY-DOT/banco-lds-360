@@ -933,8 +933,8 @@
     const foto =
       document.getElementById("datoFoto");
 
-    const fotoURL =
-      convertirURLFotoDrive(
+    const fotoOriginal =
+      String(
         estudiante.fotoUrl ||
         estudiante.fotoURL ||
         estudiante.foto_url ||
@@ -942,20 +942,41 @@
         estudiante.foto ||
         estudiante.FOTO ||
         ""
-      );
+      ).trim();
 
-    if (fotoURL) {
-      foto.src = fotoURL;
-      foto.style.display = "block";
-    } else {
-      foto.removeAttribute("src");
-      foto.style.display = "none";
+    const fotosDisponibles =
+      obtenerURLsFotoDrive(fotoOriginal);
+
+    foto.style.display = "none";
+    foto.removeAttribute("src");
+
+    if (fotosDisponibles.length) {
+
+      let indiceFoto = 0;
+
+      function intentarFoto() {
+
+        if (indiceFoto >= fotosDisponibles.length) {
+          foto.style.display = "none";
+          foto.removeAttribute("src");
+          return;
+        }
+
+        foto.src = fotosDisponibles[indiceFoto];
+        foto.style.display = "block";
+        indiceFoto++;
+      }
+
+      foto.onload = function() {
+        foto.style.display = "block";
+      };
+
+      foto.onerror = function() {
+        intentarFoto();
+      };
+
+      intentarFoto();
     }
-
-    foto.onerror = function() {
-      foto.removeAttribute("src");
-      foto.style.display = "none";
-    };
 
     document.getElementById("panelOperacion").classList.add("oculto");
     document.getElementById("btnCobrar").classList.remove("tipo-activo");
@@ -1257,7 +1278,35 @@
       return "";
     }
 
-    let id = "";
+    const matchArchivo =
+      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+    const matchParametro =
+      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+    const id =
+      matchArchivo
+        ? matchArchivo[1]
+        : (matchParametro ? matchParametro[1] : "");
+
+    if (!id) {
+      return texto;
+    }
+
+    return
+      "https://drive.google.com/thumbnail?id=" +
+      encodeURIComponent(id) +
+      "&sz=w600";
+  }
+
+
+  function obtenerURLsFotoDrive(url) {
+
+    const texto = String(url || "").trim();
+
+    if (!texto) {
+      return [];
+    }
 
     const matchArchivo =
       texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -1265,20 +1314,27 @@
     const matchParametro =
       texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
 
-    if (matchArchivo) {
-      id = matchArchivo[1];
-    } else if (matchParametro) {
-      id = matchParametro[1];
+    const id =
+      matchArchivo
+        ? matchArchivo[1]
+        : (matchParametro ? matchParametro[1] : "");
+
+    if (!id) {
+      return [texto];
     }
 
-    if (id) {
-      return
-        "https://drive.google.com/thumbnail?id=" +
+    return [
+      "https://drive.google.com/thumbnail?id=" +
         encodeURIComponent(id) +
-        "&sz=w600";
-    }
-
-    return texto;
+        "&sz=w600",
+      "https://drive.google.com/uc?export=view&id=" +
+        encodeURIComponent(id),
+      "https://drive.google.com/uc?export=download&id=" +
+        encodeURIComponent(id),
+      "https://drive.google.com/file/d/" +
+        encodeURIComponent(id) +
+        "/view"
+    ];
   }
 
 
