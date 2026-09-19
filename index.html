@@ -135,27 +135,138 @@
       display: none;
     }
 
+    /* =========================================================
+       DISTRIBUCIÓN RESPONSIVE DEL ESTUDIANTE
+       PC: FOTO IZQUIERDA / INFORMACIÓN DERECHA
+       CELULAR: TODO EN UNA COLUMNA
+       ========================================================= */
+
+    #seccionEstudiante {
+      position: relative;
+    }
+
     .foto-estudiante-contenedor {
+      grid-column: 1;
+      grid-row: 2 / span 2;
       display: flex;
       justify-content: center;
-      margin-top: 15px;
+      align-items: flex-start;
+      margin-top: 0;
     }
 
     .foto-estudiante {
-      width: 120px;
-      height: 120px;
+      width: 230px;
+      height: 230px;
+      max-width: 100%;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 14px;
       border: 4px solid #123c69;
       background: #f8f9fa;
       display: none;
     }
 
     .datos-estudiante {
+      grid-column: 2;
+      grid-row: 2;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 15px;
+      margin-top: 0;
+    }
+
+    #seccionEstudiante .saldo {
+      grid-column: 2;
+      grid-row: 3;
+      margin-top: 12px;
+    }
+
+    /* Cuando el estudiante ya fue cargado, JS usa display:grid */
+    #seccionEstudiante {
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 18px 20px;
+      align-items: start;
+    }
+
+    #seccionEstudiante > .titulo {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    @media (max-width: 768px) {
+      #seccionEstudiante {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      #seccionEstudiante > .titulo,
+      .foto-estudiante-contenedor,
+      .datos-estudiante,
+      #seccionEstudiante .saldo {
+        grid-column: 1;
+      }
+
+      #seccionEstudiante > .titulo {
+        grid-row: 1;
+      }
+
+      .foto-estudiante-contenedor {
+        grid-row: 2;
+      }
+
+      .foto-estudiante {
+        width: 170px;
+        height: 170px;
+      }
+
+      .datos-estudiante {
+        grid-row: 3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #seccionEstudiante .saldo {
+        grid-row: 4;
+      }
+
+      .contenedor {
+        width: 94%;
+        max-width: 100%;
+      }
+
+      .tarjeta {
+        padding: 16px;
+      }
+
+      .tipo-operacion {
+        flex-direction: column;
+      }
+
+      .tipo-operacion button {
+        width: 100%;
+      }
+
+      table {
+        min-width: 700px;
+      }
+
+      .tabla-contenedor {
+        overflow-x: auto;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .datos-estudiante {
+        grid-template-columns: 1fr;
+      }
+
+      .foto-estudiante {
+        width: 155px;
+        height: 155px;
+      }
+
+      .encabezado h1 {
+        font-size: 24px;
+      }
     }
 
     .dato {
@@ -291,83 +402,6 @@
       }
     }
   </style>
-
-<style id="ajuste-responsive-foto">
-/* FOTO DEL ESTUDIANTE: más grande y adaptable */
-.foto-estudiante,
-#fotoEstudiante,
-.student-photo,
-#fotoAlumno {
-  width: 180px !important;
-  height: 180px !important;
-  max-width: 100% !important;
-  object-fit: cover !important;
-  border-radius: 14px !important;
-  display: block !important;
-  margin: 0 auto 18px auto !important;
-}
-
-/* Contenedor de la foto */
-.contenedor-foto,
-.foto-container,
-.student-photo-container {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-}
-
-/* PC */
-@media (min-width: 769px) {
-  .foto-estudiante,
-  #fotoEstudiante,
-  .student-photo,
-  #fotoAlumno {
-    width: 210px !important;
-    height: 210px !important;
-  }
-}
-
-/* Celular */
-@media (max-width: 768px) {
-  body {
-    overflow-x: hidden !important;
-  }
-
-  .container,
-  .contenedor,
-  main {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .foto-estudiante,
-  #fotoEstudiante,
-  .student-photo,
-  #fotoAlumno {
-    width: 150px !important;
-    height: 150px !important;
-  }
-
-  button,
-  select,
-  input,
-  textarea {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  .grid,
-  .datos-grid,
-  .student-data,
-  .operation-buttons {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-}
-</style>
-
 </head>
 
 <body>
@@ -1010,8 +1044,8 @@
     const foto =
       document.getElementById("datoFoto");
 
-    const fotoOriginal =
-      String(
+    const fotoURL =
+      convertirURLFotoDrive(
         estudiante.fotoUrl ||
         estudiante.fotoURL ||
         estudiante.foto_url ||
@@ -1019,41 +1053,20 @@
         estudiante.foto ||
         estudiante.FOTO ||
         ""
-      ).trim();
+      );
 
-    const fotosDisponibles =
-      obtenerURLsFotoDrive(fotoOriginal);
-
-    foto.style.display = "none";
-    foto.removeAttribute("src");
-
-    if (fotosDisponibles.length) {
-
-      let indiceFoto = 0;
-
-      function intentarFoto() {
-
-        if (indiceFoto >= fotosDisponibles.length) {
-          foto.style.display = "none";
-          foto.removeAttribute("src");
-          return;
-        }
-
-        foto.src = fotosDisponibles[indiceFoto];
-        foto.style.display = "block";
-        indiceFoto++;
-      }
-
-      foto.onload = function() {
-        foto.style.display = "block";
-      };
-
-      foto.onerror = function() {
-        intentarFoto();
-      };
-
-      intentarFoto();
+    if (fotoURL) {
+      foto.src = fotoURL;
+      foto.style.display = "block";
+    } else {
+      foto.removeAttribute("src");
+      foto.style.display = "none";
     }
+
+    foto.onerror = function() {
+      foto.removeAttribute("src");
+      foto.style.display = "none";
+    };
 
     document.getElementById("panelOperacion").classList.add("oculto");
     document.getElementById("btnCobrar").classList.remove("tipo-activo");
@@ -1061,7 +1074,7 @@
 
     document
       .getElementById("seccionEstudiante")
-      .style.display = "block";
+      .style.display = "grid";
 
 
     document
@@ -1355,35 +1368,7 @@
       return "";
     }
 
-    const matchArchivo =
-      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-    const matchParametro =
-      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-
-    const id =
-      matchArchivo
-        ? matchArchivo[1]
-        : (matchParametro ? matchParametro[1] : "");
-
-    if (!id) {
-      return texto;
-    }
-
-    return
-      "https://drive.google.com/thumbnail?id=" +
-      encodeURIComponent(id) +
-      "&sz=w600";
-  }
-
-
-  function obtenerURLsFotoDrive(url) {
-
-    const texto = String(url || "").trim();
-
-    if (!texto) {
-      return [];
-    }
+    let id = "";
 
     const matchArchivo =
       texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -1391,27 +1376,20 @@
     const matchParametro =
       texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
 
-    const id =
-      matchArchivo
-        ? matchArchivo[1]
-        : (matchParametro ? matchParametro[1] : "");
-
-    if (!id) {
-      return [texto];
+    if (matchArchivo) {
+      id = matchArchivo[1];
+    } else if (matchParametro) {
+      id = matchParametro[1];
     }
 
-    return [
-      "https://drive.google.com/thumbnail?id=" +
+    if (id) {
+      return
+        "https://drive.google.com/thumbnail?id=" +
         encodeURIComponent(id) +
-        "&sz=w600",
-      "https://drive.google.com/uc?export=view&id=" +
-        encodeURIComponent(id),
-      "https://drive.google.com/uc?export=download&id=" +
-        encodeURIComponent(id),
-      "https://drive.google.com/file/d/" +
-        encodeURIComponent(id) +
-        "/view"
-    ];
+        "&sz=w600";
+    }
+
+    return texto;
   }
 
 
