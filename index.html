@@ -1303,29 +1303,38 @@
     const foto =
       document.getElementById("datoFoto");
 
-    const fotoURL =
-      convertirURLFotoDrive(
-        estudiante.fotoUrl ||
-        estudiante.fotoURL ||
-        estudiante.foto_url ||
-        estudiante.FOTO_URL ||
-        estudiante.foto ||
-        estudiante.FOTO ||
-        ""
-      );
+    const fotoOriginal =
+      estudiante.fotoUrl ||
+      estudiante.fotoURL ||
+      estudiante.foto_url ||
+      estudiante.FOTO_URL ||
+      estudiante.foto ||
+      estudiante.FOTO ||
+      "";
 
-    if (fotoURL) {
-      foto.src = fotoURL;
+    const fotosCandidatas = obtenerURLsFoto(fotoOriginal);
+    let indiceFoto = 0;
+
+    foto.style.display = "none";
+    foto.removeAttribute("src");
+
+    foto.onload = function() {
       foto.style.display = "block";
-    } else {
-      foto.removeAttribute("src");
-      foto.style.display = "none";
-    }
+    };
 
     foto.onerror = function() {
-      foto.removeAttribute("src");
-      foto.style.display = "none";
+      indiceFoto++;
+      if (indiceFoto < fotosCandidatas.length) {
+        foto.src = fotosCandidatas[indiceFoto];
+      } else {
+        foto.removeAttribute("src");
+        foto.style.display = "none";
+      }
     };
+
+    if (fotosCandidatas.length > 0) {
+      foto.src = fotosCandidatas[0];
+    }
 
     document.getElementById("panelOperacion").classList.add("oculto");
     document.getElementById("btnCobrar").classList.remove("tipo-activo");
@@ -1619,45 +1628,56 @@
      TIPO DE OPERACIÓN
      ========================================================= */
 
-  function convertirURLFotoDrive(url) {
+  function obtenerURLsFoto(url) {
 
-    const texto = String(url || "").trim();
+    let texto = String(url || "").trim();
 
-    if (!texto) {
-      return "";
-    }
+    if (!texto) return [];
+
+    // Si la celda trae una fórmula IMAGE("URL"), extraemos la URL.
+    const imagenFormula = texto.match(/IMAGE\s*\(\s*[\"']([^\"']+)[\"']/i);
+    if (imagenFormula) texto = imagenFormula[1];
+
+    const urls = [];
+    const agregar = function(valor) {
+      if (valor && urls.indexOf(valor) === -1) urls.push(valor);
+    };
+
+    // URL directa de imagen.
+    if (/^https?:\/\//i.test(texto)) agregar(texto);
 
     let id = "";
+    const matchArchivo = texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    const matchParametro = texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    const matchOpen = texto.match(/open\?id=([a-zA-Z0-9_-]+)/i);
+    const matchUc = texto.match(/uc\?id=([a-zA-Z0-9_-]+)/i);
 
-    // Google Drive: /file/d/ID/
-    const matchArchivo =
-      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-    // Google Drive: ?id=ID o &id=ID
-    const matchParametro =
-      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-
-    // Si en FOTO_URL se guardó solamente el ID del archivo
-    const matchSoloID =
-      texto.match(/^[a-zA-Z0-9_-]{20,}$/);
-
-    if (matchArchivo) {
-      id = matchArchivo[1];
-    } else if (matchParametro) {
-      id = matchParametro[1];
-    } else if (matchSoloID) {
-      id = matchSoloID[0];
-    }
+    if (matchArchivo) id = matchArchivo[1];
+    else if (matchParametro) id = matchParametro[1];
+    else if (matchOpen) id = matchOpen[1];
+    else if (matchUc) id = matchUc[1];
 
     if (id) {
-      return
-        "https://drive.google.com/thumbnail?id=" +
-        encodeURIComponent(id) +
-        "&sz=w800";
+      // Probamos varias formas de Google Drive sin modificar el backend.
+      agregar("https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w800");
+      agregar("https://drive.google.com/uc?export=view&id=" + encodeURIComponent(id));
+      agregar("https://lh3.googleusercontent.com/d/" + encodeURIComponent(id) + "=w800");
     }
 
-    // También acepta directamente una URL de imagen.
-    return texto;
+    // Si es un ID puro de Drive.
+    if (/^[a-zA-Z0-9_-]{15,}$/.test(texto)) {
+      agregar("https://drive.google.com/thumbnail?id=" + encodeURIComponent(texto) + "&sz=w800");
+      agregar("https://drive.google.com/uc?export=view&id=" + encodeURIComponent(texto));
+      agregar("https://lh3.googleusercontent.com/d/" + encodeURIComponent(texto) + "=w800");
+    }
+
+    return urls;
+  }
+
+
+  function convertirURLFotoDrive(url) {
+    const urls = obtenerURLsFoto(url);
+    return urls.length ? urls[0] : "";
   }
 
 
