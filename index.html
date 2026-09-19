@@ -453,10 +453,9 @@
       <div class="campo">
         <label for="responsable">Responsable</label>
 
-        <input
-          type="text"
-          id="responsable"
-          placeholder="Ingrese responsable">
+        <select id="responsable">
+          <option value="">Seleccione responsable</option>
+        </select>
       </div>
 
       <div class="campo">
@@ -879,6 +878,7 @@
 
 
         cargarOpciones();
+        cargarResponsables();
 
         ocultarMensaje("mensaje");
 
@@ -1049,6 +1049,57 @@
     );
 
   }
+
+  function cargarResponsables() {
+
+    llamarAPI(
+
+      {
+        accion: "responsables"
+      },
+
+      function(respuesta) {
+
+        const select =
+          document.getElementById("responsable");
+
+        select.innerHTML =
+          '<option value="">Seleccione responsable</option>';
+
+        if (!respuesta || respuesta.ok === false) {
+          return;
+        }
+
+        const responsables =
+          Array.isArray(respuesta.responsables)
+            ? respuesta.responsables
+            : [];
+
+        responsables.forEach(function(responsable) {
+
+          const nombre =
+            String(responsable || "").trim();
+
+          if (!nombre) {
+            return;
+          }
+
+          const option =
+            document.createElement("option");
+
+          option.value = nombre;
+          option.textContent = nombre;
+
+          select.appendChild(option);
+
+        });
+
+      }
+
+    );
+
+  }
+
 
   function normalizarCategoria(categoria) {
 
