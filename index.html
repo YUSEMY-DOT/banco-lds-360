@@ -381,20 +381,25 @@
 
       </div>
 
-      <div class="campo">
-        <label for="categoria">Categoría</label>
+      <!-- OPCIONES DE LA OPERACIÓN -->
+      <div id="opcionesOperacion" class="oculto">
 
-        <select id="categoria" onchange="cargarConceptos()">
-          <option value="">Seleccione una categoría</option>
-        </select>
-      </div>
+        <div class="campo">
+          <label for="categoria">Categoría</label>
 
-      <div class="campo">
-        <label for="concepto">Concepto</label>
+          <select id="categoria" onchange="cargarConceptos()">
+            <option value="">Seleccione una categoría</option>
+          </select>
+        </div>
 
-        <select id="concepto">
-          <option value="">Seleccione un concepto</option>
-        </select>
+        <div class="campo">
+          <label for="concepto">Concepto</label>
+
+          <select id="concepto">
+            <option value="">Seleccione un concepto</option>
+          </select>
+        </div>
+
       </div>
 
       <div class="campo">
@@ -918,15 +923,49 @@
         }
 
 
-        categorias =
-          respuesta.categorias || {};
+        const opciones = Array.isArray(respuesta.opciones)
+          ? respuesta.opciones
+          : [];
 
 
-        conceptosCatalogo =
-          respuesta.conceptos || {};
+        categorias = {};
+
+        conceptosCatalogo = {};
+
+\        opciones.forEach(function(item) {
+
+          const categoria =
+            String(
+              item.CATEGORIA ||
+              item.Categoria ||
+              item.categoria ||
+              ""
+            ).trim();
+
+          const concepto =
+            String(
+              item.CONCEPTO ||
+              item.Concepto ||
+              item.concepto ||
+              ""
+            ).trim();
+
+          if (!categoria || !concepto) {
+            return;
+          }
+
+          if (!categorias[categoria]) {
+            categorias[categoria] = [];
+          }
+
+          categorias[categoria].push(concepto);
+
+        });
 
 
-        cargarCategorias();
+        document
+          .getElementById("opcionesOperacion")
+          .classList.add("oculto");
 
       }
 
@@ -945,17 +984,48 @@
       '<option value="">Seleccione una categoría</option>';
 
 
+    if (!tipoOperacion) {
+      return;
+    }
+
+
     Object.keys(categorias).forEach(function(categoria) {
+
+      let mostrar = false;
+
+
+      if (tipoOperacion === "INGRESO") {
+
+        mostrar =
+          categoria === "INGRESOS_Y_SUELDOS" ||
+          categoria === "PREMIOS_Y_BONIFICACIONES" ||
+          categoria === "AHORROS_E_INVERSIONES";
+
+      }
+
+
+      if (tipoOperacion === "EGRESO") {
+
+        mostrar =
+          categoria === "PAGOS_Y_GASTOS" ||
+          categoria === "SANCIONES_Y_MULTAS" ||
+          categoria === "COSTOS_Y_OTROS";
+
+      }
+
+
+      if (!mostrar) {
+        return;
+      }
+
 
       const option =
         document.createElement("option");
-
 
       option.value = categoria;
 
       option.textContent =
         obtenerNombreCategoria(categoria);
-
 
       select.appendChild(option);
 
@@ -965,7 +1035,6 @@
     cargarConceptos();
 
   }
-
 
   function obtenerNombreCategoria(categoria) {
 
@@ -1065,6 +1134,9 @@
     const btnPagar =
       document.getElementById("btnPagar");
 
+    const opciones =
+      document.getElementById("opcionesOperacion");
+
 
     btnCobrar.classList.remove("tipo-activo");
 
@@ -1072,17 +1144,16 @@
 
 
     if (tipo === "INGRESO") {
-
       btnCobrar.classList.add("tipo-activo");
-
     }
 
 
     if (tipo === "EGRESO") {
-
       btnPagar.classList.add("tipo-activo");
-
     }
+
+
+    opciones.classList.remove("oculto");
 
 
     document.getElementById("categoria").value = "";
@@ -1091,10 +1162,12 @@
       '<option value="">Seleccione un concepto</option>';
 
 
+    cargarCategorias();
+
+
     ocultarMensaje("mensajeOperacion");
 
   }
-
 
   /* =========================================================
      REGISTRAR MOVIMIENTO
