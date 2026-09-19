@@ -1044,8 +1044,8 @@
     const foto =
       document.getElementById("datoFoto");
 
-    const fotoURL =
-      convertirURLFotoDrive(
+    const fotoOriginal =
+      String(
         estudiante.fotoUrl ||
         estudiante.fotoURL ||
         estudiante.foto_url ||
@@ -1053,19 +1053,33 @@
         estudiante.foto ||
         estudiante.FOTO ||
         ""
-      );
+      ).trim();
 
-    if (fotoURL) {
-      foto.src = fotoURL;
+    const urlsFoto = obtenerURLsFoto(fotoOriginal);
+
+    foto.dataset.intento = "0";
+
+    if (urlsFoto.length > 0) {
       foto.style.display = "block";
+      foto.src = urlsFoto[0];
+
+      foto.onerror = function() {
+        const siguiente =
+          Number(foto.dataset.intento || "0") + 1;
+
+        foto.dataset.intento = String(siguiente);
+
+        if (siguiente < urlsFoto.length) {
+          foto.src = urlsFoto[siguiente];
+        } else {
+          foto.removeAttribute("src");
+          foto.style.display = "none";
+        }
+      };
     } else {
       foto.removeAttribute("src");
       foto.style.display = "none";
-    }
-
-    foto.onerror = function() {
-      foto.removeAttribute("src");
-      foto.style.display = "none";
+      foto.onerror = null;
     };
 
     document.getElementById("panelOperacion").classList.add("oculto");
@@ -1360,12 +1374,12 @@
      TIPO DE OPERACIÓN
      ========================================================= */
 
-  function convertirURLFotoDrive(url) {
+  function obtenerURLsFoto(url) {
 
     const texto = String(url || "").trim();
 
     if (!texto) {
-      return "";
+      return [];
     }
 
     let id = "";
@@ -1382,14 +1396,21 @@
       id = matchParametro[1];
     }
 
-    if (id) {
-      return
-        "https://drive.google.com/thumbnail?id=" +
-        encodeURIComponent(id) +
-        "&sz=w600";
+    if (!id) {
+      return [texto];
     }
 
-    return texto;
+    return [
+      texto,
+      "https://drive.google.com/thumbnail?id=" +
+        encodeURIComponent(id) +
+        "&sz=w800",
+      "https://drive.google.com/uc?export=view&id=" +
+        encodeURIComponent(id),
+      "https://lh3.googleusercontent.com/d/" +
+        encodeURIComponent(id) +
+        "=w800"
+    ];
   }
 
 
