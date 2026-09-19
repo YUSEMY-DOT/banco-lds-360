@@ -291,6 +291,83 @@
       }
     }
   </style>
+
+<style id="ajuste-responsive-foto">
+/* FOTO DEL ESTUDIANTE: más grande y adaptable */
+.foto-estudiante,
+#fotoEstudiante,
+.student-photo,
+#fotoAlumno {
+  width: 180px !important;
+  height: 180px !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
+  border-radius: 14px !important;
+  display: block !important;
+  margin: 0 auto 18px auto !important;
+}
+
+/* Contenedor de la foto */
+.contenedor-foto,
+.foto-container,
+.student-photo-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* PC */
+@media (min-width: 769px) {
+  .foto-estudiante,
+  #fotoEstudiante,
+  .student-photo,
+  #fotoAlumno {
+    width: 210px !important;
+    height: 210px !important;
+  }
+}
+
+/* Celular */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden !important;
+  }
+
+  .container,
+  .contenedor,
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .foto-estudiante,
+  #fotoEstudiante,
+  .student-photo,
+  #fotoAlumno {
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  button,
+  select,
+  input,
+  textarea {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .grid,
+  .datos-grid,
+  .student-data,
+  .operation-buttons {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
