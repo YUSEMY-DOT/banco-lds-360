@@ -936,7 +936,11 @@
     const fotoURL =
       convertirURLFotoDrive(
         estudiante.fotoUrl ||
+        estudiante.fotoURL ||
+        estudiante.foto_url ||
+        estudiante.FOTO_URL ||
         estudiante.foto ||
+        estudiante.FOTO ||
         ""
       );
 
