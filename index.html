@@ -400,51 +400,53 @@
           </select>
         </div>
 
-        <div class="campo">
-          <label for="monto">Monto LDS</label>
+      </div>
 
-          <input
-            type="number"
-            id="monto"
-            min="0"
-            step="0.01"
-            placeholder="Ingrese el monto">
-        </div>
+      <div class="campo">
+        <label for="monto">Monto LDS</label>
 
-        <div class="campo">
-          <label for="responsable">Responsable</label>
+        <input
+          type="number"
+          id="monto"
+          min="0"
+          step="0.01"
+          placeholder="Ingrese el monto">
+      </div>
 
-          <input
-            type="text"
-            id="responsable"
-            placeholder="Ingrese responsable">
-        </div>
+      <div class="campo">
+        <label for="responsable">Responsable</label>
 
-        <div class="campo">
-          <label for="observacion">Observación</label>
+        <input
+          type="text"
+          id="responsable"
+          placeholder="Ingrese responsable">
+      </div>
 
-          <textarea
-            id="observacion"
-            placeholder="Ingrese observación"></textarea>
-        </div>
+      <div class="campo">
+        <label for="observacion">Observación</label>
 
-        <div class="botones">
+        <textarea
+          id="observacion"
+          placeholder="Ingrese observación"></textarea>
+      </div>
 
-          <button
-            type="button"
-            class="btn-principal"
-            onclick="registrarMovimiento()">
-            Registrar movimiento
-          </button>
+      <div class="botones">
 
-          <button
-            type="button"
-            class="btn-secundario"
-            onclick="limpiarOperacion()">
-            Limpiar
-          </button>
+        <button
+          type="button"
+          class="btn-principal"
+          onclick="registrarMovimiento()">
+          Registrar movimiento
+        </button>
 
-        </div>
+        <button
+          type="button"
+          class="btn-secundario"
+          onclick="limpiarOperacion()">
+          Limpiar
+        </button>
+
+      </div>
 
       <div id="mensajeOperacion" class="mensaje"></div>
 
@@ -920,30 +922,42 @@
 
         }
 
-        const opciones = Array.isArray(respuesta.opciones)
-          ? respuesta.opciones
-          : [];
+        const opciones =
+          Array.isArray(respuesta.opciones)
+            ? respuesta.opciones
+            : [];
 
         categorias = {};
         conceptosCatalogo = {};
 
         opciones.forEach(function(item) {
 
-          const categoria = String(
-            item.CATEGORIA ||
-            item.Categoria ||
-            item.categoria ||
-            item.NOMBRE_CATEGORIA ||
-            item.NOMBRE_CATEGORiA ||
-            ""
-          ).trim();
+          let categoria = "";
+          let concepto = "";
 
-          const concepto = String(
-            item.CONCEPTO ||
-            item.Concepto ||
-            item.concepto ||
-            ""
-          ).trim();
+          Object.keys(item).forEach(function(clave) {
+
+            const claveNormalizada =
+              String(clave)
+                .trim()
+                .toUpperCase();
+
+            const valor =
+              String(item[clave] || "").trim();
+
+            if (!valor) {
+              return;
+            }
+
+            if (claveNormalizada.includes("CATEGORIA")) {
+              categoria = valor;
+            }
+
+            if (claveNormalizada.includes("CONCEPTO")) {
+              concepto = valor;
+            }
+
+          });
 
           if (!categoria || !concepto) {
             return;
@@ -1037,6 +1051,7 @@
     cargarConceptos();
 
   }
+
 
   function obtenerNombreCategoria(categoria) {
 
