@@ -922,34 +922,47 @@
 
         }
 
+        /*
+         * CONFIG_OPCIONES tiene la estructura REAL:
+         * A = INGRESOS_Y_SUELDOS
+         * B = PREMIOS_Y_BONIFICACIONES
+         * C = AHORROS_E_INVERSIONES
+         * D = PAGOS_Y_GASTOS
+         * E = SANCIONES_Y_MULTAS
+         * F = COSTOS_Y_OTROS
+         *
+         * Apps Script devuelve esa misma estructura en
+         * respuesta.opcionesPorCategoria.
+         */
         const opciones =
-          Array.isArray(respuesta.opciones)
-            ? respuesta.opciones
-            : [];
+          respuesta.opcionesPorCategoria &&
+          typeof respuesta.opcionesPorCategoria === "object"
+            ? respuesta.opcionesPorCategoria
+            : {};
 
         categorias = {};
         conceptosCatalogo = {};
 
-        opciones.forEach(function(item) {
+        Object.keys(opciones).forEach(function(categoria) {
 
-          Object.keys(item).forEach(function(clave) {
+          const lista =
+            Array.isArray(opciones[categoria])
+              ? opciones[categoria]
+              : [];
 
-            const categoria =
-              String(clave || "").trim();
+          categorias[categoria] = [];
 
-            const concepto =
-              String(item[clave] || "").trim();
+          lista.forEach(function(concepto) {
 
-            if (!categoria || !concepto) {
+            const texto =
+              String(concepto || "").trim();
+
+            if (!texto) {
               return;
             }
 
-            if (!categorias[categoria]) {
-              categorias[categoria] = [];
-            }
-
-            if (categorias[categoria].indexOf(concepto) === -1) {
-              categorias[categoria].push(concepto);
+            if (categorias[categoria].indexOf(texto) === -1) {
+              categorias[categoria].push(texto);
             }
 
           });
