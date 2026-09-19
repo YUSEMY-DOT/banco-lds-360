@@ -1629,25 +1629,34 @@
 
     let id = "";
 
+    // Google Drive: /file/d/ID/
     const matchArchivo =
       texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
+    // Google Drive: ?id=ID o &id=ID
     const matchParametro =
       texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+    // Si en FOTO_URL se guardó solamente el ID del archivo
+    const matchSoloID =
+      texto.match(/^[a-zA-Z0-9_-]{20,}$/);
 
     if (matchArchivo) {
       id = matchArchivo[1];
     } else if (matchParametro) {
       id = matchParametro[1];
+    } else if (matchSoloID) {
+      id = matchSoloID[0];
     }
 
     if (id) {
       return
         "https://drive.google.com/thumbnail?id=" +
         encodeURIComponent(id) +
-        "&sz=w600";
+        "&sz=w800";
     }
 
+    // También acepta directamente una URL de imagen.
     return texto;
   }
 
