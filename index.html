@@ -408,10 +408,10 @@
 
         <button
           type="button"
-          id="btnSaldo"
+          id="btnMovimientos"
           class="btn-saldo"
-          onclick="mostrarSaldo()">
-          SALDO
+          onclick="mostrarMovimientos()">
+          MOVIMIENTOS
         </button>
 
       </div>
@@ -1050,51 +1050,34 @@
 
   function cargarResponsables() {
 
-    llamarAPI(
+    const select =
+      document.getElementById("responsable");
 
-      {
-        accion: "responsables"
-      },
+    select.innerHTML =
+      '<option value="">Seleccione responsable</option>';
 
-      function(respuesta) {
+    /*
+     * RESPONSABLES / CAJEROS
+     * Opciones exactas de la tabla CAJA.
+     */
+    const responsables = [
+      "MISS LILY MELO AZAÑERO",
+      "MISS KIARA MORALES ELGUERA",
+      "MISS ANGHY REYES MELO",
+      "MISS KARIN MOLERO ROMANI"
+    ];
 
-        const select =
-          document.getElementById("responsable");
+    responsables.forEach(function(nombre) {
 
-        select.innerHTML =
-          '<option value="">Seleccione responsable</option>';
+      const option =
+        document.createElement("option");
 
-        if (!respuesta || respuesta.ok === false) {
-          return;
-        }
+      option.value = nombre;
+      option.textContent = nombre;
 
-        const responsables =
-          Array.isArray(respuesta.responsables)
-            ? respuesta.responsables
-            : [];
+      select.appendChild(option);
 
-        responsables.forEach(function(responsable) {
-
-          const nombre =
-            String(responsable || "").trim();
-
-          if (!nombre) {
-            return;
-          }
-
-          const option =
-            document.createElement("option");
-
-          option.value = nombre;
-          option.textContent = nombre;
-
-          select.appendChild(option);
-
-        });
-
-      }
-
-    );
+    });
 
   }
 
@@ -1311,25 +1294,35 @@
 
   }
 
-  function mostrarSaldo() {
+  function mostrarMovimientos() {
+
+    if (!estudianteActual) {
+      return;
+    }
 
     tipoOperacion = "";
 
-    document.getElementById("btnCobrar").classList.remove("tipo-activo");
-    document.getElementById("btnPagar").classList.remove("tipo-activo");
-    document.getElementById("panelOperacion").classList.add("oculto");
+    document
+      .getElementById("btnCobrar")
+      .classList.remove("tipo-activo");
 
-    if (estudianteActual) {
-      document.getElementById("datoSaldo").textContent =
-        numero(estudianteActual.saldoActual).toFixed(2) +
-        " " +
-        MONEDA;
-    }
+    document
+      .getElementById("btnPagar")
+      .classList.remove("tipo-activo");
+
+    document
+      .getElementById("panelOperacion")
+      .classList.add("oculto");
+
+    document
+      .getElementById("seccionMovimientos")
+      .style.display = "block";
+
+    cargarMovimientos(estudianteActual.codigo);
 
     ocultarMensaje("mensajeOperacion");
 
   }
-
 
   /* =========================================================
      REGISTRAR MOVIMIENTO
@@ -1551,7 +1544,7 @@
     llamarAPI(
 
       {
-        accion: "movimientos",
+        accion: "estudiante",
         codigo: codigo
       },
 
@@ -1582,6 +1575,7 @@
 
 
           const fecha =
+            movimiento.fechaTexto ||
             movimiento.fecha ||
             movimiento.timestamp ||
             "";
