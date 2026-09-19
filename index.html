@@ -96,6 +96,13 @@
       color: white;
     }
 
+    .btn-saldo {
+      background: #123c69;
+      color: white;
+    }
+
+
+
     .btn-secundario {
       background: #6c757d;
       color: white;
@@ -125,6 +132,22 @@
     }
 
     .estudiante {
+      display: none;
+    }
+
+    .foto-estudiante-contenedor {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .foto-estudiante {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #123c69;
+      background: #f8f9fa;
       display: none;
     }
 
@@ -314,6 +337,10 @@
 
       <div class="titulo">Datos del estudiante</div>
 
+      <div class="foto-estudiante-contenedor">
+        <img id="datoFoto" class="foto-estudiante" src="" alt="Foto del estudiante">
+      </div>
+
       <div class="datos-estudiante">
 
         <div class="dato">
@@ -379,10 +406,20 @@
           PAGAR
         </button>
 
+        <button
+          type="button"
+          id="btnSaldo"
+          class="btn-saldo"
+          onclick="mostrarSaldo()">
+          SALDO
+        </button>
+
       </div>
 
+      <div id="panelOperacion" class="oculto">
+
       <!-- OPCIONES DE LA OPERACIÓN -->
-      <div id="opcionesOperacion" class="oculto">
+      <div id="opcionesOperacion">
 
         <div class="campo">
           <label for="categoria">Categoría</label>
@@ -449,6 +486,8 @@
       </div>
 
       <div id="mensajeOperacion" class="mensaje"></div>
+
+      </div>
 
     </section>
 
@@ -818,8 +857,19 @@
         estudianteActual = respuesta.estudiante;
 
 
+        const estudianteMostrado = Object.assign(
+          {},
+          respuesta.estudiante,
+          {
+            saldoActual:
+              respuesta.cuenta
+                ? respuesta.cuenta.saldoActual
+                : 0
+          }
+        );
+
         mostrarEstudiante(
-          respuesta.estudiante
+          estudianteMostrado
         );
 
 
@@ -844,6 +894,8 @@
      ========================================================= */
 
   function mostrarEstudiante(estudiante) {
+
+    estudianteActual = estudiante;
 
     document.getElementById("datoCodigo").textContent =
       estudiante.codigo || "-";
@@ -878,6 +930,25 @@
       " " +
       MONEDA;
 
+    const foto =
+      document.getElementById("datoFoto");
+
+    const fotoURL =
+      estudiante.fotoUrl ||
+      estudiante.foto ||
+      "";
+
+    if (fotoURL) {
+      foto.src = fotoURL;
+      foto.style.display = "block";
+    } else {
+      foto.removeAttribute("src");
+      foto.style.display = "none";
+    }
+
+    document.getElementById("panelOperacion").classList.add("oculto");
+    document.getElementById("btnCobrar").classList.remove("tipo-activo");
+    document.getElementById("btnPagar").classList.remove("tipo-activo");
 
     document
       .getElementById("seccionEstudiante")
@@ -891,7 +962,7 @@
 
     document
       .getElementById("seccionMovimientos")
-      .style.display = "block";
+      .style.display = "none";
 
   }
 
@@ -1149,6 +1220,9 @@
     const opciones =
       document.getElementById("opcionesOperacion");
 
+    const panelOperacion =
+      document.getElementById("panelOperacion");
+
 
     btnCobrar.classList.remove("tipo-activo");
 
@@ -1165,7 +1239,7 @@
     }
 
 
-    opciones.classList.remove("oculto");
+    panelOperacion.classList.remove("oculto");
 
 
     document.getElementById("categoria").value = "";
@@ -1180,6 +1254,26 @@
     ocultarMensaje("mensajeOperacion");
 
   }
+
+  function mostrarSaldo() {
+
+    tipoOperacion = "";
+
+    document.getElementById("btnCobrar").classList.remove("tipo-activo");
+    document.getElementById("btnPagar").classList.remove("tipo-activo");
+    document.getElementById("panelOperacion").classList.add("oculto");
+
+    if (estudianteActual) {
+      document.getElementById("datoSaldo").textContent =
+        numero(estudianteActual.saldoActual).toFixed(2) +
+        " " +
+        MONEDA;
+    }
+
+    ocultarMensaje("mensajeOperacion");
+
+  }
+
 
   /* =========================================================
      REGISTRAR MOVIMIENTO
@@ -1558,6 +1652,7 @@
 
     limpiarCamposOperacion();
 
+    document.getElementById("panelOperacion").classList.add("oculto");
 
     ocultarMensaje("mensajeOperacion");
 
