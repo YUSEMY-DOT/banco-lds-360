@@ -934,9 +934,11 @@
       document.getElementById("datoFoto");
 
     const fotoURL =
-      estudiante.fotoUrl ||
-      estudiante.foto ||
-      "";
+      convertirURLFotoDrive(
+        estudiante.fotoUrl ||
+        estudiante.foto ||
+        ""
+      );
 
     if (fotoURL) {
       foto.src = fotoURL;
@@ -945,6 +947,11 @@
       foto.removeAttribute("src");
       foto.style.display = "none";
     }
+
+    foto.onerror = function() {
+      foto.removeAttribute("src");
+      foto.style.display = "none";
+    };
 
     document.getElementById("panelOperacion").classList.add("oculto");
     document.getElementById("btnCobrar").classList.remove("tipo-activo");
@@ -1231,6 +1238,43 @@
 
     });
 
+  }
+
+
+  /* =========================================================
+     TIPO DE OPERACIÓN
+     ========================================================= */
+
+  function convertirURLFotoDrive(url) {
+
+    const texto = String(url || "").trim();
+
+    if (!texto) {
+      return "";
+    }
+
+    let id = "";
+
+    const matchArchivo =
+      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+    const matchParametro =
+      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+    if (matchArchivo) {
+      id = matchArchivo[1];
+    } else if (matchParametro) {
+      id = matchParametro[1];
+    }
+
+    if (id) {
+      return
+        "https://drive.google.com/thumbnail?id=" +
+        encodeURIComponent(id) +
+        "&sz=w600";
+    }
+
+    return texto;
   }
 
 
