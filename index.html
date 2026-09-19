@@ -1040,9 +1040,7 @@
 
         });
 
-        document
-          .getElementById("opcionesOperacion")
-          .classList.add("oculto");
+        /* Las opciones se muestran al presionar COBRAR o PAGAR. */
 
       }
 
@@ -1292,6 +1290,13 @@
 
     panelOperacion.classList.remove("oculto");
 
+    /* Al presionar COBRAR o PAGAR deben aparecer las opciones. */
+    document
+      .getElementById("opcionesOperacion")
+      .classList.remove("oculto");
+
+    /* Cargar nuevamente responsables para asegurar que el selector esté actualizado. */
+    cargarResponsables();
 
     document.getElementById("categoria").value = "";
 
