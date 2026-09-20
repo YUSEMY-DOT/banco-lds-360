@@ -4,832 +4,832 @@
 
 <head>
 
-  <meta
+  <meta
 charset="UTF-8">
 
-  <meta
+  <meta
 name="viewport" content="width=device-width,
 initial-scale=1.0">
 
-  <title>BANCO
+  <title>BANCO
 LDS 360</title>
 
-  <!-- Lector QR
+  <!-- Lector QR
 gratuito -->
 
-  <script
+  <script
 src="https://unpkg.com/html5-qrcode"
 type="text/javascript"></script>
 
-  <style>
+  <style>
 
-    * {
+    * {
 
-      box-sizing:
+      box-sizing:
 border-box;
 
-      margin: 0;
+      margin: 0;
 
-      padding: 0;
+      padding: 0;
 
-      font-family:
+      font-family:
 Arial, Helvetica, sans-serif;
 
-    }
+    }
 
-    body {
+    body {
 
-      background:
+      background:
 #f4f6f9;
 
-      color: #1f2937;
+      color: #1f2937;
 
-    }
+    }
 
-    .encabezado {
+    .encabezado {
 
-      background:
+      background:
 #123c69;
 
-      color: white;
+      color: white;
 
-      padding: 20px;
+      padding: 20px;
 
-      text-align:
+      text-align:
 center;
 
-    }
+    }
 
-    .encabezado h1 {
+    .encabezado h1 {
 
-      font-size: 28px;
+      font-size: 28px;
 
-      margin-bottom:
+      margin-bottom:
 5px;
 
-    }
+    }
 
-    .encabezado p {
+    .encabezado p {
 
-      font-size: 14px;
+      font-size: 14px;
 
-    }
+    }
 
-    .contenedor {
+    .contenedor {
 
-      width: 95%;
+      width: 95%;
 
-      max-width:
+      max-width:
 1100px;
 
-      margin: 25px
+      margin: 25px
 auto;
 
-    }
+    }
 
-    .tarjeta {
+    .tarjeta {
 
-      background:
+      background:
 white;
 
-      border-radius:
+      border-radius:
 12px;
 
-      padding: 20px;
+      padding: 20px;
 
-      margin-bottom:
+      margin-bottom:
 20px;
 
-      box-shadow: 0
+      box-shadow: 0
 3px 12px rgba(0,0,0,0.08);
 
-    }
+    }
 
-    .titulo {
+    .titulo {
 
-      font-size: 20px;
+      font-size: 20px;
 
-      font-weight:
+      font-weight:
 bold;
 
-      margin-bottom:
+      margin-bottom:
 15px;
 
-      color: #123c69;
+      color: #123c69;
 
-    }
+    }
 
-    #lectorQR {
+    #lectorQR {
 
-      width: 100%;
+      width: 100%;
 
-      max-width:
+      max-width:
 500px;
 
-      margin: 0 auto
+      margin: 0 auto
 15px;
 
-    }
+    }
 
-    .botones {
+    .botones {
 
-      display: flex;
+      display: flex;
 
-      gap: 10px;
+      gap: 10px;
 
-      flex-wrap: wrap;
+      flex-wrap: wrap;
 
-      margin-top:
+      margin-top:
 15px;
 
-    }
+    }
 
-    button {
+    button {
 
-      border: none;
+      border: none;
 
-      border-radius:
+      border-radius:
 8px;
 
-      padding: 12px
+      padding: 12px
 18px;
 
-      cursor: pointer;
+      cursor: pointer;
 
-      font-weight:
+      font-weight:
 bold;
 
-      font-size: 14px;
+      font-size: 14px;
 
-    }
+    }
 
-    .btn-principal {
+    .btn-principal {
 
-      background:
+      background:
 #123c69;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
-    .btn-ingreso {
+    .btn-ingreso {
 
-      background:
+      background:
 #198754;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
-    .btn-egreso {
+    .btn-egreso {
 
-      background:
+      background:
 #dc3545;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
-    .btn-saldo {
+    .btn-saldo {
 
-      background:
+      background:
 #123c69;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
 
 
-    .btn-secundario {
+    .btn-secundario {
 
-      background:
+      background:
 #6c757d;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
-    button:hover {
+    button:hover {
 
-      opacity: 0.9;
+      opacity: 0.9;
 
-    }
+    }
 
-    .mensaje {
+    .mensaje {
 
-      margin-top:
+      margin-top:
 15px;
 
-      padding: 12px;
+      padding: 12px;
 
-      border-radius:
+      border-radius:
 8px;
 
-      display: none;
+      display: none;
 
-    }
+    }
 
-    .mensaje.ok {
+    .mensaje.ok {
 
-      display: block;
+      display: block;
 
-      background:
+      background:
 #d1e7dd;
 
-      color: #0f5132;
+      color: #0f5132;
 
-    }
+    }
 
-    .mensaje.error {
+    .mensaje.error {
 
-      display: block;
+      display: block;
 
-      background:
+      background:
 #f8d7da;
 
-      color: #842029;
+      color: #842029;
 
-    }
+    }
 
-    .estudiante {
+    .estudiante {
 
-      display: none;
+      display: none;
 
-    }
+    }
 
-   
+   
 .datos-estudiante-layout {
 
-      display: grid;
+      display: grid;
 
-     
+     
 grid-template-columns: 220px 1fr;
 
-      gap: 28px;
+      gap: 28px;
 
-      align-items:
+      align-items:
 center;
 
-      max-width:
+      max-width:
 900px;
 
-      margin: 18px
+      margin: 18px
 auto 0;
 
-    }
+    }
 
-   
+   
 .foto-estudiante-contenedor {
 
-      display: flex;
+      display: flex;
 
-      align-items:
+      align-items:
 center;
 
-      justify-content:
+      justify-content:
 center;
 
-      min-height:
+      min-height:
 220px;
 
-    }
+    }
 
-    .foto-estudiante {
+    .foto-estudiante {
 
-      width: 200px;
+      width: 200px;
 
-      height: 200px;
+      height: 200px;
 
-      object-fit:
+      object-fit:
 cover;
 
-      border-radius:
+      border-radius:
 18px;
 
-      border: 4px
+      border: 4px
 solid #123c69;
 
-      background:
+      background:
 #f8f9fa;
 
-      display: none;
+      display: none;
 
-      box-shadow: 0
+      box-shadow: 0
 8px 22px rgba(0,0,0,.14);
 
-    }
+    }
 
-    .datos-estudiante
+    .datos-estudiante
 {
 
-      display: grid;
+      display: grid;
 
-     
+     
 grid-template-columns: repeat(2, minmax(180px, 1fr));
 
-      gap: 12px;
+      gap: 12px;
 
-      margin-top: 0;
+      margin-top: 0;
 
-    }
+    }
 
-    .dato {
+    .dato {
 
-      background:
+      background:
 #f8f9fa;
 
-      border-radius:
+      border-radius:
 8px;
 
-      padding: 12px;
+      padding: 12px;
 
-    }
+    }
 
-    .dato strong {
+    .dato strong {
 
-      display: block;
+      display: block;
 
-      color: #123c69;
+      color: #123c69;
 
-      margin-bottom:
+      margin-bottom:
 5px;
 
-      font-size: 13px;
+      font-size: 13px;
 
-    }
+    }
 
-    .saldo {
+    .saldo {
 
-      background:
+      background:
 #e7f1ff;
 
-      border-radius:
+      border-radius:
 10px;
 
-      padding: 18px;
+      padding: 18px;
 
-      margin-top:
+      margin-top:
 15px;
 
-      text-align:
+      text-align:
 center;
 
-    }
+    }
 
-    .saldo span {
+    .saldo span {
 
-      display: block;
+      display: block;
 
-      font-size: 13px;
+      font-size: 13px;
 
-      color: #555;
+      color: #555;
 
-    }
+    }
 
-    .saldo strong {
+    .saldo strong {
 
-      display: block;
+      display: block;
 
-      font-size: 30px;
+      font-size: 30px;
 
-      color: #123c69;
+      color: #123c69;
 
-      margin-top: 5px;
+      margin-top: 5px;
 
-    }
+    }
 
-    .operacion {
+    .operacion {
 
-      display: none;
+      display: none;
 
-    }
+    }
 
-    .tipo-operacion {
+    .tipo-operacion {
 
-      display: flex;
+      display: flex;
 
-      gap: 10px;
+      gap: 10px;
 
-      margin-bottom:
+      margin-bottom:
 20px;
 
-    }
+    }
 
-    .tipo-operacion
+    .tipo-operacion
 button {
 
-      flex: 1;
+      flex: 1;
 
-    }
+    }
 
-    .tipo-activo {
+    .tipo-activo {
 
-      outline: 3px
+      outline: 3px
 solid rgba(18,60,105,0.25);
 
-    }
+    }
 
-    .campo {
+    .campo {
 
-      margin-bottom:
+      margin-bottom:
 15px;
 
-    }
+    }
 
-    .campo label {
+    .campo label {
 
-      display: block;
+      display: block;
 
-      font-weight:
+      font-weight:
 bold;
 
-      margin-bottom:
+      margin-bottom:
 6px;
 
-      font-size: 14px;
+      font-size: 14px;
 
-    }
+    }
 
-    .campo input,
+    .campo input,
 
-    .campo select,
+    .campo select,
 
-    .campo textarea {
+    .campo textarea {
 
-      width: 100%;
+      width: 100%;
 
-      border: 1px
+      border: 1px
 solid #ced4da;
 
-      border-radius:
+      border-radius:
 7px;
 
-      padding: 11px;
+      padding: 11px;
 
-      font-size: 14px;
+      font-size: 14px;
 
-      background:
+      background:
 white;
 
-    }
+    }
 
-    .campo textarea {
+    .campo textarea {
 
-      min-height:
+      min-height:
 90px;
 
-      resize:
+      resize:
 vertical;
 
-    }
+    }
 
-    .tabla-contenedor
+    .tabla-contenedor
 {
 
-      overflow-x:
+      overflow-x:
 auto;
 
-    }
+    }
 
-    table {
+    table {
 
-      width: 100%;
+      width: 100%;
 
-      border-collapse:
+      border-collapse:
 collapse;
 
-      margin-top:
+      margin-top:
 10px;
 
-      min-width:
+      min-width:
 700px;
 
-    }
+    }
 
-    th,
+    th,
 
-    td {
+    td {
 
-      border-bottom:
+      border-bottom:
 1px solid #dee2e6;
 
-      padding: 10px;
+      padding: 10px;
 
-      text-align:
+      text-align:
 left;
 
-      font-size: 13px;
+      font-size: 13px;
 
-    }
+    }
 
-    th {
+    th {
 
-      background:
+      background:
 #123c69;
 
-      color: white;
+      color: white;
 
-    }
+    }
 
-    .ingreso {
+    .ingreso {
 
-      color: #198754;
+      color: #198754;
 
-      font-weight:
+      font-weight:
 bold;
 
-    }
+    }
 
-    .egreso {
+    .egreso {
 
-      color: #dc3545;
+      color: #dc3545;
 
-      font-weight:
+      font-weight:
 bold;
 
-    }
+    }
 
-    .oculto {
+    .oculto {
 
-      display: none
+      display: none
 !important;
 
-    }
+    }
 
-    .cargando {
+    .cargando {
 
-      text-align:
+      text-align:
 center;
 
-      padding: 15px;
+      padding: 15px;
 
-      color: #666;
+      color: #666;
 
-    }
+    }
 
-    @media (max-width:
+    @media (max-width:
 600px) {
 
-      .encabezado h1 {
+      .encabezado h1 {
 
-        font-size:
+        font-size:
 22px;
 
-      }
+      }
 
-      .tipo-operacion
+      .tipo-operacion
 {
 
-       
+       
 flex-direction: column;
 
-      }
+      }
 
-    }
+    }
 
 /* =========================================================
 
-   PORTADA BANCO LDS
+   PORTADA BANCO LDS
 360
 
-   No modifica la
+   No modifica la
 estructura interna del sistema.
 
-  
+  
 ========================================================= */
 
 #portadaLDS360{
 
-  min-height:100vh;
+  min-height:100vh;
 
-  width:100%;
+  width:100%;
 
-  background:#fff;
+  background:#fff;
 
-  display:flex;
+  display:flex;
 
- 
+ 
 flex-direction:column;
 
-  overflow:hidden;
+  overflow:hidden;
 
 }
 
 #portadaLDS360 .portada-header{
 
-  min-height:128px;
+  min-height:128px;
 
-  background:#071f40;
+  background:#071f40;
 
-  border-bottom:4px
+  border-bottom:4px
 solid #f4c400;
 
-  color:#fff;
+  color:#fff;
 
-  display:flex;
+  display:flex;
 
-  align-items:center;
+  align-items:center;
 
- 
+ 
 justify-content:space-between;
 
-  padding:18px 4.2vw;
+  padding:18px 4.2vw;
 
 }
 
 #portadaLDS360 .portada-marca{
 
-  display:flex;
+  display:flex;
 
-  align-items:center;
+  align-items:center;
 
-  gap:18px;
+  gap:18px;
 
 }
 
 #portadaLDS360 .portada-escudo{
 
-  width:82px;
+  width:82px;
 
-  height:82px;
+  height:82px;
 
-  object-fit:contain;
+  object-fit:contain;
 
 }
 
 #portadaLDS360 .portada-nombre{
 
- 
+ 
 font-family:Georgia,serif;
 
- 
+ 
 font-size:clamp(27px,3.2vw,48px);
 
-  font-weight:700;
+  font-weight:700;
 
-  line-height:1;
+  line-height:1;
 
 }
 
 #portadaLDS360 .portada-lema{
 
-  margin-top:8px;
+  margin-top:8px;
 
-  color:#f4c400;
+  color:#f4c400;
 
- 
+ 
 font-family:Georgia,serif;
 
- 
+ 
 font-size:clamp(15px,1.55vw,24px);
 
-  font-style:italic;
+  font-style:italic;
 
-  font-weight:700;
+  font-weight:700;
 
 }
 
 #portadaLDS360 .portada-admin{
 
-  border:1px solid
+  border:1px solid
 rgba(255,255,255,.28);
 
-  border-radius:50px;
+  border-radius:50px;
 
-  padding:17px 30px;
+  padding:17px 30px;
 
- 
+ 
 font-size:clamp(17px,1.5vw,25px);
 
-  font-weight:700;
+  font-weight:700;
 
-  white-space:nowrap;
+  white-space:nowrap;
 
 }
 
 #portadaLDS360 .portada-cuerpo{
 
-  flex:1;
+  flex:1;
 
- 
+ 
 min-height:calc(100vh - 128px);
 
-  display:grid;
+  display:grid;
 
- 
+ 
 grid-template-columns:52% 48%;
 
 }
 
 #portadaLDS360 .portada-izq{
 
-  position:relative;
+  position:relative;
 
-  padding:36px 4vw
+  padding:36px 4vw
 45px;
 
-  display:flex;
+  display:flex;
 
- 
+ 
 flex-direction:column;
 
-  align-items:center;
+  align-items:center;
 
-  text-align:center;
+  text-align:center;
 
- 
+ 
 background-color:#fff;
 
- 
+ 
 background-image:radial-gradient(#d8e0eb 1.25px,transparent 1.25px);
 
-  background-size:24px
+  background-size:24px
 24px;
 
 }
 
 #portadaLDS360 .portada-logo{
 
- 
+ 
 width:min(510px,80%);
 
-  max-height:220px;
+  max-height:220px;
 
-  object-fit:contain;
+  object-fit:contain;
 
 }
 
 #portadaLDS360 .portada-subtitulo{
 
-  margin-top:14px;
+  margin-top:14px;
 
- 
+ 
 font-size:clamp(18px,2vw,30px);
 
-  color:#1d2939;
+  color:#1d2939;
 
 }
 
 #portadaLDS360 .portada-descripcion{
 
-  margin-top:32px;
+  margin-top:32px;
 
- 
+ 
 font-size:clamp(21px,2.1vw,33px);
 
-  line-height:1.25;
+  line-height:1.25;
 
-  font-weight:800;
+  font-weight:800;
 
-  color:#071a36;
+  color:#071a36;
 
 }
 
 #portadaLDS360 .portada-accesos{
 
- 
+ 
 width:min(780px,100%);
 
-  display:grid;
+  display:grid;
 
- 
+ 
 grid-template-columns:1fr 1fr;
 
-  gap:18px;
+  gap:18px;
 
-  margin-top:30px;
+  margin-top:30px;
 
 }
 
 #portadaLDS360 .portada-acceso{
 
-  min-height:170px;
+  min-height:170px;
 
-  background:#fff;
+  background:#fff;
 
-  border-radius:28px;
+  border-radius:28px;
 
-  box-shadow:0 8px
+  box-shadow:0 8px
 24px rgba(0,0,0,.16);
 
-  overflow:hidden;
+  overflow:hidden;
 
-  display:flex;
+  display:flex;
 
- 
+ 
 flex-direction:column;
 
- 
+ 
 justify-content:space-between;
 
-  cursor:pointer;
+  cursor:pointer;
 
-  padding:0;
+  padding:0;
 
-  color:#071a36;
+  color:#071a36;
 
-  border:0;
+  border:0;
 
 }
 
@@ -838,25 +838,25 @@ justify-content:space-between;
 
 #portadaLDS360 .portada-acceso h2{
 
-  padding:20px 15px
+  padding:20px 15px
 4px;
 
- 
+ 
 font-size:clamp(18px,1.8vw,29px);
 
-  line-height:1;
+  line-height:1;
 
 }
 
 #portadaLDS360 .portada-acceso p{
 
-  padding:4px 16px;
+  padding:4px 16px;
 
-  font-size:14px;
+  font-size:14px;
 
-  line-height:1.25;
+  line-height:1.25;
 
-  color:#344054;
+  color:#344054;
 
 }
 
@@ -866,14 +866,14 @@ font-size:clamp(18px,1.8vw,29px);
 
 #portadaLDS360 .portada-flecha{
 
-  height:66px;
+  height:66px;
 
-  display:flex;
+  display:flex;
 
- 
+ 
 justify-content:center;
 
-  align-items:center;
+  align-items:center;
 
 }
 
@@ -885,98 +885,98 @@ justify-content:center;
 
 #portadaLDS360 .portada-flecha span{
 
- 
+ 
 width:52px;height:52px;border:4px solid #fff;border-radius:50%;
 
- 
+ 
 color:#fff;font-size:48px;line-height:38px;display:flex;
 
- 
+ 
 align-items:center;justify-content:center;
 
 }
 
 #portadaLDS360 .portada-seguridad{
 
- 
+ 
 width:min(780px,100%);
 
-  margin-top:16px;
+  margin-top:16px;
 
-  padding:15px 20px;
+  padding:15px 20px;
 
-  border-radius:28px;
+  border-radius:28px;
 
-  background:#fff;
+  background:#fff;
 
-  box-shadow:0 7px
+  box-shadow:0 7px
 20px rgba(0,0,0,.12);
 
-  text-align:left;
+  text-align:left;
 
-  font-size:15px;
+  font-size:15px;
 
 }
 
 #portadaLDS360 .portada-der{
 
-  position:relative;
+  position:relative;
 
-  min-height:100%;
+  min-height:100%;
 
-  overflow:hidden;
+  overflow:hidden;
 
-  background:#062b55;
+  background:#062b55;
 
-  display:flex;
+  display:flex;
 
- 
+ 
 justify-content:center;
 
- 
+ 
 align-items:flex-end;
 
 }
 
 #portadaLDS360 .portada-banco-fondo{
 
-  position:absolute;
+  position:absolute;
 
-  width:92%;
+  width:92%;
 
-  max-width:900px;
+  max-width:900px;
 
-  bottom:-2%;
+  bottom:-2%;
 
-  object-fit:contain;
+  object-fit:contain;
 
-  opacity:.95;
+  opacity:.95;
 
 }
 
 #portadaLDS360 .portada-personajes{
 
-  position:absolute;
+  position:absolute;
 
-  z-index:2;
+  z-index:2;
 
-  width:78%;
+  width:78%;
 
-  max-width:760px;
+  max-width:760px;
 
-  height:86%;
+  height:86%;
 
-  bottom:0;
+  bottom:0;
 
 }
 
 #portadaLDS360 .portada-personajes img{
 
-  position:absolute;
+  position:absolute;
 
-  object-fit:contain;
+  object-fit:contain;
 
- 
+ 
 object-position:bottom center;
 
 }
@@ -992,27 +992,27 @@ object-position:bottom center;
 
 #portadaLDS360 .portada-marca-final{
 
-  position:absolute;
+  position:absolute;
 
-  right:5%;
+  right:5%;
 
-  bottom:4%;
+  bottom:4%;
 
-  z-index:5;
+  z-index:5;
 
-  color:#fff;
+  color:#fff;
 
- 
+ 
 font-family:Georgia,serif;
 
- 
+ 
 font-size:clamp(24px,3vw,50px);
 
-  font-weight:700;
+  font-weight:700;
 
-  line-height:.9;
+  line-height:.9;
 
-  text-align:left;
+  text-align:left;
 
 }
 
@@ -1020,178 +1020,178 @@ font-size:clamp(24px,3vw,50px);
 
 @media(max-width:900px){
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-header{
 
-    min-height:100px;
+    min-height:100px;
 
-    padding:12px 18px;
+    padding:12px 18px;
 
-  }
+  }
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-escudo{width:60px;height:60px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-marca{gap:10px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-nombre{font-size:23px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-lema{font-size:12px;margin-top:5px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-admin{padding:11px 16px;font-size:14px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-cuerpo{
 
-   
+   
 grid-template-columns:1fr;
 
-  }
+  }
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-izq{
 
-    min-height:auto;
+    min-height:auto;
 
-    padding:30px 18px
+    padding:30px 18px
 34px;
 
-  }
+  }
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-logo{width:min(430px,82%);max-height:180px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-descripcion{margin-top:24px;font-size:23px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-der{min-height:500px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-personajes{width:92%;height:92%}
 
 }
 
 @media(max-width:600px){
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-header{min-height:82px;padding:10px 12px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-escudo{width:48px;height:48px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-nombre{font-size:19px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-lema{font-size:10px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-admin{padding:8px 11px;font-size:12px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-izq{padding:24px 12px 28px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-logo{width:88%;max-height:145px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-subtitulo{font-size:17px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-descripcion{font-size:21px;margin-top:20px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-accesos{
 
-   
+   
 grid-template-columns:1fr;
 
-    gap:12px;
+    gap:12px;
 
-    margin-top:24px;
+    margin-top:24px;
 
-  }
+  }
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-acceso{min-height:140px;border-radius:22px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-acceso h2{font-size:20px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-flecha{height:55px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-flecha span{width:45px;height:45px;font-size:40px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-der{min-height:420px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-personajes{width:100%;height:94%}
 
 }
 
 @media(max-width:420px){
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-admin{font-size:11px;padding:7px 9px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-nombre{font-size:17px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-lema{font-size:9px}
 
-  #portadaLDS360
+  #portadaLDS360
 .portada-der{min-height:360px}
 
 }
 
 
-    @media (max-width:
+    @media (max-width:
 700px) {
 
-     
+     
 .datos-estudiante-layout {
 
-       
+       
 grid-template-columns: 1fr;
 
-        gap: 16px;
+        gap: 16px;
 
-      }
+      }
 
-     
+     
 .foto-estudiante-contenedor {
 
-        min-height: 0;
+        min-height: 0;
 
-      }
+      }
 
-      .foto-estudiante
+      .foto-estudiante
 {
 
-        width: 170px;
+        width: 170px;
 
-        height: 170px;
+        height: 170px;
 
-      }
+      }
 
-     
+     
 .datos-estudiante {
 
-       
+       
 grid-template-columns: 1fr;
 
-      }
+      }
 
-    }
+    }
 
 
 /* ====== SOLO PORTADA: SIN IMÁGENES SUELTAS ====== */
@@ -1323,2658 +1323,2658 @@ grid-template-columns: 1fr;
     </button>
   </section>
 
-  <!-- SISTEMA
+  <!-- SISTEMA
 EXISTENTE: SE CONSERVA -->
 
-  <div
+  <div
 id="sistemaPrincipal" class="sistema-principal oculto">
 
-  <!-- ENCABEZADO
+  <!-- ENCABEZADO
 -->
 
-  <header
+  <header
 class="encabezado">
 
-    <h1>BANCO
+    <h1>BANCO
 LDS 360</h1>
 
-    <p>IEP LA
+    <p>IEP LA
 SALLE DEL SUR</p>
 
-    <p>Nuevo Sol
+    <p>Nuevo Sol
 Lasallista (LDS)</p>
 
-  </header>
+  </header>
 
-  <main
+  <main
 class="contenedor">
 
-    <!-- LECTOR QR
+    <!-- LECTOR QR
 -->
 
-    <section
+    <section
 class="tarjeta">
 
-      <div
+      <div
 class="titulo">Identificación del estudiante</div>
 
-      <div
+      <div
 id="lectorQR"></div>
 
-      <div
+      <div
 class="botones">
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 class="btn-principal"
 
-         
+         
 onclick="iniciarQR()">
 
-          📷
+          📷
 Escanear QR
 
-       
+       
 </button>
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 class="btn-secundario"
 
-         
+         
 onclick="ingresarCodigoManual()">
 
-          ⌨️
+          ⌨️
 Ingresar código manualmente
 
-       
+       
 </button>
 
-      </div>
+      </div>
 
-      <div
+      <div
 id="mensaje" class="mensaje"></div>
 
-    </section>
+    </section>
 
 
-    <!-- DATOS DEL
+    <!-- DATOS DEL
 ESTUDIANTE -->
 
-    <section
+    <section
 id="seccionEstudiante" class="tarjeta estudiante">
 
-      <div
+      <div
 class="titulo">Datos del estudiante</div>
 
-      <div
+      <div
 class="datos-estudiante-layout">
 
-        <div
+        <div
 class="foto-estudiante-contenedor">
 
-          <img
+          <img
 id="datoFoto" class="foto-estudiante" src=""
 alt="Foto del estudiante">
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="datos-estudiante">
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Código</strong>
 
-          <span
+          <span
 id="datoCodigo">-</span>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Estudiante</strong>
 
-          <span
+          <span
 id="datoNombre">-</span>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Grado</strong>
 
-          <span
+          <span
 id="datoGrado">-</span>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Sección</strong>
 
-          <span
+          <span
 id="datoSeccion">-</span>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Docente</strong>
 
-          <span
+          <span
 id="datoDocente">-</span>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="dato">
 
-         
+         
 <strong>Monto base</strong>
 
-          <span
+          <span
 id="datoBase">0.00 LDS</span>
 
-        </div>
+        </div>
 
-        </div>
+        </div>
 
-      </div>
+      </div>
 
-      <div
+      <div
 class="saldo">
 
-       
+       
 <span>Saldo actual</span>
 
-        <strong
+        <strong
 id="datoSaldo">0.00 LDS</strong>
 
-      </div>
+      </div>
 
-    </section>
+    </section>
 
 
-    <!-- OPERACIÓN
+    <!-- OPERACIÓN
 -->
 
-    <section
+    <section
 id="seccionOperacion" class="tarjeta operacion">
 
-      <div
+      <div
 class="titulo">Operación</div>
 
-      <div
+      <div
 class="tipo-operacion">
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 id="btnCobrar"
 
-         
+         
 class="btn-ingreso"
 
-         
+         
 onclick="seleccionarOperacion('INGRESO')">
 
-          COBRAR
+          COBRAR
 
-       
+       
 </button>
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 id="btnPagar"
 
-         
+         
 class="btn-egreso"
 
-         
+         
 onclick="seleccionarOperacion('EGRESO')">
 
-          PAGAR
+          PAGAR
 
-       
+       
 </button>
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 id="btnMovimientos"
 
-         
+         
 class="btn-saldo"
 
-         
+         
 onclick="mostrarMovimientos()">
 
-          MOVIMIENTOS
+          MOVIMIENTOS
 
-       
+       
 </button>
 
-      </div>
+      </div>
 
-      <div
+      <div
 id="panelOperacion" class="oculto">
 
-      <!-- OPCIONES
+      <!-- OPCIONES
 DE LA OPERACIÓN -->
 
-      <div
+      <div
 id="opcionesOperacion">
 
-        <div
+        <div
 class="campo">
 
-          <label
+          <label
 for="categoria">Categoría</label>
 
-          <select
+          <select
 id="categoria" onchange="cargarConceptos()">
 
-            <option
+            <option
 value="">Seleccione una categoría</option>
 
-         
+         
 </select>
 
-        </div>
+        </div>
 
-        <div
+        <div
 class="campo">
 
-          <label
+          <label
 for="concepto">Concepto</label>
 
-          <select
+          <select
 id="concepto">
 
-            <option
+            <option
 value="">Seleccione un concepto</option>
 
-         
+         
 </select>
 
-        </div>
+        </div>
 
-      </div>
+      </div>
 
-      <div
+      <div
 class="campo">
 
-        <label
+        <label
 for="monto">Monto LDS</label>
 
-        <input
+        <input
 
-         
+         
 type="number"
 
-         
+         
 id="monto"
 
-         
+         
 min="0"
 
-         
+         
 step="0.01"
 
-         
+         
 placeholder="Ingrese el monto">
 
-      </div>
+      </div>
 
-      <div
+      <div
 class="campo">
 
-        <label
+        <label
 for="responsable">Responsable</label>
 
-        <select
+        <select
 id="responsable">
 
-          <option
+          <option
 value="">Seleccione responsable</option>
 
-       
+       
 </select>
 
-      </div>
+      </div>
 
-      <div
+      <div
 class="campo">
 
-        <label
+        <label
 for="observacion">Observación</label>
 
-        <textarea
+        <textarea
 
-         
+         
 id="observacion"
 
-         
+         
 placeholder="Ingrese observación"></textarea>
 
-      </div>
+      </div>
 
-      <div
+      <div
 class="botones">
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 class="btn-principal"
 
-         
+         
 onclick="registrarMovimiento()">
 
-          Registrar
+          Registrar
 movimiento
 
-       
+       
 </button>
 
-        <button
+        <button
 
-         
+         
 type="button"
 
-         
+         
 class="btn-secundario"
 
-         
+         
 onclick="limpiarOperacion()">
 
-          Limpiar
+          Limpiar
 
-       
+       
 </button>
 
-      </div>
+      </div>
 
-      <div
+      <div
 id="mensajeOperacion" class="mensaje"></div>
 
-      </div>
+      </div>
 
-    </section>
+    </section>
 
 
-    <!--
+    <!--
 MOVIMIENTOS -->
 
-    <section
+    <section
 id="seccionMovimientos" class="tarjeta estudiante">
 
-      <div
+      <div
 class="titulo">Movimientos del estudiante</div>
 
-      <div
+      <div
 class="tabla-contenedor">
 
-        <table>
+        <table>
 
-         
+         
 <thead>
 
-            <tr>
+            <tr>
 
-             
+             
 <th>Fecha</th>
 
-             
+             
 <th>Tipo</th>
 
-             
+             
 <th>Concepto</th>
 
-             
+             
 <th>Monto LDS</th>
 
-             
+             
 <th>Responsable</th>
 
-             
+             
 <th>Observación</th>
 
-           
+           
 </tr>
 
-         
+         
 </thead>
 
-          <tbody
+          <tbody
 id="tablaMovimientos">
 
-         
+         
 </tbody>
 
-        </table>
+        </table>
 
-      </div>
+      </div>
 
-    </section>
+    </section>
 
-  </main>
+  </main>
 
 
 <script>
 
-  /*
+  /*
 =========================================================
 
-     CONFIGURACIÓN
+     CONFIGURACIÓN
 
-    
+    
 ========================================================= */
 
-  const APP_SCRIPT_URL
+  const APP_SCRIPT_URL
 =
 "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
-  const SISTEMA =
+  const SISTEMA =
 "BANCO LDS 360";
 
-  const MONEDA =
+  const MONEDA =
 "LDS";
 
 
-  /*
+  /*
 =========================================================
 
-     VARIABLES
+     VARIABLES
 
-    
+    
 ========================================================= */
 
-  let estudianteActual
+  let estudianteActual
 = null;
 
-  let tipoOperacion =
+  let tipoOperacion =
 "";
 
-  let lector = null;
+  let lector = null;
 
-  let categorias = {};
+  let categorias = {};
 
-  let
+  let
 conceptosCatalogo = {};
 
 
-  /*
+  /*
 =========================================================
 
-     UTILIDADES
+     UTILIDADES
 
-    
+    
 ========================================================= */
 
-  function
+  function
 mostrarMensaje(id, texto, tipo) {
 
-    const elemento =
+    const elemento =
 document.getElementById(id);
 
-   
+   
 elemento.textContent = texto;
 
-    elemento.className
+    elemento.className
 = "mensaje " + tipo;
 
-  }
+  }
 
 
-  function
+  function
 ocultarMensaje(id) {
 
-    const elemento =
+    const elemento =
 document.getElementById(id);
 
-    elemento.className
+    elemento.className
 = "mensaje";
 
-   
+   
 elemento.textContent = "";
 
-  }
+  }
 
 
-  function
+  function
 generarRequestId() {
 
-    return
+    return
 "LDS-" +
 
-      Date.now() +
+      Date.now() +
 
-      "-" +
+      "-" +
 
-     
+     
 Math.random().toString(36).substring(2, 10);
 
-  }
+  }
 
 
-  function
+  function
 numero(valor) {
 
-    const n =
+    const n =
 Number(valor);
 
-    return
+    return
 Number.isFinite(n) ? n : 0;
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     JSONP
+     JSONP
 
-    
+    
 ========================================================= */
 
-  function
+  function
 llamarAPI(parametros, callback) {
 
-    if (
+    if (
 
-      !APP_SCRIPT_URL
+      !APP_SCRIPT_URL
 ||
 
-      APP_SCRIPT_URL
+      APP_SCRIPT_URL
 === "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT"
 
-    ) {
+    ) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensaje",
 
-        "Falta
+        "Falta
 colocar la URL de Apps Script.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    const
+    const
 nombreCallback =
 
-     
+     
 "callbackLDS_" +
 
-      Date.now() +
+      Date.now() +
 
-      "_" +
+      "_" +
 
-     
+     
 Math.floor(Math.random() * 100000);
 
 
-   
+   
 parametros.callback = nombreCallback;
 
 
-    const query =
+    const query =
 Object.keys(parametros)
 
-     
+     
 .map(function(clave) {
 
-        return
+        return
 encodeURIComponent(clave) +
 
-         
+         
 "=" +
 
-         
+         
 encodeURIComponent(parametros[clave]);
 
-      })
+      })
 
-     
+     
 .join("&");
 
 
-    const script =
+    const script =
 document.createElement("script");
 
-    script.src =
+    script.src =
 APP_SCRIPT_URL + "?" + query;
 
 
-   
+   
 window[nombreCallback] = function(respuesta) {
 
-      try {
+      try {
 
-       
+       
 callback(respuesta);
 
-      } finally {
+      } finally {
 
-        delete
+        delete
 window[nombreCallback];
 
-       
+       
 script.remove();
 
-      }
+      }
 
-    };
+    };
 
 
-    script.onerror =
+    script.onerror =
 function() {
 
-      delete
+      delete
 window[nombreCallback];
 
-      script.remove();
+      script.remove();
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensaje",
 
-        "No se
+        "No se
 pudo conectar con BANCO LDS 360.",
 
-       
+       
 "error"
 
-      );
+      );
 
-    };
+    };
 
 
-   
+   
 document.body.appendChild(script);
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     QR
+     QR
 
-    
+    
 ========================================================= */
 
-  function iniciarQR()
+  function iniciarQR()
 {
 
-   
+   
 ocultarMensaje("mensaje");
 
 
-    if (lector) {
+    if (lector) {
 
-      try {
+      try {
 
-        lector.stop();
+        lector.stop();
 
-      } catch (e) {}
+      } catch (e) {}
 
-      lector = null;
+      lector = null;
 
-    }
+    }
 
 
-    lector = new
+    lector = new
 Html5Qrcode("lectorQR");
 
 
-    const
+    const
 configuracion = {
 
-      fps: 10,
+      fps: 10,
 
-      qrbox: {
+      qrbox: {
 
-        width: 250,
+        width: 250,
 
-        height: 250
+        height: 250
 
-      }
+      }
 
-    };
+    };
 
 
-    lector.start(
+    lector.start(
 
-      {
+      {
 
-        facingMode:
+        facingMode:
 "environment"
 
-      },
+      },
 
-      configuracion,
+      configuracion,
 
-     
+     
 function(codigoQR) {
 
-        detenerQR();
+        detenerQR();
 
-       
+       
 buscarEstudiante(codigoQR);
 
-      },
+      },
 
-      function(error)
+      function(error)
 {
 
-        // Errores
+        // Errores
 normales de lectura:
 
-        // no se
+        // no se
 muestran para no interrumpir el escaneo.
 
-      }
+      }
 
-   
+   
 ).catch(function(error) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensaje",
 
-        "No fue
+        "No fue
 posible iniciar la cámara. Use el botón de ingreso manual.",
 
-       
+       
 "error"
 
-      );
+      );
 
-    });
+    });
 
-  }
+  }
 
 
-  function detenerQR()
+  function detenerQR()
 {
 
-    if (!lector) {
+    if (!lector) {
 
-      return;
+      return;
 
-    }
+    }
 
 
-    lector.stop()
+    lector.stop()
 
-      .then(function()
+      .then(function()
 {
 
-       
+       
 lector.clear();
 
-        lector = null;
+        lector = null;
 
-      })
+      })
 
-     
+     
 .catch(function() {
 
-        lector = null;
+        lector = null;
 
-      });
+      });
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     INGRESO MANUAL
+     INGRESO MANUAL
 
-    
+    
 ========================================================= */
 
-  function
+  function
 ingresarCodigoManual() {
 
-    const codigo =
+    const codigo =
 prompt(
 
-      "Ingrese el
+      "Ingrese el
 código del estudiante:"
 
-    );
+    );
 
 
-    if (!codigo) {
+    if (!codigo) {
 
-      return;
+      return;
 
-    }
+    }
 
 
-   
+   
 buscarEstudiante(codigo.trim());
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     CONSULTAR
+     CONSULTAR
 ESTUDIANTE
 
-    
+    
 ========================================================= */
 
-  function
+  function
 buscarEstudiante(codigo) {
 
-    if (!codigo) {
+    if (!codigo) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensaje",
 
-        "Ingrese
+        "Ingrese
 un código válido.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    mostrarMensaje(
+    mostrarMensaje(
 
-     
+     
 "mensaje",
 
-     
+     
 "Consultando estudiante...",
 
-      "ok"
+      "ok"
 
-    );
+    );
 
 
-    llamarAPI(
+    llamarAPI(
 
-      {
+      {
 
-        accion:
+        accion:
 "estudiante",
 
-        codigo: codigo
+        codigo: codigo
 
-      },
+      },
 
-     
+     
 function(respuesta) {
 
-        if (
+        if (
 
-          !respuesta
+          !respuesta
 ||
 
-          respuesta.ok
+          respuesta.ok
 === false ||
 
-         
+         
 !respuesta.estudiante
 
-        ) {
+        ) {
 
-         
+         
 mostrarMensaje(
 
-           
+           
 "mensaje",
 
-            respuesta
+            respuesta
 && respuesta.mensaje
 
-              ?
+              ?
 respuesta.mensaje
 
-              :
+              :
 "Estudiante no encontrado.",
 
-           
+           
 "error"
 
-          );
+          );
 
-          return;
+          return;
 
-        }
+        }
 
 
-       
+       
 estudianteActual = respuesta.estudiante;
 
 
-        const
+        const
 estudianteMostrado = Object.assign(
 
-          {},
+          {},
 
-         
+         
 respuesta.estudiante,
 
-          {
+          {
 
-           
+           
 saldoActual:
 
-             
+             
 respuesta.cuenta
 
-                ?
+                ?
 respuesta.cuenta.saldoActual
 
-                : 0
+                : 0
 
-          }
+          }
 
-        );
+        );
 
-       
+       
 mostrarEstudiante(
 
-         
+         
 estudianteMostrado
 
-        );
+        );
 
 
-       
+       
 cargarMovimientos(
 
-         
+         
 respuesta.estudiante.codigo
 
-        );
+        );
 
 
-       
+       
 cargarOpciones();
 
-       
+       
 cargarResponsables();
 
-       
+       
 ocultarMensaje("mensaje");
 
-      }
+      }
 
-    );
+    );
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     MOSTRAR
+     MOSTRAR
 ESTUDIANTE
 
-    
+    
 ========================================================= */
 
-  function
+  function
 mostrarEstudiante(estudiante) {
 
-    estudianteActual =
+    estudianteActual =
 estudiante;
 
-   
+   
 document.getElementById("datoCodigo").textContent =
 
-     
+     
 estudiante.codigo || "-";
 
 
-   
+   
 document.getElementById("datoNombre").textContent =
 
-     
+     
 estudiante.nombreCompleto ||
 
-     
+     
 estudiante.nombre ||
 
-      "-";
+      "-";
 
 
-   
+   
 document.getElementById("datoGrado").textContent =
 
-      estudiante.grado
+      estudiante.grado
 || "-";
 
 
-   
+   
 document.getElementById("datoSeccion").textContent =
 
-     
+     
 estudiante.seccion || "-";
 
 
-   
+   
 document.getElementById("datoDocente").textContent =
 
-     
+     
 estudiante.docente || "-";
 
 
-   
+   
 document.getElementById("datoBase").textContent =
 
-     
+     
 numero(estudiante.montoBase).toFixed(2) +
 
-      " " +
+      " " +
 
-      MONEDA;
+      MONEDA;
 
 
-   
+   
 document.getElementById("datoSaldo").textContent =
 
-     
+     
 numero(estudiante.saldoActual).toFixed(2) +
 
-      " " +
+      " " +
 
-      MONEDA;
+      MONEDA;
 
-    const foto =
+    const foto =
 
-     
+     
 document.getElementById("datoFoto");
 
-    const fotoOriginal
+    const fotoOriginal
 =
 
-     
+     
 estudiante.fotoUrl ||
 
-     
+     
 estudiante.fotoURL ||
 
-     
+     
 estudiante.foto_url ||
 
-     
+     
 estudiante.FOTO_URL ||
 
-      estudiante.foto
+      estudiante.foto
 ||
 
-      estudiante.FOTO
+      estudiante.FOTO
 ||
 
-      "";
+      "";
 
-    const
+    const
 fotosCandidatas = obtenerURLsFoto(fotoOriginal);
 
-    let indiceFoto =
+    let indiceFoto =
 0;
 
-    foto.style.display
+    foto.style.display
 = "none";
 
-   
+   
 foto.removeAttribute("src");
 
-    foto.onload =
+    foto.onload =
 function() {
 
-     
+     
 foto.style.display = "block";
 
-    };
+    };
 
-    foto.onerror =
+    foto.onerror =
 function() {
 
-      indiceFoto++;
+      indiceFoto++;
 
-      if (indiceFoto
+      if (indiceFoto
 < fotosCandidatas.length) {
 
-        foto.src =
+        foto.src =
 fotosCandidatas[indiceFoto];
 
-      } else {
+      } else {
 
-       
+       
 foto.removeAttribute("src");
 
-       
+       
 foto.style.display = "none";
 
-      }
+      }
 
-    };
+    };
 
-    if
+    if
 (fotosCandidatas.length > 0) {
 
-      foto.src =
+      foto.src =
 fotosCandidatas[0];
 
-    }
+    }
 
-   
+   
 document.getElementById("panelOperacion").classList.add("oculto");
 
-   
+   
 document.getElementById("btnCobrar").classList.remove("tipo-activo");
 
-   
+   
 document.getElementById("btnPagar").classList.remove("tipo-activo");
 
-    document
+    document
 
-     
+     
 .getElementById("seccionEstudiante")
 
-      .style.display =
+      .style.display =
 "block";
 
 
-    document
+    document
 
-     
+     
 .getElementById("seccionOperacion")
 
-      .style.display =
+      .style.display =
 "block";
 
 
-    document
+    document
 
-     
+     
 .getElementById("seccionMovimientos")
 
-      .style.display =
+      .style.display =
 "none";
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     CATEGORÍAS Y
+     CATEGORÍAS Y
 CONCEPTOS
 
-    
+    
 ========================================================= */
 
-  function
+  function
 cargarOpciones() {
 
-    llamarAPI(
+    llamarAPI(
 
-      {
+      {
 
-        accion:
+        accion:
 "opciones"
 
-      },
+      },
 
-     
+     
 function(respuesta) {
 
-        if (!respuesta
+        if (!respuesta
 || respuesta.ok === false) {
 
-         
+         
 mostrarMensaje(
 
-           
+           
 "mensajeOperacion",
 
-            "No
+            "No
 se pudieron cargar las opciones.",
 
-           
+           
 "error"
 
-          );
+          );
 
-          return;
+          return;
 
-        }
+        }
 
-        /*
+        /*
 
-         *
+         *
 CONFIG_OPCIONES tiene la estructura REAL:
 
-         * A =
+         * A =
 INGRESOS_Y_SUELDOS
 
-         * B =
+         * B =
 PREMIOS_Y_BONIFICACIONES
 
-         * C =
+         * C =
 AHORROS_E_INVERSIONES
 
-         * D =
+         * D =
 PAGOS_Y_GASTOS
 
-         * E =
+         * E =
 SANCIONES_Y_MULTAS
 
-         * F =
+         * F =
 COSTOS_Y_OTROS
 
-         *
+         *
 
-         * Apps Script
+         * Apps Script
 devuelve esa misma estructura en
 
-         *
+         *
 respuesta.opcionesPorCategoria.
 
-         */
+         */
 
-        const opciones
+        const opciones
 =
 
-         
+         
 respuesta.opcionesPorCategoria &&
 
-          typeof
+          typeof
 respuesta.opcionesPorCategoria === "object"
 
-            ?
+            ?
 respuesta.opcionesPorCategoria
 
-            : {};
+            : {};
 
-        categorias =
+        categorias =
 {};
 
-       
+       
 conceptosCatalogo = {};
 
-       
+       
 Object.keys(opciones).forEach(function(categoria) {
 
-          const lista
+          const lista
 =
 
-           
+           
 Array.isArray(opciones[categoria])
 
-              ?
+              ?
 opciones[categoria]
 
-              : [];
+              : [];
 
-         
+         
 categorias[categoria] = [];
 
-         
+         
 lista.forEach(function(concepto) {
 
-            const
+            const
 texto =
 
-             
+             
 String(concepto || "").trim();
 
-            if
+            if
 (!texto) {
 
-              return;
+              return;
 
-            }
+            }
 
-            if
+            if
 (categorias[categoria].indexOf(texto) === -1) {
 
-             
+             
 categorias[categoria].push(texto);
 
-            }
+            }
 
-          });
+          });
 
-        });
+        });
 
-        /* Las
+        /* Las
 opciones se muestran al presionar COBRAR o PAGAR. */
 
-      }
+      }
 
-    );
+    );
 
-  }
+  }
 
-  function
+  function
 cargarResponsables() {
 
-    const select =
+    const select =
 
-     
+     
 document.getElementById("responsable");
 
-    select.innerHTML =
+    select.innerHTML =
 
-      '<option
+      '<option
 value="">Seleccione responsable</option>';
 
-    /*
+    /*
 
-     * RESPONSABLES /
+     * RESPONSABLES /
 CAJEROS
 
-     * Opciones
+     * Opciones
 exactas de la tabla CAJA.
 
-     */
+     */
 
-    const responsables
+    const responsables
 = [
 
-      "MISS LILY
+      "MISS LILY
 MELO AZAÑERO",
 
-      "MISS KIARA
+      "MISS KIARA
 MORALES ELGUERA",
 
-      "MISS ANGHY
+      "MISS ANGHY
 REYES MELO",
 
-      "MISS KARIN
+      "MISS KARIN
 MOLERO ROMANI"
 
-    ];
+    ];
 
-   
+   
 responsables.forEach(function(nombre) {
 
-      const option =
+      const option =
 
-       
+       
 document.createElement("option");
 
-      option.value =
+      option.value =
 nombre;
 
-     
+     
 option.textContent = nombre;
 
-     
+     
 select.appendChild(option);
 
-    });
+    });
 
-  }
+  }
 
 
-  function
+  function
 normalizarCategoria(categoria) {
 
-    return
+    return
 String(categoria || "")
 
-      .trim()
+      .trim()
 
-      .toUpperCase()
+      .toUpperCase()
 
-     
+     
 .normalize("NFD")
 
-     
+     
 .replace(/[\u0300-\u036f]/g, "")
 
-     
+     
 .replace(/[^A-Z0-9]+/g, "_")
 
-     
+     
 .replace(/^_+|_+$/g, "");
 
-  }
+  }
 
 
-  function
+  function
 cargarCategorias() {
 
-    const select =
+    const select =
 
-     
+     
 document.getElementById("categoria");
 
-    select.innerHTML =
+    select.innerHTML =
 
-      '<option
+      '<option
 value="">Seleccione una categoría</option>';
 
-    if
+    if
 (!tipoOperacion) {
 
-      return;
+      return;
 
-    }
+    }
 
-   
+   
 Object.keys(categorias).forEach(function(categoria) {
 
-      const clave =
+      const clave =
 normalizarCategoria(categoria);
 
-      let mostrar =
+      let mostrar =
 false;
 
-      if
+      if
 (tipoOperacion === "INGRESO") {
 
-        mostrar =
+        mostrar =
 
-          clave ===
+          clave ===
 "INGRESOS_Y_SUELDOS" ||
 
-          clave ===
+          clave ===
 "PREMIOS_Y_BONIFICACIONES" ||
 
-          clave ===
+          clave ===
 "AHORROS_E_INVERSIONES";
 
-      }
+      }
 
-      if
+      if
 (tipoOperacion === "EGRESO") {
 
-        mostrar =
+        mostrar =
 
-          clave ===
+          clave ===
 "PAGOS_Y_GASTOS" ||
 
-          clave ===
+          clave ===
 "SANCIONES_Y_MULTAS" ||
 
-          clave ===
+          clave ===
 "COSTOS_Y_OTROS";
 
-      }
+      }
 
-      if (!mostrar) {
+      if (!mostrar) {
 
-        return;
+        return;
 
-      }
+      }
 
-      const option =
+      const option =
 
-       
+       
 document.createElement("option");
 
-      option.value =
+      option.value =
 categoria;
 
-     
+     
 option.textContent =
 
-       
+       
 obtenerNombreCategoria(categoria);
 
-     
+     
 select.appendChild(option);
 
-    });
+    });
 
-    cargarConceptos();
+    cargarConceptos();
 
-  }
+  }
 
 
-  function
+  function
 obtenerNombreCategoria(categoria) {
 
-    const nombres = {
+    const nombres = {
 
-     
+     
 INGRESOS_Y_SUELDOS:
 
-        "Ingresos
+        "Ingresos
 y Sueldos",
 
-     
+     
 PREMIOS_Y_BONIFICACIONES:
 
-        "Premios
+        "Premios
 y Bonificaciones",
 
-     
+     
 AHORROS_E_INVERSIONES:
 
-        "Ahorros
+        "Ahorros
 e Inversiones",
 
-      PAGOS_Y_GASTOS:
+      PAGOS_Y_GASTOS:
 
-        "Pagos y
+        "Pagos y
 Gastos",
 
-     
+     
 SANCIONES_Y_MULTAS:
 
-       
+       
 "Sanciones y Multas",
 
-      COSTOS_Y_OTROS:
+      COSTOS_Y_OTROS:
 
-        "Costos y
+        "Costos y
 Otros"
 
-    };
+    };
 
 
-    return
+    return
 nombres[categoria] || categoria;
 
-  }
+  }
 
 
-  function
+  function
 cargarConceptos() {
 
-    const categoria =
+    const categoria =
 
-     
+     
 document.getElementById("categoria").value;
 
 
-    const select =
+    const select =
 
-     
+     
 document.getElementById("concepto");
 
 
-    select.innerHTML =
+    select.innerHTML =
 
-      '<option
+      '<option
 value="">Seleccione un concepto</option>';
 
 
-    if (!categoria) {
+    if (!categoria) {
 
-      return;
+      return;
 
-    }
-
-
-    let lista = [];
+    }
 
 
-    if
+    let lista = [];
+
+
+    if
 (Array.isArray(categorias[categoria])) {
 
-      lista =
+      lista =
 categorias[categoria];
 
-    } else if (
+    } else if (
 
-     
+     
 Array.isArray(conceptosCatalogo[categoria])
 
-    ) {
+    ) {
 
-      lista =
+      lista =
 conceptosCatalogo[categoria];
 
-    }
+    }
 
 
-   
+   
 lista.forEach(function(concepto) {
 
-      const option =
+      const option =
 
-       
+       
 document.createElement("option");
 
 
-      option.value =
+      option.value =
 concepto;
 
-     
+     
 option.textContent = concepto;
 
 
-     
+     
 select.appendChild(option);
 
-    });
+    });
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     TIPO DE OPERACIÓN
+     TIPO DE OPERACIÓN
 
-    
+    
 ========================================================= */
 
-  function
+  function
 obtenerURLsFoto(url) {
 
-    let texto =
+    let texto =
 String(url || "").trim();
 
-    if (!texto) return
+    if (!texto) return
 [];
 
-    // Si la celda
+    // Si la celda
 trae una fórmula IMAGE("URL"), extraemos la URL.
 
-    const
+    const
 imagenFormula =
 texto.match(/IMAGE\s*\(\s*[\"']([^\"']+)[\"']/i);
 
-    if (imagenFormula)
+    if (imagenFormula)
 texto = imagenFormula[1];
 
-    const urls = [];
+    const urls = [];
 
-    const agregar =
+    const agregar =
 function(valor) {
 
-      if (valor
+      if (valor
 && urls.indexOf(valor) === -1) urls.push(valor);
 
-    };
+    };
 
-    // URL directa de
+    // URL directa de
 imagen.
 
-    if
+    if
 (/^https?:\/\//i.test(texto)) agregar(texto);
 
-    let id =
+    let id =
 "";
 
-    const matchArchivo
+    const matchArchivo
 = texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
-    const
+    const
 matchParametro = texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
 
-    const matchOpen =
+    const matchOpen =
 texto.match(/open\?id=([a-zA-Z0-9_-]+)/i);
 
-    const matchUc =
+    const matchUc =
 texto.match(/uc\?id=([a-zA-Z0-9_-]+)/i);
 
-    if (matchArchivo)
+    if (matchArchivo)
 id = matchArchivo[1];
 
-    else if
+    else if
 (matchParametro) id = matchParametro[1];
 
-    else if
+    else if
 (matchOpen) id = matchOpen[1];
 
-    else if (matchUc)
+    else if (matchUc)
 id = matchUc[1];
 
-    if (id) {
+    if (id) {
 
-      // Probamos
+      // Probamos
 varias formas de Google Drive sin modificar el backend.
 
-     
+     
 agregar("https://drive.google.com/thumbnail?id=" +
 encodeURIComponent(id) + "&sz=w800");
 
-     
+     
 agregar("https://drive.google.com/uc?export=view&id=" +
 encodeURIComponent(id));
 
-     
+     
 agregar("https://lh3.googleusercontent.com/d/" +
 encodeURIComponent(id) + "=w800");
 
-    }
+    }
 
-    // Si es un ID
+    // Si es un ID
 puro de Drive.
 
-    if
+    if
 (/^[a-zA-Z0-9_-]{15,}$/.test(texto)) {
 
-     
+     
 agregar("https://drive.google.com/thumbnail?id=" +
 encodeURIComponent(texto) + "&sz=w800");
 
-     
+     
 agregar("https://drive.google.com/uc?export=view&id=" +
 encodeURIComponent(texto));
 
-     
+     
 agregar("https://lh3.googleusercontent.com/d/" +
 encodeURIComponent(texto) + "=w800");
 
-    }
+    }
 
-    return urls;
+    return urls;
 
-  }
+  }
 
 
-  function
+  function
 convertirURLFotoDrive(url) {
 
-    const urls =
+    const urls =
 obtenerURLsFoto(url);
 
-    return urls.length
+    return urls.length
 ? urls[0] : "";
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     TIPO DE OPERACIÓN
+     TIPO DE OPERACIÓN
 
-    
+    
 ========================================================= */
 
-  function
+  function
 seleccionarOperacion(tipo) {
 
-    tipoOperacion =
+    tipoOperacion =
 tipo;
 
 
-    const btnCobrar =
+    const btnCobrar =
 
-     
+     
 document.getElementById("btnCobrar");
 
-    const btnPagar =
+    const btnPagar =
 
-     
+     
 document.getElementById("btnPagar");
 
-    const opciones =
+    const opciones =
 
-     
+     
 document.getElementById("opcionesOperacion");
 
-    const
+    const
 panelOperacion =
 
-     
+     
 document.getElementById("panelOperacion");
 
 
-   
+   
 btnCobrar.classList.remove("tipo-activo");
 
-   
+   
 btnPagar.classList.remove("tipo-activo");
 
 
-    if (tipo ===
+    if (tipo ===
 "INGRESO") {
 
-     
+     
 btnCobrar.classList.add("tipo-activo");
 
-    }
+    }
 
 
-    if (tipo ===
+    if (tipo ===
 "EGRESO") {
 
-     
+     
 btnPagar.classList.add("tipo-activo");
 
-    }
+    }
 
 
-   
+   
 panelOperacion.classList.remove("oculto");
 
-    /* Al presionar
+    /* Al presionar
 COBRAR o PAGAR deben aparecer las opciones. */
 
-    document
+    document
 
-     
+     
 .getElementById("opcionesOperacion")
 
-     
+     
 .classList.remove("oculto");
 
-    /* Cargar
+    /* Cargar
 nuevamente responsables para asegurar que el selector esté actualizado. */
 
-   
+   
 cargarResponsables();
 
-   
+   
 document.getElementById("categoria").value = "";
 
-   
+   
 document.getElementById("concepto").innerHTML =
 
-      '<option
+      '<option
 value="">Seleccione un concepto</option>';
 
 
-   
+   
 cargarCategorias();
 
 
-   
+   
 ocultarMensaje("mensajeOperacion");
 
-  }
+  }
 
-  function
+  function
 mostrarMovimientos() {
 
-    if
+    if
 (!estudianteActual) {
 
-      return;
+      return;
 
-    }
+    }
 
-    tipoOperacion =
+    tipoOperacion =
 "";
 
-    document
+    document
 
-     
+     
 .getElementById("btnCobrar")
 
-     
+     
 .classList.remove("tipo-activo");
 
-    document
+    document
 
-     
+     
 .getElementById("btnPagar")
 
-     
+     
 .classList.remove("tipo-activo");
 
-    document
+    document
 
-     
+     
 .getElementById("panelOperacion")
 
-     
+     
 .classList.add("oculto");
 
-    document
+    document
 
-     
+     
 .getElementById("seccionMovimientos")
 
-      .style.display =
+      .style.display =
 "block";
 
-   
+   
 cargarMovimientos(estudianteActual.codigo);
 
-   
+   
 ocultarMensaje("mensajeOperacion");
 
-  }
+  }
 
-  /*
+  /*
 =========================================================
 
-     REGISTRAR
+     REGISTRAR
 MOVIMIENTO
 
-    
+    
 ========================================================= */
 
-  function
+  function
 registrarMovimiento() {
 
-   
+   
 ocultarMensaje("mensajeOperacion");
 
 
-    if
+    if
 (!estudianteActual) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-        "Primero
+        "Primero
 debe seleccionar un estudiante.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    if
+    if
 (!tipoOperacion) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-       
+       
 "Seleccione COBRAR o PAGAR.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    const categoria =
+    const categoria =
 
-     
+     
 document.getElementById("categoria").value;
 
 
-    const concepto =
+    const concepto =
 
-     
+     
 document.getElementById("concepto").value;
 
 
-    const monto =
+    const monto =
 
-      numero(
+      numero(
 
-       
+       
 document.getElementById("monto").value
 
-      );
+      );
 
 
-    const responsable
+    const responsable
 =
 
-     
+     
 document.getElementById("responsable").value.trim();
 
 
-    const observacion
+    const observacion
 =
 
-     
+     
 document.getElementById("observacion").value.trim();
 
 
-    if (!categoria) {
+    if (!categoria) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-       
+       
 "Seleccione una categoría.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    if (!concepto) {
+    if (!concepto) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-       
+       
 "Seleccione un concepto.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    if (monto <= 0)
+    if (monto <= 0)
 {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-        "Ingrese
+        "Ingrese
 un monto mayor que 0.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    if (!responsable)
+    if (!responsable)
 {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-        "Ingrese
+        "Ingrese
 el responsable.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    if (
+    if (
 
-      tipoOperacion
+      tipoOperacion
 === "EGRESO" &&
 
-      monto >
+      monto >
 numero(estudianteActual.saldoActual)
 
-    ) {
+    ) {
 
-      mostrarMensaje(
+      mostrarMensaje(
 
-       
+       
 "mensajeOperacion",
 
-        "El saldo
+        "El saldo
 disponible no permite realizar este pago.",
 
-       
+       
 "error"
 
-      );
+      );
 
-      return;
+      return;
 
-    }
+    }
 
 
-    const datos = {
+    const datos = {
 
-      accion:
+      accion:
 "registrar",
 
-      codigo:
+      codigo:
 estudianteActual.codigo,
 
-      tipo:
+      tipo:
 tipoOperacion,
 
-      categoria:
+      categoria:
 categoria,
 
-      concepto:
+      concepto:
 concepto,
 
-      monto: monto,
+      monto: monto,
 
-      responsable:
+      responsable:
 responsable,
 
-      observacion:
+      observacion:
 observacion,
 
-      requestId:
+      requestId:
 generarRequestId()
 
-    };
+    };
 
 
-    mostrarMensaje(
+    mostrarMensaje(
 
-     
+     
 "mensajeOperacion",
 
-     
+     
 "Registrando movimiento...",
 
-      "ok"
+      "ok"
 
-    );
+    );
 
 
-    llamarAPI(
+    llamarAPI(
 
-      datos,
+      datos,
 
-     
+     
 function(respuesta) {
 
-        if (!respuesta
+        if (!respuesta
 || respuesta.ok === false) {
 
-         
+         
 mostrarMensaje(
 
-           
+           
 "mensajeOperacion",
 
-            respuesta
+            respuesta
 && respuesta.mensaje
 
-              ?
+              ?
 respuesta.mensaje
 
-              :
+              :
 "No se pudo registrar el movimiento.",
 
-           
+           
 "error"
 
-          );
+          );
 
-          return;
+          return;
 
-        }
+        }
 
 
-       
+       
 mostrarMensaje(
 
-         
+         
 "mensajeOperacion",
 
-         
+         
 "Movimiento registrado correctamente.",
 
-         
+         
 "ok"
 
-        );
+        );
 
 
-        if
+        if
 (respuesta.saldoActual !== undefined) {
 
-         
+         
 estudianteActual.saldoActual =
 
-           
+           
 numero(respuesta.saldoActual);
 
 
-         
+         
 document.getElementById("datoSaldo").textContent =
 
-           
+           
 numero(respuesta.saldoActual).toFixed(2) +
 
-            "
+            "
 " +
 
-            MONEDA;
+            MONEDA;
 
-        }
+        }
 
 
-       
+       
 limpiarCamposOperacion();
 
 
-       
+       
 cargarMovimientos(
 
-         
+         
 estudianteActual.codigo
 
-        );
+        );
 
-      }
+      }
 
-    );
+    );
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     MOVIMIENTOS
+     MOVIMIENTOS
 
-    
+    
 ========================================================= */
 
-  function
+  function
 cargarMovimientos(codigo) {
 
-    llamarAPI(
+    llamarAPI(
 
-      {
+      {
 
-        accion:
+        accion:
 "estudiante",
 
-        codigo: codigo
+        codigo: codigo
 
-      },
+      },
 
-     
+     
 function(respuesta) {
 
-        const tabla =
+        const tabla =
 
-         
+         
 document.getElementById("tablaMovimientos");
 
 
-       
+       
 tabla.innerHTML = "";
 
 
-        if (
+        if (
 
-          !respuesta
+          !respuesta
 ||
 
-          respuesta.ok
+          respuesta.ok
 === false ||
 
-         
+         
 !Array.isArray(respuesta.movimientos)
 
-        ) {
+        ) {
 
-          return;
+          return;
 
-        }
+        }
 
 
-       
+       
 respuesta.movimientos.forEach(function(movimiento) {
 
-          const fila =
+          const fila =
 
-           
+           
 document.createElement("tr");
 
 
-          const fecha
+          const fecha
 =
 
-           
+           
 movimiento.fechaTexto ||
 
-           
+           
 movimiento.fecha ||
 
-           
+           
 movimiento.timestamp ||
 
-           
+           
 "";
 
 
-          const tipo =
+          const tipo =
 
-           
+           
 movimiento.tipo ||
 
-           
+           
 movimiento.tipoMovimiento ||
 
-           
+           
 "";
 
 
-          const
+          const
 concepto =
 
-           
+           
 movimiento.concepto || "";
 
 
-          const monto
+          const monto
 =
 
-            numero(
+            numero(
 
-             
+             
 movimiento.monto ||
 
-             
+             
 movimiento.montoLDS
 
-            );
+            );
 
 
-          const
+          const
 responsable =
 
-           
+           
 movimiento.responsable || "";
 
 
-          const
+          const
 observacion =
 
-           
+           
 movimiento.observacion || "";
 
 
-         
+         
 fila.innerHTML =
 
-           
+           
 "<td>" +
 
-             
+             
 escaparHTML(fecha) +
 
-           
+           
 "</td>" +
 
-           
+           
 "<td class='" +
 
-              (tipo
+              (tipo
 === "INGRESO"
 
-                ?
+                ?
 "ingreso"
 
-                :
+                :
 "egreso") +
 
-           
+           
 "'>" +
 
-             
+             
 escaparHTML(tipo) +
 
-           
+           
 "</td>" +
 
-           
+           
 "<td>" +
 
-             
+             
 escaparHTML(concepto) +
 
-           
+           
 "</td>" +
 
-           
+           
 "<td>" +
 
-             
+             
 monto.toFixed(2) +
 
-              "
+              "
 " +
 
-              MONEDA +
+              MONEDA +
 
-           
+           
 "</td>" +
 
-           
+           
 "<td>" +
 
-             
+             
 escaparHTML(responsable) +
 
-           
+           
 "</td>" +
 
-           
+           
 "<td>" +
 
-             
+             
 escaparHTML(observacion) +
 
-           
+           
 "</td>";
 
 
-         
+         
 tabla.appendChild(fila);
 
-        });
+        });
 
-      }
+      }
 
-    );
+    );
 
-  }
+  }
 
 
-  function
+  function
 escaparHTML(valor) {
 
-    return
+    return
 String(valor)
 
-     
+     
 .replace(/&/g, "&amp;")
 
-     
+     
 .replace(/</g, "&lt;")
 
-     
+     
 .replace(/>/g, "&gt;")
 
-     
+     
 .replace(/"/g, "&quot;")
 
-      .replace(/'/g,
+      .replace(/'/g,
 "&#039;");
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     LIMPIAR
+     LIMPIAR
 
-    
+    
 ========================================================= */
 
-  function
+  function
 limpiarCamposOperacion() {
 
-   
+   
 document.getElementById("categoria").value = "";
 
-   
+   
 document.getElementById("concepto").innerHTML =
 
-      '<option
+      '<option
 value="">Seleccione un concepto</option>';
 
-   
+   
 document.getElementById("monto").value = "";
 
-   
+   
 document.getElementById("responsable").value = "";
 
-   
+   
 document.getElementById("observacion").value = "";
 
-  }
+  }
 
 
-  function
+  function
 limpiarOperacion() {
 
-    tipoOperacion =
+    tipoOperacion =
 "";
 
-    document
+    document
 
-     
+     
 .getElementById("btnCobrar")
 
-     
+     
 .classList.remove("tipo-activo");
 
-    document
+    document
 
-     
+     
 .getElementById("btnPagar")
 
-     
+     
 .classList.remove("tipo-activo");
 
 
-   
+   
 limpiarCamposOperacion();
 
-   
+   
 document.getElementById("panelOperacion").classList.add("oculto");
 
-   
+   
 ocultarMensaje("mensajeOperacion");
 
-  }
+  }
 
 
-  /*
+  /*
 =========================================================
 
-     ENTRADA DESDE LA
+     ENTRADA DESDE LA
 PORTADA
 
-    
+    
 ========================================================= */
 
-  function
+  function
 abrirSistemaLDS360(modo) {
 
-   
+   
 document.getElementById("portadaLDS360").style.display =
 "none";
 
-    document
+    document
 
-     
+     
 .getElementById("sistemaPrincipal")
 
-     
+     
 .classList.remove("oculto");
 
-    window.scrollTo(0,
+    window.scrollTo(0,
 0);
 
-    if (modo ===
+    if (modo ===
 "qr") {
 
-      iniciarQR();
+      iniciarQR();
 
-    }
+    }
 
-    if (modo ===
+    if (modo ===
 "manual") {
 
-     
+     
 ingresarCodigoManual();
 
-    }
+    }
 
-  }
+  }
 
 </script>
 
