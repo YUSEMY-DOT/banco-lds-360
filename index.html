@@ -234,8 +234,7 @@ bold;
 
       display: block;
 
-      background:
-#d1e7dd;
+      background: #d1e7dd;
 
       color: #0f5132;
 
@@ -462,8 +461,7 @@ bold;
       border: 1px
 solid #ced4da;
 
-      border-radius:
-7px;
+      border-radius: 7px;
 
       padding: 11px;
 
@@ -525,8 +523,7 @@ left;
 
     th {
 
-      background:
-#123c69;
+      background: #123c69;
 
       color: white;
 
@@ -981,8 +978,7 @@ object-position:bottom center;
 
 }
 
-#portadaLDS360
-.portada-nina{width:34%;left:2%;bottom:0;z-index:2}
+#portadaLDS360 .portada-nina{width:34%;left:2%;bottom:0;z-index:2}
 
 #portadaLDS360
 .portada-nino{width:37%;left:30%;bottom:0;z-index:3}
@@ -1193,15 +1189,6 @@ grid-template-columns: 1fr;
 
     }
 
-
-/* SOLO PORTADA: retirar fondo e imágenes decorativas. INTERIOR INTACTO. */
-#portadaLDS360 .portada-escudo,
-#portadaLDS360 .portada-logo,
-#portadaLDS360 .portada-banco-fondo,
-#portadaLDS360 .portada-personajes{display:none!important;}
-#portadaLDS360 .portada-der{display:none!important;}
-#portadaLDS360 .portada-cuerpo{grid-template-columns:1fr!important;}
-#portadaLDS360 .portada-izq{background-image:none!important;}
 </style>
 
 </head>
@@ -1209,160 +1196,13 @@ grid-template-columns: 1fr;
 
 <body>
 
-  <!-- PORTADA
--->
+  <!-- PORTADA PRINCIPAL ELIMINADA -->
 
-  <section
-id="portadaLDS360">
-
-    <header
-class="portada-header">
-
-      <div
-class="portada-marca">
-
-        
-
-        <div>
-
-          <div
-class="portada-nombre">IEP LA SALLE DEL SUR</div>
-
-          <div
-class="portada-lema">Formamos personas íntegras</div>
-
-        </div>
-
-      </div>
-
-      <div
-class="portada-admin">🔒&nbsp;
-Administrador</div>
-
-    </header>
-
-    <div
-class="portada-cuerpo">
-
-      <section
-class="portada-izq">
-
-        
-
-        <div
-class="portada-subtitulo">Sistema financiero educativo</div>
-
-        <div
-class="portada-descripcion">
-
-          Consulta de
-forma rápida y segura<br>
-
-          la
-información financiera del estudiante.
-
-        </div>
-
-        <div
-class="portada-accesos">
-
-          <button
-type="button"
-
-                 
-class="portada-acceso qr"
-
-                 
-onclick="abrirSistemaLDS360('qr')">
-
-           
-<div>
-
-             
-<h2>ESCANEAR<br>CÓDIGO QR</h2>
-
-             
-<p>Escanea el código del estudiante para consultar.</p>
-
-           
-</div>
-
-            <div
-class="portada-flecha"><span>›</span></div>
-
-         
-</button>
-
-          <button
-type="button"
-
-                 
-class="portada-acceso codigo"
-
-                 
-onclick="abrirSistemaLDS360('manual')">
-
-           
-<div>
-
-             
-<h2>INGRESAR<br>CÓDIGO</h2>
-
-             
-<p>Ingresa el código del estudiante para consultar.</p>
-
-           
-</div>
-
-            <div
-class="portada-flecha"><span>›</span></div>
-
-         
-</button>
-
-        </div>
-
-        <div
-class="portada-seguridad">
-
-          🛡️&nbsp;
-Sistema seguro, confiable y diseñado para el bienestar financiero del
-estudiante.
-
-        </div>
-
-      </section>
-
-      <section
-class="portada-der">
-
-        
-
-        <div
-class="portada-personajes">
-
-          
-
-          
-
-          
-
-        </div>
-
-        <div
-class="portada-marca-final">BANCO<br>LDS 360</div>
-
-      </section>
-
-    </div>
-
-  </section>
-
-  <!-- SISTEMA
+  <!-- SISTEMA
 EXISTENTE: SE CONSERVA -->
 
   <div
-id="sistemaPrincipal" class="sistema-principal oculto">
+id="sistemaPrincipal" class="sistema-principal">
 
   <!-- ENCABEZADO
 -->
@@ -1430,8 +1270,7 @@ onclick="ingresarCodigoManual()">
           ⌨️
 Ingresar código manualmente
 
-       
-</button>
+        </button>
 
       </div>
 
@@ -1450,8 +1289,7 @@ id="seccionEstudiante" class="tarjeta estudiante">
       <div
 class="titulo">Datos del estudiante</div>
 
-      <div
-class="datos-estudiante-layout">
+      <div class="datos-estudiante-layout">
 
         <div
 class="foto-estudiante-contenedor">
@@ -1588,8 +1426,7 @@ type="button"
          
 id="btnPagar"
 
-         
-class="btn-egreso"
+          class="btn-egreso"
 
          
 onclick="seleccionarOperacion('EGRESO')">
@@ -1635,8 +1472,8 @@ class="campo">
           <label
 for="categoria">Categoría</label>
 
-          <select
-id="categoria" onchange="cargarConceptos()">
+          <select id="categoria"
+onchange="cargarConceptos()">
 
             <option
 value="">Seleccione una categoría</option>
@@ -1679,8 +1516,7 @@ type="number"
          
 id="monto"
 
-         
-min="0"
+          min="0"
 
          
 step="0.01"
@@ -1896,8 +1732,7 @@ elemento.textContent = texto;
   function
 ocultarMensaje(id) {
 
-    const elemento =
-document.getElementById(id);
+    const elemento = document.getElementById(id);
 
     elemento.className
 = "mensaje";
@@ -1944,8 +1779,8 @@ Number.isFinite(n) ? n : 0;
     
 ========================================================= */
 
-  function
-llamarAPI(parametros, callback) {
+  function llamarAPI(parametros,
+callback) {
 
     if (
 
@@ -1999,8 +1834,7 @@ Object.keys(parametros)
      
 .map(function(clave) {
 
-        return
-encodeURIComponent(clave) +
+        return encodeURIComponent(clave) +
 
          
 "=" +
@@ -2100,8 +1934,7 @@ ocultarMensaje("mensaje");
     }
 
 
-    lector = new
-Html5Qrcode("lectorQR");
+    lector = new Html5Qrcode("lectorQR");
 
 
     const
@@ -2322,8 +2155,7 @@ mostrarMensaje(
               ?
 respuesta.mensaje
 
-              :
-"Estudiante no encontrado.",
+              : "Estudiante no encontrado.",
 
            
 "error"
@@ -2376,8 +2208,7 @@ estudianteMostrado
        
 cargarMovimientos(
 
-         
-respuesta.estudiante.codigo
+          respuesta.estudiante.codigo
 
         );
 
@@ -2464,8 +2295,8 @@ numero(estudiante.montoBase).toFixed(2) +
       MONEDA;
 
 
-   
-document.getElementById("datoSaldo").textContent =
+    document.getElementById("datoSaldo").textContent
+=
 
      
 numero(estudiante.saldoActual).toFixed(2) +
@@ -2511,8 +2342,7 @@ fotosCandidatas = obtenerURLsFoto(fotoOriginal);
     foto.style.display
 = "none";
 
-   
-foto.removeAttribute("src");
+    foto.removeAttribute("src");
 
     foto.onload =
 function() {
@@ -2556,8 +2386,7 @@ fotosCandidatas[0];
    
 document.getElementById("panelOperacion").classList.add("oculto");
 
-   
-document.getElementById("btnCobrar").classList.remove("tipo-activo");
+    document.getElementById("btnCobrar").classList.remove("tipo-activo");
 
    
 document.getElementById("btnPagar").classList.remove("tipo-activo");
@@ -2597,8 +2426,8 @@ document.getElementById("btnPagar").classList.remove("tipo-activo");
      CATEGORÍAS Y
 CONCEPTOS
 
-    
-========================================================= */
+     =========================================================
+*/
 
   function
 cargarOpciones() {
@@ -2644,8 +2473,7 @@ CONFIG_OPCIONES tiene la estructura REAL:
          * A =
 INGRESOS_Y_SUELDOS
 
-         * B =
-PREMIOS_Y_BONIFICACIONES
+         * B = PREMIOS_Y_BONIFICACIONES
 
          * C =
 AHORROS_E_INVERSIONES
@@ -2686,8 +2514,7 @@ respuesta.opcionesPorCategoria
         categorias =
 {};
 
-       
-conceptosCatalogo = {};
+        conceptosCatalogo = {};
 
        
 Object.keys(opciones).forEach(function(categoria) {
@@ -2725,8 +2552,7 @@ String(concepto || "").trim();
             if
 (categorias[categoria].indexOf(texto) === -1) {
 
-             
-categorias[categoria].push(texto);
+              categorias[categoria].push(texto);
 
             }
 
@@ -2821,8 +2647,8 @@ String(categoria || "")
      
 .replace(/[\u0300-\u036f]/g, "")
 
-     
-.replace(/[^A-Z0-9]+/g, "_")
+      .replace(/[^A-Z0-9]+/g,
+"_")
 
      
 .replace(/^_+|_+$/g, "");
@@ -3186,8 +3012,7 @@ tipo;
 
     const btnCobrar =
 
-     
-document.getElementById("btnCobrar");
+      document.getElementById("btnCobrar");
 
     const btnPagar =
 
@@ -3261,8 +3086,7 @@ document.getElementById("concepto").innerHTML =
 value="">Seleccione un concepto</option>';
 
 
-   
-cargarCategorias();
+    cargarCategorias();
 
 
    
@@ -3360,8 +3184,7 @@ debe seleccionar un estudiante.",
     }
 
 
-    if
-(!tipoOperacion) {
+    if (!tipoOperacion) {
 
       mostrarMensaje(
 
@@ -3413,8 +3236,7 @@ document.getElementById("responsable").value.trim();
     const observacion
 =
 
-     
-document.getElementById("observacion").value.trim();
+      document.getElementById("observacion").value.trim();
 
 
     if (!categoria) {
@@ -3532,8 +3354,7 @@ disponible no permite realizar este pago.",
       accion:
 "registrar",
 
-      codigo:
-estudianteActual.codigo,
+      codigo: estudianteActual.codigo,
 
       tipo:
 tipoOperacion,
@@ -3732,8 +3553,7 @@ document.createElement("tr");
            
 movimiento.fechaTexto ||
 
-           
-movimiento.fecha ||
+            movimiento.fecha ||
 
            
 movimiento.timestamp ||
@@ -3785,8 +3605,8 @@ movimiento.responsable || "";
           const
 observacion =
 
-           
-movimiento.observacion || "";
+            movimiento.observacion
+|| "";
 
 
          
@@ -3932,8 +3752,8 @@ document.getElementById("observacion").value = "";
   }
 
 
-  function
-limpiarOperacion() {
+  function limpiarOperacion()
+{
 
     tipoOperacion =
 "";
