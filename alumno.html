@@ -1067,6 +1067,63 @@ async function confirmarAcceso() {
   }
 }
 
+function cargarFoto(url) {
+  const foto = document.getElementById("datoFoto");
+  if (!foto) return;
+
+  const texto = String(url || "").trim();
+  foto.dataset.intento = "0";
+
+  const urls = obtenerURLsFoto(texto);
+
+  if (!urls.length) {
+    foto.removeAttribute("src");
+    foto.style.display = "none";
+    foto.onerror = null;
+    return;
+  }
+
+  foto.style.display = "block";
+  foto.src = urls[0];
+
+  foto.onerror = function () {
+    const siguiente = Number(foto.dataset.intento || "0") + 1;
+    foto.dataset.intento = String(siguiente);
+
+    if (siguiente < urls.length) {
+      foto.src = urls[siguiente];
+    } else {
+      foto.removeAttribute("src");
+      foto.style.display = "none";
+      foto.onerror = null;
+    }
+  };
+}
+
+function obtenerURLsFoto(url) {
+  const texto = String(url || "").trim();
+  if (!texto) return [];
+
+  let id = "";
+  const matchArchivo = texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  const matchParametro = texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+  if (matchArchivo) {
+    id = matchArchivo[1];
+  } else if (matchParametro) {
+    id = matchParametro[1];
+  }
+
+  if (!id) return [texto];
+
+  return [
+    texto,
+    "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w800",
+    "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(id),
+    "https://lh3.googleusercontent.com/d/" + encodeURIComponent(id) + "=w800"
+  ];
+}
+
 function mostrarFichaEstudiante(datos) {
 
   const estudiante =
