@@ -1203,141 +1203,65 @@ grid-template-columns: 1fr;
   <!-- PORTADA
 -->
 
-  <section
-id="portadaLDS360">
+  <section id="portadaLDS360" class="portada-limpia">
 
-    <header
-class="portada-header">
+    <div class="portada-botones">
 
-      <div
-class="portada-marca">
+      <button type="button" class="btn-portada btn-portada-qr" onclick="abrirSistemaLDS360('qr')">
+        📷 ESCANEAR CÓDIGO QR
+      </button>
 
-        <div>
+      <button type="button" class="btn-portada btn-portada-codigo" onclick="abrirSistemaLDS360('manual')">
+        ⌨️ INGRESAR CÓDIGO
+      </button>
 
-          <div
-class="portada-nombre">IEP LA SALLE DEL SUR</div>
+      <button type="button" class="btn-portada btn-portada-admin" onclick="alert('Acceso de administrador no configurado en esta versión.')">
+        🔒 ADMINISTRADOR
+      </button>
 
-          <div
-class="portada-lema">Formamos personas íntegras</div>
+    </div>
 
-        </div>
+  </section>
 
-      </div>
+  <style>
+    #portadaLDS360.portada-limpia {
+      min-height: 100vh;
+      width: 100%;
+      background: #ffffff !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      overflow: hidden;
+    }
+    #portadaLDS360 .portada-botones {
+      width: min(430px, 92vw);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+    }
+    #portadaLDS360 .btn-portada {
+      width: 100%;
+      min-height: 58px;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    }
+    #portadaLDS360 .btn-portada-qr { background: #123c69; color: #ffffff; }
+    #portadaLDS360 .btn-portada-codigo { background: #198754; color: #ffffff; }
+    #portadaLDS360 .btn-portada-admin { background: #6c757d; color: #ffffff; }
+    @media (max-width: 520px) {
+      #portadaLDS360.portada-limpia { padding: 20px; }
+      #portadaLDS360 .btn-portada { min-height: 54px; font-size: 14px; }
+    }
+  </style>
 
-      <div
-class="portada-admin">🔒&nbsp;
-Administrador</div>
-
-    </header>
-
-    <div
-class="portada-cuerpo">
-
-      <section
-class="portada-izq">
-
-        <div
-class="portada-subtitulo">Sistema financiero educativo</div>
-
-        <div
-class="portada-descripcion">
-
-          Consulta de
-forma rápida y segura<br>
-
-          la
-información financiera del estudiante.
-
-        </div>
-
-        <div
-class="portada-accesos">
-
-          <button
-type="button"
-
-                 
-class="portada-acceso qr"
-
-                 
-onclick="abrirSistemaLDS360('qr')">
-
-           
-<div>
-
-             
-<h2>ESCANEAR<br>CÓDIGO QR</h2>
-
-             
-<p>Escanea el código del estudiante para consultar.</p>
-
-           
-</div>
-
-            <div
-class="portada-flecha"><span>›</span></div>
-
-         
-</button>
-
-          <button
-type="button"
-
-                 
-class="portada-acceso codigo"
-
-                 
-onclick="abrirSistemaLDS360('manual')">
-
-           
-<div>
-
-             
-<h2>INGRESAR<br>CÓDIGO</h2>
-
-             
-<p>Ingresa el código del estudiante para consultar.</p>
-
-           
-</div>
-
-            <div
-class="portada-flecha"><span>›</span></div>
-
-         
-</button>
-
-        </div>
-
-        <div
-class="portada-seguridad">
-
-          🛡️&nbsp;
-Sistema seguro, confiable y diseñado para el bienestar financiero del
-estudiante.
-
-        </div>
-
-      </section>
-
-      <section
-class="portada-der">
-
-        <div
-class="portada-personajes">
-
-        </div>
-
-        <div
-class="portada-marca-final">BANCO<br>LDS 360</div>
-
-      </section>
-
-    </div>
-
-  </section>
-
-  <!-- SISTEMA
+  <!-- SISTEMA
 EXISTENTE: SE CONSERVA -->
 
   <div
