@@ -1,625 +1,1262 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANCO LDS 360 — Consulta del estudiante</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANCO LDS 360</title>
 
-<style>
-:root{
-  --azul:#123c69;
-  --azul2:#071f40;
-  --dorado:#c8a951;
-  --fondo:#eef3f8;
-  --blanco:#fff;
-  --texto:#1f2937;
-  --muted:#64748b;
-  --borde:#dbe4ee;
-  --verde:#15803d;
-  --rojo:#b91c1c;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  color:var(--texto);
-  background:
-    radial-gradient(circle at top right,rgba(200,169,81,.18),transparent 30%),
-    linear-gradient(135deg,#f7f9fc 0%,var(--fondo) 55%,#e7edf5 100%);
-  min-height:100vh;
-}
-header{
-  background:linear-gradient(135deg,var(--azul2),var(--azul));
-  color:#fff;
-  padding:22px clamp(18px,4vw,54px);
-  box-shadow:0 8px 25px rgba(7,31,64,.2);
-}
-.header-inner{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-.brand{display:flex;align-items:center;gap:15px}
-.brand-mark{
-  width:52px;height:52px;border-radius:14px;display:grid;place-items:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.28);
-  font-size:28px;
-}
-.brand h1{margin:0;font-size:clamp(22px,3vw,32px)}
-.brand p{margin:4px 0 0;opacity:.88;font-size:14px}
-main{max-width:1100px;margin:0 auto;padding:28px 18px 45px}
-.panel{
-  background:var(--blanco);
-  border:1px solid var(--borde);
-  border-radius:20px;
-  box-shadow:0 8px 24px rgba(15,23,42,.06);
-  overflow:hidden;
-}
-.panel-head{
-  padding:18px 20px;
-  border-bottom:1px solid var(--borde);
-}
-.panel-head h2{margin:0;color:var(--azul);font-size:21px}
-.panel-body{padding:20px}
-label{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin:12px 0 6px;
-  font-weight:700;
-}
-input{
-  width:100%;
-  border:1px solid #cbd5e1;
-  border-radius:11px;
-  padding:12px 13px;
-  font:inherit;
-  color:var(--texto);
-  background:#fff;
-  outline:none;
-}
-input:focus{
-  border-color:var(--azul);
-  box-shadow:0 0 0 3px rgba(18,60,105,.1);
-}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-button{
-  border:0;
-  border-radius:12px;
-  padding:11px 15px;
-  font:inherit;
-  font-weight:700;
-  cursor:pointer;
-}
-.btn-gold{background:var(--dorado);color:#16253a}
-.btn-outline{background:#fff;border:1px solid var(--borde);color:var(--azul)}
-.message{
-  margin-top:12px;
-  padding:11px 12px;
-  border-radius:10px;
-  display:none;
-  font-size:14px;
-}
-.message.ok{display:block;background:#ecfdf3;color:var(--verde)}
-.message.error{display:block;background:#fef2f2;color:var(--rojo)}
-.hidden{display:none!important}
+  <!-- Mismo lector QR gratuito del banco actual -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
-.profile{
-  margin-top:20px;
-  background:#fff;
-  border:1px solid var(--borde);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 8px 24px rgba(15,23,42,.05);
-}
-.profile-top{
-  display:grid;
-  grid-template-columns:180px minmax(0,1fr);
-  gap:22px;
-  padding:22px;
-  align-items:center;
-}
-.photo-wrap{
-  width:180px;height:180px;
-  border-radius:18px;
-  overflow:hidden;
-  background:#eaf0f6;
-  border:1px solid var(--borde);
-  display:grid;
-  place-items:center;
-}
-.photo{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:none;
-}
-.photo-placeholder{font-size:62px;color:#8aa0b7}
-.name{font-size:28px;font-weight:900;color:var(--azul);margin-bottom:7px}
-.meta{color:var(--muted);font-size:14px;line-height:1.65}
-.balance{
-  margin-top:16px;
-  background:#e7f1ff;
-  border-radius:14px;
-  padding:16px 18px;
-}
-.balance span{display:block;font-size:12px;color:#555}
-.balance strong{display:block;font-size:30px;color:var(--azul);margin-top:5px}
-.summary{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  padding:0 22px 22px;
-}
-.summary-card{
-  border:1px solid var(--borde);
-  border-radius:14px;
-  padding:14px;
-  background:#f8fafc;
-}
-.summary-card span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-.summary-card strong{font-size:20px;color:var(--azul)}
-.table-wrap{
-  overflow:auto;
-  border-top:1px solid var(--borde);
-}
-table{width:100%;border-collapse:collapse;min-width:720px}
-th,td{
-  padding:11px 12px;
-  border-bottom:1px solid #e5eaf0;
-  text-align:left;
-  font-size:13px;
-  vertical-align:top;
-}
-th{
-  background:#f4f7fb;
-  color:var(--azul);
-  font-size:12px;
-  text-transform:uppercase;
-}
-tr:last-child td{border-bottom:0}
-.empty{text-align:center;color:var(--muted);padding:28px 14px}
-.ingreso{color:var(--verde);font-weight:700}
-.egreso{color:var(--rojo);font-weight:700}
-.note{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:12px;
-  background:#eff6ff;
-  border:1px solid #cfe1f5;
-  color:#21456d;
-  font-size:13px;
-  line-height:1.45;
-}
-footer{text-align:center;color:var(--muted);padding:0 18px 30px;font-size:12px}
+  <style>
 
-@media(max-width:700px){
-  .header-inner{align-items:flex-start;flex-direction:column}
-  .profile-top{grid-template-columns:1fr}
-  .photo-wrap{width:150px;height:150px}
-  .summary{grid-template-columns:1fr}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+    background:
+        linear-gradient(rgba(7,31,64,0.18), rgba(7,31,64,0.18)),
+        url("fondo-financiero.jpg") center center / cover fixed no-repeat;
+    color: #1f2937;
 }
-</style>
+    
+    .encabezado {
+      background: #123c69;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .encabezado h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .encabezado p {
+      font-size: 14px;
+    }
+
+    .contenedor {
+      width: 95%;
+      max-width: 1100px;
+      margin: 25px auto;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .titulo {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #123c69;
+    }
+
+    #lectorQR {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 15px;
+    }
+
+    .botones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .btn-principal {
+      background: #123c69;
+      color: white;
+    }
+
+    .btn-ingreso {
+      background: #198754;
+      color: white;
+    }
+
+    .btn-egreso {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-saldo {
+      background: #123c69;
+      color: white;
+    }
+
+
+
+    .btn-secundario {
+      background: #6c757d;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .mensaje.ok {
+      display: block;
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .mensaje.error {
+      display: block;
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .estudiante {
+      display: none;
+    }
+
+    /* =========================================================
+       DISTRIBUCIÓN RESPONSIVE DEL ESTUDIANTE
+       PC: FOTO IZQUIERDA / INFORMACIÓN DERECHA
+       CELULAR: TODO EN UNA COLUMNA
+       ========================================================= */
+
+    #seccionEstudiante {
+      position: relative;
+    }
+
+    .foto-estudiante-contenedor {
+      grid-column: 1;
+      grid-row: 2 / span 2;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 0;
+    }
+
+    .foto-estudiante {
+      width: 230px;
+      height: 230px;
+      max-width: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 4px solid #123c69;
+      background: #f8f9fa;
+      display: none;
+    }
+
+    .datos-estudiante {
+      grid-column: 2;
+      grid-row: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 0;
+    }
+
+    #seccionEstudiante .saldo {
+      grid-column: 2;
+      grid-row: 3;
+      margin-top: 12px;
+    }
+
+    /* Cuando el estudiante ya fue cargado, JS usa display:grid */
+    #seccionEstudiante {
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 18px 20px;
+      align-items: start;
+    }
+
+    #seccionEstudiante > .titulo {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    @media (max-width: 768px) {
+      #seccionEstudiante {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      #seccionEstudiante > .titulo,
+      .foto-estudiante-contenedor,
+      .datos-estudiante,
+      #seccionEstudiante .saldo {
+        grid-column: 1;
+      }
+
+      #seccionEstudiante > .titulo {
+        grid-row: 1;
+      }
+
+      .foto-estudiante-contenedor {
+        grid-row: 2;
+      }
+
+      .foto-estudiante {
+        width: 170px;
+        height: 170px;
+      }
+
+      .datos-estudiante {
+        grid-row: 3;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #seccionEstudiante .saldo {
+        grid-row: 4;
+      }
+
+      .contenedor {
+        width: 94%;
+        max-width: 100%;
+      }
+
+      .tarjeta {
+        padding: 16px;
+      }
+
+      .tipo-operacion {
+        flex-direction: column;
+      }
+
+      .tipo-operacion button {
+        width: 100%;
+      }
+
+      table {
+        min-width: 700px;
+      }
+
+      .tabla-contenedor {
+        overflow-x: auto;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .datos-estudiante {
+        grid-template-columns: 1fr;
+      }
+
+      .foto-estudiante {
+        width: 155px;
+        height: 155px;
+      }
+
+      .encabezado h1 {
+        font-size: 24px;
+      }
+    }
+
+    .dato {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .dato strong {
+      display: block;
+      color: #123c69;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+
+    .saldo {
+      background: #e7f1ff;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .saldo span {
+      display: block;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .saldo strong {
+      display: block;
+      font-size: 30px;
+      color: #123c69;
+      margin-top: 5px;
+    }
+
+    .operacion {
+      display: none;
+    }
+
+    .tipo-operacion {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tipo-operacion button {
+      flex: 1;
+    }
+
+    .tipo-activo {
+      outline: 3px solid rgba(18,60,105,0.25);
+    }
+
+    .campo {
+      margin-bottom: 15px;
+    }
+
+    .campo label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      width: 100%;
+      border: 1px solid #ced4da;
+      border-radius: 7px;
+      padding: 11px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .campo textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      min-width: 700px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #123c69;
+      color: white;
+    }
+
+    .ingreso {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    .egreso {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    .cargando {
+      text-align: center;
+      padding: 15px;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      .encabezado h1 {
+        font-size: 22px;
+      }
+
+      .tipo-operacion {
+        flex-direction: column;
+      }
+    }
+  
+
+  /* PORTADA PRINCIPAL: capa independiente; el sistema interior no se modifica. */
+  #portadaLDS360{position:fixed;inset:0;z-index:99999;width:100vw;height:100vh;overflow:hidden;background:#071f40;}
+  #portadaLDS360 .portada-bg{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center center;}
+  #portadaLDS360 .portada-hotspot{position:absolute;z-index:2;border:0;padding:0;margin:0;background:transparent;cursor:pointer;}
+  #portadaLDS360 .portada-hotspot:focus-visible{outline:3px solid #f4c400;outline-offset:3px;border-radius:14px;}
+  #portadaLDS360 .portada-hotspot.qr{left:14.8%;top:66.0%;width:17.0%;height:9.5%;}
+  #portadaLDS360 .portada-hotspot.codigo{left:32.5%;top:66.0%;width:17.0%;height:9.5%;}
+  @media(max-width:900px){#portadaLDS360 .portada-hotspot.qr{left:14%;top:65.5%;width:18%;height:10%;}#portadaLDS360 .portada-hotspot.codigo{left:32%;top:65.5%;width:18%;height:10%;}}
+  @media(max-width:600px){#portadaLDS360 .portada-hotspot.qr{left:8%;top:62%;width:40%;height:12%;}#portadaLDS360 .portada-hotspot.codigo{left:52%;top:62%;width:40%;height:12%;}}
+
+
+    /* SOLO para el acceso de alumnos: clave antes de mostrar el estado de cuenta. */
+    .acceso-clave {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .acceso-clave.activo {
+      display: block;
+    }
+
+    .estado-acceso {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fff8e1;
+      color: #6b5300;
+      font-size: 13px;
+    }
+
+    .btn-salir-alumno {
+      background: #6c757d;
+      color: white;
+    }
+  </style>
 </head>
 
 <body>
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <div class="brand-mark">🎓</div>
-      <div>
-        <h1>BANCO LDS 360</h1>
-        <p>IEP LA SALLE DEL SUR · Consulta del estado de cuenta</p>
-      </div>
-    </div>
-  </div>
-</header>
 
-<main>
-  <section class="panel" id="loginPanel">
-    <div class="panel-head">
-      <h2>🔐 Ingreso del estudiante</h2>
-    </div>
+  <!-- ENCABEZADO: MISMO FORMATO VISUAL DEL BANCO ACTUAL -->
+  <header class="encabezado">
+    <h1>BANCO LDS 360</h1>
+    <p>IEP LA SALLE DEL SUR</p>
+    <p>Nuevo Sol Lasallista (LDS)</p>
+  </header>
 
-    <div class="panel-body">
-      <label for="codigo">Código de estudiante</label>
-      <input id="codigo" type="text" maxlength="40"
-             placeholder="Ejemplo: LDS-EST-001"
-             autocomplete="username"
-             autocapitalize="characters">
+  <main class="contenedor">
 
-      <label for="clave">Clave personal</label>
-      <input id="clave" type="password" maxlength="80"
-             placeholder="Ingresa tu clave"
-             autocomplete="current-password">
+    <!-- IDENTIFICACIÓN -->
+    <section class="tarjeta">
 
-      <div class="actions">
-        <button class="btn-gold" type="button" id="btnIngresar">Ingresar</button>
-      </div>
+      <div class="titulo">Identificación del estudiante</div>
 
-      <div id="mensaje" class="message"></div>
+      <div id="lectorQR"></div>
 
-      <div class="note">
-        Ingresa únicamente tu propio código y clave. Después del acceso,
-        esta página muestra solo la información correspondiente a esa cuenta.
-      </div>
-    </div>
-  </section>
+      <div class="botones">
+        <button
+          type="button"
+          class="btn-principal"
+          onclick="iniciarQR()">
+          📷 Escanear QR
+        </button>
 
-  <section id="perfil" class="profile hidden">
-    <div class="profile-top">
-      <div class="photo-wrap">
-        <img id="foto" class="photo" src="" alt="Foto del estudiante">
-        <div id="fotoPlaceholder" class="photo-placeholder">👤</div>
+        <button
+          type="button"
+          class="btn-secundario"
+          onclick="ingresarCodigoManual()">
+          ⌨️ Ingresar código manualmente
+        </button>
       </div>
 
-      <div>
-        <div id="nombre" class="name">—</div>
-        <div id="meta" class="meta">—</div>
+      <div id="mensaje" class="mensaje"></div>
 
-        <div class="balance">
-          <span>Saldo actual</span>
-          <strong id="saldo">0.00 LDS</strong>
+      <!-- CLAVE: APARECE DESPUÉS DE IDENTIFICAR EL CÓDIGO -->
+      <div id="accesoClave" class="acceso-clave">
+
+        <div class="campo">
+          <label for="claveAlumno">Clave personal</label>
+          <input
+            type="password"
+            id="claveAlumno"
+            maxlength="80"
+            autocomplete="current-password"
+            placeholder="Ingrese su clave">
         </div>
-      </div>
-    </div>
 
-    <div class="summary">
-      <div class="summary-card">
-        <span>Total ingresos</span>
-        <strong id="ingresos">0.00 LDS</strong>
-      </div>
-      <div class="summary-card">
-        <span>Total egresos</span>
-        <strong id="egresos">0.00 LDS</strong>
-      </div>
-      <div class="summary-card">
-        <span>Movimientos registrados</span>
-        <strong id="contadorMovimientos">0</strong>
-      </div>
-    </div>
+        <div class="botones">
+          <button
+            type="button"
+            class="btn-principal"
+            onclick="confirmarAcceso()">
+            🔐 Ingresar a mi cuenta
+          </button>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Tipo</th>
-            <th>Concepto</th>
-            <th>Monto LDS</th>
-            <th>Responsable</th>
-            <th>Observación</th>
-          </tr>
-        </thead>
-        <tbody id="tablaMovimientos">
-          <tr>
-            <td colspan="6" class="empty">Sin movimientos registrados.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-</main>
+          <button
+            type="button"
+            class="btn-salir-alumno"
+            onclick="reiniciarAcceso()">
+            Limpiar
+          </button>
+        </div>
 
-<footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
+        <div id="codigoSeleccionado" class="estado-acceso"></div>
+      </div>
+
+    </section>
+
+    <!-- DATOS DEL ESTUDIANTE -->
+    <section id="seccionEstudiante" class="tarjeta estudiante">
+
+      <div class="titulo">Datos del estudiante</div>
+
+      <div class="foto-estudiante-contenedor">
+        <img id="datoFoto" class="foto-estudiante" src="" alt="Foto del estudiante">
+      </div>
+
+      <div class="datos-estudiante">
+
+        <div class="dato">
+          <strong>Código</strong>
+          <span id="datoCodigo">-</span>
+        </div>
+
+        <div class="dato">
+          <strong>Estudiante</strong>
+          <span id="datoNombre">-</span>
+        </div>
+
+        <div class="dato">
+          <strong>Grado</strong>
+          <span id="datoGrado">-</span>
+        </div>
+
+        <div class="dato">
+          <strong>Sección</strong>
+          <span id="datoSeccion">-</span>
+        </div>
+
+        <div class="dato">
+          <strong>Docente</strong>
+          <span id="datoDocente">-</span>
+        </div>
+
+        <div class="dato">
+          <strong>Monto base</strong>
+          <span id="datoBase">0.00 LDS</span>
+        </div>
+
+      </div>
+
+      <div class="saldo">
+        <span>Saldo actual</span>
+        <strong id="datoSaldo">0.00 LDS</strong>
+      </div>
+
+    </section>
+
+    <!-- MOVIMIENTOS -->
+    <section id="seccionMovimientos" class="tarjeta estudiante">
+
+      <div class="titulo">Movimientos del estudiante</div>
+
+      <div class="tabla-contenedor">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Concepto</th>
+              <th>Monto LDS</th>
+              <th>Responsable</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+
+          <tbody id="tablaMovimientos"></tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
 
 <script>
-/*
- * IMPORTANTE:
- * Este archivo es NUEVO.
- * No reemplaza ni modifica index.html, app.js ni administrador.html.
- *
- * Coloca aquí la URL de la NUEVA implementación de Apps Script
- * exclusiva para alumnos.
- */
-const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxZ3ZYzBGAfFUdyJpDpMlAAVOBVrDocj3E3jJ1GTZIWTPjlSv1LjfMECbMmDWVU-H-prQ/exec";
+  /* =========================================================
+     CONFIGURACIÓN
+     ========================================================= */
 
-function textoSeguro(valor){
-  return String(valor == null ? "" : valor).trim();
-}
+  const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxZ3ZYzBGAfFUdyJpDpMlAAVOBVrDocj3E3jJ1GTZIWTPjlSv1LjfMECbMmDWVU-H-prQ/exec";
 
-function normalizarCodigo(codigo){
-  return textoSeguro(codigo)
-    .toUpperCase()
-    .replace(/[._\s]+/g,"-")
-    .replace(/-+/g,"-");
-}
 
-function mostrarMensaje(texto,tipo){
-  const el=document.getElementById("mensaje");
-  el.textContent=texto;
-  el.className="message "+tipo;
-}
+  /* =========================================================
+     VARIABLES
+     ========================================================= */
 
-function formatearLDS(valor){
-  const n=Number(valor);
-  return Number.isFinite(n) ? n.toFixed(2) + " LDS" : "0.00 LDS";
-}
+  let codigoPendiente = "";
+  let noncePendiente = "";
+  let saltPendiente = "";
+  let lector = null;
 
-function escaparHTML(texto){
-  return String(texto ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/\x27/g,"&#39;")
-    .replace(/"/g,"&quot;");
-}
 
-async function sha256(texto){
-  const datos = new TextEncoder().encode(texto);
-  const hash = await crypto.subtle.digest("SHA-256",datos);
-  return Array.from(new Uint8Array(hash))
-    .map(byte => byte.toString(16).padStart(2,"0"))
-    .join("");
-}
+  /* =========================================================
+     UTILIDADES
+     ========================================================= */
 
-function jsonp(parametros){
-  return new Promise(function(resolve,reject){
-    const callback =
-      "ldsAlumno_"+Date.now()+"_"+Math.floor(Math.random()*100000);
+  function mostrarMensaje(id, texto, tipo) {
+    const elemento = document.getElementById(id);
+    elemento.textContent = texto;
+    elemento.className = "mensaje " + tipo;
+  }
 
-    const query = Object.keys(parametros)
-      .map(function(k){
-        return encodeURIComponent(k)+"="+encodeURIComponent(parametros[k]);
-      })
-      .join("&");
+  function ocultarMensaje(id) {
+    const elemento = document.getElementById(id);
+    elemento.className = "mensaje";
+    elemento.textContent = "";
+  }
 
-    const script=document.createElement("script");
-    script.src=
-      ALUMNOS_API_URL+
-      "?"+query+
-      "&callback="+encodeURIComponent(callback);
+  function numero(valor) {
+    const n = Number(valor);
+    return Number.isFinite(n) ? n : 0;
+  }
 
-    let terminado=false;
+  function normalizarCodigo(codigo) {
+    return String(codigo == null ? "" : codigo)
+      .trim()
+      .toUpperCase()
+      .replace(/[._\s]+/g, "-")
+      .replace(/-+/g, "-");
+  }
 
-    const limpiar=function(){
-      if(script.parentNode) script.parentNode.removeChild(script);
-      try{delete window[callback];}catch(e){window[callback]=undefined;}
-    };
+  function escaparHTML(valor) {
+    return String(valor == null ? "" : valor)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-    const temporizador=setTimeout(function(){
-      if(terminado)return;
-      terminado=true;
-      limpiar();
-      reject(new Error("Tiempo de espera agotado."));
-    },15000);
+  async function sha256(texto) {
+    const datos = new TextEncoder().encode(texto);
+    const hash = await crypto.subtle.digest("SHA-256", datos);
+    return Array.from(new Uint8Array(hash))
+      .map(byte => byte.toString(16).padStart(2, "0"))
+      .join("");
+  }
 
-    window[callback]=function(respuesta){
-      if(terminado)return;
-      terminado=true;
-      clearTimeout(temporizador);
-      limpiar();
-      resolve(respuesta);
-    };
 
-    script.onerror=function(){
-      if(terminado)return;
-      terminado=true;
-      clearTimeout(temporizador);
-      limpiar();
-      reject(new Error("No se pudo conectar con el servicio de alumnos."));
-    };
+  /* =========================================================
+     JSONP
+     ========================================================= */
 
-    document.body.appendChild(script);
-  });
-}
+  function llamarAPI(parametros) {
+    return new Promise(function(resolve, reject) {
 
-async function prepararFoto(url){
-  const texto=textoSeguro(url);
-  if(!texto)return [];
+      const callback =
+        "callbackAlumnoLDS_" +
+        Date.now() +
+        "_" +
+        Math.floor(Math.random() * 100000);
 
-  let id="";
-  const matchArchivo=texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  const matchParametro=texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      const query = Object.keys(parametros)
+        .map(function(clave) {
+          return encodeURIComponent(clave) +
+            "=" +
+            encodeURIComponent(parametros[clave]);
+        })
+        .join("&");
 
-  if(matchArchivo) id=matchArchivo[1];
-  else if(matchParametro) id=matchParametro[1];
+      const script = document.createElement("script");
 
-  if(!id)return [texto];
+      script.src =
+        ALUMNOS_API_URL +
+        "?" +
+        query +
+        "&callback=" +
+        encodeURIComponent(callback);
 
-  return [
-    texto,
-    "https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w800",
-    "https://drive.google.com/uc?export=view&id="+encodeURIComponent(id),
-    "https://lh3.googleusercontent.com/d/"+encodeURIComponent(id)+"=w800"
-  ];
-}
+      let terminado = false;
 
-async function mostrarFoto(url){
-  const foto=document.getElementById("foto");
-  const placeholder=document.getElementById("fotoPlaceholder");
-  const urls=await prepararFoto(url);
+      const limpiar = function() {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
 
-  foto.style.display="none";
-  placeholder.style.display="grid";
-  foto.removeAttribute("src");
+        try {
+          delete window[callback];
+        } catch (e) {
+          window[callback] = undefined;
+        }
+      };
 
-  if(!urls.length)return;
+      const temporizador = setTimeout(function() {
+        if (terminado) return;
 
-  let intento=0;
+        terminado = true;
+        limpiar();
 
-  foto.onerror=function(){
-    intento++;
-    if(intento<urls.length){
-      foto.src=urls[intento];
-    }else{
-      foto.style.display="none";
-      placeholder.style.display="grid";
+        reject(
+          new Error(
+            "El servicio de acceso no respondió a tiempo."
+          )
+        );
+      }, 15000);
+
+      window[callback] = function(respuesta) {
+        if (terminado) return;
+
+        terminado = true;
+        clearTimeout(temporizador);
+        limpiar();
+
+        resolve(respuesta);
+      };
+
+      script.onerror = function() {
+        if (terminado) return;
+
+        terminado = true;
+        clearTimeout(temporizador);
+        limpiar();
+
+        reject(
+          new Error(
+            "No se pudo conectar con BANCO LDS 360."
+          )
+        );
+      };
+
+      document.body.appendChild(script);
+    });
+  }
+
+
+  /* =========================================================
+     QR
+     ========================================================= */
+
+  function detenerQR() {
+    if (!lector) return;
+
+    try {
+      lector.stop();
+    } catch (e) {}
+
+    lector = null;
+  }
+
+  function iniciarQR() {
+
+    ocultarMensaje("mensaje");
+
+    if (lector) {
+      try {
+        lector.stop();
+      } catch (e) {}
+      lector = null;
     }
-  };
 
-  foto.onload=function(){
-    foto.style.display="block";
-    placeholder.style.display="none";
-  };
+    try {
+      lector = new Html5Qrcode("lectorQR");
+    } catch (error) {
+      mostrarMensaje(
+        "mensaje",
+        "No fue posible iniciar el lector QR.",
+        "error"
+      );
+      return;
+    }
 
-  foto.src=urls[0];
-}
+    const configuracion = {
+      fps: 10,
+      qrbox: {
+        width: 250,
+        height: 250
+      }
+    };
 
-function mostrarPerfil(datos){
-  const estudiante=datos.estudiante || {};
-  const cuenta=datos.cuenta || {};
-  const movimientos=Array.isArray(datos.movimientos)
-    ? datos.movimientos
-    : [];
+    lector.start(
+      { facingMode: "environment" },
+      configuracion,
+      function(codigoQR) {
 
-  document.getElementById("nombre").textContent =
-    estudiante.nombreCompleto || "Estudiante";
+        detenerQR();
 
-  document.getElementById("meta").textContent =
-    [
-      estudiante.codigo || "",
-      estudiante.grado ? "Grado: "+estudiante.grado : "",
-      estudiante.seccion ? "Sección: "+estudiante.seccion : "",
-      estudiante.docente ? "Docente: "+estudiante.docente : ""
-    ].filter(Boolean).join(" · ");
+        prepararCodigo(codigoQR);
 
-  document.getElementById("saldo").textContent =
-    formatearLDS(cuenta.saldoActual);
+      },
+      function(error) {
 
-  document.getElementById("ingresos").textContent =
-    formatearLDS(cuenta.totalIngresos);
+        // Errores normales de lectura: no interrumpir.
 
-  document.getElementById("egresos").textContent =
-    formatearLDS(cuenta.totalEgresos);
+      }
+    ).catch(function(error) {
 
-  document.getElementById("contadorMovimientos").textContent =
-    String(movimientos.length);
+      mostrarMensaje(
+        "mensaje",
+        "No fue posible iniciar la cámara. Use el ingreso manual.",
+        "error"
+      );
 
-  const tbody=document.getElementById("tablaMovimientos");
+    });
+  }
 
-  if(!movimientos.length){
-    tbody.innerHTML =
-      '<tr><td colspan="6" class="empty">Sin movimientos registrados.</td></tr>';
-  }else{
-    tbody.innerHTML = movimientos.map(function(m){
-      const tipo=textoSeguro(
-        m.tipo || m.TIPO || m.tipoMovimiento || m["TIPO DE MOVIMIENTO"]
-      ).toUpperCase();
+
+  /* =========================================================
+     IDENTIFICACIÓN
+     ========================================================= */
+
+  function ingresarCodigoManual() {
+
+    const codigo = prompt(
+      "Ingrese el código del estudiante:"
+    );
+
+    if (!codigo) {
+      return;
+    }
+
+    prepararCodigo(codigo);
+
+  }
+
+
+  function prepararCodigo(codigo) {
+
+    codigoPendiente = normalizarCodigo(codigo);
+
+    if (!codigoPendiente) {
+      mostrarMensaje(
+        "mensaje",
+        "Ingrese un código válido.",
+        "error"
+      );
+      return;
+    }
+
+    noncePendiente = "";
+    saltPendiente = "";
+
+    document.getElementById("accesoClave")
+      .classList.add("activo");
+
+    document.getElementById("codigoSeleccionado")
+      .textContent =
+        "Código identificado: " + codigoPendiente +
+        ". Ingrese su clave personal para continuar.";
+
+    document.getElementById("claveAlumno").value = "";
+    document.getElementById("claveAlumno").focus();
+
+    mostrarMensaje(
+      "mensaje",
+      "Código identificado. Ahora ingrese su clave personal.",
+      "ok"
+    );
+
+    prepararReto();
+  }
+
+
+  async function prepararReto() {
+
+    try {
+
+      const respuesta = await llamarAPI({
+        accion: "preloginAlumno",
+        codigo: codigoPendiente
+      });
+
+      if (!respuesta || respuesta.ok !== true) {
+        throw new Error(
+          respuesta && respuesta.mensaje
+            ? respuesta.mensaje
+            : "No fue posible validar el código."
+        );
+      }
+
+      saltPendiente = respuesta.salt;
+      noncePendiente = respuesta.nonce;
+
+    } catch (error) {
+
+      noncePendiente = "";
+      saltPendiente = "";
+
+      mostrarMensaje(
+        "mensaje",
+        error && error.message
+          ? error.message
+          : "No fue posible preparar el acceso.",
+        "error"
+      );
+    }
+  }
+
+
+  /* =========================================================
+     LOGIN DEL ALUMNO
+     ========================================================= */
+
+  async function confirmarAcceso() {
+
+    const clave =
+      document.getElementById("claveAlumno").value;
+
+    if (!codigoPendiente) {
+      mostrarMensaje(
+        "mensaje",
+        "Primero identifique al estudiante.",
+        "error"
+      );
+      return;
+    }
+
+    if (!clave) {
+      mostrarMensaje(
+        "mensaje",
+        "Ingrese su clave personal.",
+        "error"
+      );
+      return;
+    }
+
+    if (!saltPendiente || !noncePendiente) {
+      mostrarMensaje(
+        "mensaje",
+        "La solicitud de acceso expiró. Vuelva a ingresar el código.",
+        "error"
+      );
+      return;
+    }
+
+    try {
+
+      mostrarMensaje(
+        "mensaje",
+        "Verificando acceso...",
+        "ok"
+      );
+
+      const hashClave =
+        await sha256(
+          clave + "|" + saltPendiente
+        );
+
+      const prueba =
+        await sha256(
+          hashClave + "|" + noncePendiente
+        );
+
+      const respuesta =
+        await llamarAPI({
+          accion: "loginAlumno",
+          codigo: codigoPendiente,
+          nonce: noncePendiente,
+          prueba: prueba
+        });
+
+      if (!respuesta || respuesta.ok !== true) {
+        throw new Error(
+          respuesta && respuesta.mensaje
+            ? respuesta.mensaje
+            : "Credenciales inválidas."
+        );
+      }
+
+      mostrarFichaEstudiante(respuesta);
+
+      document.getElementById("accesoClave")
+        .classList.remove("activo");
+
+      mostrarMensaje(
+        "mensaje",
+        "Acceso correcto.",
+        "ok"
+      );
+
+    } catch (error) {
+
+      mostrarMensaje(
+        "mensaje",
+        error && error.message
+          ? error.message
+          : "No fue posible iniciar sesión.",
+        "error"
+      );
+    }
+  }
+
+
+  /* =========================================================
+     MOSTRAR ESTUDIANTE
+     ========================================================= */
+
+  function obtenerURLsFoto(url) {
+
+    const texto =
+      String(url || "").trim();
+
+    if (!texto) return [];
+
+    let id = "";
+
+    const matchArchivo =
+      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+    const matchParametro =
+      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+    if (matchArchivo) {
+      id = matchArchivo[1];
+    } else if (matchParametro) {
+      id = matchParametro[1];
+    }
+
+    if (!id) {
+      return [texto];
+    }
+
+    return [
+      texto,
+      "https://drive.google.com/thumbnail?id=" +
+        encodeURIComponent(id) +
+        "&sz=w800",
+      "https://drive.google.com/uc?export=view&id=" +
+        encodeURIComponent(id),
+      "https://lh3.googleusercontent.com/d/" +
+        encodeURIComponent(id) +
+        "=w800"
+    ];
+  }
+
+
+  function cargarFoto(url) {
+
+    const foto =
+      document.getElementById("datoFoto");
+
+    const urls =
+      obtenerURLsFoto(url);
+
+    foto.style.display = "none";
+    foto.removeAttribute("src");
+
+    if (!urls.length) return;
+
+    let indice = 0;
+
+    foto.onload = function() {
+      foto.style.display = "block";
+    };
+
+    foto.onerror = function() {
+
+      indice++;
+
+      if (indice < urls.length) {
+        foto.src = urls[indice];
+      } else {
+        foto.style.display = "none";
+      }
+    };
+
+    foto.src = urls[0];
+  }
+
+
+  function mostrarFichaEstudiante(datos) {
+
+    const estudiante =
+      datos.estudiante || {};
+
+    const cuenta =
+      datos.cuenta || {};
+
+    const movimientos =
+      Array.isArray(datos.movimientos)
+        ? datos.movimientos
+        : [];
+
+    document.getElementById("datoCodigo")
+      .textContent =
+        estudiante.codigo || "-";
+
+    document.getElementById("datoNombre")
+      .textContent =
+        estudiante.nombreCompleto || "-";
+
+    document.getElementById("datoGrado")
+      .textContent =
+        estudiante.grado || "-";
+
+    document.getElementById("datoSeccion")
+      .textContent =
+        estudiante.seccion || "-";
+
+    document.getElementById("datoDocente")
+      .textContent =
+        estudiante.docente || "-";
+
+    document.getElementById("datoBase")
+      .textContent =
+        numero(estudiante.montoBase).toFixed(2) +
+        " LDS";
+
+    document.getElementById("datoSaldo")
+      .textContent =
+        numero(cuenta.saldoActual).toFixed(2) +
+        " LDS";
+
+    document.getElementById("seccionEstudiante")
+      .style.display = "grid";
+
+    document.getElementById("seccionMovimientos")
+      .style.display = "block";
+
+    cargarFoto(
+      estudiante.fotoUrl ||
+      estudiante.foto ||
+      ""
+    );
+
+    const tabla =
+      document.getElementById("tablaMovimientos");
+
+    tabla.innerHTML = "";
+
+    if (!movimientos.length) {
+
+      tabla.innerHTML =
+        '<tr><td colspan="6" style="text-align:center">Sin movimientos registrados.</td></tr>';
+
+      return;
+    }
+
+    movimientos.forEach(function(movimiento) {
+
+      const fila =
+        document.createElement("tr");
+
+      const tipo =
+        movimiento.tipo ||
+        movimiento.tipoMovimiento ||
+        "";
 
       const clase =
-        tipo==="INGRESO" ? "ingreso" :
-        tipo==="EGRESO" ? "egreso" : "";
+        tipo === "INGRESO"
+          ? "ingreso"
+          : tipo === "EGRESO"
+            ? "egreso"
+            : "";
 
-      return `
-        <tr>
-          <td>${escaparHTML(m.fechaTexto || m.fecha || m.FECHA || "")}</td>
-          <td class="${clase}">${escaparHTML(tipo)}</td>
-          <td>${escaparHTML(m.concepto || m.CONCEPTO || "")}</td>
-          <td>${escaparHTML(formatearLDS(m.monto || m.MONTO || m["MONTO LDS"]))}</td>
-          <td>${escaparHTML(m.responsable || m.RESPONSABLE || "")}</td>
-          <td>${escaparHTML(m.observacion || m.OBSERVACION || m.OBSERVACIÓN || "")}</td>
-        </tr>
-      `;
-    }).join("");
-  }
+      const monto =
+        numero(
+          movimiento.monto ||
+          movimiento.montoLDS
+        );
 
-  document.getElementById("loginPanel").classList.add("hidden");
-  document.getElementById("perfil").classList.remove("hidden");
+      fila.innerHTML =
+        "<td>" +
+          escaparHTML(
+            movimiento.fechaTexto ||
+            movimiento.fecha ||
+            movimiento.timestamp ||
+            ""
+          ) +
+        "</td>" +
 
-  mostrarFoto(
-    estudiante.fotoUrl ||
-    estudiante.fotoURL ||
-    estudiante.foto_url ||
-    estudiante.FOTO_URL ||
-    estudiante.foto ||
-    estudiante.FOTO ||
-    ""
-  );
-}
+        "<td class='" +
+          clase +
+        "'>" +
+          escaparHTML(tipo) +
+        "</td>" +
 
-async function ingresarAlumno(){
-  const codigo=normalizarCodigo(
-    document.getElementById("codigo").value
-  );
-  const clave=document.getElementById("clave").value;
+        "<td>" +
+          escaparHTML(
+            movimiento.concepto || ""
+          ) +
+        "</td>" +
 
-  if(!codigo || !clave){
-    mostrarMensaje("Ingresa tu código y tu clave.","error");
-    return;
-  }
+        "<td>" +
+          monto.toFixed(2) +
+          " LDS" +
+        "</td>" +
 
-  if(!ALUMNOS_API_URL || ALUMNOS_API_URL.indexOf("PEGAR_AQUI_")===0){
-    mostrarMensaje(
-      "Falta configurar la URL del Web App de alumnos.",
-      "error"
-    );
-    return;
-  }
+        "<td>" +
+          escaparHTML(
+            movimiento.responsable || ""
+          ) +
+        "</td>" +
 
-  try{
-    mostrarMensaje("Verificando acceso...","ok");
+        "<td>" +
+          escaparHTML(
+            movimiento.observacion || ""
+          ) +
+        "</td>";
 
-    /*
-     * PASO 1:
-     * El backend entrega salt + nonce.
-     * No devuelve datos personales todavía.
-     */
-    const pre = await jsonp({
-      accion:"preloginAlumno",
-      codigo:codigo
+      tabla.appendChild(fila);
+
     });
-
-    if(!pre || pre.ok!==true){
-      throw new Error(
-        (pre && pre.mensaje) ||
-        "Credenciales inválidas."
-      );
-    }
-
-    /*
-     * La clave nunca se envía en texto plano.
-     *
-     * proof = SHA256(
-     *   SHA256(clave + "|" + salt) + "|" + nonce
-     * )
-     */
-    const hashClave=await sha256(clave+"|"+pre.salt);
-    const prueba=await sha256(hashClave+"|"+pre.nonce);
-
-    /*
-     * PASO 2:
-     * El backend comprueba la prueba y solo entonces
-     * entrega los datos del estudiante.
-     */
-    const login = await jsonp({
-      accion:"loginAlumno",
-      codigo:codigo,
-      nonce:pre.nonce,
-      prueba:prueba
-    });
-
-    if(!login || login.ok!==true){
-      throw new Error(
-        (login && login.mensaje) ||
-        "Credenciales inválidas."
-      );
-    }
-
-    mostrarMensaje("Acceso correcto.","ok");
-    mostrarPerfil(login);
-
-  }catch(error){
-    console.error(error);
-    mostrarMensaje(
-      error && error.message
-        ? error.message
-        : "No se pudo iniciar sesión.",
-      "error"
-    );
   }
-}
 
-document.getElementById("btnIngresar")
-  .addEventListener("click",ingresarAlumno);
 
-document.getElementById("clave")
-  .addEventListener("keydown",function(e){
-    if(e.key==="Enter") ingresarAlumno();
-  });
+  /* =========================================================
+     REINICIAR
+     ========================================================= */
+
+  function reiniciarAcceso() {
+
+    detenerQR();
+
+    codigoPendiente = "";
+    noncePendiente = "";
+    saltPendiente = "";
+
+    document.getElementById("claveAlumno").value = "";
+
+    document.getElementById("accesoClave")
+      .classList.remove("activo");
+
+    document.getElementById("codigoSeleccionado")
+      .textContent = "";
+
+    document.getElementById("seccionEstudiante")
+      .style.display = "none";
+
+    document.getElementById("seccionMovimientos")
+      .style.display = "none";
+
+    document.getElementById("datoFoto")
+      .style.display = "none";
+
+    document.getElementById("datoFoto")
+      .removeAttribute("src");
+
+    document.getElementById("tablaMovimientos")
+      .innerHTML = "";
+
+    ocultarMensaje("mensaje");
+  }
+
+
+  document.getElementById("claveAlumno")
+    .addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        confirmarAcceso();
+      }
+    });
 </script>
+
 </body>
 </html>
