@@ -1,1211 +1,652 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
   <meta
 charset="UTF-8">
-
   <meta
 name="viewport" content="width=device-width,
 initial-scale=1.0">
-
   <title>BANCO
 LDS 360</title>
-
   <!-- Lector QR
 gratuito -->
-
   <script
 src="https://unpkg.com/html5-qrcode"
 type="text/javascript"></script>
-
   <style>
-
     * {
-
       box-sizing:
 border-box;
-
       margin: 0;
-
       padding: 0;
-
       font-family:
 Arial, Helvetica, sans-serif;
-
     }
-
     body {
-
       background:
 #f4f6f9;
-
       color: #1f2937;
-
     }
-
     .encabezado {
-
       background:
 #123c69;
-
       color: white;
-
       padding: 20px;
-
       text-align:
 center;
-
     }
-
     .encabezado h1 {
-
       font-size: 28px;
-
       margin-bottom:
 5px;
-
     }
-
     .encabezado p {
-
       font-size: 14px;
-
     }
-
     .contenedor {
-
       width: 95%;
-
       max-width:
 1100px;
-
       margin: 25px
 auto;
-
     }
-
     .tarjeta {
-
       background:
 white;
-
       border-radius:
 12px;
-
       padding: 20px;
-
       margin-bottom:
 20px;
-
       box-shadow: 0
 3px 12px rgba(0,0,0,0.08);
-
     }
-
     .titulo {
-
       font-size: 20px;
-
       font-weight:
 bold;
-
       margin-bottom:
 15px;
-
       color: #123c69;
-
     }
-
     #lectorQR {
-
       width: 100%;
-
       max-width:
 500px;
-
       margin: 0 auto
 15px;
-
     }
-
     .botones {
-
       display: flex;
-
       gap: 10px;
-
       flex-wrap: wrap;
-
       margin-top:
 15px;
-
     }
-
     button {
-
       border: none;
-
       border-radius:
 8px;
-
       padding: 12px
 18px;
-
       cursor: pointer;
-
       font-weight:
 bold;
-
       font-size: 14px;
-
     }
-
     .btn-principal {
-
       background:
 #123c69;
-
       color: white;
-
     }
-
     .btn-ingreso {
-
       background:
 #198754;
-
       color: white;
-
     }
-
     .btn-egreso {
-
       background:
 #dc3545;
-
       color: white;
-
     }
-
     .btn-saldo {
-
       background:
 #123c69;
-
       color: white;
-
     }
-
-
-
     .btn-secundario {
-
       background:
 #6c757d;
-
       color: white;
-
     }
-
     button:hover {
-
       opacity: 0.9;
-
     }
-
     .mensaje {
-
       margin-top:
 15px;
-
       padding: 12px;
-
       border-radius:
 8px;
-
       display: none;
-
     }
-
     .mensaje.ok {
-
       display: block;
-
       background:
 #d1e7dd;
-
       color: #0f5132;
-
     }
-
     .mensaje.error {
-
       display: block;
-
       background:
 #f8d7da;
-
       color: #842029;
-
     }
-
     .estudiante {
-
       display: none;
-
     }
-
-   
 .datos-estudiante-layout {
-
       display: grid;
-
-     
 grid-template-columns: 220px 1fr;
-
       gap: 28px;
-
       align-items:
 center;
-
       max-width:
 900px;
-
       margin: 18px
 auto 0;
-
     }
-
-   
 .foto-estudiante-contenedor {
-
       display: flex;
-
       align-items:
 center;
-
       justify-content:
 center;
-
       min-height:
 220px;
-
     }
-
     .foto-estudiante {
-
       width: 200px;
-
       height: 200px;
-
       object-fit:
 cover;
-
       border-radius:
 18px;
-
       border: 4px
 solid #123c69;
-
       background:
 #f8f9fa;
-
       display: none;
-
       box-shadow: 0
 8px 22px rgba(0,0,0,.14);
-
     }
-
     .datos-estudiante
 {
-
       display: grid;
-
-     
 grid-template-columns: repeat(2, minmax(180px, 1fr));
-
       gap: 12px;
-
       margin-top: 0;
-
     }
-
     .dato {
-
       background:
 #f8f9fa;
-
       border-radius:
 8px;
-
       padding: 12px;
-
     }
-
     .dato strong {
-
       display: block;
-
       color: #123c69;
-
       margin-bottom:
 5px;
-
       font-size: 13px;
-
     }
-
     .saldo {
-
       background:
 #e7f1ff;
-
       border-radius:
 10px;
-
       padding: 18px;
-
       margin-top:
 15px;
-
       text-align:
 center;
-
     }
-
     .saldo span {
-
       display: block;
-
       font-size: 13px;
-
       color: #555;
-
     }
-
     .saldo strong {
-
       display: block;
-
       font-size: 30px;
-
       color: #123c69;
-
       margin-top: 5px;
-
     }
-
     .operacion {
-
       display: none;
-
     }
-
     .tipo-operacion {
-
       display: flex;
-
       gap: 10px;
-
       margin-bottom:
 20px;
-
     }
-
     .tipo-operacion
 button {
-
       flex: 1;
-
     }
-
     .tipo-activo {
-
       outline: 3px
 solid rgba(18,60,105,0.25);
-
     }
-
     .campo {
-
       margin-bottom:
 15px;
-
     }
-
     .campo label {
-
       display: block;
-
       font-weight:
 bold;
-
       margin-bottom:
 6px;
-
       font-size: 14px;
-
     }
-
     .campo input,
-
     .campo select,
-
     .campo textarea {
-
       width: 100%;
-
       border: 1px
 solid #ced4da;
-
       border-radius:
 7px;
-
       padding: 11px;
-
       font-size: 14px;
-
       background:
 white;
-
     }
-
     .campo textarea {
-
       min-height:
 90px;
-
       resize:
 vertical;
-
     }
-
     .tabla-contenedor
 {
-
       overflow-x:
 auto;
-
     }
-
     table {
-
       width: 100%;
-
       border-collapse:
 collapse;
-
       margin-top:
 10px;
-
       min-width:
 700px;
-
     }
-
     th,
-
     td {
-
       border-bottom:
 1px solid #dee2e6;
-
       padding: 10px;
-
       text-align:
 left;
-
       font-size: 13px;
-
     }
-
     th {
-
       background:
 #123c69;
-
       color: white;
-
     }
-
     .ingreso {
-
       color: #198754;
-
       font-weight:
 bold;
-
     }
-
     .egreso {
-
       color: #dc3545;
-
       font-weight:
 bold;
-
     }
-
     .oculto {
-
       display: none
 !important;
-
     }
-
     .cargando {
-
       text-align:
 center;
-
       padding: 15px;
-
       color: #666;
-
     }
-
     @media (max-width:
 600px) {
-
       .encabezado h1 {
-
         font-size:
 22px;
-
       }
-
       .tipo-operacion
 {
-
-       
 flex-direction: column;
-
       }
-
     }
-
 /* =========================================================
-
    PORTADA BANCO LDS
 360
-
    No modifica la
 estructura interna del sistema.
-
-  
 ========================================================= */
-
 #portadaLDS360{
-
   min-height:100vh;
-
   width:100%;
-
   background:#fff;
-
   display:flex;
-
- 
 flex-direction:column;
-
   overflow:hidden;
-
 }
-
 #portadaLDS360 .portada-header{
-
   min-height:128px;
-
   background:#071f40;
-
   border-bottom:4px
 solid #f4c400;
-
   color:#fff;
-
   display:flex;
-
   align-items:center;
-
- 
 justify-content:space-between;
-
   padding:18px 4.2vw;
-
 }
-
 #portadaLDS360 .portada-marca{
-
   display:flex;
-
   align-items:center;
-
   gap:18px;
-
 }
-
 #portadaLDS360 .portada-escudo{
-
   width:82px;
-
   height:82px;
-
   object-fit:contain;
-
 }
-
 #portadaLDS360 .portada-nombre{
-
- 
 font-family:Georgia,serif;
-
- 
 font-size:clamp(27px,3.2vw,48px);
-
   font-weight:700;
-
   line-height:1;
-
 }
-
 #portadaLDS360 .portada-lema{
-
   margin-top:8px;
-
   color:#f4c400;
-
- 
 font-family:Georgia,serif;
-
- 
 font-size:clamp(15px,1.55vw,24px);
-
   font-style:italic;
-
   font-weight:700;
-
 }
-
 #portadaLDS360 .portada-admin{
-
   border:1px solid
 rgba(255,255,255,.28);
-
   border-radius:50px;
-
   padding:17px 30px;
-
- 
 font-size:clamp(17px,1.5vw,25px);
-
   font-weight:700;
-
   white-space:nowrap;
-
 }
-
 #portadaLDS360 .portada-cuerpo{
-
   flex:1;
-
- 
 min-height:calc(100vh - 128px);
-
   display:grid;
-
- 
 grid-template-columns:52% 48%;
-
 }
-
 #portadaLDS360 .portada-izq{
-
   position:relative;
-
   padding:36px 4vw
 45px;
-
   display:flex;
-
- 
 flex-direction:column;
-
   align-items:center;
-
   text-align:center;
-
- 
 background-color:#fff;
-
- 
 background-image:radial-gradient(#d8e0eb 1.25px,transparent 1.25px);
-
   background-size:24px
 24px;
-
 }
-
 #portadaLDS360 .portada-logo{
-
- 
 width:min(510px,80%);
-
   max-height:220px;
-
   object-fit:contain;
-
 }
-
 #portadaLDS360 .portada-subtitulo{
-
   margin-top:14px;
-
- 
 font-size:clamp(18px,2vw,30px);
-
   color:#1d2939;
-
 }
-
 #portadaLDS360 .portada-descripcion{
-
   margin-top:32px;
-
- 
 font-size:clamp(21px,2.1vw,33px);
-
   line-height:1.25;
-
   font-weight:800;
-
   color:#071a36;
-
 }
-
 #portadaLDS360 .portada-accesos{
-
- 
 width:min(780px,100%);
-
   display:grid;
-
- 
 grid-template-columns:1fr 1fr;
-
   gap:18px;
-
   margin-top:30px;
-
 }
-
 #portadaLDS360 .portada-acceso{
-
   min-height:170px;
-
   background:#fff;
-
   border-radius:28px;
-
   box-shadow:0 8px
 24px rgba(0,0,0,.16);
-
   overflow:hidden;
-
   display:flex;
-
- 
 flex-direction:column;
-
- 
 justify-content:space-between;
-
   cursor:pointer;
-
   padding:0;
-
   color:#071a36;
-
   border:0;
-
 }
-
 #portadaLDS360
 .portada-acceso:hover{opacity:1;transform:translateY(-2px)}
-
 #portadaLDS360 .portada-acceso h2{
-
   padding:20px 15px
 4px;
-
- 
 font-size:clamp(18px,1.8vw,29px);
-
   line-height:1;
-
 }
-
 #portadaLDS360 .portada-acceso p{
-
   padding:4px 16px;
-
   font-size:14px;
-
   line-height:1.25;
-
   color:#344054;
-
 }
-
 #portadaLDS360 .portada-acceso.qr h2{color:#cf0018}
-
 #portadaLDS360 .portada-acceso.codigo h2{color:#071a36}
-
 #portadaLDS360 .portada-flecha{
-
   height:66px;
-
   display:flex;
-
- 
 justify-content:center;
-
   align-items:center;
-
 }
-
 #portadaLDS360 .portada-acceso.qr
 .portada-flecha{background:#cf0018}
-
 #portadaLDS360 .portada-acceso.codigo
 .portada-flecha{background:#071a36}
-
 #portadaLDS360 .portada-flecha span{
-
- 
 width:52px;height:52px;border:4px solid #fff;border-radius:50%;
-
- 
 color:#fff;font-size:48px;line-height:38px;display:flex;
-
- 
 align-items:center;justify-content:center;
-
 }
-
 #portadaLDS360 .portada-seguridad{
-
- 
 width:min(780px,100%);
-
   margin-top:16px;
-
   padding:15px 20px;
-
   border-radius:28px;
-
   background:#fff;
-
   box-shadow:0 7px
 20px rgba(0,0,0,.12);
-
   text-align:left;
-
   font-size:15px;
-
 }
-
 #portadaLDS360 .portada-der{
-
   position:relative;
-
   min-height:100%;
-
   overflow:hidden;
-
   background:#062b55;
-
   display:flex;
-
- 
 justify-content:center;
-
- 
 align-items:flex-end;
-
 }
-
 #portadaLDS360 .portada-banco-fondo{
-
   position:absolute;
-
   width:92%;
-
   max-width:900px;
-
   bottom:-2%;
-
   object-fit:contain;
-
   opacity:.95;
-
 }
-
 #portadaLDS360 .portada-personajes{
-
   position:absolute;
-
   z-index:2;
-
   width:78%;
-
   max-width:760px;
-
   height:86%;
-
   bottom:0;
-
 }
-
 #portadaLDS360 .portada-personajes img{
-
   position:absolute;
-
   object-fit:contain;
-
- 
 object-position:bottom center;
-
 }
-
 #portadaLDS360
 .portada-nina{width:34%;left:2%;bottom:0;z-index:2}
-
 #portadaLDS360
 .portada-nino{width:37%;left:30%;bottom:0;z-index:3}
-
 #portadaLDS360
 .portada-profesora{width:44%;right:0;bottom:3%;z-index:2}
-
 #portadaLDS360 .portada-marca-final{
-
   position:absolute;
-
   right:5%;
-
   bottom:4%;
-
   z-index:5;
-
   color:#fff;
-
- 
 font-family:Georgia,serif;
-
- 
 font-size:clamp(24px,3vw,50px);
-
   font-weight:700;
-
   line-height:.9;
-
   text-align:left;
-
 }
-
 .sistema-principal.oculto{display:none!important}
-
 @media(max-width:900px){
-
   #portadaLDS360
 .portada-header{
-
     min-height:100px;
-
     padding:12px 18px;
-
   }
-
   #portadaLDS360
 .portada-escudo{width:60px;height:60px}
-
   #portadaLDS360
 .portada-marca{gap:10px}
-
   #portadaLDS360
 .portada-nombre{font-size:23px}
-
   #portadaLDS360
 .portada-lema{font-size:12px;margin-top:5px}
-
   #portadaLDS360
 .portada-admin{padding:11px 16px;font-size:14px}
-
   #portadaLDS360
 .portada-cuerpo{
-
-   
 grid-template-columns:1fr;
-
   }
-
   #portadaLDS360
 .portada-izq{
-
     min-height:auto;
-
     padding:30px 18px
 34px;
-
   }
-
   #portadaLDS360
 .portada-logo{width:min(430px,82%);max-height:180px}
-
   #portadaLDS360
 .portada-descripcion{margin-top:24px;font-size:23px}
-
   #portadaLDS360
 .portada-der{min-height:500px}
-
   #portadaLDS360
 .portada-personajes{width:92%;height:92%}
-
 }
-
 @media(max-width:600px){
-
   #portadaLDS360
 .portada-header{min-height:82px;padding:10px 12px}
-
   #portadaLDS360
 .portada-escudo{width:48px;height:48px}
-
   #portadaLDS360
 .portada-nombre{font-size:19px}
-
   #portadaLDS360
 .portada-lema{font-size:10px}
-
   #portadaLDS360
 .portada-admin{padding:8px 11px;font-size:12px}
-
   #portadaLDS360
 .portada-izq{padding:24px 12px 28px}
-
   #portadaLDS360
 .portada-logo{width:88%;max-height:145px}
-
   #portadaLDS360
 .portada-subtitulo{font-size:17px}
-
   #portadaLDS360
 .portada-descripcion{font-size:21px;margin-top:20px}
-
   #portadaLDS360
 .portada-accesos{
-
-   
 grid-template-columns:1fr;
-
     gap:12px;
-
     margin-top:24px;
-
   }
-
   #portadaLDS360
 .portada-acceso{min-height:140px;border-radius:22px}
-
   #portadaLDS360
 .portada-acceso h2{font-size:20px}
-
   #portadaLDS360
 .portada-flecha{height:55px}
-
   #portadaLDS360
 .portada-flecha span{width:45px;height:45px;font-size:40px}
-
   #portadaLDS360
 .portada-der{min-height:420px}
-
   #portadaLDS360
 .portada-personajes{width:100%;height:94%}
-
 }
-
 @media(max-width:420px){
-
   #portadaLDS360
 .portada-admin{font-size:11px;padding:7px 9px}
-
   #portadaLDS360
 .portada-nombre{font-size:17px}
-
   #portadaLDS360
 .portada-lema{font-size:9px}
-
   #portadaLDS360
 .portada-der{min-height:360px}
-
 }
-
-
     @media (max-width:
 700px) {
-
-     
 .datos-estudiante-layout {
-
-       
 grid-template-columns: 1fr;
-
         gap: 16px;
-
       }
-
-     
 .foto-estudiante-contenedor {
-
         min-height: 0;
-
       }
-
       .foto-estudiante
 {
-
         width: 170px;
-
         height: 170px;
-
       }
-
-     
 .datos-estudiante {
-
-       
 grid-template-columns: 1fr;
-
       }
-
     }
-
 </style>
-
 </head>
-
-
 <body>
-
   <!-- PORTADA -->
   <section id="portadaLDS360" style="min-height:100vh;width:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:30px;">
     <div style="width:min(440px,92vw);display:flex;flex-direction:column;gap:18px;">
       <button type="button" style="width:100%;min-height:62px;background:#123c69;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;" onclick="abrirSistemaLDS360('qr')">📷 ESCANEAR CÓDIGO QR</button>
       <button type="button" style="width:100%;min-height:62px;background:#198754;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;" onclick="abrirSistemaLDS360('manual')">⌨️ INGRESAR CÓDIGO</button>
-      <button type="button" style="width:100%;min-height:62px;background:#6c757d;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;">🔒 ADMINISTRADOR</button>
+      <button type="button" style="width:100%;min-height:62px;background:#6c757d;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;" onclick="return false;">🔒 ADMINISTRADOR</button>
     </div>
     <script>
       (function () {
@@ -1223,2664 +664,1282 @@ grid-template-columns: 1fr;
       })();
     </script>
   </section>
-
   <!-- SISTEMA
 EXISTENTE: SE CONSERVA -->
-
   <div
 id="sistemaPrincipal" class="sistema-principal oculto">
-
   <!-- ENCABEZADO
 -->
-
   <header
 class="encabezado">
-
     <h1>BANCO
 LDS 360</h1>
-
     <p>IEP LA
 SALLE DEL SUR</p>
-
     <p>Nuevo Sol
 Lasallista (LDS)</p>
-
   </header>
-
   <main
 class="contenedor">
-
     <!-- LECTOR QR
 -->
-
     <section
 class="tarjeta">
-
       <div
 class="titulo">Identificación del estudiante</div>
-
       <div
 id="lectorQR"></div>
-
       <div
 class="botones">
-
         <button
-
-         
 type="button"
-
-         
 class="btn-principal"
-
-         
 onclick="iniciarQR()">
-
           📷
 Escanear QR
-
-       
 </button>
-
         <button
-
-         
 type="button"
-
-         
 class="btn-secundario"
-
-         
 onclick="ingresarCodigoManual()">
-
           ⌨️
 Ingresar código manualmente
-
-       
 </button>
-
       </div>
-
       <div
 id="mensaje" class="mensaje"></div>
-
     </section>
-
-
     <!-- DATOS DEL
 ESTUDIANTE -->
-
     <section
 id="seccionEstudiante" class="tarjeta estudiante">
-
       <div
 class="titulo">Datos del estudiante</div>
-
       <div
 class="datos-estudiante-layout">
-
         <div
 class="foto-estudiante-contenedor">
-
           <img
 id="datoFoto" class="foto-estudiante" src=""
 alt="Foto del estudiante">
-
         </div>
-
         <div
 class="datos-estudiante">
-
         <div
 class="dato">
-
-         
 <strong>Código</strong>
-
           <span
 id="datoCodigo">-</span>
-
         </div>
-
         <div
 class="dato">
-
-         
 <strong>Estudiante</strong>
-
           <span
 id="datoNombre">-</span>
-
         </div>
-
         <div
 class="dato">
-
-         
 <strong>Grado</strong>
-
           <span
 id="datoGrado">-</span>
-
         </div>
-
         <div
 class="dato">
-
-         
 <strong>Sección</strong>
-
           <span
 id="datoSeccion">-</span>
-
         </div>
-
         <div
 class="dato">
-
-         
 <strong>Docente</strong>
-
           <span
 id="datoDocente">-</span>
-
         </div>
-
         <div
 class="dato">
-
-         
 <strong>Monto base</strong>
-
           <span
 id="datoBase">0.00 LDS</span>
-
         </div>
-
         </div>
-
       </div>
-
       <div
 class="saldo">
-
-       
 <span>Saldo actual</span>
-
         <strong
 id="datoSaldo">0.00 LDS</strong>
-
       </div>
-
     </section>
-
-
     <!-- OPERACIÓN
 -->
-
     <section
 id="seccionOperacion" class="tarjeta operacion">
-
       <div
 class="titulo">Operación</div>
-
       <div
 class="tipo-operacion">
-
         <button
-
-         
 type="button"
-
-         
 id="btnCobrar"
-
-         
 class="btn-ingreso"
-
-         
 onclick="seleccionarOperacion('INGRESO')">
-
           COBRAR
-
-       
 </button>
-
         <button
-
-         
 type="button"
-
-         
 id="btnPagar"
-
-         
 class="btn-egreso"
-
-         
 onclick="seleccionarOperacion('EGRESO')">
-
           PAGAR
-
-       
 </button>
-
         <button
-
-         
 type="button"
-
-         
 id="btnMovimientos"
-
-         
 class="btn-saldo"
-
-         
 onclick="mostrarMovimientos()">
-
           MOVIMIENTOS
-
-       
 </button>
-
       </div>
-
       <div
 id="panelOperacion" class="oculto">
-
       <!-- OPCIONES
 DE LA OPERACIÓN -->
-
       <div
 id="opcionesOperacion">
-
         <div
 class="campo">
-
           <label
 for="categoria">Categoría</label>
-
           <select
 id="categoria" onchange="cargarConceptos()">
-
             <option
 value="">Seleccione una categoría</option>
-
-         
 </select>
-
         </div>
-
         <div
 class="campo">
-
           <label
 for="concepto">Concepto</label>
-
           <select
 id="concepto">
-
             <option
 value="">Seleccione un concepto</option>
-
-         
 </select>
-
         </div>
-
       </div>
-
       <div
 class="campo">
-
         <label
 for="monto">Monto LDS</label>
-
         <input
-
-         
 type="number"
-
-         
 id="monto"
-
-         
 min="0"
-
-         
 step="0.01"
-
-         
 placeholder="Ingrese el monto">
-
       </div>
-
       <div
 class="campo">
-
         <label
 for="responsable">Responsable</label>
-
         <select
 id="responsable">
-
           <option
 value="">Seleccione responsable</option>
-
-       
 </select>
-
       </div>
-
       <div
 class="campo">
-
         <label
 for="observacion">Observación</label>
-
         <textarea
-
-         
 id="observacion"
-
-         
 placeholder="Ingrese observación"></textarea>
-
       </div>
-
       <div
 class="botones">
-
         <button
-
-         
 type="button"
-
-         
 class="btn-principal"
-
-         
 onclick="registrarMovimiento()">
-
           Registrar
 movimiento
-
-       
 </button>
-
         <button
-
-         
 type="button"
-
-         
 class="btn-secundario"
-
-         
 onclick="limpiarOperacion()">
-
           Limpiar
-
-       
 </button>
-
       </div>
-
       <div
 id="mensajeOperacion" class="mensaje"></div>
-
       </div>
-
     </section>
-
-
     <!--
 MOVIMIENTOS -->
-
     <section
 id="seccionMovimientos" class="tarjeta estudiante">
-
       <div
 class="titulo">Movimientos del estudiante</div>
-
       <div
 class="tabla-contenedor">
-
         <table>
-
-         
 <thead>
-
             <tr>
-
-             
 <th>Fecha</th>
-
-             
 <th>Tipo</th>
-
-             
 <th>Concepto</th>
-
-             
 <th>Monto LDS</th>
-
-             
 <th>Responsable</th>
-
-             
 <th>Observación</th>
-
-           
 </tr>
-
-         
 </thead>
-
           <tbody
 id="tablaMovimientos">
-
-         
 </tbody>
-
         </table>
-
       </div>
-
     </section>
-
   </main>
-
-
 <script>
-
   /*
 =========================================================
-
      CONFIGURACIÓN
-
-    
 ========================================================= */
-
   const APP_SCRIPT_URL
 =
 "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
-
   const SISTEMA =
 "BANCO LDS 360";
-
   const MONEDA =
 "LDS";
-
-
   /*
 =========================================================
-
      VARIABLES
-
-    
 ========================================================= */
-
   let estudianteActual
 = null;
-
   let tipoOperacion =
 "";
-
   let lector = null;
-
   let categorias = {};
-
   let
 conceptosCatalogo = {};
-
-
   /*
 =========================================================
-
      UTILIDADES
-
-    
 ========================================================= */
-
   function
 mostrarMensaje(id, texto, tipo) {
-
     const elemento =
 document.getElementById(id);
-
-   
 elemento.textContent = texto;
-
     elemento.className
 = "mensaje " + tipo;
-
   }
-
-
   function
 ocultarMensaje(id) {
-
     const elemento =
 document.getElementById(id);
-
     elemento.className
 = "mensaje";
-
-   
 elemento.textContent = "";
-
   }
-
-
   function
 generarRequestId() {
-
     return
 "LDS-" +
-
       Date.now() +
-
       "-" +
-
-     
 Math.random().toString(36).substring(2, 10);
-
   }
-
-
   function
 numero(valor) {
-
     const n =
 Number(valor);
-
     return
 Number.isFinite(n) ? n : 0;
-
   }
-
-
   /*
 =========================================================
-
      JSONP
-
-    
 ========================================================= */
-
   function
 llamarAPI(parametros, callback) {
-
     if (
-
       !APP_SCRIPT_URL
 ||
-
       APP_SCRIPT_URL
 === "PEGA_AQUI_LA_URL_DE_APPS_SCRIPT"
-
     ) {
-
       mostrarMensaje(
-
-       
 "mensaje",
-
         "Falta
 colocar la URL de Apps Script.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     const
 nombreCallback =
-
-     
 "callbackLDS_" +
-
       Date.now() +
-
       "_" +
-
-     
 Math.floor(Math.random() * 100000);
-
-
-   
 parametros.callback = nombreCallback;
-
-
     const query =
 Object.keys(parametros)
-
-     
 .map(function(clave) {
-
         return
 encodeURIComponent(clave) +
-
-         
 "=" +
-
-         
 encodeURIComponent(parametros[clave]);
-
       })
-
-     
 .join("&");
-
-
     const script =
 document.createElement("script");
-
     script.src =
 APP_SCRIPT_URL + "?" + query;
-
-
-   
 window[nombreCallback] = function(respuesta) {
-
       try {
-
-       
 callback(respuesta);
-
       } finally {
-
         delete
 window[nombreCallback];
-
-       
 script.remove();
-
       }
-
     };
-
-
     script.onerror =
 function() {
-
       delete
 window[nombreCallback];
-
       script.remove();
-
       mostrarMensaje(
-
-       
 "mensaje",
-
         "No se
 pudo conectar con BANCO LDS 360.",
-
-       
 "error"
-
       );
-
     };
-
-
-   
 document.body.appendChild(script);
-
   }
-
-
   /*
 =========================================================
-
      QR
-
-    
 ========================================================= */
-
   function iniciarQR()
 {
-
-   
 ocultarMensaje("mensaje");
-
-
     if (lector) {
-
       try {
-
         lector.stop();
-
       } catch (e) {}
-
       lector = null;
-
     }
-
-
     lector = new
 Html5Qrcode("lectorQR");
-
-
     const
 configuracion = {
-
       fps: 10,
-
       qrbox: {
-
         width: 250,
-
         height: 250
-
       }
-
     };
-
-
     lector.start(
-
       {
-
         facingMode:
 "environment"
-
       },
-
       configuracion,
-
-     
 function(codigoQR) {
-
         detenerQR();
-
-       
 buscarEstudiante(codigoQR);
-
       },
-
       function(error)
 {
-
         // Errores
 normales de lectura:
-
         // no se
 muestran para no interrumpir el escaneo.
-
       }
-
-   
 ).catch(function(error) {
-
       mostrarMensaje(
-
-       
 "mensaje",
-
         "No fue
 posible iniciar la cámara. Use el botón de ingreso manual.",
-
-       
 "error"
-
       );
-
     });
-
   }
-
-
   function detenerQR()
 {
-
     if (!lector) {
-
       return;
-
     }
-
-
     lector.stop()
-
       .then(function()
 {
-
-       
 lector.clear();
-
         lector = null;
-
       })
-
-     
 .catch(function() {
-
         lector = null;
-
       });
-
   }
-
-
   /*
 =========================================================
-
      INGRESO MANUAL
-
-    
 ========================================================= */
-
   function
 ingresarCodigoManual() {
-
     const codigo =
 prompt(
-
       "Ingrese el
 código del estudiante:"
-
     );
-
-
     if (!codigo) {
-
       return;
-
     }
-
-
-   
 buscarEstudiante(codigo.trim());
-
   }
-
-
   /*
 =========================================================
-
      CONSULTAR
 ESTUDIANTE
-
-    
 ========================================================= */
-
   function
 buscarEstudiante(codigo) {
-
     if (!codigo) {
-
       mostrarMensaje(
-
-       
 "mensaje",
-
         "Ingrese
 un código válido.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     mostrarMensaje(
-
-     
 "mensaje",
-
-     
 "Consultando estudiante...",
-
       "ok"
-
     );
-
-
     llamarAPI(
-
       {
-
         accion:
 "estudiante",
-
         codigo: codigo
-
       },
-
-     
 function(respuesta) {
-
         if (
-
           !respuesta
 ||
-
           respuesta.ok
 === false ||
-
-         
 !respuesta.estudiante
-
         ) {
-
-         
 mostrarMensaje(
-
-           
 "mensaje",
-
             respuesta
 && respuesta.mensaje
-
               ?
 respuesta.mensaje
-
               :
 "Estudiante no encontrado.",
-
-           
 "error"
-
           );
-
           return;
-
         }
-
-
-       
 estudianteActual = respuesta.estudiante;
-
-
         const
 estudianteMostrado = Object.assign(
-
           {},
-
-         
 respuesta.estudiante,
-
           {
-
-           
 saldoActual:
-
-             
 respuesta.cuenta
-
                 ?
 respuesta.cuenta.saldoActual
-
                 : 0
-
           }
-
         );
-
-       
 mostrarEstudiante(
-
-         
 estudianteMostrado
-
         );
-
-
-       
 cargarMovimientos(
-
-         
 respuesta.estudiante.codigo
-
         );
-
-
-       
 cargarOpciones();
-
-       
 cargarResponsables();
-
-       
 ocultarMensaje("mensaje");
-
       }
-
     );
-
   }
-
-
   /*
 =========================================================
-
      MOSTRAR
 ESTUDIANTE
-
-    
 ========================================================= */
-
   function
 mostrarEstudiante(estudiante) {
-
     estudianteActual =
 estudiante;
-
-   
 document.getElementById("datoCodigo").textContent =
-
-     
 estudiante.codigo || "-";
-
-
-   
 document.getElementById("datoNombre").textContent =
-
-     
 estudiante.nombreCompleto ||
-
-     
 estudiante.nombre ||
-
       "-";
-
-
-   
 document.getElementById("datoGrado").textContent =
-
       estudiante.grado
 || "-";
-
-
-   
 document.getElementById("datoSeccion").textContent =
-
-     
 estudiante.seccion || "-";
-
-
-   
 document.getElementById("datoDocente").textContent =
-
-     
 estudiante.docente || "-";
-
-
-   
 document.getElementById("datoBase").textContent =
-
-     
 numero(estudiante.montoBase).toFixed(2) +
-
       " " +
-
       MONEDA;
-
-
-   
 document.getElementById("datoSaldo").textContent =
-
-     
 numero(estudiante.saldoActual).toFixed(2) +
-
       " " +
-
       MONEDA;
-
     const foto =
-
-     
 document.getElementById("datoFoto");
-
     const fotoOriginal
 =
-
-     
 estudiante.fotoUrl ||
-
-     
 estudiante.fotoURL ||
-
-     
 estudiante.foto_url ||
-
-     
 estudiante.FOTO_URL ||
-
       estudiante.foto
 ||
-
       estudiante.FOTO
 ||
-
       "";
-
     const
 fotosCandidatas = obtenerURLsFoto(fotoOriginal);
-
     let indiceFoto =
 0;
-
     foto.style.display
 = "none";
-
-   
 foto.removeAttribute("src");
-
     foto.onload =
 function() {
-
-     
 foto.style.display = "block";
-
     };
-
     foto.onerror =
 function() {
-
       indiceFoto++;
-
       if (indiceFoto
 < fotosCandidatas.length) {
-
         foto.src =
 fotosCandidatas[indiceFoto];
-
       } else {
-
-       
 foto.removeAttribute("src");
-
-       
 foto.style.display = "none";
-
       }
-
     };
-
     if
 (fotosCandidatas.length > 0) {
-
       foto.src =
 fotosCandidatas[0];
-
     }
-
-   
 document.getElementById("panelOperacion").classList.add("oculto");
-
-   
 document.getElementById("btnCobrar").classList.remove("tipo-activo");
-
-   
 document.getElementById("btnPagar").classList.remove("tipo-activo");
-
     document
-
-     
 .getElementById("seccionEstudiante")
-
       .style.display =
 "block";
-
-
     document
-
-     
 .getElementById("seccionOperacion")
-
       .style.display =
 "block";
-
-
     document
-
-     
 .getElementById("seccionMovimientos")
-
       .style.display =
 "none";
-
   }
-
-
   /*
 =========================================================
-
      CATEGORÍAS Y
 CONCEPTOS
-
-    
 ========================================================= */
-
   function
 cargarOpciones() {
-
     llamarAPI(
-
       {
-
         accion:
 "opciones"
-
       },
-
-     
 function(respuesta) {
-
         if (!respuesta
 || respuesta.ok === false) {
-
-         
 mostrarMensaje(
-
-           
 "mensajeOperacion",
-
             "No
 se pudieron cargar las opciones.",
-
-           
 "error"
-
           );
-
           return;
-
         }
-
         /*
-
          *
 CONFIG_OPCIONES tiene la estructura REAL:
-
          * A =
 INGRESOS_Y_SUELDOS
-
          * B =
 PREMIOS_Y_BONIFICACIONES
-
          * C =
 AHORROS_E_INVERSIONES
-
          * D =
 PAGOS_Y_GASTOS
-
          * E =
 SANCIONES_Y_MULTAS
-
          * F =
 COSTOS_Y_OTROS
-
          *
-
          * Apps Script
 devuelve esa misma estructura en
-
          *
 respuesta.opcionesPorCategoria.
-
          */
-
         const opciones
 =
-
-         
 respuesta.opcionesPorCategoria &&
-
           typeof
 respuesta.opcionesPorCategoria === "object"
-
             ?
 respuesta.opcionesPorCategoria
-
             : {};
-
         categorias =
 {};
-
-       
 conceptosCatalogo = {};
-
-       
 Object.keys(opciones).forEach(function(categoria) {
-
           const lista
 =
-
-           
 Array.isArray(opciones[categoria])
-
               ?
 opciones[categoria]
-
               : [];
-
-         
 categorias[categoria] = [];
-
-         
 lista.forEach(function(concepto) {
-
             const
 texto =
-
-             
 String(concepto || "").trim();
-
             if
 (!texto) {
-
               return;
-
             }
-
             if
 (categorias[categoria].indexOf(texto) === -1) {
-
-             
 categorias[categoria].push(texto);
-
             }
-
           });
-
         });
-
         /* Las
 opciones se muestran al presionar COBRAR o PAGAR. */
-
       }
-
     );
-
   }
-
   function
 cargarResponsables() {
-
     const select =
-
-     
 document.getElementById("responsable");
-
     select.innerHTML =
-
       '<option
 value="">Seleccione responsable</option>';
-
     /*
-
      * RESPONSABLES /
 CAJEROS
-
      * Opciones
 exactas de la tabla CAJA.
-
      */
-
     const responsables
 = [
-
       "MISS LILY
 MELO AZAÑERO",
-
       "MISS KIARA
 MORALES ELGUERA",
-
       "MISS ANGHY
 REYES MELO",
-
       "MISS KARIN
 MOLERO ROMANI"
-
     ];
-
-   
 responsables.forEach(function(nombre) {
-
       const option =
-
-       
 document.createElement("option");
-
       option.value =
 nombre;
-
-     
 option.textContent = nombre;
-
-     
 select.appendChild(option);
-
     });
-
   }
-
-
   function
 normalizarCategoria(categoria) {
-
     return
 String(categoria || "")
-
       .trim()
-
       .toUpperCase()
-
-     
 .normalize("NFD")
-
-     
 .replace(/[\u0300-\u036f]/g, "")
-
-     
 .replace(/[^A-Z0-9]+/g, "_")
-
-     
 .replace(/^_+|_+$/g, "");
-
   }
-
-
   function
 cargarCategorias() {
-
     const select =
-
-     
 document.getElementById("categoria");
-
     select.innerHTML =
-
       '<option
 value="">Seleccione una categoría</option>';
-
     if
 (!tipoOperacion) {
-
       return;
-
     }
-
-   
 Object.keys(categorias).forEach(function(categoria) {
-
       const clave =
 normalizarCategoria(categoria);
-
       let mostrar =
 false;
-
       if
 (tipoOperacion === "INGRESO") {
-
         mostrar =
-
           clave ===
 "INGRESOS_Y_SUELDOS" ||
-
           clave ===
 "PREMIOS_Y_BONIFICACIONES" ||
-
           clave ===
 "AHORROS_E_INVERSIONES";
-
       }
-
       if
 (tipoOperacion === "EGRESO") {
-
         mostrar =
-
           clave ===
 "PAGOS_Y_GASTOS" ||
-
           clave ===
 "SANCIONES_Y_MULTAS" ||
-
           clave ===
 "COSTOS_Y_OTROS";
-
       }
-
       if (!mostrar) {
-
         return;
-
       }
-
       const option =
-
-       
 document.createElement("option");
-
       option.value =
 categoria;
-
-     
 option.textContent =
-
-       
 obtenerNombreCategoria(categoria);
-
-     
 select.appendChild(option);
-
     });
-
     cargarConceptos();
-
   }
-
-
   function
 obtenerNombreCategoria(categoria) {
-
     const nombres = {
-
-     
 INGRESOS_Y_SUELDOS:
-
         "Ingresos
 y Sueldos",
-
-     
 PREMIOS_Y_BONIFICACIONES:
-
         "Premios
 y Bonificaciones",
-
-     
 AHORROS_E_INVERSIONES:
-
         "Ahorros
 e Inversiones",
-
       PAGOS_Y_GASTOS:
-
         "Pagos y
 Gastos",
-
-     
 SANCIONES_Y_MULTAS:
-
-       
 "Sanciones y Multas",
-
       COSTOS_Y_OTROS:
-
         "Costos y
 Otros"
-
     };
-
-
     return
 nombres[categoria] || categoria;
-
   }
-
-
   function
 cargarConceptos() {
-
     const categoria =
-
-     
 document.getElementById("categoria").value;
-
-
     const select =
-
-     
 document.getElementById("concepto");
-
-
     select.innerHTML =
-
       '<option
 value="">Seleccione un concepto</option>';
-
-
     if (!categoria) {
-
       return;
-
     }
-
-
     let lista = [];
-
-
     if
 (Array.isArray(categorias[categoria])) {
-
       lista =
 categorias[categoria];
-
     } else if (
-
-     
 Array.isArray(conceptosCatalogo[categoria])
-
     ) {
-
       lista =
 conceptosCatalogo[categoria];
-
     }
-
-
-   
 lista.forEach(function(concepto) {
-
       const option =
-
-       
 document.createElement("option");
-
-
       option.value =
 concepto;
-
-     
 option.textContent = concepto;
-
-
-     
 select.appendChild(option);
-
     });
-
   }
-
-
   /*
 =========================================================
-
      TIPO DE OPERACIÓN
-
-    
 ========================================================= */
-
   function
 obtenerURLsFoto(url) {
-
     let texto =
 String(url || "").trim();
-
     if (!texto) return
 [];
-
     // Si la celda
 trae una fórmula IMAGE("URL"), extraemos la URL.
-
     const
 imagenFormula =
 texto.match(/IMAGE\s*\(\s*[\"']([^\"']+)[\"']/i);
-
     if (imagenFormula)
 texto = imagenFormula[1];
-
     const urls = [];
-
     const agregar =
 function(valor) {
-
       if (valor
 && urls.indexOf(valor) === -1) urls.push(valor);
-
     };
-
     // URL directa de
 imagen.
-
     if
 (/^https?:\/\//i.test(texto)) agregar(texto);
-
     let id =
 "";
-
     const matchArchivo
 = texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
     const
 matchParametro = texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-
     const matchOpen =
 texto.match(/open\?id=([a-zA-Z0-9_-]+)/i);
-
     const matchUc =
 texto.match(/uc\?id=([a-zA-Z0-9_-]+)/i);
-
     if (matchArchivo)
 id = matchArchivo[1];
-
     else if
 (matchParametro) id = matchParametro[1];
-
     else if
 (matchOpen) id = matchOpen[1];
-
     else if (matchUc)
 id = matchUc[1];
-
     if (id) {
-
       // Probamos
 varias formas de Google Drive sin modificar el backend.
-
-     
 agregar("https://drive.google.com/thumbnail?id=" +
 encodeURIComponent(id) + "&sz=w800");
-
-     
 agregar("https://drive.google.com/uc?export=view&id=" +
 encodeURIComponent(id));
-
-     
 agregar("https://lh3.googleusercontent.com/d/" +
 encodeURIComponent(id) + "=w800");
-
     }
-
     // Si es un ID
 puro de Drive.
-
     if
 (/^[a-zA-Z0-9_-]{15,}$/.test(texto)) {
-
-     
 agregar("https://drive.google.com/thumbnail?id=" +
 encodeURIComponent(texto) + "&sz=w800");
-
-     
 agregar("https://drive.google.com/uc?export=view&id=" +
 encodeURIComponent(texto));
-
-     
 agregar("https://lh3.googleusercontent.com/d/" +
 encodeURIComponent(texto) + "=w800");
-
     }
-
     return urls;
-
   }
-
-
   function
 convertirURLFotoDrive(url) {
-
     const urls =
 obtenerURLsFoto(url);
-
     return urls.length
 ? urls[0] : "";
-
   }
-
-
   /*
 =========================================================
-
      TIPO DE OPERACIÓN
-
-    
 ========================================================= */
-
   function
 seleccionarOperacion(tipo) {
-
     tipoOperacion =
 tipo;
-
-
     const btnCobrar =
-
-     
 document.getElementById("btnCobrar");
-
     const btnPagar =
-
-     
 document.getElementById("btnPagar");
-
     const opciones =
-
-     
 document.getElementById("opcionesOperacion");
-
     const
 panelOperacion =
-
-     
 document.getElementById("panelOperacion");
-
-
-   
 btnCobrar.classList.remove("tipo-activo");
-
-   
 btnPagar.classList.remove("tipo-activo");
-
-
     if (tipo ===
 "INGRESO") {
-
-     
 btnCobrar.classList.add("tipo-activo");
-
     }
-
-
     if (tipo ===
 "EGRESO") {
-
-     
 btnPagar.classList.add("tipo-activo");
-
     }
-
-
-   
 panelOperacion.classList.remove("oculto");
-
     /* Al presionar
 COBRAR o PAGAR deben aparecer las opciones. */
-
     document
-
-     
 .getElementById("opcionesOperacion")
-
-     
 .classList.remove("oculto");
-
     /* Cargar
 nuevamente responsables para asegurar que el selector esté actualizado. */
-
-   
 cargarResponsables();
-
-   
 document.getElementById("categoria").value = "";
-
-   
 document.getElementById("concepto").innerHTML =
-
       '<option
 value="">Seleccione un concepto</option>';
-
-
-   
 cargarCategorias();
-
-
-   
 ocultarMensaje("mensajeOperacion");
-
   }
-
   function
 mostrarMovimientos() {
-
     if
 (!estudianteActual) {
-
       return;
-
     }
-
     tipoOperacion =
 "";
-
     document
-
-     
 .getElementById("btnCobrar")
-
-     
 .classList.remove("tipo-activo");
-
     document
-
-     
 .getElementById("btnPagar")
-
-     
 .classList.remove("tipo-activo");
-
     document
-
-     
 .getElementById("panelOperacion")
-
-     
 .classList.add("oculto");
-
     document
-
-     
 .getElementById("seccionMovimientos")
-
       .style.display =
 "block";
-
-   
 cargarMovimientos(estudianteActual.codigo);
-
-   
 ocultarMensaje("mensajeOperacion");
-
   }
-
   /*
 =========================================================
-
      REGISTRAR
 MOVIMIENTO
-
-    
 ========================================================= */
-
   function
 registrarMovimiento() {
-
-   
 ocultarMensaje("mensajeOperacion");
-
-
     if
 (!estudianteActual) {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
         "Primero
 debe seleccionar un estudiante.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     if
 (!tipoOperacion) {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
-       
 "Seleccione COBRAR o PAGAR.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     const categoria =
-
-     
 document.getElementById("categoria").value;
-
-
     const concepto =
-
-     
 document.getElementById("concepto").value;
-
-
     const monto =
-
       numero(
-
-       
 document.getElementById("monto").value
-
       );
-
-
     const responsable
 =
-
-     
 document.getElementById("responsable").value.trim();
-
-
     const observacion
 =
-
-     
 document.getElementById("observacion").value.trim();
-
-
     if (!categoria) {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
-       
 "Seleccione una categoría.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     if (!concepto) {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
-       
 "Seleccione un concepto.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     if (monto <= 0)
 {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
         "Ingrese
 un monto mayor que 0.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     if (!responsable)
 {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
         "Ingrese
 el responsable.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     if (
-
       tipoOperacion
 === "EGRESO" &&
-
       monto >
 numero(estudianteActual.saldoActual)
-
     ) {
-
       mostrarMensaje(
-
-       
 "mensajeOperacion",
-
         "El saldo
 disponible no permite realizar este pago.",
-
-       
 "error"
-
       );
-
       return;
-
     }
-
-
     const datos = {
-
       accion:
 "registrar",
-
       codigo:
 estudianteActual.codigo,
-
       tipo:
 tipoOperacion,
-
       categoria:
 categoria,
-
       concepto:
 concepto,
-
       monto: monto,
-
       responsable:
 responsable,
-
       observacion:
 observacion,
-
       requestId:
 generarRequestId()
-
     };
-
-
     mostrarMensaje(
-
-     
 "mensajeOperacion",
-
-     
 "Registrando movimiento...",
-
       "ok"
-
     );
-
-
     llamarAPI(
-
       datos,
-
-     
 function(respuesta) {
-
         if (!respuesta
 || respuesta.ok === false) {
-
-         
 mostrarMensaje(
-
-           
 "mensajeOperacion",
-
             respuesta
 && respuesta.mensaje
-
               ?
 respuesta.mensaje
-
               :
 "No se pudo registrar el movimiento.",
-
-           
 "error"
-
           );
-
           return;
-
         }
-
-
-       
 mostrarMensaje(
-
-         
 "mensajeOperacion",
-
-         
 "Movimiento registrado correctamente.",
-
-         
 "ok"
-
         );
-
-
         if
 (respuesta.saldoActual !== undefined) {
-
-         
 estudianteActual.saldoActual =
-
-           
 numero(respuesta.saldoActual);
-
-
-         
 document.getElementById("datoSaldo").textContent =
-
-           
 numero(respuesta.saldoActual).toFixed(2) +
-
             "
 " +
-
             MONEDA;
-
         }
-
-
-       
 limpiarCamposOperacion();
-
-
-       
 cargarMovimientos(
-
-         
 estudianteActual.codigo
-
         );
-
       }
-
     );
-
   }
-
-
   /*
 =========================================================
-
      MOVIMIENTOS
-
-    
 ========================================================= */
-
   function
 cargarMovimientos(codigo) {
-
     llamarAPI(
-
       {
-
         accion:
 "estudiante",
-
         codigo: codigo
-
       },
-
-     
 function(respuesta) {
-
         const tabla =
-
-         
 document.getElementById("tablaMovimientos");
-
-
-       
 tabla.innerHTML = "";
-
-
         if (
-
           !respuesta
 ||
-
           respuesta.ok
 === false ||
-
-         
 !Array.isArray(respuesta.movimientos)
-
         ) {
-
           return;
-
         }
-
-
-       
 respuesta.movimientos.forEach(function(movimiento) {
-
           const fila =
-
-           
 document.createElement("tr");
-
-
           const fecha
 =
-
-           
 movimiento.fechaTexto ||
-
-           
 movimiento.fecha ||
-
-           
 movimiento.timestamp ||
-
-           
 "";
-
-
           const tipo =
-
-           
 movimiento.tipo ||
-
-           
 movimiento.tipoMovimiento ||
-
-           
 "";
-
-
           const
 concepto =
-
-           
 movimiento.concepto || "";
-
-
           const monto
 =
-
             numero(
-
-             
 movimiento.monto ||
-
-             
 movimiento.montoLDS
-
             );
-
-
           const
 responsable =
-
-           
 movimiento.responsable || "";
-
-
           const
 observacion =
-
-           
 movimiento.observacion || "";
-
-
-         
 fila.innerHTML =
-
-           
 "<td>" +
-
-             
 escaparHTML(fecha) +
-
-           
 "</td>" +
-
-           
 "<td class='" +
-
               (tipo
 === "INGRESO"
-
                 ?
 "ingreso"
-
                 :
 "egreso") +
-
-           
 "'>" +
-
-             
 escaparHTML(tipo) +
-
-           
 "</td>" +
-
-           
 "<td>" +
-
-             
 escaparHTML(concepto) +
-
-           
 "</td>" +
-
-           
 "<td>" +
-
-             
 monto.toFixed(2) +
-
               "
 " +
-
               MONEDA +
-
-           
 "</td>" +
-
-           
 "<td>" +
-
-             
 escaparHTML(responsable) +
-
-           
 "</td>" +
-
-           
 "<td>" +
-
-             
 escaparHTML(observacion) +
-
-           
 "</td>";
-
-
-         
 tabla.appendChild(fila);
-
         });
-
       }
-
     );
-
   }
-
-
   function
 escaparHTML(valor) {
-
     return
 String(valor)
-
-     
 .replace(/&/g, "&amp;")
-
-     
 .replace(/</g, "&lt;")
-
-     
 .replace(/>/g, "&gt;")
-
-     
 .replace(/"/g, "&quot;")
-
       .replace(/'/g,
 "&#039;");
-
   }
-
-
   /*
 =========================================================
-
      LIMPIAR
-
-    
 ========================================================= */
-
   function
 limpiarCamposOperacion() {
-
-   
 document.getElementById("categoria").value = "";
-
-   
 document.getElementById("concepto").innerHTML =
-
       '<option
 value="">Seleccione un concepto</option>';
-
-   
 document.getElementById("monto").value = "";
-
-   
 document.getElementById("responsable").value = "";
-
-   
 document.getElementById("observacion").value = "";
-
   }
-
-
   function
 limpiarOperacion() {
-
     tipoOperacion =
 "";
-
     document
-
-     
 .getElementById("btnCobrar")
-
-     
 .classList.remove("tipo-activo");
-
     document
-
-     
 .getElementById("btnPagar")
-
-     
 .classList.remove("tipo-activo");
-
-
-   
 limpiarCamposOperacion();
-
-   
 document.getElementById("panelOperacion").classList.add("oculto");
-
-   
 ocultarMensaje("mensajeOperacion");
-
   }
-
-
   /*
 =========================================================
-
      ENTRADA DESDE LA
 PORTADA
-
-    
 ========================================================= */
-
   function
 abrirSistemaLDS360(modo) {
-
-   
 document.getElementById("portadaLDS360").style.display =
 "none";
-
     document
-
-     
 .getElementById("sistemaPrincipal")
-
-     
 .classList.remove("oculto");
-
     window.scrollTo(0,
 0);
-
     if (modo ===
 "qr") {
-
       iniciarQR();
-
     }
-
     if (modo ===
 "manual") {
-
-     
 ingresarCodigoManual();
-
     }
-
   }
-
 </script>
-
 </div>
-
 </body>
-
 </html>
