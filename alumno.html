@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BANCO LDS 360</title>
-
-  <!-- Mismo lector QR gratuito del banco actual -->
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<style>
 
     * {
       box-sizing: border-box;
@@ -416,846 +413,1339 @@
   @media(max-width:600px){#portadaLDS360 .portada-hotspot.qr{left:8%;top:62%;width:40%;height:12%;}#portadaLDS360 .portada-hotspot.codigo{left:52%;top:62%;width:40%;height:12%;}}
 
 
-    /* SOLO para el acceso de alumnos: clave antes de mostrar el estado de cuenta. */
-    .acceso-clave {
-      display: none;
-      margin-top: 18px;
-    }
+/* Acceso y visibilidad */
+#accesoClave { display:none; }
+#accesoClave.activo { display:block; }
+#seccionEstudiante,
+#seccionOperacion,
+#seccionMovimientos { display:none; }
+.btn-salir { background:#6c757d; color:#fff; }
 
-    .acceso-clave.activo {
-      display: block;
-    }
-
-    .estado-acceso {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      background: #fff8e1;
-      color: #6b5300;
-      font-size: 13px;
-    }
-
-    .btn-salir-alumno {
-      background: #6c757d;
-      color: white;
-    }
-  </style>
+</style>
 </head>
 
 <body>
 
-  <!-- ENCABEZADO: MISMO FORMATO VISUAL DEL BANCO ACTUAL -->
-  <header class="encabezado">
-    <h1>BANCO LDS 360</h1>
-    <p>IEP LA SALLE DEL SUR</p>
-    <p>Nuevo Sol Lasallista (LDS)</p>
-  </header>
+<header class="encabezado">
+  <h1>BANCO LDS 360</h1>
+  <p>IEP LA SALLE DEL SUR</p>
+  <p>Nuevo Sol Lasallista (LDS)</p>
+</header>
 
-  <main class="contenedor">
+<main class="contenedor">
 
-    <!-- IDENTIFICACIÓN -->
-    <section class="tarjeta">
+  <section class="tarjeta">
+    <div class="titulo">Identificación del estudiante</div>
 
-      <div class="titulo">Identificación del estudiante</div>
+    <div id="lectorQR"></div>
 
-      <div id="lectorQR"></div>
+    <div class="botones">
+      <button type="button" class="btn-principal" onclick="iniciarQR()">
+        📷 Escanear QR
+      </button>
+
+      <button type="button" class="btn-secundario" onclick="ingresarCodigoManual()">
+        ⌨️ Ingresar código manualmente
+      </button>
+    </div>
+
+    <div id="mensaje" class="mensaje"></div>
+
+    <div id="accesoClave">
+
+      <div class="campo">
+        <label for="claveAlumno">Clave personal</label>
+        <input
+          type="password"
+          id="claveAlumno"
+          maxlength="80"
+          autocomplete="current-password"
+          placeholder="Ingrese su clave">
+      </div>
 
       <div class="botones">
+        <button type="button" id="btnIngresarAlumno" class="btn-principal" onclick="confirmarAcceso()" disabled>
+          🔐 INGRESAR A MI CUENTA
+        </button>
+
+        <button type="button" class="btn-salir" onclick="cerrarSesion()">
+          Cerrar sesión
+        </button>
+      </div>
+
+      <div id="codigoSeleccionado" class="estado-acceso"
+           style="margin-top:12px;padding:12px;border-radius:8px;background:#fff8e1;color:#6b5300;">
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- DATOS DEL ALUMNO -->
+  <section id="seccionEstudiante" class="tarjeta estudiante">
+
+    <div class="titulo">Datos del estudiante</div>
+
+    <div class="foto-estudiante-contenedor">
+      <img id="datoFoto" class="foto-estudiante" src="" alt="Foto del estudiante">
+    </div>
+
+    <div class="datos-estudiante">
+
+      <div class="dato">
+        <strong>Código</strong>
+        <span id="datoCodigo">-</span>
+      </div>
+
+      <div class="dato">
+        <strong>Estudiante</strong>
+        <span id="datoNombre">-</span>
+      </div>
+
+      <div class="dato">
+        <strong>Grado</strong>
+        <span id="datoGrado">-</span>
+      </div>
+
+      <div class="dato">
+        <strong>Sección</strong>
+        <span id="datoSeccion">-</span>
+      </div>
+
+      <div class="dato">
+        <strong>Docente</strong>
+        <span id="datoDocente">-</span>
+      </div>
+
+      <div class="dato">
+        <strong>Monto base</strong>
+        <span id="datoBase">0.00 LDS</span>
+      </div>
+
+    </div>
+
+    <div class="saldo">
+      <span>Saldo actual</span>
+      <strong id="datoSaldo">0.00 LDS</strong>
+    </div>
+
+  </section>
+
+
+  <!-- OPERACIONES: SE MANTIENEN LOS 3 BOTONES -->
+  <section id="seccionOperacion" class="tarjeta operacion">
+
+    <div class="titulo">Operación</div>
+
+    <div class="tipo-operacion">
+
+      <button
+        type="button"
+        id="btnCobrar"
+        class="btn-ingreso"
+        onclick="seleccionarOperacion('INGRESO')">
+        COBRAR
+      </button>
+
+      <button
+        type="button"
+        id="btnPagar"
+        class="btn-egreso"
+        onclick="seleccionarOperacion('EGRESO')">
+        PAGAR
+      </button>
+
+      <button
+        type="button"
+        id="btnMovimientos"
+        class="btn-saldo"
+        onclick="mostrarMovimientos()">
+        MOVIMIENTOS
+      </button>
+
+    </div>
+
+    <div id="panelOperacion" class="oculto">
+
+      <div id="opcionesOperacion">
+
+        <div class="campo">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" onchange="cargarConceptos()">
+            <option value="">Seleccione una categoría</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="concepto">Concepto</label>
+          <select id="concepto">
+            <option value="">Seleccione un concepto</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="campo">
+        <label for="monto">Monto LDS</label>
+        <input
+          type="number"
+          id="monto"
+          min="0"
+          step="0.01"
+          placeholder="Ingrese el monto">
+      </div>
+
+      <div class="campo">
+        <label for="responsable">Responsable</label>
+        <select id="responsable">
+          <option value="">Seleccione responsable</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="observacion">Observación</label>
+        <textarea
+          id="observacion"
+          placeholder="Ingrese observación"></textarea>
+      </div>
+
+      <div class="botones">
+
         <button
           type="button"
           class="btn-principal"
-          onclick="iniciarQR()">
-          📷 Escanear QR
+          onclick="registrarMovimiento()">
+          Registrar movimiento
         </button>
 
         <button
           type="button"
           class="btn-secundario"
-          onclick="ingresarCodigoManual()">
-          ⌨️ Ingresar código manualmente
+          onclick="limpiarOperacion()">
+          Limpiar
         </button>
-      </div>
-
-      <div id="mensaje" class="mensaje"></div>
-
-      <!-- CLAVE: APARECE DESPUÉS DE IDENTIFICAR EL CÓDIGO -->
-      <div id="accesoClave" class="acceso-clave">
-
-        <div class="campo">
-          <label for="claveAlumno">Clave personal</label>
-          <input
-            type="password"
-            id="claveAlumno"
-            maxlength="80"
-            autocomplete="current-password"
-            placeholder="Ingrese su clave">
-        </div>
-
-        <div class="botones">
-          <button
-            type="button"
-            class="btn-principal"
-            onclick="confirmarAcceso()">
-            🔐 Ingresar a mi cuenta
-          </button>
-
-          <button
-            type="button"
-            class="btn-salir-alumno"
-            onclick="reiniciarAcceso()">
-            Limpiar
-          </button>
-        </div>
-
-        <div id="codigoSeleccionado" class="estado-acceso"></div>
-      </div>
-
-    </section>
-
-    <!-- DATOS DEL ESTUDIANTE -->
-    <section id="seccionEstudiante" class="tarjeta estudiante">
-
-      <div class="titulo">Datos del estudiante</div>
-
-      <div class="foto-estudiante-contenedor">
-        <img id="datoFoto" class="foto-estudiante" src="" alt="Foto del estudiante">
-      </div>
-
-      <div class="datos-estudiante">
-
-        <div class="dato">
-          <strong>Código</strong>
-          <span id="datoCodigo">-</span>
-        </div>
-
-        <div class="dato">
-          <strong>Estudiante</strong>
-          <span id="datoNombre">-</span>
-        </div>
-
-        <div class="dato">
-          <strong>Grado</strong>
-          <span id="datoGrado">-</span>
-        </div>
-
-        <div class="dato">
-          <strong>Sección</strong>
-          <span id="datoSeccion">-</span>
-        </div>
-
-        <div class="dato">
-          <strong>Docente</strong>
-          <span id="datoDocente">-</span>
-        </div>
-
-        <div class="dato">
-          <strong>Monto base</strong>
-          <span id="datoBase">0.00 LDS</span>
-        </div>
 
       </div>
 
-      <div class="saldo">
-        <span>Saldo actual</span>
-        <strong id="datoSaldo">0.00 LDS</strong>
-      </div>
+      <div id="mensajeOperacion" class="mensaje"></div>
 
-    </section>
+    </div>
+  </section>
 
-    <!-- MOVIMIENTOS -->
-    <section id="seccionMovimientos" class="tarjeta estudiante">
 
-      <div class="titulo">Movimientos del estudiante</div>
+  <!-- MOVIMIENTOS -->
+  <section id="seccionMovimientos" class="tarjeta estudiante">
 
-      <div class="tabla-contenedor">
+    <div class="titulo">Movimientos del estudiante</div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Concepto</th>
-              <th>Monto LDS</th>
-              <th>Responsable</th>
-              <th>Observación</th>
-            </tr>
-          </thead>
+    <div class="tabla-contenedor">
 
-          <tbody id="tablaMovimientos"></tbody>
-        </table>
+      <table>
 
-      </div>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Concepto</th>
+            <th>Monto LDS</th>
+            <th>Responsable</th>
+            <th>Observación</th>
+          </tr>
+        </thead>
 
-    </section>
+        <tbody id="tablaMovimientos"></tbody>
 
-  </main>
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
 
 <script>
-  /* =========================================================
-     CONFIGURACIÓN
-     ========================================================= */
+const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxZ3ZYzBGAfFUdyJpDpMlAAVOBVrDocj3E3jJ1GTZIWTPjlSv1LjfMECbMmDWVU-H-prQ/exec";
+const MONEDA = "LDS";
 
-  const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxZ3ZYzBGAfFUdyJpDpMlAAVOBVrDocj3E3jJ1GTZIWTPjlSv1LjfMECbMmDWVU-H-prQ/exec";
-
-
-  /* =========================================================
-     VARIABLES
-     ========================================================= */
-
-  let codigoPendiente = "";
-  let noncePendiente = "";
-  let saltPendiente = "";
-  let lector = null;
+let lector = null;
+let codigoPendiente = "";
+let saltPendiente = "";
+let noncePendiente = "";
+let retoEnCurso = false;
+let tokenAlumno = "";
+let estudianteActual = null;
+let tipoOperacion = "";
+let categorias = {};
 
 
-  /* =========================================================
-     UTILIDADES
-     ========================================================= */
+function mostrarMensaje(id, texto, tipo) {
+  const el = document.getElementById(id);
+  el.textContent = texto || "";
+  el.className = "mensaje " + (tipo || "");
+}
 
-  function mostrarMensaje(id, texto, tipo) {
-    const elemento = document.getElementById(id);
-    elemento.textContent = texto;
-    elemento.className = "mensaje " + tipo;
-  }
+function ocultarMensaje(id) {
+  const el = document.getElementById(id);
+  el.textContent = "";
+  el.className = "mensaje";
+}
 
-  function ocultarMensaje(id) {
-    const elemento = document.getElementById(id);
-    elemento.className = "mensaje";
-    elemento.textContent = "";
-  }
+function normalizarCodigo(codigo) {
+  return String(codigo == null ? "" : codigo)
+    .trim()
+    .toUpperCase()
+    .replace(/[._\s]+/g, "-")
+    .replace(/-+/g, "-");
+}
 
-  function numero(valor) {
-    const n = Number(valor);
-    return Number.isFinite(n) ? n : 0;
-  }
+function numero(valor) {
+  const n = Number(valor);
+  return Number.isFinite(n) ? n : 0;
+}
 
-  function normalizarCodigo(codigo) {
-    return String(codigo == null ? "" : codigo)
-      .trim()
-      .toUpperCase()
-      .replace(/[._\s]+/g, "-")
-      .replace(/-+/g, "-");
-  }
+function generarRequestId() {
+  return "LDS-ALUMNO-" +
+    Date.now() + "-" +
+    Math.random().toString(36).substring(2,10);
+}
 
-  function escaparHTML(valor) {
-    return String(valor == null ? "" : valor)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+function escaparHTML(valor) {
+  return String(valor == null ? "" : valor)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-  async function sha256(texto) {
-    const datos = new TextEncoder().encode(texto);
-    const hash = await crypto.subtle.digest("SHA-256", datos);
-    return Array.from(new Uint8Array(hash))
-      .map(byte => byte.toString(16).padStart(2, "0"))
-      .join("");
-  }
+async function sha256(texto) {
+  const datos = new TextEncoder().encode(texto);
+  const hash = await crypto.subtle.digest("SHA-256", datos);
 
-
-  /* =========================================================
-     JSONP
-     ========================================================= */
-
-  function llamarAPI(parametros) {
-    return new Promise(function(resolve, reject) {
-
-      const callback =
-        "callbackAlumnoLDS_" +
-        Date.now() +
-        "_" +
-        Math.floor(Math.random() * 100000);
-
-      const query = Object.keys(parametros)
-        .map(function(clave) {
-          return encodeURIComponent(clave) +
-            "=" +
-            encodeURIComponent(parametros[clave]);
-        })
-        .join("&");
-
-      const script = document.createElement("script");
-
-      script.src =
-        ALUMNOS_API_URL +
-        "?" +
-        query +
-        "&callback=" +
-        encodeURIComponent(callback);
-
-      let terminado = false;
-
-      const limpiar = function() {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-
-        try {
-          delete window[callback];
-        } catch (e) {
-          window[callback] = undefined;
-        }
-      };
-
-      const temporizador = setTimeout(function() {
-        if (terminado) return;
-
-        terminado = true;
-        limpiar();
-
-        reject(
-          new Error(
-            "El servicio de acceso no respondió a tiempo."
-          )
-        );
-      }, 15000);
-
-      window[callback] = function(respuesta) {
-        if (terminado) return;
-
-        terminado = true;
-        clearTimeout(temporizador);
-        limpiar();
-
-        resolve(respuesta);
-      };
-
-      script.onerror = function() {
-        if (terminado) return;
-
-        terminado = true;
-        clearTimeout(temporizador);
-        limpiar();
-
-        reject(
-          new Error(
-            "No se pudo conectar con BANCO LDS 360."
-          )
-        );
-      };
-
-      document.body.appendChild(script);
-    });
-  }
+  return Array.from(new Uint8Array(hash))
+    .map(byte => byte.toString(16).padStart(2,"0"))
+    .join("");
+}
 
 
-  /* =========================================================
-     QR
-     ========================================================= */
+function llamarAPI(parametros) {
+  return new Promise(function(resolve, reject) {
 
-  function detenerQR() {
-    if (!lector) return;
+    const callback =
+      "callbackAlumnoLDS_" +
+      Date.now() + "_" +
+      Math.floor(Math.random()*100000);
 
-    try {
-      lector.stop();
-    } catch (e) {}
+    const query = Object.keys(parametros)
+      .map(function(clave) {
+        return encodeURIComponent(clave) + "=" +
+          encodeURIComponent(parametros[clave]);
+      })
+      .join("&");
 
+    const script = document.createElement("script");
+
+    script.src =
+      ALUMNOS_API_URL +
+      "?" + query +
+      "&callback=" + encodeURIComponent(callback);
+
+    let terminado = false;
+
+    const limpiar = function() {
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+      try {
+        delete window[callback];
+      } catch (e) {
+        window[callback] = undefined;
+      }
+    };
+
+    const temporizador = setTimeout(function() {
+      if (terminado) return;
+
+      terminado = true;
+      limpiar();
+
+      reject(new Error("El servicio no respondió a tiempo."));
+    },15000);
+
+    window[callback] = function(respuesta) {
+      if (terminado) return;
+
+      terminado = true;
+      clearTimeout(temporizador);
+      limpiar();
+      resolve(respuesta);
+    };
+
+    script.onerror = function() {
+      if (terminado) return;
+
+      terminado = true;
+      clearTimeout(temporizador);
+      limpiar();
+
+      reject(new Error("No se pudo conectar con BANCO LDS 360."));
+    };
+
+    document.body.appendChild(script);
+  });
+}
+
+
+function detenerQR() {
+  if (!lector) return;
+
+  try {
+    lector.stop();
+  } catch (e) {}
+
+  lector = null;
+}
+
+function iniciarQR() {
+
+  ocultarMensaje("mensaje");
+
+  if (lector) {
+    try { lector.stop(); } catch(e) {}
     lector = null;
   }
 
-  function iniciarQR() {
-
-    ocultarMensaje("mensaje");
-
-    if (lector) {
-      try {
-        lector.stop();
-      } catch (e) {}
-      lector = null;
-    }
-
-    try {
-      lector = new Html5Qrcode("lectorQR");
-    } catch (error) {
-      mostrarMensaje(
-        "mensaje",
-        "No fue posible iniciar el lector QR.",
-        "error"
-      );
-      return;
-    }
-
-    const configuracion = {
-      fps: 10,
-      qrbox: {
-        width: 250,
-        height: 250
-      }
-    };
-
-    lector.start(
-      { facingMode: "environment" },
-      configuracion,
-      function(codigoQR) {
-
-        detenerQR();
-
-        prepararCodigo(codigoQR);
-
-      },
-      function(error) {
-
-        // Errores normales de lectura: no interrumpir.
-
-      }
-    ).catch(function(error) {
-
-      mostrarMensaje(
-        "mensaje",
-        "No fue posible iniciar la cámara. Use el ingreso manual.",
-        "error"
-      );
-
-    });
-  }
-
-
-  /* =========================================================
-     IDENTIFICACIÓN
-     ========================================================= */
-
-  function ingresarCodigoManual() {
-
-    const codigo = prompt(
-      "Ingrese el código del estudiante:"
+  try {
+    lector = new Html5Qrcode("lectorQR");
+  } catch(error) {
+    mostrarMensaje(
+      "mensaje",
+      "No fue posible iniciar el lector QR.",
+      "error"
     );
-
-    if (!codigo) {
-      return;
-    }
-
-    prepararCodigo(codigo);
-
+    return;
   }
 
+  lector.start(
+    { facingMode: "environment" },
+    {
+      fps: 10,
+      qrbox: { width:250, height:250 }
+    },
 
-  function prepararCodigo(codigo) {
+    function(codigoQR) {
+      detenerQR();
+      prepararCodigo(codigoQR);
+    },
 
-    codigoPendiente = normalizarCodigo(codigo);
-
-    if (!codigoPendiente) {
-      mostrarMensaje(
-        "mensaje",
-        "Ingrese un código válido.",
-        "error"
-      );
-      return;
+    function(error) {
+      // Errores normales del escaneo.
     }
 
-    noncePendiente = "";
-    saltPendiente = "";
-
-    document.getElementById("accesoClave")
-      .classList.add("activo");
-
-    document.getElementById("codigoSeleccionado")
-      .textContent =
-        "Código identificado: " + codigoPendiente +
-        ". Ingrese su clave personal para continuar.";
-
-    document.getElementById("claveAlumno").value = "";
-    document.getElementById("claveAlumno").focus();
+  ).catch(function(error) {
 
     mostrarMensaje(
       "mensaje",
-      "Código identificado. Ahora ingrese su clave personal.",
+      "No fue posible iniciar la cámara. Use el código manual.",
+      "error"
+    );
+
+  });
+}
+
+
+function ingresarCodigoManual() {
+  const codigo = prompt("Ingrese el código del estudiante:");
+  if (!codigo) return;
+
+  prepararCodigo(codigo);
+}
+
+
+async function prepararCodigo(codigo) {
+
+  codigoPendiente =
+    normalizarCodigo(codigo);
+
+  if (!codigoPendiente) {
+    mostrarMensaje(
+      "mensaje",
+      "Ingrese un código válido.",
+      "error"
+    );
+    return;
+  }
+
+  saltPendiente = "";
+  noncePendiente = "";
+
+  document.getElementById(
+    "accesoClave"
+  ).classList.add("activo");
+
+  document.getElementById(
+    "codigoSeleccionado"
+  ).textContent =
+    "Código identificado: " +
+    codigoPendiente +
+    ". Ingrese su clave personal.";
+
+  document.getElementById(
+    "claveAlumno"
+  ).value = "";
+
+
+  mostrarMensaje(
+    "mensaje",
+    "Preparando el acceso...",
+    "ok"
+  );
+
+  await solicitarReto();
+}
+
+
+async function solicitarReto() {
+
+  if (!codigoPendiente) return false;
+
+  retoEnCurso = true;
+  saltPendiente = "";
+  noncePendiente = "";
+
+  const boton = document.getElementById("btnIngresarAlumno");
+  if (boton) boton.disabled = true;
+
+  mostrarMensaje(
+    "mensaje",
+    "Preparando el acceso...",
+    "ok"
+  );
+
+  try {
+
+    const respuesta =
+      await llamarAPI({
+        accion:"preloginAlumno",
+        codigo:codigoPendiente
+      });
+
+    if (!respuesta || respuesta.ok !== true) {
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "Credenciales inválidas."
+      );
+    }
+
+    saltPendiente = respuesta.salt || "";
+    noncePendiente = respuesta.nonce || "";
+
+    if (!saltPendiente || !noncePendiente) {
+      throw new Error("No se pudo preparar el acceso.");
+    }
+
+    mostrarMensaje(
+      "mensaje",
+      "Código identificado. Ya puede ingresar su clave.",
       "ok"
     );
 
-    prepararReto();
-  }
-
-
-  async function prepararReto() {
-
-    try {
-
-      const respuesta = await llamarAPI({
-        accion: "preloginAlumno",
-        codigo: codigoPendiente
-      });
-
-      if (!respuesta || respuesta.ok !== true) {
-        throw new Error(
-          respuesta && respuesta.mensaje
-            ? respuesta.mensaje
-            : "No fue posible validar el código."
-        );
-      }
-
-      saltPendiente = respuesta.salt;
-      noncePendiente = respuesta.nonce;
-
-    } catch (error) {
-
-      noncePendiente = "";
-      saltPendiente = "";
-
-      mostrarMensaje(
-        "mensaje",
-        error && error.message
-          ? error.message
-          : "No fue posible preparar el acceso.",
-        "error"
-      );
-    }
-  }
-
-
-  /* =========================================================
-     LOGIN DEL ALUMNO
-     ========================================================= */
-
-  async function confirmarAcceso() {
-
-    const clave =
-      document.getElementById("claveAlumno").value;
-
-    if (!codigoPendiente) {
-      mostrarMensaje(
-        "mensaje",
-        "Primero identifique al estudiante.",
-        "error"
-      );
-      return;
-    }
-
-    if (!clave) {
-      mostrarMensaje(
-        "mensaje",
-        "Ingrese su clave personal.",
-        "error"
-      );
-      return;
-    }
-
-    if (!saltPendiente || !noncePendiente) {
-      mostrarMensaje(
-        "mensaje",
-        "La solicitud de acceso expiró. Vuelva a ingresar el código.",
-        "error"
-      );
-      return;
-    }
-
-    try {
-
-      mostrarMensaje(
-        "mensaje",
-        "Verificando acceso...",
-        "ok"
-      );
-
-      const hashClave =
-        await sha256(
-          clave + "|" + saltPendiente
-        );
-
-      const prueba =
-        await sha256(
-          hashClave + "|" + noncePendiente
-        );
-
-      const respuesta =
-        await llamarAPI({
-          accion: "loginAlumno",
-          codigo: codigoPendiente,
-          nonce: noncePendiente,
-          prueba: prueba
-        });
-
-      if (!respuesta || respuesta.ok !== true) {
-        throw new Error(
-          respuesta && respuesta.mensaje
-            ? respuesta.mensaje
-            : "Credenciales inválidas."
-        );
-      }
-
-      mostrarFichaEstudiante(respuesta);
-
-      document.getElementById("accesoClave")
-        .classList.remove("activo");
-
-      mostrarMensaje(
-        "mensaje",
-        "Acceso correcto.",
-        "ok"
-      );
-
-    } catch (error) {
-
-      mostrarMensaje(
-        "mensaje",
-        error && error.message
-          ? error.message
-          : "No fue posible iniciar sesión.",
-        "error"
-      );
-    }
-  }
-
-
-  /* =========================================================
-     MOSTRAR ESTUDIANTE
-     ========================================================= */
-
-  function obtenerURLsFoto(url) {
-
-    const texto =
-      String(url || "").trim();
-
-    if (!texto) return [];
-
-    let id = "";
-
-    const matchArchivo =
-      texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-
-    const matchParametro =
-      texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-
-    if (matchArchivo) {
-      id = matchArchivo[1];
-    } else if (matchParametro) {
-      id = matchParametro[1];
-    }
-
-    if (!id) {
-      return [texto];
-    }
-
-    return [
-      texto,
-      "https://drive.google.com/thumbnail?id=" +
-        encodeURIComponent(id) +
-        "&sz=w800",
-      "https://drive.google.com/uc?export=view&id=" +
-        encodeURIComponent(id),
-      "https://lh3.googleusercontent.com/d/" +
-        encodeURIComponent(id) +
-        "=w800"
-    ];
-  }
-
-
-  function cargarFoto(url) {
-
-    const foto =
-      document.getElementById("datoFoto");
-
-    const urls =
-      obtenerURLsFoto(url);
-
-    foto.style.display = "none";
-    foto.removeAttribute("src");
-
-    if (!urls.length) return;
-
-    let indice = 0;
-
-    foto.onload = function() {
-      foto.style.display = "block";
-    };
-
-    foto.onerror = function() {
-
-      indice++;
-
-      if (indice < urls.length) {
-        foto.src = urls[indice];
-      } else {
-        foto.style.display = "none";
-      }
-    };
-
-    foto.src = urls[0];
-  }
-
-
-  function mostrarFichaEstudiante(datos) {
-
-    const estudiante =
-      datos.estudiante || {};
-
-    const cuenta =
-      datos.cuenta || {};
-
-    const movimientos =
-      Array.isArray(datos.movimientos)
-        ? datos.movimientos
-        : [];
-
-    document.getElementById("datoCodigo")
-      .textContent =
-        estudiante.codigo || "-";
-
-    document.getElementById("datoNombre")
-      .textContent =
-        estudiante.nombreCompleto || "-";
-
-    document.getElementById("datoGrado")
-      .textContent =
-        estudiante.grado || "-";
-
-    document.getElementById("datoSeccion")
-      .textContent =
-        estudiante.seccion || "-";
-
-    document.getElementById("datoDocente")
-      .textContent =
-        estudiante.docente || "-";
-
-    document.getElementById("datoBase")
-      .textContent =
-        numero(estudiante.montoBase).toFixed(2) +
-        " LDS";
-
-    document.getElementById("datoSaldo")
-      .textContent =
-        numero(cuenta.saldoActual).toFixed(2) +
-        " LDS";
-
-    document.getElementById("seccionEstudiante")
-      .style.display = "grid";
-
-    document.getElementById("seccionMovimientos")
-      .style.display = "block";
-
-    cargarFoto(
-      estudiante.fotoUrl ||
-      estudiante.foto ||
-      ""
+    if (boton) boton.disabled = false;
+    document.getElementById("claveAlumno").focus();
+    return true;
+
+  } catch(error) {
+
+    saltPendiente = "";
+    noncePendiente = "";
+
+    mostrarMensaje(
+      "mensaje",
+      error.message || "No fue posible preparar el acceso.",
+      "error"
     );
 
-    const tabla =
-      document.getElementById("tablaMovimientos");
+    return false;
 
-    tabla.innerHTML = "";
+  } finally {
+    retoEnCurso = false;
+  }
+}
 
-    if (!movimientos.length) {
+async function confirmarAcceso() {
 
-      tabla.innerHTML =
-        '<tr><td colspan="6" style="text-align:center">Sin movimientos registrados.</td></tr>';
+  const clave =
+    document.getElementById("claveAlumno").value;
 
+  if (!codigoPendiente) {
+    mostrarMensaje(
+      "mensaje",
+      "Primero identifique el estudiante.",
+      "error"
+    );
+    return;
+  }
+
+  if (!clave) {
+    mostrarMensaje(
+      "mensaje",
+      "Ingrese su clave personal.",
+      "error"
+    );
+    return;
+  }
+
+  if (retoEnCurso) {
+    mostrarMensaje(
+      "mensaje",
+      "Espere un momento mientras se prepara el acceso.",
+      "ok"
+    );
+    return;
+  }
+
+  if (!saltPendiente || !noncePendiente) {
+    const preparado = await solicitarReto();
+    if (!preparado) return;
+  }
+
+  try {
+
+    const boton = document.getElementById("btnIngresarAlumno");
+    if (boton) boton.disabled = true;
+
+    mostrarMensaje(
+      "mensaje",
+      "Verificando acceso...",
+      "ok"
+    );
+
+    const hashClave =
+      await sha256(
+        clave + "|" + saltPendiente
+      );
+
+    const prueba =
+      await sha256(
+        hashClave + "|" + noncePendiente
+      );
+
+    const respuesta =
+      await llamarAPI({
+        accion:"loginAlumno",
+        codigo:codigoPendiente,
+        nonce:noncePendiente,
+        prueba:prueba
+      });
+
+    if (!respuesta || respuesta.ok !== true) {
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "Credenciales inválidas."
+      );
+    }
+
+    tokenAlumno = respuesta.token || "";
+    estudianteActual = respuesta.estudiante || null;
+
+    mostrarFichaEstudiante(respuesta);
+    await cargarOpciones();
+
+    document.getElementById(
+      "accesoClave"
+    ).classList.remove("activo");
+
+    mostrarMensaje(
+      "mensaje",
+      "Acceso correcto.",
+      "ok"
+    );
+
+  } catch(error) {
+
+    mostrarMensaje(
+      "mensaje",
+      error.message || "No fue posible ingresar.",
+      "error"
+    );
+
+    const boton = document.getElementById("btnIngresarAlumno");
+    if (boton) boton.disabled = false;
+  }
+}
+
+function mostrarFichaEstudiante(datos) {
+
+  const estudiante =
+    datos.estudiante || {};
+
+  const cuenta =
+    datos.cuenta || {};
+
+  document.getElementById(
+    "datoCodigo"
+  ).textContent =
+    estudiante.codigo || "-";
+
+  document.getElementById(
+    "datoNombre"
+  ).textContent =
+    estudiante.nombreCompleto || "-";
+
+  document.getElementById(
+    "datoGrado"
+  ).textContent =
+    estudiante.grado || "-";
+
+  document.getElementById(
+    "datoSeccion"
+  ).textContent =
+    estudiante.seccion || "-";
+
+  document.getElementById(
+    "datoDocente"
+  ).textContent =
+    estudiante.docente || "-";
+
+  document.getElementById(
+    "datoBase"
+  ).textContent =
+    numero(estudiante.montoBase).toFixed(2) +
+    " LDS";
+
+  document.getElementById(
+    "datoSaldo"
+  ).textContent =
+    numero(cuenta.saldoActual).toFixed(2) +
+    " LDS";
+
+  document.getElementById(
+    "seccionEstudiante"
+  ).style.display = "grid";
+
+  document.getElementById(
+    "seccionOperacion"
+  ).style.display = "block";
+
+  cargarFoto(
+    estudiante.fotoUrl ||
+    estudiante.foto ||
+    ""
+  );
+
+  cargarMovimientosDesdeRespuesta(
+    datos.movimientos || []
+  );
+}
+
+
+async function cargarOpciones() {
+
+  if (!tokenAlumno) return;
+
+  try {
+
+    const respuesta =
+      await llamarAPI({
+        accion:"opcionesAlumno",
+        token:tokenAlumno
+      });
+
+    if (!respuesta || respuesta.ok !== true) {
       return;
     }
 
-    movimientos.forEach(function(movimiento) {
+    categorias =
+      respuesta.opcionesPorCategoria || {};
 
-      const fila =
-        document.createElement("tr");
+    const select =
+      document.getElementById("responsable");
 
-      const tipo =
-        movimiento.tipo ||
-        movimiento.tipoMovimiento ||
-        "";
+    select.innerHTML =
+      '<option value="">Seleccione responsable</option>';
 
-      const clase =
-        tipo === "INGRESO"
-          ? "ingreso"
-          : tipo === "EGRESO"
-            ? "egreso"
-            : "";
+    (respuesta.responsables || [])
+      .forEach(function(nombre) {
 
-      const monto =
+        const option =
+          document.createElement("option");
+
+        option.value = nombre;
+        option.textContent = nombre;
+
+        select.appendChild(option);
+      });
+
+  } catch(error) {
+
+    console.error(
+      "Error cargando opciones:",
+      error
+    );
+  }
+}
+
+
+function determinarDireccion(
+  concepto,
+  categoria
+) {
+
+  const c =
+    String(concepto || "")
+      .trim()
+      .toUpperCase();
+
+  const cat =
+    String(categoria || "")
+      .trim()
+      .toUpperCase();
+
+  if (
+    cat === "INGRESOS_Y_SUELDOS" ||
+    cat === "PREMIOS_Y_BONIFICACIONES"
+  ) return "INGRESO";
+
+  if (
+    cat === "PAGOS_Y_GASTOS" ||
+    cat === "SANCIONES_Y_MULTAS"
+  ) return "EGRESO";
+
+  if (
+    cat === "AHORROS_E_INVERSIONES"
+  ) {
+    return c.indexOf("RETIRO DE AHORROS") === 0
+      ? "EGRESO"
+      : "INGRESO";
+  }
+
+  return "AMBOS";
+}
+
+
+function cargarCategorias() {
+
+  const select =
+    document.getElementById(
+      "categoria"
+    );
+
+  select.innerHTML =
+    '<option value="">Seleccione una categoría</option>';
+
+  Object.keys(categorias)
+    .forEach(function(categoria) {
+
+      const option =
+        document.createElement("option");
+
+      option.value = categoria;
+      option.textContent =
+        categoria.replace(/_/g," ");
+
+      select.appendChild(option);
+    });
+}
+
+
+function cargarConceptos() {
+
+  const categoria =
+    document.getElementById(
+      "categoria"
+    ).value;
+
+  const select =
+    document.getElementById(
+      "concepto"
+    );
+
+  select.innerHTML =
+    '<option value="">Seleccione un concepto</option>';
+
+  if (!categoria) return;
+
+  const lista =
+    Array.isArray(categorias[categoria])
+      ? categorias[categoria]
+      : [];
+
+  lista.forEach(function(concepto) {
+
+    const direccion =
+      determinarDireccion(
+        concepto,
+        categoria
+      );
+
+    if (
+      direccion !== "AMBOS" &&
+      direccion !== tipoOperacion
+    ) {
+      return;
+    }
+
+    const option =
+      document.createElement("option");
+
+    option.value = concepto;
+    option.textContent = concepto;
+
+    select.appendChild(option);
+  });
+}
+
+
+function seleccionarOperacion(tipo) {
+
+  if (!tokenAlumno) return;
+
+  tipoOperacion = tipo;
+
+  document.getElementById(
+    "btnCobrar"
+  ).classList.remove("tipo-activo");
+
+  document.getElementById(
+    "btnPagar"
+  ).classList.remove("tipo-activo");
+
+  if (tipo === "INGRESO") {
+    document.getElementById(
+      "btnCobrar"
+    ).classList.add("tipo-activo");
+  }
+
+  if (tipo === "EGRESO") {
+    document.getElementById(
+      "btnPagar"
+    ).classList.add("tipo-activo");
+  }
+
+  document.getElementById(
+    "panelOperacion"
+  ).classList.remove("oculto");
+
+  document.getElementById(
+    "seccionMovimientos"
+  ).style.display = "none";
+
+  cargarCategorias();
+  limpiarCamposOperacion();
+  ocultarMensaje("mensajeOperacion");
+}
+
+
+function mostrarMovimientos() {
+
+  if (!tokenAlumno) return;
+
+  document.getElementById(
+    "panelOperacion"
+  ).classList.add("oculto");
+
+  document.getElementById(
+    "seccionMovimientos"
+  ).style.display = "block";
+
+  cargarMovimientos();
+}
+
+
+async function cargarMovimientos() {
+
+  if (!tokenAlumno) return;
+
+  try {
+
+    const respuesta =
+      await llamarAPI({
+        accion:"perfilAlumno",
+        token:tokenAlumno
+      });
+
+    if (!respuesta || respuesta.ok !== true) {
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "Sesión expirada."
+      );
+    }
+
+    estudianteActual =
+      respuesta.estudiante;
+
+    document.getElementById(
+      "datoSaldo"
+    ).textContent =
+      numero(
+        respuesta.cuenta.saldoActual
+      ).toFixed(2) + " LDS";
+
+    cargarMovimientosDesdeRespuesta(
+      respuesta.movimientos || []
+    );
+
+  } catch(error) {
+
+    mostrarMensaje(
+      "mensaje",
+      error.message ||
+        "No se pudieron cargar los movimientos.",
+      "error"
+    );
+  }
+}
+
+
+function cargarMovimientosDesdeRespuesta(
+  movimientos
+) {
+
+  const tabla =
+    document.getElementById(
+      "tablaMovimientos"
+    );
+
+  tabla.innerHTML = "";
+
+  if (!movimientos.length) {
+    tabla.innerHTML =
+      '<tr><td colspan="6" style="text-align:center">Sin movimientos registrados.</td></tr>';
+    return;
+  }
+
+  movimientos.forEach(function(movimiento) {
+
+    const fila =
+      document.createElement("tr");
+
+    const tipo =
+      movimiento.tipo || "";
+
+    const clase =
+      tipo === "INGRESO"
+        ? "ingreso"
+        : tipo === "EGRESO"
+          ? "egreso"
+          : "";
+
+    fila.innerHTML =
+      "<td>" +
+        escaparHTML(
+          movimiento.fechaTexto ||
+          movimiento.fecha ||
+          ""
+        ) +
+      "</td>" +
+
+      "<td class='" +
+        clase +
+      "'>" +
+        escaparHTML(tipo) +
+      "</td>" +
+
+      "<td>" +
+        escaparHTML(
+          movimiento.concepto || ""
+        ) +
+      "</td>" +
+
+      "<td>" +
         numero(
-          movimiento.monto ||
-          movimiento.montoLDS
-        );
+          movimiento.monto
+        ).toFixed(2) +
+        " LDS" +
+      "</td>" +
 
-      fila.innerHTML =
-        "<td>" +
-          escaparHTML(
-            movimiento.fechaTexto ||
-            movimiento.fecha ||
-            movimiento.timestamp ||
-            ""
-          ) +
-        "</td>" +
+      "<td>" +
+        escaparHTML(
+          movimiento.responsable || ""
+        ) +
+      "</td>" +
 
-        "<td class='" +
-          clase +
-        "'>" +
-          escaparHTML(tipo) +
-        "</td>" +
+      "<td>" +
+        escaparHTML(
+          movimiento.observacion || ""
+        ) +
+      "</td>";
 
-        "<td>" +
-          escaparHTML(
-            movimiento.concepto || ""
-          ) +
-        "</td>" +
+    tabla.appendChild(fila);
+  });
+}
 
-        "<td>" +
-          monto.toFixed(2) +
-          " LDS" +
-        "</td>" +
 
-        "<td>" +
-          escaparHTML(
-            movimiento.responsable || ""
-          ) +
-        "</td>" +
+async function registrarMovimiento() {
 
-        "<td>" +
-          escaparHTML(
-            movimiento.observacion || ""
-          ) +
-        "</td>";
+  ocultarMensaje(
+    "mensajeOperacion"
+  );
 
-      tabla.appendChild(fila);
-
-    });
+  if (!tokenAlumno) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Sesión expirada. Inicie sesión nuevamente.",
+      "error"
+    );
+    return;
   }
 
-
-  /* =========================================================
-     REINICIAR
-     ========================================================= */
-
-  function reiniciarAcceso() {
-
-    detenerQR();
-
-    codigoPendiente = "";
-    noncePendiente = "";
-    saltPendiente = "";
-
-    document.getElementById("claveAlumno").value = "";
-
-    document.getElementById("accesoClave")
-      .classList.remove("activo");
-
-    document.getElementById("codigoSeleccionado")
-      .textContent = "";
-
-    document.getElementById("seccionEstudiante")
-      .style.display = "none";
-
-    document.getElementById("seccionMovimientos")
-      .style.display = "none";
-
-    document.getElementById("datoFoto")
-      .style.display = "none";
-
-    document.getElementById("datoFoto")
-      .removeAttribute("src");
-
-    document.getElementById("tablaMovimientos")
-      .innerHTML = "";
-
-    ocultarMensaje("mensaje");
+  if (!tipoOperacion) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Seleccione COBRAR o PAGAR.",
+      "error"
+    );
+    return;
   }
 
+  const categoria =
+    document.getElementById(
+      "categoria"
+    ).value;
 
-  document.getElementById("claveAlumno")
-    .addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        confirmarAcceso();
-      }
-    });
+  const concepto =
+    document.getElementById(
+      "concepto"
+    ).value;
+
+  const monto =
+    numero(
+      document.getElementById(
+        "monto"
+      ).value
+    );
+
+  const responsable =
+    document.getElementById(
+      "responsable"
+    ).value;
+
+  const observacion =
+    document.getElementById(
+      "observacion"
+    ).value.trim();
+
+  if (!categoria) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Seleccione una categoría.",
+      "error"
+    );
+    return;
+  }
+
+  if (!concepto) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Seleccione un concepto.",
+      "error"
+    );
+    return;
+  }
+
+  if (monto <= 0) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Ingrese un monto mayor que 0.",
+      "error"
+    );
+    return;
+  }
+
+  if (!responsable) {
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Seleccione responsable.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Registrando movimiento...",
+      "ok"
+    );
+
+    const respuesta =
+      await llamarAPI({
+        accion:"registrarMovimientoAlumno",
+        token:tokenAlumno,
+        tipo:tipoOperacion,
+        categoria:categoria,
+        concepto:concepto,
+        monto:monto,
+        responsable:responsable,
+        observacion:observacion,
+        requestId:generarRequestId()
+      });
+
+    if (!respuesta || respuesta.ok !== true) {
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "No se pudo registrar el movimiento."
+      );
+    }
+
+    document.getElementById(
+      "datoSaldo"
+    ).textContent =
+      numero(
+        respuesta.saldoActual
+      ).toFixed(2) +
+      " LDS";
+
+    mostrarMensaje(
+      "mensajeOperacion",
+      "Movimiento registrado correctamente.",
+      "ok"
+    );
+
+    limpiarCamposOperacion();
+
+    await cargarMovimientos();
+
+  } catch(error) {
+
+    mostrarMensaje(
+      "mensajeOperacion",
+      error.message ||
+        "No se pudo registrar el movimiento.",
+      "error"
+    );
+  }
+}
+
+
+function limpiarCamposOperacion() {
+
+  document.getElementById(
+    "categoria"
+  ).value = "";
+
+  document.getElementById(
+    "concepto"
+  ).innerHTML =
+    '<option value="">Seleccione un concepto</option>';
+
+  document.getElementById(
+    "monto"
+  ).value = "";
+
+  document.getElementById(
+    "responsable"
+  ).value = "";
+
+  document.getElementById(
+    "observacion"
+  ).value = "";
+}
+
+
+function limpiarOperacion() {
+
+  tipoOperacion = "";
+
+  document.getElementById(
+    "btnCobrar"
+  ).classList.remove("tipo-activo");
+
+  document.getElementById(
+    "btnPagar"
+  ).classList.remove("tipo-activo");
+
+  document.getElementById(
+    "panelOperacion"
+  ).classList.add("oculto");
+
+  limpiarCamposOperacion();
+
+  ocultarMensaje(
+    "mensajeOperacion"
+  );
+}
+
+
+async function cerrarSesion() {
+
+  try {
+
+    if (tokenAlumno) {
+      await llamarAPI({
+        accion:"logoutAlumno",
+        token:tokenAlumno
+      });
+    }
+
+  } catch(error) {}
+
+  detenerQR();
+
+  tokenAlumno = "";
+  codigoPendiente = "";
+  saltPendiente = "";
+  noncePendiente = "";
+  estudianteActual = null;
+  tipoOperacion = "";
+  categorias = {};
+
+  document.getElementById(
+    "claveAlumno"
+  ).value = "";
+
+  document.getElementById(
+    "accesoClave"
+  ).classList.remove("activo");
+  const botonIngreso = document.getElementById("btnIngresarAlumno");
+  if (botonIngreso) botonIngreso.disabled = true;
+
+  document.getElementById(
+    "codigoSeleccionado"
+  ).textContent = "";
+
+  document.getElementById(
+    "seccionEstudiante"
+  ).style.display = "none";
+
+  document.getElementById(
+    "seccionOperacion"
+  ).style.display = "none";
+
+  document.getElementById(
+    "seccionMovimientos"
+  ).style.display = "none";
+
+  document.getElementById(
+    "datoFoto"
+  ).style.display = "none";
+
+  document.getElementById(
+    "datoFoto"
+  ).removeAttribute("src");
+
+  ocultarMensaje("mensaje");
+  ocultarMensaje("mensajeOperacion");
+}
+
+
+document.getElementById(
+  "claveAlumno"
+).addEventListener(
+  "keydown",
+  function(e) {
+    if (e.key === "Enter") {
+      confirmarAcceso();
+    }
+  }
+);
 </script>
 
 </body>
