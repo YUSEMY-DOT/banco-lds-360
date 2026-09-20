@@ -1200,38 +1200,28 @@ grid-template-columns: 1fr;
 
 <body>
 
-  <!-- PORTADA
--->
-
-  <section
-id="portadaLDS360"
-style="min-height:100vh;width:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:30px;overflow:hidden;">
-
-    <div
-style="width:min(430px,92vw);display:flex;flex-direction:column;gap:16px;">
-
-      <button
-type="button"
-style="width:100%;min-height:58px;padding:15px 20px;border:0;border-radius:10px;cursor:pointer;font-size:15px;font-weight:700;background:#123c69;color:#fff;"
-onclick="abrirSistemaLDS360('qr')">
-        📷 ESCANEAR CÓDIGO QR
-      </button>
-
-      <button
-type="button"
-style="width:100%;min-height:58px;padding:15px 20px;border:0;border-radius:10px;cursor:pointer;font-size:15px;font-weight:700;background:#123c69;color:#fff;"
-onclick="abrirSistemaLDS360('manual')">
-        ⌨️ INGRESAR CÓDIGO
-      </button>
-
-      <div
-class="portada-admin"
-style="text-align:center;font-weight:700;font-size:15px;color:#123c69;padding:12px;">
-        🔒&nbsp; Administrador
-      </div>
-
+  <!-- PORTADA -->
+  <section id="portadaLDS360" style="min-height:100vh;width:100%;background:#fff;display:flex;align-items:center;justify-content:center;padding:30px;">
+    <div style="width:min(440px,92vw);display:flex;flex-direction:column;gap:18px;">
+      <button type="button" style="width:100%;min-height:62px;background:#123c69;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;" onclick="abrirSistemaLDS360('qr')">📷 ESCANEAR CÓDIGO QR</button>
+      <button type="button" style="width:100%;min-height:62px;background:#198754;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;" onclick="abrirSistemaLDS360('manual')">⌨️ INGRESAR CÓDIGO</button>
+      <button type="button" style="width:100%;min-height:62px;background:#6c757d;color:#fff;border:0;border-radius:12px;font-size:17px;font-weight:700;cursor:pointer;">🔒 ADMINISTRADOR</button>
     </div>
-
+    <script>
+      (function () {
+        const LDS_APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
+        let lectorQRPortada = null;
+        function mensajePortada(texto, tipo) { const el = document.getElementById("mensaje"); if (!el) return; el.textContent = texto || ""; el.className = "mensaje" + (tipo ? " " + tipo : ""); el.style.display = texto ? "block" : "none"; }
+        function llamarAPIPortada(parametros, callback) { const nombreCallback = "callbackLDSPortada_" + Date.now() + "_" + Math.floor(Math.random() * 100000); const datos = Object.assign({}, parametros, { callback: nombreCallback }); const query = Object.keys(datos).map(function (clave) { return encodeURIComponent(clave) + "=" + encodeURIComponent(datos[clave]); }).join("&"); const script = document.createElement("script"); script.src = LDS_APP_SCRIPT_URL + "?" + query; window[nombreCallback] = function (respuesta) { try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); } }; script.onerror = function () { delete window[nombreCallback]; script.remove(); mensajePortada("No se pudo conectar con BANCO LDS 360.", "error"); }; document.body.appendChild(script); }
+        function mostrarEstudiantePortada(e) { window.estudianteActual = e; const vals = {datoCodigo:e.codigo||"-",datoNombre:e.nombreCompleto||e.nombre||"-",datoGrado:e.grado||"-",datoSeccion:e.seccion||"-",datoDocente:e.docente||"-",datoBase:Number(e.montoBase||0).toFixed(2)+" LDS",datoSaldo:Number(e.saldoActual||0).toFixed(2)+" LDS"}; Object.keys(vals).forEach(function(id){const el=document.getElementById(id); if(el) el.textContent=vals[id];}); const foto=document.getElementById("datoFoto"); const u=e.fotoUrl||e.fotoURL||e.foto_url||e.FOTO_URL||e.foto||e.FOTO||""; if(foto){ if(u){foto.src=u;foto.style.display="block";foto.onerror=function(){foto.style.display="none";};} else {foto.removeAttribute("src");foto.style.display="none";} } const sec=document.getElementById("seccionEstudiante"); if(sec) sec.style.display="block"; const mov=document.getElementById("seccionMovimientos"); if(mov) mov.style.display="none"; }
+        function buscarEstudiantePortada(codigo) { codigo=String(codigo||"").trim(); if(!codigo){mensajePortada("Ingrese un código válido.","error");return;} mensajePortada("Consultando estudiante...","ok"); llamarAPIPortada({accion:"estudiante",codigo:codigo},function(r){if(!r||r.ok===false||!r.estudiante){mensajePortada((r&&r.mensaje)||"Estudiante no encontrado.","error");return;} mostrarEstudiantePortada(Object.assign({},r.estudiante,{saldoActual:r.cuenta?r.cuenta.saldoActual:0})); mensajePortada("","");}); }
+        window.buscarEstudiante=buscarEstudiantePortada;
+        window.detenerQR=function(){if(!lectorQRPortada)return;const x=lectorQRPortada;lectorQRPortada=null;x.stop().then(function(){x.clear();}).catch(function(){});};
+        window.iniciarQR=function(){if(typeof Html5Qrcode==="undefined"){mensajePortada("No se pudo cargar el lector QR. Use el ingreso manual.","error");return;} if(lectorQRPortada)window.detenerQR(); lectorQRPortada=new Html5Qrcode("lectorQR"); lectorQRPortada.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},function(code){window.detenerQR();window.buscarEstudiante(code);},function(){}).catch(function(){mensajePortada("No fue posible iniciar la cámara. Use el botón de ingreso manual.","error");});};
+        window.ingresarCodigoManual=function(){const codigo=window.prompt("Ingrese el código del estudiante:");if(!codigo)return;window.buscarEstudiante(codigo);};
+        window.abrirSistemaLDS360=function(modo){const p=document.getElementById("portadaLDS360"),s=document.getElementById("sistemaPrincipal");if(p)p.style.display="none";if(s)s.classList.remove("oculto");window.scrollTo(0,0);setTimeout(function(){if(modo==="qr")window.iniciarQR();if(modo==="manual")window.ingresarCodigoManual();},50);};
+      })();
+    </script>
   </section>
 
   <!-- SISTEMA
