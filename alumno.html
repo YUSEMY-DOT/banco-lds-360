@@ -671,7 +671,6 @@ const MONEDA = "LDS";
 let lector = null;
 let codigoPendiente = "";
 let saltPendiente = "";
-let noncePendiente = "";
 let retoEnCurso = false;
 let tokenAlumno = "";
 let estudianteActual = null;
@@ -879,7 +878,6 @@ async function prepararCodigo(codigo) {
   }
 
   saltPendiente = "";
-  noncePendiente = "";
 
   document.getElementById(
     "accesoClave"
@@ -913,7 +911,6 @@ async function solicitarReto() {
 
   retoEnCurso = true;
   saltPendiente = "";
-  noncePendiente = "";
 
   const boton = document.getElementById("btnIngresarAlumno");
   if (boton) boton.disabled = true;
@@ -941,9 +938,8 @@ async function solicitarReto() {
     }
 
     saltPendiente = respuesta.salt || "";
-    noncePendiente = respuesta.nonce || "";
 
-    if (!saltPendiente || !noncePendiente) {
+    if (!saltPendiente) {
       throw new Error("No se pudo preparar el acceso.");
     }
 
@@ -960,8 +956,7 @@ async function solicitarReto() {
   } catch(error) {
 
     saltPendiente = "";
-    noncePendiente = "";
-
+  
     mostrarMensaje(
       "mensaje",
       error.message || "No fue posible preparar el acceso.",
@@ -1007,7 +1002,7 @@ async function confirmarAcceso() {
     return;
   }
 
-  if (!saltPendiente || !noncePendiente) {
+  if (!saltPendiente) {
     const preparado = await solicitarReto();
     if (!preparado) return;
   }
@@ -1028,17 +1023,11 @@ async function confirmarAcceso() {
         clave + "|" + saltPendiente
       );
 
-    const prueba =
-      await sha256(
-        hashClave + "|" + noncePendiente
-      );
-
     const respuesta =
       await llamarAPI({
         accion:"loginAlumno",
         codigo:codigoPendiente,
-        nonce:noncePendiente,
-        prueba:prueba
+        hashClave:hashClave
       });
 
     if (!respuesta || respuesta.ok !== true) {
@@ -1692,7 +1681,6 @@ async function cerrarSesion() {
   tokenAlumno = "";
   codigoPendiente = "";
   saltPendiente = "";
-  noncePendiente = "";
   estudianteActual = null;
   tipoOperacion = "";
   categorias = {};
