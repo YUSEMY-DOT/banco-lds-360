@@ -665,7 +665,7 @@
 
 
 <script>
-const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxZ3ZYzBGAfFUdyJpDpMlAAVOBVrDocj3E3jJ1GTZIWTPjlSv1LjfMECbMmDWVU-H-prQ/exec";
+const ALUMNOS_API_URL = "https://script.google.com/macros/s/AKfycbxnp5uHArqp2J4hRvwz5Qdt4PsxtsvSF7bCfQerM0LFQrd6t_GpPxyNi33ucSuDDgP-/exec";
 const MONEDA = "LDS";
 
 let lector = null;
@@ -925,7 +925,7 @@ async function solicitarReto() {
 
     const respuesta =
       await llamarAPI({
-        accion:"preloginAlumno",
+        accion:"PRELOGINALUMNO",
         codigo:codigoPendiente
       });
 
@@ -1025,7 +1025,7 @@ async function confirmarAcceso() {
 
     const respuesta =
       await llamarAPI({
-        accion:"loginAlumno",
+        accion:"LOGINALUMNO",
         codigo:codigoPendiente,
         hashClave:hashClave
       });
@@ -1140,7 +1140,7 @@ async function cargarOpciones() {
 
     const respuesta =
       await llamarAPI({
-        accion:"opcionesAlumno",
+        accion:"OPCIONESALUMNO",
         token:tokenAlumno
       });
 
@@ -1353,7 +1353,7 @@ async function cargarMovimientos() {
 
     const respuesta =
       await llamarAPI({
-        accion:"perfilAlumno",
+        accion:"PERFILALUMNO",
         token:tokenAlumno
       });
 
@@ -1565,7 +1565,7 @@ async function registrarMovimiento() {
 
     const respuesta =
       await llamarAPI({
-        accion:"registrarMovimientoAlumno",
+        accion:"REGISTRARMOVIMIENTOALUMNO",
         token:tokenAlumno,
         tipo:tipoOperacion,
         categoria:categoria,
@@ -1669,7 +1669,7 @@ async function cerrarSesion() {
 
     if (tokenAlumno) {
       await llamarAPI({
-        accion:"logoutAlumno",
+        accion:"LOGOUTALUMNO",
         token:tokenAlumno
       });
     }
