@@ -936,13 +936,20 @@
       text-align:center;
     }
 
-    #video{
+    #lectorQR{
       width:100%;
-      max-height:330px;
+      min-height:290px;
       border-radius:15px;
       background:#0b1628;
-      object-fit:cover;
+      overflow:hidden;
       margin:10px 0 15px;
+    }
+
+    #lectorQR video{
+      width:100% !important;
+      max-height:330px;
+      border-radius:15px;
+      object-fit:cover;
     }
 
     .scanner-status{
@@ -1338,6 +1345,8 @@
     }
 
   </style>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 </head>
 
 <body>
@@ -1456,7 +1465,7 @@
       Coloca el código QR del estudiante frente a la cámara.
     </p>
 
-    <video id="video" autoplay playsinline></video>
+    <div id="lectorQR"></div>
 
     <div class="scanner-status" id="scannerStatus">
       Preparando cámara...
@@ -2089,66 +2098,93 @@ function volverInicio(){
 
 
 /* =========================================================
-   SCANNER QR
+   SCANNER QR ORIGINAL - HTML5-QRCODE
    ========================================================= */
 
-let scannerStream = null;
-let scannerTimer = null;
-let scannerActivo = false;
+let lectorLDS360 = null;
+let scannerQRProcesado = false;
 
 
 async function abrirScanner(){
 
-  document.getElementById("scannerOverlay")
-    .classList.add("show");
+  const overlay =
+    document.getElementById("scannerOverlay");
 
-  document.getElementById("scannerStatus")
-    .textContent =
-      "Solicitando acceso a la cámara...";
+  const status =
+    document.getElementById("scannerStatus");
 
-  document.getElementById("scannerError")
-    .textContent = "";
+  const errorBox =
+    document.getElementById("scannerError");
 
+  const contenedor =
+    document.getElementById("lectorQR");
+
+  overlay.classList.add("show");
+  status.textContent = "Solicitando acceso a la cámara...";
+  errorBox.textContent = "";
+  scannerQRProcesado = false;
+
+  if(typeof Html5Qrcode === "undefined"){
+    errorBox.textContent =
+      "No se pudo cargar el lector QR. Recarga la página e inténtalo nuevamente.";
+    return;
+  }
 
   try{
 
-    scannerStream =
-      await navigator.mediaDevices.getUserMedia({
-        video:{
-          facingMode:{
-            ideal:"environment"
-          }
-        },
-        audio:false
-      });
+    if(lectorLDS360){
+      try{
+        await lectorLDS360.stop();
+      }catch(e){}
+      try{
+        lectorLDS360.clear();
+      }catch(e){}
+      lectorLDS360 = null;
+    }
 
+    contenedor.innerHTML = "";
+    lectorLDS360 = new Html5Qrcode("lectorQR");
 
-    const video =
-      document.getElementById("video");
+    const configuracion = {
+      fps: 10,
+      qrbox: {
+        width: 250,
+        height: 250
+      },
+      aspectRatio: 1.0
+    };
 
-    video.srcObject =
-      scannerStream;
+    await lectorLDS360.start(
+      { facingMode: "environment" },
+      configuracion,
+      function(codigoQR){
 
-    await video.play();
+        if(scannerQRProcesado) return;
+        scannerQRProcesado = true;
 
-    scannerActivo = true;
+        const valor = String(codigoQR || "").trim();
+        const codigo = extraerCodigo(valor);
 
-    document.getElementById("scannerStatus")
-      .textContent =
-        "Apunta la cámara al código QR del estudiante.";
+        detenerScanner();
+        cerrarScanner();
 
-    iniciarLecturaQR();
+        solicitarAccesoAlumno(codigo);
+      },
+      function(){
+        /* Fallos normales mientras busca el QR: no mostrar error. */
+      }
+    );
+
+    status.textContent =
+      "Apunta la cámara al código QR del estudiante.";
 
   }catch(error){
 
-    console.error(error);
+    console.error("Error iniciando lector QR:", error);
 
-    document.getElementById("scannerStatus")
-      .textContent = "";
-
-    document.getElementById("scannerError")
-      .textContent =
-        "No se pudo acceder a la cámara. Verifica los permisos del navegador.";
+    status.textContent = "";
+    errorBox.textContent =
+      "No se pudo acceder a la cámara. Verifica los permisos del navegador.";
 
   }
 
@@ -2167,130 +2203,29 @@ function cerrarScanner(){
 
 function detenerScanner(){
 
-  scannerActivo = false;
+  scannerQRProcesado = true;
 
-  if(scannerTimer){
+  if(lectorLDS360){
 
-    clearTimeout(scannerTimer);
+    const lector = lectorLDS360;
+    lectorLDS360 = null;
 
-    scannerTimer = null;
-
-  }
-
-
-  if(scannerStream){
-
-    scannerStream
-      .getTracks()
-      .forEach(function(track){
-
-        track.stop();
-
+    lector.stop()
+      .then(function(){
+        try{ lector.clear(); }catch(e){}
+      })
+      .catch(function(){
+        try{ lector.clear(); }catch(e){}
       });
-
-    scannerStream = null;
-
-  }
-
-
-  const video =
-    document.getElementById("video");
-
-  if(video){
-
-    video.srcObject = null;
 
   }
 
 }
 
 
-/* =========================================================
-   LECTURA QR
-   ========================================================= */
-
+/* Compatibilidad con el nombre usado por otras funciones. */
 async function iniciarLecturaQR(){
-
-  if(!("BarcodeDetector" in window)){
-
-    document.getElementById("scannerError")
-      .textContent =
-        "Este navegador no permite lectura QR automática. Utiliza «Ingresar código».";
-
-    return;
-
-  }
-
-
-  let detector;
-
-
-  try{
-
-    detector =
-      new BarcodeDetector({
-        formats:["qr_code"]
-      });
-
-  }catch(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  const video =
-    document.getElementById("video");
-
-
-  async function analizar(){
-
-    if(!scannerActivo) return;
-
-    try{
-
-      const codes =
-        await detector.detect(video);
-
-
-      if(codes.length){
-
-        const valor =
-          codes[0].rawValue.trim();
-
-        if(valor){
-
-          detenerScanner();
-
-          cerrarScanner();
-
-          let codigo = extraerCodigo(valor);
-
-          solicitarAccesoAlumno(codigo);
-
-          return;
-
-        }
-
-      }
-
-    }catch(error){
-
-      console.error(error);
-
-    }
-
-
-    scannerTimer =
-      setTimeout(analizar,500);
-
-  }
-
-
-  analizar();
-
+  /* El lector HTML5-Qrcode ya empieza dentro de abrirScanner(). */
 }
 
 
@@ -2339,112 +2274,449 @@ function extraerCodigo(valor){
    ========================================================= */
 
 const ALUMNOS_ACCESO_API = "https://script.google.com/macros/s/AKfycbxnp5uHArqp2J4hRvwz5Qdt4PsxtsvSF7bCfQerM0LFQrd6t_GpPxyNi33ucSuDDgP-/exec";
+
 let codigoAlumnoPendiente = "";
-let nonceAlumnoPendiente = "";
 let saltAlumnoPendiente = "";
+
 
 function normalizarCodigoAlumno(codigo){
   return String(codigo == null ? "" : codigo)
-    .trim().toUpperCase().replace(/[._\s]+/g,"-").replace(/-+/g,"-");
+    .trim()
+    .toUpperCase()
+    .replace(/[._\s]+/g,"-")
+    .replace(/-+/g,"-");
 }
+
 
 function sha256Alumno(texto){
-  return crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto))
-    .then(function(hash){
-      return Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
-    });
+  return crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(String(texto))
+  ).then(function(hash){
+    return Array.from(new Uint8Array(hash))
+      .map(function(b){
+        return b.toString(16).padStart(2,"0");
+      })
+      .join("");
+  });
 }
 
+
+/* =========================================================
+   LLAMADA AL APPS SCRIPT DE ACCESO ALUMNOS
+   Usa JSONP para funcionar desde GitHub Pages.
+   ========================================================= */
+
 function llamarAPIAlumno(parametros){
+
   return new Promise(function(resolve,reject){
-    const callback="callbackLDSAlumno_"+Date.now()+"_"+Math.floor(Math.random()*100000);
-    const query=Object.keys(parametros).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(parametros[k]);}).join("&");
-    const script=document.createElement("script");
-    let terminado=false;
-    const limpiar=function(){if(script.parentNode)script.parentNode.removeChild(script);try{delete window[callback];}catch(e){window[callback]=undefined;}};
-    const timer=setTimeout(function(){if(terminado)return;terminado=true;limpiar();reject(new Error("El servicio de acceso no respondió a tiempo."));},15000);
-    window[callback]=function(res){if(terminado)return;terminado=true;clearTimeout(timer);limpiar();resolve(res);};
-    script.onerror=function(){if(terminado)return;terminado=true;clearTimeout(timer);limpiar();reject(new Error("No se pudo conectar con el acceso de alumnos."));};
-    script.src=ALUMNOS_ACCESO_API+"?"+query+"&callback="+encodeURIComponent(callback);
+
+    const callback =
+      "callbackLDSAlumno_" +
+      Date.now() + "_" +
+      Math.floor(Math.random()*100000);
+
+    const query = Object.keys(parametros)
+      .map(function(k){
+        return encodeURIComponent(k) + "=" +
+               encodeURIComponent(parametros[k]);
+      })
+      .join("&");
+
+    const script = document.createElement("script");
+
+    let terminado = false;
+
+    function limpiar(){
+      if(script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+      try{
+        delete window[callback];
+      }catch(e){
+        window[callback] = undefined;
+      }
+    }
+
+    const timer = setTimeout(function(){
+      if(terminado) return;
+      terminado = true;
+      limpiar();
+      reject(new Error("El servicio de acceso no respondió a tiempo."));
+    },15000);
+
+    window[callback] = function(respuesta){
+      if(terminado) return;
+      terminado = true;
+      clearTimeout(timer);
+      limpiar();
+      resolve(respuesta);
+    };
+
+    script.onerror = function(){
+      if(terminado) return;
+      terminado = true;
+      clearTimeout(timer);
+      limpiar();
+      reject(new Error("No se pudo conectar con el acceso de alumnos."));
+    };
+
+    script.src =
+      ALUMNOS_ACCESO_API +
+      "?" + query +
+      "&callback=" + encodeURIComponent(callback);
+
     document.body.appendChild(script);
   });
 }
 
+
+/* =========================================================
+   DESPUÉS DE QUE EL QR YA FUE LEÍDO
+   ========================================================= */
+
 function solicitarAccesoAlumno(codigo){
-  codigoAlumnoPendiente=normalizarCodigoAlumno(codigo);
-  if(!codigoAlumnoPendiente){mostrarErrorCodigo("Código de estudiante inválido.");return;}
-  nonceAlumnoPendiente=""; saltAlumnoPendiente="";
-  document.getElementById("codigoAlumnoIdentificado").textContent="Código identificado: "+codigoAlumnoPendiente;
-  document.getElementById("claveAlumnoLDS").value="";
-  document.getElementById("alumnoClaveMensaje").className="";
-  document.getElementById("alumnoClaveMensaje").textContent="Preparando el acceso...";
-  document.getElementById("alumnoClaveOverlay").classList.add("show");
-  document.getElementById("alumnoClaveOverlay").setAttribute("aria-hidden","false");
-  document.getElementById("claveAlumnoLDS").focus();
-  llamarAPIAlumno({accion:"preloginAlumno",codigo:codigoAlumnoPendiente}).then(function(res){
-    if(!res || res.ok!==true) throw new Error(res&&res.mensaje?res.mensaje:"No fue posible validar el código.");
-    saltAlumnoPendiente=res.salt||""; nonceAlumnoPendiente=res.nonce||"";
-    if(!saltAlumnoPendiente||!nonceAlumnoPendiente) throw new Error("No se pudo preparar el acceso.");
-    document.getElementById("alumnoClaveMensaje").className="ok";
-    document.getElementById("alumnoClaveMensaje").textContent="Código identificado. Ingresa tu clave personal.";
-  }).catch(function(err){
-    saltAlumnoPendiente=""; nonceAlumnoPendiente="";
-    document.getElementById("alumnoClaveMensaje").className="error";
-    document.getElementById("alumnoClaveMensaje").textContent=err.message||"No fue posible preparar el acceso.";
+
+  codigoAlumnoPendiente =
+    normalizarCodigoAlumno(codigo);
+
+  if(!codigoAlumnoPendiente){
+    mostrarErrorCodigo("Código de estudiante inválido.");
+    return;
+  }
+
+  saltAlumnoPendiente = "";
+
+  const overlay =
+    document.getElementById("alumnoClaveOverlay");
+
+  const codigoBox =
+    document.getElementById("codigoAlumnoIdentificado");
+
+  const input =
+    document.getElementById("claveAlumnoLDS");
+
+  const mensaje =
+    document.getElementById("alumnoClaveMensaje");
+
+  const boton =
+    document.getElementById("btnConfirmarClaveLDS");
+
+  codigoBox.textContent =
+    "Código identificado: " +
+    codigoAlumnoPendiente;
+
+  input.value = "";
+  boton.disabled = true;
+
+  mensaje.className = "";
+  mensaje.textContent =
+    "Preparando el acceso...";
+
+  overlay.classList.add("show");
+  overlay.setAttribute("aria-hidden","false");
+
+
+  /* =====================================================
+     EL BACKEND PROBADO DEVUELVE:
+       ok
+       salt
+
+     NO usa nonce.
+     ===================================================== */
+
+  llamarAPIAlumno({
+    accion:"preloginAlumno",
+    codigo:codigoAlumnoPendiente
+  })
+  .then(function(respuesta){
+
+    if(!respuesta || respuesta.ok !== true){
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "No fue posible validar el código."
+      );
+    }
+
+    saltAlumnoPendiente =
+      respuesta.salt || "";
+
+    if(!saltAlumnoPendiente){
+      throw new Error("El acceso no devolvió el salt.");
+    }
+
+    boton.disabled = false;
+
+    mensaje.className = "ok";
+    mensaje.textContent =
+      "Código identificado. Ingresa tu clave personal.";
+
+    input.focus();
+
+  })
+  .catch(function(error){
+
+    boton.disabled = true;
+
+    mensaje.className = "error";
+    mensaje.textContent =
+      error.message ||
+      "No fue posible preparar el acceso.";
+
   });
 }
+
 
 function cerrarClaveAlumno(){
-  document.getElementById("alumnoClaveOverlay").classList.remove("show");
-  document.getElementById("alumnoClaveOverlay").setAttribute("aria-hidden","true");
-  codigoAlumnoPendiente=""; nonceAlumnoPendiente=""; saltAlumnoPendiente="";
+
+  const overlay =
+    document.getElementById("alumnoClaveOverlay");
+
+  const input =
+    document.getElementById("claveAlumnoLDS");
+
+  const mensaje =
+    document.getElementById("alumnoClaveMensaje");
+
+  overlay.classList.remove("show");
+  overlay.setAttribute("aria-hidden","true");
+
+  input.value = "";
+  mensaje.textContent = "";
+  mensaje.className = "";
+
+  codigoAlumnoPendiente = "";
+  saltAlumnoPendiente = "";
 }
+
+
+/* =========================================================
+   VALIDAR CLAVE DE 6 DÍGITOS
+   ========================================================= */
 
 async function confirmarClaveAlumno(){
-  const clave=document.getElementById("claveAlumnoLDS").value.trim();
-  const msg=document.getElementById("alumnoClaveMensaje");
-  if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";return;}
-  if(!codigoAlumnoPendiente){msg.className="error";msg.textContent="Primero identifique al estudiante.";return;}
-  if(!saltAlumnoPendiente||!nonceAlumnoPendiente){msg.className="error";msg.textContent="Espere un momento mientras se prepara el acceso.";return;}
-  const boton=document.getElementById("btnConfirmarClaveLDS"); boton.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
+
+  const input =
+    document.getElementById("claveAlumnoLDS");
+
+  const boton =
+    document.getElementById("btnConfirmarClaveLDS");
+
+  const mensaje =
+    document.getElementById("alumnoClaveMensaje");
+
+  const clave =
+    input.value.trim();
+
+  if(!/^\d{6}$/.test(clave)){
+
+    mensaje.className = "error";
+    mensaje.textContent =
+      "La clave personal debe tener exactamente 6 dígitos.";
+
+    return;
+  }
+
+  if(!codigoAlumnoPendiente){
+
+    mensaje.className = "error";
+    mensaje.textContent =
+      "Primero identifique al estudiante.";
+
+    return;
+  }
+
+  if(!saltAlumnoPendiente){
+
+    mensaje.className = "error";
+    mensaje.textContent =
+      "Espere un momento mientras se prepara el acceso.";
+
+    return;
+  }
+
+  boton.disabled = true;
+
+  mensaje.className = "ok";
+  mensaje.textContent = "Verificando acceso...";
+
   try{
-    const hashClave=await sha256Alumno(clave+"|"+saltAlumnoPendiente);
-    const prueba=await sha256Alumno(hashClave+"|"+nonceAlumnoPendiente);
-    const res=await llamarAPIAlumno({accion:"loginAlumno",codigo:codigoAlumnoPendiente,nonce:nonceAlumnoPendiente,prueba:prueba});
-    if(!res||res.ok!==true) throw new Error(res&&res.mensaje?res.mensaje:"Credenciales inválidas.");
+
+    /* HASH_CLAVE = SHA256(clave + | + salt) */
+
+    const hashClave =
+      await sha256Alumno(
+        clave + "|" + saltAlumnoPendiente
+      );
+
+    const respuesta =
+      await llamarAPIAlumno({
+        accion:"loginAlumno",
+        codigo:codigoAlumnoPendiente,
+        hashClave:hashClave
+      });
+
+    if(!respuesta || respuesta.ok !== true){
+
+      throw new Error(
+        respuesta && respuesta.mensaje
+          ? respuesta.mensaje
+          : "La clave personal no es correcta."
+      );
+    }
+
+    const datos = respuesta;
+
     cerrarClaveAlumno();
-    mostrarEstudianteDesdeAccesoAlumno(res);
-  }catch(err){
-    msg.className="error"; msg.textContent=err.message||"No fue posible iniciar sesión.";
-  }finally{boton.disabled=false;}
+
+    /* La cuenta se abre con los datos autorizados del backend. */
+    mostrarEstudianteDesdeAccesoAlumno(datos);
+
+  }catch(error){
+
+    mensaje.className = "error";
+    mensaje.textContent =
+      error.message ||
+      "No fue posible iniciar sesión.";
+
+    boton.disabled = false;
+  }
 }
 
+
+/* =========================================================
+   MOSTRAR CUENTA DEL ALUMNO
+   ========================================================= */
+
 function mostrarEstudianteDesdeAccesoAlumno(datos){
-  const e=datos.estudiante||{}, c=datos.cuenta||{}, movimientos=Array.isArray(datos.movimientos)?datos.movimientos:[];
-  document.getElementById("studentScreen").classList.add("show");
-  document.getElementById("studentName").textContent=e.nombreCompleto||e.nombre||"Estudiante";
-  document.getElementById("studentCodeResult").textContent=e.codigo||codigoAlumnoPendiente;
-  document.getElementById("studentGrade").textContent=e.grado||"—";
-  document.getElementById("studentSection").textContent=e.seccion||"—";
-  document.getElementById("studentLastName").textContent=e.apellido||e.apellidos||"—";
-  const foto=document.getElementById("studentPhoto");
-  if(e.fotoUrl||e.foto){foto.src=e.fotoUrl||e.foto;}else{foto.removeAttribute("src");}
-  document.getElementById("baseAmount").textContent="S/ "+numero(c.montoBase??e.montoBase??0);
-  document.getElementById("incomeAmount").textContent="S/ "+numero(c.ingresos??0);
-  document.getElementById("balanceAmount").textContent="S/ "+numero(c.saldoActual??c.saldo??0);
-  const list=document.getElementById("movementList"); list.innerHTML="";
-  if(!movimientos.length){list.innerHTML='<p style="color:#667085;">No hay movimientos registrados.</p>';return;}
+
+  const e = datos.estudiante || {};
+  const c = datos.cuenta || {};
+  const movimientos =
+    Array.isArray(datos.movimientos)
+      ? datos.movimientos
+      : [];
+
+  document.getElementById("studentScreen")
+    .classList.add("show");
+
+  document.getElementById("studentName")
+    .textContent =
+      e.nombreCompleto ||
+      e.nombre ||
+      "Estudiante";
+
+  document.getElementById("studentCodeResult")
+    .textContent =
+      e.codigo || "—";
+
+  document.getElementById("studentGrade")
+    .textContent =
+      e.grado || "—";
+
+  document.getElementById("studentSection")
+    .textContent =
+      e.seccion || "—";
+
+  document.getElementById("studentLastName")
+    .textContent =
+      e.apellido ||
+      e.apellidos ||
+      "—";
+
+  const foto =
+    document.getElementById("studentPhoto");
+
+  if(e.fotoUrl || e.foto){
+    foto.src = e.fotoUrl || e.foto;
+  }else{
+    foto.removeAttribute("src");
+  }
+
+  document.getElementById("baseAmount")
+    .textContent =
+      "S/ " + numero(e.montoBase || 0);
+
+  document.getElementById("incomeAmount")
+    .textContent =
+      "S/ " + numero(c.totalIngresos || c.ingresos || 0);
+
+  document.getElementById("balanceAmount")
+    .textContent =
+      "S/ " + numero(c.saldoActual || c.saldo || 0);
+
+  const lista =
+    document.getElementById("movementList");
+
+  lista.innerHTML = "";
+
+  if(!movimientos.length){
+
+    lista.innerHTML =
+      '<p style="color:#667085;">No hay movimientos registrados.</p>';
+
+    return;
+  }
+
   movimientos.forEach(function(m){
-    const div=document.createElement("div"); div.className="movement";
-    const tipo=String(m.tipo||m.tipoMovimiento||"").toLowerCase();
-    const monto=Number(m.monto??m.montoLDS??0)||0;
-    const positivo=tipo.includes("ingreso")||tipo.includes("abono")||monto>=0;
-    div.innerHTML='<span>'+escapeHTML(m.concepto||m.descripcion||"Movimiento")+'</span><span class="'+(positivo?"positive":"negative")+'">'+(positivo?"+":"-")+" S/ "+numero(Math.abs(monto))+'</span>';
-    list.appendChild(div);
+
+    const div =
+      document.createElement("div");
+
+    div.className = "movement";
+
+    const tipo =
+      String(
+        m.tipo ||
+        m.tipoMovimiento ||
+        ""
+      ).toLowerCase();
+
+    const monto =
+      Number(
+        m.monto ??
+        m.montoLDS ??
+        0
+      ) || 0;
+
+    const positivo =
+      tipo.includes("ingreso") ||
+      tipo.includes("abono") ||
+      monto >= 0;
+
+    div.innerHTML =
+      '<span>' +
+      escapeHTML(
+        m.concepto ||
+        m.descripcion ||
+        "Movimiento"
+      ) +
+      '</span>' +
+      '<span class="' +
+      (positivo ? "positive" : "negative") +
+      '">' +
+      (positivo ? "+" : "-") +
+      " S/ " +
+      numero(Math.abs(monto)) +
+      '</span>';
+
+    lista.appendChild(div);
+
   });
 }
 
-document.getElementById("claveAlumnoLDS").addEventListener("keydown",function(e){if(e.key==="Enter")confirmarClaveAlumno();});
+
+document
+  .getElementById("claveAlumnoLDS")
+  .addEventListener("keydown",function(e){
+
+    if(e.key === "Enter"){
+      confirmarClaveAlumno();
+    }
+
+  });
+
 
 /* =========================================================
    ADMINISTRADOR
@@ -2676,12 +2948,3 @@ window.addEventListener("load",function(){
 
 </body>
 </html>
-<style>
-/* PORTADA DEL USUARIO: no se rediseña ni se reescala con CSS creativo. */
-#portadaExactaFinal{position:relative!important;width:100%!important;margin:0!important;padding:0!important;background:#fff!important;line-height:0!important;}
-#portadaExactaFinal .exact-poster-image{width:100%!important;height:auto!important;display:block!important;}
-#portadaExactaFinal .hotspot{line-height:normal!important;}
-</style>
-<script>
-// Soporte directo para la portada exacta sin cambiar el sistema interior.
-</script>
