@@ -1338,7 +1338,7 @@
     }
 
   </style>
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <!-- Lector QR: se carga solo al pulsar "Escanear código QR" para acelerar la carga inicial. -->
 </head>
 
 <body>
@@ -1380,8 +1380,10 @@
 <main id="portadaExactaFinal" class="home exact-home">
   <div class="exact-poster">
     <img class="exact-poster-image"
-         src="assets/portada.webp"
-         alt="Banco LDS 360 - IEP La Salle del Sur">
+         src="./assets/portada.webp"
+         alt="Banco LDS 360 - IEP La Salle del Sur"
+         decoding="async"
+         fetchpriority="high">
 
     <button class="hotspot hotspot-admin"
             aria-label="Administrador"
@@ -1644,7 +1646,7 @@
 
 <script>
 
-/* IMÁGENES: la portada exacta está embebida en este HTML. */
+/* IMÁGENES: la portada exacta se carga desde assets/portada.webp. */
 
 /* =========================================================
    MODAL CÓDIGO
@@ -2988,18 +2990,47 @@ window.solicitarAccesoAlumno=LDS360_pedirClaveFinal;
 /* =========================================================
    QR ORIGINAL: Html5Qrcode
    ========================================================= */
-window.abrirScanner=function(){
+let LDS360_qrLoaderPromise=null;
+
+function LDS360_cargarLectorQR(){
+  if(window.Html5Qrcode) return Promise.resolve();
+  if(LDS360_qrLoaderPromise) return LDS360_qrLoaderPromise;
+
+  LDS360_qrLoaderPromise=new Promise(function(resolve,reject){
+    const s=document.createElement("script");
+    s.src="https://unpkg.com/html5-qrcode";
+    s.async=true;
+    s.onload=function(){resolve();};
+    s.onerror=function(){
+      LDS360_qrLoaderPromise=null;
+      reject(new Error("No se pudo cargar el lector QR."));
+    };
+    document.head.appendChild(s);
+  });
+
+  return LDS360_qrLoaderPromise;
+}
+
+window.abrirScanner=async function(){
   const overlay=document.getElementById("scannerOverlay");
   const cont=document.getElementById("lectorQR");
   const error=document.getElementById("scannerError");
   const status=document.getElementById("scannerStatus");
+
   if(overlay)overlay.classList.add("show");
   if(error)error.textContent="";
-  if(status)status.textContent="Apunta la cámara al código QR del estudiante.";
-  if(!window.Html5Qrcode){if(error)error.textContent="No se pudo cargar el lector QR.";return;}
+  if(status)status.textContent="Cargando lector QR...";
+
   try{
-    if(LDS360_qrFinal){try{LDS360_qrFinal.stop();}catch(e){} LDS360_qrFinal=null;}
+    await LDS360_cargarLectorQR();
+    if(status)status.textContent="Apunta la cámara al código QR del estudiante.";
+
+    if(LDS360_qrFinal){
+      try{LDS360_qrFinal.stop();}catch(e){}
+      LDS360_qrFinal=null;
+    }
     if(cont)cont.innerHTML="";
+
     LDS360_qrFinal=new Html5Qrcode("lectorQR");
     LDS360_qrFinal.start(
       {facingMode:"environment"},
@@ -3010,7 +3041,9 @@ window.abrirScanner=function(){
         LDS360_qrFinal=null;
         if(overlay)overlay.classList.remove("show");
         const match=valor.match(/LDS[-_ ]EST[-_ ]\d+/i);
-        const codigo=match?match[0].replace(/[_ ]/g,"-").toUpperCase():LDS360_normalizarFinal(valor);
+        const codigo=match
+          ? match[0].replace(/[_ ]/g,"-").toUpperCase()
+          : LDS360_normalizarFinal(valor);
         LDS360_pedirClaveFinal(codigo);
       },
       function(){ }
@@ -3018,7 +3051,8 @@ window.abrirScanner=function(){
       if(error)error.textContent="No fue posible iniciar la cámara. Verifica los permisos.";
     });
   }catch(e){
-    if(error)error.textContent="No fue posible iniciar el lector QR.";
+    if(status)status.textContent="";
+    if(error)error.textContent=e.message||"No fue posible cargar el lector QR.";
   }
 };
 
