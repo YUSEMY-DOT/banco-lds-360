@@ -3,17 +3,12 @@
  * IEP La Salle del Sur
  */
 
-// URL oficial de tu Web App de Google Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
-/**
- * Consulta la información del estudiante priorizando la caché de localStorage para máxima velocidad.
- */
 function consultarDatosEstudiante(codigo, callback) {
   const cacheKey = 'LDS_DATA_' + codigo;
   const cacheGuardada = localStorage.getItem(cacheKey);
 
-  // 1. Mostrar de inmediato la caché si existe
   if (cacheGuardada) {
     try {
       const datosLocales = JSON.parse(cacheGuardada);
@@ -23,7 +18,6 @@ function consultarDatosEstudiante(codigo, callback) {
     }
   }
 
-  // 2. Traer información actualizada de Google Apps Script
   const url = `${SCRIPT_URL}?action=CONSULTAR_ALUMNO&codigo=${encodeURIComponent(codigo)}`;
 
   fetch(url)
@@ -39,9 +33,6 @@ function consultarDatosEstudiante(codigo, callback) {
     });
 }
 
-/**
- * Procesa el inicio de sesión del alumno con un solo viaje de red.
- */
 function ejecutarLoginSistema(codigo, hashClave, callback) {
   const url = `${SCRIPT_URL}?action=LOGINALUMNO&codigo=${encodeURIComponent(codigo)}&hash=${encodeURIComponent(hashClave)}`;
 
@@ -59,9 +50,6 @@ function ejecutarLoginSistema(codigo, hashClave, callback) {
     });
 }
 
-/**
- * Registra una transacción (Cobro/Pago) y actualiza el saldo al instante.
- */
 function registrarTransaccionSistema(codigo, tipo, monto, concepto, callback) {
   const payload = {
     action: 'REGISTRAR_TRANSACCION',
@@ -78,7 +66,6 @@ function registrarTransaccionSistema(codigo, tipo, monto, concepto, callback) {
     body: JSON.stringify(payload)
   })
   .then(() => {
-    // Como no-cors no retorna JSON directo, descontamos/sumamos localmente
     const cacheKey = 'LDS_DATA_' + codigo;
     const cache = JSON.parse(localStorage.getItem(cacheKey) || '{}');
     let saldoActual = parseFloat(cache.saldo || 0);
