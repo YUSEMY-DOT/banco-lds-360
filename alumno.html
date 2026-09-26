@@ -76,15 +76,15 @@
         <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
-      <!-- 3 BOTONES INTERNOS (Cobrar Verde, Pagar Rojo, Movimientos Lila) -->
+      <!-- 3 BOTONES INTERNOS CON COLORES EXACTOS FORZADOS -->
       <div class="grid grid-cols-3 gap-2">
-        <button onclick="seleccionarOperacion('INGRESO')" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+        <button onclick="seleccionarOperacion('INGRESO')" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #16a34a !important;">
           💰 COBRAR
         </button>
-        <button onclick="seleccionarOperacion('EGRESO')" class="bg-rose-600 hover:bg-rose-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+        <button onclick="seleccionarOperacion('EGRESO')" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #e11d48 !important;">
           💸 PAGAR
         </button>
-        <button onclick="mostrarSeccionMovimientos()" class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+        <button onclick="mostrarSeccionMovimientos()" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #9333ea !important;">
           📋 MOVIMIENTOS
         </button>
       </div>
@@ -156,12 +156,63 @@
   <script>
     let tipoOperacionActual = "";
     let catalogoGlobal = {
-      "INGRESOS_Y_SUELDOS": ["Ingreso Sueldo Base Mensual", "Ingreso Sueldo por Rol de Liderazgo", "Ingreso Bono por desempeño"],
-      "PREMIOS_Y_BONIFICACIONES": ["Bono por llevar el uniforme impecable y reglamentario", "Bono Participación destacada en clase", "Bono Premio por primer lugar en concurso académico o deportivo", "Bono Puntualidad y asistencia perfecta", "Bono Apoyo destacado en limpieza", "Bono por ayuda solidaria", "Bono Creatividad e innovación", "Bono Representar dignamente al colegio", "Bono Leer un libro y presentar evidencia", "Bono Completar un reto educativo"],
-      "AHORROS_E_INVERSIONES": ["Depósito a cuenta de ahorros (Ahorro voluntario)", "Inversión en fondo común del aula", "Retiro de ahorros (Emergencia o meta cumplida)"],
-      "PAGOS_Y_GASTOS": ["Pago Compra en la tienda escolar / cafetín", "Pago de alquiler / mantenimiento de carpeta", "Pago de servicios del aula: Agua", "Pago de servicios del aula: Energía", "Compra de material escolar de emergencia", "Gasto médico imprevisto menor", "Alquiler de libros de la biblioteca", "Pago por custodia de equipos tecnológicos", "Pago por copias extras", "Comprar stickers", "Pagar para una actividad extra", "Pagar por jugar 10 minutos más"],
-      "SANCIONES_Y_MULTAS": ["Multa por llevar mal el uniforme o incompleto", "Incumplimiento de tareas o asignaciones a tiempo", "Llegada tarde al aula o formación", "Uso no autorizado de dispositivos electrónicos", "Desorden o indisciplina leve", "Falta de respeto o modales", "No traer el material escolar requerido", "Descuido o daño leve al mobiliario", "Basura fuera de su lugar / No respetar áreas verdes", "Inasistencia injustificada a reuniones", "No ponerse al día en sus pendientes", "Malograr los cuadernos u objetos personales", "Faltar a la verdad", "Llevarse objetos del compañero"],
-      "COSTOS_Y_OTROS": ["Impuesto escolar mensual por uso de instalaciones", "Cuota extraordinaria de mantenimiento grupal", "Transacción personalizada / Ajuste de caja"]
+      "INGRESOS_Y_SUELDOS": [
+        "Ingreso Sueldo Base Mensual", 
+        "Ingreso Sueldo por Rol de Liderazgo", 
+        "Ingreso Bono por desempeño"
+      ],
+      "PREMIOS_Y_BONIFICACIONES": [
+        "Bono por llevar el uniforme impecable y reglamentario", 
+        "Bono Participación destacada en clase", 
+        "Bono Premio por primer lugar en concurso académico o deportivo", 
+        "Bono Puntualidad y asistencia perfecta", 
+        "Bono Apoyo destacado en limpieza", 
+        "Bono por ayuda solidaria", 
+        "Bono Creatividad e innovación", 
+        "Bono Representar dignamente al colegio", 
+        "Bono Leer un libro y presentar evidencia", 
+        "Bono Completar un reto educativo"
+      ],
+      "AHORROS_E_INVERSIONES": [
+        "Depósito a cuenta de ahorros (Ahorro voluntario)", 
+        "Inversión en fondo común del aula", 
+        "Retiro de ahorros (Emergencia o meta cumplida)"
+      ],
+      "PAGOS_Y_GASTOS": [
+        "Pago Compra en la tienda escolar / cafetín", 
+        "Pago de alquiler / mantenimiento de carpeta", 
+        "Pago de servicios del aula: Agua", 
+        "Pago de servicios del aula: Energía", 
+        "Compra de material escolar de emergencia", 
+        "Gasto médico imprevisto menor", 
+        "Alquiler de libros de la biblioteca", 
+        "Pago por custodia de equipos tecnológicos", 
+        "Pago por copias extras", 
+        "Comprar stickers", 
+        "Pagar para una actividad extra", 
+        "Pagar por jugar 10 minutos más"
+      ],
+      "SANCIONES_Y_MULTAS": [
+        "Multa por llevar mal el uniforme o incompleto", 
+        "Incumplimiento de tareas o asignaciones a tiempo", 
+        "Llegada tarde al aula o formación", 
+        "Uso no autorizado de dispositivos electrónicos", 
+        "Desorden o indisciplina leve", 
+        "Falta de respeto o modales", 
+        "No traer el material escolar requerido", 
+        "Descuido o daño leve al mobiliario", 
+        "Basura fuera de su lugar / No respetar áreas verdes", 
+        "Inasistencia injustificada a reuniones", 
+        "No ponerse al día en sus pendientes", 
+        "Malograr los cuadernos u objetos personales", 
+        "Faltar a la verdad", 
+        "Llevarse objetos del compañero"
+      ],
+      "COSTOS_Y_OTROS": [
+        "Impuesto escolar mensual por uso de instalaciones", 
+        "Cuota extraordinaria de mantenimiento grupal", 
+        "Transacción personalizada / Ajuste de caja"
+      ]
     };
 
     function procesarLoginAlumno() {
@@ -229,6 +280,7 @@
 
       document.getElementById('selectConcepto').innerHTML = '<option value="">Seleccione concepto</option>';
       document.getElementById('inputMonto').value = '';
+      document.getElementById('selectResponsable').value = '';
       document.getElementById('inputObservacion').value = '';
       document.getElementById('mensajeOperacion').textContent = '';
     }
@@ -272,23 +324,22 @@
       msg.textContent = "Registrando movimiento...";
 
       if (typeof registrarTransaccionSistema === 'function') {
-        registrarTransaccionSistema(codigo, tipoOperacionActual, monto, con, function(res) {
+        registrarTransaccionSistema(codigo, tipoOperacionActual, monto, con, resp, obs, function(res) {
           if (res && (res.success || res.ok)) {
             msg.className = "text-xs text-emerald-600 font-bold";
             msg.textContent = "¡Movimiento registrado con éxito!";
             
-            // LIMPIEZA AUTOMÁTICA Y RESTAURACIÓN DE LA TABLILLA A SU ESTADO INICIAL
+            // LIMPIEZA AUTOMÁTICA Y RESTAURACIÓN A SU ESTADO INICIAL
             setTimeout(() => {
               document.getElementById('seccionOperacion').classList.add('hidden');
               document.getElementById('seccionMovimientos').classList.remove('hidden');
-              document.getElementById('inputMonto').value = '';
-              document.getElementById('inputObservacion').value = '';
-              document.getElementById('selectCategoria').value = '';
+              document.getElementById('selectCategoria').innerHTML = '<option value="">Seleccione categoría</option>';
               document.getElementById('selectConcepto').innerHTML = '<option value="">Seleccione concepto</option>';
+              document.getElementById('inputMonto').value = '';
               document.getElementById('selectResponsable').value = '';
+              document.getElementById('inputObservacion').value = '';
               msg.textContent = '';
               
-              // Actualiza saldo visual
               if(res.nuevoSaldo) {
                 document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
               }
