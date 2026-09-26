@@ -6,18 +6,21 @@
   <title>BANCO LDS 360 - Portal Estudiante</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/html5-qrcode"></script>
   <script defer src="app.js"></script>
 </head>
 <body class="bg-blue-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
-  <header class="bg-blue-800 text-white p-4 shadow-md text-center">
-    <h1 class="text-xl font-bold">BANCO LDS 360</h1>
-    <p class="text-xs text-blue-200">IEP La Salle del Sur</p>
+  <header class="bg-blue-800 text-white p-4 shadow-md flex justify-between items-center">
+    <div>
+      <h1 class="text-xl font-bold">BANCO LDS 360</h1>
+      <p class="text-xs text-blue-200">IEP La Salle del Sur</p>
+    </div>
+    <a href="index.html" class="text-sm bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-full transition">← Volver al Inicio</a>
   </header>
 
   <main class="max-w-md mx-auto w-full p-4 flex-1 space-y-4">
     
+    <!-- VISTA LOGIN ESTUDIANTE -->
     <div id="vistaLogin" class="bg-white p-6 rounded-2xl shadow-xl space-y-4">
       <h2 class="text-center text-lg font-bold text-gray-700">Acceso del Estudiante</h2>
       
@@ -32,12 +35,14 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-600 mb-1">Clave de Acceso</label>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Clave de Acceso (6 dígitos)</label>
         <input 
           type="password" 
           id="loginClave" 
-          placeholder="••••" 
-          class="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+          maxlength="6"
+          inputmode="numeric"
+          placeholder="••••••" 
+          class="w-full border rounded-xl p-3 text-center text-xl tracking-widest focus:ring-2 focus:ring-blue-500 outline-none"
         />
       </div>
 
@@ -47,8 +52,11 @@
       >
         Ingresar
       </button>
+
+      <div id="loginError" class="text-red-600 text-sm text-center min-h-[20px]"></div>
     </div>
 
+    <!-- VISTA PRINCIPAL DEL ESTUDIANTE -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
@@ -65,25 +73,28 @@
           />
         </div>
         <p id="alumnoNombre" class="mt-4 font-medium text-sm text-blue-100">Cargando...</p>
+        <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
-        <button onclick="prepararTransaccion('PAGAR')" class="bg-rose-500 hover:bg-rose-600 text-white p-3 rounded-xl font-bold shadow text-center transition">
-          💸 Pagar
-        </button>
-        <button onclick="prepararTransaccion('COBRAR')" class="bg-emerald-500 hover:bg-emerald-600 text-white p-3 rounded-xl font-bold shadow text-center transition">
-          🪙 Cobrar
-        </button>
+        <div class="bg-white p-4 rounded-xl shadow text-center">
+          <span class="text-xs text-gray-500">Ingreso Base</span>
+          <p id="baseAmount" class="font-bold text-lg text-blue-900">0.00 LDS</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow text-center">
+          <span class="text-xs text-gray-500">Total Ingresos</span>
+          <p id="incomeAmount" class="font-bold text-lg text-emerald-600">0.00 LDS</p>
+        </div>
       </div>
 
       <div class="bg-white p-4 rounded-2xl shadow space-y-3">
-        <h4 class="font-bold text-gray-700 text-sm">Últimos Movimientos</h4>
+        <h4 class="font-bold text-gray-700 text-sm">Movimientos Recientes</h4>
         <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
           <p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>
         </div>
       </div>
 
-      <button onclick="cerrarSesionAlumno()" class="w-full text-center text-xs text-gray-500 underline py-2">
+      <button onclick="cerrarSesionAlumno()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 rounded-xl transition text-sm">
         Cerrar Sesión
       </button>
     </div>
@@ -96,34 +107,50 @@
 
   <script>
     function procesarLoginAlumno() {
-      const codigo = document.getElementById('loginCodigo').value.trim();
+      const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
       const clave = document.getElementById('loginClave').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      errorDiv.textContent = "";
 
-      if (!codigo || !clave) return alert("Por favor complete todos los campos.");
-
-      // Se envía la clave exacta, sin encriptar, tal como está en tu base de datos
-      if (typeof ejecutarLoginSistema === 'function') {
-        ejecutarLoginSistema(codigo, clave, funcionRespuestaLogin);
+      if (!codigo || !clave) {
+        errorDiv.textContent = "Por favor complete todos los campos.";
+        return;
       }
-    }
 
-    function funcionRespuestaLogin(res) {
-      if (res && res.success) {
-        document.getElementById('vistaLogin').classList.add('hidden');
-        document.getElementById('vistaPrincipal').classList.remove('hidden');
+      if (typeof ejecutarLoginSistema === 'function') {
+        errorDiv.textContent = "Verificando acceso...";
+        ejecutarLoginSistema(codigo, clave, function(res) {
+          if (res && (res.success || res.ok)) {
+            document.getElementById('vistaLogin').classList.add('hidden');
+            document.getElementById('vistaPrincipal').classList.remove('hidden');
 
-        document.getElementById('alumnoNombre').textContent = res.nombre || 'Estudiante';
-        document.getElementById('saldoLDS').textContent = res.saldo || '0.00';
+            const est = res.estudiante || res;
+            const cuenta = res.cuenta || res;
 
-        if (res.foto) {
-          document.getElementById('alumnoFoto').src = res.foto.includes('googleusercontent.com') 
-            ? res.foto.split('=')[0] + '=s150' 
-            : res.foto;
-        }
+            document.getElementById('alumnoNombre').textContent = est.nombreCompleto || est.nombre || 'Estudiante';
+            document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
+            document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
+            document.getElementById('baseAmount').textContent = Number(est.montoBase || res.montoBase || 0).toFixed(2) + " LDS";
+            document.getElementById('incomeAmount').textContent = Number(cuenta.totalIngresos || res.ingresos || 0).toFixed(2) + " LDS";
 
-        renderizarMovimientos(res.movimientos || []);
+            let fotoUrl = est.foto || est.fotoUrl || res.foto || "";
+            if (fotoUrl && fotoUrl.includes("drive.google.com/file/d/")) {
+              const match = fotoUrl.match(/\/d\/([^/]+)/);
+              if (match) {
+                fotoUrl = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w300";
+              }
+            }
+            if (fotoUrl) {
+              document.getElementById('alumnoFoto').src = fotoUrl;
+            }
+
+            renderizarMovimientos(res.movimientos || []);
+          } else {
+            errorDiv.textContent = res.message || res.mensaje || "Credenciales incorrectas.";
+          }
+        });
       } else {
-        alert(res.message || "Credenciales incorrectas.");
+        errorDiv.textContent = "Error de conexión con el núcleo del sistema.";
       }
     }
 
@@ -131,52 +158,43 @@
       const contenedor = document.getElementById('listaMovimientos');
       contenedor.innerHTML = '';
 
-      if (movs.length === 0) {
+      if (!movs || movs.length === 0) {
         contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>';
         return;
       }
 
       movs.forEach(m => {
+        const tipo = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
+        const monto = Number(m.monto || m.montoLDS || 0);
+        const positivo = tipo.includes('INGRESO') || tipo.includes('ABONO') || monto >= 0;
+
         const item = document.createElement('div');
         item.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 border-l-4 " + 
-          (m.tipo === 'COBRAR' ? 'border-emerald-500' : 'border-rose-500');
+          (positivo ? 'border-emerald-500' : 'border-rose-500');
         item.innerHTML = `
           <div>
-            <p class="font-bold text-xs text-gray-800">${m.concepto}</p>
-            <p class="text-[10px] text-gray-400">${m.fecha}</p>
+            <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}</p>
+            <p class="text-[10px] text-gray-400">${m.fecha || ''}</p>
           </div>
-          <span class="font-extrabold ${m.tipo === 'COBRAR' ? 'text-emerald-600' : 'text-rose-600'}">
-            ${m.tipo === 'COBRAR' ? '+' : '-'}${m.monto} LDS
+          <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
+            ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
           </span>
         `;
         contenedor.appendChild(item);
       });
     }
 
-    function prepararTransaccion(tipo) {
-      const monto = prompt(`Ingrese el monto a ${tipo}:`);
-      if (!monto || isNaN(monto)) return;
-
-      const concepto = prompt("Concepto o motivo:");
-      const codigo = document.getElementById('loginCodigo').value.trim();
-
-      if (typeof registrarTransaccionSistema === 'function') {
-        registrarTransaccionSistema(codigo, tipo, monto, concepto, function(res) {
-          if (res.success) {
-            alert("Operación realizada con éxito.");
-            document.getElementById('saldoLDS').textContent = res.nuevoSaldo;
-          } else {
-            alert("Error al procesar operación.");
-          }
-        });
-      }
-    }
-
     function cerrarSesionAlumno() {
       document.getElementById('vistaPrincipal').classList.add('hidden');
       document.getElementById('vistaLogin').classList.remove('hidden');
+      document.getElementById('loginCodigo').value = '';
       document.getElementById('loginClave').value = '';
+      document.getElementById('loginError').textContent = '';
     }
+
+    document.getElementById("loginClave").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") procesarLoginAlumno();
+    });
   </script>
 </body>
 </html>
