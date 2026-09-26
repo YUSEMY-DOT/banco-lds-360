@@ -76,19 +76,67 @@
         <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
-        <div class="bg-white p-4 rounded-xl shadow text-center">
-          <span class="text-xs text-gray-500">Ingreso Base</span>
-          <p id="baseAmount" class="font-bold text-lg text-blue-900">0.00 LDS</p>
-        </div>
-        <div class="bg-white p-4 rounded-xl shadow text-center">
-          <span class="text-xs text-gray-500">Total Ingresos</span>
-          <p id="incomeAmount" class="font-bold text-lg text-emerald-600">0.00 LDS</p>
-        </div>
+      <!-- 3 BOTONES INTERNOS (Cobrar Verde, Pagar Rojo, Movimientos Lila) -->
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="seleccionarOperacion('INGRESO')" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+          💰 COBRAR
+        </button>
+        <button onclick="seleccionarOperacion('EGRESO')" class="bg-rose-600 hover:bg-rose-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+          💸 PAGAR
+        </button>
+        <button onclick="mostrarSeccionMovimientos()" class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-xl font-bold shadow text-center transition text-xs">
+          📋 MOVIMIENTOS
+        </button>
       </div>
 
-      <div class="bg-white p-4 rounded-2xl shadow space-y-3">
-        <h4 class="font-bold text-gray-700 text-sm">Movimientos Recientes</h4>
+      <!-- FORMULARIO DE OPERACIÓN DINÁMICO -->
+      <div id="seccionOperacion" class="hidden bg-white p-5 rounded-2xl shadow space-y-3">
+        <h4 id="tituloOperacion" class="font-bold text-gray-700 text-sm">Nueva Operación</h4>
+        
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Categoría</label>
+          <select id="selectCategoria" onchange="cargarConceptosFiltrados()" class="w-full border rounded-lg p-2 text-sm outline-none">
+            <option value="">Seleccione categoría</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Concepto</label>
+          <select id="selectConcepto" class="w-full border rounded-lg p-2 text-sm outline-none">
+            <option value="">Seleccione concepto</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Monto LDS</label>
+          <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-lg p-2 text-sm outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Responsable</label>
+          <select id="selectResponsable" class="w-full border rounded-lg p-2 text-sm outline-none">
+            <option value="">Seleccione responsable</option>
+            <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+            <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+            <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+            <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Observación</label>
+          <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="w-full border rounded-lg p-2 text-sm outline-none"></textarea>
+        </div>
+
+        <button onclick="registrarMovimientoOperacion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-sm transition">
+          Registrar Movimiento
+        </button>
+        <div id="mensajeOperacion" class="text-xs text-center min-h-[18px]"></div>
+      </div>
+
+      <!-- LISTA DE MOVIMIENTOS -->
+      <div id="seccionMovimientos" class="bg-white p-4 rounded-2xl shadow space-y-3">
+        <h4 class="font-bold text-gray-700 text-sm">Historial de Movimientos</h4>
         <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
           <p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>
         </div>
@@ -106,6 +154,16 @@
   </footer>
 
   <script>
+    let tipoOperacionActual = "";
+    let catalogoGlobal = {
+      "INGRESOS_Y_SUELDOS": ["Ingreso Sueldo Base Mensual", "Ingreso Sueldo por Rol de Liderazgo", "Ingreso Bono por desempeño"],
+      "PREMIOS_Y_BONIFICACIONES": ["Bono por llevar el uniforme impecable y reglamentario", "Bono Participación destacada en clase", "Bono Premio por primer lugar en concurso académico o deportivo", "Bono Puntualidad y asistencia perfecta", "Bono Apoyo destacado en limpieza", "Bono por ayuda solidaria", "Bono Creatividad e innovación", "Bono Representar dignamente al colegio", "Bono Leer un libro y presentar evidencia", "Bono Completar un reto educativo"],
+      "AHORROS_E_INVERSIONES": ["Depósito a cuenta de ahorros (Ahorro voluntario)", "Inversión en fondo común del aula", "Retiro de ahorros (Emergencia o meta cumplida)"],
+      "PAGOS_Y_GASTOS": ["Pago Compra en la tienda escolar / cafetín", "Pago de alquiler / mantenimiento de carpeta", "Pago de servicios del aula: Agua", "Pago de servicios del aula: Energía", "Compra de material escolar de emergencia", "Gasto médico imprevisto menor", "Alquiler de libros de la biblioteca", "Pago por custodia de equipos tecnológicos", "Pago por copias extras", "Comprar stickers", "Pagar para una actividad extra", "Pagar por jugar 10 minutos más"],
+      "SANCIONES_Y_MULTAS": ["Multa por llevar mal el uniforme o incompleto", "Incumplimiento de tareas o asignaciones a tiempo", "Llegada tarde al aula o formación", "Uso no autorizado de dispositivos electrónicos", "Desorden o indisciplina leve", "Falta de respeto o modales", "No traer el material escolar requerido", "Descuido o daño leve al mobiliario", "Basura fuera de su lugar / No respetar áreas verdes", "Inasistencia injustificada a reuniones", "No ponerse al día en sus pendientes", "Malograr los cuadernos u objetos personales", "Faltar a la verdad", "Llevarse objetos del compañero"],
+      "COSTOS_Y_OTROS": ["Impuesto escolar mensual por uso de instalaciones", "Cuota extraordinaria de mantenimiento grupal", "Transacción personalizada / Ajuste de caja"]
+    };
+
     function procesarLoginAlumno() {
       const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
       const clave = document.getElementById('loginClave').value.trim();
@@ -130,27 +188,117 @@
             document.getElementById('alumnoNombre').textContent = est.nombreCompleto || est.nombre || 'Estudiante';
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
             document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
-            document.getElementById('baseAmount').textContent = Number(est.montoBase || res.montoBase || 0).toFixed(2) + " LDS";
-            document.getElementById('incomeAmount').textContent = Number(cuenta.totalIngresos || res.ingresos || 0).toFixed(2) + " LDS";
-
+            
             let fotoUrl = est.foto || est.fotoUrl || res.foto || "";
             if (fotoUrl && fotoUrl.includes("drive.google.com/file/d/")) {
               const match = fotoUrl.match(/\/d\/([^/]+)/);
-              if (match) {
-                fotoUrl = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w300";
-              }
+              if (match) fotoUrl = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w300";
             }
-            if (fotoUrl) {
-              document.getElementById('alumnoFoto').src = fotoUrl;
-            }
+            if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
 
             renderizarMovimientos(res.movimientos || []);
           } else {
             errorDiv.textContent = res.message || res.mensaje || "Credenciales incorrectas.";
           }
         });
+      }
+    }
+
+    function seleccionarOperacion(tipo) {
+      tipoOperacionActual = tipo;
+      document.getElementById('seccionOperacion').classList.remove('hidden');
+      document.getElementById('seccionMovimientos').classList.add('hidden');
+      document.getElementById('tituloOperacion').textContent = tipo === 'INGRESO' ? "💰 Registrar Cobro (Ingresos / Bonos)" : "💸 Registrar Pago (Gastos / Multas)";
+      
+      const selectCat = document.getElementById('selectCategoria');
+      selectCat.innerHTML = '<option value="">Seleccione categoría</option>';
+
+      let categoriasPermitidas = [];
+      if (tipo === 'INGRESO') {
+        categoriasPermitidas = ["INGRESOS_Y_SUELDOS", "PREMIOS_Y_BONIFICACIONES"];
       } else {
-        errorDiv.textContent = "Error de conexión con el núcleo del sistema.";
+        categoriasPermitidas = ["AHORROS_E_INVERSIONES", "PAGOS_Y_GASTOS", "SANCIONES_Y_MULTAS", "COSTOS_Y_OTROS"];
+      }
+
+      categoriasPermitidas.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat.replace(/_/g, " ");
+        selectCat.appendChild(opt);
+      });
+
+      document.getElementById('selectConcepto').innerHTML = '<option value="">Seleccione concepto</option>';
+      document.getElementById('inputMonto').value = '';
+      document.getElementById('inputObservacion').value = '';
+      document.getElementById('mensajeOperacion').textContent = '';
+    }
+
+    function cargarConceptosFiltrados() {
+      const cat = document.getElementById('selectCategoria').value;
+      const selectCon = document.getElementById('selectConcepto');
+      selectCon.innerHTML = '<option value="">Seleccione concepto</option>';
+
+      if (!cat || !catalogoGlobal[cat]) return;
+
+      catalogoGlobal[cat].forEach(con => {
+        const opt = document.createElement('option');
+        opt.value = con;
+        opt.textContent = con;
+        selectCon.appendChild(opt);
+      });
+    }
+
+    function mostrarSeccionMovimientos() {
+      document.getElementById('seccionOperacion').classList.add('hidden');
+      document.getElementById('seccionMovimientos').classList.remove('hidden');
+    }
+
+    function registrarMovimientoOperacion() {
+      const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
+      const cat = document.getElementById('selectCategoria').value;
+      const con = document.getElementById('selectConcepto').value;
+      const monto = document.getElementById('inputMonto').value.trim();
+      const resp = document.getElementById('selectResponsable').value;
+      const obs = document.getElementById('inputObservacion').value.trim();
+      const msg = document.getElementById('mensajeOperacion');
+
+      if (!cat || !con || !monto || !resp) {
+        msg.className = "text-xs text-red-600 font-bold";
+        msg.textContent = "Complete categoría, concepto, monto y responsable.";
+        return;
+      }
+
+      msg.className = "text-xs text-blue-600 font-bold";
+      msg.textContent = "Registrando movimiento...";
+
+      if (typeof registrarTransaccionSistema === 'function') {
+        registrarTransaccionSistema(codigo, tipoOperacionActual, monto, con, function(res) {
+          if (res && (res.success || res.ok)) {
+            msg.className = "text-xs text-emerald-600 font-bold";
+            msg.textContent = "¡Movimiento registrado con éxito!";
+            
+            // LIMPIEZA AUTOMÁTICA Y RESTAURACIÓN DE LA TABLILLA A SU ESTADO INICIAL
+            setTimeout(() => {
+              document.getElementById('seccionOperacion').classList.add('hidden');
+              document.getElementById('seccionMovimientos').classList.remove('hidden');
+              document.getElementById('inputMonto').value = '';
+              document.getElementById('inputObservacion').value = '';
+              document.getElementById('selectCategoria').value = '';
+              document.getElementById('selectConcepto').innerHTML = '<option value="">Seleccione concepto</option>';
+              document.getElementById('selectResponsable').value = '';
+              msg.textContent = '';
+              
+              // Actualiza saldo visual
+              if(res.nuevoSaldo) {
+                document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
+              }
+            }, 1200);
+
+          } else {
+            msg.className = "text-xs text-red-600 font-bold";
+            msg.textContent = res.message || "Error al registrar la transacción.";
+          }
+        });
       }
     }
 
