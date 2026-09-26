@@ -90,8 +90,8 @@
   </main>
 
   <script>
+    let html5QrCode = null;
     let escanerActivo = false;
-    let html5QrcodeScanner = null;
 
     function toggleEscaner() {
       const readerDiv = document.getElementById('reader');
@@ -99,9 +99,39 @@
         detenerEscaner();
       } else {
         readerDiv.classList.remove('hidden');
-        html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-        html5QrcodeScanner.render(onScanSuccess, onScanError);
-        escanerActivo = true;
+        if (!html5QrCode) {
+          html5QrCode = new Html5Qrcode("reader");
+        }
+        
+        // Detección inteligente: Compatible con PC y Celular
+        Html5Qrcode.getCameras().then(devices => {
+          if (devices && devices.length > 0) {
+            let cameraId = devices[0].id; // Por defecto la primera cámara (PC Webcam)
+            
+            // Si hay varias cámaras, buscar la trasera (para celulares)
+            for (let i = 0; i < devices.length; i++) {
+              if (devices[i].label.toLowerCase().includes('back') || devices[i].label.toLowerCase().includes('trasera')) {
+                cameraId = devices[i].id;
+                break;
+              }
+            }
+            
+            html5QrCode.start(
+              cameraId, 
+              { fps: 10, qrbox: { width: 250, height: 250 } },
+              onScanSuccess,
+              onScanError
+            ).then(() => {
+              escanerActivo = true;
+            }).catch(err => {
+              alert("Error al acceder a la cámara. Revise si otorgó los permisos.");
+            });
+          } else {
+            alert("No se detectó ninguna cámara instalada en este dispositivo.");
+          }
+        }).catch(err => {
+          alert("Permiso de cámara denegado. Por favor, acéptelo en la barra de direcciones de su navegador.");
+        });
       }
     }
 
@@ -112,13 +142,15 @@
     }
 
     function onScanError(error) {
+      // Ignorar errores por fotogramas vacíos
     }
 
     function detenerEscaner() {
-      if (html5QrcodeScanner) {
-        html5QrcodeScanner.clear().catch(e => console.error(e));
-        document.getElementById('reader').classList.add('hidden');
-        escanerActivo = false;
+      if (html5QrCode && escanerActivo) {
+        html5QrCode.stop().then(() => {
+          document.getElementById('reader').classList.add('hidden');
+          escanerActivo = false;
+        }).catch(e => console.error(e));
       }
     }
 
