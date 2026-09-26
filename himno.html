@@ -2,52 +2,254 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Himno La Salle del Sur - Melodía</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Himno Instrumental - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes barPulse {
+      0%, 100% { height: 15%; }
+      50% { height: 90%; }
+    }
+    .anim-bar {
+      animation: barPulse 0.6s infinite ease-in-out alternate;
+    }
+  </style>
 </head>
-<body class="bg-blue-900 text-white flex items-center justify-center min-h-screen p-4 text-center">
+<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
-  <div class="bg-white text-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full space-y-6">
-    <h1 class="text-2xl font-bold text-blue-900">Himno La Salle del Sur</h1>
-    <p class="text-xs text-gray-500">Presiona el botón para escuchar la guía melódica en ritmo de marcha escolar.</p>
+  <!-- ENCABEZADO -->
+  <header class="text-center py-6">
+    <div class="inline-block bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs px-4 py-1 rounded-full font-bold uppercase tracking-widest mb-2">
+      Edición Instrumental & Banda Escolar
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-black text-amber-400 uppercase tracking-wider drop-shadow-md">
+      IEP La Salle del Sur
+    </h1>
+    <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">Guía Melódica de Marcha Institucional</p>
+  </header>
 
-    <button onclick="tocarHimno()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-lg shadow-lg transition">
-      ▶ Escuchar Melodía del Himno
-    </button>
-  </div>
+  <!-- CONTENEDOR PRINCIPAL DEL REPRODUCTOR -->
+  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-700/80 space-y-8 my-auto text-center">
+    
+    <!-- EMBLEMA O ESCUDO MUSICAL -->
+    <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-500 to-indigo-600 rounded-full p-1 shadow-xl flex items-center justify-center">
+      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-4xl shadow-inner">
+        🎺
+      </div>
+    </div>
 
+    <!-- ONDAS DE VISUALIZACIÓN RÍTMICA (OCULTAS INICIALMENTE) -->
+    <div id="visualizador" class="h-16 flex justify-center items-end gap-1.5 opacity-30 transition-opacity duration-500">
+      <div class="w-2 bg-amber-400 rounded-full anim-bar" style="animation-delay: 0.1s;"></div>
+      <div class="w-2 bg-indigo-400 rounded-full anim-bar" style="animation-delay: 0.3s;"></div>
+      <div class="w-2 bg-emerald-400 rounded-full anim-bar" style="animation-delay: 0.2s;"></div>
+      <div class="w-2 bg-amber-400 rounded-full anim-bar" style="animation-delay: 0.5s;"></div>
+      <div class="w-2 bg-rose-400 rounded-full anim-bar" style="animation-delay: 0.4s;"></div>
+      <div class="w-2 bg-indigo-400 rounded-full anim-bar" style="animation-delay: 0.2s;"></div>
+      <div class="w-2 bg-emerald-400 rounded-full anim-bar" style="animation-delay: 0.6s;"></div>
+    </div>
+
+    <!-- BOTONES DE CONTROL -->
+    <div class="space-y-3 pt-2">
+      <button 
+        id="btnPlay" 
+        onclick="iniciarReproduccion()" 
+        class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
+      >
+        <span class="text-2xl">▶</span> Escuchar Melodía del Himno
+      </button>
+
+      <button 
+        id="btnStop" 
+        onclick="detenerReproduccion()" 
+        class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
+      >
+        <span>⏹</span> Detener Música
+      </button>
+    </div>
+
+    <p class="text-xs text-slate-400 italic">
+      Escucha la melodía alegre para tararear el ritmo institucional.
+    </p>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="text-center py-4 text-xs text-slate-500">
+    © IEP La Salle del Sur — Panel de Música Institucional
+  </footer>
+
+  <!-- SINTETIZADOR MULTI-INSTRUMENTAL -->
   <script>
-    function tocarHimno() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let audioCtx = null;
+    let timerID = null;
+    let sonando = false;
+
+    function crearBombo(ctx, t) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.frequency.setValueAtTime(120, t);
+      osc.frequency.exponentialRampToValueAtTime(30, t + 0.12);
+      gain.gain.setValueAtTime(0.5, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.12);
+    }
+
+    function crearCajaRedoblante(ctx, t) {
+      const bufferSize = ctx.sampleRate * 0.08;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 800;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(t);
+    }
+
+    function tocarVientosLead(ctx, freq, t, dur) {
+      if (!freq) return;
       
-      // Frecuencias numéricas de las notas (Sol Mayor)
-      const notas = [
-        { n: 392.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.8 },
-        { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.8 },
-        { n: 523.25, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 587.33, d: 0.8 },
-        { n: 587.33, d: 0.4 }, { n: 659.25, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 1.0 }
+      // Oscilador 1: Trompeta brillante
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(freq, t);
+
+      // Oscilador 2: Lira brillante (+3 cents detune)
+      const osc2 = ctx.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 1.002, t);
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(2200, t);
+
+      gain1.gain.setValueAtTime(0.25, t);
+      gain1.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.03);
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      filter.connect(gain1);
+      gain1.connect(ctx.destination);
+
+      osc1.start(t);
+      osc2.start(t);
+      osc1.stop(t + dur);
+      osc2.stop(t + dur);
+    }
+
+    function tocarBajoMarcial(ctx, freq, t, dur) {
+      if (!freq) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, t);
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(450, t);
+
+      gain.gain.setValueAtTime(0.2, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(t);
+      osc.stop(t + dur);
+    }
+
+    function iniciarReproduccion() {
+      if (sonando) return;
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      sonando = true;
+
+      document.getElementById('btnPlay').classList.add('hidden');
+      document.getElementById('btnStop').classList.remove('hidden');
+      document.getElementById('visualizador').classList.remove('opacity-30');
+      document.getElementById('visualizador').classList.add('opacity-100');
+
+      // Escala alegre de Sol Mayor en ritmo marcial animado
+      const G4 = 392.00, A4 = 440.00, B4 = 493.88, C5 = 523.25, D5 = 587.33, E5 = 659.25, G5 = 783.99;
+      const G2 = 98.00, D3 = 146.83, C3 = 130.81;
+
+      // Partitura: [Melodía, Bajo, Duración en segundos]
+      const secuencia = [
+        // Fanfarria alegre de entrada
+        [G5, G2, 0.25], [G5, G2, 0.25], [G5, G2, 0.25], [A5, D3, 0.25], [B5, G2, 0.5],
+        
+        // Coro principal
+        [G5, G2, 0.35], [G5, G2, 0.35], [G5, G2, 0.35], [A5, D3, 0.35], [B5, G2, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.7],
+        [B5, G2, 0.35], [C6, C3, 0.35], [D6, D3, 0.35], [D6, D3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.7],
+        [C6, C3, 0.35], [C6, C3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.35], [A5, D3, 0.35], [B5, G2, 0.35], [C6, C3, 0.35], [D6, D3, 0.7],
+        [D6, D3, 0.35], [E6, C3, 0.35], [D6, D3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.9],
+
+        // Estrofa
+        [C6, C3, 0.35], [C6, C3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.35], [A5, D3, 0.35], [B5, G2, 0.35],
+        [B5, G2, 0.35], [C6, C3, 0.35], [D6, D3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.7],
+        [G5, G2, 0.35], [A5, D3, 0.35], [B5, G2, 0.35], [C6, C3, 0.35], [D6, D3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.7],
+
+        // Remate final
+        [C6, C3, 0.35], [C6, C3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 0.35], [A5, D3, 0.35], [B5, G2, 0.35], [C6, C3, 0.35], [D6, D3, 0.7],
+        [D6, D3, 0.35], [E6, C3, 0.35], [D6, D3, 0.35], [C6, C3, 0.35], [B5, G2, 0.35], [A5, D3, 0.35], [G5, G2, 1.2]
       ];
 
-      let tiempo = audioCtx.currentTime;
+      // Frecuencias exactas para notas
+      const F_MAP = { G5: 392, A5: 440, B5: 493.88, C6: 523.25, D6: 587.33, E6: 659.25 };
 
-      notas.forEach(item => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+      let t = audioCtx.currentTime + 0.1;
 
-        osc.type = 'triangle'; // Tono suave similar a una lira
-        osc.frequency.setValueAtTime(item.n, tiempo);
+      secuencia.forEach(([mNote, bNote, dur]) => {
+        const freqM = F_MAP[mNote] || 392;
+        
+        // Tocar Melodía Vientos/Lira
+        tocarVientosLead(audioCtx, freqM, t, dur);
+        // Tocar Bajo Rítmico
+        tocarBajoMarcial(audioCtx, bNote, t, dur);
+        
+        // Percusión de marcha escolar
+        crearBombo(audioCtx, t);
+        crearCajaRedoblante(audioCtx, t + dur * 0.5);
 
-        gain.gain.setValueAtTime(0.3, tiempo);
-        gain.gain.exponentialRampToValueAtTime(0.001, tiempo + item.d - 0.05);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start(tiempo);
-        osc.stop(tiempo + item.d);
-
-        tiempo += item.d;
+        t += dur;
       });
+
+      const duracionTotal = (t - audioCtx.currentTime) * 1000;
+      timerID = setTimeout(() => {
+        detenerReproduccion();
+      }, duracionTotal);
+    }
+
+    function detenerReproduccion() {
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      if (timerID) clearTimeout(timerID);
+      sonando = false;
+
+      document.getElementById('btnPlay').classList.remove('hidden');
+      document.getElementById('btnStop').classList.add('hidden');
+      document.getElementById('visualizador').classList.add('opacity-30');
+      document.getElementById('visualizador').classList.remove('opacity-100');
     }
   </script>
 </body>
