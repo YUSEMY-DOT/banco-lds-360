@@ -5,15 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BANCO LDS 360 - Portal Estudiante</title>
   
-  <!-- Carga optimizada -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script defer src="https://unpkg.com/html5-qrcode"></script>
-  <script defer src="app_3.js"></script>
+  <script defer src="app.js"></script>
 </head>
 <body class="bg-blue-50 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
-  <!-- Encabezado -->
   <header class="bg-blue-800 text-white p-4 shadow-md text-center">
     <h1 class="text-xl font-bold">BANCO LDS 360</h1>
     <p class="text-xs text-blue-200">IEP La Salle del Sur</p>
@@ -21,7 +19,6 @@
 
   <main class="max-w-md mx-auto w-full p-4 flex-1 space-y-4">
     
-    <!-- PANTALLA DE LOGIN -->
     <div id="vistaLogin" class="bg-white p-6 rounded-2xl shadow-xl space-y-4">
       <h2 class="text-center text-lg font-bold text-gray-700">Acceso del Estudiante</h2>
       
@@ -53,10 +50,8 @@
       </button>
     </div>
 
-    <!-- PANTALLA PRINCIPAL DEL ALUMNO (Oculta por defecto) -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
-      <!-- Card del Saldo -->
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
         <div class="flex justify-between items-center">
           <div>
@@ -73,7 +68,6 @@
         <p id="alumnoNombre" class="mt-4 font-medium text-sm text-blue-100">Cargando...</p>
       </div>
 
-      <!-- Botones Rápidos de Operaciones -->
       <div class="grid grid-cols-2 gap-3">
         <button onclick="prepararTransaccion('PAGAR')" class="bg-rose-500 hover:bg-rose-600 text-white p-3 rounded-xl font-bold shadow text-center transition">
           💸 Pagar
@@ -83,7 +77,6 @@
         </button>
       </div>
 
-      <!-- Historial de Movimientos -->
       <div class="bg-white p-4 rounded-2xl shadow space-y-3">
         <h4 class="font-bold text-gray-700 text-sm">Últimos Movimientos</h4>
         <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
@@ -109,7 +102,6 @@
 
       if (!codigo || !clave) return alert("Por favor complete todos los campos.");
 
-      // Cifrado de clave mediante CryptoJS (SHA-256)
       const hashClave = CryptoJS.SHA256(clave).toString();
 
       if (typeof ejecutarLoginSistema === 'function') {
