@@ -87,7 +87,7 @@
         </button>
       </div>
 
-      <!-- FORMULARIO DE OPERACIÓN CON GUIADO PASO A PASO -->
+      <!-- FORMULARIO DE OPERACIÓN CON GUIADO TOTAL PASO A PASO -->
       <div id="seccionOperacion" class="hidden bg-white p-5 rounded-2xl shadow space-y-3">
         <h4 id="tituloOperacion" class="font-bold text-gray-700 text-sm">Registrar Pago o Gasto</h4>
         
@@ -107,12 +107,12 @@
 
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Monto LDS</label>
-          <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-lg p-2 text-sm outline-none" />
+          <input type="number" id="inputMonto" oninput="alCambiarMonto()" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-lg p-2 text-sm outline-none" />
         </div>
 
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Responsable del Registro</label>
-          <select id="selectResponsable" class="w-full border rounded-lg p-2 text-sm outline-none">
+          <select id="selectResponsable" onchange="alCambiarResponsable()" class="w-full border rounded-lg p-2 text-sm outline-none">
             <option value="">Seleccione responsable</option>
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
             <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
@@ -123,7 +123,7 @@
 
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Observación</label>
-          <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="w-full border rounded-lg p-2 text-sm outline-none"></textarea>
+          <textarea id="inputObservacion" onfocus="hablarTextoVoz('Escribe una observación opcional si lo deseas.')" rows="2" placeholder="Detalle opcional..." class="w-full border rounded-lg p-2 text-sm outline-none"></textarea>
         </div>
 
         <button onclick="registrarMovimientoOperacion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-sm transition">
@@ -197,7 +197,7 @@
 
     let historialMovimientosActual = [];
 
-    // REPRODUCTOR DE EFECTOS DE SONIDO SINTETIZADOS EN TIEMPO REAL
+    // EFECTOS DE SONIDO SINTETIZADOS
     function reproducirSonidoMoneda() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -234,7 +234,7 @@
       } catch(e) {}
     }
 
-    // VOZ FLUIDA Y ALEGRE EN ESPAÑOL
+    // VOZ UNIFICADA AMIGABLE (Prioriza 'Dani', 'Helena' o voz femenina en español)
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -246,15 +246,13 @@
         const voces = window.speechSynthesis.getVoices();
         let vozIdeal = voces.find(v => 
           v.lang.startsWith('es') && (
-            v.name.toLowerCase().includes('female') || 
-            v.name.toLowerCase().includes('mujer') || 
-            v.name.includes('Lucia') || 
-            v.name.includes('Monica') || 
-            v.name.includes('Helena') || 
-            v.name.includes('Sofia') || 
-            v.name.includes('Victoria') || 
-            v.name.includes('Google español') ||
-            v.name.includes('Microsoft')
+            v.name.toLowerCase().includes('dani') || 
+            v.name.toLowerCase().includes('helena') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('monica') || 
+            v.name.toLowerCase().includes('sofia') || 
+            v.name.toLowerCase().includes('female') ||
+            v.name.toLowerCase().includes('google español')
           )
         );
 
@@ -286,17 +284,19 @@
 
       if (!codigo || !clave) {
         errorDiv.textContent = "Por favor complete todos los campos.";
+        hablarTextoVoz("Por favor complete todos los campos.");
         return;
       }
 
       if (typeof ejecutarLoginSistema === 'function') {
         errorDiv.textContent = "Verificando acceso...";
         ejecutarLoginSistema(codigo, clave, function(res) {
-          if (res && (res.success || res.ok)) {
+          // VALIDACIÓN ESTRICTA DE CREDENCIALES
+          if (res && (res.success === true || res.ok === true) && res.estudiante) {
             document.getElementById('vistaLogin').classList.add('hidden');
             document.getElementById('vistaPrincipal').classList.remove('hidden');
 
-            const est = res.estudiante || res;
+            const est = res.estudiante;
             const cuenta = res.cuenta || res;
 
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
@@ -304,7 +304,6 @@
 
             historialMovimientosActual = res.movimientos || [];
 
-            // ANUNCIO EN VOZ DEL ABONO MÁS RECIENTE SI EXISTE
             let textoAbonoReciente = "";
             if (historialMovimientosActual.length > 0) {
               const movIngreso = historialMovimientosActual.find(m => {
@@ -326,7 +325,6 @@
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
             document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
             
-            // CONSERVAR Y RENDERIZAR LA FOTO DEL ALUMNO
             let fotoUrl = est.foto || est.fotoUrl || res.foto || "";
             if (fotoUrl && fotoUrl.includes("drive.google.com/file/d/")) {
               const match = fotoUrl.match(/\/d\/([^/]+)/);
@@ -342,7 +340,10 @@
             }, 300);
 
           } else {
-            errorDiv.textContent = res.message || res.mensaje || "Credenciales incorrectas.";
+            const mensajeError = res.message || res.mensaje || "Código o clave incorrecta. Verifique sus datos.";
+            errorDiv.textContent = mensajeError;
+            reproducirSonidoMoneda();
+            hablarTextoVoz("Acceso denegado. Código o clave incorrecta.");
           }
         });
       }
@@ -371,7 +372,6 @@
       document.getElementById('inputObservacion').value = '';
       document.getElementById('mensajeOperacion').textContent = '';
 
-      // VOZ DE GUIADO INTERACTIVO
       hablarTextoVoz("Estás en la sección de Pagar. Primero selecciona la categoría y luego el concepto de tu pago.");
     }
 
@@ -400,12 +400,25 @@
       }
     }
 
+    function alCambiarMonto() {
+      const monto = document.getElementById('inputMonto').value;
+      if (monto && monto > 0) {
+        hablarTextoVoz(`Monto ingresado: ${monto} LDS. Ahora selecciona al responsable del registro.`);
+      }
+    }
+
+    function alCambiarResponsable() {
+      const resp = document.getElementById('selectResponsable').value;
+      if (resp) {
+        hablarTextoVoz(`Responsable seleccionado: ${resp}. Ya puedes confirmar tu pago.`);
+      }
+    }
+
     function accionBotonMovimientos() {
       reproducirSonidoMoneda();
       document.getElementById('seccionOperacion').classList.add('hidden');
       document.getElementById('seccionMovimientos').classList.remove('hidden');
 
-      // CONTAR CUÁNTOS ABONOS Y PAGOS TIENE EL NIÑO PARA SU META DEL DÍA
       let cantidadAbonos = 0;
       if (historialMovimientosActual && historialMovimientosActual.length > 0) {
         cantidadAbonos = historialMovimientosActual.filter(m => {
