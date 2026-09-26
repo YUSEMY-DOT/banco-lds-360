@@ -56,14 +56,9 @@
       <div id="loginError" class="text-red-600 text-sm text-center min-h-[20px]"></div>
     </div>
 
-    <!-- VISTA PRINCIPAL DEL ESTUDIANTE -->
+    <!-- VISTA PRINCIPAL DEL ESTUDIANTE (LIMPIA Y SIN CARTEL VISUAL) -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
-      <!-- SALUDO MOTIVADOR PERSONALIZADO CON LA FRASE INSTITUCIONAL -->
-      <div id="tarjetaSaludo" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-2xl shadow-md text-center">
-        <p id="textoSaludo" class="font-bold text-sm">¡Hola! Bienvenido. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?</p>
-      </div>
-
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
         <div class="flex justify-between items-center">
           <div>
@@ -220,25 +215,44 @@
       ]
     };
 
-    // VOZ FEMENINA CÁLIDA Y AMIGABLE
+    // VOZ FEMENINA ALEGRE, FLUIDA Y NATURAL
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(texto);
         utterance.lang = 'es-ES';
-        utterance.rate = 1.02;
-        utterance.pitch = 1.25;
+        utterance.rate = 1.0;  // Velocidad estable para que no se entrecorte
+        utterance.pitch = 1.35; // Tono alegre y juvenil (femenino)
 
         const voces = window.speechSynthesis.getVoices();
-        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.includes('Lucia') || v.name.includes('Monica') || v.name.includes('Helena') || v.name.includes('Sofia') || v.name.includes('Victoria') || v.name.includes('Mia') || v.name.includes('Paulina') || v.name.toLowerCase().includes('female')));
+        // Búsqueda específica de voz femenina en español
+        let vozIdeal = voces.find(v => 
+          v.lang.startsWith('es') && (
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('mujer') || 
+            v.name.includes('Lucia') || 
+            v.name.includes('Monica') || 
+            v.name.includes('Helena') || 
+            v.name.includes('Sofia') || 
+            v.name.includes('Victoria') || 
+            v.name.includes('Mia') || 
+            v.name.includes('Paulina') ||
+            v.name.includes('Sabina') ||
+            v.name.includes('Laura')
+          )
+        );
+
         if (!vozIdeal) {
           vozIdeal = voces.find(v => v.lang.startsWith('es'));
         }
+
         if (vozIdeal) {
           utterance.voice = vozIdeal;
         }
 
-        window.speechSynthesis.speak(utterance);
+        setTimeout(() => {
+          window.speechSynthesis.speak(utterance);
+        }, 150);
       }
     }
 
@@ -272,10 +286,9 @@
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
             const primerNombre = nombreCompleto.split(' ')[0];
 
-            // FRASE EXACTA SOLICITADA POR LA PROFESORA CON EL NOMBRE DEL NIÑO
-            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a la Banca Móvil de La Salle del Sur. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?`;
+            // FRASE EXACTA DE BIENVENIDA EN AUDIO
+            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a la banca móvil, La Salle del Sur. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?`;
             
-            document.getElementById('textoSaludo').textContent = textoSaludoFinal;
             document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
             document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
