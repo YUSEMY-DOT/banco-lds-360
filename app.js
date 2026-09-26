@@ -1,11 +1,10 @@
 /**
- * BANCO LDS 360 - Núcleo de Integración y Caché
+ * BANCO LDS 360 - Núcleo de Integración Principal
  * IEP La Salle del Sur
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
-// Función JSONP para saltar el bloqueo CORS de Google de forma transparente
 function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
   
@@ -47,7 +46,6 @@ function consultarDatosEstudiante(codigo, callback) {
 }
 
 function ejecutarLoginSistema(codigo, clave, callback) {
-  // Envía el código y la clave directamente a Google Apps Script para su validación en el servidor
   hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
     if (data && data.success) {
       localStorage.setItem('LDS_DATA_' + codigo, JSON.stringify(data));
