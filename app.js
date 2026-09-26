@@ -1,11 +1,11 @@
 /**
- * BANCO LDS 360 - Núcleo de Integración y Caché (VERSIÓN JSONP ORIGINAL)
+ * BANCO LDS 360 - Núcleo de Integración y Caché
  * IEP La Salle del Sur
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
-// Función JSONP que salta los bloqueos de seguridad de Google
+// Función JSONP para saltar el bloqueo CORS de Google de forma transparente
 function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
   
@@ -24,7 +24,7 @@ function hacerPeticionJSONP(parametros, callback) {
   script.src = url;
   
   script.onerror = function() {
-    callback({ success: false, message: "Error de red o conexión al servidor de Google." });
+    callback({ success: false, message: "Error de red o conexión." });
   };
 
   document.body.appendChild(script);
@@ -34,14 +34,10 @@ function consultarDatosEstudiante(codigo, callback) {
   const cacheKey = 'LDS_DATA_' + codigo;
   const cacheGuardada = localStorage.getItem(cacheKey);
 
-  // Muestra datos almacenados de inmediato
   if (cacheGuardada) {
-    try { 
-      callback(JSON.parse(cacheGuardada)); 
-    } catch(e) {}
+    try { callback(JSON.parse(cacheGuardada)); } catch(e) {}
   }
 
-  // Trae la información real mediante JSONP en segundo plano
   hacerPeticionJSONP({ action: 'CONSULTAR_ALUMNO', codigo: codigo }, function(datosRed) {
     if (datosRed && datosRed.success) {
       localStorage.setItem(cacheKey, JSON.stringify(datosRed));
@@ -50,8 +46,9 @@ function consultarDatosEstudiante(codigo, callback) {
   });
 }
 
-function ejecutarLoginSistema(codigo, hashClave, callback) {
-  hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, hash: hashClave }, function(data) {
+function ejecutarLoginSistema(codigo, clave, callback) {
+  // Envía el código y la clave directamente a Google Apps Script para su validación en el servidor
+  hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
     if (data && data.success) {
       localStorage.setItem('LDS_DATA_' + codigo, JSON.stringify(data));
     }
