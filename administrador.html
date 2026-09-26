@@ -14,7 +14,7 @@
 
   <header class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center">
     <h1 class="text-xl font-bold">IEP La Salle del Sur - BANCO LDS 360</h1>
-    <span class="text-sm bg-blue-700 px-3 py-1 rounded-full">Panel Administración</span>
+    <a href="index.html" class="text-sm bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-full transition">← Volver al Inicio</a>
   </header>
 
   <main class="max-w-4xl mx-auto p-4 space-y-6">
@@ -103,12 +103,9 @@
           html5QrCode = new Html5Qrcode("reader");
         }
         
-        // Detección inteligente: Compatible con PC y Celular
         Html5Qrcode.getCameras().then(devices => {
           if (devices && devices.length > 0) {
-            let cameraId = devices[0].id; // Por defecto la primera cámara (PC Webcam)
-            
-            // Si hay varias cámaras, buscar la trasera (para celulares)
+            let cameraId = devices[0].id;
             for (let i = 0; i < devices.length; i++) {
               if (devices[i].label.toLowerCase().includes('back') || devices[i].label.toLowerCase().includes('trasera')) {
                 cameraId = devices[i].id;
@@ -141,9 +138,7 @@
       buscarEstudiante();
     }
 
-    function onScanError(error) {
-      // Ignorar errores por fotogramas vacíos
-    }
+    function onScanError(error) {}
 
     function detenerEscaner() {
       if (html5QrCode && escanerActivo) {
