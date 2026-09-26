@@ -1,5 +1,5 @@
 /**
- * BANCO LDS 360 - Núcleo de Integración Principal
+ * BANCO LDS 360 - Núcleo de Integración Optimizado (Velocidad Instantánea)
  * IEP La Salle del Sur
  */
 
@@ -10,7 +10,9 @@ function hacerPeticionJSONP(parametros, callback) {
   
   window[nombreCallback] = function(data) {
     delete window[nombreCallback];
-    document.body.removeChild(script);
+    if (script && script.parentNode) {
+      document.body.removeChild(script);
+    }
     callback(data);
   };
 
@@ -33,12 +35,13 @@ function consultarDatosEstudiante(codigo, callback) {
   const cacheKey = 'LDS_DATA_' + codigo;
   const cacheGuardada = localStorage.getItem(cacheKey);
 
+  // Si hay datos guardados, se muestran al instante para cero esperas
   if (cacheGuardada) {
     try { callback(JSON.parse(cacheGuardada)); } catch(e) {}
   }
 
   hacerPeticionJSONP({ action: 'CONSULTAR_ALUMNO', codigo: codigo }, function(datosRed) {
-    if (datosRed && datosRed.success) {
+    if (datosRed && (datosRed.success || datosRed.ok)) {
       localStorage.setItem(cacheKey, JSON.stringify(datosRed));
       callback(datosRed);
     }
@@ -46,9 +49,20 @@ function consultarDatosEstudiante(codigo, callback) {
 }
 
 function ejecutarLoginSistema(codigo, clave, callback) {
+  const cacheKey = 'LDS_LOGIN_' + codigo;
+  const cacheGuardada = localStorage.getItem(cacheKey);
+
+  // Respuesta flash usando caché local si ya ingresó antes
+  if (cacheGuardada) {
+    try { 
+      const datosPrevios = JSON.parse(cacheGuardada);
+      callback(datosPrevios); 
+    } catch(e) {}
+  }
+
   hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
-    if (data && data.success) {
-      localStorage.setItem('LDS_DATA_' + codigo, JSON.stringify(data));
+    if (data && (data.success || data.ok)) {
+      localStorage.setItem(cacheKey, JSON.stringify(data));
     }
     callback(data);
   });
@@ -62,11 +76,8 @@ function registrarTransaccionSistema(codigo, tipo, monto, concepto, callback) {
     monto: monto, 
     concepto: concepto || 'General' 
   }, function(res) {
-    if (res && res.success) {
-      const cacheKey = 'LDS_DATA_' + codigo;
-      const cache = JSON.parse(localStorage.getItem(cacheKey) || '{}');
-      cache.saldo = res.nuevoSaldo;
-      localStorage.setItem(cacheKey, JSON.stringify(cache));
+    if (res && (res.success || res.ok)) {
+      localStorage.removeItem('LDS_LOGIN_' + codigo); // Limpia caché para forzar actualización de saldo fresco
     }
     callback(res || { success: false });
   });
