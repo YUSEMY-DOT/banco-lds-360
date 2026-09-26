@@ -53,20 +53,6 @@
         Ingresar
       </button>
 
-      <!-- PROBADOR DE VOCES (Optimizado sin pausas) -->
-      <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-        <label class="block text-xs font-bold text-blue-900">🔊 Selector de Voz Fluida:</label>
-        <select id="selectVoces" class="w-full border rounded-lg p-2 text-xs bg-white outline-none">
-          <option value="">Cargando voces disponibles...</option>
-        </select>
-        <button 
-          onclick="probarVozSeleccionada()" 
-          class="w-full bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-2 rounded-lg transition"
-        >
-          ▶ Probar voz fluida
-        </button>
-      </div>
-
       <div id="loginError" class="text-red-600 text-sm text-center min-h-[20px]"></div>
     </div>
 
@@ -90,22 +76,19 @@
         <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
-      <!-- 3 BOTONES INTERNOS CON COLORES FORZADOS (Cobrar Verde, Pagar Rojo, Movimientos Lila) -->
-      <div class="grid grid-cols-3 gap-2">
-        <button onclick="seleccionarOperacion('INGRESO')" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #16a34a !important;">
-          💰 COBRAR
+      <!-- 2 BOTONES INTERNOS (Pagar Rojo, Movimientos Lila - Cobrar removido para alumnos) -->
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="accionBotonPagar()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2" style="background-color: #e11d48 !important;">
+          💸 PAGAR / GASTOS
         </button>
-        <button onclick="seleccionarOperacion('EGRESO')" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #e11d48 !important;">
-          💸 PAGAR
-        </button>
-        <button onclick="mostrarSeccionMovimientos()" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #9333ea !important;">
+        <button onclick="accionBotonMovimientos()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2" style="background-color: #9333ea !important;">
           📋 MOVIMIENTOS
         </button>
       </div>
 
-      <!-- FORMULARIO DE OPERACIÓN DINÁMICO -->
+      <!-- FORMULARIO DE OPERACIÓN (SOLO PAGOS / GASTOS / MULTAS / AHORROS) -->
       <div id="seccionOperacion" class="hidden bg-white p-5 rounded-2xl shadow space-y-3">
-        <h4 id="tituloOperacion" class="font-bold text-gray-700 text-sm">Nueva Operación</h4>
+        <h4 id="tituloOperacion" class="font-bold text-gray-700 text-sm">Registrar Pago o Gasto</h4>
         
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Categoría</label>
@@ -127,7 +110,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-gray-600 mb-1">Responsable</label>
+          <label class="block text-xs font-medium text-gray-600 mb-1">Responsable del Registro</label>
           <select id="selectResponsable" class="w-full border rounded-lg p-2 text-sm outline-none">
             <option value="">Seleccione responsable</option>
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
@@ -143,14 +126,14 @@
         </div>
 
         <button onclick="registrarMovimientoOperacion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-sm transition">
-          Registrar Movimiento
+          Confirmar y Registrar Pago
         </button>
         <div id="mensajeOperacion" class="text-xs text-center min-h-[18px]"></div>
       </div>
 
       <!-- LISTA DE MOVIMIENTOS -->
       <div id="seccionMovimientos" class="bg-white p-4 rounded-2xl shadow space-y-3">
-        <h4 class="font-bold text-gray-700 text-sm">Historial de Movimientos</h4>
+        <h4 class="font-bold text-gray-700 text-sm">Historial de Movimientos y Abonos</h4>
         <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
           <p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>
         </div>
@@ -168,25 +151,7 @@
   </footer>
 
   <script>
-    let tipoOperacionActual = "";
     let catalogoGlobal = {
-      "INGRESOS_Y_SUELDOS": [
-        "Ingreso Sueldo Base Mensual", 
-        "Ingreso Sueldo por Rol de Liderazgo", 
-        "Ingreso Bono por desempeño"
-      ],
-      "PREMIOS_Y_BONIFICACIONES": [
-        "Bono por llevar el uniforme impecable y reglamentario", 
-        "Bono Participación destacada en clase", 
-        "Bono Premio por primer lugar en concurso académico o deportivo", 
-        "Bono Puntualidad y asistencia perfecta", 
-        "Bono Apoyo destacado en limpieza", 
-        "Bono por ayuda solidaria", 
-        "Bono Creatividad e innovación", 
-        "Bono Representar dignamente al colegio", 
-        "Bono Leer un libro y presentar evidencia", 
-        "Bono Completar un reto educativo"
-      ],
       "AHORROS_E_INVERSIONES": [
         "Depósito a cuenta de ahorros (Ahorro voluntario)", 
         "Inversión en fondo común del aula", 
@@ -229,59 +194,14 @@
       ]
     };
 
-    let listaVocesDisponibles = [];
-
-    function cargarListaVoces() {
-      if (!('speechSynthesis' in window)) return;
-      listaVocesDisponibles = window.speechSynthesis.getVoices();
-      const select = document.getElementById('selectVoces');
-      if (!select) return;
-
-      select.innerHTML = '';
-      let vocesEspanol = listaVocesDisponibles.filter(v => v.lang.startsWith('es'));
-      if (vocesEspanol.length === 0) vocesEspanol = listaVocesDisponibles;
-
-      vocesEspanol.forEach((voz, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${voz.name} (${voz.lang})`;
-        select.appendChild(option);
-      });
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = cargarListaVoces;
-      setTimeout(cargarListaVoces, 500);
-    }
-
-    function probarVozSeleccionada() {
-      if (!('speechSynthesis' in window)) return;
-      const select = document.getElementById('selectVoces');
-      const indice = select.value;
-      if (indice === "" || !listaVocesDisponibles[indice]) return;
-
-      window.speechSynthesis.cancel();
-      // Texto optimizado sin pausas robóticas
-      const textoPrueba = "Hola Adam, bienvenida a la banca móvil de La Salle del Sur. Estamos listos para ayudarte, qué deseas realizar hoy.";
-      const utterance = new SpeechSynthesisUtterance(textoPrueba);
-      utterance.voice = listaVocesDisponibles[indice];
-      utterance.rate = 1.05; // Velocidad más fluida
-      utterance.pitch = 1.2;
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    // SÍNTESIS DE VOZ FLUIDA (Elimina pausas excesivas de puntos y comas)
+    // VOZ FLUIDA Y ALEGRE
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        
-        // Limpiamos los puntos y signos fuertes para evitar pausas robóticas
         const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
-        
         const utterance = new SpeechSynthesisUtterance(textoLimpio);
-        utterance.rate = 1.06; // Ligeramente más dinámica y natural
-        utterance.pitch = 1.25; // Tono alegre
+        utterance.rate = 1.05;
+        utterance.pitch = 1.25;
 
         const voces = window.speechSynthesis.getVoices();
         let vozIdeal = voces.find(v => 
@@ -312,6 +232,12 @@
       }
     }
 
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
     function procesarLoginAlumno() {
       const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
       const clave = document.getElementById('loginClave').value.trim();
@@ -336,7 +262,24 @@
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
             const primerNombre = nombreCompleto.split(' ')[0];
 
-            const textoSaludoFinal = `Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur. Estamos listos para ayudarte, qué deseas realizar hoy.`;
+            // BUSCAR SI TIENE UN ABONO O SUELDO RECIENTE EN SUS MOVIMIENTOS
+            let textoAbonoReciente = "";
+            if (res.movimientos && res.movimientos.length > 0) {
+              const movIngreso = res.movimientos.find(m => {
+                const t = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
+                const montoVal = Number(m.monto || m.montoLDS || 0);
+                return t.includes('INGRESO') || t.includes('ABONO') || montoVal > 0;
+              });
+              if (movIngreso) {
+                const resp = movIngreso.responsable || "una profesora";
+                const monto = movIngreso.monto || movIngreso.montoLDS || 0;
+                const concepto = movIngreso.concepto || movIngreso.descripcion || "abono";
+                textoAbonoReciente = ` Hoy recibiste un abono de ${resp} por ${monto} L D S para ${concepto}. ¡Muchas felicidades!`;
+              }
+            }
+
+            // FRASE EXACTA COMBINADA CON EL ABONO RECIENTE
+            const textoSaludoFinal = `Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.${textoAbonoReciente} Estamos listos para ayudarte, qué deseas realizar hoy.`;
             
             document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
@@ -362,22 +305,16 @@
       }
     }
 
-    function seleccionarOperacion(tipo) {
-      tipoOperacionActual = tipo;
+    function accionBotonPagar() {
       document.getElementById('seccionOperacion').classList.remove('hidden');
       document.getElementById('seccionMovimientos').classList.add('hidden');
-      document.getElementById('tituloOperacion').textContent = tipo === 'INGRESO' ? "💰 Registrar Cobro (Ingresos / Bonos)" : "💸 Registrar Pago (Gastos / Multas)";
+      document.getElementById('tituloOperacion').textContent = "💸 Registrar Pago, Gasto o Multa";
       
       const selectCat = document.getElementById('selectCategoria');
       selectCat.innerHTML = '<option value="">Seleccione categoría</option>';
 
-      let categoriasPermitidas = [];
-      if (tipo === 'INGRESO') {
-        categoriasPermitidas = ["INGRESOS_Y_SUELDOS", "PREMIOS_Y_BONIFICACIONES"];
-      } else {
-        categoriasPermitidas = ["AHORROS_E_INVERSIONES", "PAGOS_Y_GASTOS", "SANCIONES_Y_MULTAS", "COSTOS_Y_OTROS"];
-      }
-
+      // Solo categorías de egreso/pago para estudiantes
+      const categoriasPermitidas = ["AHORROS_E_INVERSIONES", "PAGOS_Y_GASTOS", "SANCIONES_Y_MULTAS", "COSTOS_Y_OTROS"];
       categoriasPermitidas.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat;
@@ -390,6 +327,17 @@
       document.getElementById('selectResponsable').value = '';
       document.getElementById('inputObservacion').value = '';
       document.getElementById('mensajeOperacion').textContent = '';
+
+      // VOZ PARLANTE DEL BOTÓN
+      hablarTextoVoz("Sección de pagos y gastos. Selecciona tu concepto y monto.");
+    }
+
+    function accionBotonMovimientos() {
+      document.getElementById('seccionOperacion').classList.add('hidden');
+      document.getElementById('seccionMovimientos').classList.remove('hidden');
+
+      // VOZ PARLANTE DEL BOTÓN
+      hablarTextoVoz("Aquí puedes revisar tu historial de movimientos y abonos recientes.");
     }
 
     function cargarConceptosFiltrados() {
@@ -405,11 +353,6 @@
         opt.textContent = con;
         selectCon.appendChild(opt);
       });
-    }
-
-    function mostrarSeccionMovimientos() {
-      document.getElementById('seccionOperacion').classList.add('hidden');
-      document.getElementById('seccionMovimientos').classList.remove('hidden');
     }
 
     function registrarMovimientoOperacion() {
@@ -428,20 +371,14 @@
       }
 
       msg.className = "text-xs text-blue-600 font-bold";
-      msg.textContent = "Registrando movimiento...";
+      msg.textContent = "Registrando pago...";
 
       if (typeof registrarTransaccionSistema === 'function') {
-        registrarTransaccionSistema(codigo, tipoOperacionActual, monto, con, resp, obs, function(res) {
+        registrarTransaccionSistema(codigo, 'EGRESO', monto, con, resp, obs, function(res) {
           if (res && (res.success || res.ok)) {
             msg.className = "text-xs text-emerald-600 font-extrabold";
             
-            let textoFelicitacion = "";
-            if (tipoOperacionActual === 'INGRESO') {
-              textoFelicitacion = `Muchísimas felicidades, has conseguido ${monto} LDS el día de hoy, qué gran trabajo.`;
-            } else {
-              textoFelicitacion = `Excelente, estás cumpliendo muy bien con tu misión y responsabilidad, pago registrado con éxito.`;
-            }
-            
+            const textoFelicitacion = `Excelente, estás cumpliendo muy bien con tu misión y responsabilidad, pago registrado con éxito.`;
             msg.textContent = textoFelicitacion;
 
             hablarTextoVoz(textoFelicitacion);
@@ -495,13 +432,14 @@
         const tipo = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
         const monto = Number(m.monto || m.montoLDS || 0);
         const positivo = tipo.includes('INGRESO') || tipo.includes('ABONO') || monto >= 0;
+        const responsableNombre = m.responsable ? ` (${m.responsable})` : '';
 
         const item = document.createElement('div');
         item.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 border-l-4 " + 
           (positivo ? 'border-emerald-500' : 'border-rose-500');
         item.innerHTML = `
           <div>
-            <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}</p>
+            <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}${responsableNombre}</p>
             <p class="text-[10px] text-gray-400">${m.fecha || ''}</p>
           </div>
           <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
