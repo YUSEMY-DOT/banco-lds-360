@@ -3,8 +3,8 @@
  * IEP La Salle del Sur
  */
 
-// URL de tu implementación Web App de Google Apps Script
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID/exec";
+// URL oficial de tu Web App de Google Apps Script
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
 /**
  * Consulta la información del estudiante priorizando la caché de localStorage para máxima velocidad.
