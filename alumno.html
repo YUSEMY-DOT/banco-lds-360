@@ -59,6 +59,11 @@
     <!-- VISTA PRINCIPAL DEL ESTUDIANTE -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
+      <!-- SALUDO MOTIVADOR PERSONALIZADO -->
+      <div id="tarjetaSaludo" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-2xl shadow-md text-center">
+        <p id="textoSaludo" class="font-bold text-sm">¡Bienvenido a tu banco, La Salle del Sur! ¿Qué vas a hacer el día de hoy?</p>
+      </div>
+
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
         <div class="flex justify-between items-center">
           <div>
@@ -215,6 +220,18 @@
       ]
     };
 
+    // FUNCIÓN DE SÍNTESIS DE VOZ PARA HABLARLE AL NIÑO
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Detiene cualquier voz anterior
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-ES';
+        utterance.rate = 1.0;  // Velocidad normal
+        utterance.pitch = 1.1; // Tono ligeramente más amigable para niños
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
     function procesarLoginAlumno() {
       const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
       const clave = document.getElementById('loginClave').value.trim();
@@ -236,7 +253,12 @@
             const est = res.estudiante || res;
             const cuenta = res.cuenta || res;
 
-            document.getElementById('alumnoNombre').textContent = est.nombreCompleto || est.nombre || 'Estudiante';
+            const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
+            const primerNombre = nombreCompleto.split(' ')[0];
+
+            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a tu banco, La Salle del Sur. ¿Qué vas a hacer el día de hoy?`;
+            document.getElementById('textoSaludo').textContent = textoSaludoFinal;
+            document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
             document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
             
@@ -248,6 +270,10 @@
             if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
 
             renderizarMovimientos(res.movimientos || []);
+
+            // HABLAR EL SALUDO EN VOZ ALTA
+            hablarTextoVoz(textoSaludoFinal);
+
           } else {
             errorDiv.textContent = res.message || res.mensaje || "Credenciales incorrectas.";
           }
@@ -326,10 +352,21 @@
       if (typeof registrarTransaccionSistema === 'function') {
         registrarTransaccionSistema(codigo, tipoOperacionActual, monto, con, resp, obs, function(res) {
           if (res && (res.success || res.ok)) {
-            msg.className = "text-xs text-emerald-600 font-bold";
-            msg.textContent = "¡Movimiento registrado con éxito!";
+            msg.className = "text-xs text-emerald-600 font-extrabold";
             
-            // ACTUALIZACIÓN INMEDIATA DEL SALDO Y DEL HISTORIAL DE MOVIMIENTOS
+            let textoFelicitacion = "";
+            if (tipoOperacionActual === 'INGRESO') {
+              textoFelicitacion = `¡Bravo! Has conseguido el día de hoy ${monto} L D S. ¡Excelente trabajo!`;
+            } else {
+              textoFelicitacion = `¡Bien hecho! Estás cumpliendo con tu misión. El pago ha sido registrado.`;
+            }
+            
+            msg.textContent = textoFelicitacion;
+
+            // HABLAR LA FELICITACIÓN EN VOZ ALTA
+            hablarTextoVoz(textoFelicitacion);
+            
+            // ACTUALIZACIÓN INMEDIATA DEL SALDO Y DEL HISTORIAL
             if(res.nuevoSaldo) {
               document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
             }
@@ -356,7 +393,7 @@
               document.getElementById('selectResponsable').value = '';
               document.getElementById('inputObservacion').value = '';
               msg.textContent = '';
-            }, 1200);
+            }, 3000);
 
           } else {
             msg.className = "text-xs text-red-600 font-bold";
