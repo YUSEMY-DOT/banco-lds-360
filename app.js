@@ -3,7 +3,7 @@
  * IEP La Salle del Sur
  */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
 
 function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
