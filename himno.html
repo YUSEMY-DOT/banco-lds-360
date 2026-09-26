@@ -3,293 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Himno Marcial Dinámico - IEP La Salle del Sur</title>
+  <title>Himno Institucional - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @keyframes pulseBar {
-      0%, 100% { height: 10px; }
-      50% { height: 50px; }
-    }
-    .active-bar {
-      animation: pulseBar 0.4s infinite ease-in-out alternate;
-    }
-  </style>
 </head>
-<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
+<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between p-4 font-sans">
 
   <!-- ENCABEZADO -->
   <header class="text-center py-6">
-    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1 rounded-full font-extrabold uppercase tracking-widest mb-2 shadow">
-      🥁 Banda de Guerra y Trompetas Escolar
-    </div>
-    <h1 class="text-3xl sm:text-4xl font-black text-amber-400 uppercase tracking-wider drop-shadow-lg">
+    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1 rounded-full font-bold uppercase tracking-widest mb-2">
       IEP La Salle del Sur
+    </div>
+    <h1 class="text-3xl font-extrabold text-amber-400 uppercase tracking-wider">
+      Himno Institucional
     </h1>
-    <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">Marcha Institucional Alegre y Dinámica</p>
+    <p class="text-xs text-slate-400 mt-1">"Enseñanza, Disciplina y Lealtad"</p>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL DEL REPRODUCTOR -->
-  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-500/30 space-y-8 my-auto text-center">
-    
-    <!-- ICONO ANIMADO -->
-    <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-500 via-orange-500 to-indigo-600 rounded-full p-1 shadow-2xl flex items-center justify-center">
-      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner">
-        🎺
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-xl mx-auto w-full space-y-6 my-auto">
+
+    <!-- SECCIÓN 1: REPRODUCTOR DE GRABACIÓN / AUDIO REAL -->
+    <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 space-y-4">
+      <h2 class="text-base font-bold text-amber-300 flex items-center gap-2">
+        🎙️ Cargar / Escuchar Audio Real (MP3 o Grabación)
+      </h2>
+      <p class="text-xs text-slate-300">
+        Si tienes un audio grabado en tu celular cantando o tarareando el himno, selecciónalo aquí para escucharlo directamente en la página:
+      </p>
+
+      <input 
+        type="file" 
+        id="archivoAudio" 
+        accept="audio/*" 
+        onchange="cargarAudioReal(event)" 
+        class="block w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer"
+      />
+
+      <audio id="reproductorAudio" controls class="w-full hidden mt-2 rounded-lg bg-slate-900"></audio>
+    </div>
+
+    <!-- SECCIÓN 2: PIANO DIGITAL INTERACTIVO (PARA PRACTICAR Y TOCAR) -->
+    <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 space-y-4 text-center">
+      <h2 class="text-base font-bold text-indigo-300">
+        🎹 Piano / Teclado Guiado de Notas
+      </h2>
+      <p class="text-xs text-slate-400">
+        Presiona las teclas para ensayar la melodía sílaba por sílaba:
+      </p>
+
+      <!-- TECLAS DE PIANO -->
+      <div class="flex justify-center items-center gap-1.5 pt-2 overflow-x-auto pb-2">
+        <button onclick="tocarNota(261.63)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">DO</button>
+        <button onclick="tocarNota(293.66)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">RE</button>
+        <button onclick="tocarNota(329.63)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">MI</button>
+        <button onclick="tocarNota(349.23)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">FA</button>
+        <button onclick="tocarNota(392.00)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">SOL</button>
+        <button onclick="tocarNota(440.00)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">LA</button>
+        <button onclick="tocarNota(493.88)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">SI</button>
+        <button onclick="tocarNota(523.25)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">DO°</button>
       </div>
     </div>
-
-    <!-- ECUALIZADOR ANIMADO -->
-    <div id="visualizador" class="h-14 flex justify-center items-end gap-1.5 opacity-30 transition-opacity duration-300">
-      <div class="w-2 bg-amber-400 rounded-full active-bar" style="animation-delay: 0.1s;"></div>
-      <div class="w-2 bg-yellow-400 rounded-full active-bar" style="animation-delay: 0.3s;"></div>
-      <div class="w-2 bg-emerald-400 rounded-full active-bar" style="animation-delay: 0.2s;"></div>
-      <div class="w-2 bg-indigo-400 rounded-full active-bar" style="animation-delay: 0.4s;"></div>
-      <div class="w-2 bg-amber-400 rounded-full active-bar" style="animation-delay: 0.15s;"></div>
-      <div class="w-2 bg-rose-400 rounded-full active-bar" style="animation-delay: 0.35s;"></div>
-      <div class="w-2 bg-emerald-400 rounded-full active-bar" style="animation-delay: 0.25s;"></div>
-    </div>
-
-    <!-- BOTONES DE CONTROL -->
-    <div class="space-y-3 pt-2">
-      <button 
-        id="btnPlay" 
-        onclick="iniciarMarcha()" 
-        class="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
-      >
-        <span class="text-2xl">▶</span> Escuchar Marcha con Tambores
-      </button>
-
-      <button 
-        id="btnStop" 
-        onclick="detenerMarcha()" 
-        class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
-      >
-        <span>⏹</span> Detener Música
-      </button>
-    </div>
-
-    <p id="estadoTexto" class="text-xs text-amber-300 font-medium">
-      Presiona el botón verde para escuchar la banda escolar.
-    </p>
 
   </main>
 
   <footer class="text-center py-4 text-xs text-slate-500">
-    © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
+    © IEP La Salle del Sur — Panel de Música Institucional
   </footer>
 
-  <!-- SINTETIZADOR DE PERCUSIÓN Y TROMPETAS -->
   <script>
     let audioCtx = null;
-    let timerID = null;
-    let sonando = false;
 
-    // 1. INSTRUMENTO: BOMBO MARCIAL DE MAMPARRO
-    function playBombo(ctx, t) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.frequency.setValueAtTime(140, t);
-      osc.frequency.exponentialRampToValueAtTime(38, t + 0.12);
-      gain.gain.setValueAtTime(0.7, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.12);
+    function cargarAudioReal(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const audioPlayer = document.getElementById('reproductorAudio');
+        audioPlayer.src = URL.createObjectURL(file);
+        audioPlayer.classList.remove('hidden');
+        audioPlayer.play();
+      }
     }
 
-    // 2. INSTRUMENTO: CAJA / REDOBLANTE CON MENTONERA
-    function playRedoblante(ctx, t, acento = false) {
-      const bufferSize = ctx.sampleRate * (acento ? 0.09 : 0.06);
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'highpass';
-      filter.frequency.value = 1200;
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(acento ? 0.4 : 0.22, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + (acento ? 0.09 : 0.06));
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      noise.start(t);
-    }
-
-    // 3. INSTRUMENTO: PLATILLAZO DE BANDA
-    function playPlatillo(ctx, t) {
-      const bufferSize = ctx.sampleRate * 0.3;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'highpass';
-      filter.frequency.value = 3500;
-
-      const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.35, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-      noise.start(t);
-    }
-
-    // 4. INSTRUMENTO: TROMPETA BRILLANTE DE MARCHA
-    function playTrompeta(ctx, freq, t, dur) {
-      if (!freq) return;
-
-      // Dos osciladores acoplados para simular cuerpo de metales
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-
-      osc1.type = 'sawtooth';
-      osc2.type = 'sawtooth';
-
-      osc1.frequency.setValueAtTime(freq, t);
-      osc2.frequency.setValueAtTime(freq * 1.003, t); // Ligerísimo ataque para brillo
-
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1800, t);
-      filter.frequency.linearRampToValueAtTime(3200, t + 0.05); // Ataque metálico de trompeta
-      filter.frequency.exponentialRampToValueAtTime(1600, t + dur);
-
-      gain.gain.setValueAtTime(0.35, t);
-      gain.gain.linearRampToValueAtTime(0.4, t + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur - 0.01);
-
-      osc1.connect(filter);
-      osc2.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc1.start(t);
-      osc2.start(t);
-      osc1.stop(t + dur);
-      osc2.stop(t + dur);
-    }
-
-    async function iniciarMarcha() {
-      if (sonando) return;
-
-      try {
+    function tocarNota(freq) {
+      if (!audioCtx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
-
-        if (audioCtx.state === 'suspended') {
-          await audioCtx.resume();
-        }
-
-        sonando = true;
-        document.getElementById('btnPlay').classList.add('hidden');
-        document.getElementById('btnStop').classList.remove('hidden');
-        document.getElementById('visualizador').classList.remove('opacity-30');
-        document.getElementById('visualizador').classList.add('opacity-100');
-        document.getElementById('estadoTexto').textContent = "🎺 ¡Sonando Marcha Institucional con Tambores y Trompetas!";
-
-        // FRECUENCIAS ESCALA SOL MAYOR (Alegre y brillante)
-        const G4 = 392.00, A4 = 440.00, B4 = 493.88, C5 = 523.25, D5 = 587.33, E5 = 659.25, G5 = 783.99;
-
-        // TIEMPOS Y RITMO EN SEGUNDOS (124 BPM)
-        const tStep = 0.24; // Pulso de corchea marcial
-
-        // SECUENCIA DE MELODÍA DE TROMPETAS
-        const notasTrompeta = [
-          // INTRO FANFARRIA
-          { f: G5, d: 1 }, { f: G5, d: 1 }, { f: G5, d: 1 }, { f: A4, d: 1 }, { f: B4, d: 2 },
-          
-          // APRENDIENDO CON METAS Y VALORES...
-          { f: G4, d: 1.5 }, { f: G4, d: 1.5 }, { f: G4, d: 1.5 }, { f: A4, d: 1.5 }, { f: B4, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 3 },
-          { f: B4, d: 1.5 }, { f: C5, d: 1.5 }, { f: D5, d: 1.5 }, { f: D5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 3 },
-
-          // LASALLISTA DEL SUR ES NUESTRO EJEMPLO...
-          { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 1.5 }, { f: A4, d: 1.5 }, { f: B4, d: 1.5 }, { f: C5, d: 1.5 }, { f: D5, d: 3 },
-          { f: D5, d: 1.5 }, { f: E5, d: 1.5 }, { f: D5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 4 },
-
-          // ESTROFA: COMO SIEMPRE UN PASO ADELANTE...
-          { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 1.5 }, { f: A4, d: 1.5 }, { f: B4, d: 1.5 },
-          { f: B4, d: 1.5 }, { f: C5, d: 1.5 }, { f: D5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 3 },
-
-          // REMATE Y REMATE FINAL
-          { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 1.5 }, { f: A4, d: 1.5 }, { f: B4, d: 1.5 }, { f: C5, d: 1.5 }, { f: D5, d: 3 },
-          { f: D5, d: 1.5 }, { f: E5, d: 1.5 }, { f: D5, d: 1.5 }, { f: C5, d: 1.5 }, { f: B4, d: 1.5 }, { f: A4, d: 1.5 }, { f: G4, d: 5 }
-        ];
-
-        let currTime = audioCtx.currentTime + 0.1;
-
-        // PROGRAMAR TROMPETAS
-        notasTrompeta.forEach(item => {
-          const durSec = item.d * tStep;
-          playTrompeta(audioCtx, item.f, currTime, durSec);
-          currTime += durSec;
-        });
-
-        // PROGRAMAR BATERÍA / TAMBORES A LO LARGO DE LA MARCHA
-        let drumTime = audioCtx.currentTime + 0.1;
-        let stepCount = 0;
-
-        playPlatillo(audioCtx, drumTime); // Platillazo inicial de largada
-
-        while (drumTime < currTime) {
-          // Bombo en tiempos 1 y 3
-          if (stepCount % 4 === 0 || stepCount % 4 === 2) {
-            playBombo(audioCtx, drumTime);
-          }
-
-          // Redoblante en tiempos 2 y 4 con redobles intermedios
-          if (stepCount % 4 === 1 || stepCount % 4 === 3) {
-            playRedoblante(audioCtx, drumTime, true);
-            playRedoblante(audioCtx, drumTime + (tStep * 0.33), false); // Redoble
-          } else {
-            playRedoblante(audioCtx, drumTime + (tStep * 0.5), false);
-          }
-
-          // Platillazos estratégicos de acentuación
-          if (stepCount % 16 === 0 && stepCount > 0) {
-            playPlatillo(audioCtx, drumTime);
-          }
-
-          drumTime += tStep;
-          stepCount++;
-        }
-
-        // Programar fin automático
-        const tiempoTotal = (currTime - audioCtx.currentTime) * 1000;
-        timerID = setTimeout(() => {
-          detenerMarcha();
-        }, tiempoTotal);
-
-      } catch (err) {
-        alert("Error al activar audio: " + err.message);
       }
-    }
-
-    function detenerMarcha() {
-      if (audioCtx) {
-        audioCtx.close();
-        audioCtx = null;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
-      if (timerID) clearTimeout(timerID);
-      sonando = false;
 
-      document.getElementById('btnPlay').classList.remove('hidden');
-      document.getElementById('btnStop').classList.add('hidden');
-      document.getElementById('visualizador').classList.add('opacity-30');
-      document.getElementById('visualizador').classList.remove('opacity-100');
-      document.getElementById('estadoTexto').textContent = "Presiona el botón verde para escuchar la banda escolar.";
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
     }
   </script>
 </body>
