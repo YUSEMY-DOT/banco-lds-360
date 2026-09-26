@@ -3,67 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Himno Oficial - IEP La Salle del Sur</title>
+  <title>Himno Institucional - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
   <!-- ENCABEZADO -->
   <header class="text-center py-6">
-    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1 rounded-full font-bold uppercase tracking-widest mb-2 shadow">
+    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1.5 rounded-full font-extrabold uppercase tracking-widest mb-2 shadow">
       IEP La Salle del Sur
     </div>
-    <h1 class="text-3xl font-extrabold text-amber-400 uppercase tracking-wider">
-      Himno Institucional Oficial
+    <h1 class="text-3xl sm:text-4xl font-black text-amber-400 uppercase tracking-wider drop-shadow-md">
+      Himno Institucional
     </h1>
-    <p class="text-xs text-slate-300 mt-1 font-medium">"Enseñanza, Disciplina y Lealtad"</p>
+    <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">"Enseñanza, Disciplina y Lealtad"</p>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-500/30 space-y-6 my-auto text-center">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="max-w-lg mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-amber-500/30 space-y-6 my-auto text-center">
     
-    <!-- ICONO DE ESCUDO -->
+    <!-- EMBLEMA INSTITUCIONAL -->
     <div class="w-24 h-24 mx-auto bg-gradient-to-tr from-amber-500 to-indigo-600 rounded-full p-1 shadow-2xl flex items-center justify-center">
       <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-4xl shadow-inner">
-        🎵
+        🎤
       </div>
     </div>
 
-    <!-- BOTONES DE CONTROL DE MELODÍA SINTETIZADA -->
+    <!-- BOTÓN DE REPRODUCCIÓN DE VOZ REAL -->
     <div class="space-y-3 pt-2">
       <button 
         id="btnPlay" 
-        onclick="reproducirMelodiaVoz()" 
-        class="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
+        onclick="reproducirHimnoReal()" 
+        class="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
       >
-        <span class="text-2xl">▶</span> Escuchar Melodía del Himno
+        <span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!
       </button>
 
-      <button 
-        id="btnStop" 
-        onclick="detenerAudio()" 
-        class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
-      >
-        <span>⏹</span> Detener Melodía
-      </button>
+      <audio id="audioHimnoReal" src="himno.m4a" preload="auto"></audio>
     </div>
 
-    <p id="estadoTexto" class="text-xs text-amber-300 font-medium">
-      Haz clic en el botón verde para escuchar la melodía guiada.
-    </p>
+    <!-- LETRA EN VIVO PARA ACOMPAÑAR Y CANTAR -->
+    <div class="bg-slate-900/90 p-5 sm:p-6 rounded-2xl border border-slate-700/80 space-y-4 text-center">
+      <p class="text-xs font-bold text-amber-400 uppercase tracking-widest border-b border-slate-800 pb-2">
+        📜 Letra para Cantar Juntos
+      </p>
 
-    <!-- OPCIÓN OPCIONAL PARA CARGAR TU ARCHIVO DE VOZ REAL DE CELULAR -->
-    <div class="border-t border-slate-700 pt-4 space-y-2 text-left">
-      <label class="block text-xs font-bold text-slate-300">
-        🎙️ ¿Deseas reproducir tu voz grabada del celular?
-      </label>
-      <input 
-        type="file" 
-        accept="audio/*" 
-        onchange="reproducirAudioPropio(event)" 
-        class="block w-full text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer"
-      />
-      <audio id="playerVozLocal" controls class="w-full hidden mt-2 rounded-lg bg-slate-900"></audio>
+      <div class="space-y-2 text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
+        <p class="text-amber-300 font-bold">Aprendiendo con metas y valores,</p>
+        <p class="text-amber-300 font-bold">cual nos diste tú mi gran maestro.</p>
+        <p class="text-amber-400 font-extrabold text-base sm:text-lg">Lasallista del Sur es nuestro ejemplo</p>
+        <p class="text-amber-400 font-extrabold text-base sm:text-lg">de enseñanza, disciplina y lealtad.</p>
+
+        <hr class="border-slate-800 my-3" />
+
+        <p>Como siempre un paso adelante,</p>
+        <p>sencillez, responsabilidad y honor.</p>
+        <p>Es el lema que tú nos enseñaste,</p>
+        <p>ejemplo puro que nos distes al crecer.</p>
+
+        <hr class="border-slate-800 my-3" />
+
+        <p>Sabiduría de grandes mentores,</p>
+        <p>en nuestras aulas se educa con amor.</p>
+
+        <hr class="border-slate-800 my-3" />
+
+        <p class="text-emerald-400 font-bold">Lasallista del Sur es nuestro ejemplo</p>
+        <p class="text-emerald-400 font-bold">de enseñanza, disciplina y lealtad.</p>
+        <p class="text-emerald-300 font-black text-lg uppercase tracking-wider mt-2">¡Lealtad!</p>
+      </div>
     </div>
 
   </main>
@@ -72,135 +80,28 @@
     © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
   </footer>
 
-  <!-- MOTOR MÚSICAL ADAPTADO A TU CANTO REAL -->
   <script>
-    let audioCtx = null;
-    let timerID = null;
-    let sonando = false;
+    function reproducirHimnoReal() {
+      const audio = document.getElementById('audioHimnoReal');
+      const btn = document.getElementById('btnPlay');
 
-    // Frecuencias exactas escala Do Mayor (C4 - C5)
-    const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.00, A4 = 440.00, B4 = 493.88, C5 = 523.25;
-    const C3 = 130.81, G3 = 196.00, F3 = 174.61;
-
-    // TRANSCRIPCIÓN EXACTA DE TU AUDIO
-    const notasCanto = [
-      // "Aprendiendo con metas y valores..."
-      { m: C4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.70 },
-      { m: A4, b: F3, d: 0.35 }, { m: G4, b: F3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.70 }, { m: C4, b: C3, d: 0.70 },
-
-      // "cual nos diste tú mi gran maestro..."
-      { m: D4, b: G3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.70 }, { m: A4, b: F3, d: 0.70 },
-      { m: B4, b: G3, d: 0.35 }, { m: A4, b: G3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 }, { m: D4, b: G3, d: 0.70 },
-
-      // "Lasallista del Sur es nuestro ejemplo..."
-      { m: E4, b: C3, d: 0.35 }, { m: F4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: C5, b: C3, d: 0.70 }, { m: C5, b: C3, d: 0.70 },
-      { m: B4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
-
-      // "de enseñanza, disciplina y lealtad."
-      { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.70 },
-      { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: C4, b: C3, d: 1.20 },
-
-      // "Como siempre un paso adelante..."
-      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
-
-      // "sencillez, responsabilidad y honor..."
-      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.70 },
-
-      // "Es el lema que tú nos enseñaste..."
-      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
-
-      // "ejemplo puro que nos diste al crecer..."
-      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: C4, b: C3, d: 0.70 },
-
-      // "Sabiduría de grandes mentores..."
-      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
-
-      // "En nuestras aulas se educa con amor..."
-      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: C4, b: C3, d: 0.70 },
-
-      // "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad..."
-      { m: E4, b: C3, d: 0.35 }, { m: F4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: C5, b: C3, d: 0.70 }, { m: C5, b: C3, d: 0.70 },
-      { m: B4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
-      { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.70 },
-      { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: C4, b: C3, d: 1.20 }
-    ];
-
-    async function reproducirMelodiaVoz() {
-      if (sonando) return;
-
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-
-        if (audioCtx.state === 'suspended') {
-          await audioCtx.resume();
-        }
-
-        sonando = true;
-        document.getElementById('btnPlay').classList.add('hidden');
-        document.getElementById('btnStop').classList.remove('hidden');
-        document.getElementById('estadoTexto').textContent = "🎶 Sonando melodía transcrita de tu voz...";
-
-        let t = audioCtx.currentTime + 0.1;
-
-        notasCanto.forEach(item => {
-          // Tocar tono suave de melodía (Flauta/Lira)
-          sonarNota(audioCtx, item.m, t, item.d, 'triangle', 0.35);
-          // Tocar acompañamiento armonioso de fondo
-          sonarNota(audioCtx, item.b, t, item.d, 'sine', 0.20);
-          t += item.d;
+      if (audio.paused) {
+        audio.play().then(() => {
+          btn.innerHTML = '<span class="text-2xl">⏸</span> Pausar Himno';
+          btn.className = "w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
+        }).catch(err => {
+          alert("Asegúrate de subir el archivo 'himno.m4a' a GitHub para escuchar tu voz.");
         });
-
-        const tiempoTotal = (t - audioCtx.currentTime) * 1000;
-        timerID = setTimeout(() => {
-          detenerAudio();
-        }, tiempoTotal);
-
-      } catch (err) {
-        alert("Error de audio: " + err.message);
+      } else {
+        audio.pause();
+        btn.innerHTML = '<span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!';
+        btn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
       }
-    }
 
-    function sonarNota(ctx, freq, inicio, duracion, tipo, vol) {
-      if (!freq) return;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = tipo;
-      osc.frequency.setValueAtTime(freq, inicio);
-
-      gain.gain.setValueAtTime(vol, inicio);
-      gain.gain.exponentialRampToValueAtTime(0.0001, inicio + duracion - 0.02);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(inicio);
-      osc.stop(inicio + duracion);
-    }
-
-    function reproducirAudioPropio(e) {
-      const file = e.target.files[0];
-      if (file) {
-        detenerAudio();
-        const player = document.getElementById('playerVozLocal');
-        player.src = URL.createObjectURL(file);
-        player.classList.remove('hidden');
-        player.play();
-      }
-    }
-
-    function detenerAudio() {
-      if (audioCtx) {
-        audioCtx.close();
-        audioCtx = null;
-      }
-      if (timerID) clearTimeout(timerID);
-      sonando = false;
-
-      document.getElementById('btnPlay').classList.remove('hidden');
-      document.getElementById('btnStop').classList.add('hidden');
-      document.getElementById('estadoTexto').textContent = "Haz clic en el botón verde para escuchar la melodía guiada.";
+      audio.onended = function() {
+        btn.innerHTML = '<span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!';
+        btn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
+      };
     }
   </script>
 </body>
