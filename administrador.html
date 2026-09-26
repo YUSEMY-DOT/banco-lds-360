@@ -437,22 +437,29 @@
     }
 
     function actualizarVistaAdmin(data) {
-      if (!data || !data.success) {
+      if (!data || !(data.success || data.ok)) {
         alert("No se encontraron datos para el estudiante.");
         return;
       }
-      document.getElementById('fichaAlumno').classList.remove('hidden');
-      document.getElementById('nombreAlumno').textContent = data.nombre || data.estudiante?.nombreCompleto || 'Estudiante';
-      document.getElementById('gradoAlumno').textContent = (data.grado || data.estudiante?.grado || '') + ' ' + (data.seccion || data.estudiante?.seccion || '');
-      document.getElementById('saldoAlumno').textContent = Number(data.saldo || data.cuenta?.saldoActual || 0).toFixed(2);
 
-      const foto = data.foto || data.estudiante?.foto || "";
-      if (foto) {
-        document.getElementById('fotoAlumno').src = optimizarUrlFotoDrive(foto);
-      }
+      document.getElementById('fichaAlumno').classList.remove('hidden');
+
+      const nombre = data.nombreCompleto || data.nombre || data.estudiante?.nombreCompleto || data.estudiante?.nombre || 'Estudiante';
+      const grado = (data.grado || data.estudiante?.grado || '') + ' ' + (data.seccion || data.estudiante?.seccion || '');
+      const saldo = Number(data.saldoActual || data.saldo || data.cuenta?.saldoActual || 0).toFixed(2);
+
+      document.getElementById('nombreAlumno').textContent = nombre;
+      document.getElementById('gradoAlumno').textContent = grado;
+      document.getElementById('saldoAlumno').textContent = saldo;
+
+      const fotoRaw = data.fotoUrl || data.foto || data.estudiante?.fotoUrl || data.estudiante?.foto || "";
+      document.getElementById('fotoAlumno').src = optimizarUrlFotoDrive(fotoRaw);
 
       renderizarMovimientosAdmin(data.movimientos || []);
       cargarIncidenciasLocales(data.codigo || document.getElementById('codigoEstudiante').value.trim());
+
+      // Locución automática de voz al encontrar los datos del alumno
+      hablarTextoVoz(`Estudiante ${nombre}. Saldo disponible: ${saldo} LDS.`);
     }
 
     function renderizarMovimientosAdmin(movs) {
@@ -476,7 +483,7 @@
         item.innerHTML = `
           <div>
             <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}${resp}</p>
-            <p class="text-[10px] text-gray-400">${m.fecha || ''}</p>
+            <p class="text-[10px] text-gray-400">${m.fecha || m.fechaTexto || ''}</p>
           </div>
           <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
             ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
@@ -520,9 +527,12 @@
     }
 
     function optimizarUrlFotoDrive(url) {
-      if (!url) return 'https://via.placeholder.com/150';
-      if (url.includes('googleusercontent.com') || url.includes('drive.google.com')) {
-        return url.split('=')[0] + '=s150';
+      if (!url || url.trim() === '') return 'https://via.placeholder.com/150?text=Sin+Foto';
+      if (url.includes('drive.google.com') || url.includes('googleusercontent.com')) {
+        const match = url.match(/\/d\/([^\/\?]+)/) || url.match(/id=([^&]+)/);
+        if (match && match[1]) {
+          return 'https://lh3.googleusercontent.com/d/' + match[1];
+        }
       }
       return url;
     }
