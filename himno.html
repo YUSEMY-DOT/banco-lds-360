@@ -3,105 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Himno Institucional - IEP La Salle del Sur</title>
+  <title>Himno Institucional Jovial - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- LIBRERÍA SOUNDFONT DE INSTRUMENTOS REALES -->
+  <script src="https://cdn.jsdelivr.net/npm/soundfont-player@0.8.7/dist/soundfont-player.min.js"></script>
 </head>
-<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
+<body class="bg-gradient-to-b from-sky-900 via-indigo-900 to-slate-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
   <!-- ENCABEZADO -->
   <header class="text-center py-6">
-    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1.5 rounded-full font-extrabold uppercase tracking-widest mb-2 shadow">
+    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-widest mb-2 shadow">
       IEP La Salle del Sur
     </div>
-    <h1 class="text-3xl sm:text-4xl font-black text-amber-400 uppercase tracking-wider drop-shadow-md">
+    <h1 class="text-3xl sm:text-4xl font-black text-amber-300 uppercase tracking-wider drop-shadow-lg">
       Himno Institucional
     </h1>
-    <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">"Enseñanza, Disciplina y Lealtad"</p>
+    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">Arreglo Jovial, Cálido y Alegre</p>
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
-  <main class="max-w-lg mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-2xl border border-amber-500/30 space-y-6 my-auto text-center">
+  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-400/30 space-y-6 my-auto text-center">
     
-    <!-- EMBLEMA INSTITUCIONAL -->
-    <div class="w-24 h-24 mx-auto bg-gradient-to-tr from-amber-500 to-indigo-600 rounded-full p-1 shadow-2xl flex items-center justify-center">
-      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-4xl shadow-inner">
-        🎤
+    <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-400 via-yellow-400 to-sky-500 rounded-full p-1 shadow-2xl flex items-center justify-center">
+      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner">
+        🎶
       </div>
     </div>
 
-    <!-- BOTÓN DE REPRODUCCIÓN DE VOZ REAL -->
     <div class="space-y-3 pt-2">
       <button 
         id="btnPlay" 
-        onclick="reproducirHimnoReal()" 
-        class="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
+        onclick="reproducirJovial()" 
+        class="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
       >
-        <span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!
+        <span class="text-2xl">▶</span> Escuchar Melodía Alegre
       </button>
 
-      <audio id="audioHimnoReal" src="himno.m4a" preload="auto"></audio>
+      <button 
+        id="btnStop" 
+        onclick="detenerMelodia()" 
+        class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
+      >
+        <span>⏹</span> Detener
+      </button>
     </div>
 
-    <!-- LETRA EN VIVO PARA ACOMPAÑAR Y CANTAR -->
-    <div class="bg-slate-900/90 p-5 sm:p-6 rounded-2xl border border-slate-700/80 space-y-4 text-center">
-      <p class="text-xs font-bold text-amber-400 uppercase tracking-widest border-b border-slate-800 pb-2">
-        📜 Letra para Cantar Juntos
-      </p>
-
-      <div class="space-y-2 text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
-        <p class="text-amber-300 font-bold">Aprendiendo con metas y valores,</p>
-        <p class="text-amber-300 font-bold">cual nos diste tú mi gran maestro.</p>
-        <p class="text-amber-400 font-extrabold text-base sm:text-lg">Lasallista del Sur es nuestro ejemplo</p>
-        <p class="text-amber-400 font-extrabold text-base sm:text-lg">de enseñanza, disciplina y lealtad.</p>
-
-        <hr class="border-slate-800 my-3" />
-
-        <p>Como siempre un paso adelante,</p>
-        <p>sencillez, responsabilidad y honor.</p>
-        <p>Es el lema que tú nos enseñaste,</p>
-        <p>ejemplo puro que nos distes al crecer.</p>
-
-        <hr class="border-slate-800 my-3" />
-
-        <p>Sabiduría de grandes mentores,</p>
-        <p>en nuestras aulas se educa con amor.</p>
-
-        <hr class="border-slate-800 my-3" />
-
-        <p class="text-emerald-400 font-bold">Lasallista del Sur es nuestro ejemplo</p>
-        <p class="text-emerald-400 font-bold">de enseñanza, disciplina y lealtad.</p>
-        <p class="text-emerald-300 font-black text-lg uppercase tracking-wider mt-2">¡Lealtad!</p>
-      </div>
-    </div>
+    <p id="estadoTexto" class="text-xs text-amber-200 font-medium">
+      Haz clic para cargar la flauta dulce, marimba y piano jovial.
+    </p>
 
   </main>
 
-  <footer class="text-center py-4 text-xs text-slate-500">
+  <footer class="text-center py-4 text-xs text-slate-400">
     © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
   </footer>
 
   <script>
-    function reproducirHimnoReal() {
-      const audio = document.getElementById('audioHimnoReal');
-      const btn = document.getElementById('btnPlay');
+    let audioCtx = null;
+    let flauta = null;
+    let marimba = null;
+    let piano = null;
+    let sonando = false;
+    let timeouts = [];
 
-      if (audio.paused) {
-        audio.play().then(() => {
-          btn.innerHTML = '<span class="text-2xl">⏸</span> Pausar Himno';
-          btn.className = "w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
-        }).catch(err => {
-          alert("Asegúrate de subir el archivo 'himno.m4a' a GitHub para escuchar tu voz.");
+    // MELODÍA DULCE Y JOVIAL EXTRAÍDA DE TU AUDIO (CANTADA EN DO MAYOR)
+    const melodíaVoz = [
+      // Aprendiendo con metas y valores...
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+
+      // cual nos diste tú mi gran maestro...
+      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+
+      // Lasallista del Sur es nuestro ejemplo...
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+
+      // de enseñanza, disciplina y lealtad.
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.2 },
+
+      // Como siempre un paso adelante...
+      { n: "E4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+
+      // sencillez, responsabilidad y honor...
+      { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 },
+
+      // Es el lema que tú nos enseñaste...
+      { n: "E4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+
+      // ejemplo puro que nos diste al crecer...
+      { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "C4", d: 0.7 },
+
+      // Sabiduría de grandes mentores...
+      { n: "E4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+
+      // en nuestras aulas se educa con amor...
+      { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "C4", d: 0.7 },
+
+      // Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad...
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+    ];
+
+    // ACORDES ALEGRES DE ACOMPAÑAMIENTO EN PIANO (C, F, G)
+    const acordesPiano = [
+      { t: 0.0, notes: ["C3", "E3", "G3"], d: 2.5 },
+      { t: 2.5, notes: ["F3", "A3", "C4"], d: 2.5 },
+      { t: 5.0, notes: ["G3", "B3", "D4"], d: 2.5 },
+      { t: 7.5, notes: ["C3", "E3", "G3"], d: 2.5 },
+      { t: 10.0, notes: ["F3", "A3", "C4"], d: 2.5 },
+      { t: 12.5, notes: ["G3", "B3", "D4"], d: 2.5 },
+      { t: 15.0, notes: ["C3", "E3", "G3"], d: 3.0 },
+      { t: 18.0, notes: ["C3", "E3", "G3"], d: 2.5 },
+      { t: 20.5, notes: ["F3", "A3", "C4"], d: 2.5 },
+      { t: 23.0, notes: ["G3", "B3", "D4"], d: 2.5 },
+      { t: 25.5, notes: ["C3", "E3", "G3"], d: 3.0 }
+    ];
+
+    async function reproducirJovial() {
+      if (sonando) return;
+
+      const estado = document.getElementById('estadoTexto');
+      estado.textContent = "⌛ Cargando instrumentos alegres...";
+
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        if (audioCtx.state === 'suspended') {
+          await audioCtx.resume();
+        }
+
+        // Cargar timbres cálidos: Flauta Dulce, Marimba y Piano Acústico
+        if (!flauta) {
+          flauta = await Soundfont.instrument(audioCtx, 'flute');
+        }
+        if (!marimba) {
+          marimba = await Soundfont.instrument(audioCtx, 'marimba');
+        }
+        if (!piano) {
+          piano = await Soundfont.instrument(audioCtx, 'acoustic_grand_piano');
+        }
+
+        sonando = true;
+        document.getElementById('btnPlay').classList.add('hidden');
+        document.getElementById('btnStop').classList.remove('hidden');
+        estado.textContent = "🎶 Reproduciendo melodía jovial y cálida.";
+
+        let t = audioCtx.currentTime + 0.1;
+
+        // 1. Melodía alegre combinada (Flauta dulce + toque suave de Marimba)
+        melodíaVoz.forEach(item => {
+          flauta.play(item.n, t, { duration: item.d, gain: 0.7 });
+          marimba.play(item.n, t, { duration: item.d, gain: 0.4 });
+          t += item.d;
         });
-      } else {
-        audio.pause();
-        btn.innerHTML = '<span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!';
-        btn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
-      }
 
-      audio.onended = function() {
-        btn.innerHTML = '<span class="text-2xl">▶</span> ¡Unámonos a Cantar el Himno!';
-        btn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3";
-      };
+        // 2. Acompañamiento armonioso con piano
+        let startTime = audioCtx.currentTime + 0.1;
+        acordesPiano.forEach(chord => {
+          chord.notes.forEach(note => {
+            piano.play(note, startTime + chord.t, { duration: chord.d, gain: 0.4 });
+          });
+        });
+
+        const duracionTotal = (t - audioCtx.currentTime) * 1000;
+        const tid = setTimeout(() => {
+          detenerMelodia();
+        }, duracionTotal);
+        timeouts.push(tid);
+
+      } catch (e) {
+        alert("Error al reproducir: " + e.message);
+        detenerMelodia();
+      }
+    }
+
+    function detenerMelodia() {
+      timeouts.forEach(clearTimeout);
+      timeouts = [];
+      if (flauta) flauta.stop();
+      if (marimba) marimba.stop();
+      if (piano) piano.stop();
+
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      sonando = false;
+
+      document.getElementById('btnPlay').classList.remove('hidden');
+      document.getElementById('btnStop').classList.add('hidden');
+      document.getElementById('estadoTexto').textContent = "Haz clic para escuchar la melodía alegre.";
     }
   </script>
 </body>
