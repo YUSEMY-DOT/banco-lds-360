@@ -4,326 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BANCO LDS 360 - IEP La Salle del Sur</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/html5-qrcode"></script>
-  <script defer src="app.js"></script>
 </head>
-<body class="bg-slate-900 text-gray-100 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white font-sans min-h-screen flex flex-col justify-between p-4">
 
-  <!-- CABECERA INSTITUCIONAL ÚNICA -->
-  <header class="bg-blue-900/90 backdrop-blur-md text-white p-4 shadow-xl border-b border-blue-800 flex justify-between items-center sticky top-0 z-50">
-    <div class="flex items-center gap-3 cursor-pointer" onclick="navegarA('portada')">
-      <div class="bg-blue-600 text-white font-black px-3 py-1.5 rounded-xl text-lg shadow">LDS</div>
-      <div>
-        <h1 class="text-lg font-extrabold tracking-wide">BANCO LDS 360</h1>
-        <p class="text-[11px] text-blue-200">IEP La Salle del Sur — KIDSWork LS</p>
-      </div>
-    </div>
-    <button id="btnInicioHeader" onclick="navegarA('portada')" class="hidden text-xs bg-blue-800 hover:bg-blue-700 text-blue-100 px-3 py-1.5 rounded-full transition border border-blue-600">
-      🏠 Inicio
-    </button>
+  <header class="text-center py-6">
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">BANCO LDS 360</h1>
+    <p class="text-blue-300 text-sm mt-1">IEP La Salle del Sur — KIDSWork LS</p>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL MULTI-VISTA -->
-  <main class="max-w-4xl mx-auto p-4 flex-1 w-full flex flex-col justify-center">
+  <main class="max-w-md mx-auto w-full space-y-6 flex-1 flex flex-col justify-center">
+    
+    <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-2xl text-center space-y-6">
+      <h2 class="text-xl font-bold text-blue-100">Bienvenido al Portal Bancario Escolar</h2>
+      <p class="text-xs text-gray-300">Seleccione su tipo de acceso para ingresar al sistema:</p>
 
-    <!-- ========================================== -->
-    <!-- VISTA 1: PORTADA PRINCIPAL DE INICIO       -->
-    <!-- ========================================== -->
-    <section id="vistaPortada" class="space-y-6 my-auto">
-      <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-2xl text-center space-y-6 max-w-md mx-auto">
-        <div class="space-y-2">
-          <span class="bg-blue-500/20 text-blue-300 text-xs font-semibold px-3 py-1 rounded-full border border-blue-400/30">Sistema Bancario Escolar</span>
-          <h2 class="text-2xl font-black text-white">¡Bienvenidos a KIDSWork LS!</h2>
-          <p class="text-xs text-gray-300">Seleccione su portal de acceso institucional:</p>
-        </div>
+      <div class="space-y-4">
+        <!-- ACCESO ALUMNO -->
+        <a href="alumno.html" class="block w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-lg">
+          🎓 Portal Estudiante
+        </a>
 
-        <div class="space-y-4 pt-2">
-          <button onclick="navegarA('estudiante')" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-3 border border-blue-400/30">
-            <span>🎓</span> Portal Estudiante
-          </button>
-
-          <button onclick="navegarA('docente')" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-3 border border-emerald-400/30">
-            <span>👩‍🏫</span> Panel Mises (Administración)
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- VISTA 2: PORTAL ESTUDIANTE                -->
-    <!-- ========================================== -->
-    <section id="vistaEstudiante" class="hidden max-w-md mx-auto w-full space-y-4 my-auto">
-      
-      <!-- SUB-VISTA: LOGIN ESTUDIANTE -->
-      <div id="estudianteLogin" class="bg-white text-gray-800 p-6 rounded-3xl shadow-2xl space-y-4 border">
-        <h3 class="text-center text-lg font-bold text-blue-900">Acceso del Estudiante</h3>
-        
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">Código de Estudiante</label>
-          <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="w-full border rounded-xl p-3 uppercase focus:ring-2 focus:ring-blue-500 outline-none text-gray-800 font-semibold" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">Clave de Acceso (6 dígitos)</label>
-          <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full border rounded-xl p-3 text-center text-xl tracking-widest focus:ring-2 focus:ring-blue-500 outline-none font-bold text-gray-800" />
-        </div>
-
-        <button onclick="procesarLoginAlumno()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg text-sm">
-          Ingresar a mi Banca Móvil
-        </button>
-
-        <div id="loginError" class="text-red-600 text-xs text-center font-bold min-h-[20px]"></div>
-      </div>
-
-      <!-- SUB-VISTA: DASHBOARD Y SALDO ESTUDIANTE -->
-      <div id="estudianteDashboard" class="hidden space-y-4">
-        
-        <!-- CARD DE SALDO -->
-        <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-3xl shadow-xl relative overflow-hidden border border-blue-500/30">
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="text-xs text-blue-200 uppercase font-semibold">Saldo Disponible</p>
-              <h3 class="text-3xl font-black mt-1"><span id="saldoLDS">0.00</span> <span class="text-sm font-normal">LDS</span></h3>
-            </div>
-            <img id="alumnoFoto" src="https://via.placeholder.com/100" alt="Foto Estudiante" class="w-16 h-16 rounded-full border-2 border-white object-cover shadow-lg" />
-          </div>
-          <p id="alumnoNombre" class="mt-4 font-bold text-sm text-blue-100">Cargando...</p>
-          <p id="alumnoGrado" class="text-xs text-blue-200 mt-0.5">---</p>
-        </div>
-
-        <!-- BOTONES DE ACCIÓN -->
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="accionBotonPagar()" class="text-white p-4 rounded-2xl font-bold shadow-lg text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02]" style="background-color: #e11d48 !important;">
-            💸 PAGAR / GASTOS
-          </button>
-          <button onclick="accionBotonMovimientos()" class="text-white p-4 rounded-2xl font-bold shadow-lg text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02]" style="background-color: #9333ea !important;">
-            📋 MOVIMIENTOS
-          </button>
-        </div>
-
-        <!-- FORMULARIO DE REGISTRO DE GASTO -->
-        <div id="seccionOperacion" class="hidden bg-white text-gray-800 p-5 rounded-3xl shadow-xl space-y-3 border">
-          <h4 id="tituloOperacion" class="font-bold text-gray-800 text-sm">Registrar Pago o Gasto</h4>
-          
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Categoría</label>
-            <select id="selectCategoria" onchange="alCambiarCategoria()" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 outline-none">
-              <option value="">Seleccione categoría</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Concepto</label>
-            <select id="selectConcepto" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 outline-none">
-              <option value="">Seleccione concepto</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Monto LDS</label>
-            <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 outline-none font-bold" />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Responsable del Registro</label>
-            <select id="selectResponsable" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 outline-none">
-              <option value="">Seleccione responsable</option>
-              <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
-              <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
-              <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
-              <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Observación</label>
-            <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 outline-none"></textarea>
-          </div>
-
-          <button onclick="registrarMovimientoOperacion()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow">
-            Confirmar y Registrar Pago
-          </button>
-          <div id="mensajeOperacion" class="text-xs text-center font-bold min-h-[18px]"></div>
-        </div>
-
-        <!-- HISTORIAL DE MOVIMIENTOS -->
-        <div id="seccionMovimientos" class="bg-white text-gray-800 p-4 rounded-3xl shadow-xl space-y-3 border">
-          <h4 class="font-bold text-gray-800 text-sm">Historial de Movimientos</h4>
-          <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-xs">
-            <p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>
-          </div>
-        </div>
-
-        <button onclick="cerrarSesionAlumno()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold py-2.5 rounded-2xl transition text-xs border border-gray-700">
-          Cerrar Sesión Estudiante
-        </button>
-      </div>
-
-    </section>
-
-    <!-- ========================================== -->
-    <!-- VISTA 3: PANEL DE MISES / DOCENTES        -->
-    <!-- ========================================== -->
-    <section id="vistaDocente" class="hidden space-y-6 w-full my-auto">
-      
-      <!-- SUB-VISTA: LOGIN MISES -->
-      <div id="docenteLogin" class="bg-white text-gray-800 p-8 rounded-3xl shadow-2xl max-w-md mx-auto space-y-4 border">
-        <h3 class="text-center text-xl font-black text-blue-900">Acceso Administrativo - Mises</h3>
-        <p class="text-xs text-center text-gray-500">Seleccione su nombre institucional para iniciar turno.</p>
-        
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">Docente / Miss</label>
-          <select id="loginDocente" class="w-full border rounded-xl p-3 text-xs outline-none bg-gray-50 font-semibold text-gray-800">
-            <option value="">Seleccione su nombre</option>
-            <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
-            <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
-            <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
-            <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-600 mb-1">Clave de Acceso</label>
-          <input type="password" id="loginClaveDocente" placeholder="360LDS" class="w-full border rounded-xl p-3 text-center text-lg tracking-widest outline-none bg-gray-50 font-bold text-gray-800" />
-        </div>
-
-        <button onclick="procesarLoginAdmin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg text-sm">
-          Ingresar al Panel Mises
-        </button>
-
-        <div id="errorAdminLogin" class="text-red-600 text-xs text-center font-bold min-h-[20px]"></div>
-      </div>
-
-      <!-- SUB-VISTA: PANEL DOCENTE ACTIVO -->
-      <div id="docenteDashboard" class="hidden space-y-6">
-        
-        <!-- BARRA DOCENTE CONECTADA -->
-        <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-4 rounded-2xl shadow-xl flex justify-between items-center border border-emerald-600/30">
-          <div>
-            <p class="text-[10px] text-emerald-200 uppercase font-semibold">Docente Conectada:</p>
-            <h3 id="nombreMissActiva" class="font-bold text-sm">---</h3>
-          </div>
-          <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-1.5 rounded-xl transition font-bold shadow">
-            Cerrar Turno
-          </button>
-        </div>
-
-        <!-- BÚSQUEDA Y ESCÁNER QR -->
-        <section class="bg-white text-gray-800 p-6 rounded-3xl shadow-xl space-y-4 border">
-          <h4 class="text-sm font-bold text-gray-700 border-b pb-2">Consulta de Estudiante</h4>
-          
-          <div class="flex flex-col sm:flex-row gap-2">
-            <input type="text" id="codigoEstudiante" placeholder="Ej: LDS-EST-001" class="flex-1 border rounded-xl px-4 py-2.5 text-sm uppercase outline-none focus:ring-2 focus:ring-emerald-500 font-bold" />
-            <button onclick="buscarEstudiante()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow">
-              Buscar
-            </button>
-            <button onclick="toggleEscaner()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition shadow flex items-center justify-center gap-1.5">
-              📷 Escanear QR
+        <!-- ACCESO ADMINISTRATIVO CON VALIDACIÓN DE CLAVE -->
+        <div class="border-t border-white/10 pt-4 space-y-3">
+          <label class="block text-xs text-blue-200 font-medium">Acceso Administrativo Mises</label>
+          <div class="flex gap-2">
+            <input 
+              type="password" 
+              id="adminPin" 
+              placeholder="Clave Administrador" 
+              class="w-full bg-white/20 border border-white/30 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-emerald-400 text-center tracking-widest"
+              onkeydown="if(event.key==='Enter') validarAdmin()"
+            />
+            <button onclick="validarAdmin()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-sm transition">
+              Ingresar
             </button>
           </div>
-
-          <div id="reader" class="hidden w-full max-w-xs mx-auto overflow-hidden rounded-2xl border"></div>
-        </section>
-
-        <!-- FICHA Y ACCIONES DEL ESTUDIANTE -->
-        <section id="fichaAlumno" class="hidden bg-white text-gray-800 p-6 rounded-3xl shadow-xl space-y-6 border">
-          <div class="flex items-center gap-4">
-            <img id="fotoAlumno" src="https://via.placeholder.com/150" alt="Foto Estudiante" class="w-20 h-20 rounded-full object-cover border-2 border-emerald-500 shadow" />
-            <div>
-              <h3 id="nombreAlumno" class="text-lg font-bold text-gray-800">---</h3>
-              <p id="gradoAlumno" class="text-xs text-gray-500">---</p>
-              <div class="mt-1 text-xl font-black text-emerald-800">
-                Saldo: <span id="saldoAlumno">0.00</span> LDS
-              </div>
-            </div>
-          </div>
-
-          <!-- MÓDULO DE ABONOS -->
-          <div class="border-t pt-4 space-y-3 bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200">
-            <h5 class="font-bold text-emerald-900 text-xs flex items-center gap-1.5">
-              💰 Módulo de Abonos (Sueldos / Premios / Bonificaciones)
-            </h5>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Categoría</label>
-                <select id="selectCategoriaAbono" onchange="cargarConceptosAbonoAdmin()" class="w-full border rounded-xl p-2 text-xs bg-white outline-none">
-                  <option value="">Seleccione categoría</option>
-                  <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
-                  <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Concepto</label>
-                <select id="selectConceptoAbono" class="w-full border rounded-xl p-2 text-xs bg-white outline-none">
-                  <option value="">Seleccione concepto</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Monto LDS</label>
-                <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-xl p-2 text-xs bg-white outline-none font-bold" />
-              </div>
-              <div>
-                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Responsable</label>
-                <input type="text" id="inputResponsableAuto" readonly class="w-full border rounded-xl p-2 text-xs bg-gray-100 text-gray-600 font-bold" />
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-semibold text-gray-600 mb-1">Observación</label>
-              <input type="text" id="inputObservacionAbono" placeholder="Ej: Excelente desempeño..." class="w-full border rounded-xl p-2 text-xs bg-white outline-none" />
-            </div>
-
-            <button onclick="ejecutarAbonoAdministrativo()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition shadow">
-              Confirmar y Abonar al Estudiante
-            </button>
-            <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[18px]"></div>
-          </div>
-
-          <!-- HISTORIAL DE MOVIMIENTOS -->
-          <div class="border-t pt-4 space-y-3">
-            <h5 class="font-bold text-gray-700 text-xs">Historial de Movimientos del Estudiante</h5>
-            <div id="listaMovimientosAdmin" class="space-y-2 max-h-48 overflow-y-auto text-xs">
-              <p class="text-gray-400 text-center italic py-2">Sin movimientos registrados.</p>
-            </div>
-          </div>
-        </section>
-
+          <p id="adminError" class="text-rose-400 text-xs font-bold min-h-[16px]"></p>
+        </div>
       </div>
-
-    </section>
+    </div>
 
   </main>
 
-  <footer class="text-center py-4 text-[11px] text-gray-500 border-t border-slate-800">
-    BANCO LDS 360 — IEP La Salle del Sur
+  <footer class="text-center py-4 text-xs text-gray-400">
+    IEP La Salle del Sur — Todos los derechos reservados
   </footer>
 
-  <!-- LÓGICA DE CONTROL DE VISTAS UNIFICADA -->
   <script>
-    function navegarA(vista) {
-      document.getElementById('vistaPortada').classList.add('hidden');
-      document.getElementById('vistaEstudiante').classList.add('hidden');
-      document.getElementById('vistaDocente').classList.add('hidden');
+    function validarAdmin() {
+      const input = document.getElementById('adminPin');
+      const error = document.getElementById('adminError');
+      const pin = (input ? input.value : '').trim();
 
-      const btnInicio = document.getElementById('btnInicioHeader');
-
-      if (vista === 'portada') {
-        document.getElementById('vistaPortada').classList.remove('hidden');
-        btnInicio.classList.add('hidden');
-      } else if (vista === 'estudiante') {
-        document.getElementById('vistaEstudiante').classList.remove('hidden');
-        btnInicio.classList.remove('hidden');
-      } else if (vista === 'docente') {
-        document.getElementById('vistaDocente').classList.remove('hidden');
-        btnInicio.classList.remove('hidden');
+      if (!pin) {
+        error.textContent = 'Ingresa la clave de administrador.';
+        return;
       }
+
+      if (pin.toUpperCase() !== '360LDS') {
+        error.textContent = 'Clave de administrador incorrecta.';
+        return;
+      }
+
+      error.textContent = '';
+      window.location.href = 'administrador.html';
     }
   </script>
 </body>
