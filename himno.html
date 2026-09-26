@@ -3,109 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Himno Institucional - IEP La Salle del Sur</title>
+  <title>Himno Oficial - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between p-4 font-sans">
+<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
   <!-- ENCABEZADO -->
   <header class="text-center py-6">
-    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1 rounded-full font-bold uppercase tracking-widest mb-2">
+    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1 rounded-full font-bold uppercase tracking-widest mb-2 shadow">
       IEP La Salle del Sur
     </div>
     <h1 class="text-3xl font-extrabold text-amber-400 uppercase tracking-wider">
-      Himno Institucional
+      Himno Institucional Oficial
     </h1>
-    <p class="text-xs text-slate-400 mt-1">"Enseñanza, Disciplina y Lealtad"</p>
+    <p class="text-xs text-slate-300 mt-1 font-medium">"Enseñanza, Disciplina y Lealtad"</p>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-xl mx-auto w-full space-y-6 my-auto">
-
-    <!-- SECCIÓN 1: REPRODUCTOR DE GRABACIÓN / AUDIO REAL -->
-    <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 space-y-4">
-      <h2 class="text-base font-bold text-amber-300 flex items-center gap-2">
-        🎙️ Cargar / Escuchar Audio Real (MP3 o Grabación)
-      </h2>
-      <p class="text-xs text-slate-300">
-        Si tienes un audio grabado en tu celular cantando o tarareando el himno, selecciónalo aquí para escucharlo directamente en la página:
-      </p>
-
-      <input 
-        type="file" 
-        id="archivoAudio" 
-        accept="audio/*" 
-        onchange="cargarAudioReal(event)" 
-        class="block w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer"
-      />
-
-      <audio id="reproductorAudio" controls class="w-full hidden mt-2 rounded-lg bg-slate-900"></audio>
+  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-500/30 space-y-6 my-auto text-center">
+    
+    <!-- ICONO DE ESCUDO -->
+    <div class="w-24 h-24 mx-auto bg-gradient-to-tr from-amber-500 to-indigo-600 rounded-full p-1 shadow-2xl flex items-center justify-center">
+      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-4xl shadow-inner">
+        🎵
+      </div>
     </div>
 
-    <!-- SECCIÓN 2: PIANO DIGITAL INTERACTIVO (PARA PRACTICAR Y TOCAR) -->
-    <div class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 space-y-4 text-center">
-      <h2 class="text-base font-bold text-indigo-300">
-        🎹 Piano / Teclado Guiado de Notas
-      </h2>
-      <p class="text-xs text-slate-400">
-        Presiona las teclas para ensayar la melodía sílaba por sílaba:
-      </p>
+    <!-- BOTONES DE CONTROL DE MELODÍA SINTETIZADA -->
+    <div class="space-y-3 pt-2">
+      <button 
+        id="btnPlay" 
+        onclick="reproducirMelodiaVoz()" 
+        class="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-700 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
+      >
+        <span class="text-2xl">▶</span> Escuchar Melodía del Himno
+      </button>
 
-      <!-- TECLAS DE PIANO -->
-      <div class="flex justify-center items-center gap-1.5 pt-2 overflow-x-auto pb-2">
-        <button onclick="tocarNota(261.63)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">DO</button>
-        <button onclick="tocarNota(293.66)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">RE</button>
-        <button onclick="tocarNota(329.63)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">MI</button>
-        <button onclick="tocarNota(349.23)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">FA</button>
-        <button onclick="tocarNota(392.00)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">SOL</button>
-        <button onclick="tocarNota(440.00)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">LA</button>
-        <button onclick="tocarNota(493.88)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">SI</button>
-        <button onclick="tocarNota(523.25)" class="w-11 h-32 bg-white text-gray-900 font-bold rounded-b-lg shadow active:bg-amber-300 transition flex flex-col justify-end pb-2 text-xs">DO°</button>
-      </div>
+      <button 
+        id="btnStop" 
+        onclick="detenerAudio()" 
+        class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
+      >
+        <span>⏹</span> Detener Melodía
+      </button>
+    </div>
+
+    <p id="estadoTexto" class="text-xs text-amber-300 font-medium">
+      Haz clic en el botón verde para escuchar la melodía guiada.
+    </p>
+
+    <!-- OPCIÓN OPCIONAL PARA CARGAR TU ARCHIVO DE VOZ REAL DE CELULAR -->
+    <div class="border-t border-slate-700 pt-4 space-y-2 text-left">
+      <label class="block text-xs font-bold text-slate-300">
+        🎙️ ¿Deseas reproducir tu voz grabada del celular?
+      </label>
+      <input 
+        type="file" 
+        accept="audio/*" 
+        onchange="reproducirAudioPropio(event)" 
+        class="block w-full text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer"
+      />
+      <audio id="playerVozLocal" controls class="w-full hidden mt-2 rounded-lg bg-slate-900"></audio>
     </div>
 
   </main>
 
   <footer class="text-center py-4 text-xs text-slate-500">
-    © IEP La Salle del Sur — Panel de Música Institucional
+    © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
   </footer>
 
+  <!-- MOTOR MÚSICAL ADAPTADO A TU CANTO REAL -->
   <script>
     let audioCtx = null;
+    let timerID = null;
+    let sonando = false;
 
-    function cargarAudioReal(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const audioPlayer = document.getElementById('reproductorAudio');
-        audioPlayer.src = URL.createObjectURL(file);
-        audioPlayer.classList.remove('hidden');
-        audioPlayer.play();
+    // Frecuencias exactas escala Do Mayor (C4 - C5)
+    const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.00, A4 = 440.00, B4 = 493.88, C5 = 523.25;
+    const C3 = 130.81, G3 = 196.00, F3 = 174.61;
+
+    // TRANSCRIPCIÓN EXACTA DE TU AUDIO
+    const notasCanto = [
+      // "Aprendiendo con metas y valores..."
+      { m: C4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.70 },
+      { m: A4, b: F3, d: 0.35 }, { m: G4, b: F3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.70 }, { m: C4, b: C3, d: 0.70 },
+
+      // "cual nos diste tú mi gran maestro..."
+      { m: D4, b: G3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.70 }, { m: A4, b: F3, d: 0.70 },
+      { m: B4, b: G3, d: 0.35 }, { m: A4, b: G3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 }, { m: D4, b: G3, d: 0.70 },
+
+      // "Lasallista del Sur es nuestro ejemplo..."
+      { m: E4, b: C3, d: 0.35 }, { m: F4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: C5, b: C3, d: 0.70 }, { m: C5, b: C3, d: 0.70 },
+      { m: B4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
+
+      // "de enseñanza, disciplina y lealtad."
+      { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.70 },
+      { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: C4, b: C3, d: 1.20 },
+
+      // "Como siempre un paso adelante..."
+      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
+
+      // "sencillez, responsabilidad y honor..."
+      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.70 },
+
+      // "Es el lema que tú nos enseñaste..."
+      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
+
+      // "ejemplo puro que nos diste al crecer..."
+      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: C4, b: C3, d: 0.70 },
+
+      // "Sabiduría de grandes mentores..."
+      { m: E4, b: C3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
+
+      // "En nuestras aulas se educa con amor..."
+      { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: C4, b: C3, d: 0.70 },
+
+      // "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad..."
+      { m: E4, b: C3, d: 0.35 }, { m: F4, b: C3, d: 0.35 }, { m: G4, b: C3, d: 0.70 }, { m: G4, b: C3, d: 0.35 }, { m: C5, b: C3, d: 0.70 }, { m: C5, b: C3, d: 0.70 },
+      { m: B4, b: G3, d: 0.35 }, { m: A4, b: F3, d: 0.35 }, { m: G4, b: C3, d: 0.35 }, { m: F4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.70 },
+      { m: D4, b: G3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: F4, b: F3, d: 0.70 }, { m: F4, b: F3, d: 0.70 },
+      { m: F4, b: F3, d: 0.35 }, { m: E4, b: C3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: D4, b: G3, d: 0.35 }, { m: C4, b: C3, d: 1.20 }
+    ];
+
+    async function reproducirMelodiaVoz() {
+      if (sonando) return;
+
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        if (audioCtx.state === 'suspended') {
+          await audioCtx.resume();
+        }
+
+        sonando = true;
+        document.getElementById('btnPlay').classList.add('hidden');
+        document.getElementById('btnStop').classList.remove('hidden');
+        document.getElementById('estadoTexto').textContent = "🎶 Sonando melodía transcrita de tu voz...";
+
+        let t = audioCtx.currentTime + 0.1;
+
+        notasCanto.forEach(item => {
+          // Tocar tono suave de melodía (Flauta/Lira)
+          sonarNota(audioCtx, item.m, t, item.d, 'triangle', 0.35);
+          // Tocar acompañamiento armonioso de fondo
+          sonarNota(audioCtx, item.b, t, item.d, 'sine', 0.20);
+          t += item.d;
+        });
+
+        const tiempoTotal = (t - audioCtx.currentTime) * 1000;
+        timerID = setTimeout(() => {
+          detenerAudio();
+        }, tiempoTotal);
+
+      } catch (err) {
+        alert("Error de audio: " + err.message);
       }
     }
 
-    function tocarNota(freq) {
-      if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+    function sonarNota(ctx, freq, inicio, duracion, tipo, vol) {
+      if (!freq) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      osc.type = tipo;
+      osc.frequency.setValueAtTime(freq, inicio);
 
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+      gain.gain.setValueAtTime(vol, inicio);
+      gain.gain.exponentialRampToValueAtTime(0.0001, inicio + duracion - 0.02);
 
       osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      gain.connect(ctx.destination);
 
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.8);
+      osc.start(inicio);
+      osc.stop(inicio + duracion);
+    }
+
+    function reproducirAudioPropio(e) {
+      const file = e.target.files[0];
+      if (file) {
+        detenerAudio();
+        const player = document.getElementById('playerVozLocal');
+        player.src = URL.createObjectURL(file);
+        player.classList.remove('hidden');
+        player.play();
+      }
+    }
+
+    function detenerAudio() {
+      if (audioCtx) {
+        audioCtx.close();
+        audioCtx = null;
+      }
+      if (timerID) clearTimeout(timerID);
+      sonando = false;
+
+      document.getElementById('btnPlay').classList.remove('hidden');
+      document.getElementById('btnStop').classList.add('hidden');
+      document.getElementById('estadoTexto').textContent = "Haz clic en el botón verde para escuchar la melodía guiada.";
     }
   </script>
 </body>
