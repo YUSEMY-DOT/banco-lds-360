@@ -1,5 +1,5 @@
 /**
- * BANCO LDS 360 - Núcleo de Alta Velocidad (Sin demoras de servidor)
+ * BANCO LDS 360 - Núcleo con Seguridad de Tiempo (Anti-congelamiento)
  * IEP La Salle del Sur
  */
 
@@ -7,8 +7,22 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsL
 
 function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
-  
+  let respuestaEnviada = false;
+
+  // SEGURIDAD: Si Google tarda más de 8 segundos, desbloquea la pantalla automáticamente
+  const timeoutSeguridad = setTimeout(() => {
+    if (!respuestaEnviada) {
+      respuestaEnviada = true;
+      delete window[nombreCallback];
+      if (script && script.parentNode) document.body.removeChild(script);
+      callback({ success: false, message: "El servidor de Google tardó demasiado. Intenta otra vez." });
+    }
+  }, 8000);
+
   window[nombreCallback] = function(data) {
+    if (respuestaEnviada) return;
+    respuestaEnviada = true;
+    clearTimeout(timeoutSeguridad);
     delete window[nombreCallback];
     if (script && script.parentNode) {
       document.body.removeChild(script);
@@ -25,6 +39,11 @@ function hacerPeticionJSONP(parametros, callback) {
   script.src = url;
   
   script.onerror = function() {
+    if (respuestaEnviada) return;
+    respuestaEnviada = true;
+    clearTimeout(timeoutSeguridad);
+    delete window[nombreCallback];
+    if (script && script.parentNode) document.body.removeChild(script);
     callback({ success: false, message: "Error de red o conexión." });
   };
 
@@ -51,13 +70,11 @@ function ejecutarLoginSistema(codigo, clave, callback) {
   const cacheKey = 'LDS_SESION_INSTANTANEA_' + codigo;
   const sesionCache = localStorage.getItem(cacheKey);
 
-  // Si ya tenemos los datos cacheados de este alumno, respondemos AL INSTANTE (0 segundos de espera)
   if (sesionCache) {
     try {
       const datos = JSON.parse(sesionCache);
       callback(datos);
       
-      // En segundo plano y sin bloquear al usuario, actualizamos los datos reales en Google Sheets
       hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(resBackground) {
         if (resBackground && (resBackground.success || resBackground.ok)) {
           localStorage.setItem(cacheKey, JSON.stringify(resBackground));
@@ -67,7 +84,6 @@ function ejecutarLoginSistema(codigo, clave, callback) {
     } catch(e) {}
   }
 
-  // Si es la primera vez, consultamos al servidor normal pero optimizado
   hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
     if (data && (data.success || data.ok)) {
       localStorage.setItem(cacheKey, JSON.stringify(data));
@@ -76,13 +92,15 @@ function ejecutarLoginSistema(codigo, clave, callback) {
   });
 }
 
-function registrarTransaccionSistema(codigo, tipo, monto, concepto, callback) {
+function registrarTransaccionSistema(codigo, tipo, monto, concepto, responsable, observacion, callback) {
   hacerPeticionJSONP({ 
     action: 'REGISTRAR_TRANSACCION', 
     codigo: codigo, 
     tipo: tipo, 
     monto: monto, 
-    concepto: concepto || 'General' 
+    concepto: concepto || 'General',
+    responsable: responsable || '',
+    observacion: observacion || ''
   }, function(res) {
     if (res && (res.success || res.ok)) {
       localStorage.removeItem('LDS_SESION_INSTANTANEA_' + codigo);
