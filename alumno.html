@@ -6,7 +6,6 @@
   <title>BANCO LDS 360 - Portal Estudiante</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script defer src="https://unpkg.com/html5-qrcode"></script>
   <script defer src="app.js"></script>
 </head>
@@ -102,10 +101,9 @@
 
       if (!codigo || !clave) return alert("Por favor complete todos los campos.");
 
-      const hashClave = CryptoJS.SHA256(clave).toString();
-
+      // Se envía la clave exacta, sin encriptar, tal como está en tu base de datos
       if (typeof ejecutarLoginSistema === 'function') {
-        ejecutarLoginSistema(codigo, hashClave, funcionRespuestaLogin);
+        ejecutarLoginSistema(codigo, clave, funcionRespuestaLogin);
       }
     }
 
