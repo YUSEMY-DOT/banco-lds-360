@@ -1,12 +1,13 @@
 /**
- * BANCO LDS 360 - Núcleo de Conexión y Seguridad
+ * BANCO LDS 360 - Núcleo de Conexión Unificado
  * IEP La Salle del Sur
  */
 
+// URL principal desplegada de tu Google Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
 
 function hacerPeticionJSONP(parametros, callback) {
-  const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
   let respuestaEnviada = false;
 
   const timeoutSeguridad = setTimeout(() => {
@@ -14,9 +15,9 @@ function hacerPeticionJSONP(parametros, callback) {
       respuestaEnviada = true;
       delete window[nombreCallback];
       if (script && script.parentNode) document.body.removeChild(script);
-      callback({ success: false, message: "El servidor tardó demasiado. Intenta otra vez." });
+      callback({ success: false, ok: false, mensaje: "El servidor tardó demasiado. Intenta nuevamente." });
     }
-  }, 8000);
+  }, 12000);
 
   window[nombreCallback] = function(data) {
     if (respuestaEnviada) return;
@@ -31,61 +32,45 @@ function hacerPeticionJSONP(parametros, callback) {
 
   let url = SCRIPT_URL + '?callback=' + nombreCallback;
   for (let clave in parametros) {
-    url += '&' + clave + '=' + encodeURIComponent(parametros[clave]);
+    if (parametros[clave] !== undefined && parametros[clave] !== null) {
+      url += '&' + encodeURIComponent(clave) + '=' + encodeURIComponent(parametros[clave]);
+    }
   }
 
   const script = document.createElement('script');
   script.src = url;
-  
+
   script.onerror = function() {
     if (respuestaEnviada) return;
     respuestaEnviada = true;
     clearTimeout(timeoutSeguridad);
     delete window[nombreCallback];
     if (script && script.parentNode) document.body.removeChild(script);
-    callback({ success: false, message: "Error de red o conexión." });
+    callback({ success: false, ok: false, mensaje: "Error de conexión con el servidor." });
   };
 
   document.body.appendChild(script);
 }
 
+// Consultar datos de estudiante por código o QR
 function consultarDatosEstudiante(codigo, callback) {
-  hacerPeticionJSONP({ action: 'CONSULTAR_ALUMNO', codigo: codigo }, function(datosRed) {
-    callback(datosRed);
-  });
+  hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, callback);
 }
 
+// Iniciar sesión del estudiante con PIN de 6 dígitos
 function ejecutarLoginSistema(codigo, clave, callback) {
-  // Petición directa al servidor de Google Sheets para validar código y clave de forma estricta
-  hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
-    if (data && (data.success === true || data.ok === true)) {
-      // Verificación adicional de seguridad por si el servidor devuelve éxito pero la clave no coincide
-      const est = data.estudiante || data;
-      const claveReal = String(est.clave || est.password || est.pin || "").trim();
-      
-      if (claveReal && claveReal !== "" && claveReal !== String(clave).trim()) {
-        callback({ success: false, message: "Clave de acceso incorrecta." });
-        return;
-      }
-      
-      localStorage.setItem('LDS_SESION_' + codigo, JSON.stringify(data));
-      callback(data);
-    } else {
-      callback(data || { success: false, message: "Credenciales incorrectas o código no registrado." });
-    }
-  });
+  hacerPeticionJSONP({ accion: 'LOGINALUMNO', codigo: codigo, clave: clave }, callback);
 }
 
+// Registrar abonos o gastos de un estudiante
 function registrarTransaccionSistema(codigo, tipo, monto, concepto, responsable, observacion, callback) {
-  hacerPeticionJSONP({ 
-    action: 'REGISTRAR_TRANSACCION', 
-    codigo: codigo, 
-    tipo: tipo, 
-    monto: monto, 
+  hacerPeticionJSONP({
+    accion: 'REGISTRAR_TRANSACCION',
+    codigo: codigo,
+    tipo: tipo,
+    monto: monto,
     concepto: concepto || 'General',
-    responsable: responsable || '',
+    responsable: responsable || 'MISS EN TURNO',
     observacion: observacion || ''
-  }, function(res) {
-    callback(res || { success: false });
-  });
+  }, callback);
 }
