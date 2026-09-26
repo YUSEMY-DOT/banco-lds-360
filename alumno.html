@@ -220,16 +220,31 @@
       ]
     };
 
-    // FUNCIÓN DE SÍNTESIS DE VOZ PARA HABLARLE AL NIÑO
+    // VOZ SINTETIZADA ROBUSTA PARA EL NAVEGADOR
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Detiene cualquier voz anterior
+        window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(texto);
         utterance.lang = 'es-ES';
-        utterance.rate = 1.0;  // Velocidad normal
-        utterance.pitch = 1.1; // Tono ligeramente más amigable para niños
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1;
+
+        // Asegurar que use una voz en español instalada en el equipo
+        const voces = window.speechSynthesis.getVoices();
+        const vozEspanol = voces.find(v => v.lang.startsWith('es'));
+        if (vozEspanol) {
+          utterance.voice = vozEspanol;
+        }
+
         window.speechSynthesis.speak(utterance);
       }
+    }
+
+    // Precargar voces del sistema
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
     }
 
     function procesarLoginAlumno() {
@@ -271,8 +286,10 @@
 
             renderizarMovimientos(res.movimientos || []);
 
-            // HABLAR EL SALUDO EN VOZ ALTA
-            hablarTextoVoz(textoSaludoFinal);
+            // REPRODUCIR VOZ EN ALTO
+            setTimeout(() => {
+              hablarTextoVoz(textoSaludoFinal);
+            }, 300);
 
           } else {
             errorDiv.textContent = res.message || res.mensaje || "Credenciales incorrectas.";
@@ -356,7 +373,7 @@
             
             let textoFelicitacion = "";
             if (tipoOperacionActual === 'INGRESO') {
-              textoFelicitacion = `¡Bravo! Has conseguido el día de hoy ${monto} L D S. ¡Excelente trabajo!`;
+              textoFelicitacion = `¡Bravo! Has conseguido el día de hoy ${monto} LDS. ¡Excelente trabajo!`;
             } else {
               textoFelicitacion = `¡Bien hecho! Estás cumpliendo con tu misión. El pago ha sido registrado.`;
             }
@@ -366,7 +383,6 @@
             // HABLAR LA FELICITACIÓN EN VOZ ALTA
             hablarTextoVoz(textoFelicitacion);
             
-            // ACTUALIZACIÓN INMEDIATA DEL SALDO Y DEL HISTORIAL
             if(res.nuevoSaldo) {
               document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
             }
