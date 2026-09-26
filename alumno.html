@@ -59,6 +59,7 @@
     <!-- VISTA PRINCIPAL DEL ESTUDIANTE -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
+      <!-- TARJETA DE SALDO CON FOTO DEL ESTUDIANTE -->
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
         <div class="flex justify-between items-center">
           <div>
@@ -68,7 +69,7 @@
           <img 
             id="alumnoFoto" 
             src="https://via.placeholder.com/100" 
-            alt="Foto" 
+            alt="Foto del Estudiante" 
             class="w-16 h-16 rounded-full border-2 border-white object-cover shadow"
           />
         </div>
@@ -76,30 +77,30 @@
         <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
-      <!-- 2 BOTONES INTERNOS (Pagar Rojo, Movimientos Lila - Cobrar removido para alumnos) -->
+      <!-- BOTONES DE ACCIÓN PARLANTES -->
       <div class="grid grid-cols-2 gap-3">
-        <button onclick="accionBotonPagar()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2" style="background-color: #e11d48 !important;">
+        <button onclick="accionBotonPagar()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02]" style="background-color: #e11d48 !important;">
           💸 PAGAR / GASTOS
         </button>
-        <button onclick="accionBotonMovimientos()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2" style="background-color: #9333ea !important;">
+        <button onclick="accionBotonMovimientos()" class="text-white p-4 rounded-xl font-bold shadow text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02]" style="background-color: #9333ea !important;">
           📋 MOVIMIENTOS
         </button>
       </div>
 
-      <!-- FORMULARIO DE OPERACIÓN (SOLO PAGOS / GASTOS / MULTAS / AHORROS) -->
+      <!-- FORMULARIO DE OPERACIÓN CON GUIADO PASO A PASO -->
       <div id="seccionOperacion" class="hidden bg-white p-5 rounded-2xl shadow space-y-3">
         <h4 id="tituloOperacion" class="font-bold text-gray-700 text-sm">Registrar Pago o Gasto</h4>
         
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Categoría</label>
-          <select id="selectCategoria" onchange="cargarConceptosFiltrados()" class="w-full border rounded-lg p-2 text-sm outline-none">
+          <select id="selectCategoria" onchange="alCambiarCategoria()" class="w-full border rounded-lg p-2 text-sm outline-none">
             <option value="">Seleccione categoría</option>
           </select>
         </div>
 
         <div>
           <label class="block text-xs font-medium text-gray-600 mb-1">Concepto</label>
-          <select id="selectConcepto" class="w-full border rounded-lg p-2 text-sm outline-none">
+          <select id="selectConcepto" onchange="alCambiarConcepto()" class="w-full border rounded-lg p-2 text-sm outline-none">
             <option value="">Seleccione concepto</option>
           </select>
         </div>
@@ -131,7 +132,7 @@
         <div id="mensajeOperacion" class="text-xs text-center min-h-[18px]"></div>
       </div>
 
-      <!-- LISTA DE MOVIMIENTOS -->
+      <!-- LISTA DE MOVIMIENTOS E HISTORIAL -->
       <div id="seccionMovimientos" class="bg-white p-4 rounded-2xl shadow space-y-3">
         <h4 class="font-bold text-gray-700 text-sm">Historial de Movimientos y Abonos</h4>
         <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
@@ -194,7 +195,46 @@
       ]
     };
 
-    // VOZ FLUIDA Y ALEGRE
+    let historialMovimientosActual = [];
+
+    // REPRODUCTOR DE EFECTOS DE SONIDO SINTETIZADOS EN TIEMPO REAL
+    function reproducirSonidoMoneda() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(987.77, ctx.currentTime);
+        osc.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.3);
+      } catch(e) {}
+    }
+
+    function reproducirSonidoExito() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const notas = [523.25, 659.25, 783.99, 1046.50];
+        notas.forEach((frec, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = frec;
+          gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.08);
+          osc.stop(ctx.currentTime + idx * 0.08 + 0.25);
+        });
+      } catch(e) {}
+    }
+
+    // VOZ FLUIDA Y ALEGRE EN ESPAÑOL
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -228,7 +268,7 @@
 
         setTimeout(() => {
           window.speechSynthesis.speak(utterance);
-        }, 150);
+        }, 120);
       }
     }
 
@@ -262,29 +302,31 @@
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
             const primerNombre = nombreCompleto.split(' ')[0];
 
-            // BUSCAR SI TIENE UN ABONO O SUELDO RECIENTE EN SUS MOVIMIENTOS
+            historialMovimientosActual = res.movimientos || [];
+
+            // ANUNCIO EN VOZ DEL ABONO MÁS RECIENTE SI EXISTE
             let textoAbonoReciente = "";
-            if (res.movimientos && res.movimientos.length > 0) {
-              const movIngreso = res.movimientos.find(m => {
+            if (historialMovimientosActual.length > 0) {
+              const movIngreso = historialMovimientosActual.find(m => {
                 const t = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
                 const montoVal = Number(m.monto || m.montoLDS || 0);
                 return t.includes('INGRESO') || t.includes('ABONO') || montoVal > 0;
               });
               if (movIngreso) {
-                const resp = movIngreso.responsable || "una profesora";
+                const resp = movIngreso.responsable || "tu profesora";
                 const monto = movIngreso.monto || movIngreso.montoLDS || 0;
                 const concepto = movIngreso.concepto || movIngreso.descripcion || "abono";
                 textoAbonoReciente = ` Hoy recibiste un abono de ${resp} por ${monto} L D S para ${concepto}. ¡Muchas felicidades!`;
               }
             }
 
-            // FRASE EXACTA COMBINADA CON EL ABONO RECIENTE
             const textoSaludoFinal = `Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.${textoAbonoReciente} Estamos listos para ayudarte, qué deseas realizar hoy.`;
             
             document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
             document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || res.saldo || 0).toFixed(2);
             
+            // CONSERVAR Y RENDERIZAR LA FOTO DEL ALUMNO
             let fotoUrl = est.foto || est.fotoUrl || res.foto || "";
             if (fotoUrl && fotoUrl.includes("drive.google.com/file/d/")) {
               const match = fotoUrl.match(/\/d\/([^/]+)/);
@@ -292,7 +334,8 @@
             }
             if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
 
-            renderizarMovimientos(res.movimientos || []);
+            renderizarMovimientos(historialMovimientosActual);
+            reproducirSonidoExito();
 
             setTimeout(() => {
               hablarTextoVoz(textoSaludoFinal);
@@ -306,6 +349,7 @@
     }
 
     function accionBotonPagar() {
+      reproducirSonidoMoneda();
       document.getElementById('seccionOperacion').classList.remove('hidden');
       document.getElementById('seccionMovimientos').classList.add('hidden');
       document.getElementById('tituloOperacion').textContent = "💸 Registrar Pago, Gasto o Multa";
@@ -313,7 +357,6 @@
       const selectCat = document.getElementById('selectCategoria');
       selectCat.innerHTML = '<option value="">Seleccione categoría</option>';
 
-      // Solo categorías de egreso/pago para estudiantes
       const categoriasPermitidas = ["AHORROS_E_INVERSIONES", "PAGOS_Y_GASTOS", "SANCIONES_Y_MULTAS", "COSTOS_Y_OTROS"];
       categoriasPermitidas.forEach(cat => {
         const opt = document.createElement('option');
@@ -328,19 +371,11 @@
       document.getElementById('inputObservacion').value = '';
       document.getElementById('mensajeOperacion').textContent = '';
 
-      // VOZ PARLANTE DEL BOTÓN
-      hablarTextoVoz("Sección de pagos y gastos. Selecciona tu concepto y monto.");
+      // VOZ DE GUIADO INTERACTIVO
+      hablarTextoVoz("Estás en la sección de Pagar. Primero selecciona la categoría y luego el concepto de tu pago.");
     }
 
-    function accionBotonMovimientos() {
-      document.getElementById('seccionOperacion').classList.add('hidden');
-      document.getElementById('seccionMovimientos').classList.remove('hidden');
-
-      // VOZ PARLANTE DEL BOTÓN
-      hablarTextoVoz("Aquí puedes revisar tu historial de movimientos y abonos recientes.");
-    }
-
-    function cargarConceptosFiltrados() {
+    function alCambiarCategoria() {
       const cat = document.getElementById('selectCategoria').value;
       const selectCon = document.getElementById('selectConcepto');
       selectCon.innerHTML = '<option value="">Seleccione concepto</option>';
@@ -353,6 +388,41 @@
         opt.textContent = con;
         selectCon.appendChild(opt);
       });
+
+      const nombreCatLimpio = cat.replace(/_/g, " ").toLowerCase();
+      hablarTextoVoz(`Elegiste la categoría ${nombreCatLimpio}. Ahora selecciona tu concepto.`);
+    }
+
+    function alCambiarConcepto() {
+      const con = document.getElementById('selectConcepto').value;
+      if (con) {
+        hablarTextoVoz(`Concepto: ${con}. Ingresa el monto a pagar.`);
+      }
+    }
+
+    function accionBotonMovimientos() {
+      reproducirSonidoMoneda();
+      document.getElementById('seccionOperacion').classList.add('hidden');
+      document.getElementById('seccionMovimientos').classList.remove('hidden');
+
+      // CONTAR CUÁNTOS ABONOS Y PAGOS TIENE EL NIÑO PARA SU META DEL DÍA
+      let cantidadAbonos = 0;
+      if (historialMovimientosActual && historialMovimientosActual.length > 0) {
+        cantidadAbonos = historialMovimientosActual.filter(m => {
+          const t = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
+          const montoVal = Number(m.monto || m.montoLDS || 0);
+          return t.includes('INGRESO') || t.includes('ABONO') || montoVal > 0;
+        }).length;
+      }
+
+      let mensajeMovimientos = "";
+      if (cantidadAbonos > 0) {
+        mensajeMovimientos = `Aquí están tus movimientos. Llevas ${cantidadAbonos} abonos recibidos hasta hoy. ¡Sigue esforzándote para cumplir tu meta del día!`;
+      } else {
+        mensajeMovimientos = `Aquí están tus movimientos. Recuerda cumplir tus deberes en el aula para ganar tus abonos del día.`;
+      }
+
+      hablarTextoVoz(mensajeMovimientos);
     }
 
     function registrarMovimientoOperacion() {
@@ -367,6 +437,7 @@
       if (!cat || !con || !monto || !resp) {
         msg.className = "text-xs text-red-600 font-bold";
         msg.textContent = "Complete categoría, concepto, monto y responsable.";
+        hablarTextoVoz("Por favor completa la categoría, el concepto, el monto y el responsable.");
         return;
       }
 
@@ -381,13 +452,15 @@
             const textoFelicitacion = `Excelente, estás cumpliendo muy bien con tu misión y responsabilidad, pago registrado con éxito.`;
             msg.textContent = textoFelicitacion;
 
+            reproducirSonidoExito();
             hablarTextoVoz(textoFelicitacion);
             
             if(res.nuevoSaldo) {
               document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
             }
             if(res.movimientos) {
-              renderizarMovimientos(res.movimientos);
+              historialMovimientosActual = res.movimientos;
+              renderizarMovimientos(historialMovimientosActual);
             } else {
               consultarDatosEstudiante(codigo, function(dataEst) {
                 if(dataEst && (dataEst.success || dataEst.ok)) {
@@ -395,7 +468,8 @@
                   if(cuenta.saldoActual || cuenta.saldo) {
                     document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo).toFixed(2);
                   }
-                  renderizarMovimientos(dataEst.movimientos || []);
+                  historialMovimientosActual = dataEst.movimientos || [];
+                  renderizarMovimientos(historialMovimientosActual);
                 }
               });
             }
