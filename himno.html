@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Himno Institucional Jovial - IEP La Salle del Sur</title>
+  <title>Himno Institucional en Lira - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-b from-sky-900 via-indigo-900 to-slate-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
+<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
   <!-- ENCABEZADO -->
   <header class="text-center py-6">
@@ -16,7 +16,7 @@
     <h1 class="text-3xl sm:text-4xl font-black text-amber-300 uppercase tracking-wider drop-shadow-lg">
       Himno Institucional
     </h1>
-    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">Arreglo Jovial, Cálido y Alegre</p>
+    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">Arreglo de Lira, Flauta Dulce y Percusión Escolar</p>
   </header>
 
   <!-- CONTENEDOR PRINCIPAL -->
@@ -24,22 +24,22 @@
     
     <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-400 via-yellow-400 to-sky-500 rounded-full p-1 shadow-2xl flex items-center justify-center">
       <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner">
-        🎶
+        🔔
       </div>
     </div>
 
     <div class="space-y-3 pt-2">
       <button 
         id="btnPlay" 
-        onclick="reproducirJovial()" 
-        class="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
+        onclick="reproducirLiraEscolar()" 
+        class="w-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-lg flex items-center justify-center gap-3"
       >
-        <span class="text-2xl">▶</span> Escuchar Melodía Alegre
+        <span class="text-2xl">▶</span> Escuchar Liras y Flautas
       </button>
 
       <button 
         id="btnStop" 
-        onclick="detenerMelodia()" 
+        onclick="detenerMusica()" 
         class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-xl transition transform active:scale-95 text-base hidden flex items-center justify-center gap-2"
       >
         <span>⏹</span> Detener
@@ -47,7 +47,7 @@
     </div>
 
     <p id="estadoTexto" class="text-xs text-amber-200 font-medium">
-      Haz clic para escuchar la melodía alegre.
+      Tono original cantado en Do Mayor (Lira + Flauta + Tambor).
     </p>
 
   </main>
@@ -61,14 +61,14 @@
     let sonando = false;
     let timerID = null;
 
-    // Frecuencias exactas en Hz (Do Mayor C4-C5)
+    // Frecuencias exactas en Hertz (Do Mayor)
     const FREQS = {
-      "C3": 130.81, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "B3": 246.94,
-      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23, "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+      "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
     };
 
     // Melodía transcrita de tu voz
-    const melodiaVoz = [
+    const notasCanto = [
       // Aprendiendo con metas y valores...
       { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
       { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
@@ -110,66 +110,79 @@
       { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
     ];
 
-    // Sintetizador Nativo Web Audio (Sin dependencias externas)
-    function sonarMelodiaJovial(ctx, freq, t, dur) {
+    // SINTETIZADOR DE LIRA METÁLICA / GLOCKENSPIEL
+    function sonarLira(ctx, freq, t, dur) {
       if (!freq) return;
 
-      // 1. Melodía Dulce (Flauta / Lira)
       const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = 'sine';
-      osc1.frequency.setValueAtTime(freq, t);
-
-      // Vibrato suave
-      const vibrato = ctx.createOscillator();
-      const vibratoGain = ctx.createGain();
-      vibrato.frequency.setValueAtTime(5, t);
-      vibratoGain.gain.setValueAtTime(3, t);
-      vibrato.connect(osc1.frequency);
-      vibrato.start(t);
-      vibrato.stop(t + dur);
-
-      gain1.gain.setValueAtTime(0.01, t);
-      gain1.gain.linearRampToValueAtTime(0.35, t + 0.05);
-      gain1.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
-
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(t);
-      osc1.stop(t + dur);
-
-      // 2. Marimba / Glockenspiel (Toque percusivo alegre)
       const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(freq * 2, t);
+      const gain = ctx.createGain();
 
-      gain2.gain.setValueAtTime(0.2, t);
-      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      osc1.type = 'sine';
+      osc2.type = 'sine';
 
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
+      osc1.frequency.setValueAtTime(freq, t);
+      osc2.frequency.setValueAtTime(freq * 2, t); // Armónico metálico de placa brillante
+
+      gain.gain.setValueAtTime(0.35, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.1); // Resonancia propia de la lira
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc1.start(t);
       osc2.start(t);
-      osc2.stop(t + 0.25);
+      osc1.stop(t + 1.1);
+      osc2.stop(t + 1.1);
     }
 
-    function sonarAcompanamiento(ctx, freq, t, dur) {
+    // SINTETIZADOR DE FLAUTA DULCE
+    function sonarFlauta(ctx, freq, t, dur) {
       if (!freq) return;
+
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
+
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, t);
 
-      gain.gain.setValueAtTime(0.15, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.03);
+      gain.gain.setValueAtTime(0.01, t);
+      gain.gain.linearRampToValueAtTime(0.18, t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
+
       osc.start(t);
       osc.stop(t + dur);
     }
 
-    async function reproducirJovial() {
+    // PERCUSIÓN MARCIAL SUAVE
+    function sonarRedoblante(ctx, t) {
+      const bufferSize = ctx.sampleRate * 0.05;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 1600;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.10, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(t);
+    }
+
+    async function reproducirLiraEscolar() {
       if (sonando) return;
 
       try {
@@ -183,33 +196,32 @@
         sonando = true;
         document.getElementById('btnPlay').classList.add('hidden');
         document.getElementById('btnStop').classList.remove('hidden');
-        document.getElementById('estadoTexto').textContent = "🎶 Reproduciendo arreglo alegre y jovial...";
+        document.getElementById('estadoTexto').textContent = "🔔 Reproduciendo Lira Metálica, Flauta Dulce y Tambor...";
 
         let t = audioCtx.currentTime + 0.1;
 
-        melodiaVoz.forEach(item => {
+        notasCanto.forEach(item => {
           const f = FREQS[item.n] || 261.63;
-          sonarMelodiaJovial(audioCtx, f, t, item.d);
-
-          // Acompañamiento armónico bajo
-          const fBajo = f / 2;
-          sonarAcompanamiento(audioCtx, fBajo, t, item.d);
+          
+          sonarLira(audioCtx, f, t, item.d);
+          sonarFlauta(audioCtx, f, t, item.d);
+          sonarRedoblante(audioCtx, t);
 
           t += item.d;
         });
 
         const duracionTotal = (t - audioCtx.currentTime) * 1000;
         timerID = setTimeout(() => {
-          detenerMelodia();
+          detenerMusica();
         }, duracionTotal);
 
       } catch (e) {
-        alert("Error de reproducción: " + e.message);
-        detenerMelodia();
+        alert("Error de audio: " + e.message);
+        detenerMusica();
       }
     }
 
-    function detenerMelodia() {
+    function detenerMusica() {
       if (timerID) clearTimeout(timerID);
       if (audioCtx) {
         audioCtx.close();
@@ -219,7 +231,7 @@
 
       document.getElementById('btnPlay').classList.remove('hidden');
       document.getElementById('btnStop').classList.add('hidden');
-      document.getElementById('estadoTexto').textContent = "Haz clic para escuchar la melodía alegre.";
+      document.getElementById('estadoTexto').textContent = "Tono original cantado en Do Mayor (Lira + Flauta + Tambor).";
     }
   </script>
 </body>
