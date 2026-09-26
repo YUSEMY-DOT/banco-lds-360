@@ -10,86 +10,364 @@
   <script defer src="https://unpkg.com/html5-qrcode"></script>
   <script defer src="app.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
   <header class="bg-blue-900 text-white p-4 shadow-lg flex justify-between items-center">
-    <h1 class="text-xl font-bold">IEP La Salle del Sur - BANCO LDS 360</h1>
+    <h1 class="text-xl font-bold">IEP La Salle del Sur - Panel de Administración</h1>
     <a href="index.html" class="text-sm bg-blue-700 hover:bg-blue-600 px-3 py-1 rounded-full transition">← Volver al Inicio</a>
   </header>
 
-  <main class="max-w-4xl mx-auto p-4 space-y-6">
+  <main class="max-w-4xl mx-auto p-4 space-y-6 flex-1 w-full">
     
-    <section class="bg-white p-6 rounded-xl shadow-md space-y-4">
-      <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Consulta de Estudiante</h2>
+    <!-- VISTA LOGIN DE DOCENTES / MISES -->
+    <div id="vistaLoginAdmin" class="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto space-y-4 my-10">
+      <h2 class="text-center text-xl font-bold text-blue-900">Acceso Administrativo - Mises</h2>
+      <p class="text-xs text-center text-gray-500">Seleccione su nombre institucional para iniciar turno.</p>
       
-      <div class="flex flex-col sm:flex-row gap-3">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Docente / Miss</label>
+        <select id="loginDocente" class="w-full border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">Seleccione su nombre</option>
+          <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+          <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+          <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+          <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Clave de Acceso Docente</label>
         <input 
-          type="text" 
-          id="codigoEstudiante" 
-          placeholder="Ej: LDS-EST-001" 
-          class="flex-1 border rounded-lg px-4 py-2 text-lg uppercase focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="password" 
+          id="loginClaveDocente" 
+          maxlength="6"
+          inputmode="numeric"
+          placeholder="••••••" 
+          class="w-full border rounded-xl p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button 
-          onclick="buscarEstudiante()" 
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition"
-        >
-          Buscar
-        </button>
-        <button 
-          onclick="toggleEscaner()" 
-          class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"
-        >
-          📷 Escanear QR
+      </div>
+
+      <button 
+        onclick="procesarLoginAdmin()" 
+        class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition shadow-lg"
+      >
+        Ingresar al Panel
+      </button>
+
+      <div id="errorAdminLogin" class="text-red-600 text-xs text-center min-h-[20px]"></div>
+    </div>
+
+    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL (OCULTO HASTA INICIAR SESIÓN) -->
+    <div id="panelAdminPrincipal" class="hidden space-y-6">
+      
+      <!-- BARRA DE BIENVENIDA DE LA MISSE -->
+      <div class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-4 rounded-xl shadow flex justify-between items-center">
+        <div>
+          <p class="text-xs text-blue-200">Docente Conectada:</p>
+          <h3 id="nombreMissActiva" class="font-bold text-base">---</h3>
+        </div>
+        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-2 rounded-lg transition font-medium">
+          Cerrar Turno
         </button>
       </div>
 
-      <div id="reader" class="hidden w-full max-w-sm mx-auto overflow-hidden rounded-lg border"></div>
-    </section>
+      <!-- SECCIÓN 1: CONSULTA DE ESTUDIANTE -->
+      <section class="bg-white p-6 rounded-xl shadow-md space-y-4">
+        <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Consulta de Estudiante</h2>
+        
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input 
+            type="text" 
+            id="codigoEstudiante" 
+            placeholder="Ej: LDS-EST-001" 
+            class="flex-1 border rounded-lg px-4 py-2 text-lg uppercase focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button 
+            onclick="buscarEstudiante()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition"
+          >
+            Buscar
+          </button>
+          <button 
+            onclick="toggleEscaner()" 
+            class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2"
+          >
+            📷 Escanear QR
+          </button>
+        </div>
 
-    <section id="fichaAlumno" class="hidden bg-white p-6 rounded-xl shadow-md space-y-4">
-      <div class="flex items-center gap-4">
-        <img 
-          id="fotoAlumno" 
-          src="https://via.placeholder.com/150" 
-          alt="Foto Estudiante" 
-          class="w-24 h-24 rounded-full object-cover border-2 border-blue-500 shadow"
-        />
-        <div>
-          <h3 id="nombreAlumno" class="text-xl font-bold text-gray-800">---</h3>
-          <p id="gradoAlumno" class="text-gray-500">---</p>
-          <div class="mt-2 text-2xl font-extrabold text-blue-900">
-            Saldo: <span id="saldoAlumno">0.00</span> LDS
+        <div id="reader" class="hidden w-full max-w-sm mx-auto overflow-hidden rounded-lg border"></div>
+      </section>
+
+      <!-- FICHA Y ACCIONES DEL ALUMNO SELECCIONADO -->
+      <section id="fichaAlumno" class="hidden bg-white p-6 rounded-xl shadow-md space-y-6">
+        <div class="flex items-center gap-4">
+          <img 
+            id="fotoAlumno" 
+            src="https://via.placeholder.com/150" 
+            alt="Foto Estudiante" 
+            class="w-24 h-24 rounded-full object-cover border-2 border-blue-500 shadow"
+          />
+          <div>
+            <h3 id="nombreAlumno" class="text-xl font-bold text-gray-800">---</h3>
+            <p id="gradoAlumno" class="text-gray-500">---</p>
+            <div class="mt-2 text-2xl font-extrabold text-blue-900">
+              Saldo: <span id="saldoAlumno">0.00</span> LDS
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="border-t pt-4 space-y-3">
-        <h4 class="font-semibold text-gray-700">Registrar Atenciones e Incidencias</h4>
-        <textarea 
-          id="observacion" 
-          rows="3" 
-          placeholder="Escriba aquí la incidencia o detalle de atención..." 
-          class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-        <button 
-          onclick="guardarIncidenciaLocal()" 
-          class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-medium transition"
-        >
-          Guardar Incidencia
-        </button>
-      </div>
+        <!-- MÓDULO DE ABONAR (SUELDOS Y PREMIOS) -->
+        <div class="border-t pt-4 space-y-3 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+          <h4 class="font-bold text-emerald-900 text-sm flex items-center gap-2">
+            💰 Módulo de Abonos (Sueldos / Premios / Bonificaciones)
+          </h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1">Categoría</label>
+              <select id="selectCategoriaAbono" onchange="cargarConceptosAbonoAdmin()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
+                <option value="">Seleccione categoría</option>
+                <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
+                <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
+              </select>
+            </div>
 
-      <div class="border-t pt-4">
-        <h4 class="font-semibold text-gray-700 mb-2">Historial de Incidencias Guardadas</h4>
-        <ul id="listaIncidencias" class="space-y-2 text-sm text-gray-600 max-h-40 overflow-y-auto">
-          <li class="italic text-gray-400">Sin incidencias registradas hoy.</li>
-        </ul>
-      </div>
-    </section>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1">Concepto</label>
+              <select id="selectConceptoAbono" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
+                <option value="">Seleccione concepto</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1">Monto LDS</label>
+              <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-600 mb-1">Responsable (Automático)</label>
+              <input type="text" id="inputResponsableAuto" readonly class="w-full border rounded-lg p-2 text-sm bg-gray-100 text-gray-600 font-bold" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Observación o Motivo</label>
+            <input type="text" id="inputObservacionAbono" placeholder="Ej: Excelente desempeño en clase..." class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
+          </div>
+
+          <button 
+            onclick="ejecutarAbonoAdministrativo()" 
+            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow"
+          >
+            Confirmar y Abonar al Estudiante
+          </button>
+          <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[18px]"></div>
+        </div>
+
+        <!-- ESTADO DE CUENTA / MOVIMIENTOS BANCARIOS DEL ESTUDIANTE -->
+        <div class="border-t pt-4 space-y-3">
+          <h4 class="font-semibold text-gray-700 text-sm">Estado de Cuenta - Movimientos del Estudiante</h4>
+          <div id="listaMovimientosAdmin" class="space-y-2 max-h-48 overflow-y-auto text-sm">
+            <p class="text-gray-400 text-center italic py-2">Sin movimientos registrados.</p>
+          </div>
+        </div>
+
+        <!-- REGISTRO DE INCIDENCIAS -->
+        <div class="border-t pt-4 space-y-3">
+          <h4 class="font-semibold text-gray-700">Registrar Atenciones e Incidencias</h4>
+          <textarea 
+            id="observacion" 
+            rows="3" 
+            placeholder="Escriba aquí la incidencia o detalle de atención..." 
+            class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+          <button 
+            onclick="guardarIncidenciaLocal()" 
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-medium transition"
+          >
+            Guardar Incidencia
+          </button>
+        </div>
+
+        <div class="border-t pt-4">
+          <h4 class="font-semibold text-gray-700 mb-2">Historial de Incidencias Guardadas</h4>
+          <ul id="listaIncidencias" class="space-y-2 text-sm text-gray-600 max-h-40 overflow-y-auto">
+            <li class="italic text-gray-400">Sin incidencias registradas hoy.</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
 
   </main>
 
   <script>
+    let missActual = "";
+    let catalogoAbonosAdmin = {
+      "INGRESOS_Y_SUELDOS": [
+        "Ingreso Sueldo Base Mensual", 
+        "Ingreso Sueldo por Rol de Liderazgo", 
+        "Ingreso Bono por desempeño"
+      ],
+      "PREMIOS_Y_BONIFICACIONES": [
+        "Bono por llevar el uniforme impecable y reglamentario", 
+        "Bono Participación destacada en clase", 
+        "Bono Premio por primer lugar en concurso académico o deportivo", 
+        "Bono Puntualidad y asistencia perfecta", 
+        "Bono Apoyo destacado en limpieza", 
+        "Bono por ayuda solidaria", 
+        "Bono Creatividad e innovación", 
+        "Bono Representar dignamente al colegio", 
+        "Bono Leer un libro y presentar evidencia", 
+        "Bono Completar un reto educativo"
+      ]
+    };
+
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+        const utterance = new SpeechSynthesisUtterance(textoLimpio);
+        utterance.rate = 1.05;
+        utterance.pitch = 1.25;
+
+        const voces = window.speechSynthesis.getVoices();
+        let vozIdeal = voces.find(v => 
+          v.lang.startsWith('es') && (
+            v.name.toLowerCase().includes('dani') || 
+            v.name.toLowerCase().includes('helena') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('monica') || 
+            v.name.toLowerCase().includes('sofia') || 
+            v.name.toLowerCase().includes('female') ||
+            v.name.toLowerCase().includes('google español')
+          )
+        );
+
+        if (!vozIdeal) {
+          vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        }
+
+        if (vozIdeal) {
+          utterance.voice = vozIdeal;
+        }
+
+        setTimeout(() => {
+          window.speechSynthesis.speak(utterance);
+        }, 120);
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    function procesarLoginAdmin() {
+      const docente = document.getElementById('loginDocente').value;
+      const clave = document.getElementById('loginClaveDocente').value.trim();
+      const errorDiv = document.getElementById('errorAdminLogin');
+      errorDiv.textContent = "";
+
+      if (!docente || !clave) {
+        errorDiv.textContent = "Seleccione su nombre y escriba su clave.";
+        return;
+      }
+
+      if (clave.length < 4) {
+        errorDiv.textContent = "La clave debe tener al menos 4 dígitos.";
+        return;
+      }
+
+      missActual = docente;
+      document.getElementById('vistaLoginAdmin').classList.add('hidden');
+      document.getElementById('panelAdminPrincipal').classList.remove('hidden');
+      document.getElementById('nombreMissActiva').textContent = missActual;
+      document.getElementById('inputResponsableAuto').value = missActual;
+
+      hablarTextoVoz(`Bienvenida ${missActual} al panel de administración del banco escolar.`);
+    }
+
+    function cerrarSesionAdmin() {
+      missActual = "";
+      document.getElementById('panelAdminPrincipal').classList.add('hidden');
+      document.getElementById('vistaLoginAdmin').classList.remove('hidden');
+      document.getElementById('loginDocente').value = "";
+      document.getElementById('loginClaveDocente').value = "";
+      document.getElementById('fichaAlumno').classList.add('hidden');
+    }
+
+    function cargarConceptosAbonoAdmin() {
+      const cat = document.getElementById('selectCategoriaAbono').value;
+      const selectCon = document.getElementById('selectConceptoAbono');
+      selectCon.innerHTML = '<option value="">Seleccione concepto</option>';
+
+      if (!cat || !catalogoAbonosAdmin[cat]) return;
+
+      catalogoAbonosAdmin[cat].forEach(con => {
+        const opt = document.createElement('option');
+        opt.value = con;
+        opt.textContent = con;
+        selectCon.appendChild(opt);
+      });
+    }
+
+    function ejecutarAbonoAdministrativo() {
+      const codigo = document.getElementById('codigoEstudiante').value.trim().toUpperCase();
+      const cat = document.getElementById('selectCategoriaAbono').value;
+      const con = document.getElementById('selectConceptoAbono').value;
+      const monto = document.getElementById('inputMontoAbono').value.trim();
+      const obs = document.getElementById('inputObservacionAbono').value.trim();
+      const msg = document.getElementById('mensajeAbonoAdmin');
+
+      if (!codigo) {
+        alert("Primero busque o escanee a un estudiante.");
+        return;
+      }
+
+      if (!cat || !con || !monto) {
+        msg.className = "text-xs text-red-600 font-bold";
+        msg.textContent = "Complete categoría, concepto y monto.";
+        return;
+      }
+
+      msg.className = "text-xs text-blue-600 font-bold";
+      msg.textContent = "Procesando abono...";
+
+      if (typeof registrarTransaccionSistema === 'function') {
+        registrarTransaccionSistema(codigo, 'INGRESO', monto, con, missActual, obs, function(res) {
+          if (res && (res.success || res.ok)) {
+            msg.className = "text-xs text-emerald-600 font-extrabold";
+            msg.textContent = "¡Abono registrado con éxito!";
+            hablarTextoVoz(`Abono de ${monto} LDS registrado exitosamente a nombre de ${missActual}.`);
+
+            if (res.nuevoSaldo) {
+              document.getElementById('saldoAlumno').textContent = Number(res.nuevoSaldo).toFixed(2);
+            }
+            if (res.movimientos) {
+              renderizarMovimientosAdmin(res.movimientos);
+            } else {
+              buscarEstudiante();
+            }
+
+            setTimeout(() => {
+              document.getElementById('selectCategoriaAbono').value = "";
+              document.getElementById('selectConceptoAbono').innerHTML = '<option value="">Seleccione concepto</option>';
+              document.getElementById('inputMontoAbono').value = "";
+              document.getElementById('inputObservacionAbono').value = "";
+              msg.textContent = "";
+            }, 3000);
+          } else {
+            msg.className = "text-xs text-red-600 font-bold";
+            msg.textContent = res.message || "Error al procesar el abono.";
+          }
+        });
+      }
+    }
+
     let html5QrCode = null;
     let escanerActivo = false;
 
@@ -121,13 +399,13 @@
             ).then(() => {
               escanerActivo = true;
             }).catch(err => {
-              alert("Error al acceder a la cámara. Revise si otorgó los permisos.");
+              alert("Error al acceder a la cámara.");
             });
           } else {
-            alert("No se detectó ninguna cámara instalada en este dispositivo.");
+            alert("No se detectó ninguna cámara.");
           }
         }).catch(err => {
-          alert("Permiso de cámara denegado. Por favor, acéptelo en la barra de direcciones de su navegador.");
+          alert("Permiso de cámara denegado.");
         });
       }
     }
@@ -164,15 +442,48 @@
         return;
       }
       document.getElementById('fichaAlumno').classList.remove('hidden');
-      document.getElementById('nombreAlumno').textContent = data.nombre || 'Estudiante';
-      document.getElementById('gradoAlumno').textContent = data.grado || 'Primaria';
-      document.getElementById('saldoAlumno').textContent = data.saldo || '0.00';
+      document.getElementById('nombreAlumno').textContent = data.nombre || data.estudiante?.nombreCompleto || 'Estudiante';
+      document.getElementById('gradoAlumno').textContent = (data.grado || data.estudiante?.grado || '') + ' ' + (data.seccion || data.estudiante?.seccion || '');
+      document.getElementById('saldoAlumno').textContent = Number(data.saldo || data.cuenta?.saldoActual || 0).toFixed(2);
 
-      if (data.foto) {
-        document.getElementById('fotoAlumno').src = optimizarUrlFotoDrive(data.foto);
+      const foto = data.foto || data.estudiante?.foto || "";
+      if (foto) {
+        document.getElementById('fotoAlumno').src = optimizarUrlFotoDrive(foto);
       }
 
-      cargarIncidenciasLocales(data.codigo);
+      renderizarMovimientosAdmin(data.movimientos || []);
+      cargarIncidenciasLocales(data.codigo || document.getElementById('codigoEstudiante').value.trim());
+    }
+
+    function renderizarMovimientosAdmin(movs) {
+      const contenedor = document.getElementById('listaMovimientosAdmin');
+      contenedor.innerHTML = '';
+
+      if (!movs || movs.length === 0) {
+        contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>';
+        return;
+      }
+
+      movs.forEach(m => {
+        const tipo = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
+        const monto = Number(m.monto || m.montoLDS || 0);
+        const positivo = tipo.includes('INGRESO') || tipo.includes('ABONO') || monto >= 0;
+        const resp = m.responsable ? ` (${m.responsable})` : '';
+
+        const item = document.createElement('div');
+        item.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 border-l-4 " + 
+          (positivo ? 'border-emerald-500' : 'border-rose-500');
+        item.innerHTML = `
+          <div>
+            <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}${resp}</p>
+            <p class="text-[10px] text-gray-400">${m.fecha || ''}</p>
+          </div>
+          <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
+            ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
+          </span>
+        `;
+        contenedor.appendChild(item);
+      });
     }
 
     function guardarIncidenciaLocal() {
