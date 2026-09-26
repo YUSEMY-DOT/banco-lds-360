@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Himno La Salle del Sur - Melodía</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-900 text-white flex items-center justify-center min-h-screen p-4 text-center">
+
+  <div class="bg-white text-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full space-y-6">
+    <h1 class="text-2xl font-bold text-blue-900">Himno La Salle del Sur</h1>
+    <p class="text-xs text-gray-500">Presiona el botón para escuchar la guía melódica en ritmo de marcha escolar.</p>
+
+    <button onclick="tocarHimno()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl text-lg shadow-lg transition">
+      ▶ Escuchar Melodía del Himno
+    </button>
+  </div>
+
+  <script>
+    function tocarHimno() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Frecuencias numéricas de las notas (Sol Mayor)
+      const notas = [
+        { n: 392.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.8 },
+        { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.8 },
+        { n: 523.25, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 587.33, d: 0.8 },
+        { n: 587.33, d: 0.4 }, { n: 659.25, d: 0.4 }, { n: 587.33, d: 0.4 }, { n: 523.25, d: 0.4 }, { n: 493.88, d: 0.4 }, { n: 440.00, d: 0.4 }, { n: 392.00, d: 1.0 }
+      ];
+
+      let tiempo = audioCtx.currentTime;
+
+      notas.forEach(item => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle'; // Tono suave similar a una lira
+        osc.frequency.setValueAtTime(item.n, tiempo);
+
+        gain.gain.setValueAtTime(0.3, tiempo);
+        gain.gain.exponentialRampToValueAtTime(0.001, tiempo + item.d - 0.05);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(tiempo);
+        osc.stop(tiempo + item.d);
+
+        tiempo += item.d;
+      });
+    }
+  </script>
+</body>
+</html>
