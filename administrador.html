@@ -14,40 +14,40 @@
     body { font-family: 'Montserrat', sans-serif; }
   </style>
 </head>
-<body class="bg-slate-950 text-gray-800 min-h-screen flex flex-col justify-between">
+<body class="bg-[#0b1628] text-gray-800 min-h-screen flex flex-col justify-between">
 
-  <!-- CABECERA INSTITUCIONAL AMPLIA -->
-  <header class="bg-[#031d38] text-white px-8 py-5 flex justify-between items-center border-b-4 border-amber-500 shadow-2xl sticky top-0 z-40">
-    <div class="flex items-center gap-4">
-      <div class="w-14 h-14 bg-red-700 rounded-2xl flex items-center justify-center font-black text-amber-300 text-base border-2 border-amber-400 shadow-lg">
+  <!-- CABECERA INSTITUCIONAL -->
+  <header class="bg-[#031d38] text-white px-6 py-4 flex justify-between items-center border-b-4 border-amber-500 shadow-xl sticky top-0 z-40">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-red-700 rounded-2xl flex items-center justify-center font-black text-amber-300 text-sm border-2 border-amber-400 shadow">
         L.S.
       </div>
       <div>
-        <h1 class="font-black text-xl tracking-wider uppercase text-amber-100">IEP LA SALLE DEL SUR</h1>
-        <p class="text-xs text-amber-300 italic font-semibold">Panel de Administración Mises — KIDSWork LS</p>
+        <h1 class="font-black text-lg tracking-wider uppercase text-amber-100">IEP LA SALLE DEL SUR</h1>
+        <p class="text-[11px] text-amber-300 italic font-semibold">Panel de Administración Mises — KIDSWork LS</p>
       </div>
     </div>
 
-    <a href="index.html" class="bg-blue-800 hover:bg-blue-700 text-white text-xs px-5 py-3 rounded-2xl font-black transition flex items-center gap-2 border border-blue-500 shadow-lg uppercase tracking-wider">
+    <a href="index.html" class="bg-blue-800 hover:bg-blue-700 text-white text-xs px-4 py-2.5 rounded-xl font-black transition flex items-center gap-2 border border-blue-500 shadow uppercase tracking-wider">
       🏠 Volver al Inicio
     </a>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL AMPLIADO A MÁXIMA PANTALLA -->
-  <main class="flex-1 p-6 lg:p-10 max-w-7xl mx-auto w-full flex flex-col justify-center">
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-1 p-4 lg:p-8 max-w-2xl mx-auto w-full flex flex-col justify-center my-auto">
     
-    <!-- PASO 1: SELECCIÓN DE DOCENTE Y TURNO -->
-    <section id="docenteLogin" class="bg-white text-gray-800 p-10 lg:p-14 rounded-3xl shadow-2xl max-w-xl mx-auto w-full space-y-6 border-2 border-slate-200">
+    <!-- PASO 1: SELECCIÓN DE DOCENTE Y TURNO (Proporción exacta) -->
+    <section id="docenteLogin" class="bg-white text-gray-800 p-8 lg:p-10 rounded-3xl shadow-2xl w-full space-y-6 border-2 border-slate-200">
       <div class="text-center space-y-2">
-        <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-4 py-2 rounded-full border border-emerald-300 uppercase tracking-wider">Turno Docente</span>
-        <h2 class="text-3xl font-black text-[#031d38] pt-2">Acceso Administrativo</h2>
-        <p class="text-sm text-gray-500 font-medium">Seleccione su nombre institucional para iniciar turno.</p>
+        <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3.5 py-1.5 rounded-full border border-emerald-300 uppercase tracking-wider">Turno Docente</span>
+        <h2 class="text-2xl lg:text-3xl font-black text-[#031d38] pt-1">Acceso Administrativo</h2>
+        <p class="text-xs text-gray-500 font-medium">Seleccione su nombre institucional para iniciar turno.</p>
       </div>
 
-      <div class="space-y-5 pt-3">
+      <div class="space-y-5 pt-2">
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Docente / Miss</label>
-          <select id="loginDocente" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm">
+          <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Docente / Miss</label>
+          <select id="loginDocente" class="w-full border-2 border-gray-200 rounded-2xl p-3.5 text-sm outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm">
             <option value="">Seleccione su nombre</option>
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
             <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
@@ -57,77 +57,77 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Clave Administrador (PIN)</label>
-          <input type="password" id="loginClaveDocente" placeholder="360LDS" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-center text-xl tracking-[0.5em] outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm" />
+          <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Clave Administrador (PIN)</label>
+          <input type="password" id="loginClaveDocente" class="w-full border-2 border-gray-200 rounded-2xl p-3.5 text-center text-xl tracking-[0.4em] outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm" />
         </div>
 
-        <button onclick="procesarLoginAdmin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl transition shadow-xl text-sm uppercase tracking-wider">
+        <button onclick="procesarLoginAdmin()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl transition shadow-lg text-xs uppercase tracking-wider">
           Iniciar Turno Administrativo
         </button>
 
-        <div id="errorAdminLogin" class="text-rose-600 text-xs text-center font-bold min-h-[20px]"></div>
+        <div id="errorAdminLogin" class="text-rose-600 text-xs text-center font-bold min-h-[18px]"></div>
       </div>
     </section>
 
     <!-- PASO 2: PANEL DE CONTROL DOCENTE -->
-    <section id="docenteDashboard" class="hidden space-y-8 w-full">
+    <section id="docenteDashboard" class="hidden space-y-6 w-full max-w-4xl mx-auto">
       
       <!-- BARRA DE LA MISS EN TURNO -->
-      <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-6 rounded-3xl shadow-2xl flex justify-between items-center border-2 border-emerald-500/40">
-        <div class="space-y-1">
-          <p class="text-xs text-emerald-200 uppercase font-extrabold tracking-wider">Docente Conectada:</p>
-          <h3 id="nombreMissActiva" class="text-xl font-black tracking-wide text-amber-200">---</h3>
+      <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-5 rounded-2xl shadow-xl flex justify-between items-center border border-emerald-500/40">
+        <div class="space-y-0.5">
+          <p class="text-[10px] text-emerald-200 uppercase font-extrabold tracking-wider">Docente Conectada:</p>
+          <h3 id="nombreMissActiva" class="text-base font-black tracking-wide text-amber-200">---</h3>
         </div>
-        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-5 py-3 rounded-2xl transition font-black shadow-lg uppercase tracking-wider">
+        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-4 py-2 rounded-xl transition font-black shadow uppercase tracking-wider">
           🚪 Cerrar Turno
         </button>
       </div>
 
       <!-- BÚSQUEDA Y ESCÁNER QR -->
-      <div class="bg-white text-gray-800 p-8 rounded-3xl shadow-2xl space-y-6 border-2 border-slate-200">
-        <div class="border-b pb-4">
-          <h3 class="text-lg font-black text-[#031d38] uppercase tracking-wide">Consulta de Estudiante</h3>
-          <p class="text-xs text-gray-500 font-medium pt-0.5">Ingrese el código del estudiante o utilice la cámara para escanear su código QR.</p>
+      <div class="bg-white text-gray-800 p-6 rounded-3xl shadow-2xl space-y-4 border-2 border-slate-200">
+        <div class="border-b pb-3">
+          <h3 class="text-base font-black text-[#031d38] uppercase tracking-wide">Consulta de Estudiante</h3>
+          <p class="text-xs text-gray-500 font-medium">Ingrese el código del estudiante o utilice la cámara.</p>
         </div>
         
-        <div class="flex flex-col sm:flex-row gap-4">
-          <input type="text" id="codigoEstudianteAdmin" placeholder="Ej: LDS-EST-001" class="flex-1 border-2 border-gray-200 rounded-2xl px-6 py-4 text-base uppercase outline-none focus:border-emerald-600 font-black tracking-wider text-gray-800 bg-gray-50 shadow-sm" />
-          <button onclick="buscarEstudianteAdmin()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="text" id="codigoEstudianteAdmin" placeholder="Ej: LDS-EST-001" class="flex-1 border-2 border-gray-200 rounded-2xl px-4 py-3 text-sm uppercase outline-none focus:border-emerald-600 font-black tracking-wider text-gray-800 bg-gray-50 shadow-sm" />
+          <button onclick="buscarEstudianteAdmin()" class="bg-[#00a859] hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5">
             🔍 Buscar
           </button>
-          <button onclick="toggleEscanerAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2">
+          <button onclick="toggleEscanerAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5">
             📷 Escanear QR
           </button>
         </div>
 
-        <div id="readerAdmin" class="hidden w-full max-w-lg mx-auto overflow-hidden rounded-2xl border-4 border-blue-500/30 bg-slate-100 shadow-inner"></div>
+        <div id="readerAdmin" class="hidden w-full max-w-md mx-auto overflow-hidden rounded-2xl border-4 border-blue-500/30 bg-slate-100 shadow-inner"></div>
       </div>
 
-      <!-- FICHA Y MÓDULO DE ABONOS DEL ALUMNO (CON FOTO GRANDE Y ESPACIOS AMPLIOS) -->
-      <section id="fichaAlumnoAdmin" class="hidden bg-white text-gray-800 p-10 rounded-3xl shadow-2xl space-y-8 border-2 border-slate-200">
+      <!-- FICHA Y MÓDULO DE ABONOS DEL ALUMNO (FOTO MEDIANA Y PROPORCIONAL) -->
+      <section id="fichaAlumnoAdmin" class="hidden bg-white text-gray-800 p-8 rounded-3xl shadow-2xl space-y-6 border-2 border-slate-200">
         
-        <!-- DATOS DEL ESTUDIANTE CON FOTO GRANDE -->
-        <div class="flex flex-col md:flex-row items-center gap-8 border-b-2 border-gray-100 pb-8">
-          <img id="fotoAlumnoAdmin" src="https://via.placeholder.com/150" alt="Foto Estudiante" class="w-36 h-36 md:w-44 md:h-44 rounded-3xl object-cover border-4 border-emerald-500 shadow-2xl flex-shrink-0 bg-gray-100" />
-          <div class="space-y-2 text-center md:text-left flex-1">
-            <h3 id="nombreAlumnoAdmin" class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">---</h3>
-            <p id="gradoAlumnoAdmin" class="text-sm font-black text-gray-500 uppercase tracking-widest bg-gray-100 py-1 px-3 rounded-xl inline-block">---</p>
-            <div class="text-3xl md:text-4xl font-black text-emerald-800 pt-3">
+        <div class="flex flex-col sm:flex-row items-center gap-6 border-b-2 border-gray-100 pb-6">
+          <!-- FOTO MEDIANA Y PROPORCIONAL -->
+          <img id="fotoAlumnoAdmin" src="" alt="Foto Estudiante" class="w-32 h-36 rounded-2xl object-cover border-4 border-emerald-500 shadow-xl flex-shrink-0 bg-gray-100" />
+          <div class="space-y-1.5 text-center sm:text-left flex-1">
+            <h3 id="nombreAlumnoAdmin" class="text-2xl font-black text-gray-900 tracking-tight">---</h3>
+            <p id="gradoAlumnoAdmin" class="text-xs font-black text-gray-500 uppercase tracking-widest bg-gray-100 py-1 px-3 rounded-lg inline-block">---</p>
+            <div class="text-2xl font-black text-emerald-800 pt-2">
               Saldo Disponible: <span id="saldoAlumnoAdmin">0.00</span> LDS
             </div>
           </div>
         </div>
 
         <!-- MÓDULO DE ABONOS -->
-        <div class="bg-emerald-50/80 p-8 rounded-3xl border-2 border-emerald-300 space-y-6 shadow-sm">
-          <h5 class="font-black text-emerald-900 text-base flex items-center gap-3 uppercase tracking-wide">
-            <span class="text-2xl">💰</span> Módulo de Abonos (Sueldos / Premios / Bonificaciones)
+        <div class="bg-emerald-50/80 p-6 rounded-3xl border-2 border-emerald-300 space-y-4 shadow-sm">
+          <h5 class="font-black text-emerald-900 text-sm flex items-center gap-2 uppercase tracking-wide">
+            <span>💰</span> Módulo de Abonos (Sueldos / Premios / Bonificaciones)
           </h5>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Categoría</label>
-              <select id="selectCategoriaAbono" onchange="cargarConceptosAbonoAdmin()" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm bg-white outline-none font-black text-gray-800 focus:border-emerald-600 shadow-sm">
+              <label class="block text-xs font-black text-gray-700 mb-1.5 uppercase tracking-wide">Categoría</label>
+              <select id="selectCategoriaAbono" onchange="cargarConceptosAbonoAdmin()" class="w-full border-2 border-gray-200 rounded-2xl p-3 text-xs bg-white outline-none font-black text-gray-800 focus:border-emerald-600 shadow-sm">
                 <option value="">Seleccione categoría</option>
                 <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
                 <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
@@ -135,40 +135,40 @@
             </div>
 
             <div>
-              <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Concepto</label>
-              <select id="selectConceptoAbono" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm bg-white outline-none font-black text-gray-800 focus:border-emerald-600 shadow-sm">
+              <label class="block text-xs font-black text-gray-700 mb-1.5 uppercase tracking-wide">Concepto</label>
+              <select id="selectConceptoAbono" class="w-full border-2 border-gray-200 rounded-2xl p-3 text-xs bg-white outline-none font-black text-gray-800 focus:border-emerald-600 shadow-sm">
                 <option value="">Seleccione concepto</option>
               </select>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Monto LDS</label>
-              <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm bg-white outline-none font-black text-emerald-700 focus:border-emerald-600 shadow-sm" />
+              <label class="block text-xs font-black text-gray-700 mb-1.5 uppercase tracking-wide">Monto LDS</label>
+              <input type="number" id="inputMontoAbono" min="0" step="0.01" class="w-full border-2 border-gray-200 rounded-2xl p-3 text-sm bg-white outline-none font-black text-emerald-700 focus:border-emerald-600 shadow-sm" />
             </div>
             <div>
-              <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Responsable</label>
-              <input type="text" id="inputResponsableAuto" readonly class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm bg-gray-100 font-black text-gray-700 shadow-sm" />
+              <label class="block text-xs font-black text-gray-700 mb-1.5 uppercase tracking-wide">Responsable</label>
+              <input type="text" id="inputResponsableAuto" readonly class="w-full border-2 border-gray-200 rounded-2xl p-3 text-sm bg-gray-100 font-black text-gray-700 shadow-sm" />
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Observación (Opcional)</label>
-            <input type="text" id="inputObservacionAbono" placeholder="Ej: Excelente desempeño académico..." class="w-full border-2 border-gray-200 rounded-2xl p-4 text-sm bg-white outline-none font-bold text-gray-800 focus:border-emerald-600 shadow-sm" />
+            <label class="block text-xs font-black text-gray-700 mb-1.5 uppercase tracking-wide">Observación (Opcional)</label>
+            <input type="text" id="inputObservacionAbono" class="w-full border-2 border-gray-200 rounded-2xl p-3 text-xs bg-white outline-none font-bold text-gray-800 focus:border-emerald-600 shadow-sm" />
           </div>
 
-          <button onclick="ejecutarAbonoAdministrativo()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl text-sm uppercase tracking-wider transition shadow-xl">
+          <button onclick="ejecutarAbonoAdministrativo()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
             Confirmar y Abonar al Estudiante
           </button>
-          <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[24px] pt-1"></div>
+          <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[20px] pt-1"></div>
         </div>
 
         <!-- MOVIMIENTOS HISTÓRICOS -->
-        <div class="border-t-2 border-gray-100 pt-6 space-y-4">
+        <div class="border-t-2 border-gray-100 pt-5 space-y-3">
           <h5 class="font-black text-gray-800 text-sm uppercase tracking-wide">Historial de Movimientos del Estudiante</h5>
-          <div id="listaMovimientosAdmin" class="space-y-3 max-h-64 overflow-y-auto text-xs pr-2">
-            <p class="text-gray-400 text-center italic py-6 text-sm">Sin movimientos registrados recientemente.</p>
+          <div id="listaMovimientosAdmin" class="space-y-2 max-h-56 overflow-y-auto text-xs pr-2">
+            <p class="text-gray-400 text-center italic py-4">Sin movimientos registrados recientemente.</p>
           </div>
         </div>
 
@@ -178,7 +178,7 @@
 
   </main>
 
-  <footer class="bg-[#021326] text-center py-5 text-xs text-gray-400 border-t border-blue-900/50">
+  <footer class="bg-[#021326] text-center py-4 text-xs text-gray-400 border-t border-blue-900/50">
     LA SALLE DEL SUR — LIMA PERÚ
   </footer>
 
