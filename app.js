@@ -1,88 +1,78 @@
 /**
- * BANCO LDS 360 - Núcleo de Integración y Caché
+ * BANCO LDS 360 - Núcleo de Integración y Caché (VERSIÓN JSONP ORIGINAL)
  * IEP La Salle del Sur
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
+// Función JSONP que salta los bloqueos de seguridad de Google
+function hacerPeticionJSONP(parametros, callback) {
+  const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  
+  window[nombreCallback] = function(data) {
+    delete window[nombreCallback];
+    document.body.removeChild(script);
+    callback(data);
+  };
+
+  let url = SCRIPT_URL + '?callback=' + nombreCallback;
+  for (let clave in parametros) {
+    url += '&' + clave + '=' + encodeURIComponent(parametros[clave]);
+  }
+
+  const script = document.createElement('script');
+  script.src = url;
+  
+  script.onerror = function() {
+    callback({ success: false, message: "Error de red o conexión al servidor de Google." });
+  };
+
+  document.body.appendChild(script);
+}
+
 function consultarDatosEstudiante(codigo, callback) {
   const cacheKey = 'LDS_DATA_' + codigo;
   const cacheGuardada = localStorage.getItem(cacheKey);
 
+  // Muestra datos almacenados de inmediato
   if (cacheGuardada) {
-    try {
-      const datosLocales = JSON.parse(cacheGuardada);
-      callback(datosLocales);
-    } catch (e) {
-      console.error("Error al leer la caché local:", e);
-    }
+    try { 
+      callback(JSON.parse(cacheGuardada)); 
+    } catch(e) {}
   }
 
-  const url = `${SCRIPT_URL}?action=CONSULTAR_ALUMNO&codigo=${encodeURIComponent(codigo)}`;
-
-  fetch(url)
-    .then(response => response.json())
-    .then(datosRed => {
-      if (datosRed && datosRed.success) {
-        localStorage.setItem(cacheKey, JSON.stringify(datosRed));
-        callback(datosRed);
-      }
-    })
-    .catch(error => {
-      console.error("Error en la conexión con Apps Script:", error);
-    });
+  // Trae la información real mediante JSONP en segundo plano
+  hacerPeticionJSONP({ action: 'CONSULTAR_ALUMNO', codigo: codigo }, function(datosRed) {
+    if (datosRed && datosRed.success) {
+      localStorage.setItem(cacheKey, JSON.stringify(datosRed));
+      callback(datosRed);
+    }
+  });
 }
 
 function ejecutarLoginSistema(codigo, hashClave, callback) {
-  const url = `${SCRIPT_URL}?action=LOGINALUMNO&codigo=${encodeURIComponent(codigo)}&hash=${encodeURIComponent(hashClave)}`;
-
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      if (data && data.success) {
-        localStorage.setItem('LDS_DATA_' + codigo, JSON.stringify(data));
-      }
-      callback(data);
-    })
-    .catch(err => {
-      console.error("Error al autenticar:", err);
-      callback({ success: false, message: "Error de red o conexión." });
-    });
+  hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, hash: hashClave }, function(data) {
+    if (data && data.success) {
+      localStorage.setItem('LDS_DATA_' + codigo, JSON.stringify(data));
+    }
+    callback(data);
+  });
 }
 
 function registrarTransaccionSistema(codigo, tipo, monto, concepto, callback) {
-  const payload = {
-    action: 'REGISTRAR_TRANSACCION',
-    codigo: codigo,
-    tipo: tipo,
-    monto: monto,
-    concepto: concepto || 'General'
-  };
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    const cacheKey = 'LDS_DATA_' + codigo;
-    const cache = JSON.parse(localStorage.getItem(cacheKey) || '{}');
-    let saldoActual = parseFloat(cache.saldo || 0);
-
-    if (tipo === 'COBRAR') {
-      saldoActual += parseFloat(monto);
-    } else {
-      saldoActual -= parseFloat(monto);
+  hacerPeticionJSONP({ 
+    action: 'REGISTRAR_TRANSACCION', 
+    codigo: codigo, 
+    tipo: tipo, 
+    monto: monto, 
+    concepto: concepto || 'General' 
+  }, function(res) {
+    if (res && res.success) {
+      const cacheKey = 'LDS_DATA_' + codigo;
+      const cache = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+      cache.saldo = res.nuevoSaldo;
+      localStorage.setItem(cacheKey, JSON.stringify(cache));
     }
-
-    cache.saldo = saldoActual.toFixed(2);
-    localStorage.setItem(cacheKey, JSON.stringify(cache));
-
-    callback({ success: true, nuevoSaldo: cache.saldo });
-  })
-  .catch(err => {
-    console.error("Error registrando transacción:", err);
-    callback({ success: false });
+    callback(res || { success: false });
   });
 }
