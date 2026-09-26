@@ -76,7 +76,7 @@
         <p id="alumnoGrado" class="text-xs text-blue-200 mt-1">---</p>
       </div>
 
-      <!-- 3 BOTONES INTERNOS CON COLORES FORZADOS EN LÍNEA -->
+      <!-- 3 BOTONES INTERNOS (Cobrar Verde, Pagar Rojo, Movimientos Lila) -->
       <div class="grid grid-cols-3 gap-2">
         <button onclick="seleccionarOperacion('INGRESO')" class="text-white p-3 rounded-xl font-bold shadow text-center transition text-xs" style="background-color: #16a34a !important;">
           💰 COBRAR
@@ -150,7 +150,7 @@
   </main>
 
   <footer class="text-center py-3 text-xs text-gray-400">
-    KIDSWork LS - Todos los derechos reservados
+    KIDSWork LS - v3.0 Actualizado - Todos los derechos reservados
   </footer>
 
   <script>
@@ -266,7 +266,7 @@
 
       let categoriasPermitidas = [];
       if (tipo === 'INGRESO') {
-        // SOLAMENTE LAS DOS CATEGORÍAS PEDIDAS PARA COBRAR
+        // FILTRO ESTRICTO: SOLO ESTAS DOS CATEGORÍAS PARA COBRAR
         categoriasPermitidas = ["INGRESOS_Y_SUELDOS", "PREMIOS_Y_BONIFICACIONES"];
       } else {
         categoriasPermitidas = ["AHORROS_E_INVERSIONES", "PAGOS_Y_GASTOS", "SANCIONES_Y_MULTAS", "COSTOS_Y_OTROS"];
