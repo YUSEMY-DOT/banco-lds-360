@@ -1,5 +1,5 @@
 /**
- * BANCO LDS 360 - Núcleo con Seguridad de Tiempo (Anti-congelamiento)
+ * BANCO LDS 360 - Núcleo de Conexión y Seguridad
  * IEP La Salle del Sur
  */
 
@@ -9,13 +9,12 @@ function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Math.round(100000 * Math.random());
   let respuestaEnviada = false;
 
-  // SEGURIDAD: Si Google tarda más de 8 segundos, desbloquea la pantalla automáticamente
   const timeoutSeguridad = setTimeout(() => {
     if (!respuestaEnviada) {
       respuestaEnviada = true;
       delete window[nombreCallback];
       if (script && script.parentNode) document.body.removeChild(script);
-      callback({ success: false, message: "El servidor de Google tardó demasiado. Intenta otra vez." });
+      callback({ success: false, message: "El servidor tardó demasiado. Intenta otra vez." });
     }
   }, 8000);
 
@@ -51,44 +50,29 @@ function hacerPeticionJSONP(parametros, callback) {
 }
 
 function consultarDatosEstudiante(codigo, callback) {
-  const cacheKey = 'LDS_DATA_' + codigo;
-  const cacheGuardada = localStorage.getItem(cacheKey);
-
-  if (cacheGuardada) {
-    try { callback(JSON.parse(cacheGuardada)); } catch(e) {}
-  }
-
   hacerPeticionJSONP({ action: 'CONSULTAR_ALUMNO', codigo: codigo }, function(datosRed) {
-    if (datosRed && (datosRed.success || datosRed.ok)) {
-      localStorage.setItem(cacheKey, JSON.stringify(datosRed));
-      callback(datosRed);
-    }
+    callback(datosRed);
   });
 }
 
 function ejecutarLoginSistema(codigo, clave, callback) {
-  const cacheKey = 'LDS_SESION_INSTANTANEA_' + codigo;
-  const sesionCache = localStorage.getItem(cacheKey);
-
-  if (sesionCache) {
-    try {
-      const datos = JSON.parse(sesionCache);
-      callback(datos);
-      
-      hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(resBackground) {
-        if (resBackground && (resBackground.success || resBackground.ok)) {
-          localStorage.setItem(cacheKey, JSON.stringify(resBackground));
-        }
-      });
-      return;
-    } catch(e) {}
-  }
-
+  // Petición directa al servidor de Google Sheets para validar código y clave de forma estricta
   hacerPeticionJSONP({ action: 'LOGINALUMNO', codigo: codigo, clave: clave }, function(data) {
-    if (data && (data.success || data.ok)) {
-      localStorage.setItem(cacheKey, JSON.stringify(data));
+    if (data && (data.success === true || data.ok === true)) {
+      // Verificación adicional de seguridad por si el servidor devuelve éxito pero la clave no coincide
+      const est = data.estudiante || data;
+      const claveReal = String(est.clave || est.password || est.pin || "").trim();
+      
+      if (claveReal && claveReal !== "" && claveReal !== String(clave).trim()) {
+        callback({ success: false, message: "Clave de acceso incorrecta." });
+        return;
+      }
+      
+      localStorage.setItem('LDS_SESION_' + codigo, JSON.stringify(data));
+      callback(data);
+    } else {
+      callback(data || { success: false, message: "Credenciales incorrectas o código no registrado." });
     }
-    callback(data);
   });
 }
 
@@ -102,9 +86,6 @@ function registrarTransaccionSistema(codigo, tipo, monto, concepto, responsable,
     responsable: responsable || '',
     observacion: observacion || ''
   }, function(res) {
-    if (res && (res.success || res.ok)) {
-      localStorage.removeItem('LDS_SESION_INSTANTANEA_' + codigo);
-    }
     callback(res || { success: false });
   });
 }
