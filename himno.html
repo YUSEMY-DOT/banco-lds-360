@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Himno Institucional Jovial - IEP La Salle del Sur</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- LIBRERÍA SOUNDFONT DE INSTRUMENTOS REALES -->
-  <script src="https://cdn.jsdelivr.net/npm/soundfont-player@0.8.7/dist/soundfont-player.min.js"></script>
 </head>
 <body class="bg-gradient-to-b from-sky-900 via-indigo-900 to-slate-950 text-white min-h-screen flex flex-col justify-between p-4 font-sans select-none">
 
@@ -49,7 +47,7 @@
     </div>
 
     <p id="estadoTexto" class="text-xs text-amber-200 font-medium">
-      Haz clic para cargar la flauta dulce, marimba y piano jovial.
+      Haz clic para escuchar la melodía alegre.
     </p>
 
   </main>
@@ -60,14 +58,17 @@
 
   <script>
     let audioCtx = null;
-    let flauta = null;
-    let marimba = null;
-    let piano = null;
     let sonando = false;
-    let timeouts = [];
+    let timerID = null;
 
-    // MELODÍA DULCE Y JOVIAL EXTRAÍDA DE TU AUDIO (CANTADA EN DO MAYOR)
-    const melodíaVoz = [
+    // Frecuencias exactas en Hz (Do Mayor C4-C5)
+    const FREQS = {
+      "C3": 130.81, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "B3": 246.94,
+      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23, "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+    };
+
+    // Melodía transcrita de tu voz
+    const melodiaVoz = [
       // Aprendiendo con metas y valores...
       { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
       { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
@@ -109,26 +110,67 @@
       { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
     ];
 
-    // ACORDES ALEGRES DE ACOMPAÑAMIENTO EN PIANO (C, F, G)
-    const acordesPiano = [
-      { t: 0.0, notes: ["C3", "E3", "G3"], d: 2.5 },
-      { t: 2.5, notes: ["F3", "A3", "C4"], d: 2.5 },
-      { t: 5.0, notes: ["G3", "B3", "D4"], d: 2.5 },
-      { t: 7.5, notes: ["C3", "E3", "G3"], d: 2.5 },
-      { t: 10.0, notes: ["F3", "A3", "C4"], d: 2.5 },
-      { t: 12.5, notes: ["G3", "B3", "D4"], d: 2.5 },
-      { t: 15.0, notes: ["C3", "E3", "G3"], d: 3.0 },
-      { t: 18.0, notes: ["C3", "E3", "G3"], d: 2.5 },
-      { t: 20.5, notes: ["F3", "A3", "C4"], d: 2.5 },
-      { t: 23.0, notes: ["G3", "B3", "D4"], d: 2.5 },
-      { t: 25.5, notes: ["C3", "E3", "G3"], d: 3.0 }
-    ];
+    // Sintetizador Nativo Web Audio (Sin dependencias externas)
+    function sonarMelodiaJovial(ctx, freq, t, dur) {
+      if (!freq) return;
+
+      // 1. Melodía Dulce (Flauta / Lira)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, t);
+
+      // Vibrato suave
+      const vibrato = ctx.createOscillator();
+      const vibratoGain = ctx.createGain();
+      vibrato.frequency.setValueAtTime(5, t);
+      vibratoGain.gain.setValueAtTime(3, t);
+      vibrato.connect(osc1.frequency);
+      vibrato.start(t);
+      vibrato.stop(t + dur);
+
+      gain1.gain.setValueAtTime(0.01, t);
+      gain1.gain.linearRampToValueAtTime(0.35, t + 0.05);
+      gain1.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.02);
+
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(t);
+      osc1.stop(t + dur);
+
+      // 2. Marimba / Glockenspiel (Toque percusivo alegre)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2, t);
+
+      gain2.gain.setValueAtTime(0.2, t);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(t);
+      osc2.stop(t + 0.25);
+    }
+
+    function sonarAcompanamiento(ctx, freq, t, dur) {
+      if (!freq) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0.15, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.03);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + dur);
+    }
 
     async function reproducirJovial() {
       if (sonando) return;
-
-      const estado = document.getElementById('estadoTexto');
-      estado.textContent = "⌛ Cargando instrumentos alegres...";
 
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -138,58 +180,37 @@
           await audioCtx.resume();
         }
 
-        // Cargar timbres cálidos: Flauta Dulce, Marimba y Piano Acústico
-        if (!flauta) {
-          flauta = await Soundfont.instrument(audioCtx, 'flute');
-        }
-        if (!marimba) {
-          marimba = await Soundfont.instrument(audioCtx, 'marimba');
-        }
-        if (!piano) {
-          piano = await Soundfont.instrument(audioCtx, 'acoustic_grand_piano');
-        }
-
         sonando = true;
         document.getElementById('btnPlay').classList.add('hidden');
         document.getElementById('btnStop').classList.remove('hidden');
-        estado.textContent = "🎶 Reproduciendo melodía jovial y cálida.";
+        document.getElementById('estadoTexto').textContent = "🎶 Reproduciendo arreglo alegre y jovial...";
 
         let t = audioCtx.currentTime + 0.1;
 
-        // 1. Melodía alegre combinada (Flauta dulce + toque suave de Marimba)
-        melodíaVoz.forEach(item => {
-          flauta.play(item.n, t, { duration: item.d, gain: 0.7 });
-          marimba.play(item.n, t, { duration: item.d, gain: 0.4 });
+        melodiaVoz.forEach(item => {
+          const f = FREQS[item.n] || 261.63;
+          sonarMelodiaJovial(audioCtx, f, t, item.d);
+
+          // Acompañamiento armónico bajo
+          const fBajo = f / 2;
+          sonarAcompanamiento(audioCtx, fBajo, t, item.d);
+
           t += item.d;
         });
 
-        // 2. Acompañamiento armonioso con piano
-        let startTime = audioCtx.currentTime + 0.1;
-        acordesPiano.forEach(chord => {
-          chord.notes.forEach(note => {
-            piano.play(note, startTime + chord.t, { duration: chord.d, gain: 0.4 });
-          });
-        });
-
         const duracionTotal = (t - audioCtx.currentTime) * 1000;
-        const tid = setTimeout(() => {
+        timerID = setTimeout(() => {
           detenerMelodia();
         }, duracionTotal);
-        timeouts.push(tid);
 
       } catch (e) {
-        alert("Error al reproducir: " + e.message);
+        alert("Error de reproducción: " + e.message);
         detenerMelodia();
       }
     }
 
     function detenerMelodia() {
-      timeouts.forEach(clearTimeout);
-      timeouts = [];
-      if (flauta) flauta.stop();
-      if (marimba) marimba.stop();
-      if (piano) piano.stop();
-
+      if (timerID) clearTimeout(timerID);
       if (audioCtx) {
         audioCtx.close();
         audioCtx = null;
