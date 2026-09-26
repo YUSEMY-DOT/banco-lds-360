@@ -57,7 +57,7 @@
       <div id="errorAdminLogin" class="text-red-600 text-xs text-center min-h-[20px]"></div>
     </div>
 
-    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL (OCULTO HASTA INICIAR SESIÓN) -->
+    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL -->
     <div id="panelAdminPrincipal" class="hidden space-y-6">
       
       <!-- BARRA DE BIENVENIDA DE LA MISSE -->
@@ -135,7 +135,7 @@
 
             <div>
               <label class="block text-xs font-medium text-gray-600 mb-1">Concepto</label>
-              <select id="selectConceptoAbono" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
+              <select id="selectConceptoAbono" onchange="anunciarConceptoSeleccionado()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
                 <option value="">Seleccione concepto</option>
               </select>
             </div>
@@ -144,7 +144,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-gray-600 mb-1">Monto LDS</label>
-              <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
+              <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" onchange="anunciarMontoIngresado()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
             </div>
             <div>
               <label class="block text-xs font-medium text-gray-600 mb-1">Responsable (Automático)</label>
@@ -256,7 +256,7 @@
 
         setTimeout(() => {
           window.speechSynthesis.speak(utterance);
-        }, 120);
+        }, 100);
       }
     }
 
@@ -274,11 +274,13 @@
 
       if (!docente || !clave) {
         errorDiv.textContent = "Seleccione su nombre y escriba su clave.";
+        hablarTextoVoz("Por favor seleccione su nombre y escriba su clave.");
         return;
       }
 
       if (clave.length < 4) {
         errorDiv.textContent = "La clave debe tener al menos 4 dígitos.";
+        hablarTextoVoz("La clave debe tener al menos cuatro dígitos.");
         return;
       }
 
@@ -298,10 +300,12 @@
       document.getElementById('loginDocente').value = "";
       document.getElementById('loginClaveDocente').value = "";
       document.getElementById('fichaAlumno').classList.add('hidden');
+      hablarTextoVoz("Turno cerrado correctamente.");
     }
 
     function cargarConceptosAbonoAdmin() {
-      const cat = document.getElementById('selectCategoriaAbono').value;
+      const catSelect = document.getElementById('selectCategoriaAbono');
+      const cat = catSelect.value;
       const selectCon = document.getElementById('selectConceptoAbono');
       selectCon.innerHTML = '<option value="">Seleccione concepto</option>';
 
@@ -313,6 +317,23 @@
         opt.textContent = con;
         selectCon.appendChild(opt);
       });
+
+      const nombreCat = catSelect.options[catSelect.selectedIndex].text;
+      hablarTextoVoz(`Categoría seleccionada: ${nombreCat}. Seleccione ahora el concepto.`);
+    }
+
+    function anunciarConceptoSeleccionado() {
+      const con = document.getElementById('selectConceptoAbono').value;
+      if (con) {
+        hablarTextoVoz(`Concepto seleccionado: ${con}. Ingrese el monto a abonar.`);
+      }
+    }
+
+    function anunciarMontoIngresado() {
+      const monto = document.getElementById('inputMontoAbono').value;
+      if (monto && Number(monto) > 0) {
+        hablarTextoVoz(`Monto ingresado: ${monto} LDS.`);
+      }
     }
 
     function ejecutarAbonoAdministrativo() {
@@ -325,32 +346,38 @@
 
       if (!codigo) {
         alert("Primero busque o escanee a un estudiante.");
+        hablarTextoVoz("Primero busque o escanee a un estudiante.");
         return;
       }
 
       if (!cat || !con || !monto) {
         msg.className = "text-xs text-red-600 font-bold";
         msg.textContent = "Complete categoría, concepto y monto.";
+        hablarTextoVoz("Por favor complete la categoría, el concepto y el monto a abonar.");
         return;
       }
 
       msg.className = "text-xs text-blue-600 font-bold";
       msg.textContent = "Procesando abono...";
+      hablarTextoVoz(`Procesando abono de ${monto} LDS por concepto de ${con}.`);
 
       if (typeof registrarTransaccionSistema === 'function') {
         registrarTransaccionSistema(codigo, 'INGRESO', monto, con, missActual, obs, function(res) {
           if (res && (res.success || res.ok)) {
             msg.className = "text-xs text-emerald-600 font-extrabold";
             msg.textContent = "¡Abono registrado con éxito!";
-            hablarTextoVoz(`Abono de ${monto} LDS registrado exitosamente a nombre de ${missActual}.`);
-
-            if (res.nuevoSaldo) {
-              document.getElementById('saldoAlumno').textContent = Number(res.nuevoSaldo).toFixed(2);
+            
+            const nuevoSaldo = res.nuevoSaldo || res.saldoActual;
+            if (nuevoSaldo !== undefined) {
+              document.getElementById('saldoAlumno').textContent = Number(nuevoSaldo).toFixed(2);
             }
+
+            hablarTextoVoz(`¡Abono de ${monto} LDS registrado con éxito! El nuevo saldo disponible es ${document.getElementById('saldoAlumno').textContent} LDS.`);
+
             if (res.movimientos) {
               renderizarMovimientosAdmin(res.movimientos);
             } else {
-              buscarEstudiante();
+              buscarEstudiante(true); // Actualizar silencioso
             }
 
             setTimeout(() => {
@@ -363,6 +390,7 @@
           } else {
             msg.className = "text-xs text-red-600 font-bold";
             msg.textContent = res.message || "Error al procesar el abono.";
+            hablarTextoVoz(`Ocurrió un error al procesar el abono: ${res.message || 'Intente nuevamente'}.`);
           }
         });
       }
@@ -381,6 +409,8 @@
           html5QrCode = new Html5Qrcode("reader");
         }
         
+        hablarTextoVoz("Cámara activada. Muestre el código QR del estudiante.");
+
         Html5Qrcode.getCameras().then(devices => {
           if (devices && devices.length > 0) {
             let cameraId = devices[0].id;
@@ -400,12 +430,15 @@
               escanerActivo = true;
             }).catch(err => {
               alert("Error al acceder a la cámara.");
+              hablarTextoVoz("Error al acceder a la cámara.");
             });
           } else {
             alert("No se detectó ninguna cámara.");
+            hablarTextoVoz("No se detectó ninguna cámara.");
           }
         }).catch(err => {
           alert("Permiso de cámara denegado.");
+          hablarTextoVoz("Permiso de cámara denegado.");
         });
       }
     }
@@ -413,6 +446,7 @@
     function onScanSuccess(decodedText) {
       document.getElementById('codigoEstudiante').value = decodedText;
       detenerEscaner();
+      hablarTextoVoz(`Código QR leído correctamente. Buscando estudiante.`);
       buscarEstudiante();
     }
 
@@ -427,18 +461,25 @@
       }
     }
 
-    function buscarEstudiante() {
+    function buscarEstudiante(silencioso = false) {
       const codigo = document.getElementById('codigoEstudiante').value.trim();
-      if (!codigo) return alert("Ingrese un código válido.");
+      if (!codigo) {
+        alert("Ingrese un código válido.");
+        hablarTextoVoz("Ingrese un código de estudiante válido.");
+        return;
+      }
 
       if (typeof consultarDatosEstudiante === 'function') {
-        consultarDatosEstudiante(codigo, actualizarVistaAdmin);
+        consultarDatosEstudiante(codigo, function(data) {
+          actualizarVistaAdmin(data, silencioso);
+        });
       }
     }
 
-    function actualizarVistaAdmin(data) {
+    function actualizarVistaAdmin(data, silencioso = false) {
       if (!data || !(data.success || data.ok)) {
         alert("No se encontraron datos para el estudiante.");
+        hablarTextoVoz("No se encontraron datos para el estudiante ingresado.");
         return;
       }
 
@@ -458,8 +499,9 @@
       renderizarMovimientosAdmin(data.movimientos || []);
       cargarIncidenciasLocales(data.codigo || document.getElementById('codigoEstudiante').value.trim());
 
-      // Locución automática de voz al encontrar los datos del alumno
-      hablarTextoVoz(`Estudiante ${nombre}. Saldo disponible: ${saldo} LDS.`);
+      if (!silencioso) {
+        hablarTextoVoz(`Estudiante ${nombre}, grado ${grado}. Saldo disponible: ${saldo} LDS.`);
+      }
     }
 
     function renderizarMovimientosAdmin(movs) {
@@ -496,7 +538,11 @@
     function guardarIncidenciaLocal() {
       const codigo = document.getElementById('codigoEstudiante').value.trim();
       const obs = document.getElementById('observacion').value.trim();
-      if (!obs || !codigo) return alert("Escriba una observación.");
+      if (!obs || !codigo) {
+        alert("Escriba una observación.");
+        hablarTextoVoz("Por favor escriba el detalle de la incidencia.");
+        return;
+      }
 
       const key = 'INCIDENCIAS_' + codigo;
       const registros = JSON.parse(localStorage.getItem(key) || '[]');
@@ -505,6 +551,7 @@
       
       document.getElementById('observacion').value = '';
       cargarIncidenciasLocales(codigo);
+      hablarTextoVoz("Incidencia o atención registrada correctamente.");
     }
 
     function cargarIncidenciasLocales(codigo) {
