@@ -1,11 +1,9 @@
 /**
- * BANCO LDS 360 - CONECTOR DIRECTO ADMINISTRATIVO
+ * BANCO LDS 360 - FLUJO ORDENADO Y DEFINITIVO
  * IEP La Salle del Sur
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
-
-let missActual = "";
 
 // PETICIÓN JSONP
 function hacerPeticionJSONP(parametros, callback) {
@@ -54,7 +52,7 @@ function hacerPeticionJSONP(parametros, callback) {
   document.body.appendChild(script);
 }
 
-// FUNCIONES DE VOZ Y SONIDO
+// EFECTOS DE SONIDO Y VOZ PARLANTE
 function reproducirSonidoExito() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -77,79 +75,105 @@ function reproducirSonidoExito() {
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
-    const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
-    const utterance = new SpeechSynthesisUtterance(textoLimpio);
+    const utterance = new SpeechSynthesisUtterance(texto);
     utterance.rate = 1.0;
     utterance.pitch = 1.2;
-
     const voces = window.speechSynthesis.getVoices();
-    let vozIdeal = voces.find(v => v.lang.startsWith('es'));
-    if (vozIdeal) utterance.voice = vozIdeal;
-
+    let vozEs = voces.find(v => v.lang.startsWith('es'));
+    if (vozEs) utterance.voice = vozEs;
     setTimeout(() => { window.speechSynthesis.speak(utterance); }, 100);
   }
 }
 
-// BÚSQUEDA DEL ALUMNO ADAPTADA A TU INTERFAZ
-function buscarEstudiante() {
-  // Detecta el input de texto en cualquiera de las versiones de la interfaz
-  const inputElem = document.getElementById('codigoEstudiante') || 
-                    document.getElementById('codigoEstudianteAdmin') || 
-                    document.querySelector('input[type="text"]');
+// 1. VALIDACIÓN MAESTRA DESDE LA PORTADA (`index.html`)
+function validarAdmin() {
+  const input = document.getElementById('adminPin');
+  const error = document.getElementById('adminError');
+  const pin = (input ? input.value : '').trim();
 
-  const codigo = inputElem ? inputElem.value.trim().toUpperCase() : "";
-
-  if (!codigo) {
-    hablarTextoVoz("Por favor escribe o ingresa el código del estudiante.");
+  if (!pin) {
+    if (error) error.textContent = 'Ingresa la clave de administrador.';
+    hablarTextoVoz("Ingresa la clave de administrador.");
     return;
   }
 
-  hablarTextoVoz("Consultando información del estudiante.");
+  if (pin.toUpperCase() !== '360LDS') {
+    if (error) error.textContent = 'Clave de administrador incorrecta.';
+    hablarTextoVoz("Clave de administrador incorrecta.");
+    return;
+  }
 
-  hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, function(data) {
-    if (!data || !(data.success || data.ok)) {
-      alert("No se encontraron datos para el código: " + codigo);
-      hablarTextoVoz("No se encontraron datos registrados para este estudiante.");
+  if (error) error.textContent = '';
+  reproducirSonidoExito();
+  hablarTextoVoz("Acceso concedido al panel administrativo.");
+  window.location.href = 'administrador.html';
+}
+
+// 2. BÚSQUEDA Y VOZ EN EL PANEL (`administrador.html`)
+function buscarEstudiante() {
+  const inputs = document.querySelectorAll('input');
+  let codigo = "";
+  
+  for (let inp of inputs) {
+    if (inp.value && inp.value.trim() !== "" && inp.type !== 'password') {
+      codigo = inp.value.trim().toUpperCase();
+      break;
+    }
+  }
+
+  if (!codigo) {
+    alert("Por favor ingrese o escanee un código de estudiante.");
+    hablarTextoVoz("Por favor ingrese un código de estudiante.");
+    return;
+  }
+
+  hablarTextoVoz("Consultando base de datos.");
+
+  hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, function(res) {
+    if (!res || !(res.success || res.ok)) {
+      alert("No se encontró al estudiante con código: " + codigo);
+      hablarTextoVoz("No se encontró el estudiante.");
       return;
     }
 
-    const est = data.estudiante || data;
+    const est = res.estudiante || res;
     const nombre = est.nombreCompleto || est.nombre || 'Estudiante';
-    const saldo = Number(data.saldoActual || data.saldo || 0).toFixed(2);
-
-    // Muestra la ficha si estaba oculta
-    const ficha = document.getElementById('fichaAlumno') || document.getElementById('fichaAlumnoAdmin');
-    if (ficha) ficha.classList.remove('hidden');
+    const saldo = Number(res.saldoActual || res.saldo || 0).toFixed(2);
 
     reproducirSonidoExito();
-
-    setTimeout(() => {
-      hablarTextoVoz(`Estudiante ${nombre}. Saldo disponible: ${saldo} LDS.`);
-    }, 200);
+    hablarTextoVoz(`Estudiante ${nombre}. Saldo actual: ${saldo} LDS.`);
+    alert(`¡Estudiante Encontrado!\nNombre: ${nombre}\nSaldo: ${saldo} LDS`);
   });
 }
 
-// ASIGNACIÓN AUTOMÁTICA DE EVENTOS AL CREGAR LA PÁGINA
+// ACTIVADORES AUTOMÁTICOS DE CLICS Y TECLAS
 document.addEventListener("DOMContentLoaded", function() {
-  // Conecta automáticamente cualquier botón "Buscar" existente con la función de voz y consulta
-  const botones = document.getElementsByTagName('button');
-  for (let b of botones) {
-    if (b.textContent.toLowerCase().includes('buscar')) {
-      b.onclick = function(e) {
+  const botones = document.querySelectorAll('button');
+  botones.forEach(btn => {
+    const texto = btn.textContent.toUpperCase();
+    if (texto.includes('BUSCAR') || texto.includes('INGRESAR')) {
+      btn.onclick = function(e) {
         e.preventDefault();
-        buscarEstudiante();
+        if (texto.includes('BUSCAR')) {
+          buscarEstudiante();
+        } else if (document.getElementById('adminPin')) {
+          validarAdmin();
+        }
       };
     }
-  }
+  });
 
-  // Activar búsqueda al presionar Enter en el cajón de texto
-  const inputs = document.getElementsByTagName('input');
-  for (let input of inputs) {
-    input.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        buscarEstudiante();
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(inp => {
+    inp.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (inp.id === 'adminPin') {
+          validarAdmin();
+        } else {
+          buscarEstudiante();
+        }
       }
     });
-  }
+  });
 });
