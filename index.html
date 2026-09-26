@@ -3492,4 +3492,71 @@ window.validarAdmin = function(){
 
 </body>
 </html>
+<!-- MÚSICA INSTITUCIONAL DE FONDO PARA LA PORTADA PRINCIPAL -->
+<script>
+  (function() {
+    let audioCtx = null;
+    let sonando = false;
 
+    const FREQS = {
+      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+      "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+    };
+
+    // Melodía transcrita de tu canto (Do Mayor)
+    const melodiaPortada = [
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+    ];
+
+    function sonarLira(ctx, freq, t, dur) {
+      if (!freq) return;
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, t);
+      osc2.frequency.setValueAtTime(freq * 2, t);
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+      osc1.start(t);
+      osc2.start(t);
+      osc1.stop(t + 1.0);
+      osc2.stop(t + 1.0);
+    }
+
+    async function activarMusicaPortada() {
+      if (sonando) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') {
+          await audioCtx.resume();
+        }
+        sonando = true;
+
+        let t = audioCtx.currentTime + 0.1;
+        melodiaPortada.forEach(item => {
+          const f = FREQS[item.n] || 261.63;
+          sonarLira(audioCtx, f, t, item.d);
+          t += item.d;
+        });
+      } catch (e) {}
+    }
+
+    // Se activa al tocar cualquier zona de la portada principal
+    ['click', 'touchstart', 'pointerdown', 'scroll'].forEach(evt => {
+      document.addEventListener(evt, activarMusicaPortada, { once: true });
+    });
+  })();
+</script>
