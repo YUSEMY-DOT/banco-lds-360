@@ -59,9 +59,9 @@
     <!-- VISTA PRINCIPAL DEL ESTUDIANTE -->
     <div id="vistaPrincipal" class="hidden space-y-4">
       
-      <!-- SALUDO MOTIVADOR PERSONALIZADO -->
+      <!-- SALUDO MOTIVADOR PERSONALIZADO CON LA FRASE INSTITUCIONAL -->
       <div id="tarjetaSaludo" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-2xl shadow-md text-center">
-        <p id="textoSaludo" class="font-bold text-sm">¡Bienvenido a tu banco, La Salle del Sur! ¿Qué vas a hacer el día de hoy?</p>
+        <p id="textoSaludo" class="font-bold text-sm">¡Hola! Bienvenido. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?</p>
       </div>
 
       <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
@@ -220,27 +220,28 @@
       ]
     };
 
-    // VOZ SINTETIZADA ROBUSTA PARA EL NAVEGADOR
+    // VOZ FEMENINA CÁLIDA Y AMIGABLE
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(texto);
         utterance.lang = 'es-ES';
-        utterance.rate = 1.0;
-        utterance.pitch = 1.1;
+        utterance.rate = 1.02;
+        utterance.pitch = 1.25;
 
-        // Asegurar que use una voz en español instalada en el equipo
         const voces = window.speechSynthesis.getVoices();
-        const vozEspanol = voces.find(v => v.lang.startsWith('es'));
-        if (vozEspanol) {
-          utterance.voice = vozEspanol;
+        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.includes('Lucia') || v.name.includes('Monica') || v.name.includes('Helena') || v.name.includes('Sofia') || v.name.includes('Victoria') || v.name.includes('Mia') || v.name.includes('Paulina') || v.name.toLowerCase().includes('female')));
+        if (!vozIdeal) {
+          vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        }
+        if (vozIdeal) {
+          utterance.voice = vozIdeal;
         }
 
         window.speechSynthesis.speak(utterance);
       }
     }
 
-    // Precargar voces del sistema
     if ('speechSynthesis' in window) {
       window.speechSynthesis.onvoiceschanged = function() {
         window.speechSynthesis.getVoices();
@@ -271,7 +272,9 @@
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
             const primerNombre = nombreCompleto.split(' ')[0];
 
-            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a tu banco, La Salle del Sur. ¿Qué vas a hacer el día de hoy?`;
+            // FRASE EXACTA SOLICITADA POR LA PROFESORA CON EL NOMBRE DEL NIÑO
+            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a la Banca Móvil de La Salle del Sur. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?`;
+            
             document.getElementById('textoSaludo').textContent = textoSaludoFinal;
             document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
@@ -286,7 +289,6 @@
 
             renderizarMovimientos(res.movimientos || []);
 
-            // REPRODUCIR VOZ EN ALTO
             setTimeout(() => {
               hablarTextoVoz(textoSaludoFinal);
             }, 300);
@@ -373,14 +375,13 @@
             
             let textoFelicitacion = "";
             if (tipoOperacionActual === 'INGRESO') {
-              textoFelicitacion = `¡Bravo! Has conseguido el día de hoy ${monto} LDS. ¡Excelente trabajo!`;
+              textoFelicitacion = `¡Muchísimas felicidades! Has conseguido ${monto} L D S el día de hoy. ¡Qué gran trabajo!`;
             } else {
-              textoFelicitacion = `¡Bien hecho! Estás cumpliendo con tu misión. El pago ha sido registrado.`;
+              textoFelicitacion = `¡Excelente! Estás cumpliendo muy bien con tu misión y responsabilidad. Pago registrado con éxito.`;
             }
             
             msg.textContent = textoFelicitacion;
 
-            // HABLAR LA FELICITACIÓN EN VOZ ALTA
             hablarTextoVoz(textoFelicitacion);
             
             if(res.nuevoSaldo) {
@@ -409,7 +410,7 @@
               document.getElementById('selectResponsable').value = '';
               document.getElementById('inputObservacion').value = '';
               msg.textContent = '';
-            }, 3000);
+            }, 3500);
 
           } else {
             msg.className = "text-xs text-red-600 font-bold";
