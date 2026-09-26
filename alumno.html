@@ -53,9 +53,9 @@
         Ingresar
       </button>
 
-      <!-- SECTOR DE PRUEBA DE VOCES (Para que elijas la que más te guste) -->
+      <!-- PROBADOR DE VOCES (Optimizado sin pausas) -->
       <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-        <label class="block text-xs font-bold text-blue-900">🔊 Probador de Voces del Dispositivo:</label>
+        <label class="block text-xs font-bold text-blue-900">🔊 Selector de Voz Fluida:</label>
         <select id="selectVoces" class="w-full border rounded-lg p-2 text-xs bg-white outline-none">
           <option value="">Cargando voces disponibles...</option>
         </select>
@@ -63,7 +63,7 @@
           onclick="probarVozSeleccionada()" 
           class="w-full bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-2 rounded-lg transition"
         >
-          ▶ Probar esta voz
+          ▶ Probar voz fluida
         </button>
       </div>
 
@@ -238,10 +238,8 @@
       if (!select) return;
 
       select.innerHTML = '';
-      
-      // Filtrar preferentemente las voces en español
       let vocesEspanol = listaVocesDisponibles.filter(v => v.lang.startsWith('es'));
-      if (vocesEspanol.length === 0) vocesEspanol = listaVocesDisponibles; // Fallback si no hay en español
+      if (vocesEspanol.length === 0) vocesEspanol = listaVocesDisponibles;
 
       vocesEspanol.forEach((voz, index) => {
         const option = document.createElement('option');
@@ -263,25 +261,29 @@
       if (indice === "" || !listaVocesDisponibles[indice]) return;
 
       window.speechSynthesis.cancel();
-      const textoPrueba = "¡Hola, Adam! Bienvenido a la banca móvil, La Salle del Sur. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?";
+      // Texto optimizado sin pausas robóticas
+      const textoPrueba = "Hola Adam, bienvenida a la banca móvil de La Salle del Sur. Estamos listos para ayudarte, qué deseas realizar hoy.";
       const utterance = new SpeechSynthesisUtterance(textoPrueba);
       utterance.voice = listaVocesDisponibles[indice];
-      utterance.rate = 1.0;
-      utterance.pitch = 1.25;
+      utterance.rate = 1.05; // Velocidad más fluida
+      utterance.pitch = 1.2;
 
       window.speechSynthesis.speak(utterance);
     }
 
-    // VOZ AUTOMÁTICA AL INGRESAR EL ALUMNO
+    // SÍNTESIS DE VOZ FLUIDA (Elimina pausas excesivas de puntos y comas)
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(texto);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.25;
+        
+        // Limpiamos los puntos y signos fuertes para evitar pausas robóticas
+        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+        
+        const utterance = new SpeechSynthesisUtterance(textoLimpio);
+        utterance.rate = 1.06; // Ligeramente más dinámica y natural
+        utterance.pitch = 1.25; // Tono alegre
 
         const voces = window.speechSynthesis.getVoices();
-        // Buscar la mejor voz femenina en español disponible
         let vozIdeal = voces.find(v => 
           v.lang.startsWith('es') && (
             v.name.toLowerCase().includes('female') || 
@@ -291,10 +293,8 @@
             v.name.includes('Helena') || 
             v.name.includes('Sofia') || 
             v.name.includes('Victoria') || 
-            v.name.includes('Mia') || 
-            v.name.includes('Paulina') ||
-            v.name.includes('Sabina') ||
-            v.name.includes('Laura')
+            v.name.includes('Google español') ||
+            v.name.includes('Microsoft')
           )
         );
 
@@ -336,7 +336,7 @@
             const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
             const primerNombre = nombreCompleto.split(' ')[0];
 
-            const textoSaludoFinal = `¡Hola, ${primerNombre}! Bienvenido a la banca móvil, La Salle del Sur. Estamos listos para ayudarte. ¿Qué deseas realizar hoy?`;
+            const textoSaludoFinal = `Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur. Estamos listos para ayudarte, qué deseas realizar hoy.`;
             
             document.getElementById('alumnoNombre').textContent = nombreCompleto;
             document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
@@ -437,9 +437,9 @@
             
             let textoFelicitacion = "";
             if (tipoOperacionActual === 'INGRESO') {
-              textoFelicitacion = `¡Muchísimas felicidades! Has conseguido ${monto} L D S el día de hoy. ¡Qué gran trabajo!`;
+              textoFelicitacion = `Muchísimas felicidades, has conseguido ${monto} LDS el día de hoy, qué gran trabajo.`;
             } else {
-              textoFelicitacion = `¡Excelente! Estás cumpliendo muy bien con tu misión y responsabilidad. Pago registrado con éxito.`;
+              textoFelicitacion = `Excelente, estás cumpliendo muy bien con tu misión y responsabilidad, pago registrado con éxito.`;
             }
             
             msg.textContent = textoFelicitacion;
