@@ -1,5 +1,5 @@
 /**
- * BANCO LDS 360 - FLUJO ORDENADO Y DEFINITIVO
+ * BANCO LDS 360 - CONECTOR Y NÚCLEO OFICIAL
  * IEP La Salle del Sur
  */
 
@@ -52,7 +52,7 @@ function hacerPeticionJSONP(parametros, callback) {
   document.body.appendChild(script);
 }
 
-// EFECTOS DE SONIDO Y VOZ PARLANTE
+// VOZ Y SONIDO
 function reproducirSonidoExito() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -85,31 +85,35 @@ function hablarTextoVoz(texto) {
   }
 }
 
-// 1. VALIDACIÓN MAESTRA DESDE LA PORTADA (`index.html`)
+// VALIDACIÓN DE LA CLAVE DE ADMINISTRADOR (360LDS)
 function validarAdmin() {
-  const input = document.getElementById('adminPin');
-  const error = document.getElementById('adminError');
-  const pin = (input ? input.value : '').trim();
+  // Busca cualquier campo de contraseña o texto donde se haya escrito la clave en la ventana flotante
+  const inputs = document.querySelectorAll('input');
+  let pin = "";
+  
+  for (let inp of inputs) {
+    if (inp.value && inp.value.trim() !== "") {
+      pin = inp.value.trim();
+      break;
+    }
+  }
 
   if (!pin) {
-    if (error) error.textContent = 'Ingresa la clave de administrador.';
     hablarTextoVoz("Ingresa la clave de administrador.");
     return;
   }
 
   if (pin.toUpperCase() !== '360LDS') {
-    if (error) error.textContent = 'Clave de administrador incorrecta.';
     hablarTextoVoz("Clave de administrador incorrecta.");
     return;
   }
 
-  if (error) error.textContent = '';
   reproducirSonidoExito();
   hablarTextoVoz("Acceso concedido al panel administrativo.");
   window.location.href = 'administrador.html';
 }
 
-// 2. BÚSQUEDA Y VOZ EN EL PANEL (`administrador.html`)
+// BÚSQUEDA Y VOZ EN EL PANEL ADMINISTRATIVO (`administrador.html`)
 function buscarEstudiante() {
   const inputs = document.querySelectorAll('input');
   let codigo = "";
@@ -146,20 +150,19 @@ function buscarEstudiante() {
   });
 }
 
-// ACTIVADORES AUTOMÁTICOS DE CLICS Y TECLAS
+// ESCUCHADOR GLOBAL DE BOTONES Y TECLAS
 document.addEventListener("DOMContentLoaded", function() {
   const botones = document.querySelectorAll('button');
   botones.forEach(btn => {
     const texto = btn.textContent.toUpperCase();
-    if (texto.includes('BUSCAR') || texto.includes('INGRESAR')) {
-      btn.onclick = function(e) {
-        e.preventDefault();
-        if (texto.includes('BUSCAR')) {
-          buscarEstudiante();
-        } else if (document.getElementById('adminPin')) {
+    if (texto.includes('INGRESAR') || texto.includes('ACceso') || texto.includes('LOGIN')) {
+      // Permite que el botón de ingresar active la validación de administrador si está en la portada
+      if (document.querySelector('input[type="password"]') || document.body.innerHTML.includes('Administrador')) {
+        btn.onclick = function(e) {
+          e.preventDefault();
           validarAdmin();
-        }
-      };
+        };
+      }
     }
   });
 
@@ -168,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
     inp.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        if (inp.id === 'adminPin') {
+        if (inp.type === 'password') {
           validarAdmin();
         } else {
           buscarEstudiante();
