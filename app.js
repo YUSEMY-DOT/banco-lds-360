@@ -1,14 +1,13 @@
 /**
- * BANCO LDS 360 - NÚCLEO DE CONEXIÓN UNIFICADO
+ * BANCO LDS 360 - CONECTOR DIRECTO ADMINISTRATIVO
  * IEP La Salle del Sur
  */
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
 
-let codigoEstudianteTemporal = "";
 let missActual = "";
 
-// PETICIÓN BASE JSONP
+// PETICIÓN JSONP
 function hacerPeticionJSONP(parametros, callback) {
   const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
   let respuestaEnviada = false;
@@ -55,23 +54,7 @@ function hacerPeticionJSONP(parametros, callback) {
   document.body.appendChild(script);
 }
 
-// FUNCIONES DE AUDIO Y VOZ
-function reproducirPitidoScanner() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = 1200;
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.15);
-  } catch(e) {}
-}
-
+// FUNCIONES DE VOZ Y SONIDO
 function reproducirSonidoExito() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -96,8 +79,8 @@ function hablarTextoVoz(texto) {
     window.speechSynthesis.cancel();
     const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
     const utterance = new SpeechSynthesisUtterance(textoLimpio);
-    utterance.rate = 1.05;
-    utterance.pitch = 1.25;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.2;
 
     const voces = window.speechSynthesis.getVoices();
     let vozIdeal = voces.find(v => v.lang.startsWith('es'));
@@ -107,47 +90,66 @@ function hablarTextoVoz(texto) {
   }
 }
 
-// CONEXIONES CON APPS SCRIPT
-function consultarDatosEstudiante(codigo, callback) {
-  hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, callback);
-}
+// BÚSQUEDA DEL ALUMNO ADAPTADA A TU INTERFAZ
+function buscarEstudiante() {
+  // Detecta el input de texto en cualquiera de las versiones de la interfaz
+  const inputElem = document.getElementById('codigoEstudiante') || 
+                    document.getElementById('codigoEstudianteAdmin') || 
+                    document.querySelector('input[type="text"]');
 
-function ejecutarLoginSistema(codigo, clave, callback) {
-  hacerPeticionJSONP({ accion: 'LOGINALUMNO', codigo: codigo, clave: clave }, callback);
-}
+  const codigo = inputElem ? inputElem.value.trim().toUpperCase() : "";
 
-function registrarTransaccionSistema(codigo, tipo, monto, concepto, responsable, observacion, callback) {
-  hacerPeticionJSONP({
-    accion: 'REGISTRAR_TRANSACCION',
-    codigo: codigo,
-    tipo: tipo,
-    monto: monto,
-    concepto: concepto || 'General',
-    responsable: responsable || 'MISS EN TURNO',
-    observacion: observacion || ''
-  }, callback);
-}
-
-// VALIDACIÓN DE CLAVE ADMINISTRATIVA (360LDS)
-function validarAdmin() {
-  const input = document.getElementById('adminPin');
-  const error = document.getElementById('adminError');
-  const pin = (input ? input.value : '').trim();
-
-  if (!pin) {
-    if (error) error.textContent = 'Ingresa la clave de administrador.';
-    hablarTextoVoz("Ingresa la clave de administrador.");
+  if (!codigo) {
+    hablarTextoVoz("Por favor escribe o ingresa el código del estudiante.");
     return;
   }
 
-  if (pin.toUpperCase() !== '360LDS') {
-    if (error) error.textContent = 'Clave de administrador incorrecta.';
-    hablarTextoVoz("Clave de administrador incorrecta.");
-    return;
+  hablarTextoVoz("Consultando información del estudiante.");
+
+  hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, function(data) {
+    if (!data || !(data.success || data.ok)) {
+      alert("No se encontraron datos para el código: " + codigo);
+      hablarTextoVoz("No se encontraron datos registrados para este estudiante.");
+      return;
+    }
+
+    const est = data.estudiante || data;
+    const nombre = est.nombreCompleto || est.nombre || 'Estudiante';
+    const saldo = Number(data.saldoActual || data.saldo || 0).toFixed(2);
+
+    // Muestra la ficha si estaba oculta
+    const ficha = document.getElementById('fichaAlumno') || document.getElementById('fichaAlumnoAdmin');
+    if (ficha) ficha.classList.remove('hidden');
+
+    reproducirSonidoExito();
+
+    setTimeout(() => {
+      hablarTextoVoz(`Estudiante ${nombre}. Saldo disponible: ${saldo} LDS.`);
+    }, 200);
+  });
+}
+
+// ASIGNACIÓN AUTOMÁTICA DE EVENTOS AL CREGAR LA PÁGINA
+document.addEventListener("DOMContentLoaded", function() {
+  // Conecta automáticamente cualquier botón "Buscar" existente con la función de voz y consulta
+  const botones = document.getElementsByTagName('button');
+  for (let b of botones) {
+    if (b.textContent.toLowerCase().includes('buscar')) {
+      b.onclick = function(e) {
+        e.preventDefault();
+        buscarEstudiante();
+      };
+    }
   }
 
-  if (error) error.textContent = '';
-  reproducirSonidoExito();
-  hablarTextoVoz("Acceso concedido al panel administrativo.");
-  window.location.href = 'administrador.html';
-}
+  // Activar búsqueda al presionar Enter en el cajón de texto
+  const inputs = document.getElementsByTagName('input');
+  for (let input of inputs) {
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        buscarEstudiante();
+      }
+    });
+  }
+});
