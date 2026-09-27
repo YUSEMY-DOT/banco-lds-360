@@ -11,6 +11,7 @@
     :root {
       --azul-oscuro: #0d1b2a;
       --oro: #c99a32;
+      --oro-claro: #e0b84c;
       --blanco: #ffffff;
       --gris-fondo: #f0f2f5;
       --gris-texto: #667085;
@@ -88,7 +89,7 @@
       gap: 40px;
     }
 
-    /* Ilustraciones laterales con tamaño idéntico */
+    /* Ilustraciones laterales con tamaño igual y proporcional */
     .side-character {
       flex: 0 1 26%;
       max-width: 320px;
@@ -189,6 +190,10 @@
       box-shadow: 0 0 0 4px rgba(201, 154, 50, 0.15);
     }
 
+    select.input-field:invalid {
+      color: var(--gris-texto);
+    }
+
     .primary-btn {
       width: 100%;
       height: 54px;
@@ -217,6 +222,38 @@
       min-height: 20px;
       font-weight: 600;
     }
+
+    /* =========================================================
+       RESPONSIVE DESIGN
+       ========================================================= */
+    @media (max-width: 992px) {
+      .main-wrapper {
+        flex-direction: column;
+        padding: 95px 20px 30px;
+        gap: 25px;
+      }
+      .login-card {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 480px;
+        order: 1;
+      }
+      .side-character {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 220px;
+      }
+      .side-character img {
+        height: auto;
+        max-height: 280px;
+      }
+      .side-character:first-of-type {
+        order: 0;
+      }
+      .side-character:last-of-type {
+        order: 2;
+      }
+    }
   </style>
 </head>
 <body>
@@ -229,13 +266,13 @@
   <main class="main-wrapper">
     <!-- MAESTRA IZQUIERDA (Sentada) -->
     <div class="side-character">
-      <img src="ChatGPT_Image_26_sept_2026__21_44_20-removebg-preview.jpg" alt="Profesora sentada" onerror="this.src='https://via.placeholder.com/300?text=Maestra+Sentada'">
+      <img src="https://lh3.googleusercontent.com/d/1DKGQQtOvchzrxfknFkX0jUjiiZg5k4R7" alt="Profesora sentada" onerror="this.style.display='none'">
     </div>
 
     <!-- TARJETA CENTRAL (Insignia en el círculo) -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='https://via.placeholder.com/120?text=Insignia+LDS'">
+        <img src="https://lh3.googleusercontent.com/d/1q4BizgmM5iccQqhIcmmq3d0twlOp5nFs" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.style.display='none'">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
@@ -261,7 +298,7 @@
 
     <!-- MAESTRA DERECHA (De pie observando) -->
     <div class="side-character">
-      <img src="cafbcee3-1257-41fb-a69f-2fca120687fc-removebg-preview.jpg" alt="Profesora observando" onerror="this.src='https://via.placeholder.com/300?text=Maestra+Observando'">
+      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Profesora observando" onerror="this.style.display='none'">
     </div>
   </main>
 
