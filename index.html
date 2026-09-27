@@ -53,73 +53,6 @@
       background:#f5f6f8;
     }
 
-    .header{
-      height:88px;
-      min-height:88px;
-      width:100%;
-      background:var(--azul);
-      border-bottom:4px solid var(--oro);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 32px 0 38px;
-      position:relative;
-      z-index:20;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      min-width:0;
-    }
-
-    .school-logo{
-      visibility:hidden;
-      width:58px;
-      height:64px;
-      object-fit:contain;
-      flex:none;
-    }
-
-    .school-text{
-      color:#fff;
-      line-height:1.05;
-    }
-
-    .school-name{
-      font-family:Georgia, "Times New Roman", serif;
-      font-size:28px;
-      font-weight:700;
-      letter-spacing:.3px;
-      white-space:nowrap;
-    }
-
-    .school-motto{
-      margin-top:6px;
-      color:#e4b85a;
-      font-family:Georgia, "Times New Roman", serif;
-      font-size:17px;
-      font-style:italic;
-      font-weight:600;
-    }
-
-    .admin-btn{
-      border:1px solid rgba(255,255,255,.28);
-      background:rgba(255,255,255,.09);
-      color:white;
-      padding:13px 24px;
-      border-radius:12px;
-      font-size:17px;
-      cursor:pointer;
-      transition:.2s;
-      white-space:nowrap;
-    }
-
-    .admin-btn:hover{
-      background:rgba(255,255,255,.16);
-    }
-
     .overlay{
       position:fixed;
       inset:0;
@@ -1032,13 +965,9 @@ document.addEventListener("keydown",function(e){
     cerrarAdmin();
   }
 });
-
-window.addEventListener("load",function(){
-  console.log("Banco LDS 360 Online iniciado correctamente.");
-});
 </script>
 
-<!-- MÚSICA INSTITUCIONAL AUTOMÁTICA AL ABRIR LA PORTADA -->
+<!-- REPRODUCCIÓN AUTOMÁTICA DEL HIMNO Y VOZ DE BIENVENIDA AL CARGAR -->
 <script>
   (function() {
     let audioCtx = null;
@@ -1079,7 +1008,21 @@ window.addEventListener("load",function(){
       osc2.stop(t + 1.0);
     }
 
-    function iniciarMusicaAutomatica() {
+    function hablarBienvenida() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance("Bienvenidos a Banco LDS 360, del colegio La Salle del Sur.");
+        utterance.rate = 1.0;
+        utterance.pitch = 1.1;
+        const voces = window.speechSynthesis.getVoices();
+        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('google español')));
+        if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        if (vozIdeal) utterance.voice = vozIdeal;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function iniciarAudioAutomatico() {
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
@@ -1094,10 +1037,21 @@ window.addEventListener("load",function(){
           t += item.d;
         });
       } catch (e) {}
+
+      setTimeout(hablarBienvenida, 800);
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(iniciarMusicaAutomatica, 500);
+    window.addEventListener("load", function() {
+      iniciarAudioAutomatico();
+    });
+
+    // Respaldo por si el navegador bloquea el audio automático de entrada
+    ['click', 'touchstart', 'pointerdown'].forEach(evt => {
+      document.addEventListener(evt, function activarPorInteraccion() {
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      }, { once: true });
     });
   })();
 </script>
