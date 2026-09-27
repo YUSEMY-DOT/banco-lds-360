@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Banco LDS 360 Online · IEP La Salle del Sur</title>
+  <title>Banco LDS 360 · IEP La Salle del Sur</title>
 
   <style>
     :root{
@@ -110,7 +110,7 @@
     }
 
     /* =========================================================
-       BOTONES INFERIORES EN LA ESCALERA (PADRES Y MANUAL)
+       BOTONES INFERIORES EN LA ESCALERA (SIN BORDES NEGROS)
        ========================================================= */
     .stair-button {
       position: absolute;
@@ -118,7 +118,6 @@
       left: 86.8%;
       width: 12.4%;
       height: 10.5%;
-      border: 3px solid #142744;
       font-family: 'Segoe UI', Arial, sans-serif;
       font-weight: 900;
       display: flex;
@@ -138,29 +137,62 @@
       box-shadow: 0 7px 25px rgba(0, 0, 0, 0.55);
     }
 
-    /* Botón Padres: Verde Limón muy vistoso */
+    /* Botón Padres: Verde Limón sin línea negra, borde del mismo color, letras azulinas */
     .stair-padres {
       top: 73.0%;
       background: linear-gradient(135deg, #bef264 0%, #65a30d 100%);
-      color: #0f172a;
+      border: 2px solid #65a30d;
+      color: var(--azul);
     }
 
-    /* Botón Manual: Amarillo Fuerte / Encendido */
+    /* Botón Manual: Amarillo Fuerte sin línea negra, borde del mismo color, letras azulinas */
     .stair-manual {
       top: 84.5%;
       background: linear-gradient(135deg, #fef08a 0%, #ca8a04 100%);
-      color: #0f172a;
+      border: 2px solid #ca8a04;
+      color: var(--azul);
     }
 
     .stair-button .icon {
-      font-size: 34px; /* Iconos / dibujos internos más grandes */
+      font-size: 34px;
       line-height: 1;
     }
 
     .stair-button span.btn-text {
       font-weight: 900;
       font-size: 12px;
+      color: var(--azul);
       letter-spacing: 0.5px;
+    }
+
+    /* =========================================================
+       BOTÓN DE AUDIO DISCRETO E IMPERCEPTIBLE
+       ========================================================= */
+    .audio-discreto {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      z-index: 2000;
+      background: rgba(13, 27, 42, 0.6);
+      border: 1px solid rgba(201, 154, 50, 0.4);
+      color: rgba(255, 255, 255, 0.85);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+    }
+    .audio-discreto:hover {
+      background: rgba(20, 39, 68, 0.9);
+      color: #fff;
+      transform: scale(1.08);
+      border-color: var(--oro);
     }
 
     /* =========================================================
@@ -511,22 +543,30 @@
 
 <body>
 
+  <!-- AUDIO DE FONDO AMBIENTAL -->
+  <audio id="bgMusic" loop src="assets/musica_fondo.mp3"></audio>
+
+  <!-- BOTÓN DE AUDIO DISCRETO E IMPERCEPTIBLE -->
+  <button class="audio-discreto" onclick="toggleMusica()" id="btnMusica" title="Activar / Desactivar música de fondo">
+    🎵
+  </button>
+
   <!-- PORTADA PRINCIPAL -->
   <main class="exact-home">
     <div class="exact-poster">
       <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur">
       
       <!-- Botones principales -->
-      <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
-      <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
-      <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
+      <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="hablarTextoVoz('Abriendo panel administrativo'); abrirAdmin()"></button>
+      <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="hablarTextoVoz('Activando escáner QR'); abrirScanner()"></button>
+      <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="hablarTextoVoz('Ingrese su código de estudiante'); abrirCodigo()"></button>
 
-      <!-- Botones en la parte baja de la escalera (Padres y Manual) con iconos grandes y colores vibrantes -->
-      <button class="stair-button stair-padres" onclick="abrirTutores()">
+      <!-- Botones en la parte baja de la escalera (Padres y Manual) -->
+      <button class="stair-button stair-padres" onclick="hablarTextoVoz('Abriendo portal de padres'); abrirTutores()">
         <span class="icon">👥</span>
         <span class="btn-text">Padres</span>
       </button>
-      <button class="stair-button stair-manual" onclick="abrirReglas()">
+      <button class="stair-button stair-manual" onclick="hablarTextoVoz('Abriendo manual y reglas del banco'); abrirReglas()">
         <span class="icon">📖</span>
         <span class="btn-text">Manual</span>
       </button>
@@ -661,6 +701,78 @@
   </div>
 
   <script>
+  /* =========================================================
+     SISTEMA DE VOZ INTERACTIVA (TEXT-TO-SPEECH)
+     ========================================================= */
+  function hablarTextoVoz(texto) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+      const utterance = new SpeechSynthesisUtterance(textoLimpio);
+      utterance.rate = 1.05;
+      utterance.pitch = 1.25;
+
+      const voces = window.speechSynthesis.getVoices();
+      let vozIdeal = voces.find(v => 
+        v.lang.startsWith('es') && (
+          v.name.toLowerCase().includes('dani') || 
+          v.name.toLowerCase().includes('helena') || 
+          v.name.toLowerCase().includes('lucia') || 
+          v.name.toLowerCase().includes('monica') || 
+          v.name.toLowerCase().includes('sofia') || 
+          v.name.toLowerCase().includes('female') ||
+          v.name.toLowerCase().includes('google español')
+        )
+      );
+
+      if (!vozIdeal) {
+        vozIdeal = voces.find(v => v.lang.startsWith('es'));
+      }
+
+      if (vozIdeal) {
+        utterance.voice = vozIdeal;
+      }
+
+      setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, 50);
+    }
+  }
+
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = function() {
+      window.speechSynthesis.getVoices();
+    };
+  }
+
+  /* =========================================================
+     CONTROL DE MÚSICA DISCRETO
+     ========================================================= */
+  function toggleMusica() {
+    const audio = document.getElementById("bgMusic");
+    const btn = document.getElementById("btnMusica");
+    if (audio.paused) {
+      audio.play().then(() => {
+        btn.style.borderColor = "var(--oro)";
+        btn.style.background = "rgba(20, 39, 68, 0.9)";
+        hablarTextoVoz("Música de fondo activada.");
+      }).catch(e => {
+        alert("Haz clic en la página para permitir la reproducción de audio.");
+      });
+    } else {
+      audio.pause();
+      btn.style.borderColor = "rgba(201, 154, 50, 0.4)";
+      btn.style.background = "rgba(13, 27, 42, 0.6)";
+      hablarTextoVoz("Música de fondo desactivada.");
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      hablarTextoVoz("Bienvenido al Banco L D S 360, del Colegio La Salle del Sur.");
+    }, 800);
+  });
+
   function abrirCodigo(){
     document.getElementById("codeOverlay").classList.add("show");
     document.getElementById("studentCode").value = "";
@@ -686,6 +798,7 @@
     error.textContent = "";
     if(!codigo){
       error.textContent = "Ingresa el código del estudiante.";
+      hablarTextoVoz("Por favor ingresa el código del estudiante.");
       return;
     }
     solicitarAccesoAlumno(codigo);
@@ -803,6 +916,7 @@
       if(!saltAlumnoPendiente||!nonceAlumnoPendiente) throw new Error("No se pudo preparar el acceso.");
       document.getElementById("alumnoClaveMensaje").className="ok";
       document.getElementById("alumnoClaveMensaje").textContent="Código identificado. Ingresa tu clave personal.";
+      hablarTextoVoz("Código identificado. Ingresa tu clave personal.");
     }).catch(function(err){
       saltAlumnoPendiente=""; nonceAlumnoPendiente="";
       document.getElementById("alumnoClaveMensaje").className="error";
@@ -820,7 +934,7 @@
     const clave=document.getElementById("claveAlumnoLDS").value.trim();
     const msg=document.getElementById("alumnoClaveMensaje");
     const btn=document.getElementById("btnConfirmarClaveLDS");
-    if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";return;}
+    if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";hablarTextoVoz("La clave personal debe tener 6 dígitos.");return;}
     if(!codigoAlumnoPendiente){msg.className="error";msg.textContent="Primero identifique al estudiante.";return;}
     if(!saltAlumnoPendiente||!nonceAlumnoPendiente){msg.className="error";msg.textContent="Espere un momento mientras se prepara el acceso.";return;}
     btn.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
@@ -831,8 +945,10 @@
       if(!res||res.ok!==true) throw new Error(res&&res.mensaje?res.mensaje:"Credenciales inválidas.");
       cerrarClaveAlumno();
       mostrarEstudianteDesdeAccesoAlumno(res);
+      hablarTextoVoz("Acceso exitoso. Bienvenido a tu cuenta.");
     }catch(err){
       msg.className="error"; msg.textContent=err.message||"No fue posible iniciar sesión.";
+      hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
     }finally{btn.disabled=false;}
   }
 
@@ -880,15 +996,18 @@
 
     if(!pin){
       error.textContent = 'Ingresa la clave de administrador.';
+      hablarTextoVoz("Ingresa la clave de administrador.");
       return;
     }
 
     if(pin.toUpperCase() !== '360LDS'){
       error.textContent = 'Clave de administrador incorrecta.';
+      hablarTextoVoz("Clave incorrecta.");
       return;
     }
 
     error.textContent = '';
+    hablarTextoVoz("Clave correcta. Abriendo panel.");
     window.location.href = 'administrador.html';
   };
 
