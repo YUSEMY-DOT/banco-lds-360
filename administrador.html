@@ -36,7 +36,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-1 p-4 lg:p-8 max-w-2xl mx-auto w-full flex flex-col justify-center my-auto">
     
-    <!-- PASO 1: SELECCIÓN DE DOCENTE Y TURNO (Proporción exacta) -->
+    <!-- PASO 1: SELECCIÓN DE DOCENTE Y TURNO -->
     <section id="docenteLogin" class="bg-white text-gray-800 p-8 lg:p-10 rounded-3xl shadow-2xl w-full space-y-6 border-2 border-slate-200">
       <div class="text-center space-y-2">
         <span class="bg-emerald-100 text-emerald-900 text-xs font-black px-3.5 py-1.5 rounded-full border border-emerald-300 uppercase tracking-wider">Turno Docente</span>
@@ -61,7 +61,7 @@
           <input type="password" id="loginClaveDocente" class="w-full border-2 border-gray-200 rounded-2xl p-3.5 text-center text-xl tracking-[0.4em] outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm" />
         </div>
 
-        <button onclick="procesarLoginAdmin()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl transition shadow-lg text-xs uppercase tracking-wider">
+        <button onclick="procesarLoginAdmin()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl transition shadow-lg text-xs uppercase tracking-wider cursor-pointer">
           Iniciar Turno Administrativo
         </button>
 
@@ -78,7 +78,7 @@
           <p class="text-[10px] text-emerald-200 uppercase font-extrabold tracking-wider">Docente Conectada:</p>
           <h3 id="nombreMissActiva" class="text-base font-black tracking-wide text-amber-200">---</h3>
         </div>
-        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-4 py-2 rounded-xl transition font-black shadow uppercase tracking-wider">
+        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-4 py-2 rounded-xl transition font-black shadow uppercase tracking-wider cursor-pointer">
           🚪 Cerrar Turno
         </button>
       </div>
@@ -92,10 +92,10 @@
         
         <div class="flex flex-col sm:flex-row gap-3">
           <input type="text" id="codigoEstudianteAdmin" placeholder="Ej: LDS-EST-001" class="flex-1 border-2 border-gray-200 rounded-2xl px-4 py-3 text-sm uppercase outline-none focus:border-emerald-600 font-black tracking-wider text-gray-800 bg-gray-50 shadow-sm" />
-          <button onclick="buscarEstudianteAdmin()" class="bg-[#00a859] hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5">
+          <button onclick="buscarEstudianteAdmin()" class="bg-[#00a859] hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
             🔍 Buscar
           </button>
-          <button onclick="toggleEscanerAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5">
+          <button onclick="toggleEscanerAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition shadow flex items-center justify-center gap-1.5 cursor-pointer">
             📷 Escanear QR
           </button>
         </div>
@@ -103,11 +103,10 @@
         <div id="readerAdmin" class="hidden w-full max-w-md mx-auto overflow-hidden rounded-2xl border-4 border-blue-500/30 bg-slate-100 shadow-inner"></div>
       </div>
 
-      <!-- FICHA Y MÓDULO DE ABONOS DEL ALUMNO (FOTO MEDIANA Y PROPORCIONAL) -->
+      <!-- FICHA Y MÓDULO DE ABONOS DEL ALUMNO -->
       <section id="fichaAlumnoAdmin" class="hidden bg-white text-gray-800 p-8 rounded-3xl shadow-2xl space-y-6 border-2 border-slate-200">
         
         <div class="flex flex-col sm:flex-row items-center gap-6 border-b-2 border-gray-100 pb-6">
-          <!-- FOTO MEDIANA Y PROPORCIONAL -->
           <img id="fotoAlumnoAdmin" src="" alt="Foto Estudiante" class="w-32 h-36 rounded-2xl object-cover border-4 border-emerald-500 shadow-xl flex-shrink-0 bg-gray-100" />
           <div class="space-y-1.5 text-center sm:text-left flex-1">
             <h3 id="nombreAlumnoAdmin" class="text-2xl font-black text-gray-900 tracking-tight">---</h3>
@@ -158,7 +157,7 @@
             <input type="text" id="inputObservacionAbono" class="w-full border-2 border-gray-200 rounded-2xl p-3 text-xs bg-white outline-none font-bold text-gray-800 focus:border-emerald-600 shadow-sm" />
           </div>
 
-          <button onclick="ejecutarAbonoAdministrativo()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg">
+          <button onclick="ejecutarAbonoAdministrativo()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-3.5 rounded-2xl text-xs uppercase tracking-wider transition shadow-lg cursor-pointer">
             Confirmar y Abonar al Estudiante
           </button>
           <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[20px] pt-1"></div>
@@ -181,6 +180,48 @@
   <footer class="bg-[#021326] text-center py-4 text-xs text-gray-400 border-t border-blue-900/50">
     LA SALLE DEL SUR — LIMA PERÚ
   </footer>
+
+  <script>
+    function procesarLoginAdmin() {
+      const docenteSelect = document.getElementById('loginDocente');
+      const pinInput = document.getElementById('loginClaveDocente');
+      const errorDiv = document.getElementById('errorAdminLogin');
+      
+      const docente = docenteSelect ? docenteSelect.value : "";
+      const pin = pinInput ? pinInput.value.trim() : "";
+
+      if (!docente) {
+        errorDiv.textContent = "Por favor seleccione su nombre.";
+        return;
+      }
+
+      if (!pin) {
+        errorDiv.textContent = "Por favor ingrese la clave de administrador.";
+        return;
+      }
+
+      if (pin.toUpperCase() !== '360LDS') {
+        errorDiv.textContent = "Clave de administrador incorrecta.";
+        return;
+      }
+
+      errorDiv.textContent = "";
+
+      document.getElementById('docenteLogin').classList.add('hidden');
+      document.getElementById('docenteDashboard').classList.remove('hidden');
+      document.getElementById('nombreMissActiva').textContent = docente;
+      
+      const respAuto = document.getElementById('inputResponsableAuto');
+      if (respAuto) respAuto.value = docente;
+    }
+
+    function cerrarSesionAdmin() {
+      document.getElementById('docenteDashboard').classList.add('hidden');
+      document.getElementById('docenteLogin').classList.remove('hidden');
+      document.getElementById('loginClaveDocente').value = "";
+      document.getElementById('errorAdminLogin').textContent = "";
+    }
+  </script>
 
 </body>
 </html>
