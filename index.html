@@ -69,7 +69,7 @@
       -webkit-user-drag:none;
     }
 
-    /* BOTONES INVISIBLES (HOTSPOTS) SOBRE LA IMAGEN */
+    /* BOTONES PRINCIPALES (ADMIN, QR, CÓDIGO) */
     .hotspot{
       position:absolute;
       display:block;
@@ -82,10 +82,9 @@
     }
 
     .hotspot:hover{
-      background:rgba(201, 154, 50, 0.15);
+      background:rgba(255,255,255,.05);
     }
 
-    /* Coordenadas principales */
     .hotspot-admin{
       left:70.6%;
       top:3.4%;
@@ -110,23 +109,92 @@
       border-radius:24px;
     }
 
-    /* Botones pequeños en el medio entre Emprende y La Salle */
-    .hotspot-btn-padres {
-      left: 36.5%;
-      top: 85.2%;
-      width: 12%;
-      height: 4.5%;
-      border-radius: 8px;
-      border: 1px dashed rgba(201, 154, 50, 0.5);
+    /* BOTONES SÓLIDOS Y VISIBLES MÁS A LA IZQUIERDA (PADRES E INSTRUCTIVO) */
+    .visible-btn {
+      position: absolute;
+      z-index: 55;
+      background: linear-gradient(135deg, var(--azul) 0%, var(--azul2) 100%);
+      border: 2px solid var(--oro);
+      color: var(--blanco);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .hotspot-btn-instructivo {
-      left: 51.5%;
-      top: 85.2%;
-      width: 12%;
-      height: 4.5%;
-      border-radius: 8px;
-      border: 1px dashed rgba(201, 154, 50, 0.5);
+    .visible-btn:hover {
+      background: var(--oro);
+      color: var(--azul);
+      transform: translateY(-2px);
+    }
+
+    .btn-padres {
+      left: 21.5%;
+      top: 84.8%;
+      width: 13.5%;
+      height: 5.2%;
+    }
+
+    .btn-instructivo {
+      left: 36.5%;
+      top: 84.8%;
+      width: 13.5%;
+      height: 5.2%;
+    }
+
+    /* PLACAS SÓLIDAS DE LA ESCALERA (REEMPLAZAN TEXTOS ANTERIORES) */
+    .stair-badge {
+      position: absolute;
+      z-index: 45;
+      left: 87.0%;
+      width: 12.0%;
+      height: 5.2%;
+      background: #f4f5f7;
+      border: 1px solid #ccd2da;
+      color: var(--azul);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-radius: 6px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .stair-badge:hover {
+      background: var(--oro);
+      color: var(--azul);
+      border-color: var(--oro);
+      transform: scale(1.02);
+    }
+
+    .stair-sencillez { top: 53.2%; }
+    .stair-responsabilidad { top: 59.6%; }
+    .stair-honor { top: 66.0%; }
+    .stair-fraternidad { top: 72.4%; }
+
+    /* BLOQUE SÓLIDO PARA OCULTAR LA ORACIÓN "Ser más, para servir mejor" */
+    .cover-sentence {
+      position: absolute;
+      z-index: 44;
+      left: 86.5%;
+      top: 78.5%;
+      width: 13.0%;
+      height: 10.5%;
+      background: #e8ebef; /* Color exacto del bloque de piedra para tapar el texto */
+      border-radius: 4px;
     }
 
     /* =========================================================
@@ -224,7 +292,7 @@
     .info-list li {
       margin-bottom: 8px;
       font-size: 14px;
-      line-height: 1.4;
+      line-height:1.4;
     }
 
     /* PANTALLA DE RESULTADOS DEL ESTUDIANTE */
@@ -487,9 +555,18 @@
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
 
-      <!-- Botones pequeños entre Emprende y La Salle -->
-      <button class="hotspot hotspot-btn-padres" aria-label="Portal Padres / Tutores" onclick="abrirTutores()"></button>
-      <button class="hotspot hotspot-btn-instructivo" aria-label="Instructivo / Reglas" onclick="abrirReglas()"></button>
+      <!-- Botones visibles inferiores (Padres e Instructivo) -->
+      <button class="visible-btn btn-padres" onclick="abrirTutores()">👥 Padres / Tutores</button>
+      <button class="visible-btn btn-instructivo" onclick="abrirReglas()">📋 Instructivo</button>
+
+      <!-- Ocultar la oración inferior de la escalera -->
+      <div class="cover-sentence"></div>
+
+      <!-- Placas de la escalera actualizadas -->
+      <div class="stair-badge stair-sencillez" onclick="mostrarValor('Sencillez')">SENCILLEZ</div>
+      <div class="stair-badge stair-responsabilidad" onclick="mostrarValor('Responsabilidad')">RESPONSABILIDAD</div>
+      <div class="stair-badge stair-honor" onclick="mostrarValor('Honor')">HONOR</div>
+      <div class="stair-badge stair-fraternidad" onclick="mostrarValor('Fraternidad')">FRATERNIDAD</div>
     </div>
   </main>
 
@@ -663,6 +740,10 @@
   }
   function cerrarReglas(){
     document.getElementById("reglasOverlay").classList.remove("show");
+  }
+
+  function mostrarValor(valor){
+    alert("Valor lasallista: " + valor + " - Formando personas íntegras en La Salle del Sur.");
   }
 
   let lds360QrInstance = null;
