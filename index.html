@@ -967,7 +967,7 @@ document.addEventListener("keydown",function(e){
 });
 </script>
 
-<!-- REPRODUCCIÓN AUTOMÁTICA DEL HIMNO Y VOZ DE BIENVENIDA AL CARGAR -->
+<!-- SCRIPT ORIGINAL: EL LOCUTOR DA LA BIENVENIDA Y CANTA EL HIMNO AUTOMÁTICAMENTE CON LA LIRA -->
 <script>
   (function() {
     let audioCtx = null;
@@ -997,32 +997,56 @@ document.addEventListener("keydown",function(e){
       osc2.type = 'sine';
       osc1.frequency.setValueAtTime(freq, t);
       osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.25, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+      gain.gain.setValueAtTime(0.4, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
       osc1.connect(gain);
       osc2.connect(gain);
       gain.connect(ctx.destination);
       osc1.start(t);
       osc2.start(t);
-      osc1.stop(t + 1.0);
-      osc2.stop(t + 1.0);
+      osc1.stop(t + 1.2);
+      osc2.stop(t + 1.2);
     }
 
-    function hablarBienvenida() {
+    function cantarHimnoConVoz() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance("Bienvenidos a Banco LDS 360, del colegio La Salle del Sur.");
-        utterance.rate = 1.0;
-        utterance.pitch = 1.1;
+        
+        // 1. Bienvenida inicial
+        const saludo = new SpeechSynthesisUtterance("Bienvenidos al Banco La Salle del Sur.");
+        saludo.rate = 1.0;
+        saludo.pitch = 1.1;
+        saludo.volume = 1.0;
+
+        // 2. Simulación de estrofas cantadas por el locutor
+        const estrofa1 = new SpeechSynthesisUtterance("Entad cantando, oh juventudes lasallanas, templo del saber y la virtud.");
+        estrofa1.rate = 0.95;
+        estrofa1.pitch = 1.2;
+        estrofa1.volume = 1.0;
+
+        const estrofa2 = new SpeechSynthesisUtterance("Marchamos siempre unidos con fe y honor, guiados por la luz de nuestro gran amor.");
+        estrofa2.rate = 0.95;
+        estrofa2.pitch = 1.2;
+        estrofa2.volume = 1.0;
+
         const voces = window.speechSynthesis.getVoices();
         let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('google español')));
         if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        if (vozIdeal) utterance.voice = vozIdeal;
-        window.speechSynthesis.speak(utterance);
+        
+        if (vozIdeal) {
+          saludo.voice = vozIdeal;
+          estrofa1.voice = vozIdeal;
+          estrofa2.voice = vozIdeal;
+        }
+
+        // Secuencia de canto automático
+        window.speechSynthesis.speak(saludo);
+        setTimeout(() => { window.speechSynthesis.speak(estrofa1); }, 3000);
+        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 9000);
       }
     }
 
-    function iniciarAudioAutomatico() {
+    function iniciarTodoAutomatico() {
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
@@ -1030,24 +1054,25 @@ document.addEventListener("keydown",function(e){
           audioCtx.resume();
         }
 
-        let t = audioCtx.currentTime + 0.1;
+        // Inicia la voz cantando
+        cantarHimnoConVoz();
+
+        // Inicia la música de la lira simultáneamente
+        let t = audioCtx.currentTime + 0.2;
         melodiaPortada.forEach(item => {
           const f = FREQS[item.n] || 261.63;
           sonarLira(audioCtx, f, t, item.d);
           t += item.d;
         });
       } catch (e) {}
-
-      setTimeout(hablarBienvenida, 800);
     }
 
     window.addEventListener("load", function() {
-      iniciarAudioAutomatico();
+      setTimeout(iniciarTodoAutomatico, 500);
     });
 
-    // Respaldo por si el navegador bloquea el audio automático de entrada
     ['click', 'touchstart', 'pointerdown'].forEach(evt => {
-      document.addEventListener(evt, function activarPorInteraccion() {
+      document.addEventListener(evt, function activarAudio() {
         if (audioCtx && audioCtx.state === 'suspended') {
           audioCtx.resume();
         }
