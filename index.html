@@ -967,7 +967,7 @@ document.addEventListener("keydown",function(e){
 });
 </script>
 
-<!-- REPRODUCCIÓN AUTOMÁTICA DEL HIMNO CORRECTO Y LA LIRA CON CALIDEZ -->
+<!-- REPRODUCCIÓN AUTOMÁTICA: BIENVENIDA + HIMNO CORRECTO + LIRA -->
 <script>
   (function() {
     let audioCtx = null;
@@ -1008,10 +1008,17 @@ document.addEventListener("keydown",function(e){
       osc2.stop(t + 1.2);
     }
 
-    function cantarHimnoCorrecto() {
+    function cantarHimnoConBienvenida() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         
+        // 1. Bienvenida inicial clara
+        const bienvenida = new SpeechSynthesisUtterance("Bienvenidos al Banco La Salle del Sur.");
+        bienvenida.rate = 1.0;
+        bienvenida.pitch = 1.1;
+        bienvenida.volume = 1.0;
+
+        // 2. Himno correcto
         const estrofa1 = new SpeechSynthesisUtterance("Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.");
         estrofa1.rate = 0.92;
         estrofa1.pitch = 1.05;
@@ -1026,12 +1033,15 @@ document.addEventListener("keydown",function(e){
         let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('google español')));
         if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
         if (vozIdeal) {
+          bienvenida.voice = vozIdeal;
           estrofa1.voice = vozIdeal;
           estrofa2.voice = vozIdeal;
         }
 
-        window.speechSynthesis.speak(estrofa1);
-        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 11000);
+        // Secuencia temporal de voz
+        window.speechSynthesis.speak(bienvenida);
+        setTimeout(() => { window.speechSynthesis.speak(estrofa1); }, 3000);
+        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 14000);
       }
     }
 
@@ -1043,7 +1053,7 @@ document.addEventListener("keydown",function(e){
           audioCtx.resume();
         }
 
-        cantarHimnoCorrecto();
+        cantarHimnoConBienvenida();
 
         let t = audioCtx.currentTime + 0.2;
         melodiaPortada.forEach(item => {
