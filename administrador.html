@@ -73,7 +73,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL
+       CONTENEDOR PRINCIPAL (EQUILIBRADO: IZQ - CENTRO - DER)
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -83,14 +83,14 @@
       padding-top: 90px;
       width: 96%;
       margin: 0 auto;
-      max-width: 1350px;
-      gap: 40px;
+      max-width: 1300px;
+      gap: 30px;
     }
 
     /* ESTILOS PARA LAS IMÁGENES LATERALES */
     .side-character {
-      flex: 0 1 26%;
-      max-width: 320px;
+      flex: 0 1 25%;
+      max-width: 300px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -100,6 +100,7 @@
       width: 100%;
       height: 380px;
       object-fit: contain; 
+      display: block;
       filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
     }
 
@@ -108,7 +109,7 @@
        ========================================================= */
     .login-card {
       flex: 0 1 40%;
-      max-width: 500px;
+      max-width: 480px;
       background: var(--blanco);
       border-radius: 34px;
       padding: 46px 40px 36px;
@@ -239,7 +240,7 @@
       }
       .side-character img {
         height: auto;
-        max-height: 280px;
+        max-height: 250px;
       }
       .side-character:first-of-type {
         order: 0;
@@ -258,7 +259,7 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- IMAGEN IZQUIERDA (Maestra Sentada) -->
+    <!-- IMAGEN IZQUIERDA: Maestra Sentada -->
     <div class="side-character">
       <img src="assets/sentada.png" alt="Profesora sentada" onerror="this.src='assets/sentada.jpg';">
     </div>
@@ -287,11 +288,11 @@
         <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
       </div>
 
-      <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
+      <button class="primary-btn" type="button" onclick="validarAccesoDocente()">Ingresar al Panel</button>
       <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- IMAGEN DERECHA (Maestra Observando) -->
+    <!-- IMAGEN DERECHA: Maestra Observando / Estudiante -->
     <div class="side-character">
       <img src="assets/observando.png" alt="Profesora observando" onerror="this.src='assets/observando.jpg';">
     </div>
@@ -330,9 +331,14 @@
     const PAGINA_PANEL = "administrador_panel.html"; 
 
     function validarAccesoDocente(){
-      const docente = document.getElementById("docenteSelect").value;
-      const clave = document.getElementById("claveDocente").value.trim();
+      const docenteElement = document.getElementById("docenteSelect");
+      const claveElement = document.getElementById("claveDocente");
       const error = document.getElementById("adminError");
+      
+      if(!docenteElement || !claveElement || !error) return;
+
+      const docente = docenteElement.value;
+      const clave = claveElement.value.trim();
       error.textContent = "";
 
       if(!docente){
@@ -357,7 +363,10 @@
     }
 
     document.getElementById("claveDocente").addEventListener("keydown", function(e){
-      if(e.key === "Enter"){ validarAccesoDocente(); }
+      if(e.key === "Enter"){ 
+        e.preventDefault();
+        validarAccesoDocente(); 
+      }
     });
   </script>
 
