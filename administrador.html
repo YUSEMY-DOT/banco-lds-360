@@ -11,7 +11,6 @@
     :root {
       --azul-oscuro: #0d1b2a;
       --oro: #c99a32;
-      --oro-claro: #e0b84c;
       --blanco: #ffffff;
       --gris-fondo: #f0f2f5;
       --gris-texto: #667085;
@@ -75,7 +74,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL EQUILIBRADO Y PROPORCIONAL
+       CONTENEDOR PRINCIPAL
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -89,7 +88,7 @@
       gap: 40px;
     }
 
-    /* Ilustraciones laterales con tamaño igual y proporcional */
+    /* ILUSTRACIONES LATERALES */
     .side-character {
       flex: 0 1 26%;
       max-width: 320px;
@@ -106,7 +105,7 @@
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN CENTRAL
+       TARJETA DE INICIO DE SESIÓN
        ========================================================= */
     .login-card {
       flex: 0 1 40%;
@@ -121,7 +120,6 @@
       z-index: 1;
     }
 
-    /* Insignia institucional aislada en el círculo superior */
     .card-insignia-container {
       width: 120px;
       height: 120px;
@@ -188,10 +186,6 @@
       border-color: var(--oro);
       background: var(--blanco);
       box-shadow: 0 0 0 4px rgba(201, 154, 50, 0.15);
-    }
-
-    select.input-field:invalid {
-      color: var(--gris-texto);
     }
 
     .primary-btn {
@@ -266,13 +260,13 @@
   <main class="main-wrapper">
     <!-- MAESTRA IZQUIERDA (Sentada) -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1DKGQQtOvchzrxfknFkX0jUjiiZg5k4R7" alt="Profesora sentada" onerror="this.style.display='none'">
+      <img src="sentada.png" alt="Profesora sentada" onerror="this.src='sentada.jpg'">
     </div>
 
-    <!-- TARJETA CENTRAL (Insignia en el círculo) -->
+    <!-- TARJETA CENTRAL -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="https://lh3.googleusercontent.com/d/1q4BizgmM5iccQqhIcmmq3d0twlOp5nFs" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.style.display='none'">
+        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='insignia.jpg'">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
@@ -296,14 +290,13 @@
       <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- MAESTRA DERECHA (De pie observando) -->
+    <!-- MAESTRA DERECHA (Observando) -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Profesora observando" onerror="this.style.display='none'">
+      <img src="observando.png" alt="Profesora observando" onerror="this.src='observando.jpg'">
     </div>
   </main>
 
   <script>
-    /* SISTEMA DE VOZ Y VALIDACIÓN */
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -313,17 +306,9 @@
         utterance.pitch = 1.25;
 
         const voces = window.speechSynthesis.getVoices();
-        let vozIdeal = voces.find(v => 
-          v.lang.startsWith('es') && (
-            v.name.toLowerCase().includes('female') ||
-            v.name.toLowerCase().includes('google español') ||
-            v.name.toLowerCase().includes('lucia') ||
-            v.name.toLowerCase().includes('monica')
-          )
-        );
+        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google español') || v.name.toLowerCase().includes('lucia') || v.name.toLowerCase().includes('monica')));
         if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
         if (vozIdeal) utterance.voice = vozIdeal;
-
         setTimeout(() => { window.speechSynthesis.speak(utterance); }, 50);
       }
     }
@@ -333,9 +318,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave.");
-      }, 700);
+      setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
     });
 
     function anunciarSeleccion(select) {
