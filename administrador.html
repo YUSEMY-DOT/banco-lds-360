@@ -4,7 +4,6 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Acceso Administrativo - Maestras · IEP La Salle del Sur</title>
 
   <style>
@@ -88,7 +87,7 @@
       gap: 40px;
     }
 
-    /* ILUSTRACIONES LATERALES */
+    /* ESTILOS PARA LAS IMÁGENES LATERALES */
     .side-character {
       flex: 0 1 26%;
       max-width: 320px;
@@ -100,12 +99,12 @@
     .side-character img {
       width: 100%;
       height: 380px;
-      object-fit: contain;
+      object-fit: contain; 
       filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN
+       TARJETA DE INICIO DE SESIÓN CENTRAL
        ========================================================= */
     .login-card {
       flex: 0 1 40%;
@@ -120,6 +119,7 @@
       z-index: 1;
     }
 
+    /* ESTILOS PARA EL CÍRCULO DE LA INSIGNIA */
     .card-insignia-container {
       width: 120px;
       height: 120px;
@@ -218,7 +218,7 @@
     }
 
     /* =========================================================
-       RESPONSIVE DESIGN
+       DISEÑO RESPONSIVO
        ========================================================= */
     @media (max-width: 992px) {
       .main-wrapper {
@@ -258,15 +258,15 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- MAESTRA IZQUIERDA (Sentada) -->
+    <!-- IMAGEN IZQUIERDA (Maestra Sentada) -->
     <div class="side-character">
-      <img src="sentada.png" alt="Profesora sentada" onerror="this.src='sentada.jpg'">
+      <img src="assets/sentada.png" alt="Profesora sentada" onerror="this.src='assets/sentada.jpg';">
     </div>
 
-    <!-- TARJETA CENTRAL -->
+    <!-- TARJETA CENTRAL CON INSIGNIA -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='insignia.jpg'">
+        <img src="assets/insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
@@ -275,9 +275,10 @@
         <label for="docenteSelect">Docente / Maestra</label>
         <select id="docenteSelect" class="input-field" required onchange="anunciarSeleccion(this)">
           <option value="" disabled selected hidden>Seleccione su nombre</option>
-          <option value="LILY">Mises Lily y Kiara</option>
+          <option value="LILY">Miss Lily Melo Azañero</option>
+          <option value="KIARA">Miss Kiara Morales Elguera</option>
           <option value="ANGHY">Miss Anghy Reyes Melo</option>
-          <option value="KARIN">Miss Molero Romani Karin</option>
+          <option value="KARIN">Miss Karin Molero Romani</option>
         </select>
       </div>
 
@@ -290,9 +291,9 @@
       <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- MAESTRA DERECHA (Observando) -->
+    <!-- IMAGEN DERECHA (Maestra Observando) -->
     <div class="side-character">
-      <img src="observando.png" alt="Profesora observando" onerror="this.src='observando.jpg'">
+      <img src="assets/observando.png" alt="Profesora observando" onerror="this.src='assets/observando.jpg';">
     </div>
   </main>
 
