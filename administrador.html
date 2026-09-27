@@ -1,604 +1,356 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BANCO LDS 360 - Panel de Administración</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script defer src="https://unpkg.com/html5-qrcode"></script>
-  <script defer src="app.js"></script>
+
+  <title>Acceso Administrativo - Maestras · IEP La Salle del Sur</title>
+
   <style>
     :root {
-      --azul: #142744;
+      --azul-oscuro: #0d1b2a;
       --oro: #c99a32;
+      --oro-claro: #e0b84c;
+      --blanco: #ffffff;
+      --gris-fondo: #f0f2f5;
+      --gris-texto: #667085;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--azul-oscuro);
+      background: var(--gris-fondo);
+      overflow-x: hidden;
+    }
+
+    /* =========================================================
+       ENCABEZADO
+       ========================================================= */
+    .header {
+      background: var(--azul-oscuro);
+      border-bottom: 4px solid var(--oro);
+      color: var(--blanco);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: normal;
+    }
+
+    .back-home-btn {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--blanco);
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .back-home-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* =========================================================
+       CONTENEDOR PRINCIPAL (CUADRÍCULA COMPACTA)
+       ========================================================= */
+    .main-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding-top: 80px; /* Espacio para el encabezado fijo */
+      width: 96%;
+      margin: 0 auto;
+      max-width: 1200px; /* Límite para pantallas muy grandes */
+    }
+
+    /* Contenedor para los personajes laterales */
+    .side-character {
+      flex: 0 1 25%; /* Ocupa aprox 1/4 del espacio flexible */
+      max-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-character img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    /* =========================================================
+       TARJETA DE INICIO DE SESIÓN (MÁS JUNTITA Y COMPACTA)
+       ========================================================= */
+    .login-card {
+      flex: 0 1 40%; /* Ocupa aprox 40% del espacio central */
+      max-width: 420px;
+      background: var(--blanco);
+      border-radius: 24px;
+      padding: 32px 32px 24px; /* Padding reducido para acercar todo */
+      box-shadow: 0 15px 40px rgba(20, 39, 68, 0.12);
+      text-align: center;
+      border-top: 5px solid var(--oro);
+      position: relative;
+      z-index: 1;
+      margin: 0 20px; /* Espacio mínimo entre tarjeta y personajes */
+    }
+
+    .card-escudo {
+      width: 80px;
+      height: auto;
+      margin-bottom: 8px; /* Acercar escudo al título */
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .login-card h2 {
+      color: var(--azul-oscuro);
+      font-size: 24px;
+      margin-bottom: 6px; /* Acercar título a la instrucción */
+      font-family: Georgia, serif;
+    }
+
+    .login-card p {
+      color: var(--gris-texto);
+      font-size: 14px;
+      margin-bottom: 24px; /* Espacio reducido antes del formulario */
+      line-height: 1.4;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px; /* Grupos de formulario más juntos */
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--azul-oscuro);
+      margin-bottom: 5px; /* Etiqueta e input muy juntos */
+    }
+
+    .input-field {
+      width: 100%;
+      height: 48px; /* Input un poco más compacto */
+      border: 1px solid #ccd2da;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-size: 16px;
+      outline: none;
+      background: #fafbfc;
+      color: var(--azul-oscuro);
+      transition: all 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--azul-oscuro);
+      background: var(--blanco);
+      box-shadow: 0 0 0 3px rgba(20, 39, 68, 0.1);
+    }
+
+    /* Estilo específico para el select placeholder */
+    select.input-field:invalid {
+      color: var(--gris-texto);
+    }
+
+    .primary-btn {
+      width: 100%;
+      height: 50px; /* Botón compacto */
+      border: 0;
+      border-radius: 12px;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 10px; /* Espacio antes del botón */
+      margin-bottom: 12px; /* Espacio antes del mensaje de error */
+      cursor: pointer;
+      transition: background 0.2s ease;
+      box-shadow: 0 4px 12px rgba(20, 39, 68, 0.2);
+    }
+
+    .primary-btn:hover {
+      background: #1a3258;
+      transform: translateY(-1px);
+    }
+
+    .error-msg {
+      margin-top: 0px;
+      color: #a7192e;
+      font-size: 13px;
+      min-height: 18px; /* Altura mínima para evitar saltos de diseño */
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       ADAPTABILIDAD (RESPONSIVE DESIGN)
+       ========================================================= */
+    @media (max-width: 992px) {
+      .main-wrapper {
+        width: 98%;
+        padding-top: 70px;
+      }
+
+      .login-card {
+        flex: 0 1 50%;
+        max-width: 400px;
+        padding: 28px 24px 20px;
+      }
+
+      .side-character {
+        flex: 0 1 20%;
+        max-width: 180px; /* Personajes más pequeños en pantallas medianas */
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 12px 20px;
+      }
+
+      .header h1 {
+        font-size: 18px;
+      }
+
+      .back-home-btn {
+        font-size: 13px;
+        padding: 6px 12px;
+      }
+
+      .main-wrapper {
+        flex-direction: column; /* Apilar elementos en pantallas pequeñas */
+        justify-content: center;
+        padding: 90px 20px 20px;
+        gap: 30px; /* Espacio entre elementos apilados */
+      }
+
+      .login-card {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 450px;
+        order: 1; /* La tarjeta va en medio */
+        margin: 0;
+      }
+
+      .side-character {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 200px;
+        order: 0; /* Personaje de la izquierda arriba */
+        margin-bottom: -15px; /* Superposición para que no se separen */
+      }
+      
+      .side-character:nth-of-type(2) {
+        order: 2; /* Personaje de la derecha abajo */
+        margin-top: -15px;
+      }
+      
+      .side-character img {
+        width: 150px; /* Tamaño fijo para los personajes apilados */
+      }
     }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
+<body>
 
-  <header class="bg-[#142744] border-b-4 border-[#c99a32] text-white p-4 shadow-lg flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <!-- Insignia Institucional -->
-      <img src="assets/insignia.webp" alt="Insignia La Salle del Sur" class="w-10 h-10 object-contain drop-shadow" onerror="this.style.display='none'">
-      <h1 class="text-xl font-bold font-serif">IEP La Salle del Sur - Panel de Administración</h1>
+  <div class="header">
+    <h1>IEP La Salle del Sur · Panel de Administración</h1>
+    <a href="index.html" class="back-home-btn">← Volver al Inicio</a>
+  </div>
+
+  <main class="main-wrapper">
+    <!-- Profesora Izquierda -->
+    <div class="side-character">
+      <img src="assets/profesora_izquierda.png" alt="Profesora sentada con tablet">
     </div>
-    <a href="index.html" class="text-sm bg-white/10 hover:bg-white/20 border border-white/30 px-3 py-1.5 rounded-xl transition">← Volver al Inicio</a>
-  </header>
 
-  <main class="max-w-4xl mx-auto p-4 space-y-6 flex-1 w-full">
-    
-    <!-- VISTA LOGIN DE DOCENTES / MISES -->
-    <div id="vistaLoginAdmin" class="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto space-y-5 my-10 border-t-4 border-[#c99a32]">
-      <div class="flex items-center justify-center gap-3 mb-2">
-        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#142744] to-blue-900 flex items-center justify-center text-2xl shadow-md border-2 border-[#c99a32]">
-          👩‍🏫
-        </div>
-      </div>
+    <!-- Tarjeta Central de Login (Compacta) -->
+    <div class="login-card">
+      <img src="assets/insignia.webp" alt="Insignia La Salle del Sur" class="card-escudo" onerror="this.style.display='none'">
+      <h2>Acceso Administrativo - Maestras</h2>
+      <p>Seleccione su nombre institucional para iniciar turno.</p>
       
-      <h2 class="text-center text-2xl font-bold font-serif text-[#142744]">Acceso Administrativo - Mises</h2>
-      <p class="text-xs text-center text-gray-500">Seleccione su nombre institucional para iniciar turno.</p>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Docente / Miss</label>
-        <select id="loginDocente" class="w-full border border-gray-300 rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-[#142744]">
-          <option value="">Seleccione su nombre</option>
-          <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
-          <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
-          <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
-          <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+      <div class="form-group">
+        <label for="docenteSelect">Docente / Maestra</label>
+        <select id="docenteSelect" class="input-field" required>
+          <option value="" disabled selected hidden>Seleccione su nombre</option>
+          <option value="LILY">Miss Lily Melo Azañero</option>
+          <option value="KIARA">Miss Kiara Morales Elguera</option>
+          <option value="ANGHY">Miss Anghy Reyes Melo</option>
+          <option value="KARIN">Miss Molero Romani Karin</option>
         </select>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Clave de Acceso Docente</label>
-        <input 
-          type="password" 
-          id="loginClaveDocente" 
-          maxlength="6"
-          inputmode="numeric"
-          placeholder="••••••" 
-          class="w-full border border-gray-300 rounded-xl p-3 text-center text-xl tracking-widest outline-none focus:ring-2 focus:ring-[#142744]"
-        />
+      <div class="form-group">
+        <label for="claveDocente">Clave de Acceso Docente</label>
+        <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
       </div>
 
-      <button 
-        onclick="procesarLoginAdmin()" 
-        class="w-full bg-[#142744] hover:bg-blue-950 text-white font-bold py-3.5 rounded-xl transition shadow-lg"
-      >
-        Ingresar al Panel
-      </button>
-
-      <div id="errorAdminLogin" class="text-red-600 text-xs text-center min-h-[20px] font-semibold"></div>
+      <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
+      <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL -->
-    <div id="panelAdminPrincipal" class="hidden space-y-6">
-      
-      <!-- BARRA DE BIENVENIDA DE LA MISSE -->
-      <div class="bg-gradient-to-r from-[#142744] to-indigo-900 text-white p-4 rounded-xl shadow-md flex justify-between items-center border-b-2 border-[#c99a32]">
-        <div>
-          <p class="text-xs text-blue-200">Docente Conectada:</p>
-          <h3 id="nombreMissActiva" class="font-bold text-base">---</h3>
-        </div>
-        <button onclick="cerrarSesionAdmin()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3.5 py-2 rounded-lg transition font-medium shadow">
-          Cerrar Turno
-        </button>
-      </div>
-
-      <!-- SECCIÓN 1: CONSULTA DE ESTUDIANTE -->
-      <section class="bg-white p-6 rounded-xl shadow-md space-y-4">
-        <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Consulta de Estudiante</h2>
-        
-        <div class="flex flex-col sm:flex-row gap-3">
-          <input 
-            type="text" 
-            id="codigoEstudiante" 
-            placeholder="Ej: LDS-EST-001" 
-            class="flex-1 border rounded-lg px-4 py-2 text-lg uppercase focus:outline-none focus:ring-2 focus:ring-[#142744]"
-          />
-          <button 
-            onclick="buscarEstudiante()" 
-            class="bg-[#142744] hover:bg-blue-950 text-white px-6 py-2 rounded-lg font-medium transition shadow"
-          >
-            Buscar
-          </button>
-          <button 
-            onclick="toggleEscaner()" 
-            class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 shadow"
-          >
-            📷 Escanear QR
-          </button>
-        </div>
-
-        <div id="reader" class="hidden w-full max-w-sm mx-auto overflow-hidden rounded-lg border"></div>
-      </section>
-
-      <!-- FICHA Y ACCIONES DEL ALUMNO SELECCIONADO -->
-      <section id="fichaAlumno" class="hidden bg-white p-6 rounded-xl shadow-md space-y-6">
-        <div class="flex items-center gap-4">
-          <img 
-            id="fotoAlumno" 
-            src="https://via.placeholder.com/150" 
-            alt="Foto Estudiante" 
-            class="w-24 h-24 rounded-full object-cover border-2 border-[#142744] shadow"
-          />
-          <div>
-            <h3 id="nombreAlumno" class="text-xl font-bold text-gray-800">---</h3>
-            <p id="gradoAlumno" class="text-gray-500">---</p>
-            <div class="mt-2 text-2xl font-extrabold text-[#142744]">
-              Saldo: <span id="saldoAlumno">0.00</span> LDS
-            </div>
-          </div>
-        </div>
-
-        <!-- MÓDULO DE ABONAR (SUELDOS Y PREMIOS) -->
-        <div class="border-t pt-4 space-y-3 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-          <h4 class="font-bold text-emerald-900 text-sm flex items-center gap-2">
-            💰 Módulo de Abonos (Sueldos / Premios / Bonificaciones)
-          </h4>
-          
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1">Categoría</label>
-              <select id="selectCategoriaAbono" onchange="cargarConceptosAbonoAdmin()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
-                <option value="">Seleccione categoría</option>
-                <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
-                <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1">Concepto</label>
-              <select id="selectConceptoAbono" onchange="anunciarConceptoSeleccionado()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none">
-                <option value="">Seleccione concepto</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1">Monto LDS</label>
-              <input type="number" id="inputMontoAbono" min="0" step="0.01" placeholder="0.00" onchange="anunciarMontoIngresado()" class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-gray-600 mb-1">Responsable (Automático)</label>
-              <input type="text" id="inputResponsableAuto" readonly class="w-full border rounded-lg p-2 text-sm bg-gray-100 text-gray-600 font-bold" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">Observación o Motivo</label>
-            <input type="text" id="inputObservacionAbono" placeholder="Ej: Excelente desempeño en clase..." class="w-full border rounded-lg p-2 text-sm bg-white outline-none" />
-          </div>
-
-          <button 
-            onclick="ejecutarAbonoAdministrativo()" 
-            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow"
-          >
-            Confirmar y Abonar al Estudiante
-          </button>
-          <div id="mensajeAbonoAdmin" class="text-xs text-center font-bold min-h-[18px]"></div>
-        </div>
-
-        <!-- ESTADO DE CUENTA / MOVIMIENTOS BANCARIOS DEL ESTUDIANTE -->
-        <div class="border-t pt-4 space-y-3">
-          <h4 class="font-semibold text-gray-700 text-sm">Estado de Cuenta - Movimientos del Estudiante</h4>
-          <div id="listaMovimientosAdmin" class="space-y-2 max-h-48 overflow-y-auto text-sm">
-            <p class="text-gray-400 text-center italic py-2">Sin movimientos registrados.</p>
-          </div>
-        </div>
-
-        <!-- REGISTRO DE INCIDENCIAS -->
-        <div class="border-t pt-4 space-y-3">
-          <h4 class="font-semibold text-gray-700">Registrar Atenciones e Incidencias</h4>
-          <textarea 
-            id="observacion" 
-            rows="3" 
-            placeholder="Escriba aquí la incidencia o detalle de atención..." 
-            class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-[#142744] outline-none"
-          ></textarea>
-          <button 
-            onclick="guardarIncidenciaLocal()" 
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-medium transition shadow"
-          >
-            Guardar Incidencia
-          </button>
-        </div>
-
-        <div class="border-t pt-4">
-          <h4 class="font-semibold text-gray-700 mb-2">Historial de Incidencias Guardadas</h4>
-          <ul id="listaIncidencias" class="space-y-2 text-sm text-gray-600 max-h-40 overflow-y-auto">
-            <li class="italic text-gray-400">Sin incidencias registradas hoy.</li>
-          </ul>
-        </div>
-      </section>
-
+    <!-- Profesora Derecha -->
+    <div class="side-character">
+      <img src="assets/profesora_derecha.png" alt="Profesora escribiendo en escritorio">
     </div>
-
   </main>
 
   <script>
-    let missActual = "";
-    let catalogoAbonosAdmin = {
-      "INGRESOS_Y_SUELDOS": [
-        "Ingreso Sueldo Base Mensual", 
-        "Ingreso Sueldo por Rol de Liderazgo", 
-        "Ingreso Bono por desempeño"
-      ],
-      "PREMIOS_Y_BONIFICACIONES": [
-        "Bono por llevar el uniforme impecable y reglamentario", 
-        "Bono Participación destacada en clase", 
-        "Bono Premio por primer lugar en concurso académico o deportivo", 
-        "Bono Puntualidad y asistencia perfecta", 
-        "Bono Apoyo destacado en limpieza", 
-        "Bono por ayuda solidaria", 
-        "Bono Creatividad e innovación", 
-        "Bono Representar dignamente al colegio", 
-        "Bono Leer un libro y presentar evidencia", 
-        "Bono Completar un reto educativo"
-      ]
-    };
+    function validarAccesoDocente(){
+      const docente = document.getElementById("docenteSelect").value;
+      const clave = document.getElementById("claveDocente").value.trim();
+      const error = document.getElementById("adminError");
+      error.textContent = "";
 
-    function hablarTextoVoz(texto) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
-        const utterance = new SpeechSynthesisUtterance(textoLimpio);
-        utterance.rate = 1.05;
-        utterance.pitch = 1.25;
-
-        const voces = window.speechSynthesis.getVoices();
-        let vozIdeal = voces.find(v => 
-          v.lang.startsWith('es') && (
-            v.name.toLowerCase().includes('dani') || 
-            v.name.toLowerCase().includes('helena') || 
-            v.name.toLowerCase().includes('lucia') || 
-            v.name.toLowerCase().includes('monica') || 
-            v.name.toLowerCase().includes('sofia') || 
-            v.name.toLowerCase().includes('female') ||
-            v.name.toLowerCase().includes('google español')
-          )
-        );
-
-        if (!vozIdeal) {
-          vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        }
-
-        if (vozIdeal) {
-          utterance.voice = vozIdeal;
-        }
-
-        setTimeout(() => {
-          window.speechSynthesis.speak(utterance);
-        }, 100);
+      if(!docente){
+        error.textContent = "Por favor, seleccione su nombre de la lista.";
+        return;
       }
-    }
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = function() {
-        window.speechSynthesis.getVoices();
-      };
-    }
-
-    function procesarLoginAdmin() {
-      const docente = document.getElementById('loginDocente').value;
-      const clave = document.getElementById('loginClaveDocente').value.trim();
-      const errorDiv = document.getElementById('errorAdminLogin');
-      errorDiv.textContent = "";
-
-      if (!docente || !clave) {
-        errorDiv.textContent = "Seleccione su nombre y escriba su clave.";
-        hablarTextoVoz("Por favor seleccione su nombre y escriba su clave.");
+      if(!clave){
+        error.textContent = "Por favor, ingrese su clave de acceso docente.";
         return;
       }
 
-      if (clave.length < 4) {
-        errorDiv.textContent = "La clave debe tener al menos 4 dígitos.";
-        hablarTextoVoz("La clave debe tener al menos cuatro dígitos.");
-        return;
-      }
-
-      missActual = docente;
-      document.getElementById('vistaLoginAdmin').classList.add('hidden');
-      document.getElementById('panelAdminPrincipal').classList.remove('hidden');
-      document.getElementById('nombreMissActiva').textContent = missActual;
-      document.getElementById('inputResponsableAuto').value = missActual;
-
-      hablarTextoVoz(`Bienvenida ${missActual} al panel de administración del banco escolar.`);
-    }
-
-    function cerrarSesionAdmin() {
-      missActual = "";
-      document.getElementById('panelAdminPrincipal').classList.add('hidden');
-      document.getElementById('vistaLoginAdmin').classList.remove('hidden');
-      document.getElementById('loginDocente').value = "";
-      document.getElementById('loginClaveDocente').value = "";
-      document.getElementById('fichaAlumno').classList.add('hidden');
-      hablarTextoVoz("Turno cerrado correctamente.");
-    }
-
-    function cargarConceptosAbonoAdmin() {
-      const catSelect = document.getElementById('selectCategoriaAbono');
-      const cat = catSelect.value;
-      const selectCon = document.getElementById('selectConceptoAbono');
-      selectCon.innerHTML = '<option value="">Seleccione concepto</option>';
-
-      if (!cat || !catalogoAbonosAdmin[cat]) return;
-
-      catalogoAbonosAdmin[cat].forEach(con => {
-        const opt = document.createElement('option');
-        opt.value = con;
-        opt.textContent = con;
-        selectCon.appendChild(opt);
-      });
-
-      const nombreCat = catSelect.options[catSelect.selectedIndex].text;
-      hablarTextoVoz(`Categoría seleccionada: ${nombreCat}. Seleccione ahora el concepto.`);
-    }
-
-    function anunciarConceptoSeleccionado() {
-      const con = document.getElementById('selectConceptoAbono').value;
-      if (con) {
-        hablarTextoVoz(`Concepto seleccionado: ${con}. Ingrese el monto a abonar.`);
-      }
-    }
-
-    function anunciarMontoIngresado() {
-      const monto = document.getElementById('inputMontoAbono').value;
-      if (monto && Number(monto) > 0) {
-        hablarTextoVoz(`Monto ingresado: ${monto} LDS.`);
-      }
-    }
-
-    function ejecutarAbonoAdministrativo() {
-      const codigo = document.getElementById('codigoEstudiante').value.trim().toUpperCase();
-      const cat = document.getElementById('selectCategoriaAbono').value;
-      const con = document.getElementById('selectConceptoAbono').value;
-      const monto = document.getElementById('inputMontoAbono').value.trim();
-      const obs = document.getElementById('inputObservacionAbono').value.trim();
-      const msg = document.getElementById('mensajeAbonoAdmin');
-
-      if (!codigo) {
-        alert("Primero busque o escanee a un estudiante.");
-        hablarTextoVoz("Primero busque o escanee a un estudiante.");
-        return;
-      }
-
-      if (!cat || !con || !monto) {
-        msg.className = "text-xs text-red-600 font-bold";
-        msg.textContent = "Complete categoría, concepto y monto.";
-        hablarTextoVoz("Por favor complete la categoría, el concepto y el monto a abonar.");
-        return;
-      }
-
-      msg.className = "text-xs text-blue-600 font-bold";
-      msg.textContent = "Procesando abono...";
-      hablarTextoVoz(`Procesando abono de ${monto} LDS por concepto de ${con}.`);
-
-      if (typeof registrarTransaccionSistema === 'function') {
-        registrarTransaccionSistema(codigo, 'INGRESO', monto, con, missActual, obs, function(res) {
-          if (res && (res.success || res.ok)) {
-            msg.className = "text-xs text-emerald-600 font-extrabold";
-            msg.textContent = "¡Abono registrado con éxito!";
-            
-            const nuevoSaldo = res.nuevoSaldo || res.saldoActual;
-            if (nuevoSaldo !== undefined) {
-              document.getElementById('saldoAlumno').textContent = Number(nuevoSaldo).toFixed(2);
-            }
-
-            hablarTextoVoz(`¡Abono de ${monto} LDS registrado con éxito! El nuevo saldo disponible es ${document.getElementById('saldoAlumno').textContent} LDS.`);
-
-            if (res.movimientos) {
-              renderizarMovimientosAdmin(res.movimientos);
-            } else {
-              buscarEstudiante(true); 
-            }
-
-            setTimeout(() => {
-              document.getElementById('selectCategoriaAbono').value = "";
-              document.getElementById('selectConceptoAbono').innerHTML = '<option value="">Seleccione concepto</option>';
-              document.getElementById('inputMontoAbono').value = "";
-              document.getElementById('inputObservacionAbono').value = "";
-              msg.textContent = "";
-            }, 3000);
-          } else {
-            msg.className = "text-xs text-red-600 font-bold";
-            msg.textContent = res.message || "Error al procesar el abono.";
-            hablarTextoVoz(`Ocurrió un error al procesar el abono: ${res.message || 'Intente nuevamente'}.`);
-          }
-        });
-      }
-    }
-
-    let html5QrCode = null;
-    let escanerActivo = false;
-
-    function toggleEscaner() {
-      const readerDiv = document.getElementById('reader');
-      if (escanerActivo) {
-        detenerEscaner();
+      if(clave === "360LDS" || clave === "2026"){
+        localStorage.setItem("maestraActiva", docente);
+        // Simular redirección
+        alert(`Bienvenida ${docente}. Redirigiendo al panel...`);
+        window.location.href = "administrador_panel.html";
       } else {
-        readerDiv.classList.remove('hidden');
-        if (!html5QrCode) {
-          html5QrCode = new Html5Qrcode("reader");
-        }
-        
-        hablarTextoVoz("Cámara activada. Muestre el código QR del estudiante.");
-
-        Html5Qrcode.getCameras().then(devices => {
-          if (devices && devices.length > 0) {
-            let cameraId = devices[0].id;
-            for (let i = 0; i < devices.length; i++) {
-              if (devices[i].label.toLowerCase().includes('back') || devices[i].label.toLowerCase().includes('trasera')) {
-                cameraId = devices[i].id;
-                break;
-              }
-            }
-            
-            html5QrCode.start(
-              cameraId, 
-              { fps: 10, qrbox: { width: 250, height: 250 } },
-              onScanSuccess,
-              onScanError
-            ).then(() => {
-              escanerActivo = true;
-            }).catch(err => {
-              alert("Error al acceder a la cámara.");
-              hablarTextoVoz("Error al acceder a la cámara.");
-            });
-          } else {
-            alert("No se detectó ninguna cámara.");
-            hablarTextoVoz("No se detectó ninguna cámara.");
-          }
-        }).catch(err => {
-          alert("Permiso de cámara denegado.");
-          hablarTextoVoz("Permiso de cámara denegado.");
-        });
+        error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
       }
     }
 
-    function onScanSuccess(decodedText) {
-      document.getElementById('codigoEstudiante').value = decodedText;
-      detenerEscaner();
-      hablarTextoVoz(`Código QR leído correctamente. Buscando estudiante.`);
-      buscarEstudiante();
-    }
-
-    function onScanError(error) {}
-
-    function detenerEscaner() {
-      if (html5QrCode && escanerActivo) {
-        html5QrCode.stop().then(() => {
-          document.getElementById('reader').classList.add('hidden');
-          escanerActivo = false;
-        }).catch(e => console.error(e));
+    // Permitir "Enter" para iniciar sesión
+    document.getElementById("claveDocente").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){
+        validarAccesoDocente();
       }
-    }
-
-    function buscarEstudiante(silencioso = false) {
-      const codigo = document.getElementById('codigoEstudiante').value.trim();
-      if (!codigo) {
-        alert("Ingrese un código válido.");
-        hablarTextoVoz("Ingrese un código de estudiante válido.");
-        return;
-      }
-
-      if (typeof consultarDatosEstudiante === 'function') {
-        consultarDatosEstudiante(codigo, function(data) {
-          actualizarVistaAdmin(data, silencioso);
-        });
-      }
-    }
-
-    function actualizarVistaAdmin(data, silencioso = false) {
-      if (!data || !(data.success || data.ok)) {
-        alert("No se encontraron datos para el estudiante.");
-        hablarTextoVoz("No se encontraron datos para el estudiante ingresado.");
-        return;
-      }
-
-      document.getElementById('fichaAlumno').classList.remove('hidden');
-
-      const nombre = data.nombreCompleto || data.nombre || data.estudiante?.nombreCompleto || data.estudiante?.nombre || 'Estudiante';
-      const grado = (data.grado || data.estudiante?.grado || '') + ' ' + (data.seccion || data.estudiante?.seccion || '');
-      const saldo = Number(data.saldoActual || data.saldo || data.cuenta?.saldoActual || 0).toFixed(2);
-
-      document.getElementById('nombreAlumno').textContent = nombre;
-      document.getElementById('gradoAlumno').textContent = grado;
-      document.getElementById('saldoAlumno').textContent = saldo;
-
-      const fotoRaw = data.fotoUrl || data.foto || data.estudiante?.fotoUrl || data.estudiante?.foto || "";
-      document.getElementById('fotoAlumno').src = optimizarUrlFotoDrive(fotoRaw);
-
-      renderizarMovimientosAdmin(data.movimientos || []);
-      cargarIncidenciasLocales(data.codigo || document.getElementById('codigoEstudiante').value.trim());
-
-      if (!silencioso) {
-        hablarTextoVoz(`Estudiante ${nombre}, grado ${grado}. Saldo disponible: ${saldo} LDS.`);
-      }
-    }
-
-    function renderizarMovimientosAdmin(movs) {
-      const contenedor = document.getElementById('listaMovimientosAdmin');
-      contenedor.innerHTML = '';
-
-      if (!movs || movs.length === 0) {
-        contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>';
-        return;
-      }
-
-      movs.forEach(m => {
-        const tipo = String(m.tipo || m.tipoMovimiento || "").toUpperCase();
-        const monto = Number(m.monto || m.montoLDS || 0);
-        const positivo = tipo.includes('INGRESO') || tipo.includes('ABONO') || monto >= 0;
-        const resp = m.responsable ? ` (${m.responsable})` : '';
-
-        const item = document.createElement('div');
-        item.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 border-l-4 " + 
-          (positivo ? 'border-emerald-500' : 'border-rose-500');
-        item.innerHTML = `
-          <div>
-            <p class="font-bold text-xs text-gray-800">${m.concepto || m.descripcion || 'Movimiento'}${resp}</p>
-            <p class="text-[10px] text-gray-400">${m.fecha || m.fechaTexto || ''}</p>
-          </div>
-          <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
-            ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
-          </span>
-        `;
-        contenedor.appendChild(item);
-      });
-    }
-
-    function guardarIncidenciaLocal() {
-      const codigo = document.getElementById('codigoEstudiante').value.trim();
-      const obs = document.getElementById('observacion').value.trim();
-      if (!obs || !codigo) {
-        alert("Escriba una observación.");
-        hablarTextoVoz("Por favor escriba el detalle de la incidencia.");
-        return;
-      }
-
-      const key = 'INCIDENCIAS_' + codigo;
-      const registros = JSON.parse(localStorage.getItem(key) || '[]');
-      registros.push({ fecha: new Date().toLocaleString(), detalle: obs });
-      localStorage.setItem(key, JSON.stringify(registros));
-      
-      document.getElementById('observacion').value = '';
-      cargarIncidenciasLocales(codigo);
-      hablarTextoVoz("Incidencia o atención registrada correctamente.");
-    }
-
-    function cargarIncidenciasLocales(codigo) {
-      const key = 'INCIDENCIAS_' + codigo;
-      const registros = JSON.parse(localStorage.getItem(key) || '[]');
-      const ul = document.getElementById('listaIncidencias');
-      ul.innerHTML = '';
-
-      if (registros.length === 0) {
-        ul.innerHTML = '<li class="italic text-gray-400">Sin incidencias registradas hoy.</li>';
-        return;
-      }
-
-      registros.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'bg-gray-50 p-2 rounded border';
-        li.innerHTML = `<strong>${item.fecha}:</strong> ${item.detalle}`;
-        ul.appendChild(li);
-      });
-    }
-
-    function optimizarUrlFotoDrive(url) {
-      if (!url || url.trim() === '') return 'https://via.placeholder.com/150?text=Sin+Foto';
-      if (url.includes('drive.google.com') || url.includes('googleusercontent.com')) {
-        const match = url.match(/\/d\/([^\/\?]+)/) || url.match(/id=([^&]+)/);
-        if (match && match[1]) {
-          return 'https://lh3.googleusercontent.com/d/' + match[1];
-        }
-      }
-      return url;
-    }
+    });
   </script>
+
 </body>
 </html>
