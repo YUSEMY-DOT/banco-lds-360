@@ -75,7 +75,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL EQUILIBRADO
+       CONTENEDOR PRINCIPAL CENTRADO
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -83,38 +83,20 @@
       justify-content: center;
       min-height: 100vh;
       padding-top: 90px;
-      width: 96%;
-      margin: 0 auto;
-      max-width: 1300px;
-      gap: 35px;
-    }
-
-    /* Ilustraciones laterales proporcionales */
-    .side-character {
-      flex: 0 1 30%;
-      max-width: 380px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .side-character img {
       width: 100%;
-      height: auto;
-      max-height: 440px;
-      object-fit: contain;
-      filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN ELEGANTE
+       TARJETA DE INICIO DE SESIÓN GRANDE Y ELEGANTE
        ========================================================= */
     .login-card {
-      flex: 0 1 36%;
-      max-width: 410px;
+      width: 100%;
+      max-width: 480px; /* Cuadro más grande y cómodo */
       background: var(--blanco);
-      border-radius: 28px;
-      padding: 34px 30px 26px;
+      border-radius: 30px;
+      padding: 42px 38px 32px;
       box-shadow: 0 20px 50px rgba(13, 27, 42, 0.12);
       text-align: center;
       border-top: 6px solid var(--oro);
@@ -122,19 +104,19 @@
       z-index: 1;
     }
 
-    /* Insignia estilizada dentro de la tarjeta */
+    /* Insignia institucional perfectamente ubicada dentro del círculo */
     .card-insignia-container {
-      width: 82px;
-      height: 82px;
-      margin: 0 auto 14px;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 18px;
       background: #f8f9fa;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 15px rgba(201, 154, 50, 0.2);
-      border: 2px solid rgba(201, 154, 50, 0.3);
-      padding: 6px;
+      box-shadow: 0 6px 18px rgba(201, 154, 50, 0.25);
+      border: 2px solid rgba(201, 154, 50, 0.4);
+      padding: 8px;
     }
 
     .card-insignia {
@@ -145,27 +127,27 @@
 
     .login-card h2 {
       color: var(--azul-oscuro);
-      font-size: 23px;
-      margin-bottom: 6px;
+      font-size: 25px;
+      margin-bottom: 8px;
       font-family: Georgia, serif;
       font-weight: 700;
     }
 
     .login-card p {
       color: var(--gris-texto);
-      font-size: 13.5px;
-      margin-bottom: 22px;
+      font-size: 14.5px;
+      margin-bottom: 26px;
       line-height: 1.4;
     }
 
     .form-group {
       text-align: left;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .form-group label {
       display: block;
-      font-size: 12.5px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--azul-oscuro);
       margin-bottom: 6px;
@@ -173,11 +155,11 @@
 
     .input-field {
       width: 100%;
-      height: 48px;
+      height: 50px;
       border: 1px solid #ccd2da;
       border-radius: 12px;
       padding: 0 16px;
-      font-size: 15px;
+      font-size: 16px;
       outline: none;
       background: #fafbfc;
       color: var(--azul-oscuro);
@@ -196,15 +178,15 @@
 
     .primary-btn {
       width: 100%;
-      height: 50px;
+      height: 52px;
       border: 0;
       border-radius: 12px;
       background: var(--azul-oscuro);
       color: var(--blanco);
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
-      margin-top: 10px;
-      margin-bottom: 12px;
+      margin-top: 12px;
+      margin-bottom: 14px;
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 6px 15px rgba(20, 39, 68, 0.25);
@@ -218,7 +200,7 @@
 
     .error-msg {
       color: #a7192e;
-      font-size: 13px;
+      font-size: 13.5px;
       min-height: 18px;
       font-weight: 600;
     }
@@ -226,28 +208,12 @@
     /* =========================================================
        RESPONSIVE DESIGN
        ========================================================= */
-    @media (max-width: 992px) {
-      .main-wrapper {
-        flex-direction: column;
-        padding: 95px 20px 30px;
-        gap: 25px;
-      }
+    @media (max-width: 576px) {
       .login-card {
-        flex: 1 1 auto;
-        width: 100%;
-        max-width: 420px;
-        order: 1;
+        padding: 30px 20px 24px;
       }
-      .side-character {
-        flex: 0 0 auto;
-        width: 100%;
-        max-width: 200px;
-      }
-      .side-character:first-of-type {
-        order: 0;
-      }
-      .side-character:last-of-type {
-        order: 2;
+      .login-card h2 {
+        font-size: 22px;
       }
     }
   </style>
@@ -260,15 +226,10 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Profesora Izquierda -->
-    <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1UCgPk4i8tUmStOAw3j3btSPcSJmBvEUX" alt="Profesora izquierda" onerror="this.style.display='none'">
-    </div>
-
-    <!-- Tarjeta Central de Inicio de Sesión con Insignia -->
+    <!-- Tarjeta Central de Inicio de Sesión Ampliada -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="https://lh3.googleusercontent.com/d/1q4BizgmM5iccQqhIcmmq3d0twlOp5nFs" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.style.display='none'">
+        <img src="https://lh3.googleusercontent.com/d/1q4BizgmM5iccQqhIcmmq3d0twlOp5nFs" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='https://via.placeholder.com/90?text=LDS'">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
@@ -291,11 +252,6 @@
 
       <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
       <div id="adminError" class="error-msg"></div>
-    </div>
-
-    <!-- Profesora Derecha -->
-    <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Profesora derecha" onerror="this.style.display='none'">
     </div>
   </main>
 
