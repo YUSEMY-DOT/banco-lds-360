@@ -13,7 +13,6 @@
       --rojo-lasalle: #a7192e;
       --blanco: #ffffff;
       --gris-fondo: #f4f5f7;
-      --texto-gris: #667085;
     }
 
     * {
@@ -24,7 +23,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-primario) 100%);
+      background: radial-gradient(circle at 50% 30%, #1d3557 0%, var(--azul-oscuro) 100%);
       color: var(--blanco);
       min-height: 100vh;
       display: flex;
@@ -32,15 +31,15 @@
       justify-content: space-between;
     }
 
-    /* ENCABEZADO INSTITUCIONAL */
+    /* ENCABEZADO */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 40px;
-      border-bottom: 2px solid rgba(201, 154, 50, 0.3);
-      background: rgba(12, 29, 54, 0.9);
-      backdrop-filter: blur(10px);
+      padding: 18px 35px;
+      border-bottom: 3px solid var(--dorado);
+      background: rgba(12, 29, 54, 0.95);
+      backdrop-filter: blur(8px);
     }
 
     .school-brand {
@@ -49,17 +48,11 @@
       gap: 15px;
     }
 
-    .school-crest {
-      width: 48px;
-      height: 54px;
-      object-fit: contain;
-    }
-
     .school-info h1 {
       font-family: Georgia, serif;
       font-size: 20px;
-      letter-spacing: 0.5px;
       color: var(--blanco);
+      letter-spacing: 0.5px;
     }
 
     .school-info span {
@@ -68,113 +61,132 @@
       font-style: italic;
     }
 
-    .admin-link {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    .admin-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: var(--blanco);
-      padding: 10px 20px;
+      padding: 9px 18px;
       border-radius: 10px;
       cursor: pointer;
       font-size: 14px;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
-    .admin-link:hover {
+    .admin-btn:hover {
       background: var(--dorado);
       color: var(--azul-oscuro);
       border-color: var(--dorado);
     }
 
-    /* CUERPO PRINCIPAL */
+    /* CONTENEDOR PRINCIPAL */
     main {
       flex: 1;
-      max-width: 1050px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 40px 20px;
-      text-align: center;
+      padding: 30px 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
+      text-align: center;
     }
 
-    .hero-title {
+    /* BANNER O ELEMENTO VISUAL (REEMPLAZO DEL BANCO/NIÑOS) */
+    .visual-banner {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(201, 154, 50, 0.3);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 25px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
+    }
+
+    .visual-banner h2 {
       font-family: Georgia, serif;
-      font-size: 46px;
-      margin-bottom: 8px;
+      font-size: 38px;
       color: var(--blanco);
+      margin-bottom: 5px;
     }
 
-    .hero-title span {
+    .visual-banner h2 span {
       color: var(--rojo-lasalle);
     }
 
-    .hero-subtitle {
-      font-size: 18px;
+    .visual-banner p {
       color: var(--dorado-claro);
-      margin-bottom: 40px;
+      font-size: 16px;
       font-weight: 500;
     }
 
-    /* GRILLA DE ACCESOS */
-    .buttons-grid {
+    /* BOTONES MÁS COMPACTOS Y ELEGANTES */
+    .compact-buttons {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 22px;
-      margin-top: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 650px;
     }
 
-    .nav-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 18px;
-      padding: 32px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(6px);
-    }
-
-    .nav-card:hover {
-      transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--dorado);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    }
-
-    .nav-icon {
-      font-size: 40px;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .nav-title {
-      font-size: 19px;
+    .action-btn {
+      background: #ffffff;
+      color: var(--azul-primario);
+      border: none;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 16px;
       font-weight: 700;
-      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      background: var(--dorado-claro);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .action-btn.primary {
+      background: var(--rojo-lasalle);
       color: var(--blanco);
     }
 
-    .nav-desc {
-      font-size: 14px;
-      color: #a0aec0;
-      line-height: 1.4;
+    .action-btn.primary:hover {
+      background: #b8233a;
+    }
+
+    .btn-icon {
+      font-size: 20px;
     }
 
     /* PIE DE PÁGINA */
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 15px;
       font-size: 13px;
-      color: var(--texto-gris);
-      background: rgba(10, 20, 38, 0.95);
+      color: #8a9ba8;
+      background: rgba(8, 16, 28, 0.95);
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    @media (max-width: 768px) {
-      .hero-title { font-size: 32px; }
-      header { padding: 15px 20px; flex-direction: column; gap: 15px; text-align: center; }
-      .school-brand { flex-direction: column; }
+    @media (max-width: 650px) {
+      .compact-buttons {
+        grid-template-columns: 1fr;
+      }
+      .visual-banner h2 {
+        font-size: 28px;
+      }
+      header {
+        padding: 15px 20px;
+      }
     }
   </style>
 </head>
@@ -182,50 +194,38 @@
 
   <header>
     <div class="school-brand">
-      <!-- Aquí puedes colocar la ruta de la insignia desde tu carpeta de Drive/Assets -->
-      <img src="assets/insignia.png" alt="Insignia La Salle" class="school-crest" onerror="this.style.display='none'">
       <div class="school-info">
         <h1>IEP LA SALLE DEL SUR</h1>
         <span>Formamos personas íntegras</span>
       </div>
     </div>
-    <button class="admin-link" onclick="abrirAdmin()">🔒 Administrador</button>
+    <button class="admin-btn" onclick="abrirAdmin()">🔒 Administrador</button>
   </header>
 
   <main>
-    <div>
-      <h2 class="hero-title">BANCO LDS <span>360</span></h2>
-      <p class="hero-subtitle">Sistema Financiero Educativo y de Economía de Aula</p>
+    <!-- Contenedor Visual (Inspirado en la temática del Banco y los estudiantes) -->
+    <div class="visual-banner">
+      <h2>BANCO LDS <span>360</span></h2>
+      <p>Sistema Financiero Educativo y de Economía de Aula</p>
     </div>
 
-    <div class="buttons-grid">
-      <!-- Tarjeta 1: Escanear QR -->
-      <div class="nav-card" onclick="abrirScanner()">
-        <span class="nav-icon">📷</span>
-        <div class="nav-title">Escanear Código QR</div>
-        <div class="nav-desc">Lectura rápida del carné estudiantil mediante cámara.</div>
-      </div>
+    <!-- Botones compactos y elegantes -->
+    <div class="compact-buttons">
+      <button class="action-btn primary" onclick="abrirScanner()">
+        <span class="btn-icon">📷</span> Escanear Código QR
+      </button>
 
-      <!-- Tarjeta 2: Ingresar por Código -->
-      <div class="nav-card" onclick="abrirCodigo()">
-        <span class="nav-icon">🔑</span>
-        <div class="nav-title">Ingresar por Código</div>
-        <div class="nav-desc">Consulta directa mediante código personal y PIN.</div>
-      </div>
+      <button class="action-btn" onclick="abrirCodigo()">
+        <span class="btn-icon">🔑</span> Ingresar Código
+      </button>
 
-      <!-- Tarjeta 3: Portal Docente / Tutores -->
-      <div class="nav-card" onclick="abrirDocentes()">
-        <span class="nav-icon">👩‍🏫</span>
-        <div class="nav-title">Portal de Tutores</div>
-        <div class="nav-desc">Gestión y registro de méritos para el plantel docente.</div>
-      </div>
+      <button class="action-btn" onclick="abrirDocentes()">
+        <span class="btn-icon">👩‍🏫</span> Portal Docente
+      </button>
 
-      <!-- Tarjeta 4: Normativas y Moneda -->
-      <div class="nav-card" onclick="abrirAyuda()">
-        <span class="nav-icon">💡</span>
-        <div class="nav-title">Moneda LDS Coins</div>
-        <div class="nav-desc">Conoce las reglas y transacciones de la economía escolar.</div>
-      </div>
+      <button class="action-btn" onclick="abrirAyuda()">
+        <span class="btn-icon">💡</span> Normativa LDS
+      </button>
     </div>
   </main>
 
@@ -238,18 +238,16 @@
       window.location.href = 'administrador.html';
     }
     function abrirScanner() {
-      // Conecta aquí con tu función existente del escáner QR
-      alert("Función de escáner QR listo para vincular.");
+      alert("Iniciando escáner QR...");
     }
     function abrirCodigo() {
-      // Conecta aquí con tu función de ingreso por código
-      alert("Ventana de código de estudiante listo para vincular.");
+      alert("Abriendo ventana de código...");
     }
     function abrirDocentes() {
-      alert("Acceso al portal de tutores y administración.");
+      alert("Portal docente enlazado.");
     }
     function abrirAyuda() {
-      alert("Información sobre el proyecto KIDSWork LS.");
+      alert("Información del sistema.");
     }
   </script>
 
