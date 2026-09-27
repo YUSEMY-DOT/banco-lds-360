@@ -33,7 +33,7 @@
     }
 
     /* =========================================================
-       ENCABEZADO
+       ENCABEZADO INSTITUCIONAL
        ========================================================= */
     .header {
       background: var(--azul-oscuro);
@@ -47,6 +47,7 @@
       top: 0;
       width: 100%;
       z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .header h1 {
@@ -56,40 +57,42 @@
     }
 
     .back-home-btn {
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(201, 154, 50, 0.4);
+      background: rgba(20, 39, 68, 0.8);
       color: var(--blanco);
       padding: 8px 16px;
       border-radius: 10px;
       cursor: pointer;
       font-size: 14px;
       text-decoration: none;
-      transition: background 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .back-home-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: var(--oro);
+      color: var(--azul-oscuro);
+      border-color: var(--oro);
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL (DISTRIBUCIÓN EQUILIBRADA)
+       CONTENEDOR PRINCIPAL EQUILIBRADO
        ========================================================= */
     .main-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding-top: 80px;
+      padding-top: 90px;
       width: 96%;
       margin: 0 auto;
-      max-width: 1250px;
-      gap: 30px;
+      max-width: 1300px;
+      gap: 35px;
     }
 
-    /* Contenedor para los personajes laterales */
+    /* Ilustraciones laterales proporcionales */
     .side-character {
-      flex: 0 1 28%;
-      max-width: 320px;
+      flex: 0 1 30%;
+      max-width: 380px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,43 +101,66 @@
     .side-character img {
       width: 100%;
       height: auto;
+      max-height: 440px;
       object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.12));
+      filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN CENTRAL
+       TARJETA DE INICIO DE SESIÓN ELEGANTE
        ========================================================= */
     .login-card {
-      flex: 0 1 38%;
+      flex: 0 1 36%;
       max-width: 410px;
       background: var(--blanco);
-      border-radius: 24px;
-      padding: 32px 28px 24px;
-      box-shadow: 0 15px 40px rgba(20, 39, 68, 0.12);
+      border-radius: 28px;
+      padding: 34px 30px 26px;
+      box-shadow: 0 20px 50px rgba(13, 27, 42, 0.12);
       text-align: center;
-      border-top: 5px solid var(--oro);
+      border-top: 6px solid var(--oro);
       position: relative;
       z-index: 1;
+    }
+
+    /* Insignia estilizada dentro de la tarjeta */
+    .card-insignia-container {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      background: #f8f9fa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(201, 154, 50, 0.2);
+      border: 2px solid rgba(201, 154, 50, 0.3);
+      padding: 6px;
+    }
+
+    .card-insignia {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .login-card h2 {
       color: var(--azul-oscuro);
       font-size: 23px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-family: Georgia, serif;
+      font-weight: 700;
     }
 
     .login-card p {
       color: var(--gris-texto);
       font-size: 13.5px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       line-height: 1.4;
     }
 
     .form-group {
       text-align: left;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
     .form-group label {
@@ -142,12 +168,12 @@
       font-size: 12.5px;
       font-weight: 700;
       color: var(--azul-oscuro);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .input-field {
       width: 100%;
-      height: 46px;
+      height: 48px;
       border: 1px solid #ccd2da;
       border-radius: 12px;
       padding: 0 16px;
@@ -159,9 +185,9 @@
     }
 
     .input-field:focus {
-      border-color: var(--azul-oscuro);
+      border-color: var(--oro);
       background: var(--blanco);
-      box-shadow: 0 0 0 3px rgba(20, 39, 68, 0.1);
+      box-shadow: 0 0 0 4px rgba(201, 154, 50, 0.15);
     }
 
     select.input-field:invalid {
@@ -170,23 +196,24 @@
 
     .primary-btn {
       width: 100%;
-      height: 48px;
+      height: 50px;
       border: 0;
       border-radius: 12px;
       background: var(--azul-oscuro);
       color: var(--blanco);
       font-size: 15px;
       font-weight: 700;
-      margin-top: 8px;
-      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-bottom: 12px;
       cursor: pointer;
-      transition: background 0.2s ease;
-      box-shadow: 0 4px 12px rgba(20, 39, 68, 0.2);
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 15px rgba(20, 39, 68, 0.25);
     }
 
     .primary-btn:hover {
       background: #1a3258;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 39, 68, 0.35);
     }
 
     .error-msg {
@@ -202,8 +229,8 @@
     @media (max-width: 992px) {
       .main-wrapper {
         flex-direction: column;
-        padding: 90px 20px 30px;
-        gap: 20px;
+        padding: 95px 20px 30px;
+        gap: 25px;
       }
       .login-card {
         flex: 1 1 auto;
@@ -233,13 +260,16 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Personaje Izquierdo (Google Drive) -->
+    <!-- Profesora Izquierda -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1UCgPk4i8tUmStOAw3j3btSPcSJmBvEUX" alt="Ilustración izquierda" onerror="this.style.display='none'">
+      <img src="https://drive.google.com/uc?export=view&id=1UCgPk4i8tUmStOAw3j3btSPcSJmBvEUX" alt="Profesora izquierda" onerror="this.style.display='none'">
     </div>
 
-    <!-- Tarjeta Central de Inicio de Sesión -->
+    <!-- Tarjeta Central de Inicio de Sesión con Insignia -->
     <div class="login-card">
+      <div class="card-insignia-container">
+        <img src="https://drive.google.com/uc?export=view&id=1q4BizgmM5iccQqhIcmmq3d0twlOp5nFs" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='https://via.placeholder.com/80?text=LDS'">
+      </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
       
@@ -263,15 +293,15 @@
       <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- Personaje Derecho (Google Drive) -->
+    <!-- Profesora Derecha -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Ilustración derecha" onerror="this.style.display='none'">
+      <img src="https://drive.google.com/uc?export=view&id=1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Profesora derecha" onerror="this.style.display='none'">
     </div>
   </main>
 
   <script>
     /* =========================================================
-       SISTEMA DE VOZ INTERACTIVA (TEXT-TO-SPEECH)
+       SISTEMA DE VOZ INTERACTIVA (TEXT-TO-SPEECH RESTAURADO)
        ========================================================= */
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
@@ -316,13 +346,6 @@
       hablarTextoVoz("Seleccionado: " + texto);
     }
 
-    /* 
-      NOTA IMPORTANTE SOBRE EL ERROR 404:
-      El error 404 al hacer clic en "Ingresar al Panel" ocurre porque 
-      el archivo de destino aún no existe o tiene otro nombre en tu repositorio.
-      Asegúrate de cambiar "administrador_panel.html" por el nombre exacto 
-      de tu archivo del panel de control si se llama distinto.
-    */
     const PAGINA_PANEL = "administrador_panel.html"; 
 
     function validarAccesoDocente(){
