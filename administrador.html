@@ -72,23 +72,24 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL (CUADRÍCULA COMPACTA)
+       CONTENEDOR PRINCIPAL (DISTRIBUCIÓN EQUILIBRADA)
        ========================================================= */
     .main-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding-top: 80px; /* Espacio para el encabezado fijo */
+      padding-top: 80px;
       width: 96%;
       margin: 0 auto;
-      max-width: 1200px; /* Límite para pantallas muy grandes */
+      max-width: 1250px;
+      gap: 20px;
     }
 
     /* Contenedor para los personajes laterales */
     .side-character {
-      flex: 0 1 25%; /* Ocupa aprox 1/4 del espacio flexible */
-      max-width: 300px;
+      flex: 0 1 28%;
+      max-width: 320px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,49 +99,49 @@
       width: 100%;
       height: auto;
       object-fit: contain;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN (MÁS JUNTITA Y COMPACTA)
+       TARJETA DE INICIO DE SESIÓN CENTRAL
        ========================================================= */
     .login-card {
-      flex: 0 1 40%; /* Ocupa aprox 40% del espacio central */
+      flex: 0 1 40%;
       max-width: 420px;
       background: var(--blanco);
       border-radius: 24px;
-      padding: 32px 32px 24px; /* Padding reducido para acercar todo */
+      padding: 32px 32px 24px;
       box-shadow: 0 15px 40px rgba(20, 39, 68, 0.12);
       text-align: center;
       border-top: 5px solid var(--oro);
       position: relative;
       z-index: 1;
-      margin: 0 20px; /* Espacio mínimo entre tarjeta y personajes */
     }
 
     .card-escudo {
       width: 80px;
       height: auto;
-      margin-bottom: 8px; /* Acercar escudo al título */
+      margin-bottom: 8px;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .login-card h2 {
       color: var(--azul-oscuro);
       font-size: 24px;
-      margin-bottom: 6px; /* Acercar título a la instrucción */
+      margin-bottom: 6px;
       font-family: Georgia, serif;
     }
 
     .login-card p {
       color: var(--gris-texto);
       font-size: 14px;
-      margin-bottom: 24px; /* Espacio reducido antes del formulario */
+      margin-bottom: 24px;
       line-height: 1.4;
     }
 
     .form-group {
       text-align: left;
-      margin-bottom: 16px; /* Grupos de formulario más juntos */
+      margin-bottom: 16px;
     }
 
     .form-group label {
@@ -148,12 +149,12 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--azul-oscuro);
-      margin-bottom: 5px; /* Etiqueta e input muy juntos */
+      margin-bottom: 5px;
     }
 
     .input-field {
       width: 100%;
-      height: 48px; /* Input un poco más compacto */
+      height: 48px;
       border: 1px solid #ccd2da;
       border-radius: 12px;
       padding: 0 16px;
@@ -170,22 +171,21 @@
       box-shadow: 0 0 0 3px rgba(20, 39, 68, 0.1);
     }
 
-    /* Estilo específico para el select placeholder */
     select.input-field:invalid {
       color: var(--gris-texto);
     }
 
     .primary-btn {
       width: 100%;
-      height: 50px; /* Botón compacto */
+      height: 50px;
       border: 0;
       border-radius: 12px;
       background: var(--azul-oscuro);
       color: var(--blanco);
       font-size: 16px;
       font-weight: 700;
-      margin-top: 10px; /* Espacio antes del botón */
-      margin-bottom: 12px; /* Espacio antes del mensaje de error */
+      margin-top: 10px;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: background 0.2s ease;
       box-shadow: 0 4px 12px rgba(20, 39, 68, 0.2);
@@ -200,75 +200,35 @@
       margin-top: 0px;
       color: #a7192e;
       font-size: 13px;
-      min-height: 18px; /* Altura mínima para evitar saltos de diseño */
+      min-height: 18px;
       font-weight: 600;
     }
 
     /* =========================================================
-       ADAPTABILIDAD (RESPONSIVE DESIGN)
+       RESPONSIVE DESIGN
        ========================================================= */
     @media (max-width: 992px) {
       .main-wrapper {
-        width: 98%;
-        padding-top: 70px;
+        flex-direction: column;
+        padding: 90px 20px 30px;
+        gap: 25px;
       }
-
-      .login-card {
-        flex: 0 1 50%;
-        max-width: 400px;
-        padding: 28px 24px 20px;
-      }
-
-      .side-character {
-        flex: 0 1 20%;
-        max-width: 180px; /* Personajes más pequeños en pantallas medianas */
-      }
-    }
-
-    @media (max-width: 768px) {
-      .header {
-        padding: 12px 20px;
-      }
-
-      .header h1 {
-        font-size: 18px;
-      }
-
-      .back-home-btn {
-        font-size: 13px;
-        padding: 6px 12px;
-      }
-
-      .main-wrapper {
-        flex-direction: column; /* Apilar elementos en pantallas pequeñas */
-        justify-content: center;
-        padding: 90px 20px 20px;
-        gap: 30px; /* Espacio entre elementos apilados */
-      }
-
       .login-card {
         flex: 1 1 auto;
         width: 100%;
-        max-width: 450px;
-        order: 1; /* La tarjeta va en medio */
-        margin: 0;
+        max-width: 440px;
+        order: 1;
       }
-
       .side-character {
         flex: 0 0 auto;
         width: 100%;
-        max-width: 200px;
-        order: 0; /* Personaje de la izquierda arriba */
-        margin-bottom: -15px; /* Superposición para que no se separen */
+        max-width: 220px;
       }
-      
-      .side-character:nth-of-type(2) {
-        order: 2; /* Personaje de la derecha abajo */
-        margin-top: -15px;
+      .side-character:first-of-type {
+        order: 0;
       }
-      
-      .side-character img {
-        width: 150px; /* Tamaño fijo para los personajes apilados */
+      .side-character:last-of-type {
+        order: 2;
       }
     }
   </style>
@@ -277,16 +237,16 @@
 
   <div class="header">
     <h1>IEP La Salle del Sur · Panel de Administración</h1>
-    <a href="index.html" class="back-home-btn">← Volver al Inicio</a>
+    <a href="index.html" class="back-home-btn" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al Inicio</a>
   </div>
 
   <main class="main-wrapper">
     <!-- Profesora Izquierda -->
     <div class="side-character">
-      <img src="assets/profesora_izquierda.png" alt="Profesora sentada con tablet">
+      <img src="assets/profesora_izquierda.png" alt="Profesora sentada con tablet" onerror="this.style.display='none'">
     </div>
 
-    <!-- Tarjeta Central de Login (Compacta) -->
+    <!-- Tarjeta Central de Inicio de Sesión -->
     <div class="login-card">
       <img src="assets/insignia.webp" alt="Insignia La Salle del Sur" class="card-escudo" onerror="this.style.display='none'">
       <h2>Acceso Administrativo - Maestras</h2>
@@ -294,7 +254,7 @@
       
       <div class="form-group">
         <label for="docenteSelect">Docente / Maestra</label>
-        <select id="docenteSelect" class="input-field" required>
+        <select id="docenteSelect" class="input-field" required onchange="anunciarSeleccion(this)">
           <option value="" disabled selected hidden>Seleccione su nombre</option>
           <option value="LILY">Miss Lily Melo Azañero</option>
           <option value="KIARA">Miss Kiara Morales Elguera</option>
@@ -314,37 +274,100 @@
 
     <!-- Profesora Derecha -->
     <div class="side-character">
-      <img src="assets/profesora_derecha.png" alt="Profesora escribiendo en escritorio">
+      <img src="assets/profesora_derecha.png" alt="Profesora escribiendo en escritorio" onerror="this.style.display='none'">
     </div>
   </main>
 
   <script>
+    /* =========================================================
+       SISTEMA DE VOZ INTERACTIVA (TEXT-TO-SPEECH)
+       ========================================================= */
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+        const utterance = new SpeechSynthesisUtterance(textoLimpio);
+        utterance.rate = 1.05;
+        utterance.pitch = 1.25;
+
+        const voces = window.speechSynthesis.getVoices();
+        let vozIdeal = voces.find(v => 
+          v.lang.startsWith('es') && (
+            v.name.toLowerCase().includes('dani') || 
+            v.name.toLowerCase().includes('helena') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('monica') || 
+            v.name.toLowerCase().includes('sofia') || 
+            v.name.toLowerCase().includes('female') ||
+            v.name.toLowerCase().includes('google español')
+          )
+        );
+
+        if (!vozIdeal) {
+          vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        }
+
+        if (vozIdeal) {
+          utterance.voice = vozIdeal;
+        }
+
+        setTimeout(() => {
+          window.speechSynthesis.speak(utterance);
+        }, 50);
+      }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    // Bienvenida hablada al abrir la ventana
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave.");
+      }, 700);
+    });
+
+    function anunciarSeleccion(select) {
+      const texto = select.options[select.selectedIndex].text;
+      hablarTextoVoz("Seleccionado: " + texto);
+    }
+
+    // ARCHIVO DE DESTINO DEL PANEL
+    const PAGINA_PANEL = "administrador_panel.html";
+
     function validarAccesoDocente(){
-      const docente = document.getElementById("docenteSelect").value;
+      const docenteSelect = document.getElementById("docenteSelect");
+      const docente = docenteSelect.value;
       const clave = document.getElementById("claveDocente").value.trim();
       const error = document.getElementById("adminError");
       error.textContent = "";
 
       if(!docente){
         error.textContent = "Por favor, seleccione su nombre de la lista.";
+        hablarTextoVoz("Por favor, seleccione su nombre de la lista.");
         return;
       }
       if(!clave){
         error.textContent = "Por favor, ingrese su clave de acceso docente.";
+        hablarTextoVoz("Por favor, ingrese su clave de acceso docente.");
         return;
       }
 
       if(clave === "360LDS" || clave === "2026"){
         localStorage.setItem("maestraActiva", docente);
-        // Simular redirección
-        alert(`Bienvenida ${docente}. Redirigiendo al panel...`);
-        window.location.href = "administrador_panel.html";
+        hablarTextoVoz("Acceso correcto. Bienvenida. Redirigiendo al panel.");
+        setTimeout(() => {
+          window.location.href = PAGINA_PANEL;
+        }, 1200);
       } else {
         error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
+        hablarTextoVoz("Clave de acceso incorrecta. Intente nuevamente.");
       }
     }
 
-    // Permitir "Enter" para iniciar sesión
     document.getElementById("claveDocente").addEventListener("keydown", function(e){
       if(e.key === "Enter"){
         validarAccesoDocente();
