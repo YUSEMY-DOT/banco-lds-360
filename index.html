@@ -110,7 +110,7 @@
     }
 
     /* =========================================================
-       BOTONES INFERIORES EN LA ESCALERA (SIN BORDES NEGROS)
+       BOTONES INFERIORES EN LA ESCALERA (PADRES Y MANUAL)
        ========================================================= */
     .stair-button {
       position: absolute;
@@ -557,16 +557,16 @@
       <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur">
       
       <!-- Botones principales -->
-      <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="hablarTextoVoz('Abriendo panel administrativo'); abrirAdmin()"></button>
-      <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="hablarTextoVoz('Activando escáner QR'); abrirScanner()"></button>
-      <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="hablarTextoVoz('Ingrese su código de estudiante'); abrirCodigo()"></button>
+      <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
+      <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
+      <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
 
       <!-- Botones en la parte baja de la escalera (Padres y Manual) -->
-      <button class="stair-button stair-padres" onclick="hablarTextoVoz('Abriendo portal de padres'); abrirTutores()">
+      <button class="stair-button stair-padres" onclick="abrirTutores()">
         <span class="icon">👥</span>
         <span class="btn-text">Padres</span>
       </button>
-      <button class="stair-button stair-manual" onclick="hablarTextoVoz('Abriendo manual y reglas del banco'); abrirReglas()">
+      <button class="stair-button stair-manual" onclick="abrirReglas()">
         <span class="icon">📖</span>
         <span class="btn-text">Manual</span>
       </button>
@@ -702,48 +702,108 @@
 
   <script>
   /* =========================================================
-     SISTEMA DE VOZ INTERACTIVA (TEXT-TO-SPEECH)
+     SISTEMA AUTOMÁTICO DE HIMNO (LIRA + TAMBOR + VOZ) AL ABRIR
      ========================================================= */
-  function hablarTextoVoz(texto) {
+  let audioCtxHimno = null;
+  let iniciadoHimno = false;
+
+  const FREQS = {
+    "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+    "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+  };
+
+  const notasMelodia = [
+    { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+    { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+    { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+    { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+    { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+    { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+    { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+    { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+  ];
+
+  function sonarLira(ctx, freq, t) {
+    if (!freq) return;
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc1.type = 'sine';
+    osc2.type = 'sine';
+    osc1.frequency.setValueAtTime(freq, t);
+    osc2.frequency.setValueAtTime(freq * 2, t);
+    gain.gain.setValueAtTime(0.20, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(ctx.destination);
+    osc1.start(t);
+    osc2.start(t);
+    osc1.stop(t + 1.0);
+    osc2.stop(t + 1.0);
+  }
+
+  function sonarTambor(ctx, t) {
+    const bufferSize = ctx.sampleRate * 0.04;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 1800;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(t);
+  }
+
+  function hablarHimnoInstitucional() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
-      const utterance = new SpeechSynthesisUtterance(textoLimpio);
-      utterance.rate = 1.05;
-      utterance.pitch = 1.25;
-
-      const voces = window.speechSynthesis.getVoices();
-      let vozIdeal = voces.find(v => 
-        v.lang.startsWith('es') && (
-          v.name.toLowerCase().includes('dani') || 
-          v.name.toLowerCase().includes('helena') || 
-          v.name.toLowerCase().includes('lucia') || 
-          v.name.toLowerCase().includes('monica') || 
-          v.name.toLowerCase().includes('sofia') || 
-          v.name.toLowerCase().includes('female') ||
-          v.name.toLowerCase().includes('google español')
-        )
-      );
-
-      if (!vozIdeal) {
-        vozIdeal = voces.find(v => v.lang.startsWith('es'));
-      }
-
-      if (vozIdeal) {
-        utterance.voice = vozIdeal;
-      }
-
-      setTimeout(() => {
-        window.speechSynthesis.speak(utterance);
-      }, 50);
+      const texto = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+      const mensaje = new SpeechSynthesisUtterance(texto);
+      mensaje.lang = 'es-PE';
+      mensaje.rate = 0.9;
+      mensaje.pitch = 1.0;
+      window.speechSynthesis.speak(mensaje);
     }
   }
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = function() {
-      window.speechSynthesis.getVoices();
-    };
+  async function ejecutarHimnoAutomatico() {
+    if (iniciadoHimno) return;
+    iniciadoHimno = true;
+
+    hablarHimnoInstitucional();
+
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtxHimno = new AudioContext();
+      if (audioCtxHimno.state === 'suspended') {
+        await audioCtxHimno.resume();
+      }
+
+      let t = audioCtxHimno.currentTime + 0.1;
+      notasMelodia.forEach(item => {
+        const f = FREQS[item.n] || 261.63;
+        sonarLira(audioCtxHimno, f, t);
+        sonarTambor(audioCtxHimno, t);
+        t += item.d;
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
+
+  // Disparadores automáticos al cargar o interactuar por primera vez
+  window.addEventListener('load', ejecutarHimnoAutomatico);
+  document.addEventListener('touchstart', ejecutarHimnoAutomatico, { once: true });
+  document.addEventListener('click', ejecutarHimnoAutomatico, { once: true });
+  document.addEventListener('pointerdown', ejecutarHimnoAutomatico, { once: true });
 
   /* =========================================================
      CONTROL DE MÚSICA DISCRETO
@@ -755,7 +815,6 @@
       audio.play().then(() => {
         btn.style.borderColor = "var(--oro)";
         btn.style.background = "rgba(20, 39, 68, 0.9)";
-        hablarTextoVoz("Música de fondo activada.");
       }).catch(e => {
         alert("Haz clic en la página para permitir la reproducción de audio.");
       });
@@ -763,15 +822,8 @@
       audio.pause();
       btn.style.borderColor = "rgba(201, 154, 50, 0.4)";
       btn.style.background = "rgba(13, 27, 42, 0.6)";
-      hablarTextoVoz("Música de fondo desactivada.");
     }
   }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      hablarTextoVoz("Bienvenido al Banco L D S 360, del Colegio La Salle del Sur.");
-    }, 800);
-  });
 
   function abrirCodigo(){
     document.getElementById("codeOverlay").classList.add("show");
@@ -798,7 +850,6 @@
     error.textContent = "";
     if(!codigo){
       error.textContent = "Ingresa el código del estudiante.";
-      hablarTextoVoz("Por favor ingresa el código del estudiante.");
       return;
     }
     solicitarAccesoAlumno(codigo);
@@ -916,7 +967,6 @@
       if(!saltAlumnoPendiente||!nonceAlumnoPendiente) throw new Error("No se pudo preparar el acceso.");
       document.getElementById("alumnoClaveMensaje").className="ok";
       document.getElementById("alumnoClaveMensaje").textContent="Código identificado. Ingresa tu clave personal.";
-      hablarTextoVoz("Código identificado. Ingresa tu clave personal.");
     }).catch(function(err){
       saltAlumnoPendiente=""; nonceAlumnoPendiente="";
       document.getElementById("alumnoClaveMensaje").className="error";
@@ -934,7 +984,7 @@
     const clave=document.getElementById("claveAlumnoLDS").value.trim();
     const msg=document.getElementById("alumnoClaveMensaje");
     const btn=document.getElementById("btnConfirmarClaveLDS");
-    if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";hablarTextoVoz("La clave personal debe tener 6 dígitos.");return;}
+    if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";return;}
     if(!codigoAlumnoPendiente){msg.className="error";msg.textContent="Primero identifique al estudiante.";return;}
     if(!saltAlumnoPendiente||!nonceAlumnoPendiente){msg.className="error";msg.textContent="Espere un momento mientras se prepara el acceso.";return;}
     btn.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
@@ -945,10 +995,8 @@
       if(!res||res.ok!==true) throw new Error(res&&res.mensaje?res.mensaje:"Credenciales inválidas.");
       cerrarClaveAlumno();
       mostrarEstudianteDesdeAccesoAlumno(res);
-      hablarTextoVoz("Acceso exitoso. Bienvenido a tu cuenta.");
     }catch(err){
       msg.className="error"; msg.textContent=err.message||"No fue posible iniciar sesión.";
-      hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
     }finally{btn.disabled=false;}
   }
 
@@ -996,18 +1044,15 @@
 
     if(!pin){
       error.textContent = 'Ingresa la clave de administrador.';
-      hablarTextoVoz("Ingresa la clave de administrador.");
       return;
     }
 
     if(pin.toUpperCase() !== '360LDS'){
       error.textContent = 'Clave de administrador incorrecta.';
-      hablarTextoVoz("Clave incorrecta.");
       return;
     }
 
     error.textContent = '';
-    hablarTextoVoz("Clave correcta. Abriendo panel.");
     window.location.href = 'administrador.html';
   };
 
