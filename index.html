@@ -10,7 +10,7 @@
   <style>
     :root{
       --azul:#142744;
-      --azul2:#1d3557;
+      --azul-oscuro:#0d1b2a;
       --rojo:#a7192e;
       --oro:#c99a32;
       --oro-claro:#e0b84c;
@@ -109,92 +109,54 @@
       border-radius:24px;
     }
 
-    /* BOTONES SÓLIDOS Y VISIBLES MÁS A LA IZQUIERDA (PADRES E INSTRUCTIVO) */
-    .visible-btn {
+    /* =========================================================
+       BOTONES ELEGANTE SOBRE LA ESCALERA (PADRES E INSTRUCTIVO)
+       ========================================================= */
+    .stair-button {
       position: absolute;
-      z-index: 55;
-      background: linear-gradient(135deg, var(--azul) 0%, var(--azul2) 100%);
-      border: 2px solid var(--oro);
+      z-index: 60;
+      left: 87.2%;
+      width: 11.6%;
+      height: 10.5%;
+      background: linear-gradient(135deg, rgba(20, 39, 68, 0.92) 0%, rgba(29, 53, 87, 0.92) 100%);
+      border: 1.5px solid var(--oro);
       color: var(--blanco);
-      font-size: 13px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.5px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .visible-btn:hover {
-      background: var(--oro);
-      color: var(--azul);
-      transform: translateY(-2px);
-    }
-
-    .btn-padres {
-      left: 21.5%;
-      top: 84.8%;
-      width: 13.5%;
-      height: 5.2%;
-    }
-
-    .btn-instructivo {
-      left: 36.5%;
-      top: 84.8%;
-      width: 13.5%;
-      height: 5.2%;
-    }
-
-    /* PLACAS SÓLIDAS DE LA ESCALERA (REEMPLAZAN TEXTOS ANTERIORES) */
-    .stair-badge {
-      position: absolute;
-      z-index: 45;
-      left: 87.0%;
-      width: 12.0%;
-      height: 5.2%;
-      background: #f4f5f7;
-      border: 1px solid #ccd2da;
-      color: var(--azul);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      gap: 4px;
       text-align: center;
-      border-radius: 6px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.45);
       cursor: pointer;
-      transition: all 0.2s ease;
+      backdrop-filter: blur(4px);
+      transition: all 0.25s ease;
     }
 
-    .stair-badge:hover {
+    .stair-button:hover {
       background: var(--oro);
       color: var(--azul);
-      border-color: var(--oro);
-      transform: scale(1.02);
+      border-color: var(--blanco);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(201, 154, 50, 0.4);
     }
 
-    .stair-sencillez { top: 53.2%; }
-    .stair-responsabilidad { top: 59.6%; }
-    .stair-honor { top: 66.0%; }
-    .stair-fraternidad { top: 72.4%; }
+    .stair-button span {
+      font-size: 16px;
+    }
 
-    /* BLOQUE SÓLIDO PARA OCULTAR LA ORACIÓN "Ser más, para servir mejor" */
-    .cover-sentence {
-      position: absolute;
-      z-index: 44;
-      left: 86.5%;
-      top: 78.5%;
-      width: 13.0%;
-      height: 10.5%;
-      background: #e8ebef; /* Color exacto del bloque de piedra para tapar el texto */
-      border-radius: 4px;
+    /* Posicionamiento sobre los escalones */
+    .stair-padres {
+      top: 52.8%;
+    }
+
+    .stair-instructivo {
+      top: 64.2%;
     }
 
     /* =========================================================
@@ -292,7 +254,7 @@
     .info-list li {
       margin-bottom: 8px;
       font-size: 14px;
-      line-height:1.4;
+      line-height: 1.4;
     }
 
     /* PANTALLA DE RESULTADOS DEL ESTUDIANTE */
@@ -555,18 +517,13 @@
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
 
-      <!-- Botones visibles inferiores (Padres e Instructivo) -->
-      <button class="visible-btn btn-padres" onclick="abrirTutores()">👥 Padres / Tutores</button>
-      <button class="visible-btn btn-instructivo" onclick="abrirReglas()">📋 Instructivo</button>
-
-      <!-- Ocultar la oración inferior de la escalera -->
-      <div class="cover-sentence"></div>
-
-      <!-- Placas de la escalera actualizadas -->
-      <div class="stair-badge stair-sencillez" onclick="mostrarValor('Sencillez')">SENCILLEZ</div>
-      <div class="stair-badge stair-responsabilidad" onclick="mostrarValor('Responsabilidad')">RESPONSABILIDAD</div>
-      <div class="stair-badge stair-honor" onclick="mostrarValor('Honor')">HONOR</div>
-      <div class="stair-badge stair-fraternidad" onclick="mostrarValor('Fraternidad')">FRATERNIDAD</div>
+      <!-- Botones elegantes sobre los escalones -->
+      <button class="stair-button stair-padres" onclick="abrirTutores()">
+        <span>👥</span> Padres / Tutores
+      </button>
+      <button class="stair-button stair-instructivo" onclick="abrirReglas()">
+        <span>📋</span> Instructivo
+      </button>
     </div>
   </main>
 
@@ -740,10 +697,6 @@
   }
   function cerrarReglas(){
     document.getElementById("reglasOverlay").classList.remove("show");
-  }
-
-  function mostrarValor(valor){
-    alert("Valor lasallista: " + valor + " - Formando personas íntegras en La Salle del Sur.");
   }
 
   let lds360QrInstance = null;
