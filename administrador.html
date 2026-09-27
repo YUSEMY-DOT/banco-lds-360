@@ -75,7 +75,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL CENTRADO
+       CONTENEDOR PRINCIPAL EQUILIBRADO CON NUEVAS ILUSTRACIONES
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -83,20 +83,38 @@
       justify-content: center;
       min-height: 100vh;
       padding-top: 90px;
+      width: 96%;
+      margin: 0 auto;
+      max-width: 1350px;
+      gap: 35px;
+    }
+
+    /* Ilustraciones laterales con tus nuevas imágenes */
+    .side-character {
+      flex: 0 1 28%;
+      max-width: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-character img {
       width: 100%;
-      padding-left: 20px;
-      padding-right: 20px;
+      height: auto;
+      max-height: 440px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN ELEGANTE Y AMPLIADA
+       TARJETA DE INICIO DE SESIÓN AMPLIADA Y CON INSIGNIA
        ========================================================= */
     .login-card {
-      width: 100%;
-      max-width: 520px;
+      flex: 0 1 40%;
+      max-width: 500px;
       background: var(--blanco);
       border-radius: 34px;
-      padding: 50px 45px 40px;
+      padding: 46px 40px 36px;
       box-shadow: 0 20px 50px rgba(13, 27, 42, 0.12);
       text-align: center;
       border-top: 6px solid var(--oro);
@@ -104,7 +122,7 @@
       z-index: 1;
     }
 
-    /* Insignia institucional grande y elegante dentro del círculo */
+    /* Insignia oficial insignia.png dentro del círculo superior */
     .card-insignia-container {
       width: 120px;
       height: 120px;
@@ -128,7 +146,7 @@
 
     .login-card h2 {
       color: var(--azul-oscuro);
-      font-size: 27px;
+      font-size: 26px;
       margin-bottom: 8px;
       font-family: Georgia, serif;
       font-weight: 700;
@@ -136,8 +154,8 @@
 
     .login-card p {
       color: var(--gris-texto);
-      font-size: 15.5px;
-      margin-bottom: 30px;
+      font-size: 15px;
+      margin-bottom: 28px;
       line-height: 1.4;
     }
 
@@ -209,12 +227,28 @@
     /* =========================================================
        RESPONSIVE DESIGN
        ========================================================= */
-    @media (max-width: 576px) {
-      .login-card {
-        padding: 34px 22px 26px;
+    @media (max-width: 992px) {
+      .main-wrapper {
+        flex-direction: column;
+        padding: 95px 20px 30px;
+        gap: 25px;
       }
-      .login-card h2 {
-        font-size: 23px;
+      .login-card {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 480px;
+        order: 1;
+      }
+      .side-character {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 220px;
+      }
+      .side-character:first-of-type {
+        order: 0;
+      }
+      .side-character:last-of-type {
+        order: 2;
       }
     }
   </style>
@@ -227,10 +261,15 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Tarjeta Central con Insignia Inteligente (Busca en varias rutas si falla) -->
+    <!-- Maestra Izquierda (Nueva Imagen de Escritorio) -->
+    <div class="side-character">
+      <img src="ChatGPT_Image_26_sept_2026__21_44_20-removebg-preview.jpg" alt="Profesora izquierda" onerror="this.style.display='none'">
+    </div>
+
+    <!-- Tarjeta Central con Insignia Institucional -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="if(this.src.includes('insignia.png')) { this.src='assets/insignia.png'; } else { this.src='https://via.placeholder.com/120?text=LDS'; }">
+        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='https://via.placeholder.com/120?text=LDS'">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
@@ -253,6 +292,11 @@
 
       <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
       <div id="adminError" class="error-msg"></div>
+    </div>
+
+    <!-- Maestra Derecha (Nueva Imagen de Pie) -->
+    <div class="side-character">
+      <img src="cafbcee3-1257-41fb-a69f-2fca120687fc-removebg-preview.jpg" alt="Profesora derecha" onerror="this.style.display='none'">
     </div>
   </main>
 
