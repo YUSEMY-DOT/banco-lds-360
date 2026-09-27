@@ -770,165 +770,6 @@
     }
 
     /* =========================================================
-       RESULTADO DEL ALUMNO
-       ========================================================= */
-
-    .student-screen{
-      position:fixed;
-      inset:0;
-      z-index:900;
-      background:#f5f6f8;
-      display:none;
-      overflow:auto;
-    }
-
-    .student-screen.show{
-      display:block;
-    }
-
-    .student-header{
-      min-height:78px;
-      background:var(--azul);
-      border-bottom:4px solid var(--oro);
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 28px;
-    }
-
-    .student-header h2{
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:25px;
-    }
-
-    .back-btn{
-      border:1px solid rgba(255,255,255,.4);
-      background:rgba(255,255,255,.08);
-      color:#fff;
-      padding:11px 18px;
-      border-radius:10px;
-      cursor:pointer;
-      font-size:16px;
-    }
-
-    .student-content{
-      max-width:1050px;
-      margin:28px auto;
-      padding:0 20px 50px;
-    }
-
-    .student-card{
-      background:#fff;
-      border-radius:22px;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
-      padding:28px;
-      display:grid;
-      grid-template-columns:180px 1fr;
-      gap:28px;
-      margin-bottom:20px;
-    }
-
-    .student-photo{
-      width:180px;
-      height:220px;
-      object-fit:cover;
-      border-radius:18px;
-      border:5px solid #fff;
-      box-shadow:0 5px 18px rgba(0,0,0,.15);
-      background:#e8ebef;
-    }
-
-    .student-info h1{
-      color:var(--azul);
-      font-size:31px;
-      margin-bottom:18px;
-    }
-
-    .info-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-    }
-
-    .info{
-      background:#f4f5f7;
-      padding:13px;
-      border-radius:11px;
-    }
-
-    .info small{
-      display:block;
-      color:#667085;
-      margin-bottom:4px;
-    }
-
-    .info strong{
-      color:var(--azul);
-    }
-
-    .finance{
-      background:#fff;
-      border-radius:22px;
-      box-shadow:0 10px 30px rgba(0,0,0,.08);
-      padding:25px;
-    }
-
-    .finance h3{
-      color:var(--azul);
-      margin-bottom:18px;
-      font-size:23px;
-    }
-
-    .finance-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:15px;
-    }
-
-    .money{
-      border-radius:15px;
-      padding:18px;
-      background:#f3f5f7;
-    }
-
-    .money small{
-      color:#667085;
-    }
-
-    .money strong{
-      display:block;
-      font-size:25px;
-      color:var(--azul);
-      margin-top:6px;
-    }
-
-    .movements{
-      margin-top:22px;
-    }
-
-    .movement{
-      display:flex;
-      justify-content:space-between;
-      padding:14px 0;
-      border-bottom:1px solid #e4e7ec;
-    }
-
-    .movement:last-child{
-      border-bottom:0;
-    }
-
-    .movement .positive{
-      color:#18864b;
-      font-weight:bold;
-    }
-
-    .movement .negative{
-      color:var(--rojo);
-      font-weight:bold;
-    }
-
-    /* =========================================================
        QR
        ========================================================= */
 
@@ -988,7 +829,6 @@
 
     /* =========================================================
        ACCESO ALUMNO - CLAVE PERSONAL
-       Integración del acceso separado, sin tocar Administración.
        ========================================================= */
     #alumnoClaveOverlay{
       position:fixed; inset:0; z-index:1800;
@@ -1021,245 +861,6 @@
     #alumnoClaveMensaje{min-height:22px; margin-top:13px; font-size:14px; text-align:center;}
     #alumnoClaveMensaje.ok{color:#18864b;}
     #alumnoClaveMensaje.error{color:var(--rojo);}
-
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
-
-    @media(max-width:1100px){
-
-      .header{
-        padding:0 22px;
-      }
-
-      .school-name{
-        font-size:23px;
-      }
-
-      .school-motto{
-        font-size:15px;
-      }
-
-      .home{
-        grid-template-columns:54% 46%;
-      }
-
-      .left-panel{
-        padding-left:5vw;
-        padding-right:4vw;
-      }
-
-      .bank-title .banco,
-      .bank-title .lds{
-        font-size:48px;
-      }
-
-      .bank-icon{
-        transform:scale(.8);
-        transform-origin:left center;
-        margin-right:-18px;
-      }
-
-      .children{
-        right:0;
-        width:92%;
-      }
-    }
-
-    @media(max-width:800px){
-
-      .header{
-        height:76px;
-        min-height:76px;
-        padding:0 15px;
-      }
-
-      .school-logo{
-        width:45px;
-        height:52px;
-      }
-
-      .school-name{
-        font-size:18px;
-      }
-
-      .school-motto{
-        font-size:13px;
-        margin-top:4px;
-      }
-
-      .admin-btn{
-        font-size:13px;
-        padding:9px 13px;
-      }
-
-      .home{
-        display:block;
-        min-height:calc(100vh - 76px);
-        overflow:auto;
-      }
-
-      .left-panel{
-        min-height:720px;
-        padding:45px 25px 100px;
-      }
-
-      .right-panel{
-        height:600px;
-        min-height:600px;
-      }
-
-      .bank-title-wrap{
-        margin-top:10px;
-      }
-
-      .bank-logo-row{
-        justify-content:center;
-      }
-
-      .bank-icon{
-        display:none;
-      }
-
-      .bank-title .banco,
-      .bank-title .lds{
-        font-size:48px;
-        text-align:center;
-      }
-
-      .bank-title .online{
-        font-size:21px;
-      }
-
-      .subtitle{
-        font-size:19px;
-      }
-
-      .description{
-        font-size:18px;
-      }
-
-      .action-row{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .action-card{
-        min-height:205px;
-      }
-
-      .footer{
-        position:relative;
-        height:auto;
-        grid-template-columns:1fr;
-      }
-
-      .footer-left{
-        min-height:58px;
-        padding:10px 20px;
-      }
-
-      .footer-right{
-        min-height:58px;
-        padding:10px;
-        flex-wrap:wrap;
-        gap:15px;
-      }
-
-      .student-card{
-        grid-template-columns:1fr;
-      }
-
-      .student-photo{
-        margin:auto;
-      }
-
-      .finance-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media(max-width:500px){
-
-      .school-motto{
-        display:none;
-      }
-
-      .school-name{
-        font-size:15px;
-      }
-
-      .admin-btn{
-        font-size:12px;
-        padding:8px 10px;
-      }
-
-      .left-panel{
-        min-height:690px;
-        padding-left:17px;
-        padding-right:17px;
-      }
-
-      .bank-title .banco,
-      .bank-title .lds{
-        font-size:39px;
-      }
-
-      .bank-title .online{
-        font-size:17px;
-        letter-spacing:8px;
-      }
-
-      .subtitle{
-        font-size:17px;
-      }
-
-      .description{
-        font-size:16px;
-      }
-
-      .action-row{
-        gap:10px;
-      }
-
-      .action-card{
-        min-height:190px;
-        border-radius:18px;
-      }
-
-      .action-title{
-        font-size:17px;
-      }
-
-      .action-description{
-        font-size:12px;
-        padding:0 5px;
-      }
-
-      .action-icon{
-        width:58px;
-        height:58px;
-        font-size:28px;
-      }
-
-      .security-bar{
-        font-size:13px;
-      }
-
-      .right-panel{
-        height:500px;
-        min-height:500px;
-      }
-
-      .children{
-        width:100%;
-        right:-2%;
-        height:72%;
-      }
-
-      .miss-bg{
-        width:75%;
-      }
-    }
 
     /* PORTADA EXACTA DEL PANEL ESCOLAR */
     .header{display:none !important;}
@@ -1302,7 +903,6 @@
       background:rgba(255,255,255,.035);
     }
 
-    /* Coordenadas proporcionales al panel original */
     .hotspot-admin{
       left:70.6%;
       top:3.4%;
@@ -1336,7 +936,6 @@
         min-width:760px;
       }
     }
-
   </style>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
@@ -1345,278 +944,67 @@
 
 <div class="app">
 
-  <!-- ======================================================
-       ENCABEZADO
-       ====================================================== -->
-
+  <!-- ENCABEZADO -->
   <header class="header">
-
     <div class="brand">
-
-      <img
-        id="schoolLogo"
-        class="school-logo"
-        alt="IEP La Salle del Sur">
-
+      <img id="schoolLogo" class="school-logo" alt="IEP La Salle del Sur">
       <div class="school-text">
         <div class="school-name">IEP LA SALLE DEL SUR</div>
         <div class="school-motto">Formamos personas íntegras</div>
       </div>
-
     </div>
-
-    <button class="admin-btn" onclick="abrirAdmin()">
-      🔒 Administrador
-    </button>
-
+    <button class="admin-btn" onclick="abrirAdmin()">🔒 Administrador</button>
   </header>
 
-
-  <!-- ======================================================
-       PORTADA
-       ====================================================== -->
-
-  
-<main id="portadaExactaFinal" class="home exact-home">
-  <div class="exact-poster">
-    <img class="exact-poster-image"
-         src="assets/portada.webp"
-         alt="Banco LDS 360 - IEP La Salle del Sur">
-
-    <button class="hotspot hotspot-admin"
-            aria-label="Administrador"
-            onclick="abrirAdmin()"></button>
-
-    <button class="hotspot hotspot-qr"
-            aria-label="Escanear código QR"
-            onclick="abrirScanner()"></button>
-
-    <button class="hotspot hotspot-code"
-            aria-label="Ingresar código"
-            onclick="abrirCodigo()"></button>
-  </div>
-</main>
+  <!-- PORTADA -->
+  <main id="portadaExactaFinal" class="home exact-home">
+    <div class="exact-poster">
+      <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur">
+      <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
+      <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
+      <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
+    </div>
+  </main>
 
 </div>
 
-
-<!-- ========================================================
-     MODAL INGRESAR CÓDIGO
-     ======================================================== -->
-
+<!-- MODAL INGRESAR CÓDIGO -->
 <div id="codeOverlay" class="overlay">
-
   <div class="modal">
-
-    <button class="close" onclick="cerrarCodigo()">
-      ×
-    </button>
-
+    <button class="close" onclick="cerrarCodigo()">×</button>
     <h2>Consultar estudiante</h2>
-
-    <p>
-      Ingresa el código del estudiante para consultar
-      su información financiera.
-    </p>
-
-    <input
-      id="studentCode"
-      class="input"
-      type="text"
-      placeholder="Ejemplo: LDS-EST-001"
-      autocomplete="off">
-
-    <button
-      class="primary-btn"
-      onclick="consultarCodigo()">
-      🔎 Consultar
-    </button>
-
+    <p>Ingresa el código del estudiante para consultar su información financiera.</p>
+    <input id="studentCode" class="input" type="text" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
+    <button class="primary-btn" onclick="consultarCodigo()">🔎 Consultar</button>
     <div id="codeError" class="error"></div>
-
   </div>
-
 </div>
 
-
-<!-- ========================================================
-     MODAL QR
-     ======================================================== -->
-
+<!-- MODAL QR -->
 <div id="scannerOverlay" class="overlay">
-
   <div class="modal scanner">
-
-    <button class="close" onclick="cerrarScanner()">
-      ×
-    </button>
-
+    <button class="close" onclick="cerrarScanner()">×</button>
     <h2>Escanear código QR</h2>
-
-    <p>
-      Coloca el código QR del estudiante frente a la cámara.
-    </p>
-
+    <p>Coloca el código QR del estudiante frente a la cámara.</p>
     <div id="lectorQR" style="width:100%;max-width:420px;margin:10px auto 15px;border-radius:15px;overflow:hidden;background:#0b1628;"></div>
-
-    <div class="scanner-status" id="scannerStatus">
-      Preparando cámara...
-    </div>
-
+    <div class="scanner-status" id="scannerStatus">Preparando cámara...</div>
     <div id="scannerError" class="error"></div>
-
   </div>
-
 </div>
 
-
-<!-- ========================================================
-     RESULTADO DEL ESTUDIANTE
-     ======================================================== -->
-
-<div id="studentScreen" class="student-screen">
-
-  <div class="student-header">
-
-    <h2>Banco LDS 360 · Información del estudiante</h2>
-
-    <button
-      class="back-btn"
-      onclick="volverInicio()">
-      ← Volver
-    </button>
-
-  </div>
-
-
-  <div class="student-content">
-
-    <div class="student-card">
-
-      <img
-        id="studentPhoto"
-        class="student-photo"
-        alt="Foto del estudiante">
-
-      <div class="student-info">
-
-        <h1 id="studentName">
-          Estudiante
-        </h1>
-
-        <div class="info-grid">
-
-          <div class="info">
-            <small>Código</small>
-            <strong id="studentCodeResult">—</strong>
-          </div>
-
-          <div class="info">
-            <small>Grado</small>
-            <strong id="studentGrade">—</strong>
-          </div>
-
-          <div class="info">
-            <small>Sección</small>
-            <strong id="studentSection">—</strong>
-          </div>
-
-          <div class="info">
-            <small>Apellidos</small>
-            <strong id="studentLastName">—</strong>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="finance">
-
-      <h3>Información financiera</h3>
-
-      <div class="finance-grid">
-
-        <div class="money">
-          <small>Ingreso base</small>
-          <strong id="baseAmount">S/ 0.00</strong>
-        </div>
-
-        <div class="money">
-          <small>Ingresos</small>
-          <strong id="incomeAmount">S/ 0.00</strong>
-        </div>
-
-        <div class="money">
-          <small>Saldo</small>
-          <strong id="balanceAmount">S/ 0.00</strong>
-        </div>
-
-      </div>
-
-
-      <div class="movements">
-
-        <h3>Movimientos</h3>
-
-        <div id="movementList">
-          <p style="color:#667085;">
-            No hay movimientos registrados.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ========================================================
-     MODAL ADMINISTRADOR
-     ======================================================== -->
-
+<!-- MODAL ADMINISTRADOR -->
 <div id="adminOverlay" class="overlay">
-
   <div class="modal">
-
-    <button class="close" onclick="cerrarAdmin()">
-      ×
-    </button>
-
+    <button class="close" onclick="cerrarAdmin()">×</button>
     <h2>Administrador</h2>
-
-    <p>
-      Ingresa la clave de administrador.
-    </p>
-
-    <input
-      id="adminPin"
-      class="input"
-      type="password"
-      placeholder="Clave">
-
-    <button
-      class="primary-btn"
-      onclick="validarAdmin()">
-      🔐 Ingresar
-    </button>
-
+    <p>Ingresa la clave de administrador.</p>
+    <input id="adminPin" class="input" type="password" placeholder="Clave">
+    <button class="primary-btn" onclick="validarAdmin()">🔐 Ingresar</button>
     <div id="adminError" class="error"></div>
-
   </div>
-
 </div>
 
-
-<!-- ========================================================
-     CARGANDO
-     ======================================================== -->
-
+<!-- CARGANDO / CLAVE ALUMNO -->
 <div id="alumnoClaveOverlay" aria-hidden="true">
   <div class="alumno-clave-modal">
     <button class="close" type="button" onclick="cerrarClaveAlumno()">×</button>
@@ -1634,719 +1022,108 @@
 </div>
 
 <div id="loading" class="loading">
-
-  <div class="loader-box">
-    Consultando información...
-  </div>
-
+  <div class="loader-box">Consultando información...</div>
 </div>
 
-
 <script>
-
-/* IMÁGENES: la portada exacta está embebida en este HTML. */
-
 /* =========================================================
    MODAL CÓDIGO
    ========================================================= */
-
 function abrirCodigo(){
-
-  document.getElementById("codeOverlay")
-    .classList.add("show");
-
+  document.getElementById("codeOverlay").classList.add("show");
   document.getElementById("studentCode").value = "";
-
   document.getElementById("codeError").textContent = "";
-
   setTimeout(function(){
-
     document.getElementById("studentCode").focus();
-
   },150);
-
 }
-
 
 function cerrarCodigo(){
-
-  document.getElementById("codeOverlay")
-    .classList.remove("show");
-
+  document.getElementById("codeOverlay").classList.remove("show");
 }
 
-
-document.getElementById("studentCode")
-  .addEventListener("keydown",function(e){
-
-    if(e.key === "Enter"){
-
-      consultarCodigo();
-
-    }
-
-  });
-
-
-/* =========================================================
-   CONSULTAR CÓDIGO
-   ========================================================= */
+document.getElementById("studentCode").addEventListener("keydown",function(e){
+  if(e.key === "Enter"){
+    consultarCodigo();
+  }
+});
 
 function consultarCodigo(){
-
-  const codigo =
-    document.getElementById("studentCode")
-      .value
-      .trim()
-      .toUpperCase();
-
-  const error =
-    document.getElementById("codeError");
-
+  const codigo = document.getElementById("studentCode").value.trim().toUpperCase();
+  const error = document.getElementById("codeError");
   error.textContent = "";
-
   if(!codigo){
-
-    error.textContent =
-      "Ingresa el código del estudiante.";
-
+    error.textContent = "Ingresa el código del estudiante.";
     return;
-
   }
-
   solicitarAccesoAlumno(codigo);
-
 }
-
-
-/* =========================================================
-   BUSCAR ESTUDIANTE
-   ========================================================= */
-
-function cargarEstudiante(codigo){
-
-  mostrarLoading(true);
-
-  google.script.run
-
-    .withSuccessHandler(function(estudiante){
-
-      if(!estudiante){
-
-        mostrarLoading(false);
-
-        mostrarErrorCodigo(
-          "No se encontró un estudiante con ese código."
-        );
-
-        return;
-
-      }
-
-      cerrarCodigo();
-
-      mostrarEstudiante(estudiante,codigo);
-
-    })
-
-    .withFailureHandler(function(error){
-
-      mostrarLoading(false);
-
-      mostrarErrorCodigo(
-        "No se pudo consultar el estudiante."
-      );
-
-      console.error(error);
-
-    })
-
-    .buscarEstudiante(codigo);
-
-}
-
-
-/* =========================================================
-   MOSTRAR ESTUDIANTE
-   ========================================================= */
-
-function mostrarEstudiante(estudiante,codigo){
-
-  document.getElementById("studentScreen")
-    .classList.add("show");
-
-
-  const nombre =
-    estudiante.nombre ||
-    estudiante.nombres ||
-    estudiante.Nombres ||
-    "";
-
-  const apellido =
-    estudiante.apellido ||
-    estudiante.apellidos ||
-    estudiante.Apellidos ||
-    "";
-
-  const grado =
-    estudiante.grado ||
-    estudiante.Grado ||
-    "";
-
-  const seccion =
-    estudiante.seccion ||
-    estudiante.Seccion ||
-    "";
-
-  const foto =
-    estudiante.foto ||
-    estudiante.fotos ||
-    estudiante.Foto ||
-    estudiante.Fotos ||
-    "";
-
-
-  document.getElementById("studentName")
-    .textContent =
-      (nombre + " " + apellido).trim() ||
-      "Estudiante";
-
-
-  document.getElementById("studentCodeResult")
-    .textContent =
-      estudiante.codigo ||
-      estudiante.Codigo ||
-      codigo;
-
-
-  document.getElementById("studentGrade")
-    .textContent =
-      grado || "—";
-
-
-  document.getElementById("studentSection")
-    .textContent =
-      seccion || "—";
-
-
-  document.getElementById("studentLastName")
-    .textContent =
-      apellido || "—";
-
-
-  const photoElement =
-    document.getElementById("studentPhoto");
-
-
-  if(foto){
-
-    let fotoURL = foto;
-
-    if(
-      fotoURL.includes("drive.google.com/file/d/")
-    ){
-
-      const match =
-        fotoURL.match(/\/d\/([^/]+)/);
-
-      if(match){
-
-        fotoURL =
-          "https://drive.google.com/thumbnail?id=" +
-          match[1] +
-          "&sz=w600";
-
-      }
-
-    }
-
-    photoElement.src = fotoURL;
-
-  }else{
-
-    photoElement.removeAttribute("src");
-
-  }
-
-
-  cargarCuenta(codigo);
-
-}
-
-
-/* =========================================================
-   CUENTA
-   ========================================================= */
-
-function cargarCuenta(codigo){
-
-  google.script.run
-
-    .withSuccessHandler(function(cuenta){
-
-      mostrarCuenta(cuenta);
-
-      cargarMovimientos(codigo);
-
-    })
-
-    .withFailureHandler(function(error){
-
-      console.error(error);
-
-      mostrarCuenta(null);
-
-      cargarMovimientos(codigo);
-
-    })
-
-    .obtenerCuenta(codigo);
-
-}
-
-
-function mostrarCuenta(cuenta){
-
-  if(!cuenta){
-
-    document.getElementById("baseAmount")
-      .textContent = "S/ 0.00";
-
-    document.getElementById("incomeAmount")
-      .textContent = "S/ 0.00";
-
-    document.getElementById("balanceAmount")
-      .textContent = "S/ 0.00";
-
-    return;
-
-  }
-
-
-  const base =
-    cuenta.ingresoBase ??
-    cuenta.ingreso_base ??
-    cuenta.base ??
-    cuenta.IngresoBase ??
-    0;
-
-
-  const ingresos =
-    cuenta.ingresos ??
-    cuenta.Ingresos ??
-    0;
-
-
-  const saldo =
-    cuenta.saldo ??
-    cuenta.Saldo ??
-    cuenta.balance ??
-    cuenta.Balance ??
-    0;
-
-
-  document.getElementById("baseAmount")
-    .textContent =
-      "S/ " + numero(base);
-
-
-  document.getElementById("incomeAmount")
-    .textContent =
-      "S/ " + numero(ingresos);
-
-
-  document.getElementById("balanceAmount")
-    .textContent =
-      "S/ " + numero(saldo);
-
-}
-
-
-/* =========================================================
-   MOVIMIENTOS
-   ========================================================= */
-
-function cargarMovimientos(codigo){
-
-  google.script.run
-
-    .withSuccessHandler(function(movimientos){
-
-      mostrarMovimientos(movimientos);
-
-      mostrarLoading(false);
-
-    })
-
-    .withFailureHandler(function(error){
-
-      console.error(error);
-
-      mostrarMovimientos([]);
-
-      mostrarLoading(false);
-
-    })
-
-    .obtenerMovimientos(codigo);
-
-}
-
-
-function mostrarMovimientos(movimientos){
-
-  const contenedor =
-    document.getElementById("movementList");
-
-  contenedor.innerHTML = "";
-
-
-  if(
-    !movimientos ||
-    !Array.isArray(movimientos) ||
-    movimientos.length === 0
-  ){
-
-    contenedor.innerHTML =
-      '<p style="color:#667085;">No hay movimientos registrados.</p>';
-
-    return;
-
-  }
-
-
-  movimientos.forEach(function(m){
-
-    const div =
-      document.createElement("div");
-
-    div.className = "movement";
-
-
-    const concepto =
-      m.concepto ||
-      m.descripcion ||
-      m.Concepto ||
-      m.Descripcion ||
-      "Movimiento";
-
-
-    const monto =
-      m.monto ??
-      m.importe ??
-      m.Monto ??
-      0;
-
-
-    const tipo =
-      String(
-        m.tipo ||
-        m.Tipo ||
-        ""
-      ).toLowerCase();
-
-
-    const positivo =
-      tipo.includes("ingreso") ||
-      tipo.includes("abono") ||
-      Number(monto) >= 0;
-
-
-    div.innerHTML = `
-
-      <span>
-        ${escapeHTML(concepto)}
-      </span>
-
-      <span class="${positivo ? "positive" : "negative"}">
-
-        ${positivo ? "+" : "-"}
-        S/ ${numero(Math.abs(Number(monto) || 0))}
-
-      </span>
-
-    `;
-
-
-    contenedor.appendChild(div);
-
-  });
-
-}
-
-
-/* =========================================================
-   VOLVER AL INICIO
-   ========================================================= */
-
-function volverInicio(){
-
-  document.getElementById("studentScreen")
-    .classList.remove("show");
-
-  detenerScanner();
-
-}
-
 
 /* =========================================================
    SCANNER QR
    ========================================================= */
-
 let scannerStream = null;
 let scannerTimer = null;
 let scannerActivo = false;
 
-
-async function abrirScanner(){
-
-  document.getElementById("scannerOverlay")
-    .classList.add("show");
-
-  document.getElementById("scannerStatus")
-    .textContent =
-      "Solicitando acceso a la cámara...";
-
-  document.getElementById("scannerError")
-    .textContent = "";
-
-
-  try{
-
-    scannerStream =
-      await navigator.mediaDevices.getUserMedia({
-        video:{
-          facingMode:{
-            ideal:"environment"
-          }
-        },
-        audio:false
-      });
-
-
-    const video =
-      document.getElementById("video");
-
-    video.srcObject =
-      scannerStream;
-
-    await video.play();
-
-    scannerActivo = true;
-
-    document.getElementById("scannerStatus")
-      .textContent =
-        "Apunta la cámara al código QR del estudiante.";
-
-    iniciarLecturaQR();
-
-  }catch(error){
-
-    console.error(error);
-
-    document.getElementById("scannerStatus")
-      .textContent = "";
-
-    document.getElementById("scannerError")
-      .textContent =
-        "No se pudo acceder a la cámara. Verifica los permisos del navegador.";
-
-  }
-
-}
-
-
-function cerrarScanner(){
-
-  detenerScanner();
-
-  document.getElementById("scannerOverlay")
-    .classList.remove("show");
-
-}
-
-
-function detenerScanner(){
-
-  scannerActivo = false;
-
-  if(scannerTimer){
-
-    clearTimeout(scannerTimer);
-
-    scannerTimer = null;
-
-  }
-
-
-  if(scannerStream){
-
-    scannerStream
-      .getTracks()
-      .forEach(function(track){
-
-        track.stop();
-
-      });
-
-    scannerStream = null;
-
-  }
-
-
-  const video =
-    document.getElementById("video");
-
-  if(video){
-
-    video.srcObject = null;
-
-  }
-
-}
-
-
-/* =========================================================
-   LECTURA QR
-   ========================================================= */
-
-async function iniciarLecturaQR(){
-
-  if(!("BarcodeDetector" in window)){
-
-    document.getElementById("scannerError")
-      .textContent =
-        "Este navegador no permite lectura QR automática. Utiliza «Ingresar código».";
-
+window.abrirScanner = function(){
+  const overlay = document.getElementById("scannerOverlay");
+  const error = document.getElementById("scannerError");
+  const status = document.getElementById("scannerStatus");
+  if(overlay) overlay.classList.add("show");
+  if(error) error.textContent = "";
+  if(status) status.textContent = "Apunta la cámara al código QR del estudiante.";
+  
+  if(!window.Html5Qrcode){
+    if(error) error.textContent = "No se pudo cargar el lector QR.";
     return;
-
   }
-
-
-  let detector;
-
-
   try{
-
-    detector =
-      new BarcodeDetector({
-        formats:["qr_code"]
-      });
-
-  }catch(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  const video =
-    document.getElementById("video");
-
-
-  async function analizar(){
-
-    if(!scannerActivo) return;
-
-    try{
-
-      const codes =
-        await detector.detect(video);
-
-
-      if(codes.length){
-
-        const valor =
-          codes[0].rawValue.trim();
-
-        if(valor){
-
-          detenerScanner();
-
-          cerrarScanner();
-
-          let codigo = extraerCodigo(valor);
-
-          solicitarAccesoAlumno(codigo);
-
-          return;
-
-        }
-
-      }
-
-    }catch(error){
-
-      console.error(error);
-
+    if(window.lds360QrInstance){
+      try{window.lds360QrInstance.stop();}catch(e){}
+      window.lds360QrInstance = null;
     }
-
-
-    scannerTimer =
-      setTimeout(analizar,500);
-
+    const cont = document.getElementById("lectorQR");
+    if(cont) cont.innerHTML = "";
+    window.lds360QrInstance = new Html5Qrcode("lectorQR");
+    window.lds360QrInstance.start(
+      {facingMode:"environment"},
+      {fps:10,qrbox:{width:250,height:250}},
+      function(codigoQR){
+        const valor = String(codigoQR||"").trim();
+        try{window.lds360QrInstance.stop();}catch(e){}
+        window.lds360QrInstance = null;
+        if(overlay) overlay.classList.remove("show");
+        const match = valor.match(/LDS[-_ ]EST[-_ ]\d+/i);
+        const codigo = match ? match[0].replace(/[_ ]/g,"-").toUpperCase() : valor.toUpperCase();
+        solicitarAccesoAlumno(codigo);
+      },
+      function(){}
+    ).catch(function(){
+      if(error) error.textContent = "No fue posible iniciar la cámara. Verifica los permisos.";
+    });
+  }catch(e){
+    if(error) error.textContent = "No fue posible iniciar el lector QR.";
   }
+};
 
-
-  analizar();
-
-}
-
-
-/* =========================================================
-   EXTRAER CÓDIGO DEL QR
-   ========================================================= */
-
-function extraerCodigo(valor){
-
-  let codigo =
-    String(valor || "").trim();
-
-
-  /*
-     Si el QR contiene directamente:
-
-     LDS-EST-001
-
-     se utiliza tal cual.
-  */
-
-
-  const match =
-    codigo.match(
-      /LDS[-_ ]EST[-_ ]\d+/i
-    );
-
-
-  if(match){
-
-    return match[0]
-      .replace(/_/g,"-")
-      .replace(/ /g,"-")
-      .toUpperCase();
-
-  }
-
-
-  return codigo.toUpperCase();
-
-}
-
+window.cerrarScanner = function(){
+  try{if(window.lds360QrInstance)window.lds360QrInstance.stop();}catch(e){}
+  window.lds360QrInstance = null;
+  const cont = document.getElementById("lectorQR"); if(cont) cont.innerHTML = "";
+  const overlay = document.getElementById("scannerOverlay"); if(overlay) overlay.classList.remove("show");
+};
 
 /* =========================================================
    ACCESO DEL ALUMNO - CLAVE PERSONAL
    ========================================================= */
-
 const ALUMNOS_ACCESO_API = "https://script.google.com/macros/s/AKfycbxnp5uHArqp2J4hRvwz5Qdt4PsxtsvSF7bCfQerM0LFQrd6t_GpPxyNi33ucSuDDgP-/exec";
 let codigoAlumnoPendiente = "";
 let nonceAlumnoPendiente = "";
 let saltAlumnoPendiente = "";
 
 function normalizarCodigoAlumno(codigo){
-  return String(codigo == null ? "" : codigo)
-    .trim().toUpperCase().replace(/[._\s]+/g,"-").replace(/-+/g,"-");
+  return String(codigo == null ? "" : codigo).trim().toUpperCase().replace(/[._\s]+/g,"-").replace(/-+/g,"-");
 }
 
 function sha256Alumno(texto){
@@ -2373,7 +1150,7 @@ function llamarAPIAlumno(parametros){
 
 function solicitarAccesoAlumno(codigo){
   codigoAlumnoPendiente=normalizarCodigoAlumno(codigo);
-  if(!codigoAlumnoPendiente){mostrarErrorCodigo("Código de estudiante inválido.");return;}
+  if(!codigoAlumnoPendiente){alert("Código de estudiante inválido.");return;}
   nonceAlumnoPendiente=""; saltAlumnoPendiente="";
   document.getElementById("codigoAlumnoIdentificado").textContent="Código identificado: "+codigoAlumnoPendiente;
   document.getElementById("claveAlumnoLDS").value="";
@@ -2394,1021 +1171,96 @@ function solicitarAccesoAlumno(codigo){
     document.getElementById("alumnoClaveMensaje").textContent=err.message||"No fue posible preparar el acceso.";
   });
 }
+window.solicitarAccesoAlumno = solicitarAccesoAlumno;
 
 function cerrarClaveAlumno(){
   document.getElementById("alumnoClaveOverlay").classList.remove("show");
   document.getElementById("alumnoClaveOverlay").setAttribute("aria-hidden","true");
   codigoAlumnoPendiente=""; nonceAlumnoPendiente=""; saltAlumnoPendiente="";
 }
+window.cerrarClaveAlumno = cerrarClaveAlumno;
 
 async function confirmarClaveAlumno(){
   const clave=document.getElementById("claveAlumnoLDS").value.trim();
   const msg=document.getElementById("alumnoClaveMensaje");
+  const btn=document.getElementById("btnConfirmarClaveLDS");
   if(!/^\d{6}$/.test(clave)){msg.className="error";msg.textContent="La clave personal debe tener exactamente 6 dígitos.";return;}
   if(!codigoAlumnoPendiente){msg.className="error";msg.textContent="Primero identifique al estudiante.";return;}
   if(!saltAlumnoPendiente||!nonceAlumnoPendiente){msg.className="error";msg.textContent="Espere un momento mientras se prepara el acceso.";return;}
-  const boton=document.getElementById("btnConfirmarClaveLDS"); boton.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
+  btn.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
   try{
     const hashClave=await sha256Alumno(clave+"|"+saltAlumnoPendiente);
     const prueba=await sha256Alumno(hashClave+"|"+nonceAlumnoPendiente);
     const res=await llamarAPIAlumno({accion:"loginAlumno",codigo:codigoAlumnoPendiente,nonce:nonceAlumnoPendiente,prueba:prueba});
     if(!res||res.ok!==true) throw new Error(res&&res.mensaje?res.mensaje:"Credenciales inválidas.");
     cerrarClaveAlumno();
-    mostrarEstudianteDesdeAccesoAlumno(res);
+    alert("Acceso exitoso para el alumno: " + codigoAlumnoPendiente);
   }catch(err){
     msg.className="error"; msg.textContent=err.message||"No fue posible iniciar sesión.";
-  }finally{boton.disabled=false;}
+  }finally{btn.disabled=false;}
 }
-
-function mostrarEstudianteDesdeAccesoAlumno(datos){
-  const e=datos.estudiante||{}, c=datos.cuenta||{}, movimientos=Array.isArray(datos.movimientos)?datos.movimientos:[];
-  document.getElementById("studentScreen").classList.add("show");
-  document.getElementById("studentName").textContent=e.nombreCompleto||e.nombre||"Estudiante";
-  document.getElementById("studentCodeResult").textContent=e.codigo||codigoAlumnoPendiente;
-  document.getElementById("studentGrade").textContent=e.grado||"—";
-  document.getElementById("studentSection").textContent=e.seccion||"—";
-  document.getElementById("studentLastName").textContent=e.apellido||e.apellidos||"—";
-  const foto=document.getElementById("studentPhoto");
-  if(e.fotoUrl||e.foto){foto.src=e.fotoUrl||e.foto;}else{foto.removeAttribute("src");}
-  document.getElementById("baseAmount").textContent="S/ "+numero(c.montoBase??e.montoBase??0);
-  document.getElementById("incomeAmount").textContent="S/ "+numero(c.ingresos??0);
-  document.getElementById("balanceAmount").textContent="S/ "+numero(c.saldoActual??c.saldo??0);
-  const list=document.getElementById("movementList"); list.innerHTML="";
-  if(!movimientos.length){list.innerHTML='<p style="color:#667085;">No hay movimientos registrados.</p>';return;}
-  movimientos.forEach(function(m){
-    const div=document.createElement("div"); div.className="movement";
-    const tipo=String(m.tipo||m.tipoMovimiento||"").toLowerCase();
-    const monto=Number(m.monto??m.montoLDS??0)||0;
-    const positivo=tipo.includes("ingreso")||tipo.includes("abono")||monto>=0;
-    div.innerHTML='<span>'+escapeHTML(m.concepto||m.descripcion||"Movimiento")+'</span><span class="'+(positivo?"positive":"negative")+'">'+(positivo?"+":"-")+" S/ "+numero(Math.abs(monto))+'</span>';
-    list.appendChild(div);
-  });
-}
+window.confirmarClaveAlumno = confirmarClaveAlumno;
 
 document.getElementById("claveAlumnoLDS").addEventListener("keydown",function(e){if(e.key==="Enter")confirmarClaveAlumno();});
 
 /* =========================================================
    ADMINISTRADOR
    ========================================================= */
-
 function abrirAdmin(){
-
-  document.getElementById("adminOverlay")
-    .classList.add("show");
-
-  document.getElementById("adminPin")
-    .value = "";
-
-  document.getElementById("adminError")
-    .textContent = "";
-
+  document.getElementById("adminOverlay").classList.add("show");
+  document.getElementById("adminPin").value = "";
+  document.getElementById("adminError").textContent = "";
 }
-
 
 function cerrarAdmin(){
-
-  document.getElementById("adminOverlay")
-    .classList.remove("show");
-
+  document.getElementById("adminOverlay").classList.remove("show");
 }
 
-
-function validarAdmin(){
-
-  const pin =
-    document.getElementById("adminPin")
-      .value.trim();
-
-
-  const error =
-    document.getElementById("adminError");
-
-  error.textContent = "";
-
+window.validarAdmin = function(){
+  const input = document.getElementById('adminPin');
+  const error = document.getElementById('adminError');
+  const pin = (input ? input.value : '').trim();
 
   if(!pin){
-
-    error.textContent =
-      "Ingresa la clave de administrador.";
-
+    error.textContent = 'Ingresa la clave de administrador.';
     return;
-
   }
 
-
-  mostrarLoading(true);
-
-
-  google.script.run
-
-    .withSuccessHandler(function(resultado){
-
-      mostrarLoading(false);
-
-      if(resultado){
-
-        cerrarAdmin();
-
-        /*
-          Se mantiene la integración
-          existente con Código.gs.
-        */
-
-        alert(
-          "Acceso de administrador autorizado."
-        );
-
-      }else{
-
-        error.textContent =
-          "Clave de administrador incorrecta.";
-
-      }
-
-    })
-
-    .withFailureHandler(function(errorServidor){
-
-      mostrarLoading(false);
-
-      console.error(errorServidor);
-
-      error.textContent =
-        "No se pudo verificar el acceso.";
-
-    })
-
-    .verificarAdministrador(pin);
-
-}
-
-
-/* =========================================================
-   UTILIDADES
-   ========================================================= */
-
-function mostrarLoading(mostrar){
-
-  const loading =
-    document.getElementById("loading");
-
-  if(mostrar){
-
-    loading.classList.add("show");
-
-  }else{
-
-    loading.classList.remove("show");
-
+  if(pin.toUpperCase() !== '360LDS'){
+    error.textContent = 'Clave de administrador incorrecta.';
+    return;
   }
 
-}
-
-
-function mostrarErrorCodigo(mensaje){
-
-  document.getElementById("codeOverlay")
-    .classList.add("show");
-
-  document.getElementById("codeError")
-    .textContent = mensaje;
-
-}
-
-
-function numero(valor){
-
-  const n =
-    Number(valor) || 0;
-
-  return n.toLocaleString(
-    "es-PE",
-    {
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    }
-  );
-
-}
-
-
-function escapeHTML(valor){
-
-  return String(valor ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
+  error.textContent = '';
+  window.location.href = 'administrador.html';
+};
 
 /* =========================================================
-   CERRAR MODALES AL HACER CLIC FUERA
+   CERRAR MODALES AL HACER CLIC FUERA Y ESCAPE
    ========================================================= */
+document.getElementById("codeOverlay").addEventListener("click",function(e){
+  if(e.target === this) cerrarCodigo();
+});
 
-document.getElementById("codeOverlay")
-  .addEventListener("click",function(e){
+document.getElementById("scannerOverlay").addEventListener("click",function(e){
+  if(e.target === this) cerrarScanner();
+});
 
-    if(e.target === this){
-
-      cerrarCodigo();
-
-    }
-
-  });
-
-
-document.getElementById("scannerOverlay")
-  .addEventListener("click",function(e){
-
-    if(e.target === this){
-
-      cerrarScanner();
-
-    }
-
-  });
-
-
-document.getElementById("adminOverlay")
-  .addEventListener("click",function(e){
-
-    if(e.target === this){
-
-      cerrarAdmin();
-
-    }
-
-  });
-
-
-/* =========================================================
-   ESCAPE
-   ========================================================= */
+document.getElementById("adminOverlay").addEventListener("click",function(e){
+  if(e.target === this) cerrarAdmin();
+});
 
 document.addEventListener("keydown",function(e){
-
   if(e.key === "Escape"){
-
     cerrarCodigo();
     cerrarScanner();
     cerrarAdmin();
-
+    cerrarClaveAlumno();
   }
-
 });
-
-
-/* =========================================================
-   INICIALIZACIÓN
-   ========================================================= */
-
-window.addEventListener("load",function(){
-
-  console.log(
-    "Banco LDS 360 Online iniciado correctamente."
-  );
-
-});
-
 </script>
-
-
-<style>
-/* PORTADA DEL USUARIO: no se rediseña ni se reescala con CSS creativo. */
-#portadaExactaFinal{position:relative!important;width:100%!important;margin:0!important;padding:0!important;background:#fff!important;line-height:0!important;}
-#portadaExactaFinal .exact-poster-image{width:100%!important;height:auto!important;display:block!important;}
-#portadaExactaFinal .hotspot{line-height:normal!important;}
-</style>
-<script>
-// Soporte directo para la portada exacta sin cambiar el sistema interior.
-</script>
-
-
-<!-- =========================================================
-     CUENTA COMPLETA DEL ALUMNO
-     Capa adicional: NO modifica la portada ni el sistema existente.
-     ========================================================= -->
-<style>
-#lds360CuentaOverlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:999999;
-  background:#f5f6f8;
-  overflow:auto;
-}
-#lds360CuentaOverlay.show{display:block;}
-#lds360CuentaHeader{
-  min-height:78px;
-  background:#142744;
-  border-bottom:4px solid #c99a32;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  padding:0 28px;
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-#lds360CuentaHeader h2{font-family:Georgia,"Times New Roman",serif;font-size:25px;margin:0;}
-#lds360CuentaCerrar{
-  border:1px solid rgba(255,255,255,.4);
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  padding:11px 18px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:16px;
-}
-#lds360CuentaContenido{
-  max-width:1100px;
-  margin:28px auto;
-  padding:0 20px 60px;
-}
-.lds360-card{
-  background:#fff;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  padding:28px;
-  margin-bottom:20px;
-}
-.lds360-datos-grid{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:28px;
-}
-#lds360Foto{
-  width:180px;
-  height:220px;
-  object-fit:cover;
-  border-radius:18px;
-  border:5px solid #fff;
-  box-shadow:0 5px 18px rgba(0,0,0,.15);
-  background:#e8ebef;
-  display:none;
-}
-#lds360FotoVacia{
-  width:180px;height:220px;border-radius:18px;background:#e8ebef;
-  display:flex;align-items:center;justify-content:center;color:#667085;font-weight:700;
-}
-#lds360Nombre{
-  color:#142744;font-size:31px;margin:0 0 18px;
-}
-.lds360-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-.lds360-info{background:#f4f5f7;padding:13px;border-radius:11px;}
-.lds360-info small{display:block;color:#667085;margin-bottom:4px;}
-.lds360-info strong{color:#142744;}
-.lds360-finance-title{color:#142744;font-size:23px;font-weight:800;margin-bottom:18px;}
-.lds360-finance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
-.lds360-money{border-radius:15px;padding:18px;background:#f3f5f7;}
-.lds360-money small{color:#667085;}
-.lds360-money strong{display:block;font-size:25px;color:#142744;margin-top:6px;}
-.lds360-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px;}
-.lds360-action{height:80px;border:0;border-radius:15px;cursor:pointer;color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;gap:10px;}
-.lds360-cobrar{background:#18864b;}
-.lds360-pagar{background:#a7192e;}
-.lds360-movs{background:#142744;}
-.lds360-action.active{outline:4px solid rgba(20,39,68,.16);transform:translateY(-1px);}
-#lds360Operacion{display:none;margin-top:20px;}
-#lds360Operacion.show{display:block;}
-.lds360-campo{margin-bottom:14px;}
-.lds360-campo label{display:block;font-weight:800;color:#475467;margin-bottom:6px;}
-.lds360-campo input,.lds360-campo select,.lds360-campo textarea{
-  width:100%;border:1px solid #d0d5dd;border-radius:10px;padding:11px;font:inherit;background:#fff;
-}
-.lds360-campo textarea{min-height:90px;resize:vertical;}
-.lds360-operacion-botones{display:flex;gap:10px;flex-wrap:wrap;}
-.lds360-btn{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;}
-.lds360-btn-primary{background:#142744;color:#fff;}
-.lds360-btn-secondary{background:#eaecf0;color:#344054;}
-#lds360MensajeOperacion{min-height:22px;margin-top:12px;font-weight:700;}
-#lds360MensajeOperacion.ok{color:#18864b;}
-#lds360MensajeOperacion.error{color:#a7192e;}
-#lds360Movimientos{display:none;}
-#lds360Movimientos.show{display:block;}
-.lds360-movement{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid #e4e7ec;}
-.lds360-movement:last-child{border-bottom:0;}
-.lds360-positive{color:#18864b;font-weight:800;}
-.lds360-negative{color:#a7192e;font-weight:800;}
-@media(max-width:800px){
-  #lds360CuentaHeader{padding:0 15px;}
-  #lds360CuentaHeader h2{font-size:18px;}
-  .lds360-datos-grid{grid-template-columns:1fr;}
-  #lds360Foto,#lds360FotoVacia{margin:auto;}
-  .lds360-finance-grid{grid-template-columns:1fr;}
-  .lds360-actions{grid-template-columns:1fr;}
-}
-</style>
-
-<div id="lds360CuentaOverlay" aria-hidden="true">
-  <div id="lds360CuentaHeader">
-    <h2>BANCO LDS 360 · Cuenta del estudiante</h2>
-    <button id="lds360CuentaCerrar" type="button" onclick="lds360CerrarCuenta()">← Volver</button>
-  </div>
-
-  <div id="lds360CuentaContenido">
-
-    <section class="lds360-card">
-      <div class="lds360-datos-grid">
-        <div>
-          <img id="lds360Foto" alt="Foto del estudiante">
-          <div id="lds360FotoVacia">Foto del alumno</div>
-        </div>
-
-        <div>
-          <h1 id="lds360Nombre">Estudiante</h1>
-          <div class="lds360-info-grid">
-            <div class="lds360-info"><small>Código</small><strong id="lds360CodigoDato">—</strong></div>
-            <div class="lds360-info"><small>Grado</small><strong id="lds360Grado">—</strong></div>
-            <div class="lds360-info"><small>Sección</small><strong id="lds360Seccion">—</strong></div>
-            <div class="lds360-info"><small>Docente</small><strong id="lds360Docente">—</strong></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="lds360-card">
-      <div class="lds360-finance-title">💰 CUENTA LDS</div>
-      <div class="lds360-finance-grid">
-        <div class="lds360-money"><small>Ingreso base</small><strong id="lds360Base">0.00 LDS</strong></div>
-        <div class="lds360-money"><small>Total ingresos</small><strong id="lds360Ingresos">0.00 LDS</strong></div>
-        <div class="lds360-money"><small>Total egresos</small><strong id="lds360Egresos">0.00 LDS</strong></div>
-      </div>
-      <div class="lds360-money" style="margin-top:15px;text-align:center;">
-        <small>Saldo actual</small>
-        <strong id="lds360Saldo">0.00 LDS</strong>
-      </div>
-
-      <div class="lds360-actions">
-        <button id="lds360BtnCobrar" class="lds360-action lds360-cobrar" type="button" onclick="lds360SeleccionarOperacion('INGRESO')">💰 COBRAR</button>
-        <button id="lds360BtnPagar" class="lds360-action lds360-pagar" type="button" onclick="lds360SeleccionarOperacion('EGRESO')">💸 PAGAR</button>
-        <button id="lds360BtnMovs" class="lds360-action lds360-movs" type="button" onclick="lds360MostrarMovimientos()">📋 MOVIMIENTOS</button>
-      </div>
-
-      <div id="lds360Operacion">
-        <div class="lds360-finance-title" id="lds360OperacionTitulo">Nueva operación</div>
-
-        <div class="lds360-campo">
-          <label for="lds360Categoria">Categoría</label>
-          <select id="lds360Categoria" onchange="lds360CargarConceptos()">
-            <option value="">Seleccione una categoría</option>
-          </select>
-        </div>
-
-        <div class="lds360-campo">
-          <label for="lds360Concepto">Concepto</label>
-          <select id="lds360Concepto">
-            <option value="">Seleccione un concepto</option>
-          </select>
-        </div>
-
-        <div class="lds360-campo">
-          <label for="lds360Monto">Monto LDS</label>
-          <input id="lds360Monto" type="number" min="0" step="0.01" placeholder="Ingrese el monto">
-        </div>
-
-        <div class="lds360-campo">
-          <label for="lds360Responsable">Responsable</label>
-          <select id="lds360Responsable">
-            <option value="">Seleccione responsable</option>
-          </select>
-        </div>
-
-        <div class="lds360-campo">
-          <label for="lds360Observacion">Observación</label>
-          <textarea id="lds360Observacion" placeholder="Ingrese observación"></textarea>
-        </div>
-
-        <div class="lds360-operacion-botones">
-          <button class="lds360-btn lds360-btn-primary" type="button" onclick="lds360RegistrarMovimiento()">Registrar movimiento</button>
-          <button class="lds360-btn lds360-btn-secondary" type="button" onclick="lds360LimpiarOperacion()">Limpiar</button>
-        </div>
-
-        <div id="lds360MensajeOperacion"></div>
-      </div>
-    </section>
-
-    <section id="lds360Movimientos" class="lds360-card">
-      <div class="lds360-finance-title">📋 MOVIMIENTOS</div>
-      <div id="lds360ListaMovimientos"></div>
-    </section>
-
-  </div>
-</div>
-
-<script>
-/* =========================================================
-   CONFIGURACIÓN FINAL
-   ========================================================= */
-const LDS360_MAIN_API = "https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
-const LDS360_ACCESO_API = "https://script.google.com/macros/s/AKfycbxnp5uHArqp2J4hRvwz5Qdt4PsxtsvSF7bCfQerM0LFQrd6t_GpPxyNi33ucSuDDgP-/exec";
-
-/* Claves de respaldo SOLO para que el flujo no se quede bloqueado si el Web App de acceso tarda.
-   La validación principal sigue intentando primero ACCESO ALUMNOS. */
-const LDS360_FALLBACK_KEYS = {
-  "LDS-EST-001":"2bb941e3ed6640d831248bf8e0eef0d9e314ab3d8a5b69c46ca5c4da554f35b0",
-  "LDS-EST-002":"9e812e3ad6fd299e435330ad720fef8ae479344391a3750a75a60b5dcce50e4d",
-  "LDS-EST-003":"55d492f5296c57c457071a86343a2caee71ec98865d6bea903557f72eb18d357",
-  "LDS-EST-004":"18ec1d3b17fd78e998b2b668e904171f5336862f3eae686aa8211a764e0cea75",
-  "LDS-EST-005":"23c2274c29a5e7fc6204e01033f9792dc6801c81f0229a3c556b6b148bd987fc"
-};
-
-let LDS360_codigoFinal = "";
-let LDS360_tokenFinal = "";
-let LDS360_datosFinal = null;
-let LDS360_tipoFinal = "";
-let LDS360_catalogoFinal = {};
-let LDS360_responsablesFinal = [];
-let LDS360_qrFinal = null;
-
-function LDS360_normalizarFinal(codigo){
-  return String(codigo || "").trim().toUpperCase().replace(/[._\s]+/g,"-").replace(/-+/g,"-");
-}
-
-async function LDS360_hashFinal(texto){
-  const h = await crypto.subtle.digest("SHA-256",new TextEncoder().encode(String(texto)));
-  return Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
-}
-
-function LDS360_numeroFinal(v){
-  const n = Number(v); return Number.isFinite(n) ? n : 0;
-}
-
-function LDS360_escapeFinal(v){
-  return String(v ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-function LDS360_jsonpFinal(url,params,timeoutMs){
-  timeoutMs=timeoutMs||7000;
-  return new Promise(function(resolve,reject){
-    const cb="lds360FinalCb_"+Date.now()+"_"+Math.floor(Math.random()*100000);
-    const qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
-    const script=document.createElement("script");
-    let done=false;
-    function clean(){
-      if(script.parentNode)script.parentNode.removeChild(script);
-      try{delete window[cb];}catch(e){window[cb]=undefined;}
-    }
-    const timer=setTimeout(function(){
-      if(done)return; done=true; clean(); reject(new Error("timeout"));
-    },timeoutMs);
-    window[cb]=function(res){
-      if(done)return; done=true; clearTimeout(timer); clean(); resolve(res);
-    };
-    script.onerror=function(){
-      if(done)return; done=true; clearTimeout(timer); clean(); reject(new Error("network"));
-    };
-    script.src=url+"?"+qs+"&callback="+encodeURIComponent(cb);
-    document.body.appendChild(script);
-  });
-}
-
-async function LDS360_pedirClaveFinal(codigo){
-  LDS360_codigoFinal=LDS360_normalizarFinal(codigo);
-  if(!LDS360_codigoFinal)return;
-  const overlay=document.getElementById("alumnoClaveOverlay");
-  const code=document.getElementById("codigoAlumnoIdentificado");
-  const input=document.getElementById("claveAlumnoLDS");
-  const msg=document.getElementById("alumnoClaveMensaje");
-  const btn=document.getElementById("btnConfirmarClaveLDS");
-  if(code)code.textContent="Código identificado: "+LDS360_codigoFinal;
-  if(input)input.value="";
-  if(btn)btn.disabled=false;
-  if(msg){msg.className="";msg.textContent="Ingresa tu clave personal.";}
-  if(overlay){overlay.classList.add("show");overlay.setAttribute("aria-hidden","false");}
-  setTimeout(function(){if(input)input.focus();},120);
-}
-window.solicitarAccesoAlumno=LDS360_pedirClaveFinal;
-
-/* =========================================================
-   QR ORIGINAL: Html5Qrcode
-   ========================================================= */
-window.abrirScanner=function(){
-  const overlay=document.getElementById("scannerOverlay");
-  const cont=document.getElementById("lectorQR");
-  const error=document.getElementById("scannerError");
-  const status=document.getElementById("scannerStatus");
-  if(overlay)overlay.classList.add("show");
-  if(error)error.textContent="";
-  if(status)status.textContent="Apunta la cámara al código QR del estudiante.";
-  if(!window.Html5Qrcode){if(error)error.textContent="No se pudo cargar el lector QR.";return;}
-  try{
-    if(LDS360_qrFinal){try{LDS360_qrFinal.stop();}catch(e){} LDS360_qrFinal=null;}
-    if(cont)cont.innerHTML="";
-    LDS360_qrFinal=new Html5Qrcode("lectorQR");
-    LDS360_qrFinal.start(
-      {facingMode:"environment"},
-      {fps:10,qrbox:{width:250,height:250}},
-      function(codigoQR){
-        const valor=String(codigoQR||"").trim();
-        try{LDS360_qrFinal.stop();}catch(e){}
-        LDS360_qrFinal=null;
-        if(overlay)overlay.classList.remove("show");
-        const match=valor.match(/LDS[-_ ]EST[-_ ]\d+/i);
-        const codigo=match?match[0].replace(/[_ ]/g,"-").toUpperCase():LDS360_normalizarFinal(valor);
-        LDS360_pedirClaveFinal(codigo);
-      },
-      function(){ }
-    ).catch(function(){
-      if(error)error.textContent="No fue posible iniciar la cámara. Verifica los permisos.";
-    });
-  }catch(e){
-    if(error)error.textContent="No fue posible iniciar el lector QR.";
-  }
-};
-
-window.cerrarScanner=function(){
-  try{if(LDS360_qrFinal)LDS360_qrFinal.stop();}catch(e){}
-  LDS360_qrFinal=null;
-  const cont=document.getElementById("lectorQR"); if(cont)cont.innerHTML="";
-  const overlay=document.getElementById("scannerOverlay"); if(overlay)overlay.classList.remove("show");
-};
-
-/* =========================================================
-   CLAVE
-   ========================================================= */
-window.confirmarClaveAlumno=async function(){
-  const input=document.getElementById("claveAlumnoLDS");
-  const msg=document.getElementById("alumnoClaveMensaje");
-  const btn=document.getElementById("btnConfirmarClaveLDS");
-  const clave=input?input.value.trim():"";
-  if(!/^\d{6}$/.test(clave)){
-    msg.className="error";msg.textContent="La clave debe tener exactamente 6 dígitos.";return;
-  }
-  btn.disabled=true; msg.className="ok"; msg.textContent="Verificando acceso...";
-
-  let respuesta=null;
-
-  /* Primero el acceso separado ya probado. */
-  try{
-    const pre=await LDS360_jsonpFinal(LDS360_ACCESO_API,{accion:"preloginAlumno",codigo:LDS360_codigoFinal},7000);
-    if(pre && pre.ok===true && pre.salt){
-      const hash=await LDS360_hashFinal(clave+"|"+pre.salt);
-      const login=await LDS360_jsonpFinal(LDS360_ACCESO_API,{accion:"loginAlumno",codigo:LDS360_codigoFinal,hashClave:hash},7000);
-      if(login && login.ok===true)respuesta=login;
-    }
-  }catch(e){ }
-
-  /* Si el acceso separado no responde, usamos la clave de respaldo
-     y cargamos la CUENTA desde el backend principal que ya funcionaba. */
-  if(!respuesta){
-    try{
-      const esperado=LDS360_FALLBACK_KEYS[LDS360_codigoFinal];
-      const recibido=await LDS360_hashFinal(clave);
-      if(esperado && esperado===recibido){
-        const cuentaPrincipal=await LDS360_jsonpFinal(LDS360_MAIN_API,{accion:"estudiante",codigo:LDS360_codigoFinal},7000);
-        if(cuentaPrincipal && cuentaPrincipal.estudiante){
-          respuesta=cuentaPrincipal;
-          respuesta._fallback=true;
-          respuesta.token="";
-        }
-      }
-    }catch(e){ }
-  }
-
-  if(!respuesta){
-    msg.className="error";
-    msg.textContent="La clave personal no es correcta o el servicio de acceso no está disponible.";
-    btn.disabled=false;
-    return;
-  }
-
-  LDS360_tokenFinal=respuesta.token||"";
-  LDS360_datosFinal=respuesta;
-  try{cerrarClaveAlumno();}catch(e){const ov=document.getElementById("alumnoClaveOverlay");if(ov)ov.classList.remove("show");}
-  const codeOv=document.getElementById("codeOverlay"); if(codeOv)codeOv.classList.remove("show");
-  LDS360_abrirCuenta(respuesta);
-};
-
-/* =========================================================
-   CUENTA
-   ========================================================= */
-function LDS360_fotoURLs(url){
-  const t=String(url||"").trim(); if(!t)return [];
-  const out=[]; function add(u){if(u && !out.includes(u))out.push(u);} add(t);
-  let id=""; const m=t.match(/\/d\/([a-zA-Z0-9_-]+)/); const q=t.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if(m)id=m[1]; else if(q)id=q[1];
-  if(id){
-    add("https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w800");
-    add("https://drive.google.com/uc?export=view&id="+encodeURIComponent(id));
-    add("https://lh3.googleusercontent.com/d/"+encodeURIComponent(id)+"=w800");
-  }
-  return out;
-}
-
-function LDS360_mostrarFoto(url){
-  const img=document.getElementById("lds360Foto");
-  const vac=document.getElementById("lds360FotoVacia");
-  const urls=LDS360_fotoURLs(url); let i=0;
-  img.style.display="none"; img.removeAttribute("src"); vac.style.display="flex";
-  if(!urls.length)return;
-  img.onload=function(){img.style.display="block";vac.style.display="none";};
-  img.onerror=function(){i++;if(i<urls.length)img.src=urls[i];else{img.style.display="none";vac.style.display="flex";}};
-  img.src=urls[0];
-}
-
-function LDS360_abrirCuenta(datos){
-  const est=datos.estudiante||{};
-  const cuenta=datos.cuenta||{};
-  const overlay=document.getElementById("lds360CuentaOverlay");
-  const student=document.getElementById("studentScreen");
-  if(student)student.classList.remove("show");
-  overlay.classList.add("show");
-  overlay.setAttribute("aria-hidden","false");
-
-  document.getElementById("lds360Nombre").textContent=est.nombreCompleto||[est.nombre||"",est.apellido||""].join(" ").trim()||"Estudiante";
-  document.getElementById("lds360CodigoDato").textContent=est.codigo||LDS360_codigoFinal||"—";
-  document.getElementById("lds360Grado").textContent=est.grado||"—";
-  document.getElementById("lds360Seccion").textContent=est.seccion||"—";
-  document.getElementById("lds360Docente").textContent=est.docente||est.teacher||"—";
-  document.getElementById("lds360Base").textContent=LDS360_numeroFinal(est.montoBase||0).toFixed(2)+" LDS";
-  document.getElementById("lds360Ingresos").textContent=LDS360_numeroFinal(cuenta.totalIngresos??cuenta.ingresos??0).toFixed(2)+" LDS";
-  document.getElementById("lds360Egresos").textContent=LDS360_numeroFinal(cuenta.totalEgresos??cuenta.egresos??0).toFixed(2)+" LDS";
-  document.getElementById("lds360Saldo").textContent=LDS360_numeroFinal(cuenta.saldoActual??cuenta.saldo??0).toFixed(2)+" LDS";
-  LDS360_mostrarFoto(est.fotoUrl||est.fotoURL||est.foto_url||est.FOTO_URL||est.foto||est.FOTO||"");
-  LDS360_renderMovimientos(datos.movimientos||[]);
-  LDS360_loadOptions();
-}
-
-function LDS360_renderMovimientos(movs){
-  const box=document.getElementById("lds360ListaMovimientos");
-  box.innerHTML="";
-  if(!Array.isArray(movs)||!movs.length){
-    box.innerHTML='<p style="color:#667085;">No hay movimientos registrados.</p>';
-    return;
-  }
-  movs.forEach(function(m){
-    const tipo=String(m.tipo||m.tipoMovimiento||m.TIPO||"").toUpperCase();
-    const monto=LDS360_numeroFinal(m.monto??m.montoLDS??m["MONTO LDS"]??0);
-    const div=document.createElement("div"); div.className="lds360-movement";
-    div.innerHTML='<span>'+LDS360_escapeFinal(m.concepto||m.descripcion||"")+'</span><span class="'+(tipo==="INGRESO"?"lds360-positive":"lds360-negative")+'">'+(tipo==="INGRESO"?"+":"-")+" "+monto.toFixed(2)+" LDS</span>";
-    box.appendChild(div);
-  });
-}
-
-/* =========================================================
-   ACTUALIZAR CUENTA / MOVIMIENTOS
-   ========================================================= */
-async function LDS360_refreshCuenta(){
-  const r=await LDS360_jsonpFinal(LDS360_MAIN_API,{accion:"estudiante",codigo:LDS360_codigoFinal},7000);
-  if(!r || !r.estudiante)throw new Error("No se pudo actualizar la cuenta.");
-  LDS360_datosFinal=r;
-  LDS360_abrirCuenta(r);
-}
-
-async function lds360MostrarMovimientos(){
-  document.getElementById("lds360Operacion").classList.remove("show");
-  document.getElementById("lds360Movimientos").classList.add("show");
-  document.getElementById("lds360BtnCobrar").classList.remove("active");
-  document.getElementById("lds360BtnPagar").classList.remove("active");
-
-  try{
-    await LDS360_refreshCuenta();
-    document.getElementById("lds360Operacion").classList.remove("show");
-    document.getElementById("lds360Movimientos").classList.add("show");
-  }catch(e){
-    document.getElementById("lds360ListaMovimientos").innerHTML='<p style="color:#a7192e;">No se pudieron cargar los movimientos.</p>';
-  }
-}
-window.lds360MostrarMovimientos=lds360MostrarMovimientos;
-
-/* =========================================================
-   CATEGORÍAS / CONCEPTOS / RESPONSABLES
-   ========================================================= */
-async function LDS360_loadOptions(){
-  const cat=document.getElementById("lds360Categoria");
-  const resp=document.getElementById("lds360Responsable");
-  const RESPONSABLES=[
-    "MISS LILY MELO AZAÑERO",
-    "MISS KIARA MORALES ELGUERA",
-    "MISS ANGHY REYES MELO",
-    "MISS KARIN MOLERO ROMANI"
-  ];
-
-  cat.innerHTML='<option value="">Seleccione una categoría</option>';
-  resp.innerHTML='<option value="">Seleccione responsable</option>';
-
-  RESPONSABLES.forEach(function(nombre){
-    const o=document.createElement("option");o.value=nombre;o.textContent=nombre;resp.appendChild(o);
-  });
-  LDS360_responsablesFinal=RESPONSABLES.slice();
-
-  let datos=null;
-
-  /* SIEMPRE intentamos primero el backend principal,
-     porque sus opciones ya estaban funcionando. */
-  try{
-    datos=await LDS360_jsonpFinal(LDS360_MAIN_API,{accion:"opciones"},7000);
-  }catch(e){ }
-
-  if(!datos || datos.ok===false || !datos.opcionesPorCategoria){
-    if(LDS360_tokenFinal){
-      try{
-        datos=await LDS360_jsonpFinal(LDS360_ACCESO_API,{accion:"opcionesAlumno",token:LDS360_tokenFinal},7000);
-      }catch(e){ }
-    }
-  }
-
-  LDS360_catalogoFinal=(datos&&datos.opcionesPorCategoria)||{};
-
-  Object.keys(LDS360_catalogoFinal).forEach(function(k){
-    const o=document.createElement("option");
-    o.value=k;o.textContent=k.replace(/_/g," ");cat.appendChild(o);
-  });
-}
-
-function LDS360_direccion(concepto,categoria){
-  const c=String(concepto||"").toUpperCase();
-  const cat=String(categoria||"").toUpperCase();
-  if(cat==="INGRESOS_Y_SUELDOS"||cat==="PREMIOS_Y_BONIFICACIONES")return"INGRESO";
-  if(cat==="PAGOS_Y_GASTOS"||cat==="SANCIONES_Y_MULTAS")return"EGRESO";
-  if(cat==="AHORROS_E_INVERSIONES")return c.indexOf("RETIRO DE AHORROS")===0?"EGRESO":"INGRESO";
-  return"AMBOS";
-}
-
-function lds360CargarConceptos(){
-  const cat=document.getElementById("lds360Categoria").value;
-  const sel=document.getElementById("lds360Concepto");
-  sel.innerHTML='<option value="">Seleccione un concepto</option>';
-  if(!cat)return;
-  (LDS360_catalogoFinal[cat]||[]).forEach(function(concepto){
-    const dir=LDS360_direccion(concepto,cat);
-    if(dir!=="AMBOS" && dir!==LDS360_tipoFinal)return;
-    const o=document.createElement("option");o.value=concepto;o.textContent=concepto;sel.appendChild(o);
-  });
-}
-window.LDS360CargarConceptos=lds360CargarConceptos;
-window.lds360CargarConceptos=lds360CargarConceptos;
-
-function lds360SeleccionarOperacion(tipo){
-  LDS360_tipoFinal=tipo;
-  document.getElementById("lds360Operacion").classList.add("show");
-  document.getElementById("lds360Movimientos").classList.remove("show");
-  document.getElementById("lds360BtnCobrar").classList.toggle("active",tipo==="INGRESO");
-  document.getElementById("lds360BtnPagar").classList.toggle("active",tipo==="EGRESO");
-  const cat=document.getElementById("lds360Categoria");
-  const con=document.getElementById("lds360Concepto");
-  cat.value="";
-  con.innerHTML='<option value="">Seleccione un concepto</option>';
-  document.getElementById("lds360OperacionTitulo").textContent=tipo==="INGRESO"?"COBRAR · Registrar ingreso":"PAGAR · Registrar egreso";
-  document.getElementById("lds360MensajeOperacion").textContent="";
-  document.getElementById("lds360MensajeOperacion").className="";
-  LDS360_loadOptions();
-}
-window.lds360SeleccionarOperacion=lds360SeleccionarOperacion;
-
-function lds360LimpiarOperacion(){
-  document.getElementById("lds360Categoria").value="";
-  document.getElementById("lds360Concepto").innerHTML='<option value="">Seleccione un concepto</option>';
-  document.getElementById("lds360Monto").value="";
-  document.getElementById("lds360Observacion").value="";
-  document.getElementById("lds360Responsable").value="";
-}
-window.lds360LimpiarOperacion=lds360LimpiarOperacion;
-
-function lds360_requestId(){
-  return "LDS360-"+Date.now()+"-"+Math.random().toString(36).slice(2,10);
-}
-
-/* =========================================================
-   COBRAR / PAGAR
-   ========================================================= */
-async function lds360RegistrarMovimiento(){
-  const msg=document.getElementById("lds360MensajeOperacion");
-  const cat=document.getElementById("lds360Categoria").value;
-  const con=document.getElementById("lds360Concepto").value;
-  const monto=LDS360_numeroFinal(document.getElementById("lds360Monto").value);
-  const responsable=document.getElementById("lds360Responsable").value;
-  const observacion=document.getElementById("lds360Observacion").value.trim();
-
-  if(!LDS360_tipoFinal){msg.className="error";msg.textContent="Seleccione COBRAR o PAGAR.";return;}
-  if(!cat||!con||monto<=0||!responsable){msg.className="error";msg.textContent="Complete categoría, concepto, monto y responsable.";return;}
-
-  msg.className="ok";
-  msg.textContent="Registrando movimiento...";
-
-  try{
-    /* Usamos el backend principal que ya registraba COBROS/PAGOS correctamente. */
-    const r=await LDS360_jsonpFinal(
-      LDS360_MAIN_API,
-      {
-        accion:"registrar",
-        codigo:LDS360_codigoFinal,
-        tipo:LDS360_tipoFinal,
-        categoria:cat,
-        concepto:con,
-        monto:monto,
-        responsable:responsable,
-        observacion:observacion,
-        requestId:lds360_requestId()
-      },
-      8000
-    );
-
-    if(!r || r.ok===false || r.exito===false){
-      throw new Error(r&&r.mensaje?r.mensaje:"No se pudo registrar el movimiento.");
-    }
-
-    msg.className="ok";
-    msg.textContent="Movimiento registrado correctamente.";
-    lds360LimpiarOperacion();
-
-    await LDS360_refreshCuenta();
-    document.getElementById("lds360Operacion").classList.add("show");
-    document.getElementById("lds360Movimientos").classList.remove("show");
-
-  }catch(e){
-    msg.className="error";
-    msg.textContent=e&&e.message?e.message:"No se pudo registrar el movimiento.";
-  }
-}
-window.lds360RegistrarMovimiento=lds360RegistrarMovimiento;
-
-function lds360CerrarCuenta(){
-  const overlay=document.getElementById("lds360CuentaOverlay");
-  overlay.classList.remove("show");
-  overlay.setAttribute("aria-hidden","true");
-  LDS360_tokenFinal="";
-  LDS360_datosFinal=null;
-  LDS360_tipoFinal="";
-  LDS360_catalogoFinal={};
-}
-window.lds360CerrarCuenta=lds360CerrarCuenta;
-
-/* Enter en la clave */
-const claveAlumnoInput=document.getElementById("claveAlumnoLDS");
-if(claveAlumnoInput){
-  claveAlumnoInput.addEventListener("keydown",function(e){
-    if(e.key==="Enter")window.confirmarClaveAlumno();
-  });
-}
-</script>
-
-
-<style id="lds360-ajuste-pantalla-final">
-/* SOLO AJUSTE DE TAMAÑO: no cambia la imagen ni su contenido. */
-html, body {
-  width:100% !important;
-  min-width:0 !important;
-  overflow-x:hidden !important;
-}
-
-#portadaExactaFinal.exact-home {
-  width:100% !important;
-  height:calc(100vh - 88px) !important;
-  min-height:0 !important;
-  overflow:hidden !important;
-}
-
-#portadaExactaFinal .exact-poster {
-  width:100% !important;
-  height:100% !important;
-  min-width:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  overflow:hidden !important;
-}
-
-#portadaExactaFinal .exact-poster-image {
-  display:block !important;
-  width:100% !important;
-  height:100% !important;
-  max-width:100% !important;
-  max-height:100% !important;
-  object-fit:contain !important;
-  object-position:center !important;
-}
-
-@media (max-width:800px) {
-  #portadaExactaFinal.exact-home {
-    height:calc(100vh - 76px) !important;
-    min-height:0 !important;
-  }
-
-  #portadaExactaFinal .exact-poster {
-    min-width:0 !important;
-    width:100% !important;
-    height:100% !important;
-  }
-
-  #portadaExactaFinal .exact-poster-image {
-    width:100% !important;
-    height:100% !important;
-    object-fit:contain !important;
-  }
-}
-</style>
-
-
 
 <style id="lds360FinalPantalla">
-/* Ajuste FINAL: mantiene la imagen original, solo adapta su tamaño a la ventana. */
 html,body{
   width:100% !important;
   min-width:0 !important;
@@ -3466,97 +1318,5 @@ html,body{
 }
 </style>
 
-<script id="lds360AdminGitHubFix">
-/* ADMINISTRADOR: conserva la ventana de clave.
-   En GitHub Pages la clave de acceso es 360LDS.
-   Con clave correcta se continúa a administrador.html. */
-window.validarAdmin = function(){
-  const input = document.getElementById('adminPin');
-  const error = document.getElementById('adminError');
-  const pin = (input ? input.value : '').trim();
-
-  if(!pin){
-    error.textContent = 'Ingresa la clave de administrador.';
-    return;
-  }
-
-  if(pin.toUpperCase() !== '360LDS'){
-    error.textContent = 'Clave de administrador incorrecta.';
-    return;
-  }
-
-  error.textContent = '';
-  window.location.href = 'administrador.html';
-};
-</script>
-
 </body>
 </html>
-<!-- MÚSICA INSTITUCIONAL DE FONDO PARA LA PORTADA PRINCIPAL -->
-<script>
-  (function() {
-    let audioCtx = null;
-    let sonando = false;
-
-    const FREQS = {
-      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
-      "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
-    };
-
-    // Melodía transcrita de tu canto (Do Mayor)
-    const melodiaPortada = [
-      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
-      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
-      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
-      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
-      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
-      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
-      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
-      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
-    ];
-
-    function sonarLira(ctx, freq, t, dur) {
-      if (!freq) return;
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc1.type = 'sine';
-      osc2.type = 'sine';
-      osc1.frequency.setValueAtTime(freq, t);
-      osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.25, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
-      osc1.connect(gain);
-      osc2.connect(gain);
-      gain.connect(ctx.destination);
-      osc1.start(t);
-      osc2.start(t);
-      osc1.stop(t + 1.0);
-      osc2.stop(t + 1.0);
-    }
-
-    async function activarMusicaPortada() {
-      if (sonando) return;
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') {
-          await audioCtx.resume();
-        }
-        sonando = true;
-
-        let t = audioCtx.currentTime + 0.1;
-        melodiaPortada.forEach(item => {
-          const f = FREQS[item.n] || 261.63;
-          sonarLira(audioCtx, f, t, item.d);
-          t += item.d;
-        });
-      } catch (e) {}
-    }
-
-    // Se activa al tocar cualquier zona de la portada principal
-    ['click', 'touchstart', 'pointerdown', 'scroll'].forEach(evt => {
-      document.addEventListener(evt, activarMusicaPortada, { once: true });
-    });
-  })();
-</script>
