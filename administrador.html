@@ -104,7 +104,7 @@
       z-index: 1;
     }
 
-    /* Insignia institucional perfectamente ajustada y elegante dentro del círculo */
+    /* Insignia institucional grande y elegante dentro del círculo */
     .card-insignia-container {
       width: 120px;
       height: 120px;
@@ -227,10 +227,10 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Tarjeta Central de Inicio de Sesión Ampliada con insignia.png -->
+    <!-- Tarjeta Central con Insignia Inteligente (Busca en varias rutas si falla) -->
     <div class="login-card">
       <div class="card-insignia-container">
-        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='https://via.placeholder.com/120?text=LDS'">
+        <img src="insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="if(this.src.includes('insignia.png')) { this.src='assets/insignia.png'; } else { this.src='https://via.placeholder.com/120?text=LDS'; }">
       </div>
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
