@@ -13,6 +13,7 @@
       --azul2:#1d3557;
       --rojo:#a7192e;
       --oro:#c99a32;
+      --oro-claro:#e0b84c;
       --blanco:#ffffff;
       --grisTexto:#667085;
     }
@@ -81,10 +82,10 @@
     }
 
     .hotspot:hover{
-      background:rgba(255,255,255,.05);
+      background:rgba(201, 154, 50, 0.15);
     }
 
-    /* Coordenadas exactas para Administrador, QR y Código */
+    /* Coordenadas principales */
     .hotspot-admin{
       left:70.6%;
       top:3.4%;
@@ -109,6 +110,25 @@
       border-radius:24px;
     }
 
+    /* Botones pequeños en el medio entre Emprende y La Salle */
+    .hotspot-btn-padres {
+      left: 36.5%;
+      top: 85.2%;
+      width: 12%;
+      height: 4.5%;
+      border-radius: 8px;
+      border: 1px dashed rgba(201, 154, 50, 0.5);
+    }
+
+    .hotspot-btn-instructivo {
+      left: 51.5%;
+      top: 85.2%;
+      width: 12%;
+      height: 4.5%;
+      border-radius: 8px;
+      border: 1px dashed rgba(201, 154, 50, 0.5);
+    }
+
     /* =========================================================
        MODALES Y VENTANAS EMERGENTES
        ========================================================= */
@@ -129,24 +149,27 @@
     }
 
     .modal{
-      width:min(480px,100%);
+      width:min(520px,100%);
       background:white;
       border-radius:24px;
       padding:32px;
       box-shadow:0 25px 80px rgba(0,0,0,.35);
       position:relative;
+      max-height:85vh;
+      overflow-y:auto;
     }
 
     .modal h2{
       color:var(--azul);
       margin-bottom:8px;
-      font-size:27px;
+      font-size:25px;
     }
 
     .modal p{
       color:var(--grisTexto);
-      margin-bottom:20px;
-      line-height:1.4;
+      margin-bottom:15px;
+      line-height:1.5;
+      font-size:15px;
     }
 
     .close{
@@ -186,6 +209,22 @@
       font-weight:700;
       margin-top:15px;
       cursor:pointer;
+    }
+
+    .info-list {
+      background: #f4f5f7;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 15px;
+    }
+    .info-list ul {
+      margin-left: 20px;
+      color: #334155;
+    }
+    .info-list li {
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
     /* PANTALLA DE RESULTADOS DEL ESTUDIANTE */
@@ -344,7 +383,6 @@
       font-weight:bold;
     }
 
-    /* ESCANÉER QR */
     .scanner{
       text-align:center;
     }
@@ -355,7 +393,6 @@
       line-height:1.4;
     }
 
-    /* CARGANDO */
     .loading{
       position:fixed;
       inset:0;
@@ -387,7 +424,6 @@
       min-height:20px;
     }
 
-    /* CLAVE PERSONAL ALUMNO */
     #alumnoClaveOverlay{
       position:fixed; inset:0; z-index:1800;
       background:rgba(8,20,38,.78);
@@ -445,11 +481,51 @@
   <main class="exact-home">
     <div class="exact-poster">
       <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur">
+      
+      <!-- Botones principales -->
       <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
+
+      <!-- Botones pequeños entre Emprende y La Salle -->
+      <button class="hotspot hotspot-btn-padres" aria-label="Portal Padres / Tutores" onclick="abrirTutores()"></button>
+      <button class="hotspot hotspot-btn-instructivo" aria-label="Instructivo / Reglas" onclick="abrirReglas()"></button>
     </div>
   </main>
+
+  <!-- MODAL TUTORES / PADRES -->
+  <div id="tutoresOverlay" class="overlay">
+    <div class="modal">
+      <button class="close" onclick="cerrarTutores()">×</button>
+      <h2>Portal de Padres y Tutores</h2>
+      <p>Espacio informativo para el acompañamiento y seguimiento de los estudiantes en la economía de aula.</p>
+      <div class="info-list">
+        <ul>
+          <li><strong>Orientación:</strong> Comunicación directa con el equipo docente responsable.</li>
+          <li><strong>Participación:</strong> Evaluación de actividades y proyectos de aula (KIDSWork LS).</li>
+          <li><strong>Seguimiento:</strong> Consulta transparente de logros y valores fomentados en primaria.</li>
+        </ul>
+      </div>
+      <button class="primary-btn" onclick="cerrarTutores()">Entendido</button>
+    </div>
+  </div>
+
+  <!-- MODAL INSTRUCTIVO / REGLAS -->
+  <div id="reglasOverlay" class="overlay">
+    <div class="modal">
+      <button class="close" onclick="cerrarReglas()">×</button>
+      <h2>Instructivo y Reglas · Banco LDS 360</h2>
+      <p>Normas oficiales del sistema gamificado de recompensas y moneda virtual (LS Coins).</p>
+      <div class="info-list">
+        <ul>
+          <li><strong>Transacciones:</strong> Cada estudiante gestiona responsablemente su cuenta digital.</li>
+          <li><strong>Earning (Ingresos):</strong> Se obtienen LS Coins mediante cumplimiento de normas y buen desempeño.</li>
+          <li><strong>Objetivo:</strong> Fomentar la responsabilidad financiera y la práctica de valores lasallistas.</li>
+        </ul>
+      </div>
+      <button class="primary-btn" onclick="cerrarReglas()">Cerrar</button>
+    </div>
+  </div>
 
   <!-- MODAL INGRESAR CÓDIGO -->
   <div id="codeOverlay" class="overlay">
@@ -575,7 +651,21 @@
     solicitarAccesoAlumno(codigo);
   }
 
-  let window.lds360QrInstance = null;
+  function abrirTutores(){
+    document.getElementById("tutoresOverlay").classList.add("show");
+  }
+  function cerrarTutores(){
+    document.getElementById("tutoresOverlay").classList.remove("show");
+  }
+
+  function abrirReglas(){
+    document.getElementById("reglasOverlay").classList.add("show");
+  }
+  function cerrarReglas(){
+    document.getElementById("reglasOverlay").classList.remove("show");
+  }
+
+  let lds360QrInstance = null;
 
   window.abrirScanner = function(){
     const overlay = document.getElementById("scannerOverlay");
@@ -590,20 +680,20 @@
       return;
     }
     try{
-      if(window.lds360QrInstance){
-        try{window.lds360QrInstance.stop();}catch(e){}
-        window.lds360QrInstance = null;
+      if(lds360QrInstance){
+        try{lds360QrInstance.stop();}catch(e){}
+        lds360QrInstance = null;
       }
       const cont = document.getElementById("lectorQR");
       if(cont) cont.innerHTML = "";
-      window.lds360QrInstance = new Html5Qrcode("lectorQR");
-      window.lds360QrInstance.start(
+      lds360QrInstance = new Html5Qrcode("lectorQR");
+      lds360QrInstance.start(
         {facingMode:"environment"},
         {fps:10,qrbox:{width:250,height:250}},
         function(codigoQR){
           const valor = String(codigoQR||"").trim();
-          try{window.lds360QrInstance.stop();}catch(e){}
-          window.lds360QrInstance = null;
+          try{lds360QrInstance.stop();}catch(e){}
+          lds360QrInstance = null;
           if(overlay) overlay.classList.remove("show");
           const match = valor.match(/LDS[-_ ]EST[-_ ]\d+/i);
           const codigo = match ? match[0].replace(/[_ ]/g,"-").toUpperCase() : valor.toUpperCase();
@@ -619,8 +709,8 @@
   };
 
   window.cerrarScanner = function(){
-    try{if(window.lds360QrInstance)window.lds360QrInstance.stop();}catch(e){}
-    window.lds360QrInstance = null;
+    try{if(lds360QrInstance)lds360QrInstance.stop();}catch(e){}
+    lds360QrInstance = null;
     const cont = document.getElementById("lectorQR"); if(cont) cont.innerHTML = "";
     const overlay = document.getElementById("scannerOverlay"); if(overlay) overlay.classList.remove("show");
   };
@@ -807,6 +897,8 @@
       cerrarScanner();
       cerrarAdmin();
       cerrarClaveAlumno();
+      cerrarTutores();
+      cerrarReglas();
     }
   });
   </script>
