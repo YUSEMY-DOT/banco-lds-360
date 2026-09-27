@@ -11,6 +11,7 @@
     :root {
       --azul-oscuro: #0d1b2a;
       --oro: #c99a32;
+      --oro-claro: #e0b84c;
       --blanco: #ffffff;
       --gris-fondo: #f0f2f5;
       --gris-texto: #667085;
@@ -71,7 +72,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL CENTRADO
+       CONTENEDOR PRINCIPAL (DISTRIBUCIÓN EQUILIBRADA)
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -79,59 +80,78 @@
       justify-content: center;
       min-height: 100vh;
       padding-top: 80px;
+      width: 96%;
+      margin: 0 auto;
+      max-width: 1250px;
+      gap: 30px;
+    }
+
+    /* Contenedor para los personajes laterales */
+    .side-character {
+      flex: 0 1 28%;
+      max-width: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-character img {
       width: 100%;
-      padding-left: 20px;
-      padding-right: 20px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.12));
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN
+       TARJETA DE INICIO DE SESIÓN CENTRAL
        ========================================================= */
     .login-card {
-      width: 100%;
-      max-width: 440px;
+      flex: 0 1 38%;
+      max-width: 410px;
       background: var(--blanco);
       border-radius: 24px;
-      padding: 36px 32px 28px;
+      padding: 32px 28px 24px;
       box-shadow: 0 15px 40px rgba(20, 39, 68, 0.12);
       text-align: center;
       border-top: 5px solid var(--oro);
+      position: relative;
+      z-index: 1;
     }
 
     .login-card h2 {
       color: var(--azul-oscuro);
-      font-size: 24px;
-      margin-bottom: 8px;
+      font-size: 23px;
+      margin-bottom: 4px;
       font-family: Georgia, serif;
     }
 
     .login-card p {
       color: var(--gris-texto);
-      font-size: 14px;
-      margin-bottom: 24px;
+      font-size: 13.5px;
+      margin-bottom: 20px;
       line-height: 1.4;
     }
 
     .form-group {
       text-align: left;
-      margin-bottom: 18px;
+      margin-bottom: 15px;
     }
 
     .form-group label {
       display: block;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--azul-oscuro);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .input-field {
       width: 100%;
-      height: 48px;
+      height: 46px;
       border: 1px solid #ccd2da;
       border-radius: 12px;
       padding: 0 16px;
-      font-size: 16px;
+      font-size: 15px;
       outline: none;
       background: #fafbfc;
       color: var(--azul-oscuro);
@@ -150,15 +170,15 @@
 
     .primary-btn {
       width: 100%;
-      height: 50px;
+      height: 48px;
       border: 0;
       border-radius: 12px;
       background: var(--azul-oscuro);
       color: var(--blanco);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      margin-top: 10px;
-      margin-bottom: 12px;
+      margin-top: 8px;
+      margin-bottom: 10px;
       cursor: pointer;
       transition: background 0.2s ease;
       box-shadow: 0 4px 12px rgba(20, 39, 68, 0.2);
@@ -175,6 +195,34 @@
       min-height: 18px;
       font-weight: 600;
     }
+
+    /* =========================================================
+       RESPONSIVE DESIGN
+       ========================================================= */
+    @media (max-width: 992px) {
+      .main-wrapper {
+        flex-direction: column;
+        padding: 90px 20px 30px;
+        gap: 20px;
+      }
+      .login-card {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 420px;
+        order: 1;
+      }
+      .side-character {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 200px;
+      }
+      .side-character:first-of-type {
+        order: 0;
+      }
+      .side-character:last-of-type {
+        order: 2;
+      }
+    }
   </style>
 </head>
 <body>
@@ -185,13 +233,19 @@
   </div>
 
   <main class="main-wrapper">
+    <!-- Personaje Izquierdo (Google Drive) -->
+    <div class="side-character">
+      <img src="https://lh3.googleusercontent.com/d/1UCgPk4i8tUmStOAw3j3btSPcSJmBvEUX" alt="Ilustración izquierda" onerror="this.style.display='none'">
+    </div>
+
+    <!-- Tarjeta Central de Inicio de Sesión -->
     <div class="login-card">
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
       
       <div class="form-group">
         <label for="docenteSelect">Docente / Maestra</label>
-        <select id="docenteSelect" class="input-field" required>
+        <select id="docenteSelect" class="input-field" required onchange="anunciarSeleccion(this)">
           <option value="" disabled selected hidden>Seleccione su nombre</option>
           <option value="LILY">Miss Lily Melo Azañero</option>
           <option value="KIARA">Miss Kiara Morales Elguera</option>
@@ -208,6 +262,11 @@
       <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
       <div id="adminError" class="error-msg"></div>
     </div>
+
+    <!-- Personaje Derecho (Google Drive) -->
+    <div class="side-character">
+      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Ilustración derecha" onerror="this.style.display='none'">
+    </div>
   </main>
 
   <script>
@@ -217,7 +276,8 @@
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(texto);
+        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+        const utterance = new SpeechSynthesisUtterance(textoLimpio);
         utterance.rate = 1.05;
         utterance.pitch = 1.25;
 
@@ -233,8 +293,16 @@
         if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
         if (vozIdeal) utterance.voice = vozIdeal;
 
-        window.speechSynthesis.speak(utterance);
+        setTimeout(() => {
+          window.speechSynthesis.speak(utterance);
+        }, 50);
       }
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -243,8 +311,18 @@
       }, 700);
     });
 
-    // ATENCIÓN: Si tu archivo de panel tiene otro nombre, cámbialo aquí.
-    // Si te sale error 404 es porque este archivo aún no existe en tu repositorio de GitHub.
+    function anunciarSeleccion(select) {
+      const texto = select.options[select.selectedIndex].text;
+      hablarTextoVoz("Seleccionado: " + texto);
+    }
+
+    /* 
+      NOTA IMPORTANTE SOBRE EL ERROR 404:
+      El error 404 al hacer clic en "Ingresar al Panel" ocurre porque 
+      el archivo de destino aún no existe o tiene otro nombre en tu repositorio.
+      Asegúrate de cambiar "administrador_panel.html" por el nombre exacto 
+      de tu archivo del panel de control si se llama distinto.
+    */
     const PAGINA_PANEL = "administrador_panel.html"; 
 
     function validarAccesoDocente(){
