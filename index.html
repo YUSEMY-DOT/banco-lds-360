@@ -347,7 +347,7 @@
     #alumnoClaveMensaje.ok{color:#18864b;}
     #alumnoClaveMensaje.error{color:var(--rojo);}
 
-    /* PORTADA EXACTA CON PÓSTER Y BOTONES INTERACTIVOS */
+    /* PORTADA EXACTA CON PÓSTER Y TODOS LOS BOTONES INTERACTIVOS */
     .exact-home{
       display:block !important;
       width:100%;
@@ -410,20 +410,22 @@
       border-radius:24px;
     }
 
+    /* Botón Zona de Padres (Cuadrado verde en la parte inferior derecha) */
     .hotspot-padres{
-      left:48.0%;
-      top:65.3%;
-      width:22.0%;
-      height:5.9%;
-      border-radius:24px;
+      left:51.5%;
+      top:85.0%;
+      width:20.5%;
+      height:8.5%;
+      border-radius:18px;
     }
 
+    /* Botón Manual (Cuadrado amarillo en la parte inferior derecha) */
     .hotspot-manual{
-      left:72.0%;
-      top:65.3%;
-      width:22.0%;
-      height:5.9%;
-      border-radius:24px;
+      left:74.5%;
+      top:85.0%;
+      width:20.5%;
+      height:8.5%;
+      border-radius:18px;
     }
   </style>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -436,7 +438,7 @@
   <main id="portadaExactaFinal" class="exact-home">
     <div class="exact-poster">
       <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur" onerror="this.src='portada.webp';">
-      <!-- BOTONES INTERACTIVOS SOBRE EL PÓSTER -->
+      <!-- TODOS LOS BOTONES INTERACTIVOS SOBRE EL PÓSTER -->
       <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
