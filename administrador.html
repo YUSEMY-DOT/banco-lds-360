@@ -33,7 +33,7 @@
     </a>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL LIMPIO (SIN CAJAS EXTRAÑAS) -->
+  <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-1 p-6 lg:p-10 max-w-5xl mx-auto w-full space-y-8 my-6">
     
     <!-- PASO 1: SELECCIÓN DE DOCENTE Y TURNO -->
@@ -52,13 +52,14 @@
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
             <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
             <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
-            <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+            <option value="MISS KARIN ISDENKA MOLERO ROMANI">MISS KARIN ISDENKA MOLERO ROMANI</option>
+            <option value="MR. ANDREW TECSUO REYES MELO">MR. ANDREW TECSUO REYES MELO</option>
           </select>
         </div>
 
         <div>
           <label class="block text-xs font-black text-gray-700 mb-2 uppercase tracking-wide">Clave Administrador (PIN)</label>
-          <input type="password" id="loginClaveDocente" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-center text-2xl tracking-[0.5em] outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm" />
+          <input type="password" id="loginClaveDocente" placeholder="••••••" class="w-full border-2 border-gray-200 rounded-2xl p-4 text-center text-xl tracking-[0.4em] outline-none bg-gray-50 font-black text-gray-800 focus:border-emerald-600 shadow-sm" />
         </div>
 
         <button onclick="procesarLoginAdmin()" class="w-full bg-[#00a859] hover:bg-emerald-700 text-white font-black py-4 rounded-2xl transition shadow-xl text-sm uppercase tracking-wider cursor-pointer">
@@ -69,7 +70,7 @@
       </div>
     </section>
 
-    <!-- PASO 2: PANEL DE CONTROL DOCENTE (OCULTO HASTA INICIAR SESIÓN) -->
+    <!-- PASO 2: PANEL DE CONTROL DOCENTE -->
     <section id="docenteDashboard" class="hidden space-y-8 w-full">
       
       <!-- BARRA DE LA MISS EN TURNO -->
@@ -83,32 +84,37 @@
         </button>
       </div>
 
-      <!-- BÚSQUEDA Y ESCÁNER QR -->
+      <!-- BÚSQUEDA Y ESCÁNER QR (CON PREFIJO AUTOMÁTICO LDS-EST-) -->
       <div class="bg-white text-gray-800 p-8 lg:p-10 rounded-3xl shadow-2xl space-y-6 border-2 border-slate-200">
         <div class="border-b pb-4">
           <h3 class="text-xl font-black text-[#031d38] uppercase tracking-wide">Consulta de Estudiante</h3>
-          <p class="text-sm text-gray-500 font-medium pt-1">Ingrese el código del estudiante o utilice la cámara para escanear su código QR.</p>
+          <p class="text-sm text-gray-500 font-medium pt-1">Ingrese el número de estudiante (ej. 001, 002) o utilice la cámara para escanear su código QR.</p>
         </div>
         
-        <div class="flex flex-col sm:flex-row gap-4">
-          <input type="text" id="codigoEstudianteAdmin" placeholder="Ej: LDS-EST-001" class="flex-1 border-2 border-gray-200 rounded-2xl px-6 py-4 text-lg uppercase outline-none focus:border-emerald-600 font-black tracking-wider text-gray-800 bg-gray-50 shadow-sm" />
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
+          <div class="flex-1 flex items-center border-2 border-gray-200 rounded-2xl bg-gray-50 focus-within:border-emerald-600 shadow-sm overflow-hidden">
+            <span class="pl-5 font-black text-gray-500 tracking-wider text-base select-none">LDS-EST-</span>
+            <input type="text" id="codigoEstudianteAdmin" placeholder="001" maxlength="6" class="w-full pr-6 py-4 text-lg uppercase outline-none font-black tracking-wider text-gray-800 bg-transparent" />
+          </div>
           
-          <button onclick="buscarEstudiante()" class="bg-[#00a859] hover:bg-emerald-700 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+          <button onclick="ejecutarBusquedaAdmin()" class="bg-[#00a859] hover:bg-emerald-700 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
             🔍 Buscar
           </button>
           
-          <button onclick="abrirScanner()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+          <button onclick="ejecutarEscanerAdmin()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto">
             📷 Escanear QR
           </button>
         </div>
 
         <div id="readerAdmin" class="hidden w-full max-w-lg mx-auto overflow-hidden rounded-2xl border-4 border-blue-500/30 bg-slate-100 shadow-inner"></div>
+        <div id="errorBusquedaAdmin" class="text-rose-600 text-xs font-bold text-center"></div>
       </div>
 
       <!-- FICHA Y MÓDULO DE ABONOS DEL ALUMNO -->
       <section id="fichaAlumnoAdmin" class="hidden bg-white text-gray-800 p-10 lg:p-12 rounded-3xl shadow-2xl space-y-8 border-2 border-slate-200">
         
         <div class="flex flex-col md:flex-row items-center gap-8 border-b-2 border-gray-100 pb-8">
+          <!-- FOTO MEDIANA Y PROPORCIONAL -->
           <img id="fotoAlumnoAdmin" src="" alt="Foto Estudiante" class="w-36 h-40 md:w-44 md:h-48 rounded-2xl object-cover border-4 border-emerald-500 shadow-2xl flex-shrink-0 bg-gray-100" />
           <div class="space-y-2 text-center md:text-left flex-1">
             <h3 id="nombreAlumnoAdmin" class="text-3xl font-black text-gray-900 tracking-tight">---</h3>
@@ -222,6 +228,113 @@
       document.getElementById('docenteLogin').classList.remove('hidden');
       document.getElementById('loginClaveDocente').value = "";
       document.getElementById('errorAdminLogin').textContent = "";
+    }
+
+    function ejecutarBusquedaAdmin() {
+      const inputVal = document.getElementById('codigoEstudianteAdmin').value.trim().toUpperCase();
+      const errorDiv = document.getElementById('errorBusquedaAdmin');
+      
+      if (!inputVal) {
+        if (errorDiv) errorDiv.textContent = "Ingrese el número del estudiante.";
+        return;
+      }
+
+      // Une el prefijo fijo con lo que digite la Miss
+      const codigo = "LDS-EST-" + inputVal.replace("LDS-EST-", "");
+
+      if (errorDiv) errorDiv.textContent = "";
+
+      if (typeof consultarDatosEstudiante === 'function') {
+        consultarDatosEstudiante(codigo, function(res) {
+          if (res && res.success) {
+            document.getElementById('fichaAlumnoAdmin').classList.remove('hidden');
+            document.getElementById('nombreAlumnoAdmin').textContent = res.nombre || "Estudiante LDS";
+            document.getElementById('gradoAlumnoAdmin').textContent = (res.grado || "PRIMARIA") + " - " + (res.seccion || "A");
+            document.getElementById('saldoAlumnoAdmin').textContent = res.saldo || "0.00";
+            if (res.foto) document.getElementById('fotoAlumnoAdmin').src = res.foto;
+          } else {
+            if (errorDiv) errorDiv.textContent = res.mensaje || "Estudiante no encontrado.";
+          }
+        });
+      }
+    }
+
+    let html5QrCodeAdmin = null;
+    function ejecutarEscanerAdmin() {
+      const readerDiv = document.getElementById('readerAdmin');
+      readerDiv.classList.remove('hidden');
+      try {
+        html5QrCodeAdmin = new Html5Qrcode("readerAdmin");
+        html5QrCodeAdmin.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          (decodedText) => {
+            if(html5QrCodeAdmin) {
+              html5QrCodeAdmin.stop().catch(() => {});
+              html5QrCodeAdmin = null;
+            }
+            readerDiv.classList.add('hidden');
+            let limpio = decodedText.trim().toUpperCase().replace("LDS-EST-", "");
+            document.getElementById('codigoEstudianteAdmin').value = limpio;
+            ejecutarBusquedaAdmin();
+          },
+          () => {}
+        ).catch(() => {
+          document.getElementById('errorBusquedaAdmin').textContent = "No se pudo acceder a la cámara.";
+        });
+      } catch(e) {
+        document.getElementById('errorBusquedaAdmin').textContent = "Error al iniciar el escáner.";
+      }
+    }
+
+    function cargarConceptosAbonoAdmin() {
+      const cat = document.getElementById('selectCategoriaAbono').value;
+      const conceptoSelect = document.getElementById('selectConceptoAbono');
+      conceptoSelect.innerHTML = '<option value="">Seleccione concepto</option>';
+      
+      let opciones = [];
+      if (cat === 'INGRESOS_Y_SUELDOS') {
+        opciones = ['Ingreso Sueldo Base Mensual', 'Ingreso Sueldo por Rol de Liderazgo', 'Ingreso Bono por desempeño'];
+      } else if (cat === 'PREMIOS_Y_BONIFICACIONES') {
+        opciones = ['Bono por llevar el uniforme impecable y reglamentario', 'Bono Participación destacada en clase', 'Bono Premio por primer lugar en concurso académico o deportivo', 'Bono Puntualidad y asistencia perfecta (Semanal / Mensual)'];
+      }
+      
+      opciones.forEach(op => {
+        const opt = document.createElement('option');
+        opt.value = op;
+        opt.textContent = op;
+        conceptoSelect.appendChild(opt);
+      });
+    }
+
+    function ejecutarAbonoAdministrativo() {
+      const inputVal = document.getElementById('codigoEstudianteAdmin').value.trim().toUpperCase();
+      const codigo = "LDS-EST-" + inputVal.replace("LDS-EST-", "");
+      const cat = document.getElementById('selectCategoriaAbono').value;
+      const concepto = document.getElementById('selectConceptoAbono').value;
+      const monto = document.getElementById('inputMontoAbono').value;
+      const responsable = document.getElementById('inputResponsableAuto').value;
+      const obs = document.getElementById('inputObservacionAbono').value;
+      const msgDiv = document.getElementById('mensajeAbonoAdmin');
+
+      if (!inputVal || !cat || !concepto || !monto) {
+        msgDiv.className = "text-rose-600 text-xs text-center font-bold min-h-[24px] pt-1";
+        msgDiv.textContent = "Complete todos los campos obligatorios.";
+        return;
+      }
+
+      if (typeof registrarTransaccionSistema === 'function') {
+        registrarTransaccionSistema(codigo, 'ABONO', monto, `${cat} - ${concepto}`, responsable, obs, function(res) {
+          if (res && res.success) {
+            msgDiv.className = "text-emerald-600 text-xs text-center font-bold min-h-[24px] pt-1";
+            msgDiv.textContent = "¡Abono registrado exitosamente!";
+            ejecutarBusquedaAdmin();
+          } else {
+            msgDiv.className = "text-rose-600 text-xs text-center font-bold min-h-[24px] pt-1";
+            msgDiv.textContent = res.mensaje || "Error al registrar la transacción.";
+          }
+        });
+      }
     }
   </script>
 
