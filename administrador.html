@@ -11,7 +11,6 @@
     :root {
       --azul-oscuro: #0d1b2a;
       --oro: #c99a32;
-      --oro-claro: #e0b84c;
       --blanco: #ffffff;
       --gris-fondo: #f0f2f5;
       --gris-texto: #667085;
@@ -72,7 +71,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL (DISTRIBUCIÓN EQUILIBRADA)
+       CONTENEDOR PRINCIPAL CENTRADO
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -80,55 +79,29 @@
       justify-content: center;
       min-height: 100vh;
       padding-top: 80px;
-      width: 96%;
-      margin: 0 auto;
-      max-width: 1250px;
-      gap: 20px;
-    }
-
-    /* Contenedor para los personajes laterales */
-    .side-character {
-      flex: 0 1 28%;
-      max-width: 320px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .side-character img {
       width: 100%;
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     /* =========================================================
-       TARJETA DE INICIO DE SESIÓN CENTRAL
+       TARJETA DE INICIO DE SESIÓN
        ========================================================= */
     .login-card {
-      flex: 0 1 40%;
-      max-width: 420px;
+      width: 100%;
+      max-width: 440px;
       background: var(--blanco);
       border-radius: 24px;
-      padding: 32px 32px 24px;
+      padding: 36px 32px 28px;
       box-shadow: 0 15px 40px rgba(20, 39, 68, 0.12);
       text-align: center;
       border-top: 5px solid var(--oro);
-      position: relative;
-      z-index: 1;
-    }
-
-    .card-escudo {
-      width: 80px;
-      height: auto;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .login-card h2 {
       color: var(--azul-oscuro);
       font-size: 24px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-family: Georgia, serif;
     }
 
@@ -141,7 +114,7 @@
 
     .form-group {
       text-align: left;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .form-group label {
@@ -149,7 +122,7 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--azul-oscuro);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .input-field {
@@ -197,39 +170,10 @@
     }
 
     .error-msg {
-      margin-top: 0px;
       color: #a7192e;
       font-size: 13px;
       min-height: 18px;
       font-weight: 600;
-    }
-
-    /* =========================================================
-       RESPONSIVE DESIGN
-       ========================================================= */
-    @media (max-width: 992px) {
-      .main-wrapper {
-        flex-direction: column;
-        padding: 90px 20px 30px;
-        gap: 25px;
-      }
-      .login-card {
-        flex: 1 1 auto;
-        width: 100%;
-        max-width: 440px;
-        order: 1;
-      }
-      .side-character {
-        flex: 0 0 auto;
-        width: 100%;
-        max-width: 220px;
-      }
-      .side-character:first-of-type {
-        order: 0;
-      }
-      .side-character:last-of-type {
-        order: 2;
-      }
     }
   </style>
 </head>
@@ -241,20 +185,13 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Profesora Izquierda -->
-    <div class="side-character">
-      <img src="assets/profesora_izquierda.png" alt="Profesora sentada con tablet" onerror="this.style.display='none'">
-    </div>
-
-    <!-- Tarjeta Central de Inicio de Sesión -->
     <div class="login-card">
-      <img src="assets/insignia.webp" alt="Insignia La Salle del Sur" class="card-escudo" onerror="this.style.display='none'">
       <h2>Acceso Administrativo - Maestras</h2>
       <p>Seleccione su nombre institucional para iniciar turno.</p>
       
       <div class="form-group">
         <label for="docenteSelect">Docente / Maestra</label>
-        <select id="docenteSelect" class="input-field" required onchange="anunciarSeleccion(this)">
+        <select id="docenteSelect" class="input-field" required>
           <option value="" disabled selected hidden>Seleccione su nombre</option>
           <option value="LILY">Miss Lily Melo Azañero</option>
           <option value="KIARA">Miss Kiara Morales Elguera</option>
@@ -271,11 +208,6 @@
       <button class="primary-btn" onclick="validarAccesoDocente()">Ingresar al Panel</button>
       <div id="adminError" class="error-msg"></div>
     </div>
-
-    <!-- Profesora Derecha -->
-    <div class="side-character">
-      <img src="assets/profesora_derecha.png" alt="Profesora escribiendo en escritorio" onerror="this.style.display='none'">
-    </div>
   </main>
 
   <script>
@@ -285,86 +217,62 @@
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
-        const utterance = new SpeechSynthesisUtterance(textoLimpio);
+        const utterance = new SpeechSynthesisUtterance(texto);
         utterance.rate = 1.05;
         utterance.pitch = 1.25;
 
         const voces = window.speechSynthesis.getVoices();
         let vozIdeal = voces.find(v => 
           v.lang.startsWith('es') && (
-            v.name.toLowerCase().includes('dani') || 
-            v.name.toLowerCase().includes('helena') || 
-            v.name.toLowerCase().includes('lucia') || 
-            v.name.toLowerCase().includes('monica') || 
-            v.name.toLowerCase().includes('sofia') || 
             v.name.toLowerCase().includes('female') ||
-            v.name.toLowerCase().includes('google español')
+            v.name.toLowerCase().includes('google español') ||
+            v.name.toLowerCase().includes('lucia') ||
+            v.name.toLowerCase().includes('monica')
           )
         );
+        if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        if (vozIdeal) utterance.voice = vozIdeal;
 
-        if (!vozIdeal) {
-          vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        }
-
-        if (vozIdeal) {
-          utterance.voice = vozIdeal;
-        }
-
-        setTimeout(() => {
-          window.speechSynthesis.speak(utterance);
-        }, 50);
+        window.speechSynthesis.speak(utterance);
       }
     }
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = function() {
-        window.speechSynthesis.getVoices();
-      };
-    }
-
-    // Bienvenida hablada al abrir la ventana
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave.");
       }, 700);
     });
 
-    function anunciarSeleccion(select) {
-      const texto = select.options[select.selectedIndex].text;
-      hablarTextoVoz("Seleccionado: " + texto);
-    }
-
-    // ARCHIVO DE DESTINO DEL PANEL
-    const PAGINA_PANEL = "administrador_panel.html";
+    // ATENCIÓN: Si tu archivo de panel tiene otro nombre, cámbialo aquí.
+    // Si te sale error 404 es porque este archivo aún no existe en tu repositorio de GitHub.
+    const PAGINA_PANEL = "administrador_panel.html"; 
 
     function validarAccesoDocente(){
-      const docenteSelect = document.getElementById("docenteSelect");
-      const docente = docenteSelect.value;
+      const docente = document.getElementById("docenteSelect").value;
       const clave = document.getElementById("claveDocente").value.trim();
       const error = document.getElementById("adminError");
       error.textContent = "";
 
       if(!docente){
         error.textContent = "Por favor, seleccione su nombre de la lista.";
-        hablarTextoVoz("Por favor, seleccione su nombre de la lista.");
+        hablarTextoVoz("Por favor seleccione su nombre.");
         return;
       }
       if(!clave){
         error.textContent = "Por favor, ingrese su clave de acceso docente.";
-        hablarTextoVoz("Por favor, ingrese su clave de acceso docente.");
+        hablarTextoVoz("Por favor ingrese su clave.");
         return;
       }
 
       if(clave === "360LDS" || clave === "2026"){
         localStorage.setItem("maestraActiva", docente);
-        hablarTextoVoz("Acceso correcto. Bienvenida. Redirigiendo al panel.");
+        hablarTextoVoz("Clave correcta. Redirigiendo al panel.");
         setTimeout(() => {
           window.location.href = PAGINA_PANEL;
         }, 1200);
       } else {
         error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
-        hablarTextoVoz("Clave de acceso incorrecta. Intente nuevamente.");
+        hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
       }
     }
 
