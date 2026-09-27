@@ -967,7 +967,7 @@ document.addEventListener("keydown",function(e){
 });
 </script>
 
-<!-- SCRIPT ORIGINAL: EL LOCUTOR DA LA BIENVENIDA Y CANTA EL HIMNO AUTOMÁTICAMENTE CON LA LIRA -->
+<!-- REPRODUCCIÓN AUTOMÁTICA DEL HIMNO CORRECTO Y LA LIRA CON CALIDEZ -->
 <script>
   (function() {
     let audioCtx = null;
@@ -997,7 +997,7 @@ document.addEventListener("keydown",function(e){
       osc2.type = 'sine';
       osc1.frequency.setValueAtTime(freq, t);
       osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.4, t);
+      gain.gain.setValueAtTime(0.35, t);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
       osc1.connect(gain);
       osc2.connect(gain);
@@ -1008,41 +1008,30 @@ document.addEventListener("keydown",function(e){
       osc2.stop(t + 1.2);
     }
 
-    function cantarHimnoConVoz() {
+    function cantarHimnoCorrecto() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         
-        // 1. Bienvenida inicial
-        const saludo = new SpeechSynthesisUtterance("Bienvenidos al Banco La Salle del Sur.");
-        saludo.rate = 1.0;
-        saludo.pitch = 1.1;
-        saludo.volume = 1.0;
-
-        // 2. Simulación de estrofas cantadas por el locutor
-        const estrofa1 = new SpeechSynthesisUtterance("Entad cantando, oh juventudes lasallanas, templo del saber y la virtud.");
-        estrofa1.rate = 0.95;
-        estrofa1.pitch = 1.2;
+        const estrofa1 = new SpeechSynthesisUtterance("Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.");
+        estrofa1.rate = 0.92;
+        estrofa1.pitch = 1.05;
         estrofa1.volume = 1.0;
 
-        const estrofa2 = new SpeechSynthesisUtterance("Marchamos siempre unidos con fe y honor, guiados por la luz de nuestro gran amor.");
-        estrofa2.rate = 0.95;
-        estrofa2.pitch = 1.2;
+        const estrofa2 = new SpeechSynthesisUtterance("Como siempre un paso adelante, sencillez, responsabilidad y honor. Es el lema que tú nos enseñaste, ejemplo puro que nos diste al crecer.");
+        estrofa2.rate = 0.92;
+        estrofa2.pitch = 1.05;
         estrofa2.volume = 1.0;
 
         const voces = window.speechSynthesis.getVoices();
         let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('google español')));
         if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        
         if (vozIdeal) {
-          saludo.voice = vozIdeal;
           estrofa1.voice = vozIdeal;
           estrofa2.voice = vozIdeal;
         }
 
-        // Secuencia de canto automático
-        window.speechSynthesis.speak(saludo);
-        setTimeout(() => { window.speechSynthesis.speak(estrofa1); }, 3000);
-        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 9000);
+        window.speechSynthesis.speak(estrofa1);
+        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 11000);
       }
     }
 
@@ -1054,10 +1043,8 @@ document.addEventListener("keydown",function(e){
           audioCtx.resume();
         }
 
-        // Inicia la voz cantando
-        cantarHimnoConVoz();
+        cantarHimnoCorrecto();
 
-        // Inicia la música de la lira simultáneamente
         let t = audioCtx.currentTime + 0.2;
         melodiaPortada.forEach(item => {
           const f = FREQS[item.n] || 261.63;
