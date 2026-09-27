@@ -110,7 +110,7 @@
     }
 
     /* =========================================================
-       BOTONES CLAROS CON MÁXIMA VISIBILIDAD EN TEXTOS E ICONOS
+       BOTONES INFERIORES EN LA ESCALERA (PADRES Y MANUAL)
        ========================================================= */
     .stair-button {
       position: absolute;
@@ -118,50 +118,49 @@
       left: 86.8%;
       width: 12.4%;
       height: 10.5%;
-      background: #ffffff;
-      border: 2.5px solid var(--oro);
-      color: #142744;
+      border: 3px solid #142744;
       font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
+      font-weight: 900;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       text-align: center;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(20, 39, 68, 0.3);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.45);
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .stair-button:hover {
-      background: #fff8e1;
-      border-color: #142744;
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 20px rgba(201, 154, 50, 0.4);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 7px 25px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Botón Padres: Verde Limón muy vistoso */
+    .stair-padres {
+      top: 73.0%;
+      background: linear-gradient(135deg, #bef264 0%, #65a30d 100%);
+      color: #0f172a;
+    }
+
+    /* Botón Manual: Amarillo Fuerte / Encendido */
+    .stair-manual {
+      top: 84.5%;
+      background: linear-gradient(135deg, #fef08a 0%, #ca8a04 100%);
+      color: #0f172a;
     }
 
     .stair-button .icon {
-      font-size: 22px;
+      font-size: 34px; /* Iconos / dibujos internos más grandes */
       line-height: 1;
     }
 
     .stair-button span.btn-text {
-      color: #142744;
-      font-weight: 800;
-      font-size: 10.5px;
-    }
-
-    /* Posicionamiento a la altura de los pies de la niña */
-    .stair-padres {
-      top: 63.5%;
-    }
-
-    .stair-instructivo {
-      top: 75.0%;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 0.5px;
     }
 
     /* =========================================================
@@ -522,14 +521,14 @@
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
 
-      <!-- Botones claros con texto e iconos nítidos y visibles -->
+      <!-- Botones en la parte baja de la escalera (Padres y Manual) con iconos grandes y colores vibrantes -->
       <button class="stair-button stair-padres" onclick="abrirTutores()">
-        <span class="icon">👨‍👩‍👧‍👦</span>
-        <span class="btn-text">Padres / Tutores</span>
+        <span class="icon">👥</span>
+        <span class="btn-text">Padres</span>
       </button>
-      <button class="stair-button stair-instructivo" onclick="abrirReglas()">
+      <button class="stair-button stair-manual" onclick="abrirReglas()">
         <span class="icon">📖</span>
-        <span class="btn-text">Instructivo</span>
+        <span class="btn-text">Manual</span>
       </button>
     </div>
   </main>
@@ -551,11 +550,11 @@
     </div>
   </div>
 
-  <!-- MODAL INSTRUCTIVO / REGLAS -->
+  <!-- MODAL MANUAL / REGLAS -->
   <div id="reglasOverlay" class="overlay">
     <div class="modal">
       <button class="close" onclick="cerrarReglas()">×</button>
-      <h2>Instructivo y Reglas · Banco LDS 360</h2>
+      <h2>Manual y Reglas · Banco LDS 360</h2>
       <p>Normas oficiales del sistema gamificado de recompensas y moneda virtual (LS Coins).</p>
       <div class="info-list">
         <ul>
