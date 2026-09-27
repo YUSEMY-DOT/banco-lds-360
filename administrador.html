@@ -75,7 +75,7 @@
     }
 
     /* =========================================================
-       CONTENEDOR PRINCIPAL EQUILIBRADO
+       CONTENEDOR PRINCIPAL EQUILIBRADO Y PROPORCIONAL
        ========================================================= */
     .main-wrapper {
       display: flex;
@@ -86,13 +86,13 @@
       width: 96%;
       margin: 0 auto;
       max-width: 1350px;
-      gap: 35px;
+      gap: 40px;
     }
 
-    /* Ilustraciones laterales proporcionales con fondo transparente */
+    /* Ilustraciones laterales con tamaño 100% igual y proporcional */
     .side-character {
-      flex: 0 1 28%;
-      max-width: 360px;
+      flex: 0 1 26%;
+      max-width: 320px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -100,8 +100,7 @@
 
     .side-character img {
       width: 100%;
-      height: auto;
-      max-height: 440px;
+      height: 380px;
       object-fit: contain;
       filter: drop-shadow(0 10px 20px rgba(13, 27, 42, 0.15));
     }
@@ -244,6 +243,10 @@
         width: 100%;
         max-width: 220px;
       }
+      .side-character img {
+        height: auto;
+        max-height: 280px;
+      }
       .side-character:first-of-type {
         order: 0;
       }
@@ -261,9 +264,9 @@
   </div>
 
   <main class="main-wrapper">
-    <!-- Maestra Izquierda (Observando) -->
+    <!-- Maestra Izquierda (La otra maestra) -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1-zN_uieDKAra3YieLGpfb1j2ebyyw-dh" alt="Profesora observando" onerror="this.src='https://via.placeholder.com/300?text=Observando'">
+      <img src="https://lh3.googleusercontent.com/d/1DKGQQtOvchzrxfknFkX0jUjiiZg5k4R7" alt="Otra maestra" onerror="this.src='https://via.placeholder.com/300?text=Maestra'">
     </div>
 
     <!-- Tarjeta Central con la Insignia Institucional Oficial en el Círculo -->
@@ -294,9 +297,9 @@
       <div id="adminError" class="error-msg"></div>
     </div>
 
-    <!-- Maestra Derecha (Sentada en el escritorio) -->
+    <!-- Maestra Derecha (La chica que observa) -->
     <div class="side-character">
-      <img src="https://lh3.googleusercontent.com/d/1DKGQQtOvchzrxfknFkX0jUjiiZg5k4R7" alt="Profesora sentada" onerror="this.src='https://via.placeholder.com/300?text=Sentada'">
+      <img src="https://lh3.googleusercontent.com/d/1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Chica observando" onerror="this.src='https://via.placeholder.com/300?text=Observando'">
     </div>
   </main>
 
