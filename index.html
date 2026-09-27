@@ -110,7 +110,7 @@
     }
 
     /* =========================================================
-       BOTONES CLAROS Y ATRAYENTES SOBRE LA ESCALERA
+       BOTONES CLAROS CON MÁXIMA VISIBILIDAD EN TEXTOS E ICONOS
        ========================================================= */
     .stair-button {
       position: absolute;
@@ -118,12 +118,12 @@
       left: 86.8%;
       width: 12.4%;
       height: 10.5%;
-      background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%);
-      border: 2px solid var(--oro);
-      color: var(--azul);
+      background: #ffffff;
+      border: 2.5px solid var(--oro);
+      color: #142744;
       font-family: 'Segoe UI', Arial, sans-serif;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.3px;
       display: flex;
       flex-direction: column;
@@ -132,30 +132,36 @@
       gap: 3px;
       text-align: center;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(20, 39, 68, 0.18);
+      box-shadow: 0 4px 15px rgba(20, 39, 68, 0.3);
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
     }
 
     .stair-button:hover {
-      background: #fff9e6;
-      border-color: var(--azul);
+      background: #fff8e1;
+      border-color: #142744;
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 20px rgba(201, 154, 50, 0.35);
+      box-shadow: 0 6px 20px rgba(201, 154, 50, 0.4);
     }
 
     .stair-button .icon {
-      font-size: 19px;
+      font-size: 22px;
       line-height: 1;
     }
 
-    /* Posicionamiento exacto sobre los escalones */
+    .stair-button span.btn-text {
+      color: #142744;
+      font-weight: 800;
+      font-size: 10.5px;
+    }
+
+    /* Posicionamiento a la altura de los pies de la niña */
     .stair-padres {
-      top: 52.8%;
+      top: 63.5%;
     }
 
     .stair-instructivo {
-      top: 64.2%;
+      top: 75.0%;
     }
 
     /* =========================================================
@@ -516,12 +522,14 @@
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
 
-      <!-- Botones claros y atrayentes sobre los escalones -->
+      <!-- Botones claros con texto e iconos nítidos y visibles -->
       <button class="stair-button stair-padres" onclick="abrirTutores()">
-        <span class="icon">👨‍👩‍👧‍👦</span> Padres / Tutores
+        <span class="icon">👨‍👩‍👧‍👦</span>
+        <span class="btn-text">Padres / Tutores</span>
       </button>
       <button class="stair-button stair-instructivo" onclick="abrirReglas()">
-        <span class="icon">📖</span> Instructivo
+        <span class="icon">📖</span>
+        <span class="btn-text">Instructivo</span>
       </button>
     </div>
   </main>
