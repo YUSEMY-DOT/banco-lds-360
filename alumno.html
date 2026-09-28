@@ -486,32 +486,62 @@
     });
 
     function consultarDatosEstudiante(codigo) {
-      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
-        if (res && (res.success === true || res.ok === true || res.estudiante)) {
+      // Después de validar la clave, consulta la ficha real del alumno.
+      // Usamos ESTUDIANTE, que en el backend apunta a la misma función de consulta.
+      hacerPeticionJSONP({ accion: 'ESTUDIANTE', codigo: codigo }, function(res) {
+        const datos = (res && res.data) ? res.data : res;
+        const est = (datos && (datos.estudiante || datos.alumno)) || {};
+
+        const encontrado = !!(
+          est && (
+            est.codigo ||
+            est.nombreCompleto ||
+            est.nombre ||
+            (datos && datos.encontrado === true)
+          )
+        );
+
+        if (encontrado) {
           document.getElementById('vistaScanner').classList.add('hidden');
+          document.getElementById('vistaClave').classList.add('hidden');
           document.getElementById('vistaPrincipal').classList.remove('hidden');
 
-          const est = res.estudiante || {};
-          const nombreCompleto = est.nombreCompleto || est.nombre || codigo;
-          
-          document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
-          
-          const saldo = Number(res.saldoActual || res.saldo || (res.cuenta && res.cuenta.saldoActual) || 0);
-          document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
-          
-          const fotoUrl = est.fotoUrl || est.foto;
-          if (fotoUrl && fotoUrl.trim() !== "") {
-            document.getElementById('alumnoFoto').src = fotoUrl.trim();
-          } else {
-            document.getElementById('alumnoFoto').src = "https://via.placeholder.com/150";
-          }
+          const nombreCompleto = est.nombreCompleto ||
+            [est.nombre, est.apellido].filter(Boolean).join(' ') ||
+            codigo;
 
-          renderizarMovimientos(res.movimientos || []);
-        } else {
-          alert("Código QR no encontrado en el sistema: " + codigo);
-          reiniciarEscanner();
+          document.getElementById('alumnoNombre').textContent = nombreCompleto;
+          document.getElementById('alumnoGrado').textContent =
+            [est.grado, est.seccion].filter(Boolean).join(' ');
+
+          const cuenta = (datos && datos.cuenta) || {};
+          const saldo = Number(
+            (datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ??
+            (datos && datos.saldo !== undefined ? datos.saldo : undefined) ??
+            cuenta.saldoActual ??
+            cuenta.saldo ??
+            0
+          );
+          document.getElementById('saldoLDS').textContent =
+            (Number.isFinite(saldo) ? saldo : 0).toFixed(2);
+
+          const fotoUrl = est.fotoUrl || est.foto || '';
+          document.getElementById('alumnoFoto').src =
+            fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
+
+          const movimientos =
+            (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || [];
+          renderizarMovimientos(movimientos);
+          return;
         }
+
+        // No volvemos a abrir la cámara automáticamente.
+        // El alumno ya fue autenticado; si la ficha no carga, permanecemos en la pantalla de clave.
+        const mensaje = document.getElementById('mensajeClave');
+        mensaje.style.color = '#dc2626';
+        mensaje.textContent =
+          (res && res.mensaje) ||
+          'La clave fue validada, pero no se pudo cargar la información del alumno.';
       });
     }
 
