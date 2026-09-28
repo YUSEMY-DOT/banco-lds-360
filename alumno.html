@@ -14,7 +14,7 @@
     }
 
     body {
-      background: linear-gradient(rgba(12, 30, 48, 0.55), rgba(12, 30, 48, 0.55)), 
+      background: linear-gradient(rgba(12, 30, 48, 0.60), rgba(12, 30, 48, 0.60)), 
                   url('assets/banco.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -23,9 +23,10 @@
       color: #333333;
     }
 
+    /* Header Institucional con Insignia */
     header {
       background-color: #0c1e30;
-      padding: 12px 24px;
+      padding: 10px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -34,14 +35,27 @@
       z-index: 10;
     }
 
+    .school-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .school-info img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
     .school-title h1 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #ffffff;
       font-weight: 800;
+      letter-spacing: 0.5px;
     }
 
     .school-title p {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: #f1c40f;
       font-weight: 600;
       font-style: italic;
@@ -64,100 +78,96 @@
     }
 
     main {
-      max-width: 480px;
+      max-width: 440px;
       width: 100%;
-      margin: 20px auto;
-      padding: 0 15px;
+      margin: auto;
+      padding: 20px 15px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      justify-content: center;
     }
 
-    /* Tarjetas / Cuadraditos Bonitos Institucionales */
     .card {
-      background: #ffffff;
-      border: 2px solid #e2e8f0;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      background: rgba(12, 30, 48, 0.92);
+      backdrop-filter: blur(10px);
+      border: 2px solid #f1c40f;
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(241, 196, 15, 0.2);
+      color: #ffffff;
     }
 
     .card h2 {
       text-align: center;
-      color: #0c1e30;
-      font-size: 1.25rem;
+      color: #ffffff;
+      font-size: 1.4rem;
       font-weight: 800;
-      margin-bottom: 16px;
+      margin-bottom: 6px;
+    }
+
+    .card p.subtitle {
+      text-align: center;
+      color: #f1c40f;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 20px;
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       text-align: left;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.82rem;
-      color: #475569;
+      font-size: 0.85rem;
+      color: #cbd5e1;
       font-weight: 600;
       margin-bottom: 6px;
     }
 
     .form-control {
       width: 100%;
-      height: 48px;
-      border: 2px solid #cbd5e1;
+      height: 50px;
+      background: #ffffff;
+      border: 2px solid #1e3a5f;
       border-radius: 12px;
       padding: 0 14px;
       font-size: 1rem;
+      color: #0c1e30;
+      font-weight: 700;
       outline: none;
       transition: all 0.2s ease;
     }
 
     .form-control:focus {
-      border-color: #0c1e30;
-      box-shadow: 0 0 8px rgba(12, 30, 48, 0.2);
+      border-color: #f1c40f;
+      box-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
     }
 
     .btn-primary {
       width: 100%;
-      height: 48px;
-      background: linear-gradient(135deg, #0c1e30 0%, #1e3a5f 100%);
-      color: #ffffff;
+      height: 50px;
+      background: linear-gradient(135deg, #f1c40f 0%, #d4ac0d 100%);
+      color: #0c1e30;
       border: none;
       border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1.05rem;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(12, 30, 48, 0.3);
-      margin-top: 6px;
+      box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+      margin-top: 10px;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, #152b42 0%, #284b7a 100%);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(241, 196, 15, 0.5);
     }
 
-    /* QR Detectado Caja */
-    .qr-detected-box {
-      display: none;
-      background: #fefce8;
-      border: 2px dashed #f1c40f;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 14px;
-      text-align: center;
-    }
-    .qr-detected-box p { font-size: 0.78rem; color: #854d0e; font-weight: 700; }
-    .qr-detected-box span { font-size: 1rem; color: #0c1e30; font-weight: 800; display: block; margin: 2px 0; }
-    .btn-manual { background: none; border: none; color: #0284c7; font-size: 0.75rem; text-decoration: underline; cursor: pointer; font-weight: 600; }
-
-    /* Vistas ocultas por defecto */
     .hidden { display: none !important; }
 
-    /* Vista Principal / Saldo */
     .saldo-card {
       background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%);
       color: #ffffff;
@@ -180,11 +190,11 @@
     .alumno-nombre { font-size: 1rem; font-weight: 700; color: #ffffff; margin-top: 12px; }
     .alumno-grado { font-size: 0.8rem; color: #cbd5e1; }
 
-    /* Botones de Acción */
     .actions-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-top: 14px;
     }
 
     .action-btn {
@@ -203,13 +213,14 @@
     .btn-pagar { background-color: #e11d48; }
     .btn-movs { background-color: #7c3aed; }
 
-    /* Secciones Operación e Historial */
     .sub-card {
       background: #ffffff;
+      color: #333;
       border-radius: 18px;
       padding: 18px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       border: 1px solid #e2e8f0;
+      margin-top: 14px;
     }
 
     .sub-card h4 {
@@ -238,21 +249,10 @@
       gap: 8px;
     }
 
-    .mov-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border-left: 4px solid #0c1e30;
-      font-size: 0.82rem;
-    }
-
     footer {
       text-align: center;
       padding: 12px;
-      font-size: 0.78px;
+      font-size: 0.78rem;
       color: #ffffff;
       background-color: #0c1e30;
       border-top: 2px solid #f1c40f;
@@ -263,10 +263,14 @@
 </head>
 <body>
 
+  <!-- Header Institucional con Insignia Oficial -->
   <header>
-    <div class="school-title">
-      <h1>BANCO LDS 360</h1>
-      <p>IEP La Salle del Sur</p>
+    <div class="school-info">
+      <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
+      <div class="school-title">
+        <h1>BANCO LDS 360</h1>
+        <p>IEP La Salle del Sur</p>
+      </div>
     </div>
     <a href="index.html" class="inicio-btn">← Inicio</a>
   </header>
@@ -276,14 +280,9 @@
     <!-- VISTA LOGIN ESTUDIANTE -->
     <div id="vistaLogin" class="card">
       <h2>Acceso del Estudiante</h2>
+      <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Cuadrito QR Detectado -->
-      <div id="qrDetectedBox" class="qr-detected-box">
-        <p>✓ Código QR Escaneado</p>
-        <span id="qrCodeText">—</span>
-        <button type="button" class="btn-manual" onclick="cambiarModoManual()">Ingresar código manualmente</button>
-      </div>
-
+      <!-- Campo de código (Se oculta automáticamente si entra por QR) -->
       <div id="grupoCodigo" class="form-group">
         <label>Código de Estudiante</label>
         <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
@@ -291,18 +290,18 @@
 
       <div class="form-group">
         <label>Clave (6 dígitos)</label>
-        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;" />
+        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.3rem; letter-spacing: 6px;" />
       </div>
 
       <button onclick="procesarLoginAlumno()" class="btn-primary">
         Ingresar
       </button>
 
-      <div id="loginError" style="color: #dc2626; font-size: 0.82rem; text-align: center; margin-top: 10px; min-height: 20px; font-weight: 600;"></div>
+      <div id="loginError" style="color: #fca5a5; font-size: 0.85rem; text-align: center; margin-top: 12px; min-height: 20px; font-weight: 600;"></div>
     </div>
 
     <!-- VISTA PRINCIPAL -->
-    <div id="vistaPrincipal" class="hidden" style="display: flex; flex-direction: column; gap: 14px;">
+    <div id="vistaPrincipal" class="hidden">
       
       <!-- CARD DE SALDO Y FOTO -->
       <div class="saldo-card">
@@ -331,27 +330,27 @@
       <div id="seccionOperacion" class="sub-card hidden">
         <h4 id="tituloOperacion">Registrar Pago o Gasto</h4>
         
-        <div class="form-group">
-          <label>Categoría</label>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="color:#475569;">Categoría</label>
           <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
             <option value="">Seleccione categoría</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label>Concepto</label>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="color:#475569;">Concepto</label>
           <select id="selectConcepto" class="input-field">
             <option value="">Seleccione concepto</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label>Monto LDS</label>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="color:#475569;">Monto LDS</label>
           <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="input-field" />
         </div>
 
-        <div class="form-group">
-          <label>Responsable del Registro</label>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="color:#475569;">Responsable del Registro</label>
           <select id="selectResponsable" class="input-field">
             <option value="">Seleccione responsable</option>
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
@@ -361,12 +360,12 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label>Observación</label>
+        <div class="form-group" style="margin-bottom: 10px;">
+          <label style="color:#475569;">Observación</label>
           <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="input-field" style="resize: none;"></textarea>
         </div>
 
-        <button onclick="registrarMovimientoOperacion()" class="btn-primary" style="margin-top: 4px;">
+        <button onclick="registrarMovimientoOperacion()" class="btn-primary" style="margin-top: 4px; background: linear-gradient(135deg, #0c1e30 0%, #1e3a5f 100%); color: #fff;">
           Confirmar y Registrar Pago
         </button>
         <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 700;"></div>
@@ -380,7 +379,7 @@
         </div>
       </div>
 
-      <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 0.85rem;">
+      <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 0.85rem; margin-top: 14px;">
         Cerrar Sesión
       </button>
     </div>
@@ -392,28 +391,27 @@
   </footer>
 
   <script>
-    // Detector automático si vino de escanear QR
+    // Si viene por QR, ocultamos totalmente el bloque del código y guardamos el valor de forma oculta para app.js
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
 
       if (codigoQR && codigoQR.trim() !== "") {
         const codigoLimpio = codigoQR.trim().toUpperCase();
-        document.getElementById('loginCodigo').value = codigoLimpio;
-        document.getElementById('qrCodeText').textContent = codigoLimpio;
-        document.getElementById('qrDetectedBox').style.display = 'block';
+        
+        let inputCodigo = document.getElementById('loginCodigo');
+        inputCodigo.type = 'hidden'; // Oculto para que app.js lo lea pero no aparezca en pantalla
+        inputCodigo.value = codigoLimpio;
+        
+        // Ocultar por completo el contenedor visual del código
         document.getElementById('grupoCodigo').style.display = 'none';
+        
+        // Foco automático en la clave
         document.getElementById('loginClave').focus();
+      } else {
+        document.getElementById('loginCodigo').focus();
       }
     });
-
-    function cambiarModoManual() {
-      localStorage.removeItem('codigoEscaneado');
-      document.getElementById('qrDetectedBox').style.display = 'none';
-      document.getElementById('grupoCodigo').style.display = 'block';
-      document.getElementById('loginCodigo').value = '';
-      document.getElementById('loginCodigo').focus();
-    }
   </script>
 </body>
 </html>
