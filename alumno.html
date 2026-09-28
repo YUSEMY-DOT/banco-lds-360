@@ -103,7 +103,7 @@
       color: #ffffff;
       font-size: 1.4rem;
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .card p.subtitle {
@@ -114,29 +114,6 @@
       margin-bottom: 20px;
     }
 
-    /* Cuadrito superior cuando escanea el QR */
-    .qr-badge-top {
-      display: none;
-      background: rgba(241, 196, 15, 0.15);
-      border: 2px dashed #f1c40f;
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    .qr-badge-top span {
-      font-size: 0.75rem;
-      color: #f1c40f;
-      font-weight: 700;
-      text-transform: uppercase;
-      display: block;
-    }
-    .qr-badge-top strong {
-      font-size: 1.25rem;
-      color: #ffffff;
-      font-weight: 800;
-    }
-
     .form-group {
       margin-bottom: 18px;
       text-align: left;
@@ -144,10 +121,10 @@
 
     .form-group label {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: #cbd5e1;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .form-control {
@@ -167,6 +144,15 @@
     .form-control:focus {
       border-color: #f1c40f;
       box-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
+    }
+
+    /* Estilo especial cuando muestra el código detectado por QR */
+    .codigo-qr-display {
+      background: rgba(241, 196, 15, 0.12);
+      border: 2px dashed #f1c40f;
+      color: #ffffff;
+      text-align: center;
+      letter-spacing: 1px;
     }
 
     .btn-primary {
@@ -305,28 +291,19 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Cuadrito superior con el código del alumno (Solo aparece al escanear QR) -->
-      <div id="qrBadgeTop" class="qr-badge-top">
-        <span>CÓDIGO DEL ESTUDIANTE</span>
-        <strong id="qrCodeTextDisplay">—</strong>
-      </div>
-
-      <!-- Input que app.js lee directamente para el código -->
-      <input type="text" id="loginCodigo" class="hidden" value="" />
-
-      <!-- Grupo manual (Solo se ve si entra de forma manual sin QR) -->
-      <div id="grupoCodigoManual" class="form-group">
-        <label>Código de Estudiante</label>
-        <input type="text" id="inputCodigoManual" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
-      </div>
-
-      <!-- Cuadrito para la clave (Siempre visible y directo) -->
+      <!-- Campo de Código (app.js lo lee perfectamente) -->
       <div class="form-group">
-        <label>Digite su Clave (6 dígitos)</label>
+        <label id="labelCodigo">Código de Estudiante</label>
+        <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
+      </div>
+
+      <!-- Cuadrito para la Clave -->
+      <div class="form-group">
+        <label>Clave (6 dígitos)</label>
         <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.5rem; letter-spacing: 8px;" />
       </div>
 
-      <button onclick="manejarIngresoSistema()" class="btn-primary">
+      <button onclick="procesarLoginAlumno()" class="btn-primary">
         Ingresar
       </button>
 
@@ -413,7 +390,7 @@
       </div>
 
       <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 0.85rem; margin-top: 14px;">
-        Cerrar Sesión
+        Cerrar Sesión / Siguiente Estudiante
       </button>
     </div>
 
@@ -428,41 +405,42 @@
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
 
+      const inputCodigo = document.getElementById('loginCodigo');
+      const labelCodigo = document.getElementById('labelCodigo');
+
       if (codigoQR && codigoQR.trim() !== "") {
         const codigoLimpio = codigoQR.trim().toUpperCase();
         
-        // Asignar el código al input que app.js lee
-        document.getElementById('loginCodigo').value = codigoLimpio;
+        // Rellenar y bloquear el input de código para que app.js lo lea pero se vea como tarjeta limpia
+        inputCodigo.value = codigoLimpio;
+        inputCodigo.readOnly = true;
+        inputCodigo.classList.add('codigo-qr-display');
+        labelCodigo.textContent = "CÓDIGO DEL ESTUDIANTE (ESCANEADO)";
         
-        // Mostrar el cuadradito superior con el código del alumno
-        document.getElementById('qrCodeTextDisplay').textContent = codigoLimpio;
-        document.getElementById('qrBadgeTop').style.display = 'block';
-        
-        // Ocultar el campo manual
-        document.getElementById('grupoCodigoManual').style.display = 'none';
-        
-        // Foco en la clave
+        // Dar foco automático al campo de la clave
         document.getElementById('loginClave').focus();
       } else {
-        document.getElementById('qrBadgeTop').style.display = 'none';
-        document.getElementById('grupoCodigoManual').style.display = 'block';
-        document.getElementById('inputCodigoManual').focus();
+        inputCodigo.value = "";
+        inputCodigo.readOnly = false;
+        inputCodigo.classList.remove('codigo-qr-display');
+        labelCodigo.textContent = "Código de Estudiante";
+        inputCodigo.focus();
       }
     });
 
-    function manejarIngresoSistema() {
-      const grupoManual = document.getElementById('grupoCodigoManual');
-      if (grupoManual.style.display !== 'none') {
-        const manualVal = document.getElementById('inputCodigoManual').value.trim().toUpperCase();
-        document.getElementById('loginCodigo').value = manualVal;
-      }
-      if (typeof procesarLoginAlumno === 'function') {
-        procesarLoginAlumno();
-      }
+    // Función de cierre de sesión mejorada para limpiar y regresar al QR para el siguiente alumno
+    function cerrarSesionAlumno() {
+      localStorage.removeItem('codigoEscaneado');
+      window.location.href = "qr.html";
     }
 
+    // Permitir presionar Enter en la clave para iniciar sesión de inmediato
     document.getElementById('loginClave').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') manejarIngresoSistema();
+      if (e.key === 'Enter') {
+        if (typeof procesarLoginAlumno === 'function') {
+          procesarLoginAlumno();
+        }
+      }
     });
   </script>
 </body>
