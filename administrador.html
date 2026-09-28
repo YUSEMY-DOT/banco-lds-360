@@ -35,7 +35,6 @@ body {
   line-height: 1.4;
 }
 
-/* ENCABEZADO */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
@@ -125,7 +124,6 @@ header {
   color: var(--azul);
 }
 
-/* PANTALLA DE ACCESO CON CLAVE (360LDS) */
 .login-wrapper {
   display: flex;
   align-items: center;
@@ -237,7 +235,6 @@ textarea {
   margin-top: 8px;
 }
 
-/* PANEL PRINCIPAL */
 main {
   max-width: 1180px;
   width: 100%;
@@ -290,7 +287,6 @@ main {
   word-break: break-word;
 }
 
-/* LAYOUT */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
@@ -305,7 +301,6 @@ main {
   box-shadow: 0 4px 12px rgba(15,23,42,.04);
   overflow: hidden;
   margin-bottom: 14px;
-  transition: all 0.2s ease;
 }
 
 .panel-head {
@@ -359,7 +354,6 @@ main {
   padding: 14px;
 }
 
-/* SELECTOR INGRESO Y EGRESO */
 .type-selector-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -394,7 +388,6 @@ main {
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 
-/* BÚSQUEDA ADAPTADA */
 .search-box {
   display: flex;
   flex-direction: column;
@@ -442,7 +435,6 @@ main {
   color: var(--rojo);
 }
 
-/* FICHA DEL ESTUDIANTE */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
@@ -516,7 +508,6 @@ main {
   border: 1px solid #b7e1cd;
 }
 
-/* TABLA CON LAS 9 COLUMNAS DE EXCEL */
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
@@ -620,7 +611,6 @@ tr:last-child td {
   color: var(--rojo);
 }
 
-/* MODAL CÁMARA ESCÁNER QR */
 .qr-modal {
   display: none;
   position: fixed;
@@ -678,7 +668,6 @@ footer {
   font-size: 11px;
 }
 
-/* MEDIA QUERIES PARA ADAPTACIÓN MÓVIL */
 @media (min-width: 600px) {
   .search-box {
     flex-direction: row;
@@ -704,35 +693,10 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-@media (max-width: 480px) {
-  .header-inner {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-  .brand {
-    justify-content: center;
-  }
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .status-card {
-    padding: 8px 10px;
-  }
-  .status-card span {
-    font-size: 10px;
-  }
-  .status-card strong {
-    font-size: 13px;
-  }
-}
 </style>
 </head>
 <body>
 
-<!-- ENCABEZADO -->
 <header>
   <div class="header-inner">
     <div class="brand">
@@ -746,7 +710,6 @@ footer {
   </div>
 </header>
 
-<!-- PANTALLA DE ACCESO CON CLAVE (360LDS) -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -776,7 +739,6 @@ footer {
   </div>
 </div>
 
-<!-- PANEL DE ADMINISTRACIÓN -->
 <main id="panelView">
   <section class="intro">
     <h2>Administración</h2>
@@ -791,13 +753,12 @@ footer {
   </section>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA: BÚSQUEDA Y MOVIMIENTOS -->
     <div>
       <div class="panel">
         <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
         <div class="panel-body">
           <div class="search-box">
-            <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
+            <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001 ó LDS-DOC-001" autocomplete="off">
             <div class="search-buttons">
               <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
               <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
@@ -805,10 +766,9 @@ footer {
           </div>
           <div id="mensaje" class="message"></div>
           
-          <!-- FICHA DEL ESTUDIANTE -->
           <div id="estudianteCard" class="student-head">
             <div class="student-photo-wrap">
-              <img id="fotoEstudiante" class="student-photo" src="" alt="Foto del estudiante">
+              <img id="fotoEstudiante" class="student-photo" src="" alt="Foto">
               <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
             </div>
             <div class="student-info-box">
@@ -818,7 +778,6 @@ footer {
             </div>
           </div>
 
-          <!-- TABLA COINCIDENTE 1:1 CON HOJA DE EXCEL MOVIMIENTOS -->
           <div class="table-wrap">
             <table>
               <thead>
@@ -843,16 +802,14 @@ footer {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS -->
     <div>
-      <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS -->
       <div id="panelPago" class="panel">
         <div class="panel-head clickable" onclick="togglePanel('panelPago')">
           <h3>💰 Registrar Pago / Transacción</h3>
           <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
-          <label class="small-label">Tipo de Movimiento (Sintaxis Excel)</label>
+          <label class="small-label">Tipo de Movimiento</label>
           <div class="type-selector-box">
             <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
             <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
@@ -869,7 +826,7 @@ footer {
             <option value="COSTOS_Y_OTROS">Costos y Otros</option>
           </select>
 
-          <label class="small-label" for="pagoConcepto">Concepto (Opciones del Excel)</label>
+          <label class="small-label" for="pagoConcepto">Concepto</label>
           <select id="pagoConcepto"></select>
 
           <label class="small-label" for="pagoMonto">Monto LDS</label>
@@ -885,19 +842,18 @@ footer {
         </div>
       </div>
 
-      <!-- MÓDULO DE INCIDENCIAS -->
       <div id="panelIncidencias" class="panel">
         <div class="panel-head clickable" onclick="togglePanel('panelIncidencias')">
           <h3>🛠️ Atención de incidencias</h3>
           <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
-          <label class="small-label" for="incCodigo">Código del estudiante</label>
+          <label class="small-label" for="incCodigo">Código</label>
           <input id="incCodigo" placeholder="LDS-EST-001">
           <label class="small-label" for="incProblema">Problema reportado</label>
           <textarea id="incProblema" rows="2" placeholder="Describe qué ocurrió..."></textarea>
-          <label class="small-label" for="incSolucion">Solución / atención realizada</label>
-          <textarea id="incSolucion" rows="2" placeholder="Describe la solución aplicada..."></textarea>
+          <label class="small-label" for="incSolucion">Solución realizada</label>
+          <textarea id="incSolucion" rows="2" placeholder="Describe la solución..."></textarea>
           <label class="small-label" for="incEstado">Estado</label>
           <select id="incEstado">
             <option>Pendiente</option>
@@ -915,7 +871,6 @@ footer {
   </section>
 </main>
 
-<!-- MODAL CÁMARA ESCÁNER QR -->
 <div id="qrModal" class="qr-modal">
   <div class="qr-modal-content">
     <h3>ESCANEAR CÓDIGO QR</h3>
@@ -927,15 +882,11 @@ footer {
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// ALTERNAR DESPLEGABLES
 function togglePanel(idPanel) {
   const panel = document.getElementById(idPanel);
-  if (panel) {
-    panel.classList.toggle('collapsed');
-  }
+  if (panel) panel.classList.toggle('collapsed');
 }
 
-// SELECCIÓN DE TIPO DE OPERACIÓN (INGRESO O EGRESO)
 function seleccionarTipoOperacion(tipo) {
   const btnIngreso = document.getElementById("btnTipoIngreso");
   const btnEgreso = document.getElementById("btnTipoEgreso");
@@ -953,7 +904,6 @@ function seleccionarTipoOperacion(tipo) {
   }
 }
 
-// 3 CATEGORÍAS EXACTAS
 const CATALOGO_EXCEL = {
   "INGRESOS_Y_SUELDOS": [
     "Ingreso Sueldo Base Mensual",
@@ -1003,7 +953,6 @@ function cargarConceptosPorTipo() {
   });
 }
 
-// SÍNTESIS DE VOZ
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -1040,7 +989,6 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// ACCESO CON CLAVE (360LDS)
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -1051,12 +999,12 @@ function validarAccesoDocente() {
   error.textContent = "";
 
   if (!docente) {
-    error.textContent = "Por favor, seleccione su nombre de la lista.";
+    error.textContent = "Seleccione su nombre.";
     hablarTextoVoz("Por favor seleccione su nombre.");
     return;
   }
   if (!clave) {
-    error.textContent = "Por favor, ingrese su clave de acceso docente.";
+    error.textContent = "Ingrese su clave.";
     hablarTextoVoz("Por favor ingrese su clave.");
     return;
   }
@@ -1067,8 +1015,8 @@ function validarAccesoDocente() {
     hablarTextoVoz("Clave correcta. Bienvenida al panel.");
     desbloquearPanel(nombreMaestra);
   } else {
-    error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
-    hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
+    error.textContent = "Clave incorrecta.";
+    hablarTextoVoz("Clave incorrecta.");
   }
 }
 
@@ -1093,11 +1041,10 @@ document.getElementById("claveDocente").addEventListener("keydown", function(e) 
   }
 });
 
-// ESCÁNER QR
 let html5QrCode = null;
 
 function abrirEscanerQR() {
-  hablarTextoVoz("Abriendo cámara para escanear código QR.");
+  hablarTextoVoz("Abriendo cámara.");
   document.getElementById("qrModal").style.display = "flex";
   html5QrCode = new Html5Qrcode("reader");
   const config = { fps: 10, qrbox: { width: 200, height: 200 } };
@@ -1131,7 +1078,6 @@ function cerrarEscanerQR() {
   }
 }
 
-// APIS Y OPERACIONES (URL NUEVA ACTUALIZADA)
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE1b9clbWMDQpvaddO7wumVnXvumRU24FaWHCwifzemqkjBwsIsVlUVWplGFzO__NN/exec";
 
 function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
@@ -1149,8 +1095,8 @@ function llamarAPI(parametros,callback){
   };
   script.onerror=function(){
     delete window[nombreCallback];script.remove();
-    mostrarMensaje("No se pudo conectar con el servicio del banco.","error");
-    hablarTextoVoz("Error de conexión con el banco.");
+    mostrarMensaje("Error de conexión.","error");
+    hablarTextoVoz("Error de conexión.");
     document.getElementById("estadoConexion").textContent="Sin conexión";
   };
   document.body.appendChild(script);
@@ -1183,54 +1129,60 @@ function mostrarFotoEstudiante(e){
 }
 
 function consultarEstudiante(){
-  const codigo=document.getElementById("codigo").value.trim().toUpperCase();
+  const codigo = document.getElementById("codigo").value.trim().toUpperCase();
   if(!codigo){
-    mostrarMensaje("Ingresa un código LDS.","error");
+    mostrarMensaje("Ingresa un código LDS.", "error");
     hablarTextoVoz("Por favor ingresa un código.");
     return;
   }
-  mostrarMensaje("Consultando...","ok");
-  hablarTextoVoz("Consultando estudiante.");
-  document.getElementById("estadoConexion").textContent="Consultando";
+  mostrarMensaje("Consultando...", "ok");
+  hablarTextoVoz("Consultando información.");
+  document.getElementById("estadoConexion").textContent = "Consultando";
 
-  llamarAPI({accion:"estudiante",codigo},function(respuesta){
-    if(!respuesta||respuesta.ok===false||!respuesta.estudiante){
+  llamarAPI({accion: "estudiante", codigo: codigo}, function(respuesta){
+    if(!respuesta || respuesta.ok === false || !respuesta.estudiante){
       document.getElementById("estudianteCard").classList.remove("show");
-      document.getElementById("tablaMovimientos").innerHTML='<tr><td colspan="9" class="empty">No se encontró el estudiante.</td></tr>';
-      document.getElementById("contadorMovimientos").textContent="0";
-      document.getElementById("estadoConexion").textContent="Conectado";
-      mostrarMensaje((respuesta&&respuesta.mensaje)||"Estudiante no encontrado.","error");
-      hablarTextoVoz("Estudiante no encontrado.");
+      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" class="empty">No se encontró el registro.</td></tr>';
+      document.getElementById("contadorMovimientos").textContent = "0";
+      document.getElementById("estadoConexion").textContent = "Conectado";
+      mostrarMensaje((respuesta && respuesta.mensaje) || "Registro no encontrado.", "error");
+      hablarTextoVoz("Registro no encontrado.");
       return;
     }
-    const e=respuesta.estudiante,cuenta=respuesta.cuenta||{};
-    const nombreEstudiante = e.nombreCompleto || e.nombre || "Estudiante";
-    const saldoEstudiante = formatearLDS(cuenta.saldoActual || 0);
 
-    document.getElementById("nombre").textContent = nombreEstudiante;
-    document.getElementById("meta").textContent = [e.codigo||codigo,e.grado||"",e.seccion||"",e.docente||""].filter(Boolean).join(" · ");
-    document.getElementById("saldo").textContent = saldoEstudiante + " LDS";
+    const e = respuesta.estudiante;
+    const cuenta = respuesta.cuenta || {};
+    const nombreUsuario = e.nombreCompleto || e.nombre || "Usuario";
+    const saldoFormateado = formatearLDS(cuenta.saldoActual || 0);
+
+    const esDocente = (e.codigo && e.codigo.includes("LDS-DOC")) || e.esDocente || (e.rol && e.rol.toUpperCase().includes("DOCENTE"));
+
+    document.getElementById("nombre").textContent = (esDocente ? "👩‍🏫 Docente: " : "👤 Alumno: ") + nombreUsuario;
+    document.getElementById("meta").textContent = [e.codigo || codigo, e.rol || (esDocente ? "DOCENTE" : "ALUMNO"), e.grado || "", e.seccion || ""].filter(Boolean).join(" · ");
+    document.getElementById("saldo").textContent = (esDocente ? "Fondo Disponible: " : "Saldo: ") + saldoFormateado + " LDS";
+
     mostrarFotoEstudiante(e);
     document.getElementById("estudianteCard").classList.add("show");
     
-    // Asignar código al formulario de pagos e incidencias
     document.getElementById("pagoCodigo").value = e.codigo || codigo;
     document.getElementById("incCodigo").value = e.codigo || codigo;
 
-    const movimientos=Array.isArray(respuesta.movimientos)?respuesta.movimientos:[];
+    const movimientos = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
     renderMovimientos(movimientos, e);
-    document.getElementById("estadoConexion").textContent="Conectado";
-    mostrarMensaje("Consulta realizada correctamente.","ok");
+    document.getElementById("estadoConexion").textContent = "Conectado";
+    mostrarMensaje("Consulta realizada correctamente.", "ok");
 
-    // LECTURA DE VOZ
-    hablarTextoVoz("Estudiante " + nombreEstudiante + ". Saldo actual: " + saldoEstudiante + " soles Lasallistas.");
+    if (esDocente) {
+      hablarTextoVoz("Maestra " + nombreUsuario + ". Fondo disponible en caja: " + saldoFormateado + " soles Lasallistas.");
+    } else {
+      hablarTextoVoz("Estudiante " + nombreUsuario + ". Saldo actual: " + saldoFormateado + " soles Lasallistas.");
+    }
   });
 }
 
-// PROCESAR TRANSACCIÓN Y REGISTRAR EN LAS 9 COLUMNAS
 function procesarPagoEstudiante() {
   const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
-  const tipoOperacion = document.getElementById("pagoOperacionVal").value; // 'INGRESO' o 'EGRESO'
+  const tipoOperacion = document.getElementById("pagoOperacionVal").value;
   const categoriaSeleccionada = document.getElementById("pagoTipo").value;
   const concepto = document.getElementById("pagoConcepto").value;
   const monto = parseFloat(document.getElementById("pagoMonto").value);
@@ -1238,12 +1190,12 @@ function procesarPagoEstudiante() {
   const responsable = sessionStorage.getItem("maestraActiva") || "DOCENTE";
 
   if (!codigo) {
-    mostrarMensajePago("Primero consulta a un estudiante.", "error");
-    hablarTextoVoz("Primero consulta a un estudiante.");
+    mostrarMensajePago("Primero consulta a un usuario.", "error");
+    hablarTextoVoz("Primero consulta a un usuario.");
     return;
   }
   if (!monto || monto <= 0) {
-    mostrarMensajePago("Ingresa un monto válido mayor a 0.", "error");
+    mostrarMensajePago("Ingresa un monto válido.", "error");
     hablarTextoVoz("Ingresa un monto válido.");
     return;
   }
@@ -1254,7 +1206,7 @@ function procesarPagoEstudiante() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: codigo,
-    tipo: tipoOperacion, // Envía 'INGRESO' o 'EGRESO'
+    tipo: tipoOperacion,
     categoria: categoriaSeleccionada,
     concepto: concepto,
     monto: monto,
@@ -1266,25 +1218,21 @@ function procesarPagoEstudiante() {
       hablarTextoVoz("Transacción registrada correctamente.");
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
-      
-      // REPLIEGUE AUTOMÁTICO INMEDIATO
       document.getElementById("panelPago").classList.add("collapsed");
-
-      consultarEstudiante(); // Recargar datos y saldo actualizado
+      consultarEstudiante();
     } else {
-      mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar transacción.", "error");
-      hablarTextoVoz("Error al registrar la transacción.");
+      mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar.", "error");
+      hablarTextoVoz("Error al registrar.");
     }
   });
 }
 
-// DIBUJAR LAS 9 COLUMNAS EXACTAS QUE FIGURAN EN EXCEL
 function renderMovimientos(movimientos, estudianteObj){
   const tabla=document.getElementById("tablaMovimientos");
   tabla.innerHTML="";
   document.getElementById("contadorMovimientos").textContent=String(movimientos.length);
   if(!movimientos.length){
-    tabla.innerHTML='<tr><td colspan="9" class="empty">No hay movimientos registrados para este estudiante.</td></tr>';
+    tabla.innerHTML='<tr><td colspan="9" class="empty">No hay movimientos registrados.</td></tr>';
     return;
   }
   
@@ -1317,12 +1265,11 @@ function renderMovimientos(movimientos, estudianteObj){
 
 function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS")||"[]");}catch(_){return[];}}
 
-// GUARDAR INCIDENCIA CON REPLIEGUE
 function guardarIncidencia(){
   const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value;
   if(!codigo||!problema){
-    alert("Ingresa el código y el problema reportado.");
-    hablarTextoVoz("Ingresa el código y el problema reportado.");
+    alert("Ingresa código y problema.");
+    hablarTextoVoz("Ingresa código y problema.");
     return;
   }
   const items=obtenerIncidencias();
@@ -1330,9 +1277,7 @@ function guardarIncidencia(){
   localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
   limpiarIncidencia();
   renderIncidencias();
-  hablarTextoVoz("Atención de incidencia guardada.");
-
-  // REPLIEGUE AUTOMÁTICO INMEDIATO
+  hablarTextoVoz("Incidencia guardada.");
   document.getElementById("panelIncidencias").classList.add("collapsed");
 }
 
@@ -1353,7 +1298,7 @@ function renderIncidencias(){
   document.getElementById("contadorIncidencias").textContent=String(items.length);
   const box=document.getElementById("listaIncidencias");
   if(!items.length){box.innerHTML='<div class="empty">Todavía no hay incidencias.</div>';return;}
-  box.innerHTML=items.slice(0,12).map(x=>`<div class="incident"><div class="incident-top"><strong>${escaparHTML(x.codigo)}</strong><span class="badge">${escaparHTML(x.estado)}</span></div><div>${escaparHTML(x.problema)}</div>${x.solucion?`<small><strong>Solución:</strong> ${escaparHTML(x.solucion)}</small>`:""}<small>${escaparHTML(x.fecha)} · <button type="button" class="danger" style="border:0;background:none;padding:0;cursor:pointer" onclick="eliminarIncidencia(${x.id})">Eliminar registro</button></small></div>`).join("");
+  box.innerHTML=items.slice(0,12).map(x=>`<div class="incident"><div class="incident-top"><strong>${escaparHTML(x.codigo)}</strong><span class="badge">${escaparHTML(x.estado)}</span></div><div>${escaparHTML(x.problema)}</div>${x.solucion?`<small><strong>Solución:</strong> ${escaparHTML(x.solucion)}</small>`:""}<small>${escaparHTML(x.fecha)} · <button type="button" class="danger" style="border:0;background:none;padding:0;cursor:pointer" onclick="eliminarIncidencia(${x.id})">Eliminar</button></small></div>`).join("");
 }
 
 document.getElementById("codigo").addEventListener("keydown",e=>{if(e.key==="Enter")consultarEstudiante();});
