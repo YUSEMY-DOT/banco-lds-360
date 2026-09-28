@@ -82,7 +82,7 @@
             background: #203f61;
         }
 
-        /* Contenedor Principal (Profesora bien pegada al cuadro) */
+        /* Contenedor Principal */
         .main-container {
             position: relative;
             flex: 1;
@@ -93,18 +93,18 @@
             max-width: 1050px;
             width: 100%;
             margin: 0 auto;
-            gap: 0px; /* Acercada totalmente al cuadro */
+            gap: 0px;
             z-index: 2;
         }
 
-        /* Tarjeta Amarillo Claro Semi-Transparente y más Angosta */
+        /* Tarjeta Amarillo Claro Semi-Transparente (Un poco más abajo) */
         .portal-card {
             background: rgba(254, 249, 231, 0.88);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            padding: 22px 16px 28px 16px; /* Relleno ajustado */
+            padding: 22px 16px 28px 16px;
             border-radius: 26px;
-            max-width: 490px; /* Más angosto como pediste */
+            max-width: 490px;
             width: 100%;
             box-shadow: 0 12px 35px rgba(0,0,0,0.25);
             border: 3px solid rgba(255, 235, 116, 0.9);
@@ -112,7 +112,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 35px;
+            margin-top: 58px; /* Bajado un poco más */
         }
 
         .bank-title {
@@ -150,7 +150,6 @@
             width: 100%;
         }
 
-        /* Mismas medidas exactas para los botones superiores */
         .top-row .img-btn img {
             width: 100%;
             height: 62px;
@@ -163,7 +162,6 @@
             filter: brightness(1.04);
         }
 
-        /* Mismo tamaño exacto de la niña del centro */
         .center-girl-img {
             width: 160px;
             height: auto;
@@ -172,7 +170,7 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.22));
         }
 
-        /* Fila Inferior: Mismas medidas para los 3 botones */
+        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
         .bottom-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -188,13 +186,13 @@
             border-radius: 12px;
         }
 
-        /* Ilustración de la derecha (Más pegada al panel y bajada) */
+        /* Ilustración de la derecha (Un poco más pequeña) */
         .right-illustration {
-            max-width: 380px;
+            max-width: 340px; /* Reducido un poco de tamaño */
             width: 100%;
             height: auto;
             object-fit: contain;
-            margin-top: 65px;
+            margin-top: 75px;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
         }
 
@@ -220,7 +218,7 @@
                 margin-top: 10px;
             }
             .right-illustration {
-                max-width: 300px;
+                max-width: 280px;
                 margin-top: 0;
             }
         }
@@ -243,8 +241,8 @@
 </head>
 <body>
 
-    <!-- Audio del Himno institucional -->
-    <audio id="bgMusic" loop>
+    <!-- Audio del Himno Institucional (Inicio automático) -->
+    <audio id="bgMusic" autoplay loop preload="auto">
         <source src="assets/himno.mp3" type="audio/mpeg">
     </audio>
 
@@ -265,7 +263,7 @@
     <!-- Contenedor Principal -->
     <div class="main-container">
         
-        <!-- Cuadro Amarillo Claro Traslúcido (Más angosto) -->
+        <!-- Cuadro Amarillo Claro Traslúcido del Banco -->
         <div class="portal-card">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
@@ -299,7 +297,7 @@
             </div>
         </div>
 
-        <!-- Ilustración de la Derecha (Profesora bien pegada) -->
+        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
         <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
 
     </div>
@@ -309,17 +307,23 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- Script de Voz de Bienvenida y Reproducción de Música -->
+    <!-- Script de Reproducción Automática de Audio y Lectura del Himno -->
     <script>
         const music = document.getElementById('bgMusic');
 
+        function iniciarAudio() {
+            music.play().catch(e => console.log("Audio listo para sonar"));
+        }
+
         window.addEventListener('load', () => {
+            iniciarAudio();
+
             if ('speechSynthesis' in window) {
                 setTimeout(() => {
                     window.speechSynthesis.cancel();
                     
-                    const textoBienvenida = "¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Escanea tu código QR o ingresa tu número para comenzar.";
-                    const utterance = new SpeechSynthesisUtterance(textoBienvenida);
+                    const textoHimno = "¡Bienvenidos al Banco Lasallista 360! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+                    const utterance = new SpeechSynthesisUtterance(textoHimno);
                     utterance.lang = 'es-ES';
                     utterance.rate = 0.95;
                     utterance.pitch = 1.05;
@@ -331,13 +335,16 @@
                     }
 
                     utterance.onend = function() {
-                        music.play().catch(e => console.log("Himno listo"));
+                        iniciarAudio();
                     };
 
                     window.speechSynthesis.speak(utterance);
-                }, 1000);
+                }, 800);
             }
         });
+
+        document.addEventListener('click', iniciarAudio, { once: true });
+        document.addEventListener('touchstart', iniciarAudio, { once: true });
     </script>
 </body>
 </html>
