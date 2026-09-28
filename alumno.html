@@ -307,12 +307,12 @@
       
       <!-- Cuadrito superior con el código del alumno (Solo aparece al escanear QR) -->
       <div id="qrBadgeTop" class="qr-badge-top">
-        <span>Código del Estudiante</span>
+        <span>CÓDIGO DEL ESTUDIANTE</span>
         <strong id="qrCodeTextDisplay">—</strong>
       </div>
 
-      <!-- Input oculto que app.js lee para procesar el login con el código del QR -->
-      <input type="hidden" id="loginCodigo" value="" />
+      <!-- Input que app.js lee directamente para el código -->
+      <input type="text" id="loginCodigo" class="hidden" value="" />
 
       <!-- Grupo manual (Solo se ve si entra de forma manual sin QR) -->
       <div id="grupoCodigoManual" class="form-group">
@@ -326,7 +326,7 @@
         <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.5rem; letter-spacing: 8px;" />
       </div>
 
-      <button onclick="procesarLoginAlumnoPersonalizado()" class="btn-primary">
+      <button onclick="manejarIngresoSistema()" class="btn-primary">
         Ingresar
       </button>
 
@@ -424,7 +424,6 @@
   </footer>
 
   <script>
-    // Manejo exacto para QR o Manual
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
@@ -432,40 +431,38 @@
       if (codigoQR && codigoQR.trim() !== "") {
         const codigoLimpio = codigoQR.trim().toUpperCase();
         
-        // Guardar en el input oculto que usa app.js
+        // Asignar el código al input que app.js lee
         document.getElementById('loginCodigo').value = codigoLimpio;
         
-        // Mostrar arriba el cuadradito bonito con el código del alumno
+        // Mostrar el cuadradito superior con el código del alumno
         document.getElementById('qrCodeTextDisplay').textContent = codigoLimpio;
         document.getElementById('qrBadgeTop').style.display = 'block';
         
-        // Ocultar el input de código manual por completo
+        // Ocultar el campo manual
         document.getElementById('grupoCodigoManual').style.display = 'none';
         
-        // Foco automático en la clave
+        // Foco en la clave
         document.getElementById('loginClave').focus();
       } else {
-        // Modo manual: mostrar input de código y ocultar el badge superior
         document.getElementById('qrBadgeTop').style.display = 'none';
         document.getElementById('grupoCodigoManual').style.display = 'block';
         document.getElementById('inputCodigoManual').focus();
       }
     });
 
-    // Función puente para asegurar que app.js tome el valor correcto sin importar el modo
-    function procesarLoginAlumnoPersonalizado() {
-      const codigoManual = document.getElementById('inputCodigoManual');
-      if (grupoCodigoManual.style.display !== 'none' && codigoManual) {
-        document.getElementById('loginCodigo').value = codigoManual.value.trim().toUpperCase();
+    function manejarIngresoSistema() {
+      const grupoManual = document.getElementById('grupoCodigoManual');
+      if (grupoManual.style.display !== 'none') {
+        const manualVal = document.getElementById('inputCodigoManual').value.trim().toUpperCase();
+        document.getElementById('loginCodigo').value = manualVal;
       }
       if (typeof procesarLoginAlumno === 'function') {
         procesarLoginAlumno();
       }
     }
 
-    // Permitir presionar Enter en la clave
     document.getElementById('loginClave').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') procesarLoginAlumnoPersonalizado();
+      if (e.key === 'Enter') manejarIngresoSistema();
     });
   </script>
 </body>
