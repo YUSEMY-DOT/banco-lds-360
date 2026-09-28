@@ -263,7 +263,7 @@
 </head>
 <body>
 
-  <!-- Header Institucional con Insignia Oficial -->
+  <!-- Header Institucional -->
   <header>
     <div class="school-info">
       <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -282,13 +282,11 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Código de Estudiante -->
       <div class="form-group">
         <label>Código de Estudiante</label>
         <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
       </div>
 
-      <!-- Clave de 6 dígitos -->
       <div class="form-group">
         <label>Clave (6 dígitos)</label>
         <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.4rem; letter-spacing: 6px;" />
@@ -304,7 +302,6 @@
     <!-- VISTA PRINCIPAL -->
     <div id="vistaPrincipal" class="hidden">
       
-      <!-- CARD DE SALDO Y FOTO -->
       <div class="saldo-card">
         <div class="saldo-top">
           <div>
@@ -317,7 +314,6 @@
         <p id="alumnoGrado" class="alumno-grado">---</p>
       </div>
 
-      <!-- BOTONES DE ACCIÓN -->
       <div class="actions-grid">
         <button onclick="accionBotonPagar()" class="action-btn btn-pagar">
           💸 PAGAR / GASTOS
@@ -412,9 +408,7 @@
         respuestaEnviada = true;
         clearTimeout(timeoutSeguridad);
         delete window[nombreCallback];
-        if (script && script.parentNode) {
-          document.body.removeChild(script);
-        }
+        if (script && script.parentNode) document.body.removeChild(script);
         callback(data);
       };
 
@@ -438,6 +432,10 @@
       };
 
       document.body.appendChild(script);
+    }
+
+    function consultarDatosEstudiante(codigo, callback) {
+      hacerPeticionJSONP({ accion: 'CONSULTAR_ALUMNO', codigo: codigo }, callback);
     }
 
     function ejecutarLoginSistema(codigo, clave, callback) {
@@ -579,8 +577,6 @@
           const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
           const primerNombre = nombreCompleto.split(' ')[0];
 
-          historialMovimientosActual = res.movimientos || [];
-
           document.getElementById('alumnoNombre').textContent = nombreCompleto;
           document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
           document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || 0).toFixed(2);
@@ -588,7 +584,17 @@
           let fotoUrl = est.fotoUrl || est.foto || "";
           if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
 
-          renderizarMovimientos(historialMovimientosActual);
+          // CONSULTAR MOVIMIENTOS AUTOMÁTICAMENTE AL INGRESAR
+          consultarDatosEstudiante(codigo, function(dataMov) {
+            if (dataMov && dataMov.movimientos) {
+              historialMovimientosActual = dataMov.movimientos;
+              renderizarMovimientos(historialMovimientosActual);
+            } else if (res.movimientos) {
+              historialMovimientosActual = res.movimientos;
+              renderizarMovimientos(historialMovimientosActual);
+            }
+          });
+
           reproducirSonidoExito();
 
           setTimeout(() => {
@@ -678,10 +684,14 @@
           if(res.nuevoSaldo !== undefined) {
             document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
           }
-          if(res.movimientos) {
-            historialMovimientosActual = res.movimientos;
-            renderizarMovimientos(historialMovimientosActual);
-          }
+          
+          // Actualizar movimientos tras registrar
+          consultarDatosEstudiante(codigo, function(dataMov) {
+            if (dataMov && dataMov.movimientos) {
+              historialMovimientosActual = dataMov.movimientos;
+              renderizarMovimientos(historialMovimientosActual);
+            }
+          });
 
           setTimeout(() => {
             document.getElementById('seccionOperacion').classList.add('hidden');
@@ -701,7 +711,7 @@
       contenedor.innerHTML = '';
 
       if (!movs || movs.length === 0) {
-        contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>';
+        contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2" style="font-size: 0.85rem;">Sin movimientos recientes.</p>';
         return;
       }
 
@@ -711,14 +721,13 @@
         const positivo = tipo.includes('INGRESO') || monto >= 0;
 
         const item = document.createElement('div');
-        item.className = "flex justify-between items-center p-2 rounded-lg bg-gray-50 border-l-4 " + 
-          (positivo ? 'border-emerald-500' : 'border-rose-500');
+        item.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 10px; background: #f8fafc; border-left: 4px solid " + (positivo ? '#10b981' : '#f43f5e') + "; margin-bottom: 6px;";
         item.innerHTML = `
           <div>
-            <p class="font-bold text-xs text-gray-800">${m.concepto || 'Movimiento'}</p>
-            <p class="text-[10px] text-gray-400">${m.fecha || m.fechaTexto || ''}</p>
+            <p style="font-weight: 700; font-size: 0.85rem; color: #0c1e30;">${m.concepto || 'Movimiento'}</p>
+            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || m.fechaTexto || ''}</p>
           </div>
-          <span class="font-extrabold ${positivo ? 'text-emerald-600' : 'text-rose-600'}">
+          <span style="font-weight: 800; font-size: 0.88rem; color: ${positivo ? '#10b981' : '#f43f5e'};">
             ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
           </span>
         `;
