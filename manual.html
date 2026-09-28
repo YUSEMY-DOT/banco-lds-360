@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANCO LDS 360 — Manual del Sistema</title>
+<title>BANCO LDS 360 — Manual y Tarifario Oficial</title>
 <style>
 :root {
   --azul: #123c69;
@@ -15,6 +15,7 @@
   --muted: #64748b;
   --borde: #dbe4ee;
   --verde: #15803d;
+  --rojo: #b91c1c;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -32,7 +33,7 @@ header {
   color: #fff;
   padding: 14px 20px;
   width: 100%;
-  max-width: 900px;
+  max-width: 960px;
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
@@ -56,7 +57,7 @@ header h1 { font-size: 16px; font-weight: 700; }
 }
 .btn:hover { background: var(--dorado); color: var(--azul2); }
 .container {
-  max-width: 900px;
+  max-width: 960px;
   width: 100%;
   display: grid;
   gap: 16px;
@@ -82,42 +83,38 @@ header h1 { font-size: 16px; font-weight: 700; }
   line-height: 1.6;
   margin-bottom: 12px;
 }
-.feature-list {
-  display: grid;
-  gap: 10px;
+.table-wrap {
+  overflow-x: auto;
   margin-top: 10px;
-}
-.feature-item {
-  background: #f8fafc;
-  border-left: 4px solid var(--dorado);
-  padding: 10px 14px;
-  border-radius: 0 8px 8px 0;
-  font-size: 13px;
-}
-.price-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-  margin-top: 12px;
-}
-.price-box {
-  background: #fdfdfd;
   border: 1px solid var(--borde);
-  padding: 12px;
   border-radius: 10px;
-  text-align: center;
 }
-.price-box strong {
-  display: block;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+th, td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e5eaf0;
+}
+th {
+  background: #f4f7fb;
   color: var(--azul);
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-.price-box span {
-  color: var(--verde);
   font-weight: 700;
-  font-size: 13px;
+  text-transform: uppercase;
+  font-size: 11px;
 }
+tr:last-child td { border-bottom: 0; }
+.monto-badge {
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.monto-ingreso { background: #ecfdf5; color: var(--verde); }
+.monto-gasto { background: #fef2f2; color: var(--rojo); }
 footer {
   margin-top: 24px;
   color: var(--muted);
@@ -129,69 +126,139 @@ footer {
 <body>
 
 <header>
-  <h1>📖 Manual del Sistema y Guía Educativa</h1>
+  <h1>📖 Manual del Sistema y Tarifario Oficial — BANCO LDS 360</h1>
   <a class="btn" href="index.html">← Volver al Inicio</a>
 </header>
 
 <div class="container">
-  <!-- ¿QUÉ ES EL BANCO LDS 360? -->
+  
+  <!-- INTRODUCCIÓN -->
   <div class="card">
     <h2>🎯 ¿Qué es el BANCO LDS 360 y KIDSWork LS?</h2>
-    <p>Es un modelo de economía de aula gamificada desarrollado para la <strong>IEP La Salle del Sur</strong>. Su objetivo principal es transformar el aprendizaje financiero, la convivencia escolar y la responsabilidad ciudadana en una experiencia lúdica y significativa para los estudiantes de primaria.</p>
-    <p>A través de la moneda virtual <strong>LS Coins</strong>, los alumnos aprenden que el esfuerzo diario, el orden, el buen comportamiento y el compañerismo generan recompensas reales dentro de la comunidad escolar.</p>
+    <p>Es un modelo de economía de aula gamificada desarrollado para la <strong>IEP La Salle del Sur</strong>. Su objetivo principal es potenciar la responsabilidad financiera, la convivencia escolar positiva y los valores lasallistas a través de la moneda oficial <strong>LDS Coins</strong>.</p>
   </div>
 
-  <!-- ¿CÓMO GANAN LOS ESTUDIANTES? -->
+  <!-- I. INGRESOS Y SUELDOS -->
   <div class="card">
-    <h2>🪙 ¿Cómo ganan LDS Coins los estudiantes?</h2>
-    <p>Los ingresos de los alumnos se registran de forma transparente en el sistema por parte de las docentes mediante bonificaciones y sueldos basados en el mérito:</p>
-    <div class="feature-list">
-      <div class="feature-item"><strong>Puntualidad y Uniforme:</strong> Premiando la responsabilidad y la presentación impecable en el colegio.</div>
-      <div class="feature-item"><strong>Participación y Retos Académicos:</strong> Incentivos por intervenciones destacadas en clase, completar retos educativos o liderar actividades de grupo.</div>
-      <div class="feature-item"><strong>Hábito de Lectura:</strong> Bonos especiales por leer libros de acuerdo a su edad y presentar evidencias con un mínimo de 20 preguntas y respuestas resueltas.</div>
-      <div class="feature-item"><strong>Cuidado del Entorno:</strong> Apoyo destacado en la limpieza, orden y ecología del aula.</div>
+    <h2>💼 I. Ingresos y Sueldos</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Ingreso Sueldo Base Mensual</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">1,130 LDS</span></td></tr>
+          <tr><td>Ingreso Sueldo por Rol de Liderazgo</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">150 LDS</span></td></tr>
+          <tr><td>Ingreso Bono por desempeño</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- ROL DE LOS PADRES -->
+  <!-- II. PREMIOS Y BONIFICACIONES -->
   <div class="card">
-    <h2>👨‍👩‍👧‍👦 El Apoyo Fundamental de los Padres</h2>
-    <p>El éxito de este proyecto descansa en la alianza estratégica entre la escuela y el hogar:</p>
-    <div class="feature-list">
-      <div class="feature-item"><strong>Refuerzo en Casa:</strong> Conversen con sus hijos sobre sus ahorros en el banco, pregúntales qué metas tienen y celebren sus logros obtenidos con esfuerzo.</div>
-      <div class="feature-item"><strong>Diálogo de Valores:</strong> Ayúdenlos a comprender que cada moneda representa constancia, disciplina y responsabilidad, valores esenciales del carisma lasallista.</div>
-      <div class="feature-item"><strong>Buzón de Sugerencias:</strong> Les invitamos a utilizar la sección "Padres" en el portal para dejarnos sus comentarios y sugerencias de mejora continua.</div>
+    <h2>🌟 II. Premios y Bonificaciones</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Bono por llevar el uniforme impecable y reglamentario</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Bono Participación destacada en clase</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Bono Premio por primer lugar en concurso académico o deportivo</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">200 LDS</span></td></tr>
+          <tr><td>Bono Puntualidad y asistencia perfecta (Semanal / Mensual)</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">200 LDS</span></td></tr>
+          <tr><td>Bono Apoyo destacado en limpieza, orden o ecología del aula</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">100 LDS</span></td></tr>
+          <tr><td>Bono por ayuda solidaria / Compañerismo destacado</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Bono Creatividad e innovación en proyectos escolares</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">200 LDS</span></td></tr>
+          <tr><td>Bono Representar dignamente al colegio en eventos externos</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">100 LDS</span></td></tr>
+          <tr><td>Bono Leer un libro y presentar evidencia de 20 preguntas y respuestas</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">500 LDS</span></td></tr>
+          <tr><td>Bono Completar un reto educativo</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">200 LDS</span></td></tr>
+          <tr><td>Bono Llegar puntual al refrigerio</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Bono Participar en Escuela para Padres junto a su familia</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">700 LDS</span></td></tr>
+          <tr><td>Bono Ser responsable con sus materiales</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Bono Ayudar a mantener limpia el aula</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">100 LDS</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- GUÍA DE PREMIOS Y CANJES -->
+  <!-- III. AHORROS E INVERSIONES -->
   <div class="card">
-    <h2>🛍️ Guía Rápida de Canjes (Tienda Escolar)</h2>
-    <p>Los estudiantes pueden canjear sus ahorros en la tienda del aula con una gran variedad de premios adaptados a su esfuerzo:</p>
-    
-    <div class="price-grid">
-      <div class="price-box">
-        <strong>Snacks y Comida</strong>
-        <span>Desde 500 LDS</span>
-        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Galletas, Doritos, chocolates, ramen, gaseosas y yogur[cite: 7].</p>
-      </div>
-      <div class="price-box">
-        <strong>Papelería y Útiles</strong>
-        <span>Desde 800 LDS</span>
-        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Correctores, notas adhesivas, plumones, borradores y cuadernos kawaii[cite: 7].</p>
-      </div>
-      <div class="price-box">
-        <strong>Accesorios y Juguetes</strong>
-        <span>Desde 1,000 LDS</span>
-        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Scrunchies, pulseras, figuras coleccionables, peluches y mochilas[cite: 7].</p>
-      </div>
-      <div class="price-box">
-        <strong>Tecnología y Premios</strong>
-        <span>Hasta 4,000 LDS</span>
-        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Audífonos, memorias USB, aros de luz y smartwatches[cite: 7].</p>
-      </div>
+    <h2>🏦 III. Ahorros e Inversiones</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Depósito a cuenta de ahorros (Ahorro voluntario)</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">10 LDS</span></td></tr>
+          <tr><td>Inversión en fondo común del aula / cooperativa</td><td style="text-align:right;"><span class="monto-badge monto-ingreso">50 LDS</span></td></tr>
+          <tr><td>Retiro de ahorros (Emergencia o meta cumplida)</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
+  <!-- IV. PAGOS Y GASTOS -->
+  <div class="card">
+    <h2>💸 IV. Pagos y Gastos</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Pago Compra en la tienda escolar / cafetín</td><td style="text-align:right;"><span class="monto-badge monto-gasto">30 LDS</span></td></tr>
+          <tr><td>Pago de alquiler / mantenimiento de carpeta o espacio de trabajo</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+          <tr><td>Pago de servicios del aula: Agua</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+          <tr><td>Pago de servicios del aula: Energía</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+          <tr><td>Pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)</td><td style="text-align:right;"><span class="monto-badge monto-gasto">50 LDS</span></td></tr>
+          <tr><td>Gasto médico imprevisto menor (Botiquín escolar / Curitas)</td><td style="text-align:right;"><span class="monto-badge monto-gasto">40 LDS</span></td></tr>
+          <tr><td>Alquiler de libros de la biblioteca o material didáctico</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+          <tr><td>Pago por custodia de equipos tecnológicos</td><td style="text-align:right;"><span class="monto-badge monto-gasto">50 LDS</span></td></tr>
+          <tr><td>Pago por copias extras</td><td style="text-align:right;"><span class="monto-badge monto-gasto">100 LDS</span></td></tr>
+          <tr><td>Comprar stickers</td><td style="text-align:right;"><span class="monto-badge monto-gasto">20 LDS</span></td></tr>
+          <tr><td>Pagar para una actividad extra</td><td style="text-align:right;"><span class="monto-badge monto-gasto">100 LDS</span></td></tr>
+          <tr><td>Pagar por jugar 10 minutos más</td><td style="text-align:right;"><span class="monto-badge monto-gasto">150 LDS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- V. SANCIONES Y MULTAS -->
+  <div class="card">
+    <h2>⚠️ V. Sanciones y Multas</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Multa por llevar mal el uniforme o incompleto</td><td style="text-align:right;"><span class="monto-badge monto-gasto">150 LDS</span></td></tr>
+          <tr><td>Incumplimiento de tareas o asignaciones a tiempo</td><td style="text-align:right;"><span class="monto-badge monto-gasto">200 LDS</span></td></tr>
+          <tr><td>Llegada tarde al aula o formación</td><td style="text-align:right;"><span class="monto-badge monto-gasto">120 LDS</span></td></tr>
+          <tr><td>Uso no autorizado de dispositivos electrónicos en clase</td><td style="text-align:right;"><span class="monto-badge monto-gasto">200 LDS</span></td></tr>
+          <tr><td>Desorden o indisciplina leve durante las horas de clase</td><td style="text-align:right;"><span class="monto-badge monto-gasto">200 LDS</span></td></tr>
+          <tr><td>Falta de respeto o modales con compañeros o docentes</td><td style="text-align:right;"><span class="monto-badge monto-gasto">200 LDS</span></td></tr>
+          <tr><td>No traer el material escolar requerido para la sesión</td><td style="text-align:right;"><span class="monto-badge monto-gasto">250 LDS</span></td></tr>
+          <tr><td>Descuido o daño leve al mobiliario o infraestructura del aula</td><td style="text-align:right;"><span class="monto-badge monto-gasto">300 LDS</span></td></tr>
+          <tr><td>Basura fuera de su lugar / No respetar áreas verdes o comunes</td><td style="text-align:right;"><span class="monto-badge monto-gasto">120 LDS</span></td></tr>
+          <tr><td>Inasistencia injustificada a reuniones o actividades obligatorias</td><td style="text-align:right;"><span class="monto-badge monto-gasto">300 LDS</span></td></tr>
+          <tr><td>No ponerse al día en sus pendientes o cuadernos</td><td style="text-align:right;"><span class="monto-badge monto-gasto">300 LDS</span></td></tr>
+          <tr><td>Malograr los cuadernos u objetos personales del compañero</td><td style="text-align:right;"><span class="monto-badge monto-gasto">350 LDS</span></td></tr>
+          <tr><td>Faltar a la verdad</td><td style="text-align:right;"><span class="monto-badge monto-gasto">500 LDS</span></td></tr>
+          <tr><td>Llevarse objetos del compañero y/o institución</td><td style="text-align:right;"><span class="monto-badge monto-gasto">1,000 LDS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- VI. COSTOS Y OTROS -->
+  <div class="card">
+    <h2>📋 VI. Costos y Otros</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concepto</th><th style="width:120px;text-align:right;">Monto</th></tr></thead>
+        <tbody>
+          <tr><td>Impuesto escolar mensual por uso de instalaciones</td><td style="text-align:right;"><span class="monto-badge monto-gasto">150 LDS</span></td></tr>
+          <tr><td>Cuota extraordinaria de mantenimiento grupal</td><td style="text-align:right;"><span class="monto-badge monto-gasto">100 LDS</span></td></tr>
+          <tr><td>Transacción personalizada / Ajuste de caja</td><td style="text-align:right;"><span class="monto-badge monto-gasto">10 LDS</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR · Formamos personas íntegras</footer>
