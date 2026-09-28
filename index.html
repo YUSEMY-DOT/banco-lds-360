@@ -31,6 +31,7 @@
             align-items: center;
             border-bottom: 3px solid #f1c40f;
             box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            z-index: 10;
         }
 
         .school-info {
@@ -80,6 +81,7 @@
 
         /* 2. Contenedor Principal */
         .main-container {
+            position: relative;
             flex: 1;
             display: flex;
             justify-content: center;
@@ -91,23 +93,36 @@
             gap: 40px;
         }
 
-        /* Tarjeta Blanca Principal */
+        /* Tarjeta Traslúcida Principal */
         .portal-card {
-            background: #ffffff;
-            padding: 35px 30px;
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 25px 30px 35px 30px;
             border-radius: 28px;
-            max-width: 620px;
+            max-width: 640px;
             width: 100%;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
-            border: 3px solid #b2dfdb;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            border: 3px solid rgba(178, 223, 219, 0.9);
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
+        /* Logo del Banco dentro de la tarjeta */
+        .bank-logo-img {
+            max-width: 140px;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+        }
+
         .bank-title {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             color: #00796b;
             font-weight: 800;
             margin-bottom: 2px;
@@ -115,10 +130,10 @@
         }
 
         .bank-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: #00897b;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
         /* Botones como imágenes directas con efecto hover */
@@ -128,18 +143,19 @@
             justify-content: center;
             transition: transform 0.2s ease, filter 0.2s ease;
             text-decoration: none;
-            width: 100%;
+            flex: 1;
         }
 
         .img-btn img {
             width: 100%;
             height: auto;
+            max-width: 220px;
             object-fit: contain;
             display: block;
         }
 
         .img-btn:hover {
-            transform: scale(1.03);
+            transform: scale(1.04);
             filter: brightness(1.04);
         }
 
@@ -148,18 +164,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
-        /* Niña más grande al centro */
+        /* Niña con monedas al centro */
         .center-girl-img {
-            width: 145px; /* Tamaño aumentado */
+            width: 175px;
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.22));
         }
 
         /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
@@ -174,12 +190,15 @@
         .bottom-row .img-btn img {
             width: 100%;
             height: 100%;
-            object-fit: fill; /* Mantiene proporciones idénticas en los 3 botones */
+            max-width: 100%;
+            object-fit: fill;
             border-radius: 12px;
         }
 
         /* Ilustración de la derecha (Profesora y Alumna) */
         .right-illustration {
+            position: relative;
+            z-index: 2;
             max-width: 440px;
             width: 100%;
             height: auto;
@@ -196,6 +215,7 @@
             color: #ffffff;
             font-weight: 600;
             border-top: 3px solid #f1c40f;
+            z-index: 10;
         }
 
         @media (max-width: 950px) {
@@ -216,7 +236,7 @@
                 grid-template-columns: 1fr;
             }
             .center-girl-img {
-                width: 120px;
+                width: 135px;
             }
         }
     </style>
@@ -245,8 +265,11 @@
     <!-- Contenedor Principal -->
     <div class="main-container">
         
-        <!-- Cuadro Blanco del Banco -->
+        <!-- Cuadro Traslúcido del Banco -->
         <div class="portal-card">
+            <!-- Logo Oficial del Banco -->
+            <img src="assets/banco.png" alt="Logo Banco LDS 360" class="bank-logo-img">
+
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
