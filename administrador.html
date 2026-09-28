@@ -125,7 +125,7 @@ header {
   color: var(--azul);
 }
 
-/* PANTALLA DE ACCESO CON CLAVE */
+/* PANTALLA DE ACCESO CON CLAVE (360LDS) */
 .login-wrapper {
   display: flex;
   align-items: center;
@@ -293,7 +293,7 @@ main {
 /* LAYOUT */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
   gap: 14px;
   align-items: start;
 }
@@ -359,7 +359,7 @@ main {
   padding: 14px;
 }
 
-/* SELECTOR INGRESO Y EGRESO INTERACTIVO */
+/* SELECTOR INGRESO Y EGRESO */
 .type-selector-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -394,7 +394,7 @@ main {
   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 
-/* BÚSQUEDA ADAPTADA A CELULAR */
+/* BÚSQUEDA ADAPTADA */
 .search-box {
   display: flex;
   flex-direction: column;
@@ -516,7 +516,7 @@ main {
   border: 1px solid #b7e1cd;
 }
 
-/* TABLA DE MOVIMIENTOS RESPONSIVA */
+/* TABLA CON LAS 9 COLUMNAS DE EXCEL */
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
@@ -528,27 +528,49 @@ main {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 500px;
+  min-width: 720px; /* Ancho suficiente para ver las 9 columnas de Excel */
 }
 
 th, td {
   padding: 8px 10px;
   border-bottom: 1px solid #e5eaf0;
   text-align: left;
-  font-size: 12px;
+  font-size: 11px;
   vertical-align: top;
+  white-space: nowrap;
+}
+
+td.cell-wrap {
+  white-space: normal;
+  min-width: 130px;
 }
 
 th {
   background: #f4f7fb;
   color: var(--azul);
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: .3px;
 }
 
 tr:last-child td {
   border-bottom: 0;
+}
+
+.badge-ingreso {
+  color: #047857;
+  background: #ecfdf5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.badge-egreso {
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
 }
 
 .empty {
@@ -656,7 +678,7 @@ footer {
   font-size: 11px;
 }
 
-/* MEDIA QUERIES PARA ADAPTAR A CELULARES Y TABLETS */
+/* MEDIA QUERIES PARA ADAPTACIÓN MÓVIL */
 @media (min-width: 600px) {
   .search-box {
     flex-direction: row;
@@ -724,7 +746,7 @@ footer {
   </div>
 </header>
 
-<!-- PANTALLA DE ACCESO OBLIGATORIA CON CLAVE (360LDS) -->
+<!-- PANTALLA DE ACCESO CON CLAVE (360LDS) -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -796,13 +818,24 @@ footer {
             </div>
           </div>
 
+          <!-- TABLA COINCIDENTE 1:1 CON HOJA DE EXCEL MOVIMIENTOS -->
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto LDS</th><th>Responsable</th><th>Observación</th></tr>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Código / QR</th>
+                  <th>Estudiante</th>
+                  <th>Grado</th>
+                  <th>Tipo de Movimiento</th>
+                  <th>Concepto</th>
+                  <th>Monto LDS</th>
+                  <th>Responsable</th>
+                  <th>Observación</th>
+                </tr>
               </thead>
               <tbody id="tablaMovimientos">
-                <tr><td colspan="6" class="empty">Ingresa un código para consultar.</td></tr>
+                <tr><td colspan="9" class="empty">Ingresa un código para consultar.</td></tr>
               </tbody>
             </table>
           </div>
@@ -810,7 +843,7 @@ footer {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS (REPLEGABLES) -->
+    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS -->
     <div>
       <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS -->
       <div id="panelPago" class="panel">
@@ -819,7 +852,7 @@ footer {
           <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
-          <label class="small-label">Tipo de Operación</label>
+          <label class="small-label">Tipo de Movimiento (Sintaxis Excel)</label>
           <div class="type-selector-box">
             <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
             <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
@@ -955,7 +988,6 @@ function cargarConceptosPorTipo() {
   const selectConcepto = document.getElementById("pagoConcepto");
   selectConcepto.innerHTML = "";
   
-  // Auto-ajustar operación si se selecciona Costos y Otros
   if (tipo === "COSTOS_Y_OTROS") {
     seleccionarTipoOperacion("EGRESO");
   } else {
@@ -1164,7 +1196,7 @@ function consultarEstudiante(){
   llamarAPI({accion:"estudiante",codigo},function(respuesta){
     if(!respuesta||respuesta.ok===false||!respuesta.estudiante){
       document.getElementById("estudianteCard").classList.remove("show");
-      document.getElementById("tablaMovimientos").innerHTML='<tr><td colspan="6" class="empty">No se encontró el estudiante.</td></tr>';
+      document.getElementById("tablaMovimientos").innerHTML='<tr><td colspan="9" class="empty">No se encontró el estudiante.</td></tr>';
       document.getElementById("contadorMovimientos").textContent="0";
       document.getElementById("estadoConexion").textContent="Conectado";
       mostrarMensaje((respuesta&&respuesta.mensaje)||"Estudiante no encontrado.","error");
@@ -1186,16 +1218,16 @@ function consultarEstudiante(){
     document.getElementById("incCodigo").value = e.codigo || codigo;
 
     const movimientos=Array.isArray(respuesta.movimientos)?respuesta.movimientos:[];
-    renderMovimientos(movimientos);
+    renderMovimientos(movimientos, e);
     document.getElementById("estadoConexion").textContent="Conectado";
     mostrarMensaje("Consulta realizada correctamente.","ok");
 
-    // LECTURA DE VOZ ANUNCIANDO NOMBRE Y SALDO
+    // LECTURA DE VOZ
     hablarTextoVoz("Estudiante " + nombreEstudiante + ". Saldo actual: " + saldoEstudiante + " soles Lasallistas.");
   });
 }
 
-// PROCESAR TRANSACCIÓN (ENVÍA STRICTAMENTE 'INGRESO' O 'EGRESO')
+// PROCESAR TRANSACCIÓN Y REGISTRAR EN LAS 9 COLUMNAS
 function procesarPagoEstudiante() {
   const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
   const tipoOperacion = document.getElementById("pagoOperacionVal").value; // 'INGRESO' o 'EGRESO'
@@ -1222,7 +1254,7 @@ function procesarPagoEstudiante() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: codigo,
-    tipo: tipoOperacion, // Envía 'INGRESO' o 'EGRESO' a Apps Script
+    tipo: tipoOperacion, // Envía 'INGRESO' o 'EGRESO'
     categoria: categoriaSeleccionada,
     concepto: concepto,
     monto: monto,
@@ -1246,18 +1278,39 @@ function procesarPagoEstudiante() {
   });
 }
 
-function renderMovimientos(movimientos){
+// DIBUJAR LAS 9 COLUMNAS EXACTAS QUE FIGURAN EN EXCEL
+function renderMovimientos(movimientos, estudianteObj){
   const tabla=document.getElementById("tablaMovimientos");
   tabla.innerHTML="";
   document.getElementById("contadorMovimientos").textContent=String(movimientos.length);
   if(!movimientos.length){
-    tabla.innerHTML='<tr><td colspan="6" class="empty">No hay movimientos registrados para este estudiante.</td></tr>';
+    tabla.innerHTML='<tr><td colspan="9" class="empty">No hay movimientos registrados para este estudiante.</td></tr>';
     return;
   }
-  movimientos.forEach(m=>{
-    const tr=document.createElement("tr");
-    const fecha=m.fechaTexto||m.fecha||m.timestamp||"",tipo=m.tipo||m.tipoMovimiento||"",concepto=m.concepto||"",monto=m.monto??m.montoLDS??0,responsable=m.responsable||"",observacion=m.observacion||"";
-    tr.innerHTML='<td>'+escaparHTML(fecha)+'</td><td>'+escaparHTML(tipo)+'</td><td>'+escaparHTML(concepto)+'</td><td>'+formatearLDS(monto)+'</td><td>'+escaparHTML(responsable)+'</td><td>'+escaparHTML(observacion)+'</td>';
+  
+  movimientos.forEach(m => {
+    const tr = document.createElement("tr");
+    const fecha = m.fechaTexto || m.fecha || m.timestamp || "";
+    const codigo = m.codigo || m.codigoQR || (estudianteObj ? estudianteObj.codigo : "");
+    const nombre = m.estudiante || m.nombre || (estudianteObj ? estudianteObj.nombreCompleto : "");
+    const grado = m.grado || (estudianteObj ? estudianteObj.grado : "");
+    const tipo = m.tipo || m.tipoMovimiento || "";
+    const concepto = m.concepto || "";
+    const monto = m.monto ?? m.montoLDS ?? 0;
+    const responsable = m.responsable || "";
+    const observacion = m.observacion || "";
+
+    const badgeClase = String(tipo).toUpperCase().includes("EGRESO") ? "badge-egreso" : "badge-ingreso";
+
+    tr.innerHTML = '<td>' + escaparHTML(fecha) + '</td>' +
+                   '<td>' + escaparHTML(codigo) + '</td>' +
+                   '<td>' + escaparHTML(nombre) + '</td>' +
+                   '<td>' + escaparHTML(grado) + '</td>' +
+                   '<td><span class="' + badgeClase + '">' + escaparHTML(tipo) + '</span></td>' +
+                   '<td class="cell-wrap">' + escaparHTML(concepto) + '</td>' +
+                   '<td><strong>' + formatearLDS(monto) + '</strong></td>' +
+                   '<td>' + escaparHTML(responsable) + '</td>' +
+                   '<td class="cell-wrap">' + escaparHTML(observacion) + '</td>';
     tabla.appendChild(tr);
   });
 }
