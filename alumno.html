@@ -6,13 +6,7 @@
   <title>BANCO LDS 360 - Portal Estudiante</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body {
       background: linear-gradient(rgba(12, 30, 48, 0.70), rgba(12, 30, 48, 0.70)), 
                   url('assets/banco.png') no-repeat center center fixed;
@@ -22,8 +16,6 @@
       flex-direction: column;
       color: #333333;
     }
-
-    /* Header Institucional */
     header {
       background-color: #0c1e30;
       padding: 10px 24px;
@@ -34,33 +26,10 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       z-index: 10;
     }
-
-    .school-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .school-info img {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
-
-    .school-title h1 {
-      font-size: 1rem;
-      color: #ffffff;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .school-title p {
-      font-size: 0.72rem;
-      color: #38bdf8;
-      font-weight: 600;
-      font-style: italic;
-    }
-
+    .school-info { display: flex; align-items: center; gap: 12px; }
+    .school-info img { width: 40px; height: 40px; object-fit: contain; }
+    .school-title h1 { font-size: 1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.5px; }
+    .school-title p { font-size: 0.72rem; color: #38bdf8; font-weight: 600; font-style: italic; }
     .inicio-btn {
       background: #152b42;
       border: 2px solid #38bdf8;
@@ -72,22 +41,8 @@
       text-decoration: none;
       transition: all 0.3s ease;
     }
-
-    .inicio-btn:hover {
-      background: #203f61;
-    }
-
-    main {
-      max-width: 440px;
-      width: 100%;
-      margin: auto;
-      padding: 20px 15px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
+    .inicio-btn:hover { background: #203f61; }
+    main { max-width: 440px; width: 100%; margin: auto; padding: 20px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
     .card {
       background: rgba(12, 30, 48, 0.95);
       backdrop-filter: blur(10px);
@@ -97,94 +52,28 @@
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
       color: #ffffff;
     }
-
-    .card h2 {
-      text-align: center;
-      color: #ffffff;
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .card p.subtitle {
-      text-align: center;
-      color: #38bdf8;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: #e2e8f0;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
+    .card h2 { text-align: center; color: #ffffff; font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .card p.subtitle { text-align: center; color: #38bdf8; font-size: 0.82rem; font-weight: 600; margin-bottom: 20px; }
+    .form-group { margin-bottom: 18px; text-align: left; }
+    .form-group label { display: block; font-size: 0.85rem; color: #e2e8f0; font-weight: 600; margin-bottom: 6px; }
     .form-control {
-      width: 100%;
-      height: 52px;
-      background: #ffffff;
-      border: 2px solid #38bdf8;
-      border-radius: 12px;
-      padding: 0 14px;
-      font-size: 1.1rem;
-      color: #0c1e30;
-      font-weight: 700;
-      outline: none;
-      transition: all 0.2s ease;
+      width: 100%; height: 52px; background: #ffffff; border: 2px solid #38bdf8; border-radius: 12px;
+      padding: 0 14px; font-size: 1.1rem; color: #0c1e30; font-weight: 700; outline: none; transition: all 0.2s ease;
     }
-
-    .form-control:focus {
-      border-color: #ffffff;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-    }
-
+    .form-control:focus { border-color: #ffffff; box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
     .btn-primary {
-      width: 100%;
-      height: 52px;
-      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
-      margin-top: 6px;
+      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 800; cursor: pointer;
+      transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); margin-top: 6px;
     }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
-      background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
-    }
-
+    .btn-primary:hover { background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%); }
     .hidden { display: none !important; }
-
     .saldo-card {
-      background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%);
-      color: #ffffff;
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      border: 2px solid #38bdf8;
+      background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%); color: #ffffff; border-radius: 20px;
+      padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 2px solid #38bdf8;
     }
-
-    .saldo-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .saldo-top { display: flex; justify-content: space-between; align-items: center; }
+    .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; }
     .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; }
     
     /* FOTO DEL ESTUDIANTE AMPLIADA Y MEJORADA */
@@ -200,80 +89,19 @@
 
     .alumno-nombre { font-size: 1rem; font-weight: 700; color: #ffffff; margin-top: 12px; }
     .alumno-grado { font-size: 0.8rem; color: #cbd5e1; }
-
-    .actions-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .action-btn {
-      padding: 14px;
-      border-radius: 14px;
-      font-weight: 700;
-      color: #ffffff;
-      border: none;
-      cursor: pointer;
-      text-align: center;
-      font-size: 0.85rem;
-      transition: transform 0.2s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .action-btn:hover { transform: scale(1.02); }
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .action-btn { padding: 14px; border-radius: 14px; font-weight: 700; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.85rem; }
     .btn-pagar { background-color: #e11d48; }
     .btn-movs { background-color: #7c3aed; }
-
-    .sub-card {
-      background: #ffffff;
-      color: #333;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      border: 1px solid #e2e8f0;
-      margin-top: 14px;
-    }
-
-    .sub-card h4 {
-      font-size: 0.95rem;
-      color: #0c1e30;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 10px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      outline: none;
-      margin-bottom: 10px;
-    }
-    .input-field:focus { border-color: #0c1e30; }
-
-    .lista-movs {
-      max-height: 180px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 12px;
-      font-size: 0.78rem;
-      color: #ffffff;
-      background-color: #0c1e30;
-      border-top: 3px solid #38bdf8;
-      font-weight: 600;
-    }
+    .sub-card { background: #ffffff; color: #333; border-radius: 18px; padding: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-top: 14px; }
+    .sub-card h4 { font-size: 0.95rem; color: #0c1e30; font-weight: 700; margin-bottom: 12px; }
+    .input-field { width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.88rem; outline: none; margin-bottom: 10px; }
+    .lista-movs { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    footer { text-align: center; padding: 12px; font-size: 0.78rem; color: #ffffff; background-color: #0c1e30; border-top: 3px solid #38bdf8; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <!-- Header Institucional -->
   <header>
     <div class="school-info">
       <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -286,7 +114,6 @@
   </header>
 
   <main>
-    
     <!-- VISTA LOGIN ESTUDIANTE -->
     <div id="vistaLogin" class="card">
       <h2>Acceso del Estudiante</h2>
@@ -311,14 +138,12 @@
 
     <!-- VISTA PRINCIPAL -->
     <div id="vistaPrincipal" class="hidden">
-      
       <div class="saldo-card">
         <div class="saldo-top">
           <div>
             <p class="saldo-title">Saldo Disponible</p>
             <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 500;">LDS</span></h3>
           </div>
-          <!-- FOTO AMPLIADA -->
           <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
         </div>
         <p id="alumnoNombre" class="alumno-nombre">Cargando...</p>
@@ -326,12 +151,8 @@
       </div>
 
       <div class="actions-grid">
-        <button onclick="accionBotonPagar()" class="action-btn btn-pagar">
-          💸 PAGAR / GASTOS
-        </button>
-        <button onclick="accionBotonMovimientos()" class="action-btn btn-movs">
-          📋 MOVIMIENTOS
-        </button>
+        <button onclick="accionBotonPagar()" class="action-btn btn-pagar">💸 PAGAR / GASTOS</button>
+        <button onclick="accionBotonMovimientos()" class="action-btn btn-movs">📋 MOVIMIENTOS</button>
       </div>
 
       <!-- FORMULARIO DE REGISTRO DE GASTO -->
@@ -387,11 +208,10 @@
         </div>
       </div>
 
-      <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 0.85rem; margin-top: 14px;">
+      <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-top: 14px;">
         Cerrar Sesión / Siguiente Estudiante
       </button>
     </div>
-
   </main>
 
   <footer>
@@ -399,8 +219,7 @@
   </footer>
 
   <script>
-    // ENLACE WEB ACTUALIZADO DE TU GOOGLE APPS SCRIPT
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
 
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
@@ -433,7 +252,6 @@
 
       const script = document.createElement('script');
       script.src = url;
-
       script.onerror = function() {
         if (respuestaEnviada) return;
         respuestaEnviada = true;
@@ -442,7 +260,6 @@
         if (script && script.parentNode) document.body.removeChild(script);
         callback({ success: false, ok: false, mensaje: "Error de conexión." });
       };
-
       document.body.appendChild(script);
     }
 
@@ -489,8 +306,6 @@
       ]
     };
 
-    let historialMovimientosActual = [];
-
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
@@ -501,7 +316,7 @@
         inputCodigo.value = codigoLimpio;
         localStorage.setItem('codigoEscaneado', codigoLimpio);
         
-        // Autenticación automática al escanear el QR
+        // Dispara la sesión automáticamente al leer el QR
         setTimeout(() => {
           procesarLoginAlumno();
         }, 300);
@@ -511,41 +326,8 @@
       }
     });
 
-    function reproducirSonidoExito() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const notas = [523.25, 659.25, 783.99, 1046.50];
-        notas.forEach((frec, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.value = frec;
-          gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.25);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(ctx.currentTime + idx * 0.08);
-          osc.stop(ctx.currentTime + idx * 0.08 + 0.25);
-        });
-      } catch(e) {}
-    }
-
-    function hablarTextoVoz(texto) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(texto.replace(/\./g, ','));
-        utterance.rate = 1.05;
-        utterance.pitch = 1.25;
-        const voces = window.speechSynthesis.getVoices();
-        let vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        if (vozIdeal) utterance.voice = vozIdeal;
-        setTimeout(() => { window.speechSynthesis.speak(utterance); }, 100);
-      }
-    }
-
     function procesarLoginAlumno() {
       const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
-      const clave = document.getElementById('loginClave').value.trim();
       const errorDiv = document.getElementById('loginError');
       errorDiv.textContent = "";
 
@@ -556,22 +338,21 @@
 
       errorDiv.textContent = "Conectando al servidor...";
 
-      hacerPeticionJSONP({ accion: 'estudiante', codigo: codigo }, function(res) {
+      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
         if (res && (res.success === true || res.ok === true || res.estudiante)) {
           document.getElementById('vistaLogin').classList.add('hidden');
           document.getElementById('vistaPrincipal').classList.remove('hidden');
 
           const est = res.estudiante || {};
           const nombreCompleto = est.nombreCompleto || est.nombre || codigo;
-          const primerNombre = nombreCompleto.split(' ')[0];
-
+          
           document.getElementById('alumnoNombre').textContent = nombreCompleto;
           document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
           
           const saldo = Number(res.saldoActual || res.saldo || (res.cuenta && res.cuenta.saldoActual) || 0);
           document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
           
-          // CAPTURA Y ASIGNACIÓN DE LA FOTO EN GRANDE
+          // FOTO GRANDE Y SEGURA
           const fotoUrl = est.fotoUrl || est.foto;
           if (fotoUrl && fotoUrl.trim() !== "") {
             document.getElementById('alumnoFoto').src = fotoUrl.trim();
@@ -579,14 +360,7 @@
             document.getElementById('alumnoFoto').src = "https://via.placeholder.com/150";
           }
 
-          historialMovimientosActual = res.movimientos || [];
-          renderizarMovimientos(historialMovimientosActual);
-          reproducirSonidoExito();
-
-          setTimeout(() => {
-            hablarTextoVoz(`¡Hola ${primerNombre}! Bienvenido a tu banca.`);
-          }, 300);
-
+          renderizarMovimientos(res.movimientos || []);
         } else {
           errorDiv.textContent = res.mensaje || "Estudiante no encontrado en el sistema.";
         }
@@ -653,7 +427,7 @@
       msg.textContent = "Registrando...";
 
       hacerPeticionJSONP({
-        accion: 'registrarMovimiento',
+        accion: 'REGISTRAR_TRANSACCION',
         codigo: codigo,
         tipo: 'EGRESO',
         monto: monto,
@@ -664,16 +438,12 @@
         if (res && (res.success || res.ok)) {
           msg.style.color = "#059669";
           msg.textContent = "¡Registrado con éxito!";
-          reproducirSonidoExito();
 
-          hacerPeticionJSONP({ accion: 'estudiante', codigo: codigo }, function(data) {
+          hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(data) {
             if (data) {
-              const saldo = Number(data.saldoActual || (data.cuenta && data.cuenta.saldoActual) || 0);
+              const saldo = Number(data.saldoActual || data.saldo || 0);
               document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
-              if (data.movimientos) {
-                historialMovimientosActual = data.movimientos;
-                renderizarMovimientos(historialMovimientosActual);
-              }
+              if (data.movimientos) renderizarMovimientos(data.movimientos);
             }
           });
 
@@ -708,7 +478,7 @@
         item.innerHTML = `
           <div>
             <p style="font-weight: 700; font-size: 0.85rem; color: #0c1e30;">${m.concepto || 'Movimiento'}</p>
-            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || m.fechaTexto || ''}</p>
+            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || ''}</p>
           </div>
           <span style="font-weight: 800; font-size: 0.88rem; color: ${positivo ? '#10b981' : '#f43f5e'};">
             ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
