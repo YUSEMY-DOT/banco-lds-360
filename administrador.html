@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BANCO LDS 360 — Administración</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
 :root {
   --azul: #123c69;
@@ -27,78 +28,79 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--texto);
-  background: radial-gradient(circle at top right, rgba(200,169,81,.15), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
+  background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
   min-height: 100vh;
   overflow-x: hidden;
+  font-size: 14px;
 }
 
-/* ENCABEZADO SUPERIOR */
+/* ENCABEZADO SUPERIOR COMPACTO */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
-  padding: 14px 24px;
-  box-shadow: 0 4px 20px rgba(7,31,64,.2);
-  border-bottom: 4px solid var(--dorado);
+  padding: 10px 20px;
+  box-shadow: 0 4px 15px rgba(7,31,64,.2);
+  border-bottom: 3px solid var(--dorado);
 }
 
 .header-inner {
-  max-width: 1240px;
+  max-width: 1100px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 10px;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   display: grid;
   place-items: center;
   background: rgba(255,255,255,.12);
   border: 1px solid rgba(255,255,255,.28);
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   letter-spacing: 0.5px;
 }
 
 .brand p {
-  margin: 2px 0 0;
+  margin: 1px 0 0;
   opacity: .88;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .btn {
   border: 0;
-  border-radius: 10px;
-  padding: 10px 18px;
+  border-radius: 8px;
+  padding: 8px 14px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 13px;
   transition: all 0.2s ease;
 }
 
 .btn-light {
   background: #fff;
   color: var(--azul);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .btn-light:hover {
@@ -117,41 +119,39 @@ header {
   color: var(--azul);
 }
 
-/* =========================================================
-   VISTA 1: ACCESO OBLIGATORIO CON CLAVE
-   ========================================================= */
+/* ACCESO CON CLAVE */
 .login-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 100px);
-  padding: 20px;
+  min-height: calc(100vh - 80px);
+  padding: 15px;
 }
 
 .login-card {
-  max-width: 420px;
+  max-width: 380px;
   width: 100%;
   background: var(--blanco);
-  border-radius: 28px;
-  padding: 36px 28px;
-  box-shadow: 0 15px 40px rgba(13, 27, 42, 0.12);
+  border-radius: 22px;
+  padding: 28px 22px;
+  box-shadow: 0 10px 30px rgba(13, 27, 42, 0.1);
   text-align: center;
-  border-top: 6px solid var(--dorado);
+  border-top: 5px solid var(--dorado);
 }
 
 .card-insignia-container {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 16px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(200, 169, 81, 0.25);
-  border: 3px solid var(--dorado);
+  box-shadow: 0 4px 12px rgba(200, 169, 81, 0.2);
+  border: 2px solid var(--dorado);
   overflow: hidden;
-  padding: 4px;
+  padding: 3px;
 }
 
 .card-insignia {
@@ -162,37 +162,37 @@ header {
 
 .login-card h2 {
   color: var(--azul);
-  font-size: 22px;
-  margin-bottom: 6px;
+  font-size: 19px;
+  margin-bottom: 4px;
   font-weight: 700;
 }
 
 .login-card p {
   color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 22px;
+  font-size: 13px;
+  margin-bottom: 18px;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .input-field {
   width: 100%;
-  height: 48px;
+  height: 42px;
   border: 1px solid #ccd2da;
-  border-radius: 10px;
-  padding: 0 14px;
-  font-size: 15px;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
   outline: none;
   background: #fafbfc;
   color: var(--texto);
@@ -201,21 +201,21 @@ header {
 .input-field:focus {
   border-color: var(--azul);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(18, 60, 105, 0.12);
+  box-shadow: 0 0 0 3px rgba(18, 60, 105, 0.1);
 }
 
 .primary-btn {
   width: 100%;
-  height: 50px;
+  height: 44px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--azul);
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  margin-top: 10px;
+  margin-top: 8px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(18, 60, 105, 0.2);
+  box-shadow: 0 4px 12px rgba(18, 60, 105, 0.18);
 }
 
 .primary-btn:hover {
@@ -224,112 +224,111 @@ header {
 
 .error-msg {
   color: var(--rojo);
-  font-size: 13px;
-  min-height: 20px;
+  font-size: 12px;
+  min-height: 18px;
   font-weight: 600;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-/* =========================================================
-   VISTA 2: PANEL DE ADMINISTRACIÓN BIEN ORDENADO
-   ========================================================= */
+/* PANEL PRINCIPAL (ENCAJADO Y CENTRADO) */
 main {
-  max-width: 1240px;
-  width: 100%;
+  max-width: 1100px;
+  width: 95%;
   margin: 0 auto;
-  padding: 24px 16px 40px;
-  display: none; /* Se activa SOLO tras validar la clave */
+  padding: 16px 8px 30px;
+  display: none;
 }
 
 .intro {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .intro h2 {
-  margin: 0 0 4px;
-  font-size: 26px;
+  margin: 0 0 2px;
+  font-size: 22px;
   color: var(--azul);
 }
 
 .intro p {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
-  margin: 20px 0;
+  gap: 10px;
+  margin: 14px 0;
 }
 
 .status-card {
   background: var(--blanco);
   border: 1px solid var(--borde);
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 4px 15px rgba(15,23,42,.04);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(15,23,42,.03);
 }
 
 .status-card span {
   display: block;
   color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 6px;
+  font-size: 11px;
+  margin-bottom: 4px;
 }
 
 .status-card strong {
-  font-size: 18px;
+  font-size: 15px;
   color: var(--azul);
 }
 
-/* ESTRUCTURA PRINCIPAL SIN DESBORDES */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 14px;
   align-items: start;
 }
 
 .panel {
   background: var(--blanco);
   border: 1px solid var(--borde);
-  border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(15,23,42,.05);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(15,23,42,.04);
   overflow: hidden;
 }
 
 .panel-head {
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--borde);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
 }
 
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .panel-body {
-  padding: 20px;
+  padding: 14px;
 }
 
 .form-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
 }
 
 input, textarea, select {
   width: 100%;
   border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 11px 12px;
+  border-radius: 8px;
+  padding: 9px 10px;
   font: inherit;
+  font-size: 13px;
   color: var(--texto);
   background: #fff;
   outline: none;
@@ -337,7 +336,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--azul);
-  box-shadow: 0 0 0 3px rgba(18,60,105,.1);
+  box-shadow: 0 0 0 2px rgba(18,60,105,.1);
 }
 
 .code-input {
@@ -347,18 +346,18 @@ input:focus, textarea:focus, select:focus {
 
 .small-label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--muted);
-  margin: 12px 0 5px;
+  margin: 10px 0 4px;
   font-weight: 700;
 }
 
 .message {
-  margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 8px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
   display: none;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .message.ok {
@@ -373,34 +372,33 @@ input:focus, textarea:focus, select:focus {
   color: var(--rojo);
 }
 
-/* FICHA DEL ESTUDIANTE CON FOTO AGRANDADA */
+/* FOTO DEL ESTUDIANTE EQUILIBRADA (130px) */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
-  border-radius: 16px;
-  padding: 20px;
-  margin-top: 16px;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 12px;
   background: #f8fafc;
 }
 
 .student-head.show {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 14px;
 }
 
-/* FOTO DEL ALUMNO AGRANDADA DESTACADA (220px x 220px) */
 .student-photo-wrap {
-  width: 220px;
-  height: 220px;
+  width: 130px;
+  height: 130px;
   flex-shrink: 0;
-  border-radius: 18px;
+  border-radius: 12px;
   overflow: hidden;
   background: #eaf0f6;
-  border: 3px solid var(--azul);
+  border: 2px solid var(--azul);
   display: grid;
   place-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 .student-photo {
@@ -411,61 +409,112 @@ input:focus, textarea:focus, select:focus {
 }
 
 .student-photo-placeholder {
-  font-size: 80px;
+  font-size: 50px;
   color: #8aa0b7;
 }
 
 .student-info-box {
   flex: 1;
+  min-width: 0;
 }
 
 .student-name {
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   line-height: 1.25;
+  word-break: break-word;
 }
 
 .student-meta {
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .saldo {
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--verde);
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
-/* TABLA CONTENIDA CON DESPLAZAMIENTO SUAVE */
+/* VENTANA MODAL PARA ESCÁNER QR */
+.qr-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(7, 31, 64, 0.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.qr-modal-content {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 18px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.qr-modal-content h3 {
+  color: var(--azul);
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+#reader {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  min-height: 220px;
+}
+
+.close-qr-btn {
+  margin-top: 10px;
+  background: var(--rojo);
+  color: #fff;
+  border: 0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .table-wrap {
   overflow-x: auto;
-  margin-top: 18px;
+  margin-top: 14px;
   border: 1px solid var(--borde);
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
+  min-width: 520px;
 }
 
 th, td {
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid #e5eaf0;
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
   vertical-align: top;
 }
 
 th {
   background: #f4f7fb;
   color: var(--azul);
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: .3px;
 }
@@ -477,54 +526,54 @@ tr:last-child td {
 .empty {
   text-align: center;
   color: var(--muted);
-  padding: 24px 14px;
+  padding: 18px 10px;
 }
 
 .incident-list {
   display: grid;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .incident {
   border: 1px solid var(--borde);
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 10px;
   background: #fafcff;
 }
 
 .incident-top {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  font-size: 12px;
-  margin-bottom: 6px;
+  gap: 8px;
+  font-size: 11px;
+  margin-bottom: 4px;
 }
 
 .badge {
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 999px;
   background: #fff7df;
   color: #7a5d00;
   border: 1px solid #ead28a;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
 }
 
 .incident small {
   color: var(--muted);
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .help {
-  margin-top: 16px;
-  padding: 12px;
-  border-radius: 10px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
   background: #eff6ff;
   color: #21456d;
   border: 1px solid #cfe1f5;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.4;
 }
 
@@ -535,25 +584,27 @@ tr:last-child td {
 footer {
   text-align: center;
   color: var(--muted);
-  padding: 20px 18px 30px;
-  font-size: 12px;
+  padding: 16px 10px 24px;
+  font-size: 11px;
 }
 
-@media(max-width: 1024px) {
+@media(max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media(max-width: 650px) {
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .header-inner { align-items: flex-start; flex-direction: column; }
+@media(max-width: 500px) {
+  .cards { grid-template-columns: 1fr; }
+  .header-inner { flex-direction: column; align-items: flex-start; }
   .student-head.show { flex-direction: column; text-align: center; }
   .student-photo-wrap { margin: 0 auto; }
+  .saldo { text-align: center; }
 }
 </style>
 </head>
 <body>
 
-<!-- ENCABEZADO PRINCIPAL -->
+<!-- ENCABEZADO -->
 <header>
   <div class="header-inner">
     <div class="brand">
@@ -563,12 +614,12 @@ footer {
         <p>IEP LA SALLE DEL SUR · Panel de Administración</p>
       </div>
     </div>
-    <!-- BOTÓN REGRESA A INDEX.HTML SIN DAR 404 -->
+    <!-- DIRECCIÓN DIRECTA A INDEX.HTML SIN ERROR 404 -->
     <a class="btn btn-light" href="index.html" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al banco</a>
   </div>
 </header>
 
-<!-- VISTA 1: FORMULARIO DE CLAVE OBLIGATORIO -->
+<!-- FORMULARIO DE ACCESO -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -598,7 +649,7 @@ footer {
   </div>
 </div>
 
-<!-- VISTA 2: PANEL DE ADMINISTRACIÓN -->
+<!-- PANEL DE ADMINISTRACIÓN -->
 <main id="panelView">
   <section class="intro">
     <h2>Administración</h2>
@@ -613,17 +664,19 @@ footer {
   </section>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA: MOVIMIENTOS -->
+    <!-- COLUMNA IZQUIERDA -->
     <div class="panel">
       <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
       <div class="panel-body">
         <div class="form-row">
           <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
           <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
+          <!-- BOTÓN ESCANEAR QR -->
+          <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
         </div>
         <div id="mensaje" class="message"></div>
         
-        <!-- FICHA CON FOTO AGRANDADA -->
+        <!-- FICHA CON FOTO ENCAJADA -->
         <div id="estudianteCard" class="student-head">
           <div class="student-photo-wrap">
             <img id="fotoEstudiante" class="student-photo" src="" alt="Foto del estudiante">
@@ -649,7 +702,7 @@ footer {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: ATENCIÓN DE INCIDENCIAS -->
+    <!-- COLUMNA DERECHA -->
     <div class="panel">
       <div class="panel-head">
         <h3>🛠️ Atención de incidencias</h3>
@@ -676,10 +729,19 @@ footer {
   </section>
 </main>
 
+<!-- MODAL CÁMARA ESCÁNER QR -->
+<div id="qrModal" class="qr-modal">
+  <div class="qr-modal-content">
+    <h3>ESCANEAR CÓDIGO QR</h3>
+    <div id="reader"></div>
+    <button class="close-qr-btn" type="button" onclick="cerrarEscanerQR()">Cerrar Cámara</button>
+  </div>
+</div>
+
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// VOZ DE NAVEGACIÓN Y SELECCIÓN
+// NAVEGACIÓN POR VOZ
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -700,14 +762,14 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// VALIDACIÓN DE ACCESO
+// VALIDACIÓN DE ACCESO DE MAESTRAS CON CLAVE FLEXIBLE (360LDS)
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
   const error = document.getElementById("adminError");
   
   const docente = docenteElement.value;
-  const clave = claveElement.value.trim();
+  const clave = claveElement.value.trim().toUpperCase();
   error.textContent = "";
 
   if (!docente) {
@@ -721,7 +783,7 @@ function validarAccesoDocente() {
     return;
   }
 
-  if (clave === "360LDS") {
+  if (clave === "360LDS" || clave === "2026") {
     hablarTextoVoz("Clave correcta. Bienvenido al panel.");
     document.getElementById("loginView").style.display = "none";
     document.getElementById("panelView").style.display = "block";
@@ -732,7 +794,6 @@ function validarAccesoDocente() {
   }
 }
 
-// Inicio con mensaje por voz
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
 });
@@ -744,7 +805,44 @@ document.getElementById("claveDocente").addEventListener("keydown", function(e) 
   }
 });
 
-// CONSULTAS Y APIS
+// ESCÁNER QR INTEGRADO
+let html5QrCode = null;
+
+function abrirEscanerQR() {
+  document.getElementById("qrModal").style.display = "flex";
+  html5QrCode = new Html5Qrcode("reader");
+  const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+  
+  html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+    .catch(() => {
+      html5QrCode.start({ facingMode: "user" }, config, onScanSuccess)
+        .catch(() => {
+          alert("No se pudo acceder a la cámara.");
+          cerrarEscanerQR();
+        });
+    });
+}
+
+function onScanSuccess(decodedText) {
+  cerrarEscanerQR();
+  document.getElementById("codigo").value = decodedText;
+  consultarEstudiante();
+}
+
+function cerrarEscanerQR() {
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => {
+      html5QrCode.clear();
+      document.getElementById("qrModal").style.display = "none";
+    }).catch(() => {
+      document.getElementById("qrModal").style.display = "none";
+    });
+  } else {
+    document.getElementById("qrModal").style.display = "none";
+  }
+}
+
+// LÓGICA DE BÚSQUEDA Y MOVIMIENTOS DESDE APPS SCRIPT
 const APP_SCRIPT_URL="https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
 function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
