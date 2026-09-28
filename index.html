@@ -97,14 +97,14 @@
             z-index: 2;
         }
 
-        /* Tarjeta Principal sin cuadro amarillo */
+        /* Tarjeta Principal integrada sobre el fondo */
         .portal-card {
             background: transparent;
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
             padding: 20px 18px 24px 18px;
             border-radius: 26px;
-            max-width: 520px;
+            max-width: 540px;
             width: 100%;
             box-shadow: none;
             border: none;
@@ -135,11 +135,12 @@
         /* Fila Superior: Botón QR | Niña Dinero | Botón Ingreso */
         .top-row {
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
             width: 100%;
-            margin-bottom: 16px;
+            margin-top: 18px; /* Desplazado hacia abajo */
+            margin-bottom: 20px;
         }
 
         .img-btn {
@@ -152,16 +153,20 @@
             width: 100%;
         }
 
+        /* Botones de QR e Ingreso: MÁS GRANDES, MÁS CUADRADOS Y MÁS ABAJO */
         .top-row .img-btn img {
             width: 100%;
-            height: 76px;
-            object-fit: contain;
+            height: 92px; /* Mayor altura para aspecto grande y cuadrado */
+            object-fit: fill; /* Llenado uniforme de proporciones */
+            border-radius: 16px;
             display: block;
+            margin-top: 20px; /* Bajados más respecto al centro */
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .img-btn:hover {
             transform: scale(1.04);
-            filter: brightness(1.04);
+            filter: brightness(1.05);
         }
 
         .center-girl-img {
@@ -233,7 +238,8 @@
                 grid-template-columns: 1fr;
             }
             .top-row .img-btn img {
-                height: 65px;
+                height: 75px;
+                margin-top: 0;
             }
             .center-girl-img {
                 width: 140px;
@@ -265,7 +271,7 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
+            <!-- Fila Superior: Botón QR (Cuadrado y más grande) | Niña Dinero | Botón Ingreso (Cuadrado y más grande) -->
             <div class="top-row">
                 <a href="qr.html" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
