@@ -27,7 +27,7 @@
         /* Barra Superior Institucional */
         header {
             background-color: #0d233a;
-            padding: 10px 25px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -39,23 +39,23 @@
         .school-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .school-info img {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
         }
 
         .school-text h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #ffffff;
             font-weight: 700;
         }
 
         .school-text p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #f1c40f;
             font-weight: 600;
         }
@@ -64,14 +64,14 @@
             background: #1b365d;
             border: 2px solid #f1c40f;
             color: white;
-            padding: 6px 15px;
+            padding: 5px 12px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             transition: all 0.3s ease;
         }
 
@@ -79,156 +79,193 @@
             background: #24487d;
         }
 
-        /* Contenedor Principal: Panel a la izquierda y Profesora a la derecha */
+        /* Contenedor Principal (Adaptable PC y Celular) */
         .main-container {
             flex: 1;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            padding: 20px 50px;
-            max-width: 1350px;
+            padding: 20px;
+            max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            gap: 60px;
+            gap: 40px;
         }
 
+        /* Cuadro más alto y angosto */
         .content-panel {
             background: rgba(255, 255, 255, 0.96);
-            padding: 28px 32px;
-            border-radius: 22px;
-            max-width: 600px;
+            padding: 35px 25px;
+            border-radius: 24px;
+            max-width: 460px;
             width: 100%;
             color: #1a237e;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
             border: 3px solid #b2dfdb;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .bank-title {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             color: #00796b;
             font-weight: 700;
             margin-bottom: 2px;
         }
 
         .bank-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #00897b;
             font-weight: 600;
-            margin-bottom: 18px;
+            margin-bottom: 25px;
         }
 
-        /* Botones organizados */
+        /* Botones organizados verticalmente */
         .buttons-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Fila Superior: Escanear QR e Ingresar Código juntos */
-        .row-top {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 12px;
-        }
-
-        /* Fila Inferior: Manual, Tienda, Padres */
-        .row-bottom {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 14px;
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            padding: 12px 14px;
-            border-radius: 14px;
+            padding: 14px 18px;
+            border-radius: 16px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
             text-align: left;
-            gap: 10px;
+            gap: 12px;
+            width: 100%;
         }
 
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
 
-        .icon-qr {
-            width: 32px;
-            height: 32px;
-            background: #0369a1;
-            border-radius: 6px;
+        /* Sección QR integrada */
+        .qr-section {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: white;
-            font-size: 1rem;
+            background: #e0f2fe;
+            border-radius: 16px;
+            padding: 10px 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 12px;
         }
 
-        .btn-text {
+        .qr-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .qr-img-badge {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: white;
+            padding: 4px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .qr-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            color: #0369a1;
+        }
+
+        .qr-text span:first-child {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .qr-text span:last-child {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+
+        .btn-content-custom {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn-icon-img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            background: white;
+            padding: 4px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-text-center {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
         }
 
-        .btn-text span:first-child {
-            font-size: 0.9rem;
+        .btn-text-center span:first-child {
+            font-size: 0.95rem;
             font-weight: 700;
         }
 
-        .btn-text span:last-child {
-            font-size: 0.68rem;
+        .btn-text-center span:last-child {
+            font-size: 0.7rem;
             opacity: 0.85;
             font-weight: 500;
         }
 
         /* Colores exactos (Sin tonos negros) */
-        .btn-qr { background: #e0f2fe; color: #0369a1; }
-        .btn-codigo { background: #f3e8ff; color: #6b21a8; justify-content: center; text-align: center; }
-        .btn-manual { background: #66BB6A; color: #1b5e20; justify-content: center; text-align: center; } /* Verde limón */
-        .btn-tienda { background: #fee2e2; color: #991b1b; justify-content: center; text-align: center; } /* Tienda */
-        .btn-padres { background: #FFD54F; color: #5d4037; justify-content: center; text-align: center; } /* Amarillo intenso */
+        .btn-codigo { background: #f3e8ff; color: #6b21a8; }
+        .btn-manual { background: #66BB6A; color: #1b5e20; }
+        .btn-tienda { background: #fee2e2; color: #991b1b; }
+        .btn-padres { background: #FFD54F; color: #5d4037; }
 
-        /* Imagen de la profesora sentada a la derecha */
+        /* Imagen de la profesora a la derecha */
         .teacher-character {
-            max-width: 340px;
+            max-width: 310px;
             height: auto;
             filter: drop-shadow(0 12px 25px rgba(0,0,0,0.5));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
         }
 
         footer {
             background-color: #0d233a;
             text-align: center;
             padding: 10px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #ffffff;
             font-weight: 600;
             border-top: 2px solid #f1c40f;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 850px) {
             .main-container {
                 flex-direction: column;
-                justify-content: center;
+                padding: 15px;
                 gap: 20px;
-                padding: 20px;
+            }
+            .content-panel {
+                max-width: 100%;
+                padding: 25px 20px;
             }
             .teacher-character {
-                max-width: 220px;
+                display: none;
             }
         }
     </style>
@@ -237,10 +274,10 @@
 
     <!-- Audio del Himno institucional -->
     <audio id="bgMusic" loop>
-        <source src="himno.mp3" type="audio/mpeg">
+        <source src="assets/himno.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Barra Superior con la Insignia en la parte superior izquierda -->
+    <!-- Barra Superior -->
     <header>
         <div class="school-info">
             <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -256,48 +293,60 @@
 
     <!-- Contenedor Principal -->
     <div class="main-container">
-        <!-- Panel Izquierdo con Título y Botones -->
+        <!-- Panel Central Estrecho y Alto -->
         <div class="content-panel">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
             <div class="buttons-grid">
-                <!-- Fila Superior: Escanear QR e Ingresar Código -->
-                <div class="row-top">
-                    <a href="qr.html" class="nav-btn btn-qr">
-                        <div class="icon-qr">📱</div>
-                        <div class="btn-text">
-                            <span>Escanear QR</span>
-                            <span>Presiona aquí para leer tu código</span>
-                        </div>
-                    </a>
-                    <a href="codigo.html" class="nav-btn btn-codigo">
-                        <div class="btn-text" style="width: 100%;">
-                            <span>Ingresar Código</span>
-                            <span>Si no puedes escanear, digítalo</span>
-                        </div>
-                    </a>
-                </div>
+                <!-- 1. Escanear QR con imagen de apoyo -->
+                <a href="qr.html" class="qr-section">
+                    <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/be04540c91b15fb2661052d3173f4a64a4541432/assets/observando.png" alt="QR" class="qr-img-badge">
+                    <div class="qr-text">
+                        <span>Escanear QR</span>
+                        <span>Presiona aquí para leer tu código</span>
+                    </div>
+                </a>
 
-                <!-- Fila Inferior: Manual, Tienda, Padres -->
-                <div class="row-bottom">
-                    <a href="manual.html" class="nav-btn btn-manual">
-                        <span style="font-size: 1.1rem;">📖</span>
-                        <span>Manual</span>
-                    </a>
-                    <a href="tienda.html" class="nav-btn btn-tienda">
-                        <span style="font-size: 1.1rem;">🛒</span>
-                        <span>Tienda</span>
-                    </a>
-                    <a href="padres.html" class="nav-btn btn-padres">
-                        <span style="font-size: 1.1rem;">👨‍👩‍👧</span>
-                        <span>Padres</span>
-                    </a>
-                </div>
+                <!-- 2. Ingresar Código -->
+                <a href="codigo.html" class="nav-btn btn-codigo">
+                    <span style="font-size: 1.3rem;">#️⃣</span>
+                    <div class="btn-text-center">
+                        <span>Ingresar Código</span>
+                        <span>Si no puedes escanear, digítalo</span>
+                    </div>
+                </a>
+
+                <!-- 3. Manual del Sistema -->
+                <a href="manual.html" class="nav-btn btn-manual">
+                    <span style="font-size: 1.3rem;">📖</span>
+                    <div class="btn-text-center">
+                        <span>Manual del Sistema</span>
+                        <span>Guía de uso del banco</span>
+                    </div>
+                </a>
+
+                <!-- 4. Tienda Escolar (Con tu imagen dinero.png integrada) -->
+                <a href="tienda.html" class="nav-btn btn-tienda">
+                    <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/2bc72afa2b13f7cd7c414c811a57a2073cfcc683/assets/dinero.png" alt="Dinero" class="btn-icon-img">
+                    <div class="btn-text-center">
+                        <span>Tienda Escolar</span>
+                        <span>Canjea tus LDS Coins</span>
+                    </div>
+                </a>
+
+                <!-- 5. Escuela de Padres -->
+                <a href="padres.html" class="nav-btn btn-padres">
+                    <span style="font-size: 1.3rem;">👨‍👩‍👧</span>
+                    <div class="btn-text-center">
+                        <span>Escuela de Padres</span>
+                        <span>Información y acompañamiento</span>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <!-- Imagen de la Profesora Sentada a la Derecha (desde tu repositorio) -->
+        <!-- Profesora a la Derecha -->
         <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/be04540c91b15fb2661052d3173f4a64a4541432/assets/observando.png" alt="Profesora La Salle del Sur" class="teacher-character">
     </div>
 
@@ -308,26 +357,24 @@
     <script>
         const music = document.getElementById('bgMusic');
 
-        // Bienvenida automática con voz cálida y posterior reproducción del himno
+        // Bienvenida por voz cálida y reproducción automática del himno al terminar
         window.addEventListener('load', () => {
             if ('speechSynthesis' in window) {
                 setTimeout(() => {
                     window.speechSynthesis.cancel();
                     
-                    const textoBienvenida = "¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Escanea tu código QR o ingresa tu número para comenzar esta gran experiencia.";
+                    const textoBienvenida = "¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Escanea tu código QR o ingresa tu número para comenzar.";
                     const utterance = new SpeechSynthesisUtterance(textoBienvenida);
                     utterance.lang = 'es-ES';
                     utterance.rate = 0.95;
-                    utterance.pitch = 1.05; // Tono equilibrado y ameno
+                    utterance.pitch = 1.05;
 
-                    // Intentar seleccionar una voz femenina/suave en español si está disponible en el navegador
                     const voices = window.speechSynthesis.getVoices();
                     const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || v.name.includes('Google') || v.name.includes('Sabrina')));
                     if (vozEspanol) {
                         utterance.voice = vozEspanol;
                     }
 
-                    // Al terminar la voz de bienvenida, reproduce automáticamente el himno
                     utterance.onend = function() {
                         music.play().catch(e => console.log("Himno listo para reproducir"));
                     };
