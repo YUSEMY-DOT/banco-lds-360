@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banco LDS 360 - Escanear QR</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Librería estándar para lectura de Código QR con cámara -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         * {
@@ -26,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Header Institucional */
         header {
             background-color: #0c1e30;
             padding: 10px 30px;
@@ -79,7 +77,6 @@
             background: #203f61;
         }
 
-        /* Contenedor Principal */
         .main-container {
             flex: 1;
             display: flex;
@@ -89,14 +86,14 @@
         }
 
         .qr-card {
-            background: rgba(12, 30, 48, 0.92);
-            backdrop-filter: blur(10px);
+            background: rgba(12, 30, 48, 0.88);
+            backdrop-filter: blur(8px);
             border-radius: 28px;
             border: 3px solid #40c4ff;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            max-width: 480px;
+            max-width: 440px;
             width: 100%;
-            padding: 25px 20px;
+            padding: 24px 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -105,56 +102,18 @@
 
         .qr-title {
             color: #40c4ff;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 12px;
         }
 
-        /* Caja de Indicador del Paso */
-        .step-box {
-            background: #152b42;
-            border: 2px solid #f1c40f;
-            border-radius: 15px;
-            padding: 10px 15px;
-            width: 100%;
-            margin: 15px 0;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ffffff;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-        }
-
-        /* Recuadro de Cámara */
         #reader {
             width: 100%;
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
-            border: 3px dashed #40c4ff;
+            border: 2px solid #40c4ff;
             background: #000000;
-            min-height: 250px;
-        }
-
-        #reader video {
-            object-fit: cover !important;
-            border-radius: 16px;
-        }
-
-        /* Botón de Código Manual */
-        .fallback-btn {
-            margin-top: 18px;
-            background: #d1c4e9;
-            color: #4a148c;
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
-
-        .fallback-btn:hover {
-            transform: scale(1.04);
+            min-height: 260px;
         }
 
         footer {
@@ -179,25 +138,14 @@
                 <p>Formamos personas íntegras</p>
             </div>
         </div>
-        <a href="index.html" class="home-btn">🏠 Inicio</a>
+        <a href="index.html" class="home-btn">🏠 Regresar</a>
     </header>
 
-    <!-- Contenedor del Escáner -->
+    <!-- Contenedor del Escáner Directo -->
     <div class="main-container">
         <div class="qr-card">
             <h1 class="qr-title">ESCANEAR CÓDIGO QR</h1>
-            
-            <!-- Indicador dinámico de paso -->
-            <div id="stepInstruction" class="step-box">
-                PASO 1: Permite el uso de tu cámara en la pantalla
-            </div>
-
-            <!-- Visor de la cámara -->
             <div id="reader"></div>
-
-            <a href="codigo.html" class="fallback-btn">
-                🔢 ¿No puedes escanear? Digita tu código aquí
-            </a>
         </div>
     </div>
 
@@ -206,110 +154,82 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPT DE NAVEGACIÓN PASO A PASO CON VOZ GUÍA -->
     <script>
         let html5QrcodeScanner = null;
-        let vozActiva = true;
+        let timeoutTimer = null;
 
-        // Función de locución de voz masculina
-        function hablarGuia(texto, alTerminar) {
+        function hablar(texto, alTerminar) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const mensaje = new SpeechSynthesisUtterance(texto);
                 mensaje.lang = 'es-PE';
-                mensaje.rate = 0.92;
+                mensaje.rate = 0.95;
                 mensaje.pitch = 1.0;
-
+                
                 const voices = window.speechSynthesis.getVoices();
                 const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Jorge') || v.name.includes('Raul') || v.name.includes('Google') || v.name.includes('Lucia') || v.name.includes('Elena')));
-                if (vozEspanol) {
-                    mensaje.voice = vozEspanol;
-                }
+                if (vozEspanol) mensaje.voice = vozEspanol;
 
-                if (alTerminar) {
-                    mensaje.onend = alTerminar;
-                }
-
+                if (alTerminar) mensaje.onend = alTerminar;
                 window.speechSynthesis.speak(mensaje);
+            } else if (alTerminar) {
+                alTerminar();
             }
         }
 
-        // Actualiza el texto en pantalla y lo reproduce por voz
-        function cambiarPaso(numeroPaso, textoPantalla, textoVoz, callback) {
-            const stepBox = document.getElementById('stepInstruction');
-            stepBox.innerText = `PASO ${numeroPaso}: ${textoPantalla}`;
-            hablarGuia(textoVoz, callback);
-        }
-
-        // Manejo del resultado del escáner
-        function onScanSuccess(decodedText, decodedResult) {
+        function volverAInicio(mensajeError) {
+            if (timeoutTimer) clearTimeout(timeoutTimer);
             if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
+                try { html5QrcodeScanner.clear(); } catch(e){}
             }
-
-            // PASO 3: Éxito al escanear
-            cambiarPaso(
-                3, 
-                "¡Código QR detectado con éxito!", 
-                `¡Código detectado correctamente! Redirigiendo a la cuenta del estudiante.`,
-                function() {
-                    // Guarda el código y redirige (puedes cambiar 'alumno.html' por tu página destino)
-                    localStorage.setItem('codigoEscaneado', decodedText);
-                    setTimeout(() => {
-                        window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
-                    }, 1200);
-                }
-            );
+            hablar(mensajeError || "No se detectó el código QR. Regresando al inicio.", function() {
+                window.location.href = "index.html";
+            });
         }
 
-        function onScanFailure(error) {
-            // Se ignora el fallo por fotograma para mantener fluido el escaneo
+        function onScanSuccess(decodedText) {
+            if (timeoutTimer) clearTimeout(timeoutTimer);
+            if (html5QrcodeScanner) {
+                try { html5QrcodeScanner.clear(); } catch(e){}
+            }
+            localStorage.setItem('codigoEscaneado', decodedText);
+            hablar("¡Código detectado correctamente!", function() {
+                window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+            });
         }
 
-        // Inicializa la cámara
-        function iniciarEscanerQR() {
-            // PASO 1: Bienvenida
-            cambiarPaso(
-                1, 
-                "Permite el acceso a tu cámara para continuar", 
-                "¡Bienvenido al lector QR del Banco Lasallista 360! Paso 1: Por favor, permite el acceso a la cámara de tu dispositivo.",
-                function() {
-                    // Inicializar módulo de cámara
-                    html5QrcodeScanner = new Html5QrcodeScanner(
-                        "reader", 
-                        { fps: 10, qrbox: { width: 220, height: 220 } },
-                        /* verbose= */ false
-                    );
+        function iniciarEscaner() {
+            hablar("Acerca tu código QR a la cámara.");
 
-                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            try {
+                html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", 
+                    { fps: 10, qrbox: { width: 220, height: 220 } },
+                    false
+                );
 
-                    // PASO 2: Colocar el QR frente a la cámara
-                    setTimeout(() => {
-                        cambiarPaso(
-                            2, 
-                            "Acerca tu código QR y mantenlo firme frente al cuadro", 
-                            "Paso 2: Excelente. Ahora acerca el código QR de tu carnet al centro del recuadro de la cámara y mantenlo firme."
-                        );
-                    }, 2500);
-                }
-            );
+                html5QrcodeScanner.render(onScanSuccess, function(err) {});
+
+                // Si no escanea ningún código en 7 segundos, retorna automáticamente a la principal
+                timeoutTimer = setTimeout(function() {
+                    volverAInicio("No se detectó el código QR. Regresando al inicio.");
+                }, 7000);
+
+            } catch (e) {
+                volverAInicio("No se pudo activar la cámara. Regresando al inicio.");
+            }
         }
 
-        // Iniciar flujo al cargar e interactuar
-        window.addEventListener('load', () => {
-            setTimeout(iniciarEscanerQR, 500);
+        window.addEventListener('load', function() {
+            setTimeout(iniciarEscaner, 300);
         });
 
-        document.addEventListener('touchstart', () => {
-            if (window.speechSynthesis.speaking === false && !html5QrcodeScanner) {
-                iniciarEscanerQR();
-            }
+        document.addEventListener('click', function() {
+            if (!html5QrcodeScanner) iniciarEscaner();
         }, { once: true });
         
-        document.addEventListener('click', () => {
-            if (window.speechSynthesis.speaking === false && !html5QrcodeScanner) {
-                iniciarEscanerQR();
-            }
+        document.addEventListener('touchstart', function() {
+            if (!html5QrcodeScanner) iniciarEscaner();
         }, { once: true });
     </script>
 </body>
