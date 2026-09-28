@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco LDS 360 - Escanear QR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Librería estándar para lectura de Código QR con cámara -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(12, 30, 48, 0.45), rgba(12, 30, 48, 0.45)), 
+                        url('assets/banco.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Header Institucional */
+        header {
+            background-color: #0c1e30;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #f1c40f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .school-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .school-info img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+        }
+
+        .school-text h3 {
+            font-size: 1.05rem;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .school-text p {
+            font-size: 0.8rem;
+            color: #f1c40f;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .home-btn {
+            background: #152b42;
+            border: 2px solid #f1c40f;
+            color: #ffffff;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background: #203f61;
+        }
+
+        /* Contenedor Principal */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .qr-card {
+            background: rgba(12, 30, 48, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            border: 3px solid #40c4ff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            max-width: 480px;
+            width: 100%;
+            padding: 25px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-title {
+            color: #40c4ff;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        /* Caja de Indicador del Paso */
+        .step-box {
+            background: #152b42;
+            border: 2px solid #f1c40f;
+            border-radius: 15px;
+            padding: 10px 15px;
+            width: 100%;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        /* Recuadro de Cámara */
+        #reader {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px dashed #40c4ff;
+            background: #000000;
+            min-height: 250px;
+        }
+
+        #reader video {
+            object-fit: cover !important;
+            border-radius: 16px;
+        }
+
+        /* Botón de Código Manual */
+        .fallback-btn {
+            margin-top: 18px;
+            background: #d1c4e9;
+            color: #4a148c;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .fallback-btn:hover {
+            transform: scale(1.04);
+        }
+
+        footer {
+            background-color: #0c1e30;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.82rem;
+            color: #ffffff;
+            font-weight: 600;
+            border-top: 3px solid #f1c40f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="school-info">
+            <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
+            <div class="school-text">
+                <h3>IEP LA SALLE DEL SUR</h3>
+                <p>Formamos personas íntegras</p>
+            </div>
+        </div>
+        <a href="index.html" class="home-btn">🏠 Inicio</a>
+    </header>
+
+    <!-- Contenedor del Escáner -->
+    <div class="main-container">
+        <div class="qr-card">
+            <h1 class="qr-title">ESCANEAR CÓDIGO QR</h1>
+            
+            <!-- Indicador dinámico de paso -->
+            <div id="stepInstruction" class="step-box">
+                PASO 1: Permite el uso de tu cámara en la pantalla
+            </div>
+
+            <!-- Visor de la cámara -->
+            <div id="reader"></div>
+
+            <a href="codigo.html" class="fallback-btn">
+                🔢 ¿No puedes escanear? Digita tu código aquí
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
+    </footer>
+
+    <!-- SCRIPT DE NAVEGACIÓN PASO A PASO CON VOZ GUÍA -->
+    <script>
+        let html5QrcodeScanner = null;
+        let vozActiva = true;
+
+        // Función de locución de voz masculina
+        function hablarGuia(texto, alTerminar) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const mensaje = new SpeechSynthesisUtterance(texto);
+                mensaje.lang = 'es-PE';
+                mensaje.rate = 0.92;
+                mensaje.pitch = 1.0;
+
+                const voices = window.speechSynthesis.getVoices();
+                const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Jorge') || v.name.includes('Raul') || v.name.includes('Google') || v.name.includes('Lucia') || v.name.includes('Elena')));
+                if (vozEspanol) {
+                    mensaje.voice = vozEspanol;
+                }
+
+                if (alTerminar) {
+                    mensaje.onend = alTerminar;
+                }
+
+                window.speechSynthesis.speak(mensaje);
+            }
+        }
+
+        // Actualiza el texto en pantalla y lo reproduce por voz
+        function cambiarPaso(numeroPaso, textoPantalla, textoVoz, callback) {
+            const stepBox = document.getElementById('stepInstruction');
+            stepBox.innerText = `PASO ${numeroPaso}: ${textoPantalla}`;
+            hablarGuia(textoVoz, callback);
+        }
+
+        // Manejo del resultado del escáner
+        function onScanSuccess(decodedText, decodedResult) {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+            }
+
+            // PASO 3: Éxito al escanear
+            cambiarPaso(
+                3, 
+                "¡Código QR detectado con éxito!", 
+                `¡Código detectado correctamente! Redirigiendo a la cuenta del estudiante.`,
+                function() {
+                    // Guarda el código y redirige (puedes cambiar 'alumno.html' por tu página destino)
+                    localStorage.setItem('codigoEscaneado', decodedText);
+                    setTimeout(() => {
+                        window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                    }, 1200);
+                }
+            );
+        }
+
+        function onScanFailure(error) {
+            // Se ignora el fallo por fotograma para mantener fluido el escaneo
+        }
+
+        // Inicializa la cámara
+        function iniciarEscanerQR() {
+            // PASO 1: Bienvenida
+            cambiarPaso(
+                1, 
+                "Permite el acceso a tu cámara para continuar", 
+                "¡Bienvenido al lector QR del Banco Lasallista 360! Paso 1: Por favor, permite el acceso a la cámara de tu dispositivo.",
+                function() {
+                    // Inicializar módulo de cámara
+                    html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader", 
+                        { fps: 10, qrbox: { width: 220, height: 220 } },
+                        /* verbose= */ false
+                    );
+
+                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+                    // PASO 2: Colocar el QR frente a la cámara
+                    setTimeout(() => {
+                        cambiarPaso(
+                            2, 
+                            "Acerca tu código QR y mantenlo firme frente al cuadro", 
+                            "Paso 2: Excelente. Ahora acerca el código QR de tu carnet al centro del recuadro de la cámara y mantenlo firme."
+                        );
+                    }, 2500);
+                }
+            );
+        }
+
+        // Iniciar flujo al cargar e interactuar
+        window.addEventListener('load', () => {
+            setTimeout(iniciarEscanerQR, 500);
+        });
+
+        document.addEventListener('touchstart', () => {
+            if (window.speechSynthesis.speaking === false && !html5QrcodeScanner) {
+                iniciarEscanerQR();
+            }
+        }, { once: true });
+        
+        document.addEventListener('click', () => {
+            if (window.speechSynthesis.speaking === false && !html5QrcodeScanner) {
+                iniciarEscanerQR();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
