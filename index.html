@@ -402,7 +402,6 @@
                     } catch(e) {}
 
                     cerrarCamaraQR();
-                    // Redirige automáticamente al portal del alumno con el código escaneado
                     window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoEncontrado.trim().toUpperCase())}`;
                 },
                 (error) => {}
