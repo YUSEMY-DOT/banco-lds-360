@@ -528,7 +528,7 @@ main {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px; /* Ancho suficiente para ver las 9 columnas de Excel */
+  min-width: 720px;
 }
 
 th, td {
@@ -1131,8 +1131,8 @@ function cerrarEscanerQR() {
   }
 }
 
-// APIS Y OPERACIONES
-const APP_SCRIPT_URL="https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
+// APIS Y OPERACIONES (URL NUEVA ACTUALIZADA)
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE1b9clbWMDQpvaddO7wumVnXvumRU24FaWHCwifzemqkjBwsIsVlUVWplGFzO__NN/exec";
 
 function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
 function escaparHTML(texto){return String(texto??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\x27/g,"&#39;").replace(/"/g,"&quot;");}
