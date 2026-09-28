@@ -15,7 +15,6 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* 1. Fondo de toda la página con la imagen del Banco */
         body {
             background: linear-gradient(rgba(12, 30, 48, 0.40), rgba(12, 30, 48, 0.40)), 
                         url('assets/banco.png') no-repeat center center fixed;
@@ -27,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* Barra Superior Institucional */
         header {
             background-color: #0c1e30;
             padding: 10px 30px;
@@ -84,7 +82,6 @@
             background: #203f61;
         }
 
-        /* Contenedor Principal (Alineado al filo inferior) */
         .main-container {
             position: relative;
             flex: 1;
@@ -99,7 +96,6 @@
             z-index: 2;
         }
 
-        /* Tarjeta Principal integrada sobre el fondo */
         .portal-card {
             background: transparent;
             backdrop-filter: none;
@@ -134,7 +130,6 @@
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
         }
 
-        /* Fila Superior: Botón QR | Niña Dinero | Botón Ingreso */
         .top-row {
             display: flex;
             align-items: flex-end;
@@ -179,7 +174,6 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
         }
 
-        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
         .bottom-row {
             display: flex;
             justify-content: space-between;
@@ -203,7 +197,6 @@
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
         }
 
-        /* Ilustración de la derecha (Profesora y Alumna) */
         .right-illustration {
             max-width: 360px;
             width: 100%;
@@ -213,12 +206,12 @@
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
         }
 
-        /* Modal o Ventana Emergente de la Cámara QR */
+        /* Modal o Ventana Emergente de la Cámara QR para introducir clave */
         #qrScannerModal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(12, 30, 48, 0.92);
+            background: rgba(12, 30, 48, 0.95);
             z-index: 1000;
             flex-direction: column;
             justify-content: center;
@@ -228,7 +221,7 @@
 
         .scanner-box {
             width: 100%;
-            max-width: 360px;
+            max-width: 380px;
             background: #0c1e30;
             border: 3px solid #f1c40f;
             border-radius: 20px;
@@ -243,6 +236,7 @@
             overflow: hidden;
             background: #000;
             border: 2px solid #38bdf8;
+            margin-bottom: 12px;
         }
 
         .btn-cerrar-camara {
@@ -253,12 +247,11 @@
             border-radius: 12px;
             font-weight: 700;
             font-size: 0.9rem;
-            margin-top: 15px;
             cursor: pointer;
+            width: 100%;
             box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
         }
 
-        /* Pie de página */
         footer {
             background-color: #0c1e30;
             text-align: center;
@@ -304,7 +297,6 @@
 </head>
 <body>
 
-    <!-- Header con Insignia Oficial y Administrador -->
     <header>
         <div class="school-info">
             <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -318,24 +310,22 @@
         </a>
     </header>
 
-    <!-- VENTANA EMERGENTE DE LA CÁMARA QR -->
+    <!-- VENTANA EMERGENTE DEL ESCÁNER QR -->
     <div id="qrScannerModal">
         <div class="scanner-box">
-            <h3 style="color: #f1c40f; margin-bottom: 12px; font-size: 1.1rem; font-weight: 700;">Apunta al código QR</h3>
+            <h3 style="color: #f1c40f; margin-bottom: 8px; font-size: 1.1rem; font-weight: 700;">Escanea el código QR</h3>
+            <p style="color: #ffffff; font-size: 0.78rem; margin-bottom: 12px;">Se identificará al alumno para ingresar su clave</p>
             <div id="reader"></div>
-            <button onclick="cerrarCamaraQR()" class="btn-cerrar-camara">✕ Cancelar / Cerrar</button>
+            <button onclick="cerrarCamaraQR()" class="btn-cerrar-camara">✕ Cancelar</button>
         </div>
     </div>
 
-    <!-- Contenedor Principal -->
     <div class="main-container">
-        
-        <!-- Contenido del Banco LDS 360 -->
         <div class="portal-card">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR (Cámara) | Niña Dinero | Botón Ingreso Manual -->
+            <!-- Fila Superior: Botón QR (Activa la cámara) | Niña Dinero | Botón Ingreso (Manual) -->
             <div class="top-row">
                 <a onclick="abrirCamaraQR()" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
@@ -348,7 +338,7 @@
                 </a>
             </div>
 
-            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual -->
+            <!-- Fila Inferior -->
             <div class="bottom-row">
                 <a href="tienda.html" class="img-btn">
                     <img src="assets/tienda.png" alt="Tienda escolar">
@@ -364,23 +354,19 @@
             </div>
         </div>
 
-        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
         <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
-
     </div>
 
-    <!-- Footer -->
     <footer>
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPTS DE AUDIO, VOZ NATURAL Y ESCÁNER QR -->
     <script>
         let audioCtx = null;
         let iniciado = false;
         let html5QrCode = null;
 
-        // ACTIVAR CÁMARA AL PRESIONAR EL BOTÓN QR
+        // ACTIVAR CÁMARA QR Y LUEGO REDIRIGIR A ALUMNO.HTML CON EL CÓDIGO CAPTURADO PARA SU CLAVE
         function abrirCamaraQR() {
             const modal = document.getElementById('qrScannerModal');
             modal.style.display = 'flex';
@@ -402,11 +388,12 @@
                     } catch(e) {}
 
                     cerrarCamaraQR();
+                    // Envía el código detectado a alumno.html para que el alumno ponga su clave
                     window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoEncontrado.trim().toUpperCase())}`;
                 },
                 (error) => {}
             ).catch(err => {
-                alert("No se pudo iniciar la cámara. Verifique los permisos en su navegador.");
+                alert("No se pudo iniciar la cámara. Verifique los permisos.");
                 cerrarCamaraQR();
             });
         }
@@ -500,7 +487,7 @@
             }
         }
 
-        // SELECCIÓN DE VOZ NATURAL Y FLUIDA EN ESPAÑOL
+        // VOZ MÁS NATURAL Y SUAVE SELECCIONADA AUTOMÁTICAMENTE
         function darBienvenidaVoz() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -508,14 +495,14 @@
                 const fraseBienvenida = "¡Hola! ¡Qué alegría verte hoy en el Banco LDS 360! Escanea tu código QR o ingresa tu código para gestionar tus monedas con mucha energía. ¡Vamos a aprender y divertirnos!";
                 const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
                 mensaje.lang = 'es-ES';
-                mensaje.rate = 1.0;
-                mensaje.pitch = 1.1;
+                mensaje.rate = 0.95;
+                mensaje.pitch = 1.05;
 
                 function asignarVozYNicializar() {
                     const voices = window.speechSynthesis.getVoices();
                     const vozNatural = voices.find(v => 
                         (v.lang.includes('es') || v.lang.includes('ES')) && 
-                        (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Helena') || v.name.includes('Laura') || v.name.includes('Lucia') || v.name.includes('Spanish'))
+                        (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Helena') || v.name.includes('Laura') || v.name.includes('Lucia') || v.name.includes('Spanish') || v.name.includes('Sabrina'))
                     ) || voices.find(v => v.lang.includes('es'));
                     
                     if (vozNatural) {
