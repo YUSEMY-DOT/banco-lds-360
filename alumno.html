@@ -186,7 +186,17 @@
 
     .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; }
-    .avatar-img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #38bdf8; object-fit: cover; background: #fff; }
+    
+    /* FOTO DEL ESTUDIANTE AMPLIADA Y MEJORADA */
+    .avatar-img { 
+      width: 88px; 
+      height: 88px; 
+      border-radius: 50%; 
+      border: 3px solid #38bdf8; 
+      object-fit: cover; 
+      background: #ffffff; 
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+    }
 
     .alumno-nombre { font-size: 1rem; font-weight: 700; color: #ffffff; margin-top: 12px; }
     .alumno-grado { font-size: 0.8rem; color: #cbd5e1; }
@@ -308,7 +318,8 @@
             <p class="saldo-title">Saldo Disponible</p>
             <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 500;">LDS</span></h3>
           </div>
-          <img id="alumnoFoto" src="https://via.placeholder.com/100" alt="Foto" class="avatar-img" />
+          <!-- FOTO AMPLIADA -->
+          <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
         </div>
         <p id="alumnoNombre" class="alumno-nombre">Cargando...</p>
         <p id="alumnoGrado" class="alumno-grado">---</p>
@@ -388,7 +399,7 @@
   </footer>
 
   <script>
-    // Enlace actualizado y sincronizado con tu Google Apps Script
+    // Enlace actualizado del Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
 
     function hacerPeticionJSONP(parametros, callback) {
@@ -555,7 +566,13 @@
           const saldo = Number(res.saldoActual || res.saldo || (res.cuenta && res.cuenta.saldoActual) || 0);
           document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
           
-          if (est.fotoUrl) document.getElementById('alumnoFoto').src = est.fotoUrl;
+          // CAPTURA Y ASIGNACIÓN DE LA FOTO EN GRANDE
+          const fotoUrl = est.fotoUrl || est.foto;
+          if (fotoUrl && fotoUrl.trim() !== "") {
+            document.getElementById('alumnoFoto').src = fotoUrl.trim();
+          } else {
+            document.getElementById('alumnoFoto').src = "https://via.placeholder.com/150";
+          }
 
           historialMovimientosActual = res.movimientos || [];
           renderizarMovimientos(historialMovimientosActual);
