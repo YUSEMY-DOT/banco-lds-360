@@ -149,11 +149,9 @@
       border: 2px solid #1e3a5f;
       border-radius: 12px;
       padding: 0 14px;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       color: #0c1e30;
       font-weight: 700;
-      text-align: center;
-      letter-spacing: 8px;
       outline: none;
       transition: all 0.2s ease;
     }
@@ -299,22 +297,28 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Cuadrito superior con el código del alumno -->
-      <div id="codigoVisual" class="codigo-badge">
+      <!-- Cuadrito superior con el código del alumno (Se muestra solo si hay QR) -->
+      <div id="codigoVisual" class="codigo-badge" style="display: none;">
         <span>CÓDIGO DEL ESTUDIANTE</span>
         <strong id="textoCodigoVisual">---</strong>
       </div>
 
-      <!-- Input oculto que app.js lee internamente -->
-      <input type="hidden" id="loginCodigo" value="" />
-
-      <!-- Cuadrito único para digitar la Clave -->
-      <div class="form-group">
-        <label style="color: #cbd5e1; text-align: center; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Digite su Clave (6 dígitos)</label>
-        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" />
+      <!-- Input de Código (Visible si es manual, oculto si viene por QR) -->
+      <div id="grupoCodigoManual" class="form-group">
+        <label style="color: #cbd5e1; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Código de Estudiante</label>
+        <input type="text" id="loginCodigoManualInput" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
       </div>
 
-      <button onclick="procesarLoginAlumno()" class="btn-primary">
+      <!-- Input oculto oficial que app.js lee siempre -->
+      <input type="hidden" id="loginCodigo" value="" />
+
+      <!-- Cuadrito para digitar la Clave -->
+      <div class="form-group">
+        <label style="color: #cbd5e1; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Digite su Clave (6 dígitos)</label>
+        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.4rem; letter-spacing: 6px;" />
+      </div>
+
+      <button onclick="ejecutarAccesoPortal()" class="btn-primary">
         Ingresar
       </button>
 
@@ -467,11 +471,36 @@
         document.getElementById('loginCodigo').value = codigoLimpio;
         document.getElementById('textoCodigoVisual').textContent = codigoLimpio;
         
+        // Mostrar tarjeta QR y ocultar input manual
+        document.getElementById('codigoVisual').style.display = 'block';
+        document.getElementById('grupoCodigoManual').style.display = 'none';
+
         setTimeout(() => {
           document.getElementById('loginClave').focus();
         }, 300);
+      } else {
+        // Modo manual: ocultar tarjeta QR y mostrar input manual de código
+        document.getElementById('codigoVisual').style.display = 'none';
+        document.getElementById('grupoCodigoManual').style.display = 'block';
+        document.getElementById('loginCodigoManualInput').focus();
       }
     });
+
+    function ejecutarAccesoPortal() {
+      // Si está en modo manual, pasar el valor al input oculto antes de procesar
+      const manualInput = document.getElementById('loginCodigoManualInput');
+      const grupoManual = document.getElementById('grupoCodigoManual');
+      
+      if (grupoManual.style.display !== 'none' && manualInput) {
+        document.getElementById('loginCodigo').value = manualInput.value.trim().toUpperCase();
+      }
+
+      if (typeof procesarLoginAlumno === 'function') {
+        procesarLoginAlumno();
+      } else {
+        console.error("No se encontró la función procesarLoginAlumno en app.js");
+      }
+    }
 
     function reproducirSonidoExito() {
       try {
@@ -506,53 +535,6 @@
 
         setTimeout(() => { window.speechSynthesis.speak(utterance); }, 100);
       }
-    }
-
-    function procesarLoginAlumno() {
-      const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
-      const clave = document.getElementById('loginClave').value.trim();
-      const errorDiv = document.getElementById('loginError');
-      errorDiv.textContent = "";
-
-      if (!codigo || !clave) {
-        errorDiv.textContent = "Por favor complete todos los campos.";
-        hablarTextoVoz("Por favor complete todos los campos.");
-        return;
-      }
-
-      errorDiv.textContent = "Verificando acceso...";
-      ejecutarLoginSistema(codigo, clave, function(res) {
-        if (res && (res.success === true || res.ok === true) && res.estudiante) {
-          document.getElementById('vistaLogin').classList.add('hidden');
-          document.getElementById('vistaPrincipal').classList.remove('hidden');
-
-          const est = res.estudiante;
-          const cuenta = res.cuenta || res;
-          const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
-          const primerNombre = nombreCompleto.split(' ')[0];
-
-          historialMovimientosActual = res.movimientos || [];
-
-          document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
-          document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || 0).toFixed(2);
-          
-          let fotoUrl = est.fotoUrl || est.foto || "";
-          if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
-
-          renderizarMovimientos(historialMovimientosActual);
-          reproducirSonidoExito();
-
-          setTimeout(() => {
-            hablarTextoVoz(`Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.`);
-          }, 300);
-
-        } else {
-          const mensajeError = res.mensaje || res.message || "Código o clave incorrecta.";
-          errorDiv.textContent = mensajeError;
-          hablarTextoVoz("Acceso denegado. Código o clave incorrecta.");
-        }
-      });
     }
 
     function accionBotonPagar() {
@@ -684,7 +666,11 @@
     }
 
     document.getElementById("loginClave").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") procesarLoginAlumno();
+      if (e.key === "Enter") ejecutarAccesoPortal();
+    });
+    
+    document.getElementById("loginCodigoManualInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") ejecutarAccesoPortal();
     });
   </script>
 </body>
