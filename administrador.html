@@ -119,7 +119,7 @@ header {
   color: var(--azul);
 }
 
-/* PANTALLA DE ACCESO CON CLAVE */
+/* PANTALLA DE ACCESO CON CLAVE (SIEMPRE VISIBLE AL INICIO) */
 .login-wrapper {
   display: flex;
   align-items: center;
@@ -335,7 +335,7 @@ main {
   display: inline-block;
 }
 
-/* Estado contraído */
+/* Estado replegado / contraído */
 .panel.collapsed .panel-body {
   display: none;
 }
@@ -408,7 +408,7 @@ input:focus, textarea:focus, select:focus {
   color: var(--rojo);
 }
 
-/* FOTO DEL ESTUDIANTE ENCAJADA */
+/* FOTO DEL ESTUDIANTE ENCAJADA (130px) */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
@@ -643,7 +643,7 @@ footer {
   </div>
 </header>
 
-<!-- PANTALLA DE ACCESO CON CLAVE -->
+<!-- PANTALLA DE ACCESO OBLIGATORIA CON CLAVE (360LDS) -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -727,7 +727,7 @@ footer {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS (DESPLEGABLES) -->
+    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS (REPLEGABLES) -->
     <div>
       <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS -->
       <div id="panelPago" class="panel">
@@ -741,8 +741,9 @@ footer {
 
           <label class="small-label" for="pagoTipo">Tipo / Categoría de Transacción</label>
           <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
-            <option value="INGRESOS_Y_SUELDOS">Ingresos y Sueldos (+)</option>
-            <option value="PREMIOS_Y_BONIFICACIONES" selected>Premios y Bonificaciones (+)</option>
+            <option value="INGRESOS_Y_SUELDOS">Ingresos y Sueldos</option>
+            <option value="PREMIOS_Y_BONIFICACIONES" selected>Premios y Bonificaciones</option>
+            <option value="COSTOS_Y_OTROS">Costos y Otros</option>
           </select>
 
           <label class="small-label" for="pagoConcepto">Concepto (Opciones del Excel)</label>
@@ -811,7 +812,7 @@ function togglePanel(idPanel) {
   }
 }
 
-// CATALOGO DE CATEGORÍAS Y CONCEPTOS
+// 3 CATEGORÍAS EXACTAS DEL EXCEL
 const CATALOGO_EXCEL = {
   "INGRESOS_Y_SUELDOS": [
     "Ingreso Sueldo Base Mensual",
@@ -833,6 +834,11 @@ const CATALOGO_EXCEL = {
     "Bono Participar en Escuela para Padres junto a su familia",
     "Bono Ser responsable con sus materiales",
     "Bono Ayudar a mantener limpia el aula"
+  ],
+  "COSTOS_Y_OTROS": [
+    "Impuesto escolar mensual por uso de instalaciones",
+    "Cuota extraordinaria de mantenimiento grupal",
+    "Transacción personalizada / Ajuste de caja"
   ]
 };
 
@@ -871,7 +877,7 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// ACCESO CON CLAVE FLEXIBLE (360LDS)
+// ACCESO CON CLAVE (OBLIGATORIO SIEMPRE AL INICIAR)
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -893,29 +899,29 @@ function validarAccesoDocente() {
   }
 
   if (clave === "360LDS" || clave === "2026") {
-    localStorage.setItem("maestraActiva", docenteElement.options[docenteElement.selectedIndex].text);
+    const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
+    sessionStorage.setItem("maestraActiva", nombreMaestra);
     hablarTextoVoz("Clave correcta. Bienvenido al panel.");
-    desbloquearPanel();
+    desbloquearPanel(nombreMaestra);
   } else {
     error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
     hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
   }
 }
 
-function desbloquearPanel() {
+function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
   document.getElementById("panelView").style.display = "block";
-  document.getElementById("maestraActivaNombre").textContent = localStorage.getItem("maestraActiva") || "Maestra";
+  document.getElementById("maestraActivaNombre").textContent = nombreMaestra || "Maestra";
   cargarConceptosPorTipo();
   renderIncidencias();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem("maestraActiva")) {
-    desbloquearPanel();
-  } else {
-    setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
-  }
+  // Siempre requiere ingresar la clave al abrir la página
+  document.getElementById("loginView").style.display = "flex";
+  document.getElementById("panelView").style.display = "none";
+  setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
 });
 
 document.getElementById("claveDocente").addEventListener("keydown", function(e) {
@@ -1044,14 +1050,14 @@ function consultarEstudiante(){
   });
 }
 
-// PROCESAR REGISTRO DE PAGO O TRANSACCIÓN
+// PROCESAR REGISTRO DE PAGO O TRANSACCIÓN CON PLIEGUE AUTOMÁTICO INMEDIATO
 function procesarPagoEstudiante() {
   const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
   const tipo = document.getElementById("pagoTipo").value;
   const concepto = document.getElementById("pagoConcepto").value;
   const monto = parseFloat(document.getElementById("pagoMonto").value);
   const observacion = document.getElementById("pagoObs").value.trim();
-  const responsable = localStorage.getItem("maestraActiva") || "DOCENTE";
+  const responsable = sessionStorage.getItem("maestraActiva") || "DOCENTE";
 
   if (!codigo) {
     mostrarMensajePago("Primero consulta a un estudiante.", "error");
@@ -1080,10 +1086,8 @@ function procesarPagoEstudiante() {
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       
-      // Contraer automáticamente el panel de pagos para despejar la pantalla
-      setTimeout(() => {
-        document.getElementById("panelPago").classList.add("collapsed");
-      }, 1200);
+      // REPLIEGUE AUTOMÁTICO INMEDIATO DEL PANEL DE PAGOS
+      document.getElementById("panelPago").classList.add("collapsed");
 
       consultarEstudiante(); // Recargar datos y movimientos actualizados
     } else {
@@ -1110,6 +1114,7 @@ function renderMovimientos(movimientos){
 
 function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS")||"[]");}catch(_){return[];}}
 
+// GUARDAR INCIDENCIA CON PLIEGUE AUTOMÁTICO INMEDIATO
 function guardarIncidencia(){
   const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value;
   if(!codigo||!problema){alert("Ingresa el código y el problema reportado.");return;}
@@ -1119,10 +1124,8 @@ function guardarIncidencia(){
   limpiarIncidencia();
   renderIncidencias();
 
-  // Contraer automáticamente el panel de incidencias para despejar la pantalla
-  setTimeout(() => {
-    document.getElementById("panelIncidencias").classList.add("collapsed");
-  }, 600);
+  // REPLIEGUE AUTOMÁTICO INMEDIATO DEL PANEL DE INCIDENCIAS
+  document.getElementById("panelIncidencias").classList.add("collapsed");
 }
 
 function limpiarIncidencia(){
