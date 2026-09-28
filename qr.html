@@ -7,13 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body {
             background: linear-gradient(rgba(12, 30, 48, 0.45), rgba(12, 30, 48, 0.45)), 
                         url('assets/banco.png') no-repeat center center fixed;
@@ -24,7 +18,6 @@
             color: #ffffff;
             overflow-x: hidden;
         }
-
         header {
             background-color: #0c1e30;
             padding: 10px 30px;
@@ -35,32 +28,10 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             z-index: 10;
         }
-
-        .school-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .school-info img {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-        }
-
-        .school-text h3 {
-            font-size: 1.05rem;
-            color: #ffffff;
-            font-weight: 800;
-        }
-
-        .school-text p {
-            font-size: 0.8rem;
-            color: #f1c40f;
-            font-weight: 600;
-            font-style: italic;
-        }
-
+        .school-info { display: flex; align-items: center; gap: 12px; }
+        .school-info img { width: 42px; height: 42px; object-fit: contain; }
+        .school-text h3 { font-size: 1.05rem; color: #ffffff; font-weight: 800; }
+        .school-text p { font-size: 0.8rem; color: #f1c40f; font-weight: 600; font-style: italic; }
         .home-btn {
             background: #152b42;
             border: 2px solid #f1c40f;
@@ -72,19 +43,8 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-
-        .home-btn:hover {
-            background: #203f61;
-        }
-
-        .main-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
+        .home-btn:hover { background: #203f61; }
+        .main-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; }
         .qr-card {
             background: rgba(12, 30, 48, 0.88);
             backdrop-filter: blur(8px);
@@ -99,30 +59,9 @@
             flex-direction: column;
             align-items: center;
         }
-
-        .qr-title {
-            color: #40c4ff;
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        #reader {
-            width: 100%;
-            border-radius: 18px;
-            overflow: hidden;
-            border: 2px solid #40c4ff;
-            background: #000000;
-            min-height: 280px;
-        }
-
-        #reader video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
-            border-radius: 16px;
-        }
-
+        .qr-title { color: #40c4ff; font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; }
+        #reader { width: 100%; border-radius: 18px; overflow: hidden; border: 2px solid #40c4ff; background: #000000; min-height: 280px; }
+        #reader video { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 16px; }
         footer {
             background-color: #0c1e30;
             text-align: center;
@@ -135,8 +74,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Header -->
     <header>
         <div class="school-info">
             <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -148,7 +85,6 @@
         <a href="index.html" class="home-btn">🏠 Regresar</a>
     </header>
 
-    <!-- Contenedor del Escáner Directo -->
     <div class="main-container">
         <div class="qr-card">
             <h1 class="qr-title">ESCANEAR CÓDIGO QR</h1>
@@ -156,40 +92,25 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
     <script>
         let html5QrCode = null;
-        let timeoutTimer = null;
-
-        function volverAInicio() {
-            if (timeoutTimer) clearTimeout(timeoutTimer);
-            if (html5QrCode && html5QrCode.isScanning) {
-                html5QrCode.stop().then(() => {
-                    window.location.href = "index.html";
-                }).catch(() => {
-                    window.location.href = "index.html";
-                });
-            } else {
-                window.location.href = "index.html";
-            }
-        }
 
         function onScanSuccess(decodedText) {
-            if (timeoutTimer) clearTimeout(timeoutTimer);
-            localStorage.setItem('codigoEscaneado', decodedText);
+            let codigoLimpio = decodedText.trim();
+            localStorage.setItem('codigoEscaneado', codigoLimpio);
             
             if (html5QrCode && html5QrCode.isScanning) {
                 html5QrCode.stop().then(() => {
-                    window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                    window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoLimpio)}`;
                 }).catch(() => {
-                    window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                    window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoLimpio)}`;
                 });
             } else {
-                window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoLimpio)}`;
             }
         }
 
@@ -197,21 +118,15 @@
             html5QrCode = new Html5Qrcode("reader");
             const config = { fps: 15, qrbox: { width: 220, height: 220 } };
 
-            // Iniciar cuenta regresiva de 7 segundos
-            timeoutTimer = setTimeout(volverAInicio, 7000);
-
-            // Activa directamente el video de la cámara trasera
             html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
                 .catch(err => {
-                    // Si no detecta cámara trasera, activa la frontal de inmediato
                     html5QrCode.start({ facingMode: "user" }, config, onScanSuccess)
                         .catch(e => {
-                            volverAInicio();
+                            console.log("Error al iniciar cámara", e);
                         });
                 });
         }
 
-        // Se enciende instantáneamente al cargar la página
         window.addEventListener('DOMContentLoaded', encenderCamaraDirecta);
     </script>
 </body>
