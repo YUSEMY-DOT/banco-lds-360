@@ -35,7 +35,7 @@ body {
   line-height: 1.4;
 }
 
-/* ENCABEZADO RESPONSIVO */
+/* ENCABEZADO */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
@@ -198,7 +198,7 @@ header {
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 0 12px;
-  font-size: 14px; /* Evita zoom automático en iPhone/Android */
+  font-size: 14px;
   outline: none;
   background: #fff;
   color: var(--texto);
@@ -227,10 +227,6 @@ textarea {
   margin-top: 8px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(18, 60, 105, 0.18);
-}
-
-.primary-btn:active {
-  background: var(--azul2);
 }
 
 .error-msg {
@@ -294,7 +290,7 @@ main {
   word-break: break-word;
 }
 
-/* LAYOUT RESPONSIVO FLEXIBLE */
+/* LAYOUT */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
@@ -302,7 +298,6 @@ main {
   align-items: start;
 }
 
-/* PANELES Y ESTILOS DE DESPLEGABLE */
 .panel {
   background: var(--blanco);
   border: 1px solid var(--borde);
@@ -348,7 +343,6 @@ main {
   display: inline-block;
 }
 
-/* Estado contraído */
 .panel.collapsed .panel-body {
   display: none;
 }
@@ -365,7 +359,42 @@ main {
   padding: 14px;
 }
 
-/* BLOQUE DE BÚSQUEDA ADAPTADO A CELULARES */
+/* SELECTOR INGRESO Y EGRESO INTERACTIVO */
+.type-selector-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.type-btn {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+  background: #f8fafc;
+  color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.type-btn.active-ingreso {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.type-btn.active-egreso {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* BÚSQUEDA ADAPTADA A CELULAR */
 .search-box {
   display: flex;
   flex-direction: column;
@@ -413,7 +442,7 @@ main {
   color: var(--rojo);
 }
 
-/* FICHA DEL ESTUDIANTE MOBIL FRIENDLY */
+/* FICHA DEL ESTUDIANTE */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
@@ -487,7 +516,7 @@ main {
   border: 1px solid #b7e1cd;
 }
 
-/* TABLA DE MOVIMIENTOS RESPONSIVA CON DESPLAZAMIENTO FLUIDO */
+/* TABLA DE MOVIMIENTOS RESPONSIVA */
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
@@ -790,10 +819,17 @@ footer {
           <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
+          <label class="small-label">Tipo de Operación</label>
+          <div class="type-selector-box">
+            <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
+            <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
+          </div>
+          <input type="hidden" id="pagoOperacionVal" value="INGRESO">
+
           <label class="small-label" for="pagoCodigo">Código de Estudiante</label>
           <input id="pagoCodigo" placeholder="LDS-EST-001" readonly style="background:#f1f5f9;">
 
-          <label class="small-label" for="pagoTipo">Tipo / Categoría de Transacción</label>
+          <label class="small-label" for="pagoTipo">Categoría de Transacción</label>
           <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
             <option value="INGRESOS_Y_SUELDOS">Ingresos y Sueldos</option>
             <option value="PREMIOS_Y_BONIFICACIONES" selected>Premios y Bonificaciones</option>
@@ -858,7 +894,7 @@ footer {
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// FUNCIÓN PARA ALTERNAR DESPLEGABLES
+// ALTERNAR DESPLEGABLES
 function togglePanel(idPanel) {
   const panel = document.getElementById(idPanel);
   if (panel) {
@@ -866,7 +902,25 @@ function togglePanel(idPanel) {
   }
 }
 
-// 3 CATEGORÍAS EXACTAS Y LIMPIAS
+// SELECCIÓN DE TIPO DE OPERACIÓN (INGRESO O EGRESO)
+function seleccionarTipoOperacion(tipo) {
+  const btnIngreso = document.getElementById("btnTipoIngreso");
+  const btnEgreso = document.getElementById("btnTipoEgreso");
+  const hiddenInput = document.getElementById("pagoOperacionVal");
+  
+  hiddenInput.value = tipo;
+  if (tipo === 'INGRESO') {
+    btnIngreso.className = 'type-btn active-ingreso';
+    btnEgreso.className = 'type-btn';
+    hablarTextoVoz("Operación seleccionada: Ingreso");
+  } else {
+    btnIngreso.className = 'type-btn';
+    btnEgreso.className = 'type-btn active-egreso';
+    hablarTextoVoz("Operación seleccionada: Egreso");
+  }
+}
+
+// 3 CATEGORÍAS EXACTAS
 const CATALOGO_EXCEL = {
   "INGRESOS_Y_SUELDOS": [
     "Ingreso Sueldo Base Mensual",
@@ -901,6 +955,13 @@ function cargarConceptosPorTipo() {
   const selectConcepto = document.getElementById("pagoConcepto");
   selectConcepto.innerHTML = "";
   
+  // Auto-ajustar operación si se selecciona Costos y Otros
+  if (tipo === "COSTOS_Y_OTROS") {
+    seleccionarTipoOperacion("EGRESO");
+  } else {
+    seleccionarTipoOperacion("INGRESO");
+  }
+
   const lista = CATALOGO_EXCEL[tipo] || [];
   lista.forEach(concepto => {
     const opt = document.createElement("option");
@@ -910,7 +971,7 @@ function cargarConceptosPorTipo() {
   });
 }
 
-// SÍNTESIS DE VOZ MULTIPLATAFORMA (COMPATIBLE CON CELULARES)
+// SÍNTESIS DE VOZ
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -947,7 +1008,7 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// ACCESO CON CLAVE (OBLIGATORIO SIEMPRE AL INICIAR)
+// ACCESO CON CLAVE (360LDS)
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -1134,10 +1195,11 @@ function consultarEstudiante(){
   });
 }
 
-// PROCESAR REGISTRO DE PAGO O TRANSACCIÓN CON PLIEGUE AUTOMÁTICO INMEDIATO
+// PROCESAR TRANSACCIÓN (ENVÍA STRICTAMENTE 'INGRESO' O 'EGRESO')
 function procesarPagoEstudiante() {
   const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
-  const tipo = document.getElementById("pagoTipo").value;
+  const tipoOperacion = document.getElementById("pagoOperacionVal").value; // 'INGRESO' o 'EGRESO'
+  const categoriaSeleccionada = document.getElementById("pagoTipo").value;
   const concepto = document.getElementById("pagoConcepto").value;
   const monto = parseFloat(document.getElementById("pagoMonto").value);
   const observacion = document.getElementById("pagoObs").value.trim();
@@ -1160,14 +1222,15 @@ function procesarPagoEstudiante() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: codigo,
-    tipo: tipo,
+    tipo: tipoOperacion, // Envía 'INGRESO' o 'EGRESO' a Apps Script
+    categoria: categoriaSeleccionada,
     concepto: concepto,
     monto: monto,
     responsable: responsable,
     observacion: observacion
   }, function(respuesta) {
     if (respuesta && respuesta.ok) {
-      mostrarMensajePago("¡Pago registrado exitosamente!", "ok");
+      mostrarMensajePago("¡Transacción registrada exitosamente!", "ok");
       hablarTextoVoz("Transacción registrada correctamente.");
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
@@ -1177,8 +1240,8 @@ function procesarPagoEstudiante() {
 
       consultarEstudiante(); // Recargar datos y saldo actualizado
     } else {
-      mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar pago.", "error");
-      hablarTextoVoz("Error al registrar el pago.");
+      mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar transacción.", "error");
+      hablarTextoVoz("Error al registrar la transacción.");
     }
   });
 }
@@ -1201,7 +1264,7 @@ function renderMovimientos(movimientos){
 
 function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS")||"[]");}catch(_){return[];}}
 
-// GUARDAR INCIDENCIA CON PLIEGUE AUTOMÁTICO INMEDIATO
+// GUARDAR INCIDENCIA CON REPLIEGUE
 function guardarIncidencia(){
   const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value;
   if(!codigo||!problema){
