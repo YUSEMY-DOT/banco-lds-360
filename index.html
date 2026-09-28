@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* 1. Barra Superior Institucional */
+        /* Barra Superior Institucional */
         header {
             background-color: #0c1e30;
             padding: 10px 30px;
@@ -78,7 +78,7 @@
             background: #203f61;
         }
 
-        /* 2. Contenedor Principal */
+        /* Contenedor Principal */
         .main-container {
             flex: 1;
             display: flex;
@@ -96,7 +96,7 @@
             background: #ffffff;
             padding: 35px 30px;
             border-radius: 28px;
-            max-width: 580px;
+            max-width: 600px;
             width: 100%;
             box-shadow: 0 12px 35px rgba(0,0,0,0.18);
             border: 3px solid #b2dfdb;
@@ -107,7 +107,7 @@
         }
 
         .bank-title {
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             color: #00796b;
             font-weight: 800;
             margin-bottom: 2px;
@@ -115,14 +115,33 @@
         }
 
         .bank-subtitle {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: #00897b;
             font-weight: 600;
             margin-bottom: 25px;
         }
 
-        /* Fila Superior: Escanea QR - Niña - Ingresa código */
-        .top-row-interactive {
+        /* Botones como imágenes directas con efecto suave al presionar o pasar el mouse */
+        .img-btn {
+            display: inline-block;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            text-decoration: none;
+            flex: 1;
+        }
+
+        .img-btn img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .img-btn:hover {
+            transform: scale(1.03);
+            filter: brightness(1.05);
+        }
+
+        /* Fila Superior */
+        .top-row {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -131,132 +150,19 @@
             margin-bottom: 25px;
         }
 
-        .pill-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            padding: 10px 14px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            text-align: left;
-            gap: 10px;
-            min-width: 175px;
-        }
-
-        .pill-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-        }
-
-        .btn-qr {
-            background: #40c4ff;
-            color: #00376b;
-        }
-
-        .btn-codigo {
-            background: #d1c4e9;
-            color: #4a148c;
-        }
-
-        .pill-icon-img {
-            width: 36px;
-            height: 36px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .pill-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.15;
-        }
-
-        .pill-text span:first-child {
-            font-size: 0.9rem;
-            font-weight: 800;
-        }
-
-        .pill-text span:last-child {
-            font-size: 0.63rem;
-            opacity: 0.88;
-            font-weight: 500;
-        }
-
-        /* Niña con monedas al centro */
         .center-girl-img {
             width: 110px;
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
         }
 
-        /* Fila Inferior: Tienda - Padres - Manual */
-        .bottom-row-interactive {
+        /* Fila Inferior */
+        .bottom-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             width: 100%;
-        }
-
-        .block-btn {
-            display: flex;
-            align-items: center;
-            padding: 12px 10px;
-            border-radius: 16px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
-            text-align: left;
-            gap: 8px;
-        }
-
-        .block-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-        }
-
-        .btn-tienda {
-            background: #ff8a80;
-            color: #880e4f;
-        }
-
-        .btn-padres {
-            background: #ffe082;
-            color: #4e342e;
-        }
-
-        .btn-manual {
-            background: #a5d6a7;
-            color: #1b5e20;
-        }
-
-        .block-icon-img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .block-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.15;
-        }
-
-        .block-text span:first-child {
-            font-size: 0.82rem;
-            font-weight: 800;
-        }
-
-        .block-text span:last-child {
-            font-size: 0.58rem;
-            opacity: 0.88;
-            font-weight: 500;
         }
 
         /* Ilustración de la derecha (Profesora y Alumna) */
@@ -268,7 +174,7 @@
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.25));
         }
 
-        /* 3. Pie de página */
+        /* Pie de página */
         footer {
             background-color: #0c1e30;
             text-align: center;
@@ -279,33 +185,29 @@
             border-top: 3px solid #f1c40f;
         }
 
-        /* Responsivo PC / Celulares */
         @media (max-width: 950px) {
             .main-container {
                 flex-direction: column;
                 padding: 20px 15px;
             }
             .right-illustration {
-                max-width: 300px;
+                max-width: 320px;
             }
         }
 
         @media (max-width: 600px) {
-            .top-row-interactive {
+            .top-row {
                 flex-direction: column;
             }
-            .bottom-row-interactive {
+            .bottom-row {
                 grid-template-columns: 1fr;
-            }
-            .pill-btn {
-                width: 100%;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio del Himno / Música Institucional -->
+    <!-- Audio del Himno institucional -->
     <audio id="bgMusic" loop>
         <source src="assets/himno.mp3" type="audio/mpeg">
     </audio>
@@ -332,51 +234,31 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Escanea QR | Niña con monedas | Ingresa código -->
-            <div class="top-row-interactive">
-                <a href="qr.html" class="pill-btn btn-qr">
-                    <img src="assets/qr.png" alt="Escanea QR" class="pill-icon-img">
-                    <div class="pill-text">
-                        <span>Escanea QR</span>
-                        <span>Presiona aquí para leer tu código</span>
-                    </div>
+            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
+            <div class="top-row">
+                <a href="qr.html" class="img-btn">
+                    <img src="assets/qr.png" alt="Escanea QR">
                 </a>
 
                 <img src="assets/dinero.png" alt="Niña Banco LDS" class="center-girl-img">
 
-                <a href="codigo.html" class="pill-btn btn-codigo">
-                    <img src="assets/ingreso.png" alt="Ingresa código" class="pill-icon-img">
-                    <div class="pill-text">
-                        <span>Ingresa código</span>
-                        <span>Si no puedes escanear, digítalo</span>
-                    </div>
+                <a href="codigo.html" class="img-btn">
+                    <img src="assets/ingreso.png" alt="Ingresa código">
                 </a>
             </div>
 
-            <!-- Fila Inferior: Tienda escolar | Padres | Manual de sistema -->
-            <div class="bottom-row-interactive">
-                <a href="tienda.html" class="block-btn btn-tienda">
-                    <img src="assets/tienda.png" alt="Tienda escolar" class="block-icon-img">
-                    <div class="block-text">
-                        <span>Tienda escolar</span>
-                        <span>Canjea tus LDS Coins</span>
-                    </div>
+            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual -->
+            <div class="bottom-row">
+                <a href="tienda.html" class="img-btn">
+                    <img src="assets/tienda.png" alt="Tienda escolar">
                 </a>
 
-                <a href="padres.html" class="block-btn btn-padres">
-                    <img src="assets/padres.png" alt="Padres" class="block-icon-img">
-                    <div class="block-text">
-                        <span>Padres</span>
-                        <span>Información y acompañamiento</span>
-                    </div>
+                <a href="padres.html" class="img-btn">
+                    <img src="assets/padres.png" alt="Padres">
                 </a>
 
-                <a href="manual.html" class="block-btn btn-manual">
-                    <img src="assets/manual.png" alt="Manual de sistema" class="block-icon-img">
-                    <div class="block-text">
-                        <span>Manual de sistema</span>
-                        <span>Guía del banco, guía de uso</span>
-                    </div>
+                <a href="manual.html" class="img-btn">
+                    <img src="assets/manual.png" alt="Manual de sistema">
                 </a>
             </div>
         </div>
@@ -413,7 +295,7 @@
                     }
 
                     utterance.onend = function() {
-                        music.play().catch(e => console.log("Himno listo para reproducirse"));
+                        music.play().catch(e => console.log("Himno listo"));
                     };
 
                     window.speechSynthesis.speak(utterance);
