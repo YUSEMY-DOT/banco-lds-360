@@ -1,116 +1,419 @@
-<!-- LOGIN ESTUDIANTE (Cuadradito Bonito Institucional) -->
-<div id="vistaLogin" class="bg-[#0c1e30]/95 backdrop-blur-md p-7 rounded-3xl shadow-2xl space-y-4 border-2 border-[#f1c40f]">
-  <div class="text-center space-y-1">
-    <h2 class="text-xl font-extrabold text-white">Acceso del Estudiante</h2>
-    <p class="text-xs text-[#f1c40f] font-semibold">Sistema Financiero Educativo y de Convivencia</p>
-  </div>
-  
-  <!-- Insignia QR Detectado (Oculto por defecto, aparece si escaneó QR) -->
-  <div id="qrBadgeContainer" class="hidden bg-[#152b42] border border-[#f1c40f]/70 p-3 rounded-2xl text-center space-y-1 shadow-inner">
-    <p class="text-[11px] text-[#f1c40f] font-bold uppercase tracking-wider">✓ Código QR Escaneado</p>
-    <p id="qrCodigoTexto" class="text-lg font-extrabold text-white tracking-widest">—</p>
-    <button type="button" onclick="resetearCodigoQR()" class="text-xs text-blue-300 underline hover:text-white font-medium">Ingresar código manualmente</button>
-  </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANCO LDS 360 - Portal Estudiante</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-  <!-- Campo de Código (Se oculta si vino por QR) -->
-  <div id="grupoCodigoInput">
-    <label class="block text-xs font-semibold text-gray-200 mb-1">Código de Estudiante</label>
-    <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="w-full bg-white text-gray-900 border-2 border-[#1e3a5f] rounded-xl p-3 uppercase font-bold outline-none focus:ring-2 focus:ring-[#f1c40f]" />
-  </div>
+    body {
+      background: linear-gradient(rgba(12, 30, 48, 0.55), rgba(12, 30, 48, 0.55)), 
+                  url('assets/banco.png') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333333;
+    }
 
-  <!-- Campo de Clave -->
-  <div>
-    <label class="block text-xs font-semibold text-gray-200 mb-1">Clave (6 dígitos)</label>
-    <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full bg-white text-gray-900 border-2 border-[#1e3a5f] rounded-xl p-3 text-center text-2xl tracking-widest font-bold outline-none focus:ring-2 focus:ring-[#f1c40f]" />
-  </div>
+    header {
+      background-color: #0c1e30;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #f1c40f;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
 
-  <button onclick="procesarLoginAlumno()" class="w-full bg-gradient-to-r from-[#f1c40f] to-[#d4ac0d] hover:brightness-110 text-[#0c1e30] font-extrabold py-3.5 rounded-xl transition shadow-lg text-base">
-    Ingresar
-  </button>
+    .school-title h1 {
+      font-size: 1.1rem;
+      color: #ffffff;
+      font-weight: 800;
+    }
 
-  <div id="loginError" class="text-rose-400 text-xs text-center min-h-[20px] font-semibold"></div>
-</div>
+    .school-title p {
+      font-size: 0.75rem;
+      color: #f1c40f;
+      font-weight: 600;
+      font-style: italic;
+    }
 
-<!-- VISTA PRINCIPAL -->
-<div id="vistaPrincipal" class="hidden space-y-4">
-  
-  <!-- CARD DE SALDO Y FOTO -->
-  <div class="bg-gradient-to-r from-[#0c1e30] to-[#152b42] text-white p-6 rounded-3xl shadow-xl relative overflow-hidden border-2 border-[#f1c40f]">
-    <div class="flex justify-between items-center">
-      <div>
-        <p class="text-xs text-[#f1c40f] uppercase font-bold tracking-wider">Saldo Disponible</p>
-        <h3 class="text-3xl font-extrabold mt-1"><span id="saldoLDS">0.00</span> <span class="text-sm font-normal text-[#f1c40f]">LDS</span></h3>
-      </div>
-      <img id="alumnoFoto" src="https://via.placeholder.com/100" alt="Foto del Estudiante" class="w-16 h-16 rounded-full border-2 border-[#f1c40f] object-cover shadow-lg bg-[#152b42]" />
+    .inicio-btn {
+      background: #152b42;
+      border: 2px solid #f1c40f;
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .inicio-btn:hover {
+      background: #203f61;
+    }
+
+    main {
+      max-width: 480px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 15px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Tarjetas / Cuadraditos Bonitos Institucionales */
+    .card {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h2 {
+      text-align: center;
+      color: #0c1e30;
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      color: #475569;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 48px;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 0 14px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: #0c1e30;
+      box-shadow: 0 0 8px rgba(12, 30, 48, 0.2);
+    }
+
+    .btn-primary {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #0c1e30 0%, #1e3a5f 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(12, 30, 48, 0.3);
+      margin-top: 6px;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #152b42 0%, #284b7a 100%);
+      transform: translateY(-1px);
+    }
+
+    /* QR Detectado Caja */
+    .qr-detected-box {
+      display: none;
+      background: #fefce8;
+      border: 2px dashed #f1c40f;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .qr-detected-box p { font-size: 0.78rem; color: #854d0e; font-weight: 700; }
+    .qr-detected-box span { font-size: 1rem; color: #0c1e30; font-weight: 800; display: block; margin: 2px 0; }
+    .btn-manual { background: none; border: none; color: #0284c7; font-size: 0.75rem; text-decoration: underline; cursor: pointer; font-weight: 600; }
+
+    /* Vistas ocultas por defecto */
+    .hidden { display: none !important; }
+
+    /* Vista Principal / Saldo */
+    .saldo-card {
+      background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid #f1c40f;
+    }
+
+    .saldo-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .saldo-title { font-size: 0.75rem; color: #f1c40f; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; }
+    .avatar-img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #f1c40f; object-fit: cover; background: #fff; }
+
+    .alumno-nombre { font-size: 1rem; font-weight: 700; color: #ffffff; margin-top: 12px; }
+    .alumno-grado { font-size: 0.8rem; color: #cbd5e1; }
+
+    /* Botones de Acción */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .action-btn {
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.85rem;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .action-btn:hover { transform: scale(1.02); }
+    .btn-pagar { background-color: #e11d48; }
+    .btn-movs { background-color: #7c3aed; }
+
+    /* Secciones Operación e Historial */
+    .sub-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .sub-card h4 {
+      font-size: 0.95rem;
+      color: #0c1e30;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .input-field:focus { border-color: #0c1e30; }
+
+    .lista-movs {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mov-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border-left: 4px solid #0c1e30;
+      font-size: 0.82rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 12px;
+      font-size: 0.78px;
+      color: #ffffff;
+      background-color: #0c1e30;
+      border-top: 2px solid #f1c40f;
+      font-weight: 600;
+    }
+  </style>
+  <script defer src="app.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="school-title">
+      <h1>BANCO LDS 360</h1>
+      <p>IEP La Salle del Sur</p>
     </div>
-    <p id="alumnoNombre" class="mt-4 font-bold text-sm text-white">Cargando...</p>
-    <p id="alumnoGrado" class="text-xs text-[#f1c40f] mt-0.5 font-semibold">---</p>
-  </div>
+    <a href="index.html" class="inicio-btn">← Inicio</a>
+  </header>
 
-  <!-- BOTONES DE ACCIÓN -->
-  <div class="grid grid-cols-2 gap-3">
-    <button onclick="accionBotonPagar()" class="text-white p-4 rounded-2xl font-bold shadow-lg text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02] border border-rose-500/50" style="background-color: #e11d48 !important;">
-      💸 PAGAR / GASTOS
-    </button>
-    <button onclick="accionBotonMovimientos()" class="text-white p-4 rounded-2xl font-bold shadow-lg text-center transition text-sm flex items-center justify-center gap-2 hover:scale-[1.02] border border-purple-500/50" style="background-color: #9333ea !important;">
-      📋 MOVIMIENTOS
-    </button>
-  </div>
-
-  <!-- FORMULARIO DE REGISTRO DE GASTO -->
-  <div id="seccionOperacion" class="hidden bg-[#0c1e30]/95 backdrop-blur-md p-5 rounded-3xl shadow-xl space-y-3 border-2 border-[#f1c40f] text-white">
-    <h4 id="tituloOperacion" class="font-extrabold text-[#f1c40f] text-sm">Registrar Pago o Gasto</h4>
+  <main>
     
-    <div>
-      <label class="block text-xs font-medium text-gray-200 mb-1">Categoría</label>
-      <select id="selectCategoria" onchange="alCambiarCategoria()" class="w-full bg-white text-gray-900 border rounded-xl p-2.5 text-sm outline-none font-semibold">
-        <option value="">Seleccione categoría</option>
-      </select>
+    <!-- VISTA LOGIN ESTUDIANTE -->
+    <div id="vistaLogin" class="card">
+      <h2>Acceso del Estudiante</h2>
+      
+      <!-- Cuadrito QR Detectado -->
+      <div id="qrDetectedBox" class="qr-detected-box">
+        <p>✓ Código QR Escaneado</p>
+        <span id="qrCodeText">—</span>
+        <button type="button" class="btn-manual" onclick="cambiarModoManual()">Ingresar código manualmente</button>
+      </div>
+
+      <div id="grupoCodigo" class="form-group">
+        <label>Código de Estudiante</label>
+        <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
+      </div>
+
+      <div class="form-group">
+        <label>Clave (6 dígitos)</label>
+        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;" />
+      </div>
+
+      <button onclick="procesarLoginAlumno()" class="btn-primary">
+        Ingresar
+      </button>
+
+      <div id="loginError" style="color: #dc2626; font-size: 0.82rem; text-align: center; margin-top: 10px; min-height: 20px; font-weight: 600;"></div>
     </div>
 
-    <div>
-      <label class="block text-xs font-medium text-gray-200 mb-1">Concepto</label>
-      <select id="selectConcepto" class="w-full bg-white text-gray-900 border rounded-xl p-2.5 text-sm outline-none font-semibold">
-        <option value="">Seleccione concepto</option>
-      </select>
+    <!-- VISTA PRINCIPAL -->
+    <div id="vistaPrincipal" class="hidden" style="display: flex; flex-direction: column; gap: 14px;">
+      
+      <!-- CARD DE SALDO Y FOTO -->
+      <div class="saldo-card">
+        <div class="saldo-top">
+          <div>
+            <p class="saldo-title">Saldo Disponible</p>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 500;">LDS</span></h3>
+          </div>
+          <img id="alumnoFoto" src="https://via.placeholder.com/100" alt="Foto" class="avatar-img" />
+        </div>
+        <p id="alumnoNombre" class="alumno-nombre">Cargando...</p>
+        <p id="alumnoGrado" class="alumno-grado">---</p>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN -->
+      <div class="actions-grid">
+        <button onclick="accionBotonPagar()" class="action-btn btn-pagar">
+          💸 PAGAR / GASTOS
+        </button>
+        <button onclick="accionBotonMovimientos()" class="action-btn btn-movs">
+          📋 MOVIMIENTOS
+        </button>
+      </div>
+
+      <!-- FORMULARIO DE REGISTRO DE GASTO -->
+      <div id="seccionOperacion" class="sub-card hidden">
+        <h4 id="tituloOperacion">Registrar Pago o Gasto</h4>
+        
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
+            <option value="">Seleccione categoría</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Concepto</label>
+          <select id="selectConcepto" class="input-field">
+            <option value="">Seleccione concepto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Monto LDS</label>
+          <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="input-field" />
+        </div>
+
+        <div class="form-group">
+          <label>Responsable del Registro</label>
+          <select id="selectResponsable" class="input-field">
+            <option value="">Seleccione responsable</option>
+            <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+            <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+            <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+            <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Observación</label>
+          <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="input-field" style="resize: none;"></textarea>
+        </div>
+
+        <button onclick="registrarMovimientoOperacion()" class="btn-primary" style="margin-top: 4px;">
+          Confirmar y Registrar Pago
+        </button>
+        <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 700;"></div>
+      </div>
+
+      <!-- HISTORIAL -->
+      <div id="seccionMovimientos" class="sub-card">
+        <h4>Historial de Movimientos</h4>
+        <div id="listaMovimientos" class="lista-movs">
+          <p style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.82rem;">Sin movimientos recientes.</p>
+        </div>
+      </div>
+
+      <button onclick="cerrarSesionAlumno()" style="width: 100%; background: #e2e8f0; color: #334155; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-size: 0.85rem;">
+        Cerrar Sesión
+      </button>
     </div>
 
-    <div>
-      <label class="block text-xs font-medium text-gray-200 mb-1">Monto LDS</label>
-      <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="w-full bg-white text-gray-900 border rounded-xl p-2.5 text-sm outline-none font-semibold" />
-    </div>
+  </main>
 
-    <div>
-      <label class="block text-xs font-medium text-gray-200 mb-1">Responsable del Registro</label>
-      <select id="selectResponsable" class="w-full bg-white text-gray-900 border rounded-xl p-2.5 text-sm outline-none font-semibold">
-        <option value="">Seleccione responsable</option>
-        <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
-        <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
-        <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
-        <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
-      </select>
-    </div>
+  <footer>
+    KIDSWork LS - IEP La Salle del Sur — Todos los derechos reservados
+  </footer>
 
-    <div>
-      <label class="block text-xs font-medium text-gray-200 mb-1">Observación</label>
-      <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="w-full bg-white text-gray-900 border rounded-xl p-2.5 text-sm outline-none font-semibold"></textarea>
-    </div>
+  <script>
+    // Detector automático si vino de escanear QR
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
 
-    <button onclick="registrarMovimientoOperacion()" class="w-full bg-gradient-to-r from-[#f1c40f] to-[#d4ac0d] hover:brightness-110 text-[#0c1e30] font-extrabold py-2.5 rounded-xl text-sm transition shadow-lg">
-      Confirmar y Registrar Pago
-    </button>
-    <div id="mensajeOperacion" class="text-xs text-center min-h-[18px] font-semibold"></div>
-  </div>
+      if (codigoQR && codigoQR.trim() !== "") {
+        const codigoLimpio = codigoQR.trim().toUpperCase();
+        document.getElementById('loginCodigo').value = codigoLimpio;
+        document.getElementById('qrCodeText').textContent = codigoLimpio;
+        document.getElementById('qrDetectedBox').style.display = 'block';
+        document.getElementById('grupoCodigo').style.display = 'none';
+        document.getElementById('loginClave').focus();
+      }
+    });
 
-  <!-- HISTORIAL -->
-  <div id="seccionMovimientos" class="bg-[#0c1e30]/95 backdrop-blur-md p-4 rounded-3xl shadow-xl space-y-3 border-2 border-[#f1c40f] text-white">
-    <h4 class="font-extrabold text-[#f1c40f] text-sm">Historial de Movimientos</h4>
-    <div id="listaMovimientos" class="space-y-2 max-h-48 overflow-y-auto text-sm">
-      <p class="text-gray-400 text-center italic py-2">Sin movimientos recientes.</p>
-    </div>
-  </div>
-
-  <button onclick="cerrarSesionAlumno()" class="w-full bg-[#152b42] hover:bg-[#203f61] border border-[#f1c40f] text-white font-bold py-2.5 rounded-xl transition text-sm shadow">
-    Cerrar Sesión
-  </button>
-</div>
+    function cambiarModoManual() {
+      localStorage.removeItem('codigoEscaneado');
+      document.getElementById('qrDetectedBox').style.display = 'none';
+      document.getElementById('grupoCodigo').style.display = 'block';
+      document.getElementById('loginCodigo').value = '';
+      document.getElementById('loginCodigo').focus();
+    }
+  </script>
+</body>
+</html>
