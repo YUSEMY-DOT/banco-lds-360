@@ -256,7 +256,7 @@
       font-size: 0.78rem;
       color: #ffffff;
       background-color: #0c1e30;
-      border-top: 2px solid #38bdf8;
+      border-top: 3px solid #38bdf8;
       font-weight: 600;
     }
   </style>
@@ -567,39 +567,42 @@
       }
 
       errorDiv.textContent = "Verificando acceso...";
+      
+      // Validamos el login y de inmediato consultamos los datos completos (saldo y movimientos) tal como en administracion
       ejecutarLoginSistema(codigo, clave, function(res) {
-        if (res && (res.success === true || res.ok === true) && res.estudiante) {
-          document.getElementById('vistaLogin').classList.add('hidden');
-          document.getElementById('vistaPrincipal').classList.remove('hidden');
-
-          const est = res.estudiante;
-          const cuenta = res.cuenta || res;
-          const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
-          const primerNombre = nombreCompleto.split(' ')[0];
-
-          document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
-          document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || 0).toFixed(2);
+        if (res && (res.success === true || res.ok === true)) {
           
-          let fotoUrl = est.fotoUrl || est.foto || "";
-          if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
+          // Consultamos los datos completos del estudiante para traer saldo y movimientos exactos
+          consultarDatosEstudiante(codigo, function(data) {
+            document.getElementById('vistaLogin').classList.add('hidden');
+            document.getElementById('vistaPrincipal').classList.remove('hidden');
 
-          // CONSULTAR MOVIMIENTOS AUTOMÁTICAMENTE AL INGRESAR
-          consultarDatosEstudiante(codigo, function(dataMov) {
-            if (dataMov && dataMov.movimientos) {
-              historialMovimientosActual = dataMov.movimientos;
-              renderizarMovimientos(historialMovimientosActual);
-            } else if (res.movimientos) {
-              historialMovimientosActual = res.movimientos;
-              renderizarMovimientos(historialMovimientosActual);
-            }
+            const est = (data && data.estudiante) ? data.estudiante : (res.estudiante || {});
+            const cuenta = (data && (data.cuenta || data)) ? (data.cuenta || data) : (res.cuenta || res);
+            
+            const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
+            const primerNombre = nombreCompleto.split(' ')[0];
+
+            document.getElementById('alumnoNombre').textContent = nombreCompleto;
+            document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
+            
+            const saldoFinal = Number(cuenta.saldoActual || cuenta.saldo || data.saldoActual || data.saldo || res.saldoActual || res.saldo || 0);
+            document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
+            
+            let fotoUrl = est.fotoUrl || est.foto || "";
+            if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
+
+            // Historial de movimientos
+            const movs = (data && data.movimientos) ? data.movimientos : (res.movimientos || []);
+            historialMovimientosActual = movs;
+            renderizarMovimientos(historialMovimientosActual);
+
+            reproducirSonidoExito();
+
+            setTimeout(() => {
+              hablarTextoVoz(`Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.`);
+            }, 300);
           });
-
-          reproducirSonidoExito();
-
-          setTimeout(() => {
-            hablarTextoVoz(`Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.`);
-          }, 300);
 
         } else {
           const mensajeError = res.mensaje || res.message || "Código o clave incorrecta.";
@@ -681,15 +684,16 @@
           reproducirSonidoExito();
           hablarTextoVoz("Pago registrado con éxito.");
           
-          if(res.nuevoSaldo !== undefined) {
-            document.getElementById('saldoLDS').textContent = Number(res.nuevoSaldo).toFixed(2);
-          }
-          
-          // Actualizar movimientos tras registrar
-          consultarDatosEstudiante(codigo, function(dataMov) {
-            if (dataMov && dataMov.movimientos) {
-              historialMovimientosActual = dataMov.movimientos;
-              renderizarMovimientos(historialMovimientosActual);
+          // Actualizamos de inmediato consultando el saldo y movimientos actualizados
+          consultarDatosEstudiante(codigo, function(data) {
+            if (data) {
+              const cuenta = data.cuenta || data;
+              const saldoFinal = Number(cuenta.saldoActual || cuenta.saldo || data.saldoActual || data.saldo || 0);
+              document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
+              if (data.movimientos) {
+                historialMovimientosActual = data.movimientos;
+                renderizarMovimientos(historialMovimientosActual);
+              }
             }
           });
 
@@ -711,7 +715,7 @@
       contenedor.innerHTML = '';
 
       if (!movs || movs.length === 0) {
-        contenedor.innerHTML = '<p class="text-gray-400 text-center italic py-2" style="font-size: 0.85rem;">Sin movimientos recientes.</p>';
+        contenedor.innerHTML = '<p style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.82rem;">Sin movimientos recientes.</p>';
         return;
       }
 
