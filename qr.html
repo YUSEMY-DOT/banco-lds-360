@@ -116,6 +116,18 @@
             min-height: 260px;
         }
 
+        /* Oculta textos innecesarios del lector */
+        #reader__dashboard_section_csr button,
+        #reader__dashboard_section_swaplink {
+            background: #152b42 !important;
+            color: #fff !important;
+            border: 1px solid #f1c40f !important;
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            font-family: 'Poppins', sans-serif !important;
+            cursor: pointer;
+        }
+
         footer {
             background-color: #0c1e30;
             text-align: center;
@@ -158,33 +170,12 @@
         let html5QrcodeScanner = null;
         let timeoutTimer = null;
 
-        function hablar(texto, alTerminar) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const mensaje = new SpeechSynthesisUtterance(texto);
-                mensaje.lang = 'es-PE';
-                mensaje.rate = 0.95;
-                mensaje.pitch = 1.0;
-                
-                const voices = window.speechSynthesis.getVoices();
-                const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Jorge') || v.name.includes('Raul') || v.name.includes('Google') || v.name.includes('Lucia') || v.name.includes('Elena')));
-                if (vozEspanol) mensaje.voice = vozEspanol;
-
-                if (alTerminar) mensaje.onend = alTerminar;
-                window.speechSynthesis.speak(mensaje);
-            } else if (alTerminar) {
-                alTerminar();
-            }
-        }
-
-        function volverAInicio(mensajeError) {
+        function volverAInicio() {
             if (timeoutTimer) clearTimeout(timeoutTimer);
             if (html5QrcodeScanner) {
                 try { html5QrcodeScanner.clear(); } catch(e){}
             }
-            hablar(mensajeError || "No se detectó el código QR. Regresando al inicio.", function() {
-                window.location.href = "index.html";
-            });
+            window.location.href = "index.html";
         }
 
         function onScanSuccess(decodedText) {
@@ -193,14 +184,10 @@
                 try { html5QrcodeScanner.clear(); } catch(e){}
             }
             localStorage.setItem('codigoEscaneado', decodedText);
-            hablar("¡Código detectado correctamente!", function() {
-                window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
-            });
+            window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
         }
 
         function iniciarEscaner() {
-            hablar("Acerca tu código QR a la cámara.");
-
             try {
                 html5QrcodeScanner = new Html5QrcodeScanner(
                     "reader", 
@@ -210,27 +197,20 @@
 
                 html5QrcodeScanner.render(onScanSuccess, function(err) {});
 
-                // Si no escanea ningún código en 7 segundos, retorna automáticamente a la principal
+                // Regresa en 7 segundos si no escanea nada
                 timeoutTimer = setTimeout(function() {
-                    volverAInicio("No se detectó el código QR. Regresando al inicio.");
+                    volverAInicio();
                 }, 7000);
 
             } catch (e) {
-                volverAInicio("No se pudo activar la cámara. Regresando al inicio.");
+                volverAInicio();
             }
         }
 
+        // Se ejecuta automáticamente al ingresar a la pantalla
         window.addEventListener('load', function() {
-            setTimeout(iniciarEscaner, 300);
+            iniciarEscaner();
         });
-
-        document.addEventListener('click', function() {
-            if (!html5QrcodeScanner) iniciarEscaner();
-        }, { once: true });
-        
-        document.addEventListener('touchstart', function() {
-            if (!html5QrcodeScanner) iniciarEscaner();
-        }, { once: true });
     </script>
 </body>
 </html>
