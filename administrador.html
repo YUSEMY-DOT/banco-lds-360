@@ -9,8 +9,8 @@
   --azul: #123c69;
   --azul2: #071f40;
   --dorado: #c8a951;
-  --fondo: #eef3f8;
-  --blanco: #fff;
+  --fondo: #f0f4f8;
+  --blanco: #ffffff;
   --texto: #1f2937;
   --muted: #64748b;
   --borde: #dbe4ee;
@@ -27,24 +27,24 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--texto);
-  background: radial-gradient(circle at top right, rgba(200,169,81,.18), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
+  background: radial-gradient(circle at top right, rgba(200,169,81,.15), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* ENCABEZADO INSTITUCIONAL */
+/* ENCABEZADO SUPERIOR */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
-  padding: 16px clamp(15px, 3vw, 40px);
-  box-shadow: 0 8px 25px rgba(7,31,64,.2);
+  padding: 14px 24px;
+  box-shadow: 0 4px 20px rgba(7,31,64,.2);
   border-bottom: 4px solid var(--dorado);
 }
 
 .header-inner {
-  max-width: 1200px;
+  max-width: 1240px;
   width: 100%;
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,40 +54,36 @@ header {
 .brand {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .brand-mark {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   display: grid;
   place-items: center;
   background: rgba(255,255,255,.12);
   border: 1px solid rgba(255,255,255,.28);
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: clamp(18px, 2.5vw, 26px);
+  font-size: 22px;
+  letter-spacing: 0.5px;
 }
 
 .brand p {
   margin: 2px 0 0;
   opacity: .88;
-  font-size: 13px;
-}
-
-.top-actions {
-  display: flex;
-  gap: 10px;
+  font-size: 12px;
 }
 
 .btn {
   border: 0;
   border-radius: 10px;
-  padding: 9px 16px;
+  padding: 10px 18px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
@@ -102,6 +98,7 @@ header {
 .btn-light {
   background: #fff;
   color: var(--azul);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .btn-light:hover {
@@ -121,31 +118,31 @@ header {
 }
 
 /* =========================================================
-   VISTA 1: INICIO DE SESIÓN DE DOCENTES (CENTRADO)
+   VISTA 1: ACCESO OBLIGATORIO CON CLAVE
    ========================================================= */
 .login-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 100px);
   padding: 20px;
 }
 
 .login-card {
-  max-width: 440px;
+  max-width: 420px;
   width: 100%;
   background: var(--blanco);
   border-radius: 28px;
-  padding: 40px 32px;
+  padding: 36px 28px;
   box-shadow: 0 15px 40px rgba(13, 27, 42, 0.12);
   text-align: center;
   border-top: 6px solid var(--dorado);
 }
 
 .card-insignia-container {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 18px;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -173,12 +170,12 @@ header {
 .login-card p {
   color: var(--muted);
   font-size: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .form-group label {
@@ -234,14 +231,14 @@ header {
 }
 
 /* =========================================================
-   VISTA 2: PANEL DE ADMINISTRACIÓN
+   VISTA 2: PANEL DE ADMINISTRACIÓN BIEN ORDENADO
    ========================================================= */
 main {
-  max-width: 1200px;
-  width: 95%;
+  max-width: 1240px;
+  width: 100%;
   margin: 0 auto;
-  padding: 24px 10px 40px;
-  display: none; /* Se activa tras ingresar clave */
+  padding: 24px 16px 40px;
+  display: none; /* Se activa SOLO tras validar la clave */
 }
 
 .intro {
@@ -249,7 +246,7 @@ main {
 }
 
 .intro h2 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 26px;
   color: var(--azul);
 }
@@ -272,7 +269,7 @@ main {
   border: 1px solid var(--borde);
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 6px 20px rgba(15,23,42,.04);
+  box-shadow: 0 4px 15px rgba(15,23,42,.04);
 }
 
 .status-card span {
@@ -283,14 +280,15 @@ main {
 }
 
 .status-card strong {
-  font-size: 17px;
+  font-size: 18px;
   color: var(--azul);
 }
 
+/* ESTRUCTURA PRINCIPAL SIN DESBORDES */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 20px;
   align-items: start;
 }
 
@@ -324,7 +322,6 @@ main {
 .form-row {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 input, textarea, select {
@@ -344,7 +341,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .code-input {
-  flex: 1 1 200px;
+  flex: 1;
   text-transform: uppercase;
 }
 
@@ -376,34 +373,34 @@ input:focus, textarea:focus, select:focus {
   color: var(--rojo);
 }
 
-/* CABECERA DEL ESTUDIANTE Y FOTO AGRANDADA */
+/* FICHA DEL ESTUDIANTE CON FOTO AGRANDADA */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
   border-radius: 16px;
-  padding: 16px;
+  padding: 20px;
   margin-top: 16px;
   background: #f8fafc;
 }
 
 .student-head.show {
-  display: grid;
-  grid-template-columns: 160px minmax(0, 1fr) auto;
-  gap: 18px;
+  display: flex;
   align-items: center;
+  gap: 22px;
 }
 
-/* FOTO DEL ALUMNO AGRANDADA A 160PX */
+/* FOTO DEL ALUMNO AGRANDADA DESTACADA (220px x 220px) */
 .student-photo-wrap {
-  width: 160px;
-  height: 160px;
-  border-radius: 16px;
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+  border-radius: 18px;
   overflow: hidden;
   background: #eaf0f6;
-  border: 2px solid var(--borde);
+  border: 3px solid var(--azul);
   display: grid;
   place-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 .student-photo {
@@ -414,29 +411,36 @@ input:focus, textarea:focus, select:focus {
 }
 
 .student-photo-placeholder {
-  font-size: 60px;
+  font-size: 80px;
   color: #8aa0b7;
 }
 
+.student-info-box {
+  flex: 1;
+}
+
 .student-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--azul);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  line-height: 1.25;
 }
 
 .student-meta {
   color: var(--muted);
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .saldo {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 900;
   color: var(--verde);
-  text-align: right;
+  margin-top: 10px;
 }
 
+/* TABLA CONTENIDA CON DESPLAZAMIENTO SUAVE */
 .table-wrap {
   overflow-x: auto;
   margin-top: 18px;
@@ -447,7 +451,7 @@ input:focus, textarea:focus, select:focus {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 650px;
+  min-width: 600px;
 }
 
 th, td {
@@ -535,23 +539,21 @@ footer {
   font-size: 12px;
 }
 
-@media(max-width: 950px) {
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media(max-width: 1024px) {
   .layout { grid-template-columns: 1fr; }
 }
 
-@media(max-width: 560px) {
-  .cards { grid-template-columns: 1fr; }
+@media(max-width: 650px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .header-inner { align-items: flex-start; flex-direction: column; }
-  .student-head.show { grid-template-columns: 1fr; }
+  .student-head.show { flex-direction: column; text-align: center; }
   .student-photo-wrap { margin: 0 auto; }
-  .saldo { text-align: left; }
 }
 </style>
 </head>
 <body>
 
-<!-- ENCABEZADO GENERAL -->
+<!-- ENCABEZADO PRINCIPAL -->
 <header>
   <div class="header-inner">
     <div class="brand">
@@ -561,14 +563,12 @@ footer {
         <p>IEP LA SALLE DEL SUR · Panel de Administración</p>
       </div>
     </div>
-    <div class="top-actions">
-      <!-- BOTÓN VOLVER AL BANCO ACTIVADO -->
-      <a class="btn btn-light" href="índice.html" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al banco</a>
-    </div>
+    <!-- BOTÓN REGRESA A INDEX.HTML SIN DAR 404 -->
+    <a class="btn btn-light" href="index.html" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al banco</a>
   </div>
 </header>
 
-<!-- VISTA 1: FORMULARIO DE ACCESO CON CLAVE 360LDS -->
+<!-- VISTA 1: FORMULARIO DE CLAVE OBLIGATORIO -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -598,7 +598,7 @@ footer {
   </div>
 </div>
 
-<!-- VISTA 2: PANEL COMPLETO DE ADMINISTRACIÓN -->
+<!-- VISTA 2: PANEL DE ADMINISTRACIÓN -->
 <main id="panelView">
   <section class="intro">
     <h2>Administración</h2>
@@ -613,6 +613,7 @@ footer {
   </section>
 
   <section class="layout">
+    <!-- COLUMNA IZQUIERDA: MOVIMIENTOS -->
     <div class="panel">
       <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
       <div class="panel-body">
@@ -622,16 +623,17 @@ footer {
         </div>
         <div id="mensaje" class="message"></div>
         
+        <!-- FICHA CON FOTO AGRANDADA -->
         <div id="estudianteCard" class="student-head">
           <div class="student-photo-wrap">
             <img id="fotoEstudiante" class="student-photo" src="" alt="Foto del estudiante">
             <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
           </div>
-          <div>
+          <div class="student-info-box">
             <div id="nombre" class="student-name">—</div>
             <div id="meta" class="student-meta">—</div>
+            <div id="saldo" class="saldo">0.00 LDS</div>
           </div>
-          <div id="saldo" class="saldo">0.00 LDS</div>
         </div>
 
         <div class="table-wrap">
@@ -647,6 +649,7 @@ footer {
       </div>
     </div>
 
+    <!-- COLUMNA DERECHA: ATENCIÓN DE INCIDENCIAS -->
     <div class="panel">
       <div class="panel-head">
         <h3>🛠️ Atención de incidencias</h3>
@@ -656,9 +659,9 @@ footer {
         <label class="small-label" for="incCodigo">Código del estudiante</label>
         <input id="incCodigo" placeholder="LDS-EST-001">
         <label class="small-label" for="incProblema">Problema reportado</label>
-        <textarea id="incProblema" rows="4" placeholder="Describe qué ocurrió..."></textarea>
+        <textarea id="incProblema" rows="3" placeholder="Describe qué ocurrió..."></textarea>
         <label class="small-label" for="incSolucion">Solución / atención realizada</label>
-        <textarea id="incSolucion" rows="4" placeholder="Describe la solución aplicada o el pase realizado..."></textarea>
+        <textarea id="incSolucion" rows="3" placeholder="Describe la solución aplicada o el pase realizado..."></textarea>
         <label class="small-label" for="incEstado">Estado</label>
         <select id="incEstado">
           <option>Pendiente</option>
@@ -676,7 +679,7 @@ footer {
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// --- SÍNTESIS DE VOZ ---
+// VOZ DE NAVEGACIÓN Y SELECCIÓN
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -697,7 +700,7 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// --- VALIDACIÓN DE ACCESO CON CLAVE 360LDS ---
+// VALIDACIÓN DE ACCESO
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -719,28 +722,19 @@ function validarAccesoDocente() {
   }
 
   if (clave === "360LDS") {
-    localStorage.setItem("maestraActiva", docente);
     hablarTextoVoz("Clave correcta. Bienvenido al panel.");
-    desbloquearPanel();
+    document.getElementById("loginView").style.display = "none";
+    document.getElementById("panelView").style.display = "block";
+    renderIncidencias();
   } else {
     error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
     hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
   }
 }
 
-function desbloquearPanel() {
-  document.getElementById("loginView").style.display = "none";
-  document.getElementById("panelView").style.display = "block";
-  renderIncidencias();
-}
-
-// Verificar si ya inició sesión previamente
+// Inicio con mensaje por voz
 window.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem("maestraActiva")) {
-    desbloquearPanel();
-  } else {
-    setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
-  }
+  setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
 });
 
 document.getElementById("claveDocente").addEventListener("keydown", function(e) {
@@ -750,7 +744,7 @@ document.getElementById("claveDocente").addEventListener("keydown", function(e) 
   }
 });
 
-// --- LÓGICA DE LA API Y EL PANEL DE ADMINISTRACIÓN ---
+// CONSULTAS Y APIS
 const APP_SCRIPT_URL="https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
 function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
