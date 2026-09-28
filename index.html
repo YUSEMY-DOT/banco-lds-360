@@ -82,29 +82,29 @@
             background: #203f61;
         }
 
-        /* Contenedor Principal */
+        /* Contenedor Principal (Alineado al filo inferior) */
         .main-container {
             position: relative;
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
-            max-width: 1050px;
+            align-items: flex-end; /* Alineación perfecta al filo inferior */
+            padding: 10px 20px 0px 20px;
+            max-width: 1080px;
             width: 100%;
             margin: 0 auto;
             gap: 0px;
             z-index: 2;
         }
 
-        /* Tarjeta Amarillo Claro Semi-Transparente (Un poco más abajo) */
+        /* Tarjeta Amarillo Claro Traslúcida sentada al filo */
         .portal-card {
             background: rgba(254, 249, 231, 0.88);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            padding: 22px 16px 28px 16px;
+            padding: 20px 18px 24px 18px;
             border-radius: 26px;
-            max-width: 490px;
+            max-width: 520px;
             width: 100%;
             box-shadow: 0 12px 35px rgba(0,0,0,0.25);
             border: 3px solid rgba(255, 235, 116, 0.9);
@@ -112,11 +112,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 58px; /* Bajado un poco más */
+            margin-bottom: 12px; /* Bajado al filo */
         }
 
         .bank-title {
-            font-size: 1.8rem;
+            font-size: 1.85rem;
             color: #00796b;
             font-weight: 800;
             margin-bottom: 2px;
@@ -124,10 +124,10 @@
         }
 
         .bank-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             color: #00897b;
             font-weight: 600;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         /* Fila Superior: Botón QR | Niña Dinero | Botón Ingreso */
@@ -137,7 +137,7 @@
             justify-content: space-between;
             gap: 6px;
             width: 100%;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .img-btn {
@@ -150,9 +150,10 @@
             width: 100%;
         }
 
+        /* Botones de QR y Código en TAMAÑO MÁS GRANDE */
         .top-row .img-btn img {
             width: 100%;
-            height: 62px;
+            height: 76px; /* Altura aumentada para hacerlos más grandes */
             object-fit: contain;
             display: block;
         }
@@ -163,7 +164,7 @@
         }
 
         .center-girl-img {
-            width: 160px;
+            width: 165px;
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
@@ -186,13 +187,13 @@
             border-radius: 12px;
         }
 
-        /* Ilustración de la derecha (Un poco más pequeña) */
+        /* Ilustración de la derecha (Profesora y Alumna al filo inferior) */
         .right-illustration {
-            max-width: 340px; /* Reducido un poco de tamaño */
+            max-width: 360px;
             width: 100%;
             height: auto;
             object-fit: contain;
-            margin-top: 75px;
+            margin-bottom: 0px; /* Bajada al filo */
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
         }
 
@@ -211,15 +212,15 @@
         @media (max-width: 950px) {
             .main-container {
                 flex-direction: column;
-                padding: 20px 15px;
+                padding: 20px 15px 0px 15px;
                 gap: 20px;
+                align-items: center;
             }
             .portal-card {
-                margin-top: 10px;
+                margin-bottom: 0;
             }
             .right-illustration {
                 max-width: 280px;
-                margin-top: 0;
             }
         }
 
@@ -231,7 +232,7 @@
                 grid-template-columns: 1fr;
             }
             .top-row .img-btn img {
-                height: auto;
+                height: 65px;
             }
             .center-girl-img {
                 width: 140px;
@@ -263,12 +264,12 @@
     <!-- Contenedor Principal -->
     <div class="main-container">
         
-        <!-- Cuadro Amarillo Claro Traslúcido del Banco -->
+        <!-- Cuadro Amarillo Claro Traslúcido del Banco (Sentado al filo) -->
         <div class="portal-card">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
+            <!-- Fila Superior: Botón QR (Más Grande) | Niña Dinero | Botón Ingreso (Más Grande) -->
             <div class="top-row">
                 <a href="qr.html" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
@@ -297,7 +298,7 @@
             </div>
         </div>
 
-        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
+        <!-- Ilustración de la Derecha (Profesora y Alumna asentadas al filo) -->
         <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
 
     </div>
