@@ -1,465 +1,316 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco LDS 360 - IEP La Salle del Sur</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Administrativo - Maestras · IEP La Salle del Sur</title>
 
-        /* 1. Fondo de toda la página con la imagen del Banco */
-        body {
-            background: linear-gradient(rgba(12, 30, 48, 0.40), rgba(12, 30, 48, 0.40)), 
-                        url('assets/banco.png') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: #333333;
-            overflow-x: hidden;
-        }
+  <style>
+    :root {
+      --azul-oscuro: #0d1b2a;
+      --oro: #c99a32;
+      --blanco: #ffffff;
+      --gris-fondo: #f0f2f5;
+      --gris-texto: #667085;
+    }
 
-        /* Barra Superior Institucional */
-        header {
-            background-color: #0c1e30;
-            padding: 10px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #f1c40f;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .school-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--azul-oscuro);
+      background: var(--gris-fondo);
+      overflow-x: hidden;
+    }
 
-        .school-info img {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-        }
+    /* ENCABEZADO INSTITUCIONAL */
+    .header {
+      background: var(--azul-oscuro);
+      border-bottom: 4px solid var(--oro);
+      color: var(--blanco);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
 
-        .school-text h3 {
-            font-size: 1.05rem;
-            color: #ffffff;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
+    .header h1 {
+      font-size: 20px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: normal;
+    }
 
-        .school-text p {
-            font-size: 0.8rem;
-            color: #f1c40f;
-            font-weight: 600;
-            font-style: italic;
-        }
+    .back-home-btn {
+      border: 1px solid rgba(201, 154, 50, 0.4);
+      background: rgba(20, 39, 68, 0.8);
+      color: var(--blanco);
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
 
-        .admin-btn {
-            background: #152b42;
-            border: 2px solid #f1c40f;
-            color: #ffffff;
-            padding: 6px 18px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-        }
+    .back-home-btn:hover {
+      background: var(--oro);
+      color: var(--azul-oscuro);
+      border-color: var(--oro);
+    }
 
-        .admin-btn:hover {
-            background: #203f61;
-        }
+    /* CONTENEDOR PRINCIPAL CENTRADO */
+    .main-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding-top: 90px;
+      width: 96%;
+      margin: 0 auto;
+      max-width: 1300px;
+    }
 
-        /* Contenedor Principal (Alineado al filo inferior) */
-        .main-container {
-            position: relative;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding: 10px 20px 0px 20px;
-            max-width: 1080px;
-            width: 100%;
-            margin: 0 auto;
-            gap: 0px;
-            z-index: 2;
-        }
+    /* TARJETA DE INICIO DE SESIÓN CENTRAL */
+    .login-card {
+      flex: 0 1 100%;
+      max-width: 480px;
+      background: var(--blanco);
+      border-radius: 34px;
+      padding: 46px 40px 36px;
+      box-shadow: 0 20px 50px rgba(13, 27, 42, 0.12);
+      text-align: center;
+      border-top: 6px solid var(--oro);
+      position: relative;
+      z-index: 1;
+    }
 
-        /* Tarjeta Principal integrada sobre el fondo */
-        .portal-card {
-            background: transparent;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            padding: 20px 18px 24px 18px;
-            border-radius: 26px;
-            max-width: 540px;
-            width: 100%;
-            box-shadow: none;
-            border: none;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 12px;
-        }
+    .card-insignia-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 22px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(201, 154, 50, 0.25);
+      border: 3px solid var(--oro);
+      overflow: hidden;
+      padding: 6px;
+    }
 
-        .bank-title {
-            font-size: 2rem;
-            color: #ffffff;
-            font-weight: 800;
-            margin-bottom: 2px;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 121, 107, 0.6);
-        }
+    .card-insignia {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-        .bank-subtitle {
-            font-size: 0.88rem;
-            color: #f1c40f;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-        }
+    .login-card h2 {
+      color: var(--azul-oscuro);
+      font-size: 26px;
+      margin-bottom: 8px;
+      font-family: Georgia, serif;
+      font-weight: 700;
+    }
 
-        /* Fila Superior: Botón QR | Niña Dinero | Botón Ingreso */
-        .top-row {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 8px;
-            width: 100%;
-            margin-top: 18px;
-            margin-bottom: 20px;
-        }
+    .login-card p {
+      color: var(--gris-texto);
+      font-size: 15px;
+      margin-bottom: 28px;
+      line-height: 1.4;
+    }
 
-        .img-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, filter 0.2s ease;
-            text-decoration: none;
-            flex: 1;
-            width: 100%;
-        }
+    .form-group {
+      text-align: left;
+      margin-bottom: 20px;
+    }
 
-        .top-row .img-btn img {
-            width: 100%;
-            height: 92px;
-            object-fit: fill;
-            border-radius: 16px;
-            display: block;
-            margin-top: 20px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--azul-oscuro);
+      margin-bottom: 8px;
+    }
 
-        .img-btn:hover {
-            transform: scale(1.04);
-            filter: brightness(1.05);
-        }
+    .input-field {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #ccd2da;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-size: 16px;
+      outline: none;
+      background: #fafbfc;
+      color: var(--azul-oscuro);
+      transition: all 0.2s ease;
+    }
 
-        .center-girl-img {
-            width: 165px;
-            height: auto;
-            flex-shrink: 0;
-            object-fit: contain;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
-        }
+    .input-field:focus {
+      border-color: var(--oro);
+      background: var(--blanco);
+      box-shadow: 0 0 0 4px rgba(201, 154, 50, 0.15);
+    }
 
-        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
-        .bottom-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        }
+    .primary-btn {
+      width: 100%;
+      height: 54px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--azul-oscuro);
+      color: var(--blanco);
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 14px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 15px rgba(20, 39, 68, 0.25);
+    }
 
-        .bottom-row .img-btn {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .primary-btn:hover {
+      background: #1a3258;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(20, 39, 68, 0.35);
+    }
 
-        .bottom-row .img-btn img {
-            width: 100%;
-            height: auto;
-            max-height: 60px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
-        }
+    .error-msg {
+      color: #a7192e;
+      font-size: 14px;
+      min-height: 20px;
+      font-weight: 600;
+    }
 
-        /* Ilustración de la derecha (Profesora y Alumna) */
-        .right-illustration {
-            max-width: 360px;
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            margin-bottom: 0px;
-            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
-        }
-
-        /* Pie de página */
-        footer {
-            background-color: #0c1e30;
-            text-align: center;
-            padding: 12px;
-            font-size: 0.82rem;
-            color: #ffffff;
-            font-weight: 600;
-            border-top: 3px solid #f1c40f;
-            z-index: 10;
-        }
-
-        @media (max-width: 950px) {
-            .main-container {
-                flex-direction: column;
-                padding: 20px 15px 0px 15px;
-                gap: 20px;
-                align-items: center;
-            }
-            .portal-card {
-                margin-bottom: 0;
-            }
-            .right-illustration {
-                max-width: 280px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .top-row {
-                flex-direction: column;
-            }
-            .bottom-row {
-                flex-direction: column;
-            }
-            .top-row .img-btn img {
-                height: 75px;
-                margin-top: 0;
-            }
-            .center-girl-img {
-                width: 140px;
-            }
-        }
-    </style>
+    @media (max-width: 600px) {
+      .main-wrapper {
+        padding: 95px 15px 30px;
+      }
+      .login-card {
+        padding: 30px 20px 25px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Header con Insignia Oficial y Administrador -->
-    <header>
-        <div class="school-info">
-            <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
-            <div class="school-text">
-                <h3>IEP LA SALLE DEL SUR</h3>
-                <p>Formamos personas íntegras</p>
-            </div>
-        </div>
-        <a href="administrador.html" class="admin-btn">
-            🔒 Administrador
-        </a>
-    </header>
+  <div class="header">
+    <h1>IEP La Salle del Sur · Panel de Administración</h1>
+    <a href="index.html" class="back-home-btn" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al Inicio</a>
+  </div>
 
-    <!-- Contenedor Principal -->
-    <div class="main-container">
-        
-        <!-- Contenido del Banco LDS 360 -->
-        <div class="portal-card">
-            <h1 class="bank-title">BANCO LDS 360</h1>
-            <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
+  <main class="main-wrapper">
+    <!-- TARJETA CENTRAL CON INSIGNIA -->
+    <div class="login-card">
+      <div class="card-insignia-container">
+        <img src="assets/insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
+      </div>
+      <h2>Acceso Administrativo - Maestras</h2>
+      <p>Seleccione su nombre institucional para iniciar turno.</p>
+      
+      <div class="form-group">
+        <label for="docenteSelect">Docente / Maestra</label>
+        <select id="docenteSelect" class="input-field" required onchange="anunciarSeleccion(this)">
+          <option value="" disabled selected hidden>Seleccione su nombre</option>
+          <option value="LILY">Miss Lily Melo Azañero</option>
+          <option value="KIARA">Miss Kiara Morales Elguera</option>
+          <option value="ANGHY">Miss Anghy Reyes Melo</option>
+          <option value="KARIN">Miss Karin Molero Romani</option>
+        </select>
+      </div>
 
-            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
-            <div class="top-row">
-                <a href="qr.html" class="img-btn">
-                    <img src="assets/qr.png" alt="Escanea QR">
-                </a>
+      <div class="form-group">
+        <label for="claveDocente">Clave de Acceso Docente</label>
+        <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
+      </div>
 
-                <img src="assets/dinero.png" alt="Niña Banco LDS" class="center-girl-img">
-
-                <a href="codigo.html" class="img-btn">
-                    <img src="assets/ingreso.png" alt="Ingresa código">
-                </a>
-            </div>
-
-            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual -->
-            <div class="bottom-row">
-                <a href="tienda.html" class="img-btn">
-                    <img src="assets/tienda.png" alt="Tienda escolar">
-                </a>
-
-                <a href="padres.html" class="img-btn">
-                    <img src="assets/padres.png" alt="Padres">
-                </a>
-
-                <a href="manual.html" class="img-btn">
-                    <img src="assets/manual.png" alt="Manual de sistema">
-                </a>
-            </div>
-        </div>
-
-        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
-        <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
-
+      <button class="primary-btn" type="button" onclick="validarAccesoDocente()">Ingresar al Panel</button>
+      <div id="adminError" class="error-msg"></div>
     </div>
+  </main>
 
-    <!-- Footer -->
-    <footer>
-        Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
-    </footer>
+  <script>
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+        const utterance = new SpeechSynthesisUtterance(textoLimpio);
+        utterance.rate = 1.05;
+        utterance.pitch = 1.25;
 
-    <!-- SCRIPT DE BIENVENIDA HABLADA PRIMERO + MÚSICA SUAVE HASTA EL LEMA -->
-    <script>
-        let audioCtx = null;
-        let iniciado = false;
+        const voces = window.speechSynthesis.getVoices();
+        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google español') || v.name.toLowerCase().includes('lucia') || v.name.toLowerCase().includes('monica')));
+        if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
+        if (vozIdeal) utterance.voice = vozIdeal;
+        setTimeout(() => { window.speechSynthesis.speak(utterance); }, 50);
+      }
+    }
 
-        // FRECUENCIAS LIRA (DO MAYOR)
-        const FREQS = {
-            "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
-            "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
-        };
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
+    }
 
-        // MELODÍA HASTA "ENSEÑANZA, DISCIPLINA Y LEALTAD" (SE TOCA UNA SOLA VEZ)
-        const notasMelodiaBreve = [
-            // "Aprendiendo con metas y valores"
-            { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
-            { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
-            // "cual nos diste tú mi gran maestro"
-            { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
-            { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
-            // "Lasallista del Sur es nuestro ejemplo"
-            { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
-            { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
-            // "de enseñanza, disciplina y lealtad." (AQUÍ FINALIZA Y CORTA)
-            { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
-            { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
-        ];
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
+    });
 
-        // SINTETIZADOR DE LIRA CON VOLUMEN TENUE
-        function sonarLiraSuave(ctx, freq, t, dur) {
-            if (!freq) return;
-            const osc1 = ctx.createOscillator();
-            const osc2 = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc1.type = 'sine';
-            osc2.type = 'sine';
-            osc1.frequency.setValueAtTime(freq, t);
-            osc2.frequency.setValueAtTime(freq * 2, t);
-            
-            // Volumen tenue (0.08) para no molestar
-            gain.gain.setValueAtTime(0.08, t);
-            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
-            
-            osc1.connect(gain);
-            osc2.connect(gain);
-            gain.connect(ctx.destination);
-            osc1.start(t);
-            osc2.start(t);
-            osc1.stop(t + 0.9);
-            osc2.stop(t + 0.9);
-        }
+    function anunciarSeleccion(select) {
+      const texto = select.options[select.selectedIndex].text;
+      hablarTextoVoz("Seleccionado: " + texto);
+    }
 
-        // TAMBOR MARCIAL SUAVE
-        function sonarTamborSuave(ctx, t) {
-            const bufferSize = ctx.sampleRate * 0.03;
-            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-            const noise = ctx.createBufferSource();
-            noise.buffer = buffer;
-            const filter = ctx.createBiquadFilter();
-            filter.type = 'highpass';
-            filter.frequency.value = 2000;
-            const gain = ctx.createGain();
-            
-            // Volumen tenue (0.02)
-            gain.gain.setValueAtTime(0.02, t);
-            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
-            
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(ctx.destination);
-            noise.start(t);
-        }
+    const PAGINA_PANEL = "administrador_panel.html"; 
 
-        // REPRODUCE LA MÚSICA UNA SOLA VEZ HASTA EL LEMA Y CORTA
-        async function tocarMelodiaHastaLema() {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-                if (audioCtx.state === 'suspended') {
-                    await audioCtx.resume();
-                }
+    function validarAccesoDocente(){
+      const docenteElement = document.getElementById("docenteSelect");
+      const claveElement = document.getElementById("claveDocente");
+      const error = document.getElementById("adminError");
+      
+      if(!docenteElement || !claveElement || !error) return;
 
-                let t = audioCtx.currentTime + 0.1;
-                notasMelodiaBreve.forEach(item => {
-                    const f = FREQS[item.n] || 261.63;
-                    sonarLiraSuave(audioCtx, f, t, item.d);
-                    sonarTamborSuave(audioCtx, t);
-                    t += item.d;
-                });
-                // Al terminar de recorrer notasMelodiaBreve, se detiene automáticamente.
-            } catch (e) {
-                console.log("Audio no iniciado", e);
-            }
-        }
+      const docente = docenteElement.value;
+      const clave = claveElement.value.trim();
+      error.textContent = "";
 
-        // VOZ FEMENINA DE BIENVENIDA AL INICIO
-        function darBienvenidaVoz() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                
-                const fraseBienvenida = "¡Bienvenidos a la banca LDS 360 de La Salle del Sur!";
-                const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
-                mensaje.lang = 'es-PE';
-                mensaje.rate = 0.95;
-                mensaje.pitch = 1.1; // Tono ligeramente más agudo para voz femenina
+      if(!docente){
+        error.textContent = "Por favor, seleccione su nombre de la lista.";
+        hablarTextoVoz("Por favor seleccione su nombre.");
+        return;
+      }
+      if(!clave){
+        error.textContent = "Por favor, ingrese su clave de acceso docente.";
+        hablarTextoVoz("Por favor ingrese su clave.");
+        return;
+      }
 
-                const voices = window.speechSynthesis.getVoices();
-                // Búsqueda prioritaria de voz femenina en español
-                const vozFemenina = voices.find(v => v.lang.includes('es') && 
-                    (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || 
-                     v.name.includes('Sabrina') || v.name.includes('Paulina') || v.name.includes('Francisca') || 
-                     v.name.includes('Google español') || v.name.includes('Female')));
-                
-                if (vozFemenina) {
-                    mensaje.voice = vozFemenina;
-                }
+      if(clave === "360LDS"){
+        localStorage.setItem("maestraActiva", docente);
+        hablarTextoVoz("Clave correcta. Redirigiendo al panel.");
+        setTimeout(() => { window.location.href = PAGINA_PANEL; }, 1200);
+      } else {
+        error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
+        hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
+      }
+    }
 
-                // RECIÉN AL TERMINAR DE HABLAR, ENTRA LA MÚSICA SUAVE
-                mensaje.onend = function() {
-                    tocarMelodiaHastaLema();
-                };
+    document.getElementById("claveDocente").addEventListener("keydown", function(e){
+      if(e.key === "Enter"){ 
+        e.preventDefault();
+        validarAccesoDocente(); 
+      }
+    });
+  </script>
 
-                window.speechSynthesis.speak(mensaje);
-            } else {
-                tocarMelodiaHastaLema();
-            }
-        }
-
-        function iniciarFlujo() {
-            if (iniciado) return;
-            iniciado = true;
-            darBienvenidaVoz();
-        }
-
-        // Inicio automático al cargar o al interactuar
-        window.addEventListener('load', () => {
-            setTimeout(iniciarFlujo, 400);
-        });
-
-        document.addEventListener('touchstart', iniciarFlujo, { once: true });
-        document.addEventListener('click', iniciarFlujo, { once: true });
-        document.addEventListener('pointerdown', iniciarFlujo, { once: true });
-    </script>
 </body>
 </html>
