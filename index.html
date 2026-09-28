@@ -75,65 +75,63 @@
       -webkit-user-drag:none;
     }
 
-    /* LOS 5 BOTONES INTERACTIVOS CON VISIBILIDAD CLARA Y PRECISA */
+    /* BOTONES INTERACTIVOS EXACTAMENTE SOBRE LOS BOTONES DEL PÓSTER */
     .hotspot{
       position:absolute;
       display:block;
-      border:2px dashed rgba(255,255,255,0.6);
-      background:rgba(255,255,255,0.15);
+      border:0;
+      background:transparent;
       cursor:pointer;
       z-index:50;
-      transition:background 0.2s, border-color 0.2s;
     }
 
     .hotspot:hover{
-      background:rgba(255,255,255,0.35);
-      border-color:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.12);
     }
 
     /* 1. Botón Administrador (Arriba a la derecha) */
     .hotspot-admin{
-      right:3.5%;
-      top:3.5%;
-      width:18%;
-      height:7%;
+      right:17.5%;
+      top:7.2%;
+      width:12%;
+      height:5.5%;
+      border-radius:8px;
+    }
+
+    /* 2. Botón Escanear QR (Botón rojo inferior izquierdo del diseño) */
+    .hotspot-qr{
+      left:25.5%;
+      bottom:28.5%;
+      width:10.5%;
+      height:5.5%;
+      border-radius:12px;
+    }
+
+    /* 3. Botón Ingresar Código (Botón azul inferior del diseño) */
+    .hotspot-code{
+      left:37.2%;
+      bottom:28.5%;
+      width:10.5%;
+      height:5.5%;
+      border-radius:12px;
+    }
+
+    /* 4. Zona de Padres (Píldora verde baja) */
+    .hotspot-padres{
+      left:25.5%;
+      bottom:20.5%;
+      width:10.5%;
+      height:4.5%;
       border-radius:10px;
     }
 
-    /* 2. Botón Escanear QR (Abajo izquierda) */
-    .hotspot-qr{
-      left:5.5%;
-      bottom:8%;
-      width:19%;
-      height:12%;
-      border-radius:12px;
-    }
-
-    /* 3. Botón Ingresar Código (Abajo centro-izquierda) */
-    .hotspot-code{
-      left:26.5%;
-      bottom:8%;
-      width:19%;
-      height:12%;
-      border-radius:12px;
-    }
-
-    /* 4. Botón Zona de Padres (Cuadrado verde abajo a la derecha) */
-    .hotspot-padres{
-      left:49.0%;
-      bottom:8%;
-      width:22%;
-      height:12%;
-      border-radius:12px;
-    }
-
-    /* 5. Botón Manual (Cuadrado amarillo abajo a la derecha) */
+    /* 5. Manual (Píldora celeste/azul baja) */
     .hotspot-manual{
-      left:73.0%;
-      bottom:8%;
-      width:22%;
-      height:12%;
-      border-radius:12px;
+      left:37.2%;
+      bottom:20.5%;
+      width:10.5%;
+      height:4.5%;
+      border-radius:10px;
     }
 
     /* VENTANAS MODALES Y PANTALLAS */
@@ -441,7 +439,7 @@
   <main id="portadaExactaFinal" class="exact-home">
     <div class="exact-poster">
       <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur" onerror="this.src='portada.webp';">
-      <!-- LOS 5 BOTONES INTERACTIVOS VISIBLES Y EN SU SITIO EXACTO -->
+      <!-- BOTONES EXACTOS SOBRE LA IMAGEN -->
       <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
@@ -972,7 +970,7 @@ document.addEventListener("keydown",function(e){
 });
 </script>
 
-<!-- REPRODUCCIÓN AUTOMÁTICA: BIENVENIDA + HIMNO CORRECTO + LIRA -->
+<!-- AUDIO AUTOMÁTICO: BIENVENIDA + HIMNO CORRECTO + LIRA -->
 <script>
   (function() {
     let audioCtx = null;
