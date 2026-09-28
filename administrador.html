@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BANCO LDS 360 — Administración</title>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
@@ -26,21 +26,23 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
   color: var(--texto);
   background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
   min-height: 100vh;
   overflow-x: hidden;
   font-size: 13px;
+  line-height: 1.4;
 }
 
-/* ENCABEZADO SUPERIOR COMPACTO */
+/* ENCABEZADO RESPONSIVO */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
-  padding: 10px 18px;
+  padding: 10px 14px;
   box-shadow: 0 4px 15px rgba(7,31,64,.2);
   border-bottom: 3px solid var(--dorado);
+  width: 100%;
 }
 
 .header-inner {
@@ -51,6 +53,7 @@ header {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .brand {
@@ -68,12 +71,14 @@ header {
   background: rgba(255,255,255,.12);
   border: 1px solid rgba(255,255,255,.28);
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   letter-spacing: 0.5px;
+  font-weight: 700;
 }
 
 .brand p {
@@ -85,7 +90,7 @@ header {
 .btn {
   border: 0;
   border-radius: 8px;
-  padding: 8px 14px;
+  padding: 9px 14px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
@@ -95,6 +100,7 @@ header {
   gap: 6px;
   font-size: 13px;
   transition: all 0.2s ease;
+  min-height: 40px;
 }
 
 .btn-light {
@@ -119,29 +125,29 @@ header {
   color: var(--azul);
 }
 
-/* PANTALLA DE ACCESO CON CLAVE (SIEMPRE VISIBLE AL INICIO) */
+/* PANTALLA DE ACCESO CON CLAVE */
 .login-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 75px);
-  padding: 15px;
+  padding: 16px 12px;
 }
 
 .login-card {
   max-width: 380px;
   width: 100%;
   background: var(--blanco);
-  border-radius: 22px;
-  padding: 28px 22px;
+  border-radius: 20px;
+  padding: 24px 18px;
   box-shadow: 0 10px 30px rgba(13, 27, 42, 0.1);
   text-align: center;
   border-top: 5px solid var(--dorado);
 }
 
 .card-insignia-container {
-  width: 80px;
-  height: 80px;
+  width: 75px;
+  height: 75px;
   margin: 0 auto 12px;
   background: #ffffff;
   border-radius: 50%;
@@ -162,15 +168,15 @@ header {
 
 .login-card h2 {
   color: var(--azul);
-  font-size: 19px;
+  font-size: 18px;
   margin-bottom: 4px;
   font-weight: 700;
 }
 
 .login-card p {
   color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 18px;
+  font-size: 12px;
+  margin-bottom: 16px;
 }
 
 .form-group {
@@ -186,21 +192,26 @@ header {
   margin-bottom: 5px;
 }
 
-.input-field {
+.input-field, input, textarea, select {
   width: 100%;
   height: 42px;
-  border: 1px solid #ccd2da;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: 14px; /* Evita zoom automático en iPhone/Android */
   outline: none;
-  background: #fafbfc;
+  background: #fff;
   color: var(--texto);
+  font-family: inherit;
 }
 
-.input-field:focus {
+textarea {
+  height: auto;
+  padding: 8px 12px;
+}
+
+.input-field:focus, input:focus, textarea:focus, select:focus {
   border-color: var(--azul);
-  background: #fff;
   box-shadow: 0 0 0 3px rgba(18, 60, 105, 0.1);
 }
 
@@ -218,7 +229,7 @@ header {
   box-shadow: 0 4px 12px rgba(18, 60, 105, 0.18);
 }
 
-.primary-btn:hover {
+.primary-btn:active {
   background: var(--azul2);
 }
 
@@ -233,9 +244,9 @@ header {
 /* PANEL PRINCIPAL */
 main {
   max-width: 1180px;
-  width: 96%;
+  width: 100%;
   margin: 0 auto;
-  padding: 16px 6px 30px;
+  padding: 14px 10px 30px;
   display: none;
 }
 
@@ -245,7 +256,7 @@ main {
 
 .intro h2 {
   margin: 0 0 2px;
-  font-size: 22px;
+  font-size: 20px;
   color: var(--azul);
 }
 
@@ -278,13 +289,15 @@ main {
 }
 
 .status-card strong {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--azul);
+  word-break: break-word;
 }
 
+/* LAYOUT RESPONSIVO FLEXIBLE */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.85fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: 14px;
   align-items: start;
 }
@@ -301,7 +314,7 @@ main {
 }
 
 .panel-head {
-  padding: 12px 16px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--borde);
   display: flex;
   align-items: center;
@@ -329,13 +342,13 @@ main {
 }
 
 .toggle-icon {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   transition: transform 0.25s ease;
   display: inline-block;
 }
 
-/* Estado replegado / contraído */
+/* Estado contraído */
 .panel.collapsed .panel-body {
   display: none;
 }
@@ -352,31 +365,23 @@ main {
   padding: 14px;
 }
 
-.form-row {
+/* BLOQUE DE BÚSQUEDA ADAPTADO A CELULARES */
+.search-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-buttons {
   display: flex;
   gap: 8px;
-  align-items: center;
 }
 
-input, textarea, select {
-  width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 8px 10px;
-  font: inherit;
-  font-size: 12px;
-  color: var(--texto);
-  background: #fff;
-  outline: none;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: var(--azul);
-  box-shadow: 0 0 0 2px rgba(18,60,105,.1);
+.search-buttons .btn {
+  flex: 1;
 }
 
 .code-input {
-  flex: 1;
   text-transform: uppercase;
 }
 
@@ -384,7 +389,7 @@ input:focus, textarea:focus, select:focus {
   display: block;
   font-size: 11px;
   color: var(--muted);
-  margin: 8px 0 3px;
+  margin: 10px 0 4px;
   font-weight: 700;
 }
 
@@ -408,7 +413,7 @@ input:focus, textarea:focus, select:focus {
   color: var(--rojo);
 }
 
-/* FOTO DEL ESTUDIANTE ENCAJADA (130px) */
+/* FICHA DEL ESTUDIANTE MOBIL FRIENDLY */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
@@ -416,17 +421,19 @@ input:focus, textarea:focus, select:focus {
   padding: 12px;
   margin-top: 12px;
   background: #f8fafc;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
 }
 
 .student-head.show {
   display: flex;
-  align-items: center;
-  gap: 14px;
 }
 
 .student-photo-wrap {
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
   flex-shrink: 0;
   border-radius: 12px;
   overflow: hidden;
@@ -445,13 +452,12 @@ input:focus, textarea:focus, select:focus {
 }
 
 .student-photo-placeholder {
-  font-size: 50px;
+  font-size: 44px;
   color: #8aa0b7;
 }
 
 .student-info-box {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .student-name {
@@ -465,29 +471,35 @@ input:focus, textarea:focus, select:focus {
 
 .student-meta {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
 .saldo {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--verde);
   margin-top: 6px;
+  background: #e6f4ea;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid #b7e1cd;
 }
 
-/* TABLA DE MOVIMIENTOS */
+/* TABLA DE MOVIMIENTOS RESPONSIVA CON DESPLAZAMIENTO FLUIDO */
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
   border: 1px solid var(--borde);
   border-radius: 10px;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 520px;
+  min-width: 500px;
 }
 
 th, td {
@@ -565,7 +577,7 @@ tr:last-child td {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(7, 31, 64, 0.85);
+  background: rgba(7, 31, 64, 0.88);
   z-index: 1000;
   justify-content: center;
   align-items: center;
@@ -601,10 +613,11 @@ tr:last-child td {
   background: var(--rojo);
   color: #fff;
   border: 0;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
+  width: 100%;
 }
 
 footer {
@@ -614,16 +627,55 @@ footer {
   font-size: 11px;
 }
 
-@media(max-width: 920px) {
-  .layout { grid-template-columns: 1fr; }
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* MEDIA QUERIES PARA ADAPTAR A CELULARES Y TABLETS */
+@media (min-width: 600px) {
+  .search-box {
+    flex-direction: row;
+    align-items: center;
+  }
+  .search-buttons {
+    flex-shrink: 0;
+  }
+  .student-head {
+    flex-direction: row;
+    text-align: left;
+  }
+  .student-info-box {
+    flex: 1;
+  }
 }
 
-@media(max-width: 500px) {
-  .cards { grid-template-columns: 1fr; }
-  .header-inner { flex-direction: column; align-items: flex-start; }
-  .student-head.show { flex-direction: column; text-align: center; }
-  .student-photo-wrap { margin: 0 auto; }
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .brand {
+    justify-content: center;
+  }
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .status-card {
+    padding: 8px 10px;
+  }
+  .status-card span {
+    font-size: 10px;
+  }
+  .status-card strong {
+    font-size: 13px;
+  }
 }
 </style>
 </head>
@@ -681,10 +733,10 @@ footer {
   </section>
 
   <section class="cards">
-    <div class="status-card"><span>Conexión</span><strong id="estadoConexion">Lista para consultar</strong></div>
+    <div class="status-card"><span>Conexión</span><strong id="estadoConexion">Lista</strong></div>
     <div class="status-card"><span>Maestra Activa</span><strong id="maestraActivaNombre">—</strong></div>
     <div class="status-card"><span>Movimientos</span><strong id="contadorMovimientos">0</strong></div>
-    <div class="status-card"><span>Incidencias guardadas</span><strong id="contadorIncidencias">0</strong></div>
+    <div class="status-card"><span>Incidencias</span><strong id="contadorIncidencias">0</strong></div>
   </section>
 
   <section class="layout">
@@ -693,10 +745,12 @@ footer {
       <div class="panel">
         <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
         <div class="panel-body">
-          <div class="form-row">
+          <div class="search-box">
             <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
-            <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
-            <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
+            <div class="search-buttons">
+              <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
+              <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
+            </div>
           </div>
           <div id="mensaje" class="message"></div>
           
@@ -812,7 +866,7 @@ function togglePanel(idPanel) {
   }
 }
 
-// 3 CATEGORÍAS EXACTAS DEL EXCEL
+// 3 CATEGORÍAS EXACTAS Y LIMPIAS
 const CATALOGO_EXCEL = {
   "INGRESOS_Y_SUELDOS": [
     "Ingreso Sueldo Base Mensual",
@@ -856,19 +910,35 @@ function cargarConceptosPorTipo() {
   });
 }
 
-// SÍNTESIS DE VOZ
+// SÍNTESIS DE VOZ MULTIPLATAFORMA (COMPATIBLE CON CELULARES)
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
     const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
     const utterance = new SpeechSynthesisUtterance(textoLimpio);
-    utterance.rate = 1.05;
-    utterance.pitch = 1.25;
-    const voces = window.speechSynthesis.getVoices();
-    let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google español') || v.name.toLowerCase().includes('lucia')));
-    if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
-    if (vozIdeal) utterance.voice = vozIdeal;
-    setTimeout(() => { window.speechSynthesis.speak(utterance); }, 50);
+    utterance.lang = 'es-PE';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.1;
+
+    function ejecutarVoz() {
+      const voces = window.speechSynthesis.getVoices();
+      let vozIdeal = voces.find(v => v.lang.includes('es') && (
+        v.name.toLowerCase().includes('female') || 
+        v.name.toLowerCase().includes('google español') || 
+        v.name.toLowerCase().includes('lucia') || 
+        v.name.toLowerCase().includes('elena') || 
+        v.name.toLowerCase().includes('monica')
+      ));
+      if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
+      if (vozIdeal) utterance.voice = vozIdeal;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = ejecutarVoz;
+    } else {
+      ejecutarVoz();
+    }
   }
 }
 
@@ -901,7 +971,7 @@ function validarAccesoDocente() {
   if (clave === "360LDS" || clave === "2026") {
     const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
     sessionStorage.setItem("maestraActiva", nombreMaestra);
-    hablarTextoVoz("Clave correcta. Bienvenido al panel.");
+    hablarTextoVoz("Clave correcta. Bienvenida al panel.");
     desbloquearPanel(nombreMaestra);
   } else {
     error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
@@ -918,7 +988,6 @@ function desbloquearPanel(nombreMaestra) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Siempre requiere ingresar la clave al abrir la página
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
   setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
@@ -935,6 +1004,7 @@ document.getElementById("claveDocente").addEventListener("keydown", function(e) 
 let html5QrCode = null;
 
 function abrirEscanerQR() {
+  hablarTextoVoz("Abriendo cámara para escanear código QR.");
   document.getElementById("qrModal").style.display = "flex";
   html5QrCode = new Html5Qrcode("reader");
   const config = { fps: 10, qrbox: { width: 200, height: 200 } };
@@ -987,6 +1057,7 @@ function llamarAPI(parametros,callback){
   script.onerror=function(){
     delete window[nombreCallback];script.remove();
     mostrarMensaje("No se pudo conectar con el servicio del banco.","error");
+    hablarTextoVoz("Error de conexión con el banco.");
     document.getElementById("estadoConexion").textContent="Sin conexión";
   };
   document.body.appendChild(script);
@@ -1020,9 +1091,15 @@ function mostrarFotoEstudiante(e){
 
 function consultarEstudiante(){
   const codigo=document.getElementById("codigo").value.trim().toUpperCase();
-  if(!codigo){mostrarMensaje("Ingresa un código LDS.","error");return;}
+  if(!codigo){
+    mostrarMensaje("Ingresa un código LDS.","error");
+    hablarTextoVoz("Por favor ingresa un código.");
+    return;
+  }
   mostrarMensaje("Consultando...","ok");
+  hablarTextoVoz("Consultando estudiante.");
   document.getElementById("estadoConexion").textContent="Consultando";
+
   llamarAPI({accion:"estudiante",codigo},function(respuesta){
     if(!respuesta||respuesta.ok===false||!respuesta.estudiante){
       document.getElementById("estudianteCard").classList.remove("show");
@@ -1030,12 +1107,16 @@ function consultarEstudiante(){
       document.getElementById("contadorMovimientos").textContent="0";
       document.getElementById("estadoConexion").textContent="Conectado";
       mostrarMensaje((respuesta&&respuesta.mensaje)||"Estudiante no encontrado.","error");
+      hablarTextoVoz("Estudiante no encontrado.");
       return;
     }
     const e=respuesta.estudiante,cuenta=respuesta.cuenta||{};
-    document.getElementById("nombre").textContent=e.nombreCompleto||e.nombre||"—";
-    document.getElementById("meta").textContent=[e.codigo||codigo,e.grado||"",e.seccion||"",e.docente||""].filter(Boolean).join(" · ");
-    document.getElementById("saldo").textContent=formatearLDS(cuenta.saldoActual)+" LDS";
+    const nombreEstudiante = e.nombreCompleto || e.nombre || "Estudiante";
+    const saldoEstudiante = formatearLDS(cuenta.saldoActual || 0);
+
+    document.getElementById("nombre").textContent = nombreEstudiante;
+    document.getElementById("meta").textContent = [e.codigo||codigo,e.grado||"",e.seccion||"",e.docente||""].filter(Boolean).join(" · ");
+    document.getElementById("saldo").textContent = saldoEstudiante + " LDS";
     mostrarFotoEstudiante(e);
     document.getElementById("estudianteCard").classList.add("show");
     
@@ -1047,6 +1128,9 @@ function consultarEstudiante(){
     renderMovimientos(movimientos);
     document.getElementById("estadoConexion").textContent="Conectado";
     mostrarMensaje("Consulta realizada correctamente.","ok");
+
+    // LECTURA DE VOZ ANUNCIANDO NOMBRE Y SALDO
+    hablarTextoVoz("Estudiante " + nombreEstudiante + ". Saldo actual: " + saldoEstudiante + " soles Lasallistas.");
   });
 }
 
@@ -1061,15 +1145,17 @@ function procesarPagoEstudiante() {
 
   if (!codigo) {
     mostrarMensajePago("Primero consulta a un estudiante.", "error");
+    hablarTextoVoz("Primero consulta a un estudiante.");
     return;
   }
   if (!monto || monto <= 0) {
     mostrarMensajePago("Ingresa un monto válido mayor a 0.", "error");
+    hablarTextoVoz("Ingresa un monto válido.");
     return;
   }
 
   mostrarMensajePago("Procesando pago...", "ok");
-  hablarTextoVoz("Procesando registro de transacción.");
+  hablarTextoVoz("Procesando pago.");
 
   llamarAPI({
     accion: "registrarMovimiento",
@@ -1086,12 +1172,13 @@ function procesarPagoEstudiante() {
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       
-      // REPLIEGUE AUTOMÁTICO INMEDIATO DEL PANEL DE PAGOS
+      // REPLIEGUE AUTOMÁTICO INMEDIATO
       document.getElementById("panelPago").classList.add("collapsed");
 
-      consultarEstudiante(); // Recargar datos y movimientos actualizados
+      consultarEstudiante(); // Recargar datos y saldo actualizado
     } else {
       mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar pago.", "error");
+      hablarTextoVoz("Error al registrar el pago.");
     }
   });
 }
@@ -1117,14 +1204,19 @@ function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_
 // GUARDAR INCIDENCIA CON PLIEGUE AUTOMÁTICO INMEDIATO
 function guardarIncidencia(){
   const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value;
-  if(!codigo||!problema){alert("Ingresa el código y el problema reportado.");return;}
+  if(!codigo||!problema){
+    alert("Ingresa el código y el problema reportado.");
+    hablarTextoVoz("Ingresa el código y el problema reportado.");
+    return;
+  }
   const items=obtenerIncidencias();
   items.unshift({id:Date.now(),fecha:new Date().toLocaleString("es-PE"),codigo,problema,solucion,estado});
   localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
   limpiarIncidencia();
   renderIncidencias();
+  hablarTextoVoz("Atención de incidencia guardada.");
 
-  // REPLIEGUE AUTOMÁTICO INMEDIATO DEL PANEL DE INCIDENCIAS
+  // REPLIEGUE AUTOMÁTICO INMEDIATO
   document.getElementById("panelIncidencias").classList.add("collapsed");
 }
 
