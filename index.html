@@ -13,7 +13,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* 1. Fondo de toda la página con la imagen del Banco de gran tamaño */
+        /* 1. Fondo de toda la página con la imagen del Banco */
         body {
             background: linear-gradient(rgba(12, 30, 48, 0.45), rgba(12, 30, 48, 0.45)), 
                         url('assets/banco.png') no-repeat center center fixed;
@@ -99,7 +99,7 @@
 
         /* Tarjeta Amarillo Claro Semi-Transparente */
         .portal-card {
-            background: rgba(254, 249, 231, 0.85); /* Amarillo claro pastel semi-transparente */
+            background: rgba(254, 249, 231, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             padding: 30px 30px 35px 30px;
@@ -151,7 +151,7 @@
         .top-row .img-btn img {
             width: 100%;
             height: auto;
-            max-width: 210px; /* Tamaño idéntico para QR e Ingreso */
+            max-width: 210px;
             object-fit: contain;
             display: block;
         }
@@ -163,14 +163,14 @@
 
         /* Niña con monedas al centro en TAMAÑO GRANDE */
         .center-girl-img {
-            width: 220px; /* Tamaño grande destacado */
+            width: 220px;
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
             filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
         }
 
-        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual (Todos del mismo tamaño) */
+        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
         .bottom-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -183,16 +183,17 @@
             width: 100%;
             height: 100%;
             max-width: 100%;
-            object-fit: fill; /* Tamaño exacto e idéntico para los 3 botones */
+            object-fit: fill;
             border-radius: 12px;
         }
 
-        /* Ilustración de la derecha (Profesora y Alumna) */
+        /* Ilustración de la derecha (Ubicada un poco más abajo) */
         .right-illustration {
             max-width: 440px;
             width: 100%;
             height: auto;
             object-fit: contain;
+            margin-top: 45px; /* Posicionada un poco más abajo */
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
         }
 
@@ -215,6 +216,7 @@
             }
             .right-illustration {
                 max-width: 320px;
+                margin-top: 0;
             }
         }
 
@@ -273,7 +275,7 @@
                 </a>
             </div>
 
-            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual (Iguales en tamaño) -->
+            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual -->
             <div class="bottom-row">
                 <a href="tienda.html" class="img-btn">
                     <img src="assets/tienda.png" alt="Tienda escolar">
@@ -289,7 +291,7 @@
             </div>
         </div>
 
-        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
+        <!-- Ilustración de la Derecha (assets/observando.png bajada un poco) -->
         <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
 
     </div>
