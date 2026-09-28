@@ -335,7 +335,7 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR (ACTIVA LA CÁMARA) | Niña Dinero | Botón Ingreso -->
+            <!-- Fila Superior: Botón QR (Cámara) | Niña Dinero | Botón Ingreso Manual -->
             <div class="top-row">
                 <a onclick="abrirCamaraQR()" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
@@ -374,7 +374,7 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPTS DE AUDIO, VOZ Y ESCÁNER QR -->
+    <!-- SCRIPTS DE AUDIO, VOZ NATURAL Y ESCÁNER QR -->
     <script>
         let audioCtx = null;
         let iniciado = false;
@@ -500,31 +500,44 @@
             }
         }
 
+        // SELECCIÓN DE VOZ NATURAL Y FLUIDA EN ESPAÑOL
         function darBienvenidaVoz() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 
                 const fraseBienvenida = "¡Hola! ¡Qué alegría verte hoy en el Banco LDS 360! Escanea tu código QR o ingresa tu código para gestionar tus monedas con mucha energía. ¡Vamos a aprender y divertirnos!";
                 const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
-                mensaje.lang = 'es-PE';
-                mensaje.rate = 1.05;
-                mensaje.pitch = 1.25;
+                mensaje.lang = 'es-ES';
+                mensaje.rate = 1.0;
+                mensaje.pitch = 1.1;
 
-                const voices = window.speechSynthesis.getVoices();
-                const vozFemenina = voices.find(v => v.lang.includes('es') && 
-                    (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || 
-                     v.name.includes('Sabrina') || v.name.includes('Paulina') || v.name.includes('Francisca') || 
-                     v.name.includes('Google español') || v.name.includes('Female')));
-                
-                if (vozFemenina) {
-                    mensaje.voice = vozFemenina;
+                function asignarVozYNicializar() {
+                    const voices = window.speechSynthesis.getVoices();
+                    const vozNatural = voices.find(v => 
+                        (v.lang.includes('es') || v.lang.includes('ES')) && 
+                        (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Helena') || v.name.includes('Laura') || v.name.includes('Lucia') || v.name.includes('Spanish'))
+                    ) || voices.find(v => v.lang.includes('es'));
+                    
+                    if (vozNatural) {
+                        mensaje.voice = vozNatural;
+                    }
+
+                    mensaje.onend = function() {
+                        tocarMelodiaHastaLema();
+                    };
+
+                    window.speechSynthesis.speak(mensaje);
                 }
 
-                mensaje.onend = function() {
-                    tocarMelodiaHastaLema();
-                };
-
-                window.speechSynthesis.speak(mensaje);
+                if (window.speechSynthesis.getVoices().length > 0) {
+                    asignarVozYNicializar();
+                } else {
+                    window.speechSynthesis.onvoiceschanged = asignarVozYNicializar;
+                    // Respaldo por si el evento no dispara
+                    setTimeout(() => {
+                        if (!window.speechSynthesis.speaking) asignarVozYNicializar();
+                    }, 300);
+                }
             } else {
                 tocarMelodiaHastaLema();
             }
