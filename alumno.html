@@ -14,7 +14,7 @@
     }
 
     body {
-      background: linear-gradient(rgba(12, 30, 48, 0.60), rgba(12, 30, 48, 0.60)), 
+      background: linear-gradient(rgba(12, 30, 48, 0.65), rgba(12, 30, 48, 0.65)), 
                   url('assets/banco.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -89,7 +89,7 @@
     }
 
     .card {
-      background: rgba(12, 30, 48, 0.92);
+      background: rgba(12, 30, 48, 0.95);
       backdrop-filter: blur(10px);
       border: 2px solid #f1c40f;
       border-radius: 24px;
@@ -114,17 +114,32 @@
       margin-bottom: 20px;
     }
 
+    /* Cuadrito superior con el código escaneado */
+    .codigo-badge {
+      background: rgba(241, 196, 15, 0.15);
+      border: 2px dashed #f1c40f;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .codigo-badge span {
+      font-size: 0.72rem;
+      color: #f1c40f;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: block;
+    }
+    .codigo-badge strong {
+      font-size: 1.3rem;
+      color: #ffffff;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
     .form-group {
       margin-bottom: 18px;
       text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      font-weight: 600;
-      margin-bottom: 6px;
     }
 
     .form-control {
@@ -134,9 +149,11 @@
       border: 2px solid #1e3a5f;
       border-radius: 12px;
       padding: 0 14px;
-      font-size: 1rem;
+      font-size: 1.3rem;
       color: #0c1e30;
       font-weight: 700;
+      text-align: center;
+      letter-spacing: 8px;
       outline: none;
       transition: all 0.2s ease;
     }
@@ -144,15 +161,6 @@
     .form-control:focus {
       border-color: #f1c40f;
       box-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
-    }
-
-    /* Estilo especial cuando muestra el código detectado por QR */
-    .codigo-qr-display {
-      background: rgba(241, 196, 15, 0.12);
-      border: 2px dashed #f1c40f;
-      color: #ffffff;
-      text-align: center;
-      letter-spacing: 1px;
     }
 
     .btn-primary {
@@ -291,16 +299,19 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Campo de Código (app.js lo lee perfectamente) -->
-      <div class="form-group">
-        <label id="labelCodigo">Código de Estudiante</label>
-        <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
+      <!-- Cuadrito superior con el código del alumno -->
+      <div id="codigoVisual" class="codigo-badge">
+        <span>CÓDIGO DEL ESTUDIANTE</span>
+        <strong id="textoCodigoVisual">---</strong>
       </div>
 
-      <!-- Cuadrito para la Clave -->
+      <!-- Input oculto que app.js lee internamente sin alterar la vista -->
+      <input type="hidden" id="loginCodigo" value="" />
+
+      <!-- Cuadrito único para digitar la Clave -->
       <div class="form-group">
-        <label>Clave (6 dígitos)</label>
-        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.5rem; letter-spacing: 8px;" />
+        <label style="color: #cbd5e1; text-align: center; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Digite su Clave (6 dígitos)</label>
+        <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" />
       </div>
 
       <button onclick="procesarLoginAlumno()" class="btn-primary">
@@ -405,36 +416,23 @@
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
 
-      const inputCodigo = document.getElementById('loginCodigo');
-      const labelCodigo = document.getElementById('labelCodigo');
-
       if (codigoQR && codigoQR.trim() !== "") {
         const codigoLimpio = codigoQR.trim().toUpperCase();
         
-        // Rellenar y bloquear el input de código para que app.js lo lea pero se vea como tarjeta limpia
-        inputCodigo.value = codigoLimpio;
-        inputCodigo.readOnly = true;
-        inputCodigo.classList.add('codigo-qr-display');
-        labelCodigo.textContent = "CÓDIGO DEL ESTUDIANTE (ESCANEADO)";
+        // Alimenta el input oculto que app.js necesita para procesar el acceso
+        document.getElementById('loginCodigo').value = codigoLimpio;
         
-        // Dar foco automático al campo de la clave
-        document.getElementById('loginClave').focus();
-      } else {
-        inputCodigo.value = "";
-        inputCodigo.readOnly = false;
-        inputCodigo.classList.remove('codigo-qr-display');
-        labelCodigo.textContent = "Código de Estudiante";
-        inputCodigo.focus();
+        // Muestra el código en la tarjeta superior visual
+        document.getElementById('textoCodigoVisual').textContent = codigoLimpio;
+        
+        // Foco inmediato en el campo de la clave
+        setTimeout(() => {
+          document.getElementById('loginClave').focus();
+        }, 300);
       }
     });
 
-    // Función de cierre de sesión mejorada para limpiar y regresar al QR para el siguiente alumno
-    function cerrarSesionAlumno() {
-      localStorage.removeItem('codigoEscaneado');
-      window.location.href = "qr.html";
-    }
-
-    // Permitir presionar Enter en la clave para iniciar sesión de inmediato
+    // Permitir iniciar sesión al presionar Enter en la clave
     document.getElementById('loginClave').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         if (typeof procesarLoginAlumno === 'function') {
@@ -442,6 +440,12 @@
         }
       }
     });
+
+    // Limpia y retorna al escáner QR para el siguiente alumno
+    function cerrarSesionAlumno() {
+      localStorage.removeItem('codigoEscaneado');
+      window.location.href = "qr.html";
+    }
   </script>
 </body>
 </html>
