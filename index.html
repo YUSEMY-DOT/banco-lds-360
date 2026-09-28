@@ -14,16 +14,17 @@
         }
 
         body {
-            background: linear-gradient(rgba(0, 20, 40, 0.5), rgba(0, 20, 40, 0.5)), 
+            background: linear-gradient(rgba(0, 20, 40, 0.45), rgba(0, 20, 40, 0.45)), 
                         url('https://drive.google.com/uc?export=view&id=1bbOOfI_TVSn_aD4_u825hQe4-LDqjoFd') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             color: #ffffff;
+            overflow-x: hidden;
         }
 
-        /* Barra Superior con la Insignia en la parte superior izquierda */
+        /* Barra Superior Institucional */
         header {
             background-color: #0d233a;
             padding: 10px 25px;
@@ -32,6 +33,7 @@
             align-items: center;
             border-bottom: 4px solid #f1c40f;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10;
         }
 
         .school-info {
@@ -77,20 +79,24 @@
             background: #24487d;
         }
 
-        /* Contenedor Principal */
+        /* Contenedor Principal: Panel a la izquierda y Profesora a la derecha */
         .main-container {
             flex: 1;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            padding: 20px;
+            padding: 20px 50px;
+            max-width: 1350px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 60px;
         }
 
         .content-panel {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 28px 32px;
             border-radius: 22px;
-            max-width: 680px;
+            max-width: 600px;
             width: 100%;
             color: #1a237e;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
@@ -99,17 +105,17 @@
         }
 
         .bank-title {
-            font-size: 2rem;
+            font-size: 1.9rem;
             color: #00796b;
             font-weight: 700;
             margin-bottom: 2px;
         }
 
         .bank-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #00897b;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         /* Botones organizados */
@@ -122,7 +128,7 @@
         /* Fila Superior: Escanear QR e Ingresar Código juntos */
         .row-top {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 1fr;
             gap: 12px;
         }
 
@@ -136,18 +142,17 @@
         .nav-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
             padding: 12px 14px;
             border-radius: 14px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.06);
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            text-align: center;
-            gap: 8px;
+            text-align: left;
+            gap: 10px;
         }
 
         .nav-btn:hover {
@@ -155,16 +160,55 @@
             box-shadow: 0 6px 16px rgba(0,0,0,0.12);
         }
 
-        .icon {
-            font-size: 1.2rem;
+        .icon-qr {
+            width: 32px;
+            height: 32px;
+            background: #0369a1;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .btn-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .btn-text span:first-child {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .btn-text span:last-child {
+            font-size: 0.68rem;
+            opacity: 0.85;
+            font-weight: 500;
         }
 
         /* Colores exactos (Sin tonos negros) */
         .btn-qr { background: #e0f2fe; color: #0369a1; }
-        .btn-codigo { background: #f3e8ff; color: #6b21a8; }
-        .btn-manual { background: #66BB6A; color: #1b5e20; } /* Verde limón */
-        .btn-tienda { background: #fee2e2; color: #991b1b; } /* Tienda */
-        .btn-padres { background: #FFD54F; color: #5d4037; } /* Amarillo intenso */
+        .btn-codigo { background: #f3e8ff; color: #6b21a8; justify-content: center; text-align: center; }
+        .btn-manual { background: #66BB6A; color: #1b5e20; justify-content: center; text-align: center; } /* Verde limón */
+        .btn-tienda { background: #fee2e2; color: #991b1b; justify-content: center; text-align: center; } /* Tienda */
+        .btn-padres { background: #FFD54F; color: #5d4037; justify-content: center; text-align: center; } /* Amarillo intenso */
+
+        /* Imagen de la profesora sentada a la derecha */
+        .teacher-character {
+            max-width: 340px;
+            height: auto;
+            filter: drop-shadow(0 12px 25px rgba(0,0,0,0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
 
         footer {
             background-color: #0d233a;
@@ -176,16 +220,22 @@
             border-top: 2px solid #f1c40f;
         }
 
-        @media (max-width: 768px) {
-            .row-top, .row-bottom {
-                grid-template-columns: 1fr;
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                justify-content: center;
+                gap: 20px;
+                padding: 20px;
+            }
+            .teacher-character {
+                max-width: 220px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio del Himno (Reproducción automática tras la voz) -->
+    <!-- Audio del Himno institucional -->
     <audio id="bgMusic" loop>
         <source src="himno.mp3" type="audio/mpeg">
     </audio>
@@ -204,8 +254,9 @@
         </a>
     </header>
 
-    <!-- Contenedor Central -->
+    <!-- Contenedor Principal -->
     <div class="main-container">
+        <!-- Panel Izquierdo con Título y Botones -->
         <div class="content-panel">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
@@ -214,32 +265,40 @@
                 <!-- Fila Superior: Escanear QR e Ingresar Código -->
                 <div class="row-top">
                     <a href="qr.html" class="nav-btn btn-qr">
-                        <span class="icon">📷</span>
-                        <span>Escanear QR</span>
+                        <div class="icon-qr">📱</div>
+                        <div class="btn-text">
+                            <span>Escanear QR</span>
+                            <span>Presiona aquí para leer tu código</span>
+                        </div>
                     </a>
                     <a href="codigo.html" class="nav-btn btn-codigo">
-                        <span class="icon">#️⃣</span>
-                        <span>Ingresar Código</span>
+                        <div class="btn-text" style="width: 100%;">
+                            <span>Ingresar Código</span>
+                            <span>Si no puedes escanear, digítalo</span>
+                        </div>
                     </a>
                 </div>
 
                 <!-- Fila Inferior: Manual, Tienda, Padres -->
                 <div class="row-bottom">
                     <a href="manual.html" class="nav-btn btn-manual">
-                        <span class="icon">📖</span>
+                        <span style="font-size: 1.1rem;">📖</span>
                         <span>Manual</span>
                     </a>
                     <a href="tienda.html" class="nav-btn btn-tienda">
-                        <span class="icon">🛒</span>
+                        <span style="font-size: 1.1rem;">🛒</span>
                         <span>Tienda</span>
                     </a>
                     <a href="padres.html" class="nav-btn btn-padres">
-                        <span class="icon">👨‍👩‍👧</span>
+                        <span style="font-size: 1.1rem;">👨‍👩‍👧</span>
                         <span>Padres</span>
                     </a>
                 </div>
             </div>
         </div>
+
+        <!-- Imagen de la Profesora Sentada a la Derecha (desde tu repositorio) -->
+        <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/be04540c91b15fb2661052d3173f4a64a4541432/assets/observando.png" alt="Profesora La Salle del Sur" class="teacher-character">
     </div>
 
     <footer>
@@ -249,17 +308,26 @@
     <script>
         const music = document.getElementById('bgMusic');
 
-        // Bienvenida automática por voz seguida del himno institucional
+        // Bienvenida automática con voz cálida y posterior reproducción del himno
         window.addEventListener('load', () => {
             if ('speechSynthesis' in window) {
                 setTimeout(() => {
                     window.speechSynthesis.cancel();
                     
-                    const utterance = new SpeechSynthesisUtterance("¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Iniciamos nuestro recorrido.");
+                    const textoBienvenida = "¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Escanea tu código QR o ingresa tu número para comenzar esta gran experiencia.";
+                    const utterance = new SpeechSynthesisUtterance(textoBienvenida);
                     utterance.lang = 'es-ES';
                     utterance.rate = 0.95;
-                    utterance.pitch = 1.1;
+                    utterance.pitch = 1.05; // Tono equilibrado y ameno
 
+                    // Intentar seleccionar una voz femenina/suave en español si está disponible en el navegador
+                    const voices = window.speechSynthesis.getVoices();
+                    const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || v.name.includes('Google') || v.name.includes('Sabrina')));
+                    if (vozEspanol) {
+                        utterance.voice = vozEspanol;
+                    }
+
+                    // Al terminar la voz de bienvenida, reproduce automáticamente el himno
                     utterance.onend = function() {
                         music.play().catch(e => console.log("Himno listo para reproducir"));
                     };
