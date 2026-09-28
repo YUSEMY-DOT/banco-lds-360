@@ -333,7 +333,7 @@
 
                 <img src="assets/dinero.png" alt="Niña Banco LDS" class="center-girl-img">
 
-                <a href="alumno.html" class="img-btn">
+                <a onclick="ingresarCodigoManual()" class="img-btn">
                     <img src="assets/ingreso.png" alt="Ingresa código">
                 </a>
             </div>
@@ -396,6 +396,18 @@
                 alert("No se pudo iniciar la cámara. Verifique los permisos.");
                 cerrarCamaraQR();
             });
+        }
+
+        // INGRESO MANUAL: pide el código y lo envía a la pantalla de clave
+        function ingresarCodigoManual() {
+            const codigo = prompt("Ingresa el código del estudiante:");
+
+            if (!codigo || codigo.trim() === "") {
+                return;
+            }
+
+            window.location.href =
+                `alumno.html?codigo=${encodeURIComponent(codigo.trim().toUpperCase())}&modo=manual`;
         }
 
         function cerrarCamaraQR() {
