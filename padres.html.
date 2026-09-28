@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360 — Espacio para Padres</title>
+<style>
+:root {
+  --azul: #123c69;
+  --azul2: #071f40;
+  --dorado: #c8a951;
+  --fondo: #f0f4f8;
+  --blanco: #ffffff;
+  --texto: #1f2937;
+  --muted: #64748b;
+  --borde: #dbe4ee;
+  --verde: #15803d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--texto);
+  background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+header {
+  background: linear-gradient(135deg, var(--azul2), var(--azul));
+  color: #fff;
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(7,31,64,.2);
+  border-bottom: 3px solid var(--dorado);
+}
+header h1 { font-size: 16px; font-weight: 700; }
+.btn {
+  background: #fff;
+  color: var(--azul);
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+.btn:hover { background: var(--dorado); color: var(--azul2); }
+.container {
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  gap: 16px;
+}
+.card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(15,23,42,.04);
+}
+.card h2 {
+  color: var(--azul);
+  font-size: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.feature-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.feature-item {
+  background: #f8fafc;
+  border-left: 4px solid var(--dorado);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+}
+.form-group {
+  margin-bottom: 12px;
+  text-align: left;
+}
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--azul);
+  margin-bottom: 4px;
+}
+input, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+input:focus, textarea:focus {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(18, 60, 105, 0.1);
+}
+.primary-btn {
+  background: var(--azul);
+  color: #fff;
+  border: 0;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(18, 60, 105, 0.2);
+}
+.primary-btn:hover { background: var(--azul2); }
+.success-msg {
+  display: none;
+  background: #ecfdf3;
+  color: var(--verde);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+}
+footer {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>👨‍👩‍👧‍👦 Sección para Padres y Apoderados</h1>
+  <a class="btn" href="index.html">← Volver al Inicio</a>
+</header>
+
+<div class="container">
+  <!-- INSTRUCTIVO DEL PROYECTO -->
+  <div class="card">
+    <h2>🌟 Bienvenidos, Familia Lasallista</h2>
+    <p>El proyecto <strong>BANCO LDS 360</strong> y el sistema de economía de aula <strong>KIDSWork LS</strong> están diseñados para potenciar el desarrollo integral de sus hijos. A través de una experiencia lúdica y educativa, los estudiantes aprenden el valor del esfuerzo, la responsabilidad y la convivencia escolar positiva.</p>
+    
+    <div class="feature-list">
+      <div class="feature-item"><strong>Moneda Escolar (LS Coins):</strong> Los niños reciben incentivos y bonos por puntualidad, participación destacada, lectura, presentación personal y cuidado de sus materiales.</div>
+      <div class="feature-item"><strong>Responsabilidad Financiera:</strong> Aprenden a administrar sus ahorros, cumplir con compromisos escolares y participar en actividades de la tienda del aula.</div>
+      <div class="feature-item"><strong>Acompañamiento en Casa:</strong> Los invitamos a conversar con sus hijos sobre sus logros diarios en el banco y reforzar los hábitos positivos desde el hogar.</div>
+    </div>
+  </div>
+
+  <!-- BANDEJA DE OPINIONES Y SUGERENCIAS -->
+  <div class="card">
+    <h2>💬 Buzón de Opiniones y Sugerencias</h2>
+    <p>Su opinión es muy valiosa para nosotras las docentes. Por favor, compártanos sus comentarios, sugerencias o consultas sobre este proyecto educativo.</p>
+    
+    <form id="sugerenciaForm" onsubmit="enviarSugerencia(event)">
+      <div class="form-group">
+        <label for="nombrePadre">Nombre del Padre o Madre de Familia</label>
+        <input type="text" id="nombrePadre" placeholder="Ej. María Pérez" required>
+      </div>
+
+      <div class="form-group">
+        <label for="hijoInfo">Nombre del Estudiante y Grado</label>
+        <input type="text" id="hijoInfo" placeholder="Ej. Juan Pérez - 3er Grado" required>
+      </div>
+
+      <div class="form-group">
+        <label for="mensajeOpinion">Su Sugerencia, Comentario o Pregunta</label>
+        <textarea id="mensajeOpinion" rows="4" placeholder="Escriba aquí sus sugerencias para mejorar el proyecto..." required></textarea>
+      </div>
+
+      <button type="submit" class="primary-btn">📩 Enviar Opinión a las Docentes</button>
+      <div id="successMsg" class="success-msg">¡Muchas gracias! Su mensaje ha sido enviado y registrado correctamente.</div>
+    </form>
+  </div>
+</div>
+
+<footer>BANCO LDS 360 · IEP LA SALLE DEL SUR · Formamos personas íntegras</footer>
+
+<script>
+function enviarSugerencia(e) {
+  e.preventDefault();
+  
+  const nombre = document.getElementById("nombrePadre").value.trim();
+  const hijo = document.getElementById("hijoInfo").value.trim();
+  const mensaje = document.getElementById("mensajeOpinion").value.trim();
+
+  if(!nombre || !hijo || !mensaje) return;
+
+  // Guardar de forma segura en el navegador para que las maestras lo revisen
+  const opiniones = JSON.parse(localStorage.getItem("BANCO_LDS_SUGERENCIAS_PADRES") || "[]");
+  opiniones.unshift({
+    fecha: new Date().toLocaleString("es-PE"),
+    padre: nombre,
+    estudiante: hijo,
+    comentario: mensaje
+  });
+  localStorage.setItem("BANCO_LDS_SUGERENCIAS_PADRES", JSON.stringify(opiniones));
+
+  // Mostrar mensaje de éxito y limpiar formulario
+  document.getElementById("successMsg").style.display = "block";
+  document.getElementById("sugerenciaForm").reset();
+
+  setTimeout(() => {
+    document.getElementById("successMsg").style.display = "none";
+  }, 5000);
+}
+</script>
+
+</body>
+</html>
