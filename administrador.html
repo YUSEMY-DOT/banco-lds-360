@@ -31,20 +31,20 @@ body {
   background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
   min-height: 100vh;
   overflow-x: hidden;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* ENCABEZADO SUPERIOR COMPACTO */
 header {
   background: linear-gradient(135deg, var(--azul2), var(--azul));
   color: #fff;
-  padding: 10px 20px;
+  padding: 10px 18px;
   box-shadow: 0 4px 15px rgba(7,31,64,.2);
   border-bottom: 3px solid var(--dorado);
 }
 
 .header-inner {
-  max-width: 1100px;
+  max-width: 1180px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -60,9 +60,9 @@ header {
 }
 
 .brand-mark {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
   display: grid;
   place-items: center;
   background: rgba(255,255,255,.12);
@@ -72,7 +72,7 @@ header {
 
 .brand h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   letter-spacing: 0.5px;
 }
 
@@ -119,12 +119,12 @@ header {
   color: var(--azul);
 }
 
-/* ACCESO CON CLAVE */
+/* PANTALLA DE ACCESO CON CLAVE */
 .login-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 75px);
   padding: 15px;
 }
 
@@ -192,7 +192,7 @@ header {
   border: 1px solid #ccd2da;
   border-radius: 8px;
   padding: 0 12px;
-  font-size: 14px;
+  font-size: 13px;
   outline: none;
   background: #fafbfc;
   color: var(--texto);
@@ -230,12 +230,12 @@ header {
   margin-top: 8px;
 }
 
-/* PANEL PRINCIPAL (ENCAJADO Y CENTRADO) */
+/* PANEL PRINCIPAL */
 main {
-  max-width: 1100px;
-  width: 95%;
+  max-width: 1180px;
+  width: 96%;
   margin: 0 auto;
-  padding: 16px 8px 30px;
+  padding: 16px 6px 30px;
   display: none;
 }
 
@@ -252,21 +252,21 @@ main {
 .intro p {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .cards {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin: 14px 0;
+  margin: 12px 0;
 }
 
 .status-card {
   background: var(--blanco);
   border: 1px solid var(--borde);
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px 12px;
   box-shadow: 0 2px 8px rgba(15,23,42,.03);
 }
 
@@ -274,7 +274,7 @@ main {
   display: block;
   color: var(--muted);
   font-size: 11px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .status-card strong {
@@ -284,7 +284,7 @@ main {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.85fr);
   gap: 14px;
   align-items: start;
 }
@@ -295,6 +295,7 @@ main {
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(15,23,42,.04);
   overflow: hidden;
+  margin-bottom: 14px;
 }
 
 .panel-head {
@@ -304,12 +305,13 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  background: #fafcff;
 }
 
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .panel-body {
@@ -326,9 +328,9 @@ input, textarea, select {
   width: 100%;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 9px 10px;
+  padding: 8px 10px;
   font: inherit;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--texto);
   background: #fff;
   outline: none;
@@ -348,7 +350,7 @@ input:focus, textarea:focus, select:focus {
   display: block;
   font-size: 11px;
   color: var(--muted);
-  margin: 10px 0 4px;
+  margin: 8px 0 3px;
   font-weight: 700;
 }
 
@@ -372,7 +374,7 @@ input:focus, textarea:focus, select:focus {
   color: var(--rojo);
 }
 
-/* FOTO DEL ESTUDIANTE EQUILIBRADA (130px) */
+/* FOTO DEL ESTUDIANTE ENCAJADA */
 .student-head {
   display: none;
   border: 1px solid var(--borde);
@@ -419,7 +421,7 @@ input:focus, textarea:focus, select:focus {
 }
 
 .student-name {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--azul);
   margin-bottom: 4px;
@@ -429,70 +431,21 @@ input:focus, textarea:focus, select:focus {
 
 .student-meta {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.4;
 }
 
 .saldo {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 900;
   color: var(--verde);
   margin-top: 6px;
 }
 
-/* VENTANA MODAL PARA ESCÁNER QR */
-.qr-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(7, 31, 64, 0.85);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-}
-
-.qr-modal-content {
-  background: #ffffff;
-  padding: 18px;
-  border-radius: 18px;
-  max-width: 360px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.qr-modal-content h3 {
-  color: var(--azul);
-  font-size: 15px;
-  margin-bottom: 10px;
-}
-
-#reader {
-  width: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #000;
-  min-height: 220px;
-}
-
-.close-qr-btn {
-  margin-top: 10px;
-  background: var(--rojo);
-  color: #fff;
-  border: 0;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
+/* TABLA DE MOVIMIENTOS */
 .table-wrap {
   overflow-x: auto;
-  margin-top: 14px;
+  margin-top: 12px;
   border: 1px solid var(--borde);
   border-radius: 10px;
 }
@@ -532,13 +485,13 @@ tr:last-child td {
 .incident-list {
   display: grid;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .incident {
   border: 1px solid var(--borde);
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 8px 10px;
   background: #fafcff;
 }
 
@@ -567,18 +520,68 @@ tr:last-child td {
 }
 
 .help {
-  margin-top: 12px;
-  padding: 10px;
+  margin-top: 10px;
+  padding: 8px 10px;
   border-radius: 8px;
   background: #eff6ff;
   color: #21456d;
   border: 1px solid #cfe1f5;
   font-size: 11px;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .danger {
   color: var(--rojo);
+}
+
+/* MODAL CÁMARA ESCÁNER QR */
+.qr-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(7, 31, 64, 0.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.qr-modal-content {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.qr-modal-content h3 {
+  color: var(--azul);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#reader {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  min-height: 200px;
+}
+
+.close-qr-btn {
+  margin-top: 10px;
+  background: var(--rojo);
+  color: #fff;
+  border: 0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 footer {
@@ -588,7 +591,7 @@ footer {
   font-size: 11px;
 }
 
-@media(max-width: 900px) {
+@media(max-width: 920px) {
   .layout { grid-template-columns: 1fr; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -598,7 +601,6 @@ footer {
   .header-inner { flex-direction: column; align-items: flex-start; }
   .student-head.show { flex-direction: column; text-align: center; }
   .student-photo-wrap { margin: 0 auto; }
-  .saldo { text-align: center; }
 }
 </style>
 </head>
@@ -614,12 +616,11 @@ footer {
         <p>IEP LA SALLE DEL SUR · Panel de Administración</p>
       </div>
     </div>
-    <!-- DIRECCIÓN DIRECTA A INDEX.HTML SIN ERROR 404 -->
     <a class="btn btn-light" href="index.html" onclick="hablarTextoVoz('Volviendo al inicio')">← Volver al banco</a>
   </div>
 </header>
 
-<!-- FORMULARIO DE ACCESO -->
+<!-- PANTALLA DE ACCESO CON CLAVE -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -653,77 +654,115 @@ footer {
 <main id="panelView">
   <section class="intro">
     <h2>Administración</h2>
-    <p>Consulta movimientos de estudiantes y registra la atención dada a incidencias.</p>
+    <p>Consulta movimientos de estudiantes, registra sus pagos y gestiona incidencias.</p>
   </section>
 
   <section class="cards">
     <div class="status-card"><span>Conexión</span><strong id="estadoConexion">Lista para consultar</strong></div>
-    <div class="status-card"><span>Consulta</span><strong>Por código LDS</strong></div>
+    <div class="status-card"><span>Maestra Activa</span><strong id="maestraActivaNombre">—</strong></div>
     <div class="status-card"><span>Movimientos</span><strong id="contadorMovimientos">0</strong></div>
     <div class="status-card"><span>Incidencias guardadas</span><strong id="contadorIncidencias">0</strong></div>
   </section>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA -->
-    <div class="panel">
-      <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
-      <div class="panel-body">
-        <div class="form-row">
-          <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
-          <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
-          <!-- BOTÓN ESCANEAR QR -->
-          <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
-        </div>
-        <div id="mensaje" class="message"></div>
-        
-        <!-- FICHA CON FOTO ENCAJADA -->
-        <div id="estudianteCard" class="student-head">
-          <div class="student-photo-wrap">
-            <img id="fotoEstudiante" class="student-photo" src="" alt="Foto del estudiante">
-            <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
+    <!-- COLUMNA IZQUIERDA: BÚSQUEDA Y MOVIMIENTOS -->
+    <div>
+      <div class="panel">
+        <div class="panel-head"><h3>📋 Movimientos del estudiante</h3></div>
+        <div class="panel-body">
+          <div class="form-row">
+            <input id="codigo" class="code-input" placeholder="Ejemplo: LDS-EST-001" autocomplete="off">
+            <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">Consultar</button>
+            <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 Escanear QR</button>
           </div>
-          <div class="student-info-box">
-            <div id="nombre" class="student-name">—</div>
-            <div id="meta" class="student-meta">—</div>
-            <div id="saldo" class="saldo">0.00 LDS</div>
+          <div id="mensaje" class="message"></div>
+          
+          <!-- FICHA DEL ESTUDIANTE -->
+          <div id="estudianteCard" class="student-head">
+            <div class="student-photo-wrap">
+              <img id="fotoEstudiante" class="student-photo" src="" alt="Foto del estudiante">
+              <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
+            </div>
+            <div class="student-info-box">
+              <div id="nombre" class="student-name">—</div>
+              <div id="meta" class="student-meta">—</div>
+              <div id="saldo" class="saldo">0.00 LDS</div>
+            </div>
           </div>
-        </div>
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto LDS</th><th>Responsable</th><th>Observación</th></tr>
-            </thead>
-            <tbody id="tablaMovimientos">
-              <tr><td colspan="6" class="empty">Ingresa un código para consultar.</td></tr>
-            </tbody>
-          </table>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>Monto LDS</th><th>Responsable</th><th>Observación</th></tr>
+              </thead>
+              <tbody id="tablaMovimientos">
+                <tr><td colspan="6" class="empty">Ingresa un código para consultar.</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA -->
-    <div class="panel">
-      <div class="panel-head">
-        <h3>🛠️ Atención de incidencias</h3>
-        <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">Limpiar</button>
+    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS -->
+    <div>
+      <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS DESDE EL EXCEL -->
+      <div class="panel">
+        <div class="panel-head">
+          <h3>💰 Registrar Pago / Transacción</h3>
+        </div>
+        <div class="panel-body">
+          <label class="small-label" for="pagoCodigo">Código de Estudiante</label>
+          <input id="pagoCodigo" placeholder="LDS-EST-001" readonly style="background:#f1f5f9;">
+
+          <label class="small-label" for="pagoTipo">Tipo / Categoría de Transacción</label>
+          <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
+            <option value="INGRESOS_Y_SUELDOS">Ingresos y Sueldos (+)</option>
+            <option value="PREMIOS_Y_BONIFICACIONES" selected>Premios y Bonificaciones (+)</option>
+            <option value="AHORROS_E_INVERSIONES">Ahorros e Inversiones</option>
+            <option value="PAGOS_Y_GASTOS">Pagos y Gastos (-)</option>
+            <option value="SANCIONES_Y_MULTAS">Sanciones y Multas (-)</option>
+            <option value="COSTOS_Y_OTROS">Costos y Otros</option>
+          </select>
+
+          <label class="small-label" for="pagoConcepto">Concepto (Opciones del Excel)</label>
+          <select id="pagoConcepto"></select>
+
+          <label class="small-label" for="pagoMonto">Monto LDS</label>
+          <input id="pagoMonto" type="number" step="0.5" min="0" placeholder="Ejemplo: 50.00">
+
+          <label class="small-label" for="pagoObs">Observación / Nota (Opcional)</label>
+          <textarea id="pagoObs" rows="2" placeholder="Motivo o detalle del pago..."></textarea>
+
+          <button class="btn btn-gold" style="width:100%;margin-top:12px;padding:10px;" type="button" onclick="procesarPagoEstudiante()">
+            💸 Registrar Transacción
+          </button>
+          <div id="pagoMensaje" class="message"></div>
+        </div>
       </div>
-      <div class="panel-body">
-        <label class="small-label" for="incCodigo">Código del estudiante</label>
-        <input id="incCodigo" placeholder="LDS-EST-001">
-        <label class="small-label" for="incProblema">Problema reportado</label>
-        <textarea id="incProblema" rows="3" placeholder="Describe qué ocurrió..."></textarea>
-        <label class="small-label" for="incSolucion">Solución / atención realizada</label>
-        <textarea id="incSolucion" rows="3" placeholder="Describe la solución aplicada o el pase realizado..."></textarea>
-        <label class="small-label" for="incEstado">Estado</label>
-        <select id="incEstado">
-          <option>Pendiente</option>
-          <option>En atención</option>
-          <option>Resuelto</option>
-        </select>
-        <button class="btn btn-gold" style="width:100%;margin-top:14px" type="button" onclick="guardarIncidencia()">Guardar atención</button>
-        <div class="help">La consulta de movimientos usa la misma API del banco. Las incidencias de este panel se guardan en el navegador del equipo administrador.</div>
-        <div id="listaIncidencias" class="incident-list"></div>
+
+      <!-- MÓDULO DE INCIDENCIAS -->
+      <div class="panel">
+        <div class="panel-head">
+          <h3>🛠️ Atención de incidencias</h3>
+          <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">Limpiar</button>
+        </div>
+        <div class="panel-body">
+          <label class="small-label" for="incCodigo">Código del estudiante</label>
+          <input id="incCodigo" placeholder="LDS-EST-001">
+          <label class="small-label" for="incProblema">Problema reportado</label>
+          <textarea id="incProblema" rows="2" placeholder="Describe qué ocurrió..."></textarea>
+          <label class="small-label" for="incSolucion">Solución / atención realizada</label>
+          <textarea id="incSolucion" rows="2" placeholder="Describe la solución aplicada..."></textarea>
+          <label class="small-label" for="incEstado">Estado</label>
+          <select id="incEstado">
+            <option>Pendiente</option>
+            <option>En atención</option>
+            <option>Resuelto</option>
+          </select>
+          <button class="btn btn-gold" style="width:100%;margin-top:10px" type="button" onclick="guardarIncidencia()">Guardar atención</button>
+          <div id="listaIncidencias" class="incident-list"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -741,7 +780,86 @@ footer {
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// NAVEGACIÓN POR VOZ
+// OPCIONES Y CONCEPTOS DE PAGO SACADOS DIRECTAMENTE DEL ARCHIVO EXCEL BANCO LDS 360.XLSX
+const CATALOGO_EXCEL = {
+  "INGRESOS_Y_SUELDOS": [
+    "Ingreso Sueldo Base Mensual",
+    "Ingreso Sueldo por Rol de Liderazgo",
+    "Ingreso Bono por desempeño"
+  ],
+  "PREMIOS_Y_BONIFICACIONES": [
+    "Bono por llevar el uniforme impecable y reglamentario",
+    "Bono Participación destacada en clase",
+    "Bono Premio por primer lugar en concurso académico o deportivo",
+    "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)",
+    "Bono Apoyo destacado en limpieza, orden o ecología del aula",
+    "Bono por ayuda solidaria / Compañerismo destacado",
+    "Bono Creatividad e innovación en proyectos escolares",
+    "Bono Representar dignamente al colegio en eventos externos",
+    "Bono Leer un libro de acuerdo a su edad y presentar evidencia preguntas y respuestas minimos (20)",
+    "Bono Completar un reto educativo",
+    "Bono Llegar antes de la hora",
+    "Bono Participar en Escuela para Padres junto a su familia",
+    "Bono Ser responsable con sus materiales",
+    "Bono Ayudar a mantener limpia el aula"
+  ],
+  "AHORROS_E_INVERSIONES": [
+    "Depósito a cuenta de ahorros (Ahorro voluntario)",
+    "Inversión en fondo común del aula / cooperativa",
+    "Retiro de ahorros (Emergencia o meta cumplida)"
+  ],
+  "PAGOS_Y_GASTOS": [
+    "Pago Compra en la tienda escolar / cafetín",
+    "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo",
+    "Pago de servicios del aula: Agua",
+    "Pago de servicios del aula: Energía",
+    "pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)",
+    "Gasto médico imprevisto menor (Botiquín escolar / Curitas)",
+    "Alquiler de libros de la biblioteca o material didáctico",
+    "Pago por custodia de equipos tecnológicos",
+    "Pago por copias extras",
+    "Comprar stickers",
+    "Pagar para una actividad extra",
+    "Pagar por jugar 10 minutos más"
+  ],
+  "SANCIONES_Y_MULTAS": [
+    "Multa por llevar mal el uniforme o incompleto",
+    "Incumplimiento de tareas o asignaciones a tiempo",
+    "Llegada tarde al aula o formación",
+    "Uso no autorizado de dispositivos electrónicos en clase",
+    "Desorden o indisciplina leve durante las horas de clase",
+    "Falta de respeto o modales con compañeros o docentes",
+    "No traer el material escolar requerido para la sesión",
+    "Descuido o daño leve al mobiliario o infraestructura del aula",
+    "Basura fuera de su lugar / No respetar áreas verdes o comunes",
+    "Inasistencia injustificada a reuniones o actividades obligatorias del equipo",
+    "No ponerse al día en sus pendientes o cuadernos",
+    "Malograr los cuadernos u objetos personales del compañero",
+    "Faltar a la verdad",
+    "Llevarse objetos del compañero y/o institucion"
+  ],
+  "COSTOS_Y_OTROS": [
+    "Impuesto escolar mensual por uso de instalaciones",
+    "Cuota extraordinaria de mantenimiento grupal",
+    "Transacción personalizada / Ajuste de caja"
+  ]
+};
+
+function cargarConceptosPorTipo() {
+  const tipo = document.getElementById("pagoTipo").value;
+  const selectConcepto = document.getElementById("pagoConcepto");
+  selectConcepto.innerHTML = "";
+  
+  const lista = CATALOGO_EXCEL[tipo] || [];
+  lista.forEach(concepto => {
+    const opt = document.createElement("option");
+    opt.value = concepto;
+    opt.textContent = concepto;
+    selectConcepto.appendChild(opt);
+  });
+}
+
+// SÍNTESIS DE VOZ
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -762,7 +880,7 @@ function anunciarSeleccion(select) {
   hablarTextoVoz("Seleccionado: " + texto);
 }
 
-// VALIDACIÓN DE ACCESO DE MAESTRAS CON CLAVE FLEXIBLE (360LDS)
+// ACCESO CON CLAVE FLEXIBLE (360LDS)
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -784,18 +902,29 @@ function validarAccesoDocente() {
   }
 
   if (clave === "360LDS" || clave === "2026") {
+    localStorage.setItem("maestraActiva", docenteElement.options[docenteElement.selectedIndex].text);
     hablarTextoVoz("Clave correcta. Bienvenido al panel.");
-    document.getElementById("loginView").style.display = "none";
-    document.getElementById("panelView").style.display = "block";
-    renderIncidencias();
+    desbloquearPanel();
   } else {
     error.textContent = "Clave de acceso incorrecta. Intente nuevamente.";
     hablarTextoVoz("Clave incorrecta. Intente nuevamente.");
   }
 }
 
+function desbloquearPanel() {
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("panelView").style.display = "block";
+  document.getElementById("maestraActivaNombre").textContent = localStorage.getItem("maestraActiva") || "Maestra";
+  cargarConceptosPorTipo();
+  renderIncidencias();
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
+  if (localStorage.getItem("maestraActiva")) {
+    desbloquearPanel();
+  } else {
+    setTimeout(() => { hablarTextoVoz("Acceso administrativo de maestras. Seleccione su nombre e ingrese su clave."); }, 700);
+  }
 });
 
 document.getElementById("claveDocente").addEventListener("keydown", function(e) {
@@ -805,7 +934,7 @@ document.getElementById("claveDocente").addEventListener("keydown", function(e) 
   }
 });
 
-// ESCÁNER QR INTEGRADO
+// ESCÁNER QR
 let html5QrCode = null;
 
 function abrirEscanerQR() {
@@ -842,12 +971,13 @@ function cerrarEscanerQR() {
   }
 }
 
-// LÓGICA DE BÚSQUEDA Y MOVIMIENTOS DESDE APPS SCRIPT
+// APIS Y OPERACIONES
 const APP_SCRIPT_URL="https://script.google.com/macros/s/AKfycbxnYxKgOh3xPibLHQIsLoCM9JYDj48hnY9OQVT0499MzZbZ1G34XfpPfsT29ieVAhFK/exec";
 
 function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
 function escaparHTML(texto){return String(texto??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\x27/g,"&#39;").replace(/"/g,"&quot;");}
 function mostrarMensaje(texto,tipo){const el=document.getElementById("mensaje");el.textContent=texto;el.className="message "+tipo;}
+function mostrarMensajePago(texto,tipo){const el=document.getElementById("pagoMensaje");el.textContent=texto;el.className="message "+tipo;}
 
 function llamarAPI(parametros,callback){
   const nombreCallback="callbackAdminLDS_"+Date.now()+"_"+Math.floor(Math.random()*100000);
@@ -911,11 +1041,57 @@ function consultarEstudiante(){
     document.getElementById("saldo").textContent=formatearLDS(cuenta.saldoActual)+" LDS";
     mostrarFotoEstudiante(e);
     document.getElementById("estudianteCard").classList.add("show");
+    
+    // Asignar código al formulario de pagos e incidencias
+    document.getElementById("pagoCodigo").value = e.codigo || codigo;
+    document.getElementById("incCodigo").value = e.codigo || codigo;
+
     const movimientos=Array.isArray(respuesta.movimientos)?respuesta.movimientos:[];
     renderMovimientos(movimientos);
     document.getElementById("estadoConexion").textContent="Conectado";
-    document.getElementById("incCodigo").value=e.codigo||codigo;
     mostrarMensaje("Consulta realizada correctamente.","ok");
+  });
+}
+
+// PROCESAR REGISTRO DE PAGO O TRANSACCIÓN
+function procesarPagoEstudiante() {
+  const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
+  const tipo = document.getElementById("pagoTipo").value;
+  const concepto = document.getElementById("pagoConcepto").value;
+  const monto = parseFloat(document.getElementById("pagoMonto").value);
+  const observacion = document.getElementById("pagoObs").value.trim();
+  const responsable = localStorage.getItem("maestraActiva") || "DOCENTE";
+
+  if (!codigo) {
+    mostrarMensajePago("Primero consulta a un estudiante.", "error");
+    return;
+  }
+  if (!monto || monto <= 0) {
+    mostrarMensajePago("Ingresa un monto válido mayor a 0.", "error");
+    return;
+  }
+
+  mostrarMensajePago("Procesando pago...", "ok");
+  hablarTextoVoz("Procesando registro de transacción.");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: codigo,
+    tipo: tipo,
+    concepto: concepto,
+    monto: monto,
+    responsable: responsable,
+    observacion: observacion
+  }, function(respuesta) {
+    if (respuesta && respuesta.ok) {
+      mostrarMensajePago("¡Pago / Transacción registrada exitosamente!", "ok");
+      hablarTextoVoz("Transacción registrada correctamente.");
+      document.getElementById("pagoMonto").value = "";
+      document.getElementById("pagoObs").value = "";
+      consultarEstudiante(); // Recargar datos y movimientos actualizados
+    } else {
+      mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar pago.", "error");
+    }
   });
 }
 
