@@ -30,111 +30,622 @@
     html,body{
       width:100%;
       height:100%;
-      overflow:hidden;
+      min-height:100%;
+      overflow-x:hidden;
       font-family:Arial, Helvetica, sans-serif;
       color:var(--texto);
-      background:#111c31;
+      background:#f4f5f7;
+    }
+
+    body{
+      min-height:100vh;
+    }
+
+    button,input{
+      font-family:inherit;
     }
 
     .app{
-      width:100vw;
-      height:100vh;
+      min-height:100vh;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      background:#f5f6f8;
+    }
+
+    .header{
+      height:88px;
+      min-height:88px;
+      width:100%;
+      background:var(--azul);
+      border-bottom:4px solid var(--oro);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 32px 0 38px;
+      position:relative;
+      z-index:20;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      min-width:0;
+    }
+
+    .school-logo{
+      visibility:hidden;
+      width:58px;
+      height:64px;
+      object-fit:contain;
+      flex:none;
+    }
+
+    .school-text{
+      color:#fff;
+      line-height:1.05;
+    }
+
+    .school-name{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:28px;
+      font-weight:700;
+      letter-spacing:.3px;
+      white-space:nowrap;
+    }
+
+    .school-motto{
+      margin-top:6px;
+      color:#e4b85a;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:17px;
+      font-style:italic;
+      font-weight:600;
+    }
+
+    .admin-btn{
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.09);
+      color:white;
+      padding:13px 24px;
+      border-radius:12px;
+      font-size:17px;
+      cursor:pointer;
+      transition:.2s;
+      white-space:nowrap;
+    }
+
+    .admin-btn:hover{
+      background:rgba(255,255,255,.16);
+    }
+
+    .home{
+      position:relative;
+      flex:1;
+      min-height:0;
+      display:grid;
+      grid-template-columns:52% 48%;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .left-panel{
+      position:relative;
+      z-index:5;
+      background:
+        radial-gradient(circle at 8% 15%, rgba(20,39,68,.045) 0 2px, transparent 2px 100%),
+        #fff;
+      padding:48px 6vw 42px 7vw;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-width:0;
+    }
+
+    .left-panel:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      width:100%;
+      height:100%;
+      background-image:
+        radial-gradient(rgba(20,39,68,.08) 1px, transparent 1px);
+      background-size:8px 8px;
+      opacity:.28;
+      mask-image:linear-gradient(to right,black,transparent 42%);
+      pointer-events:none;
+    }
+
+    .bank-title-wrap{
+      position:relative;
+      z-index:2;
+      margin-bottom:26px;
+    }
+
+    .bank-logo-row{
+      display:flex;
+      align-items:center;
+      gap:28px;
+    }
+
+    .bank-icon{
+      width:112px;
+      height:88px;
+      flex:none;
+      position:relative;
+    }
+
+    .bank-icon .roof{
+      position:absolute;
+      top:0;
+      left:10px;
+      width:92px;
+      height:30px;
+      border-top:10px solid var(--azul);
+      border-left:10px solid transparent;
+      border-right:10px solid transparent;
+      transform:skewX(-10deg);
+    }
+
+    .bank-icon .beam{
+      position:absolute;
+      top:27px;
+      left:12px;
+      width:88px;
+      height:9px;
+      background:var(--oro);
+      border-radius:2px;
+    }
+
+    .bank-icon .columns{
+      position:absolute;
+      top:36px;
+      left:19px;
+      width:74px;
+      height:37px;
+      border-left:7px solid var(--azul);
+      border-right:7px solid var(--azul);
+      display:flex;
+      justify-content:space-around;
+    }
+
+    .bank-icon .columns span{
+      width:7px;
+      background:var(--oro);
+      height:37px;
+      display:block;
+    }
+
+    .bank-icon .base{
+      position:absolute;
+      bottom:0;
+      left:6px;
+      width:100px;
+      height:8px;
+      background:var(--oro);
+      box-shadow:0 -7px 0 var(--azul);
+    }
+
+    .bank-title{
+      font-family:Georgia,"Times New Roman",serif;
+      line-height:.88;
+      letter-spacing:1px;
+    }
+
+    .bank-title .banco{
+      display:block;
+      font-size:59px;
+      color:var(--azul);
+      font-weight:700;
+    }
+
+    .bank-title .lds{
+      display:inline-block;
+      font-size:59px;
+      color:var(--rojo);
+      font-weight:700;
+    }
+
+    .bank-title .online{
+      display:block;
+      margin-top:17px;
+      font-size:24px;
+      letter-spacing:12px;
+      color:var(--azul);
+      text-align:center;
+      padding-left:10px;
+    }
+
+    .gold-line{
+      width:205px;
+      height:5px;
+      margin:25px auto 0;
+      background:linear-gradient(90deg,var(--rojo),var(--oro));
+      border-radius:10px;
+    }
+
+    .subtitle{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      color:#657080;
+      font-size:22px;
+      line-height:1.45;
+      margin:0 auto 12px;
+      max-width:650px;
+    }
+
+    .description{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      color:#1b263d;
+      font-size:20px;
+      line-height:1.4;
+      max-width:660px;
+      margin:0 auto 28px;
+    }
+
+    .action-row{
+      position:relative;
+      z-index:10;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      width:min(650px,100%);
+      margin:0 auto;
+    }
+
+    .action-card{
+      border:0;
+      background:#fff;
+      min-height:220px;
+      border-radius:24px;
+      box-shadow:
+        0 10px 25px rgba(15,30,55,.13),
+        0 2px 6px rgba(15,30,55,.08);
+      cursor:pointer;
+      overflow:hidden;
+      position:relative;
+      text-align:center;
+      transition:transform .2s, box-shadow .2s;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding-top:25px;
+    }
+
+    .action-card:hover{
+      transform:translateY(-4px);
+      box-shadow:
+        0 16px 32px rgba(15,30,55,.18),
+        0 3px 8px rgba(15,30,55,.08);
+    }
+
+    .action-card.qr{
+      border-bottom:29px solid var(--rojo);
+    }
+
+    .action-card.code{
+      border-bottom:29px solid var(--azul);
+    }
+
+    .action-icon{
+      width:72px;
+      height:72px;
+      border-radius:18px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background:#111c31;
+      font-size:37px;
+      margin-bottom:17px;
+      background:#fff;
+    }
+
+    .qr .action-icon{
+      border:3px solid var(--rojo);
+      color:var(--rojo);
+    }
+
+    .code .action-icon{
+      border:3px solid var(--azul);
+      color:var(--azul);
+    }
+
+    .action-title{
+      font-size:23px;
+      font-weight:800;
+      line-height:1.12;
+      margin-bottom:14px;
+    }
+
+    .qr .action-title{
+      color:var(--rojo);
+    }
+
+    .code .action-title{
+      color:var(--azul);
+    }
+
+    .action-description{
+      color:#606a78;
+      font-size:15px;
+      line-height:1.3;
+      max-width:210px;
+    }
+
+    .arrow{
+      position:absolute;
+      bottom:-20px;
+      left:50%;
+      transform:translateX(-50%);
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:30px;
+      font-weight:bold;
+      box-shadow:0 2px 8px rgba(0,0,0,.15);
+    }
+
+    .qr .arrow{
+      color:var(--rojo);
+    }
+
+    .code .arrow{
+      color:var(--azul);
+    }
+
+    .security-bar{
+      position:relative;
+      z-index:5;
+      width:min(650px,100%);
+      margin:26px auto 0;
+      min-height:68px;
+      border-radius:16px;
+      background:#eef0f3;
+      display:flex;
+      align-items:center;
+      padding:13px 20px;
+      gap:15px;
+      color:#2e394d;
+      font-size:15px;
+    }
+
+    .security-icon{
+      width:38px;
+      height:38px;
+      border:3px solid var(--azul);
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:none;
+      font-size:20px;
+    }
+
+    .right-panel{
       position:relative;
       overflow:hidden;
+      background:
+        radial-gradient(circle at 60% 48%, rgba(255,255,255,.06), transparent 32%),
+        linear-gradient(145deg,#172b4b 0%,#0c1d36 100%);
+      min-height:100%;
     }
 
-    .exact-home{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-    }
-
-    .exact-poster{
-      position:relative;
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .exact-poster-image{
-      max-width:100%;
-      max-height:100%;
-      width:auto;
-      height:auto;
-      object-fit:contain;
-      user-select:none;
-      -webkit-user-drag:none;
-    }
-
-    /* BOTONES INTERACTIVOS EXACTAMENTE SOBRE LOS BOTONES DEL PÓSTER */
-    .hotspot{
+    .right-panel:before{
+      content:"";
       position:absolute;
+      z-index:1;
+      left:-4%;
+      top:-5%;
+      width:15%;
+      height:110%;
+      background:#fff;
+      transform:skewX(-19deg);
+      transform-origin:top;
+    }
+
+    .gold-diagonal{
+      position:absolute;
+      z-index:4;
+      left:-1%;
+      top:-5%;
+      width:5px;
+      height:110%;
+      background:var(--oro);
+      transform:skewX(-19deg);
+      transform-origin:top;
+      opacity:.95;
+    }
+
+    .miss-bg{
+      visibility:hidden;
+      position:absolute;
+      z-index:2;
+      right:1%;
+      top:7%;
+      width:66%;
+      height:87%;
+      object-fit:contain;
+      object-position:center;
+      opacity:.24;
+      mix-blend-mode:screen;
+      filter:brightness(.72) saturate(.65) contrast(.95);
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .children{
+      position:absolute;
+      z-index:6;
+      right:7%;
+      bottom:7%;
+      width:79%;
+      height:67%;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:0;
+      pointer-events:none;
+    }
+
+    .child{
+      visibility:hidden;
+      width:47%;
+      height:100%;
+      object-fit:contain;
+      object-position:center bottom;
+      filter:drop-shadow(0 15px 14px rgba(0,0,0,.25));
+      user-select:none;
+    }
+
+    .child.boy{
+      transform:translateX(8%);
+    }
+
+    .child.girl{
+      transform:translateX(-4%);
+    }
+
+    .bank-mark{
+      position:absolute;
+      z-index:8;
+      right:7%;
+      bottom:4%;
+      display:flex;
+      align-items:center;
+      gap:13px;
+      color:#fff;
+    }
+
+    .mini-bank{
+      width:58px;
+      height:48px;
+      position:relative;
+    }
+
+    .mini-bank:before{
+      content:"";
+      position:absolute;
+      top:2px;
+      left:8px;
+      width:42px;
+      height:14px;
+      border-top:5px solid var(--oro);
+      border-left:5px solid transparent;
+      border-right:5px solid transparent;
+    }
+
+    .mini-bank:after{
+      content:"";
+      position:absolute;
+      left:10px;
+      top:17px;
+      width:38px;
+      height:23px;
+      border-left:5px solid var(--oro);
+      border-right:5px solid var(--oro);
+      box-shadow:
+        10px 0 0 -3px var(--oro),
+        20px 0 0 -3px var(--oro);
+    }
+
+    .bank-mark-text{
+      font-family:Georgia,"Times New Roman",serif;
+      line-height:1;
+    }
+
+    .bank-mark-text strong{
       display:block;
-      border:0;
-      background:transparent;
-      cursor:pointer;
-      z-index:50;
+      font-size:18px;
+      color:#fff;
     }
 
-    .hotspot:hover{
-      background:rgba(255,255,255,0.12);
+    .bank-mark-text span{
+      display:block;
+      color:var(--oro2);
+      font-size:15px;
+      margin-top:4px;
     }
 
-    /* 1. Botón Administrador (Arriba a la derecha) */
-    .hotspot-admin{
-      right:17.5%;
-      top:7.2%;
-      width:12%;
-      height:5.5%;
-      border-radius:8px;
+    .decor-line{
+      position:absolute;
+      z-index:3;
+      right:3%;
+      bottom:16%;
+      width:38%;
+      height:1px;
+      background:rgba(224,184,76,.75);
+      transform:rotate(-34deg);
+      transform-origin:right;
     }
 
-    /* 2. Botón Escanear QR (Botón rojo inferior izquierdo del diseño) */
-    .hotspot-qr{
-      left:25.5%;
-      bottom:28.5%;
-      width:10.5%;
-      height:5.5%;
-      border-radius:12px;
+    .decor-line.two{
+      bottom:22%;
+      width:29%;
+      opacity:.65;
     }
 
-    /* 3. Botón Ingresar Código (Botón azul inferior del diseño) */
-    .hotspot-code{
-      left:37.2%;
-      bottom:28.5%;
-      width:10.5%;
-      height:5.5%;
-      border-radius:12px;
+    .footer{
+      position:absolute;
+      z-index:12;
+      left:0;
+      bottom:0;
+      width:100%;
+      height:66px;
+      display:grid;
+      grid-template-columns:42% 58%;
+      color:white;
+      font-size:15px;
     }
 
-    /* 4. Zona de Padres (Píldora verde baja) */
-    .hotspot-padres{
-      left:25.5%;
-      bottom:20.5%;
-      width:10.5%;
-      height:4.5%;
-      border-radius:10px;
+    .footer-left{
+      background:linear-gradient(90deg,#971521,#b41f32);
+      display:flex;
+      align-items:center;
+      padding-left:42px;
+      gap:18px;
+      border-top-right-radius:45px;
+      border-top:3px solid var(--oro);
     }
 
-    /* 5. Manual (Píldora celeste/azul baja) */
-    .hotspot-manual{
-      left:37.2%;
-      bottom:20.5%;
-      width:10.5%;
-      height:4.5%;
-      border-radius:10px;
+    .footer-left strong{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:17px;
     }
 
-    /* VENTANAS MODALES Y PANTALLAS */
+    .footer-left span{
+      border-left:1px solid rgba(255,255,255,.55);
+      padding-left:18px;
+    }
+
+    .footer-right{
+      background:var(--azul);
+      border-top:3px solid var(--oro);
+      display:flex;
+      align-items:center;
+      justify-content:space-evenly;
+      padding-right:20px;
+    }
+
+    .footer-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    .footer-item b{
+      color:var(--oro2);
+      font-size:22px;
+    }
+
     .overlay{
       position:fixed;
       inset:0;
@@ -366,6 +877,25 @@
       font-weight:bold;
     }
 
+    .scanner{
+      text-align:center;
+    }
+
+    #video{
+      width:100%;
+      max-height:330px;
+      border-radius:15px;
+      background:#0b1628;
+      object-fit:cover;
+      margin:10px 0 15px;
+    }
+
+    .scanner-status{
+      color:#667085;
+      font-size:14px;
+      line-height:1.4;
+    }
+
     .loading{
       position:fixed;
       inset:0;
@@ -428,6 +958,267 @@
     #alumnoClaveMensaje{min-height:22px; margin-top:13px; font-size:14px; text-align:center;}
     #alumnoClaveMensaje.ok{color:#18864b;}
     #alumnoClaveMensaje.error{color:var(--rojo);}
+
+    @media(max-width:1100px){
+      .header{
+        padding:0 22px;
+      }
+      .school-name{
+        font-size:23px;
+      }
+      .school-motto{
+        font-size:15px;
+      }
+      .home{
+        grid-template-columns:54% 46%;
+      }
+      .left-panel{
+        padding-left:5vw;
+        padding-right:4vw;
+      }
+      .bank-title .banco,
+      .bank-title .lds{
+        font-size:48px;
+      }
+      .bank-icon{
+        transform:scale(.8);
+        transform-origin:left center;
+        margin-right:-18px;
+      }
+      .children{
+        right:0;
+        width:92%;
+      }
+    }
+
+    @media(max-width:800px){
+      .header{
+        height:76px;
+        min-height:76px;
+        padding:0 15px;
+      }
+      .school-logo{
+        width:45px;
+        height:52px;
+      }
+      .school-name{
+        font-size:18px;
+      }
+      .school-motto{
+        font-size:13px;
+        margin-top:4px;
+      }
+      .admin-btn{
+        font-size:13px;
+        padding:9px 13px;
+      }
+      .home{
+        display:block;
+        min-height:calc(100vh - 76px);
+        overflow:auto;
+      }
+      .left-panel{
+        min-height:720px;
+        padding:45px 25px 100px;
+      }
+      .right-panel{
+        height:600px;
+        min-height:600px;
+      }
+      .bank-title-wrap{
+        margin-top:10px;
+      }
+      .bank-logo-row{
+        justify-content:center;
+      }
+      .bank-icon{
+        display:none;
+      }
+      .bank-title .banco,
+      .bank-title .lds{
+        font-size:48px;
+        text-align:center;
+      }
+      .bank-title .online{
+        font-size:21px;
+      }
+      .subtitle{
+        font-size:19px;
+      }
+      .description{
+        font-size:18px;
+      }
+      .action-row{
+        grid-template-columns:1fr 1fr;
+      }
+      .action-card{
+        min-height:205px;
+      }
+      .footer{
+        position:relative;
+        height:auto;
+        grid-template-columns:1fr;
+      }
+      .footer-left{
+        min-height:58px;
+        padding:10px 20px;
+      }
+      .footer-right{
+        min-height:58px;
+        padding:10px;
+        flex-wrap:wrap;
+        gap:15px;
+      }
+      .student-card{
+        grid-template-columns:1fr;
+      }
+      .student-photo{
+        margin:auto;
+      }
+      .finance-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:500px){
+      .school-motto{
+        display:none;
+      }
+      .school-name{
+        font-size:15px;
+      }
+      .admin-btn{
+        font-size:12px;
+        padding:8px 10px;
+      }
+      .left-panel{
+        min-height:690px;
+        padding-left:17px;
+        padding-right:17px;
+      }
+      .bank-title .banco,
+      .bank-title .lds{
+        font-size:39px;
+      }
+      .bank-title .online{
+        font-size:17px;
+        letter-spacing:8px;
+      }
+      .subtitle{
+        font-size:17px;
+      }
+      .description{
+        font-size:16px;
+      }
+      .action-row{
+        gap:10px;
+      }
+      .action-card{
+        min-height:190px;
+        border-radius:18px;
+      }
+      .action-title{
+        font-size:17px;
+      }
+      .action-description{
+        font-size:12px;
+        padding:0 5px;
+      }
+      .action-icon{
+        width:58px;
+        height:58px;
+        font-size:28px;
+      }
+      .security-bar{
+        font-size:13px;
+      }
+      .right-panel{
+        height:500px;
+        min-height:500px;
+      }
+      .children{
+        width:100%;
+        right:-2%;
+        height:72%;
+      }
+      .miss-bg{
+        width:75%;
+      }
+    }
+
+    /* PORTADA EXACTA DEL PANEL ESCOLAR */
+    .header{display:none !important;}
+
+    .exact-home{
+      display:block !important;
+      width:100%;
+      min-height:calc(100vh - 88px);
+      background:#111c31;
+      overflow:auto;
+      position:relative;
+    }
+
+    .exact-poster{
+      width:100%;
+      position:relative;
+      line-height:0;
+    }
+
+    .exact-poster-image{
+      display:block;
+      width:100%;
+      height:auto;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .hotspot{
+      position:absolute;
+      display:block;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+      z-index:50;
+    }
+
+    .hotspot:hover{
+      background:rgba(255,255,255,.035);
+    }
+
+    .hotspot-admin{
+      left:70.6%;
+      top:3.4%;
+      width:25.0%;
+      height:6.2%;
+      border-radius:14px;
+    }
+
+    .hotspot-qr{
+      left:5.7%;
+      top:65.3%;
+      width:19.0%;
+      height:5.9%;
+      border-radius:24px;
+    }
+
+    .hotspot-code{
+      left:26.5%;
+      top:65.3%;
+      width:19.5%;
+      height:5.9%;
+      border-radius:24px;
+    }
+
+    @media(max-width:800px){
+      .exact-home{
+        min-height:0;
+      }
+      .exact-poster{
+        min-width:760px;
+      }
+    }
   </style>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
@@ -436,15 +1227,25 @@
 
 <div class="app">
 
-  <main id="portadaExactaFinal" class="exact-home">
+  <header class="header">
+    <div class="brand">
+      <img id="schoolLogo" class="school-logo" alt="IEP La Salle del Sur">
+      <div class="school-text">
+        <div class="school-name">IEP LA SALLE DEL SUR</div>
+        <div class="school-motto">Formamos personas íntegras</div>
+      </div>
+    </div>
+    <button class="admin-btn" onclick="abrirAdmin()">
+      🔒 Administrador
+    </button>
+  </header>
+
+  <main id="portadaExactaFinal" class="home exact-home">
     <div class="exact-poster">
-      <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur" onerror="this.src='portada.webp';">
-      <!-- BOTONES EXACTOS SOBRE LA IMAGEN -->
+      <img class="exact-poster-image" src="assets/portada.webp" alt="Banco LDS 360 - IEP La Salle del Sur">
       <button class="hotspot hotspot-admin" aria-label="Administrador" onclick="abrirAdmin()"></button>
       <button class="hotspot hotspot-qr" aria-label="Escanear código QR" onclick="abrirScanner()"></button>
       <button class="hotspot hotspot-code" aria-label="Ingresar código" onclick="abrirCodigo()"></button>
-      <button class="hotspot hotspot-padres" aria-label="Zona de Padres" onclick="abrirPadres()"></button>
-      <button class="hotspot hotspot-manual" aria-label="Manual" onclick="abrirManual()"></button>
     </div>
   </main>
 
@@ -550,14 +1351,6 @@ function abrirCodigo(){
 
 function cerrarCodigo(){
   document.getElementById("codeOverlay").classList.remove("show");
-}
-
-function abrirPadres(){
-  window.location.href = "padres.html";
-}
-
-function abrirManual(){
-  window.location.href = "manual.html";
 }
 
 document.getElementById("studentCode").addEventListener("keydown",function(e){
@@ -968,12 +1761,17 @@ document.addEventListener("keydown",function(e){
     cerrarAdmin();
   }
 });
+
+window.addEventListener("load",function(){
+  console.log("Banco LDS 360 Online iniciado correctamente.");
+});
 </script>
 
-<!-- AUDIO AUTOMÁTICO: BIENVENIDA + HIMNO CORRECTO + LIRA -->
+<!-- MÚSICA INSTITUCIONAL DE FONDO PARA LA PORTADA PRINCIPAL -->
 <script>
   (function() {
     let audioCtx = null;
+    let sonando = false;
 
     const FREQS = {
       "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
@@ -1000,62 +1798,28 @@ document.addEventListener("keydown",function(e){
       osc2.type = 'sine';
       osc1.frequency.setValueAtTime(freq, t);
       osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.35, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
       osc1.connect(gain);
       osc2.connect(gain);
       gain.connect(ctx.destination);
       osc1.start(t);
       osc2.start(t);
-      osc1.stop(t + 1.2);
-      osc2.stop(t + 1.2);
+      osc1.stop(t + 1.0);
+      osc2.stop(t + 1.0);
     }
 
-    function cantarHimnoConBienvenida() {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        
-        const bienvenida = new SpeechSynthesisUtterance("Bienvenidos al Banco La Salle del Sur.");
-        bienvenida.rate = 1.0;
-        bienvenida.pitch = 1.1;
-        bienvenida.volume = 1.0;
-
-        const estrofa1 = new SpeechSynthesisUtterance("Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.");
-        estrofa1.rate = 0.92;
-        estrofa1.pitch = 1.05;
-        estrofa1.volume = 1.0;
-
-        const estrofa2 = new SpeechSynthesisUtterance("Como siempre un paso adelante, sencillez, responsabilidad y honor. Es el lema que tú nos enseñaste, ejemplo puro que nos diste al crecer.");
-        estrofa2.rate = 0.92;
-        estrofa2.pitch = 1.05;
-        estrofa2.volume = 1.0;
-
-        const voces = window.speechSynthesis.getVoices();
-        let vozIdeal = voces.find(v => v.lang.startsWith('es') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('google español')));
-        if (!vozIdeal) vozIdeal = voces.find(v => v.lang.startsWith('es'));
-        if (vozIdeal) {
-          bienvenida.voice = vozIdeal;
-          estrofa1.voice = vozIdeal;
-          estrofa2.voice = vozIdeal;
-        }
-
-        window.speechSynthesis.speak(bienvenida);
-        setTimeout(() => { window.speechSynthesis.speak(estrofa1); }, 3000);
-        setTimeout(() => { window.speechSynthesis.speak(estrofa2); }, 14000);
-      }
-    }
-
-    function iniciarTodoAutomatico() {
+    async function activarMusicaPortada() {
+      if (sonando) return;
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
         if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
+          await audioCtx.resume();
         }
+        sonando = true;
 
-        cantarHimnoConBienvenida();
-
-        let t = audioCtx.currentTime + 0.2;
+        let t = audioCtx.currentTime + 0.1;
         melodiaPortada.forEach(item => {
           const f = FREQS[item.n] || 261.63;
           sonarLira(audioCtx, f, t, item.d);
@@ -1064,16 +1828,8 @@ document.addEventListener("keydown",function(e){
       } catch (e) {}
     }
 
-    window.addEventListener("load", function() {
-      setTimeout(iniciarTodoAutomatico, 500);
-    });
-
-    ['click', 'touchstart', 'pointerdown'].forEach(evt => {
-      document.addEventListener(evt, function activarAudio() {
-        if (audioCtx && audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
-      }, { once: true });
+    ['click', 'touchstart', 'pointerdown', 'scroll'].forEach(evt => {
+      document.addEventListener(evt, activarMusicaPortada, { once: true });
     });
   })();
 </script>
