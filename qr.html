@@ -93,7 +93,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             max-width: 440px;
             width: 100%;
-            padding: 24px 20px;
+            padding: 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -113,19 +113,14 @@
             overflow: hidden;
             border: 2px solid #40c4ff;
             background: #000000;
-            min-height: 260px;
+            min-height: 280px;
         }
 
-        /* Oculta textos innecesarios del lector */
-        #reader__dashboard_section_csr button,
-        #reader__dashboard_section_swaplink {
-            background: #152b42 !important;
-            color: #fff !important;
-            border: 1px solid #f1c40f !important;
-            padding: 6px 12px !important;
-            border-radius: 8px !important;
-            font-family: 'Poppins', sans-serif !important;
-            cursor: pointer;
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 16px;
         }
 
         footer {
@@ -167,50 +162,57 @@
     </footer>
 
     <script>
-        let html5QrcodeScanner = null;
+        let html5QrCode = null;
         let timeoutTimer = null;
 
         function volverAInicio() {
             if (timeoutTimer) clearTimeout(timeoutTimer);
-            if (html5QrcodeScanner) {
-                try { html5QrcodeScanner.clear(); } catch(e){}
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    window.location.href = "index.html";
+                }).catch(() => {
+                    window.location.href = "index.html";
+                });
+            } else {
+                window.location.href = "index.html";
             }
-            window.location.href = "index.html";
         }
 
         function onScanSuccess(decodedText) {
             if (timeoutTimer) clearTimeout(timeoutTimer);
-            if (html5QrcodeScanner) {
-                try { html5QrcodeScanner.clear(); } catch(e){}
-            }
             localStorage.setItem('codigoEscaneado', decodedText);
-            window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
-        }
-
-        function iniciarEscaner() {
-            try {
-                html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader", 
-                    { fps: 10, qrbox: { width: 220, height: 220 } },
-                    false
-                );
-
-                html5QrcodeScanner.render(onScanSuccess, function(err) {});
-
-                // Regresa en 7 segundos si no escanea nada
-                timeoutTimer = setTimeout(function() {
-                    volverAInicio();
-                }, 7000);
-
-            } catch (e) {
-                volverAInicio();
+            
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                }).catch(() => {
+                    window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
+                });
+            } else {
+                window.location.href = `alumno.html?codigo=${encodeURIComponent(decodedText)}`;
             }
         }
 
-        // Se ejecuta automáticamente al ingresar a la pantalla
-        window.addEventListener('load', function() {
-            iniciarEscaner();
-        });
+        function encenderCamaraDirecta() {
+            html5QrCode = new Html5Qrcode("reader");
+            const config = { fps: 15, qrbox: { width: 220, height: 220 } };
+
+            // Iniciar cuenta regresiva de 7 segundos
+            timeoutTimer = setTimeout(volverAInicio, 7000);
+
+            // Activa directamente el video de la cámara trasera
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+                .catch(err => {
+                    // Si no detecta cámara trasera, activa la frontal de inmediato
+                    html5QrCode.start({ facingMode: "user" }, config, onScanSuccess)
+                        .catch(e => {
+                            volverAInicio();
+                        });
+                });
+        }
+
+        // Se enciende instantáneamente al cargar la página
+        window.addEventListener('DOMContentLoaded', encenderCamaraDirecta);
     </script>
 </body>
 </html>
