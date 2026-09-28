@@ -289,6 +289,7 @@ main {
   align-items: start;
 }
 
+/* PANELES Y ESTILOS DE DESPLEGABLE */
 .panel {
   background: var(--blanco);
   border: 1px solid var(--borde);
@@ -296,6 +297,7 @@ main {
   box-shadow: 0 4px 12px rgba(15,23,42,.04);
   overflow: hidden;
   margin-bottom: 14px;
+  transition: all 0.2s ease;
 }
 
 .panel-head {
@@ -306,12 +308,44 @@ main {
   justify-content: space-between;
   gap: 10px;
   background: #fafcff;
+  user-select: none;
+}
+
+.panel-head.clickable {
+  cursor: pointer;
+}
+
+.panel-head.clickable:hover {
+  background: #f1f5f9;
 }
 
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-icon {
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+/* Estado contraído */
+.panel.collapsed .panel-body {
+  display: none;
+}
+
+.panel.collapsed .toggle-icon {
+  transform: rotate(-90deg);
+}
+
+.panel.collapsed .panel-head {
+  border-bottom: none;
 }
 
 .panel-body {
@@ -519,17 +553,6 @@ tr:last-child td {
   margin-top: 4px;
 }
 
-.help {
-  margin-top: 10px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: #eff6ff;
-  color: #21456d;
-  border: 1px solid #cfe1f5;
-  font-size: 11px;
-  line-height: 1.35;
-}
-
 .danger {
   color: var(--rojo);
 }
@@ -704,12 +727,13 @@ footer {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS -->
+    <!-- COLUMNA DERECHA: PAGO A ESTUDIANTE E INCIDENCIAS (DESPLEGABLES) -->
     <div>
-      <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS DESDE EL EXCEL -->
-      <div class="panel">
-        <div class="panel-head">
+      <!-- MÓDULO DE PAGO Y REGISTRO DE MOVIMIENTOS -->
+      <div id="panelPago" class="panel">
+        <div class="panel-head clickable" onclick="togglePanel('panelPago')">
           <h3>💰 Registrar Pago / Transacción</h3>
+          <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
           <label class="small-label" for="pagoCodigo">Código de Estudiante</label>
@@ -719,10 +743,6 @@ footer {
           <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
             <option value="INGRESOS_Y_SUELDOS">Ingresos y Sueldos (+)</option>
             <option value="PREMIOS_Y_BONIFICACIONES" selected>Premios y Bonificaciones (+)</option>
-            <option value="AHORROS_E_INVERSIONES">Ahorros e Inversiones</option>
-            <option value="PAGOS_Y_GASTOS">Pagos y Gastos (-)</option>
-            <option value="SANCIONES_Y_MULTAS">Sanciones y Multas (-)</option>
-            <option value="COSTOS_Y_OTROS">Costos y Otros</option>
           </select>
 
           <label class="small-label" for="pagoConcepto">Concepto (Opciones del Excel)</label>
@@ -742,10 +762,10 @@ footer {
       </div>
 
       <!-- MÓDULO DE INCIDENCIAS -->
-      <div class="panel">
-        <div class="panel-head">
+      <div id="panelIncidencias" class="panel">
+        <div class="panel-head clickable" onclick="togglePanel('panelIncidencias')">
           <h3>🛠️ Atención de incidencias</h3>
-          <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">Limpiar</button>
+          <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
           <label class="small-label" for="incCodigo">Código del estudiante</label>
@@ -760,7 +780,10 @@ footer {
             <option>En atención</option>
             <option>Resuelto</option>
           </select>
-          <button class="btn btn-gold" style="width:100%;margin-top:10px" type="button" onclick="guardarIncidencia()">Guardar atención</button>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">Guardar atención</button>
+            <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">Limpiar</button>
+          </div>
           <div id="listaIncidencias" class="incident-list"></div>
         </div>
       </div>
@@ -780,7 +803,15 @@ footer {
 <footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
 
 <script>
-// OPCIONES Y CONCEPTOS DE PAGO SACADOS DIRECTAMENTE DEL ARCHIVO EXCEL BANCO LDS 360.XLSX
+// FUNCIÓN PARA ALTERNAR DESPLEGABLES
+function togglePanel(idPanel) {
+  const panel = document.getElementById(idPanel);
+  if (panel) {
+    panel.classList.toggle('collapsed');
+  }
+}
+
+// CATALOGO DE CATEGORÍAS Y CONCEPTOS
 const CATALOGO_EXCEL = {
   "INGRESOS_Y_SUELDOS": [
     "Ingreso Sueldo Base Mensual",
@@ -802,46 +833,6 @@ const CATALOGO_EXCEL = {
     "Bono Participar en Escuela para Padres junto a su familia",
     "Bono Ser responsable con sus materiales",
     "Bono Ayudar a mantener limpia el aula"
-  ],
-  "AHORROS_E_INVERSIONES": [
-    "Depósito a cuenta de ahorros (Ahorro voluntario)",
-    "Inversión en fondo común del aula / cooperativa",
-    "Retiro de ahorros (Emergencia o meta cumplida)"
-  ],
-  "PAGOS_Y_GASTOS": [
-    "Pago Compra en la tienda escolar / cafetín",
-    "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo",
-    "Pago de servicios del aula: Agua",
-    "Pago de servicios del aula: Energía",
-    "pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)",
-    "Gasto médico imprevisto menor (Botiquín escolar / Curitas)",
-    "Alquiler de libros de la biblioteca o material didáctico",
-    "Pago por custodia de equipos tecnológicos",
-    "Pago por copias extras",
-    "Comprar stickers",
-    "Pagar para una actividad extra",
-    "Pagar por jugar 10 minutos más"
-  ],
-  "SANCIONES_Y_MULTAS": [
-    "Multa por llevar mal el uniforme o incompleto",
-    "Incumplimiento de tareas o asignaciones a tiempo",
-    "Llegada tarde al aula o formación",
-    "Uso no autorizado de dispositivos electrónicos en clase",
-    "Desorden o indisciplina leve durante las horas de clase",
-    "Falta de respeto o modales con compañeros o docentes",
-    "No traer el material escolar requerido para la sesión",
-    "Descuido o daño leve al mobiliario o infraestructura del aula",
-    "Basura fuera de su lugar / No respetar áreas verdes o comunes",
-    "Inasistencia injustificada a reuniones o actividades obligatorias del equipo",
-    "No ponerse al día en sus pendientes o cuadernos",
-    "Malograr los cuadernos u objetos personales del compañero",
-    "Faltar a la verdad",
-    "Llevarse objetos del compañero y/o institucion"
-  ],
-  "COSTOS_Y_OTROS": [
-    "Impuesto escolar mensual por uso de instalaciones",
-    "Cuota extraordinaria de mantenimiento grupal",
-    "Transacción personalizada / Ajuste de caja"
   ]
 };
 
@@ -1084,10 +1075,16 @@ function procesarPagoEstudiante() {
     observacion: observacion
   }, function(respuesta) {
     if (respuesta && respuesta.ok) {
-      mostrarMensajePago("¡Pago / Transacción registrada exitosamente!", "ok");
+      mostrarMensajePago("¡Pago registrado exitosamente!", "ok");
       hablarTextoVoz("Transacción registrada correctamente.");
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
+      
+      // Contraer automáticamente el panel de pagos para despejar la pantalla
+      setTimeout(() => {
+        document.getElementById("panelPago").classList.add("collapsed");
+      }, 1200);
+
       consultarEstudiante(); // Recargar datos y movimientos actualizados
     } else {
       mostrarMensajePago((respuesta && respuesta.mensaje) || "Error al registrar pago.", "error");
@@ -1121,6 +1118,11 @@ function guardarIncidencia(){
   localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
   limpiarIncidencia();
   renderIncidencias();
+
+  // Contraer automáticamente el panel de incidencias para despejar la pantalla
+  setTimeout(() => {
+    document.getElementById("panelIncidencias").classList.add("collapsed");
+  }, 600);
 }
 
 function limpiarIncidencia(){
