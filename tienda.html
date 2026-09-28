@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360 — Tienda Escolar</title>
+<style>
+:root {
+  --azul: #123c69;
+  --azul2: #071f40;
+  --dorado: #c8a951;
+  --fondo: #f0f4f8;
+  --blanco: #ffffff;
+  --texto: #1f2937;
+  --muted: #64748b;
+  --borde: #dbe4ee;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--texto);
+  background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+header {
+  background: linear-gradient(135deg, var(--azul2), var(--azul));
+  color: #fff;
+  padding: 12px 18px;
+  width: 100%;
+  max-width: 850px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(7,31,64,.2);
+  border-bottom: 3px solid var(--dorado);
+}
+header h1 { font-size: 16px; font-weight: 700; }
+.btn {
+  background: #fff;
+  color: var(--azul);
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+.btn:hover { background: var(--dorado); color: var(--azul2); }
+.catalog-card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 16px;
+  max-width: 850px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(15,23,42,.04);
+  text-align: center;
+}
+.catalog-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  border: 1px solid var(--borde);
+}
+footer {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛍️ Catálogo Oficial - Tienda KIDSWork LS</h1>
+  <a class="btn" href="javascript:history.back()">← Volver al Sistema</a>
+</header>
+
+<div class="catalog-card">
+  <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/d76ad46f32408a6252f0ffc2c3fe102c4b03ebba/assets/CATALOGO.png" alt="Catálogo de la Tienda Escolar">
+</div>
+
+<footer>BANCO LDS 360 · IEP LA SALLE DEL SUR</footer>
+
+</body>
+</html>
