@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banco LDS 360 - IEP La Salle del Sur</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,270 +14,303 @@
         }
 
         body {
-            background: linear-gradient(rgba(0, 20, 40, 0.45), rgba(0, 20, 40, 0.45)), 
-                        url('https://drive.google.com/uc?export=view&id=1bbOOfI_TVSn_aD4_u825hQe4-LDqjoFd') no-repeat center center fixed;
-            background-size: cover;
+            background-color: #828e9d;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #ffffff;
+            color: #333333;
             overflow-x: hidden;
         }
 
-        /* Barra Superior Institucional */
+        /* 1. Barra Superior Institucional */
         header {
-            background-color: #0d233a;
-            padding: 10px 20px;
+            background-color: #0c1e30;
+            padding: 10px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 4px solid #f1c40f;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 10;
+            border-bottom: 3px solid #f1c40f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
         }
 
         .school-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .school-info img {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             object-fit: contain;
         }
 
         .school-text h3 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #ffffff;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
         .school-text p {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #f1c40f;
             font-weight: 600;
+            font-style: italic;
         }
 
         .admin-btn {
-            background: #1b365d;
+            background: #152b42;
             border: 2px solid #f1c40f;
-            color: white;
-            padding: 5px 12px;
+            color: #ffffff;
+            padding: 6px 18px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             transition: all 0.3s ease;
         }
 
         .admin-btn:hover {
-            background: #24487d;
+            background: #203f61;
         }
 
-        /* Contenedor Principal (Adaptable PC y Celular) */
+        /* 2. Contenedor Principal */
         .main-container {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            max-width: 1200px;
+            padding: 30px 20px;
+            max-width: 1280px;
             width: 100%;
             margin: 0 auto;
             gap: 40px;
         }
 
-        /* Cuadro más alto y angosto */
-        .content-panel {
-            background: rgba(255, 255, 255, 0.96);
-            padding: 35px 25px;
-            border-radius: 24px;
-            max-width: 460px;
+        /* Tarjeta Blanca Principal */
+        .portal-card {
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 28px;
+            max-width: 580px;
             width: 100%;
-            color: #1a237e;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
             border: 3px solid #b2dfdb;
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
         }
 
         .bank-title {
-            font-size: 1.8rem;
+            font-size: 2.1rem;
             color: #00796b;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 2px;
+            letter-spacing: 0.5px;
         }
 
         .bank-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.88rem;
             color: #00897b;
             font-weight: 600;
             margin-bottom: 25px;
         }
 
-        /* Botones organizados verticalmente */
-        .buttons-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .nav-btn {
+        /* Fila Superior: Escanea QR - Niña - Ingresa código */
+        .top-row-interactive {
             display: flex;
             align-items: center;
-            padding: 14px 18px;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .pill-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-align: left;
+            gap: 10px;
+            min-width: 175px;
+        }
+
+        .pill-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        }
+
+        .btn-qr {
+            background: #40c4ff;
+            color: #00376b;
+        }
+
+        .btn-codigo {
+            background: #d1c4e9;
+            color: #4a148c;
+        }
+
+        .pill-icon-img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .pill-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .pill-text span:first-child {
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .pill-text span:last-child {
+            font-size: 0.63rem;
+            opacity: 0.88;
+            font-weight: 500;
+        }
+
+        /* Niña con monedas al centro */
+        .center-girl-img {
+            width: 110px;
+            height: auto;
+            flex-shrink: 0;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+        }
+
+        /* Fila Inferior: Tienda - Padres - Manual */
+        .bottom-row-interactive {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .block-btn {
+            display: flex;
+            align-items: center;
+            padding: 12px 10px;
             border-radius: 16px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
             transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
             text-align: left;
-            gap: 12px;
-            width: 100%;
+            gap: 8px;
         }
 
-        .nav-btn:hover {
+        .block-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
         }
 
-        /* Sección QR integrada */
-        .qr-section {
-            display: flex;
-            align-items: center;
-            background: #e0f2fe;
-            border-radius: 16px;
-            padding: 10px 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            gap: 12px;
+        .btn-tienda {
+            background: #ff8a80;
+            color: #880e4f;
         }
 
-        .qr-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        .btn-padres {
+            background: #ffe082;
+            color: #4e342e;
         }
 
-        .qr-img-badge {
-            width: 40px;
-            height: 40px;
+        .btn-manual {
+            background: #a5d6a7;
+            color: #1b5e20;
+        }
+
+        .block-icon-img {
+            width: 32px;
+            height: 32px;
             object-fit: contain;
-            background: white;
-            padding: 4px;
-            border-radius: 8px;
             flex-shrink: 0;
         }
 
-        .qr-text {
+        .block-text {
             display: flex;
             flex-direction: column;
-            line-height: 1.2;
-            color: #0369a1;
+            line-height: 1.15;
         }
 
-        .qr-text span:first-child {
-            font-size: 0.95rem;
-            font-weight: 700;
+        .block-text span:first-child {
+            font-size: 0.82rem;
+            font-weight: 800;
         }
 
-        .qr-text span:last-child {
-            font-size: 0.7rem;
-            opacity: 0.85;
+        .block-text span:last-child {
+            font-size: 0.58rem;
+            opacity: 0.88;
             font-weight: 500;
         }
 
-        .btn-content-custom {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        /* Ilustración de la derecha (Profesora y Alumna) */
+        .right-illustration {
+            max-width: 440px;
             width: 100%;
-        }
-
-        .btn-icon-img {
-            width: 38px;
-            height: 38px;
-            object-fit: contain;
-            background: white;
-            padding: 4px;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
-
-        .btn-text-center {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-
-        .btn-text-center span:first-child {
-            font-size: 0.95rem;
-            font-weight: 700;
-        }
-
-        .btn-text-center span:last-child {
-            font-size: 0.7rem;
-            opacity: 0.85;
-            font-weight: 500;
-        }
-
-        /* Colores exactos (Sin tonos negros) */
-        .btn-codigo { background: #f3e8ff; color: #6b21a8; }
-        .btn-manual { background: #66BB6A; color: #1b5e20; }
-        .btn-tienda { background: #fee2e2; color: #991b1b; }
-        .btn-padres { background: #FFD54F; color: #5d4037; }
-
-        /* Imagen de la profesora a la derecha */
-        .teacher-character {
-            max-width: 310px;
             height: auto;
-            filter: drop-shadow(0 12px 25px rgba(0,0,0,0.5));
+            object-fit: contain;
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.25));
         }
 
+        /* 3. Pie de página */
         footer {
-            background-color: #0d233a;
+            background-color: #0c1e30;
             text-align: center;
-            padding: 10px;
-            font-size: 0.75rem;
+            padding: 12px;
+            font-size: 0.82rem;
             color: #ffffff;
             font-weight: 600;
-            border-top: 2px solid #f1c40f;
+            border-top: 3px solid #f1c40f;
         }
 
-        @media (max-width: 850px) {
+        /* Responsivo PC / Celulares */
+        @media (max-width: 950px) {
             .main-container {
                 flex-direction: column;
-                padding: 15px;
-                gap: 20px;
+                padding: 20px 15px;
             }
-            .content-panel {
-                max-width: 100%;
-                padding: 25px 20px;
+            .right-illustration {
+                max-width: 300px;
             }
-            .teacher-character {
-                display: none;
+        }
+
+        @media (max-width: 600px) {
+            .top-row-interactive {
+                flex-direction: column;
+            }
+            .bottom-row-interactive {
+                grid-template-columns: 1fr;
+            }
+            .pill-btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio del Himno institucional -->
+    <!-- Audio del Himno / Música Institucional -->
     <audio id="bgMusic" loop>
         <source src="assets/himno.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Barra Superior -->
+    <!-- Header con Insignia Oficial y Administrador -->
     <header>
         <div class="school-info">
             <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
@@ -293,71 +326,75 @@
 
     <!-- Contenedor Principal -->
     <div class="main-container">
-        <!-- Panel Central Estrecho y Alto -->
-        <div class="content-panel">
+        
+        <!-- Cuadro Blanco del Banco -->
+        <div class="portal-card">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <div class="buttons-grid">
-                <!-- 1. Escanear QR con imagen de apoyo -->
-                <a href="qr.html" class="qr-section">
-                    <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/be04540c91b15fb2661052d3173f4a64a4541432/assets/observando.png" alt="QR" class="qr-img-badge">
-                    <div class="qr-text">
-                        <span>Escanear QR</span>
+            <!-- Fila Superior: Escanea QR | Niña con monedas | Ingresa código -->
+            <div class="top-row-interactive">
+                <a href="qr.html" class="pill-btn btn-qr">
+                    <img src="assets/qr.png" alt="Escanea QR" class="pill-icon-img">
+                    <div class="pill-text">
+                        <span>Escanea QR</span>
                         <span>Presiona aquí para leer tu código</span>
                     </div>
                 </a>
 
-                <!-- 2. Ingresar Código -->
-                <a href="codigo.html" class="nav-btn btn-codigo">
-                    <span style="font-size: 1.3rem;">#️⃣</span>
-                    <div class="btn-text-center">
-                        <span>Ingresar Código</span>
+                <img src="assets/dinero.png" alt="Niña Banco LDS" class="center-girl-img">
+
+                <a href="codigo.html" class="pill-btn btn-codigo">
+                    <img src="assets/ingreso.png" alt="Ingresa código" class="pill-icon-img">
+                    <div class="pill-text">
+                        <span>Ingresa código</span>
                         <span>Si no puedes escanear, digítalo</span>
                     </div>
                 </a>
+            </div>
 
-                <!-- 3. Manual del Sistema -->
-                <a href="manual.html" class="nav-btn btn-manual">
-                    <span style="font-size: 1.3rem;">📖</span>
-                    <div class="btn-text-center">
-                        <span>Manual del Sistema</span>
-                        <span>Guía de uso del banco</span>
-                    </div>
-                </a>
-
-                <!-- 4. Tienda Escolar (Con tu imagen dinero.png integrada) -->
-                <a href="tienda.html" class="nav-btn btn-tienda">
-                    <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/2bc72afa2b13f7cd7c414c811a57a2073cfcc683/assets/dinero.png" alt="Dinero" class="btn-icon-img">
-                    <div class="btn-text-center">
-                        <span>Tienda Escolar</span>
+            <!-- Fila Inferior: Tienda escolar | Padres | Manual de sistema -->
+            <div class="bottom-row-interactive">
+                <a href="tienda.html" class="block-btn btn-tienda">
+                    <img src="assets/tienda.png" alt="Tienda escolar" class="block-icon-img">
+                    <div class="block-text">
+                        <span>Tienda escolar</span>
                         <span>Canjea tus LDS Coins</span>
                     </div>
                 </a>
 
-                <!-- 5. Escuela de Padres -->
-                <a href="padres.html" class="nav-btn btn-padres">
-                    <span style="font-size: 1.3rem;">👨‍👩‍👧</span>
-                    <div class="btn-text-center">
-                        <span>Escuela de Padres</span>
+                <a href="padres.html" class="block-btn btn-padres">
+                    <img src="assets/padres.png" alt="Padres" class="block-icon-img">
+                    <div class="block-text">
+                        <span>Padres</span>
                         <span>Información y acompañamiento</span>
+                    </div>
+                </a>
+
+                <a href="manual.html" class="block-btn btn-manual">
+                    <img src="assets/manual.png" alt="Manual de sistema" class="block-icon-img">
+                    <div class="block-text">
+                        <span>Manual de sistema</span>
+                        <span>Guía del banco, guía de uso</span>
                     </div>
                 </a>
             </div>
         </div>
 
-        <!-- Profesora a la Derecha -->
-        <img src="https://raw.githubusercontent.com/YUSEMY-DOT/banco-lds-360/be04540c91b15fb2661052d3173f4a64a4541432/assets/observando.png" alt="Profesora La Salle del Sur" class="teacher-character">
+        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
+        <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
+
     </div>
 
+    <!-- Footer -->
     <footer>
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
+    <!-- Script de Voz de Bienvenida y Reproducción de Música -->
     <script>
         const music = document.getElementById('bgMusic');
 
-        // Bienvenida por voz cálida y reproducción automática del himno al terminar
         window.addEventListener('load', () => {
             if ('speechSynthesis' in window) {
                 setTimeout(() => {
@@ -376,7 +413,7 @@
                     }
 
                     utterance.onend = function() {
-                        music.play().catch(e => console.log("Himno listo para reproducir"));
+                        music.play().catch(e => console.log("Himno listo para reproducirse"));
                     };
 
                     window.speechSynthesis.speak(utterance);
