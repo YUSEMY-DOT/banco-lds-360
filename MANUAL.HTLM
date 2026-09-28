@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360 — Manual del Sistema</title>
+<style>
+:root {
+  --azul: #123c69;
+  --azul2: #071f40;
+  --dorado: #c8a951;
+  --fondo: #f0f4f8;
+  --blanco: #ffffff;
+  --texto: #1f2937;
+  --muted: #64748b;
+  --borde: #dbe4ee;
+  --verde: #15803d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--texto);
+  background: radial-gradient(circle at top right, rgba(200,169,81,.12), transparent 30%), linear-gradient(135deg, #f7f9fc 0%, var(--fondo) 55%, #e7edf5 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+header {
+  background: linear-gradient(135deg, var(--azul2), var(--azul));
+  color: #fff;
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(7,31,64,.2);
+  border-bottom: 3px solid var(--dorado);
+}
+header h1 { font-size: 16px; font-weight: 700; }
+.btn {
+  background: #fff;
+  color: var(--azul);
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+.btn:hover { background: var(--dorado); color: var(--azul2); }
+.container {
+  max-width: 900px;
+  width: 100%;
+  display: grid;
+  gap: 16px;
+}
+.card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(15,23,42,.04);
+}
+.card h2 {
+  color: var(--azul);
+  font-size: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.feature-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+.feature-item {
+  background: #f8fafc;
+  border-left: 4px solid var(--dorado);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+}
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.price-box {
+  background: #fdfdfd;
+  border: 1px solid var(--borde);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+}
+.price-box strong {
+  display: block;
+  color: var(--azul);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.price-box span {
+  color: var(--verde);
+  font-weight: 700;
+  font-size: 13px;
+}
+footer {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 Manual del Sistema y Guía Educativa</h1>
+  <a class="btn" href="index.html">← Volver al Inicio</a>
+</header>
+
+<div class="container">
+  <!-- ¿QUÉ ES EL BANCO LDS 360? -->
+  <div class="card">
+    <h2>🎯 ¿Qué es el BANCO LDS 360 y KIDSWork LS?</h2>
+    <p>Es un modelo de economía de aula gamificada desarrollado para la <strong>IEP La Salle del Sur</strong>. Su objetivo principal es transformar el aprendizaje financiero, la convivencia escolar y la responsabilidad ciudadana en una experiencia lúdica y significativa para los estudiantes de primaria.</p>
+    <p>A través de la moneda virtual <strong>LS Coins</strong>, los alumnos aprenden que el esfuerzo diario, el orden, el buen comportamiento y el compañerismo generan recompensas reales dentro de la comunidad escolar.</p>
+  </div>
+
+  <!-- ¿CÓMO GANAN LOS ESTUDIANTES? -->
+  <div class="card">
+    <h2>🪙 ¿Cómo ganan LDS Coins los estudiantes?</h2>
+    <p>Los ingresos de los alumnos se registran de forma transparente en el sistema por parte de las docentes mediante bonificaciones y sueldos basados en el mérito:</p>
+    <div class="feature-list">
+      <div class="feature-item"><strong>Puntualidad y Uniforme:</strong> Premiando la responsabilidad y la presentación impecable en el colegio.</div>
+      <div class="feature-item"><strong>Participación y Retos Académicos:</strong> Incentivos por intervenciones destacadas en clase, completar retos educativos o liderar actividades de grupo.</div>
+      <div class="feature-item"><strong>Hábito de Lectura:</strong> Bonos especiales por leer libros de acuerdo a su edad y presentar evidencias con un mínimo de 20 preguntas y respuestas resueltas.</div>
+      <div class="feature-item"><strong>Cuidado del Entorno:</strong> Apoyo destacado en la limpieza, orden y ecología del aula.</div>
+    </div>
+  </div>
+
+  <!-- ROL DE LOS PADRES -->
+  <div class="card">
+    <h2>👨‍👩‍👧‍👦 El Apoyo Fundamental de los Padres</h2>
+    <p>El éxito de este proyecto descansa en la alianza estratégica entre la escuela y el hogar:</p>
+    <div class="feature-list">
+      <div class="feature-item"><strong>Refuerzo en Casa:</strong> Conversen con sus hijos sobre sus ahorros en el banco, pregúntales qué metas tienen y celebren sus logros obtenidos con esfuerzo.</div>
+      <div class="feature-item"><strong>Diálogo de Valores:</strong> Ayúdenlos a comprender que cada moneda representa constancia, disciplina y responsabilidad, valores esenciales del carisma lasallista.</div>
+      <div class="feature-item"><strong>Buzón de Sugerencias:</strong> Les invitamos a utilizar la sección "Padres" en el portal para dejarnos sus comentarios y sugerencias de mejora continua.</div>
+    </div>
+  </div>
+
+  <!-- GUÍA DE PREMIOS Y CANJES -->
+  <div class="card">
+    <h2>🛍️ Guía Rápida de Canjes (Tienda Escolar)</h2>
+    <p>Los estudiantes pueden canjear sus ahorros en la tienda del aula con una gran variedad de premios adaptados a su esfuerzo:</p>
+    
+    <div class="price-grid">
+      <div class="price-box">
+        <strong>Snacks y Comida</strong>
+        <span>Desde 500 LDS</span>
+        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Galletas, Doritos, chocolates, ramen, gaseosas y yogur[cite: 7].</p>
+      </div>
+      <div class="price-box">
+        <strong>Papelería y Útiles</strong>
+        <span>Desde 800 LDS</span>
+        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Correctores, notas adhesivas, plumones, borradores y cuadernos kawaii[cite: 7].</p>
+      </div>
+      <div class="price-box">
+        <strong>Accesorios y Juguetes</strong>
+        <span>Desde 1,000 LDS</span>
+        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Scrunchies, pulseras, figuras coleccionables, peluches y mochilas[cite: 7].</p>
+      </div>
+      <div class="price-box">
+        <strong>Tecnología y Premios</strong>
+        <span>Hasta 4,000 LDS</span>
+        <p style="font-size:11px; color:var(--muted); margin-top:4px;">Audífonos, memorias USB, aros de luz y smartwatches[cite: 7].</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>BANCO LDS 360 · IEP LA SALLE DEL SUR · Formamos personas íntegras</footer>
+
+</body>
+</html>
