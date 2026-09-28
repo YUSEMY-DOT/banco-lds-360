@@ -14,84 +14,126 @@
         }
 
         body {
-            background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 50%, #fffde7 100%);
+            background: linear-gradient(rgba(0, 20, 40, 0.6), rgba(0, 20, 40, 0.6)), 
+                        url('https://drive.google.com/uc?export=view&id=1bbOOfI_TVSn_aD4_u825hQe4-LDqjoFd') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #004d40;
-            padding: 20px;
+            color: #ffffff;
         }
 
-        .container {
-            text-align: center;
-            max-width: 950px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.96);
-            padding: 35px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0, 150, 136, 0.18);
-            border: 3px solid #b2dfdb;
-        }
-
-        h1 {
-            font-size: 2.4rem;
-            color: #00796b;
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-
-        p.subtitle {
-            font-size: 1.05rem;
-            color: #00897b;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-
-        .audio-bar {
-            margin-bottom: 25px;
+        /* Barra Superior Institucional */
+        header {
+            background-color: #0d233a;
+            padding: 12px 30px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #f1c40f;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .control-btn {
-            background: #00acc1;
-            color: white;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 50px;
-            cursor: pointer;
+        .school-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .school-info img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .school-text h3 {
+            font-size: 1.2rem;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .school-text p {
+            font-size: 0.85rem;
+            color: #f1c40f;
             font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 15px rgba(0, 172, 193, 0.35);
+        }
+
+        .admin-btn {
+            background: #1b365d;
+            border: 2px solid #f1c40f;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.3s ease;
         }
 
-        .control-btn:hover {
-            background: #00838f;
-            transform: translateY(-2px);
+        .admin-btn:hover {
+            background: #24487d;
         }
 
-        /* Cuadrícula de los 5 Botones Fijos */
+        /* Contenedor Principal */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            gap: 40px;
+        }
+
+        /* Panel Central Izquierdo (Banco y Botones) */
+        .content-panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            max-width: 650px;
+            width: 100%;
+            color: #1a237e;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 3px solid #b2dfdb;
+            text-align: center;
+        }
+
+        .bank-title {
+            font-size: 2.2rem;
+            color: #00796b;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .bank-subtitle {
+            font-size: 0.95rem;
+            color: #00897b;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Cuadrícula de 5 Botones (3 Originales + 2 Nuevos) */
         .buttons-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
-            margin-top: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .nav-btn {
             display: flex;
             align-items: center;
-            padding: 18px 22px;
-            border-radius: 20px;
+            padding: 15px 18px;
+            border-radius: 16px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.05rem;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
@@ -99,129 +141,145 @@
         }
 
         .nav-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* El botón de QR puede ocupar toda la fila de abajo o ajustarse bien */
+        .btn-qr { grid-column: span 2; background: #e0f2fe; color: #0369a1; justify-content: center; }
+        .btn-codigo { background: #f3e8ff; color: #6b21a8; }
+        .btn-tienda { background: #fee2e2; color: #991b1b; }
+        
+        /* Botones Nuevos Solicitados (Sin tonos negros) */
+        .btn-padres { 
+            background: #FFD54F; /* Amarillo intenso cálido */
+            color: #5d4037; 
+        }
+        .btn-manual { 
+            background: #66BB6A; /* Verde limón brillante */
+            color: #1b5e20; 
         }
 
         .icon {
-            font-size: 1.7rem;
-            margin-right: 14px;
-            background: rgba(255, 255, 255, 0.75);
-            padding: 10px;
-            border-radius: 14px;
+            font-size: 1.4rem;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* 3 Botones Principales Existentes */
-        .btn-qr { background: #e0f2fe; color: #0369a1; }
-        .btn-codigo { background: #f3e8ff; color: #6b21a8; }
-        .btn-tienda { background: #fee2e2; color: #991b1b; }
-
-        /* 2 Botones Nuevos Solicitados (Amarillo fuerte y Verde limón, sin negro) */
-        .btn-padres { 
-            background: #FFD54F; 
-            color: #5d4037; 
-        }
-        .btn-manual { 
-            background: #66BB6A; 
-            color: #1b5e20; 
-        }
-
+        /* Pie de página limpio */
         footer {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #00796b;
+            background-color: #0d233a;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #ffffff;
             font-weight: 600;
+            border-top: 2px solid #f1c40f;
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Audio del Himno / Música Institucional -->
+    <!-- Audio del Himno / Música Institucional (Se reproduce automáticamente al finalizar la voz) -->
     <audio id="bgMusic" loop>
         <source src="himno.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="container">
-        <h1>BANCO LDS 360</h1>
-        <p class="subtitle">Sistema Financiero Educativo — IEP La Salle del Sur</p>
-
-        <div class="audio-bar">
-            <button class="control-btn" onclick="toggleMusic()">🎵 Reproducer / Pausar Himno</button>
-            <button class="control-btn" onclick="iniciarBienvenidaYAudio()">🗣️ Escuchar Bienvenida</button>
+    <!-- Barra Superior -->
+    <header>
+        <div class="school-info">
+            <!-- Insignia oficial -->
+            <img src="https://drive.google.com/uc?export=view&id=1JqN7T1eCmqc6ewLvUz4zEzHoaSkxZX_g" alt="Insignia La Salle del Sur">
+            <div class="school-text">
+                <h3>IEP LA SALLE DEL SUR</h3>
+                <p>Formamos personas íntegras</p>
+            </div>
         </div>
+        <a href="admin.html" class="admin-btn">
+            🔒 Administrador
+        </a>
+    </header>
 
-        <!-- 5 Botones Operativos -->
-        <div class="buttons-grid">
-            <a href="qr.html" class="nav-btn btn-qr">
-                <span class="icon">📷</span>
-                <span>Escanear Código QR</span>
-            </a>
+    <!-- Contenedor Central con la Estructura Visual -->
+    <div class="main-container">
+        <div class="content-panel">
+            <h1 class="bank-title">BANCO LDS 360</h1>
+            <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <a href="codigo.html" class="nav-btn btn-codigo">
-                <span class="icon">#️⃣</span>
-                <span>Ingresar Código</span>
-            </a>
+            <!-- 5 Botones Operativos Integrados -->
+            <div class="buttons-grid">
+                <!-- 1. Escanear QR -->
+                <a href="qr.html" class="nav-btn btn-qr">
+                    <span class="icon">📷</span>
+                    <span>Escanear Código QR</span>
+                </a>
 
-            <a href="tienda.html" class="nav-btn btn-tienda">
-                <span class="icon">🛒</span>
-                <span>Tienda Escolar</span>
-            </a>
+                <!-- 2. Ingresar Código -->
+                <a href="codigo.html" class="nav-btn btn-codigo">
+                    <span class="icon">#️⃣</span>
+                    <span>Ingresar Código</span>
+                </a>
 
-            <!-- Nuevo Botón 4: Padres (Amarillo intenso) -->
-            <a href="padres.html" class="nav-btn btn-padres">
-                <span class="icon">👨‍👩‍👧</span>
-                <span>Escuela de Padres</span>
-            </a>
+                <!-- 3. Tienda Escolar -->
+                <a href="tienda.html" class="nav-btn btn-tienda">
+                    <span class="icon">🛒</span>
+                    <span>Tienda Escolar</span>
+                </a>
 
-            <!-- Nuevo Botón 5: Manual (Verde limón) -->
-            <a href="manual.html" class="nav-btn btn-manual">
-                <span class="icon">📖</span>
-                <span>Manual del Sistema</span>
-            </a>
+                <!-- 4. Escuela de Padres (Amarillo intenso) -->
+                <a href="padres.html" class="nav-btn btn-padres">
+                    <span class="icon">👨‍👩‍👧</span>
+                    <span>Escuela de Padres</span>
+                </a>
+
+                <!-- 5. Manual del Sistema (Verde limón) -->
+                <a href="manual.html" class="nav-btn btn-manual">
+                    <span class="icon">📖</span>
+                    <span>Manual del Sistema</span>
+                </a>
+            </div>
         </div>
-
-        <footer>Lima - Perú | Formamos personas íntegras</footer>
     </div>
+
+    <!-- Pie de página -->
+    <footer>
+        Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
+    </footer>
 
     <script>
         const music = document.getElementById('bgMusic');
-        let isPlaying = false;
 
-        function toggleMusic() {
-            if (isPlaying) {
-                music.pause();
-                isPlaying = false;
-            } else {
-                music.play().catch(e => console.log("Audio pausado por navegador"));
-                isPlaying = true;
-            }
-        }
-
-        // Voz de bienvenida y posterior reproducción automática del himno
-        function iniciarBienvenidaYAudio() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                
-                const utterance = new SpeechSynthesisUtterance("¡Bienvenidos al Banco Lasallista 360! Iniciamos nuestro recorrido con alegría.");
-                utterance.lang = 'es-ES';
-                utterance.rate = 0.95;
-                utterance.pitch = 1.1;
-
-                utterance.onend = function() {
-                    music.play().then(() => {
-                        isPlaying = true;
-                    }).catch(e => console.log("Reproducción de himno lista"));
-                };
-
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
+        // Secuencia automática: Bienvenida por voz y al terminar comienza el himno automáticamente
         window.addEventListener('load', () => {
-            setTimeout(iniciarBienvenidaYAudio, 1000);
+            if ('speechSynthesis' in window) {
+                setTimeout(() => {
+                    window.speechSynthesis.cancel();
+                    
+                    const utterance = new SpeechSynthesisUtterance("¡Bienvenidos al Banco Lasallista 360! Sistema financiero educativo de La Salle del Sur. Iniciamos nuestro recorrido con alegría.");
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1.1;
+
+                    // Al terminar de hablar la voz guía, arranca el himno musical automáticamente
+                    utterance.onend = function() {
+                        music.play().catch(e => console.log("Reproducción automática iniciada por interacción"));
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                }, 1000);
+            }
         });
     </script>
 </body>
