@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* Barra Superior Institucional */
+        /* 1. Barra Superior Institucional */
         header {
             background-color: #0c1e30;
             padding: 10px 30px;
@@ -78,7 +78,7 @@
             background: #203f61;
         }
 
-        /* Contenedor Principal */
+        /* 2. Contenedor Principal */
         .main-container {
             flex: 1;
             display: flex;
@@ -96,7 +96,7 @@
             background: #ffffff;
             padding: 35px 30px;
             border-radius: 28px;
-            max-width: 600px;
+            max-width: 620px;
             width: 100%;
             box-shadow: 0 12px 35px rgba(0,0,0,0.18);
             border: 3px solid #b2dfdb;
@@ -121,48 +121,61 @@
             margin-bottom: 25px;
         }
 
-        /* Botones como imágenes directas con efecto suave al presionar o pasar el mouse */
+        /* Botones como imágenes directas con efecto hover */
         .img-btn {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: transform 0.2s ease, filter 0.2s ease;
             text-decoration: none;
-            flex: 1;
+            width: 100%;
         }
 
         .img-btn img {
             width: 100%;
             height: auto;
+            object-fit: contain;
             display: block;
         }
 
         .img-btn:hover {
             transform: scale(1.03);
-            filter: brightness(1.05);
+            filter: brightness(1.04);
         }
 
-        /* Fila Superior */
+        /* Fila Superior: Escanea QR | Niña Dinero | Botón Ingreso */
         .top-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
             margin-bottom: 25px;
         }
 
+        /* Niña más grande al centro */
         .center-girl-img {
-            width: 110px;
+            width: 145px; /* Tamaño aumentado */
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
         }
 
-        /* Fila Inferior */
+        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
         .bottom-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             width: 100%;
+            align-items: stretch;
+        }
+
+        .bottom-row .img-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill; /* Mantiene proporciones idénticas en los 3 botones */
+            border-radius: 12px;
         }
 
         /* Ilustración de la derecha (Profesora y Alumna) */
@@ -201,6 +214,9 @@
             }
             .bottom-row {
                 grid-template-columns: 1fr;
+            }
+            .center-girl-img {
+                width: 120px;
             }
         }
     </style>
