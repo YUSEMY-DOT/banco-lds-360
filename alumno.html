@@ -260,7 +260,6 @@
       font-weight: 600;
     }
   </style>
-  <script defer src="app.js"></script>
 </head>
 <body>
 
@@ -283,7 +282,7 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Código de Estudiante (Totalmente funcional para escribir o recibir QR) -->
+      <!-- Código de Estudiante -->
       <div class="form-group">
         <label>Código de Estudiante</label>
         <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
@@ -393,6 +392,70 @@
   </footer>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
+
+    function hacerPeticionJSONP(parametros, callback) {
+      const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+      let respuestaEnviada = false;
+
+      const timeoutSeguridad = setTimeout(() => {
+        if (!respuestaEnviada) {
+          respuestaEnviada = true;
+          delete window[nombreCallback];
+          if (script && script.parentNode) document.body.removeChild(script);
+          callback({ success: false, ok: false, mensaje: "El servidor tardó demasiado. Intenta nuevamente." });
+        }
+      }, 12000);
+
+      window[nombreCallback] = function(data) {
+        if (respuestaEnviada) return;
+        respuestaEnviada = true;
+        clearTimeout(timeoutSeguridad);
+        delete window[nombreCallback];
+        if (script && script.parentNode) {
+          document.body.removeChild(script);
+        }
+        callback(data);
+      };
+
+      let url = SCRIPT_URL + '?callback=' + nombreCallback;
+      for (let clave in parametros) {
+        if (parametros[clave] !== undefined && parametros[clave] !== null) {
+          url += '&' + encodeURIComponent(clave) + '=' + encodeURIComponent(parametros[clave]);
+        }
+      }
+
+      const script = document.createElement('script');
+      script.src = url;
+
+      script.onerror = function() {
+        if (respuestaEnviada) return;
+        respuestaEnviada = true;
+        clearTimeout(timeoutSeguridad);
+        delete window[nombreCallback];
+        if (script && script.parentNode) document.body.removeChild(script);
+        callback({ success: false, ok: false, mensaje: "Error de conexión con el servidor." });
+      };
+
+      document.body.appendChild(script);
+    }
+
+    function ejecutarLoginSistema(codigo, clave, callback) {
+      hacerPeticionJSONP({ accion: 'LOGINALUMNO', codigo: codigo, clave: clave }, callback);
+    }
+
+    function registrarTransaccionSistema(codigo, tipo, monto, concepto, responsable, observacion, callback) {
+      hacerPeticionJSONP({
+        accion: 'REGISTRAR_TRANSACCION',
+        codigo: codigo,
+        tipo: tipo,
+        monto: monto,
+        concepto: concepto || 'General',
+        responsable: responsable || 'MISS EN TURNO',
+        observacion: observacion || ''
+      }, callback);
+    }
+
     let catalogoGlobal = {
       "AHORROS_E_INVERSIONES": [
         "Depósito a cuenta de ahorros (Ahorro voluntario)", 
@@ -491,6 +554,53 @@
 
         setTimeout(() => { window.speechSynthesis.speak(utterance); }, 100);
       }
+    }
+
+    function procesarLoginAlumno() {
+      const codigo = document.getElementById('loginCodigo').value.trim().toUpperCase();
+      const clave = document.getElementById('loginClave').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      errorDiv.textContent = "";
+
+      if (!codigo || !clave) {
+        errorDiv.textContent = "Por favor complete todos los campos.";
+        hablarTextoVoz("Por favor complete todos los campos.");
+        return;
+      }
+
+      errorDiv.textContent = "Verificando acceso...";
+      ejecutarLoginSistema(codigo, clave, function(res) {
+        if (res && (res.success === true || res.ok === true) && res.estudiante) {
+          document.getElementById('vistaLogin').classList.add('hidden');
+          document.getElementById('vistaPrincipal').classList.remove('hidden');
+
+          const est = res.estudiante;
+          const cuenta = res.cuenta || res;
+          const nombreCompleto = est.nombreCompleto || est.nombre || 'Estudiante';
+          const primerNombre = nombreCompleto.split(' ')[0];
+
+          historialMovimientosActual = res.movimientos || [];
+
+          document.getElementById('alumnoNombre').textContent = nombreCompleto;
+          document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
+          document.getElementById('saldoLDS').textContent = Number(cuenta.saldoActual || cuenta.saldo || 0).toFixed(2);
+          
+          let fotoUrl = est.fotoUrl || est.foto || "";
+          if (fotoUrl) document.getElementById('alumnoFoto').src = fotoUrl;
+
+          renderizarMovimientos(historialMovimientosActual);
+          reproducirSonidoExito();
+
+          setTimeout(() => {
+            hablarTextoVoz(`Hola ${primerNombre}, bienvenida a la banca móvil de La Salle del Sur.`);
+          }, 300);
+
+        } else {
+          const mensajeError = res.mensaje || res.message || "Código o clave incorrecta.";
+          errorDiv.textContent = mensajeError;
+          hablarTextoVoz("Acceso denegado. Código o clave incorrecta.");
+        }
+      });
     }
 
     function accionBotonPagar() {
