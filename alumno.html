@@ -445,7 +445,15 @@
       setTimeout(() => input.focus(), 100);
     }
 
-    function validarClaveEstudiante() {
+    async function sha256Hex(texto) {
+      const datos = new TextEncoder().encode(texto);
+      const hash = await crypto.subtle.digest('SHA-256', datos);
+      return Array.from(new Uint8Array(hash))
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    async function validarClaveEstudiante() {
       const clave = document.getElementById('inputClave').value.trim();
       const mensaje = document.getElementById('mensajeClave');
 
@@ -464,19 +472,81 @@
       mensaje.style.color = "#2563eb";
       mensaje.textContent = "Validando...";
 
+      // El backend de acceso de alumnos no recibe la clave en texto plano.
+      // Primero obtiene el salt asociado al MISMO código y luego compara
+      // SHA-256(clave + "|" + salt). No modifica códigos ni nombres.
       hacerPeticionJSONP({
-        accion: 'LOGINALUMNO',
-        codigo: codigoEstudianteActual,
-        clave: clave
-      }, function(res) {
-        if (res && (res.ok === true || res.success === true || res.acceso === true || res.autorizado === true)) {
-          mensaje.textContent = "Acceso correcto.";
-          consultarDatosEstudiante(codigoEstudianteActual);
-        } else {
+        accion: 'PRELOGINALUMNO',
+        codigo: codigoEstudianteActual
+      }, async function(pre) {
+        if (!pre || pre.ok !== true || !pre.salt) {
           mensaje.style.color = "#dc2626";
-          mensaje.textContent = (res && res.mensaje) || "Código o clave incorrectos.";
+          mensaje.textContent = (pre && pre.mensaje) || "Credenciales inválidas o cuenta inactiva.";
+          return;
+        }
+
+        try {
+          const hashClave = await sha256Hex(clave + "|" + pre.salt);
+
+          hacerPeticionJSONP({
+            accion: 'LOGINALUMNO',
+            codigo: codigoEstudianteActual,
+            hashClave: hashClave
+          }, function(res) {
+            if (res && res.ok === true) {
+              mensaje.textContent = "Acceso correcto.";
+              mostrarDatosDelAlumno(res);
+            } else {
+              mensaje.style.color = "#dc2626";
+              mensaje.textContent = (res && res.mensaje) || "Credenciales inválidas o cuenta inactiva.";
+            }
+          });
+        } catch (error) {
+          mensaje.style.color = "#dc2626";
+          mensaje.textContent = "No se pudo validar la clave.";
         }
       });
+    }
+
+    function mostrarDatosDelAlumno(res) {
+      const est = (res && res.estudiante) || {};
+      const cuenta = (res && res.cuenta) || {};
+      const movimientos = Array.isArray(res && res.movimientos) ? res.movimientos : [];
+
+      if (!est || !est.codigo) {
+        document.getElementById('mensajeClave').style.color = "#dc2626";
+        document.getElementById('mensajeClave').textContent = "No se encontró el estudiante en la base de datos.";
+        return;
+      }
+
+      document.getElementById('vistaScanner').classList.add('hidden');
+      document.getElementById('vistaClave').classList.add('hidden');
+      document.getElementById('vistaPrincipal').classList.remove('hidden');
+
+      const nombreCompleto = est.nombreCompleto ||
+        [est.nombre, est.apellido].filter(Boolean).join(' ') ||
+        est.codigo;
+
+      document.getElementById('alumnoNombre').textContent = nombreCompleto;
+      document.getElementById('alumnoGrado').textContent =
+        [est.grado, est.seccion].filter(Boolean).join(' ');
+
+      const saldo = Number(cuenta.saldoActual || 0);
+      document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
+
+      const fotoUrl = est.fotoUrl || est.foto || '';
+      if (fotoUrl && String(fotoUrl).trim() !== '') {
+        document.getElementById('alumnoFoto').src = fotoUrl;
+        document.getElementById('alumnoFoto').style.display = 'block';
+      }
+
+      if (typeof movimientos !== 'undefined') {
+        window.movimientosEstudianteActual = movimientos;
+      }
+
+      // Mantiene el código interno para las operaciones posteriores,
+      // sin mostrarlo en pantalla.
+      codigoEstudianteActual = est.codigo || codigoEstudianteActual;
     }
 
     document.addEventListener('keydown', function(event) {
