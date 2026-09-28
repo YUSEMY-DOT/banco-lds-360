@@ -88,7 +88,7 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Alineación perfecta al filo inferior */
+            align-items: flex-end;
             padding: 10px 20px 0px 20px;
             max-width: 1080px;
             width: 100%;
@@ -112,7 +112,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 12px; /* Bajado al filo */
+            margin-bottom: 12px;
         }
 
         .bank-title {
@@ -150,10 +150,10 @@
             width: 100%;
         }
 
-        /* Botones de QR y Código en TAMAÑO MÁS GRANDE */
+        /* Botones de QR y Código */
         .top-row .img-btn img {
             width: 100%;
-            height: 76px; /* Altura aumentada para hacerlos más grandes */
+            height: 76px;
             object-fit: contain;
             display: block;
         }
@@ -187,13 +187,13 @@
             border-radius: 12px;
         }
 
-        /* Ilustración de la derecha (Profesora y Alumna asentadas al filo) */
+        /* Ilustración de la derecha (Profesora y Alumna) */
         .right-illustration {
             max-width: 360px;
             width: 100%;
             height: auto;
             object-fit: contain;
-            margin-bottom: 0px; /* Bajada al filo */
+            margin-bottom: 0px;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
         }
 
@@ -242,13 +242,6 @@
 </head>
 <body>
 
-    <!-- Audio del Himno Institucional (M4A integrado para inicio automático) -->
-    <audio id="bgMusic" autoplay loop preload="auto">
-        <source src="himno.m4a" type="audio/mp4">
-        <source src="assets/himno.m4a" type="audio/mp4">
-        <source src="assets/himno.mp3" type="audio/mpeg">
-    </audio>
-
     <!-- Header con Insignia Oficial y Administrador -->
     <header>
         <div class="school-info">
@@ -271,7 +264,7 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR (Más Grande) | Niña Dinero | Botón Ingreso (Más Grande) -->
+            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
             <div class="top-row">
                 <a href="qr.html" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
@@ -300,7 +293,7 @@
             </div>
         </div>
 
-        <!-- Ilustración de la Derecha (Profesora y Alumna asentadas al filo) -->
+        <!-- Ilustración de la Derecha (Profesora y Alumna) -->
         <img src="assets/observando.png" alt="Profesora y Alumna La Salle del Sur" class="right-illustration">
 
     </div>
@@ -310,46 +303,131 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- Script de Reproducción Automática de Audio y Lectura del Himno -->
+    <!-- SCRIPT DE INSTRUMENTOS EN VIVO (LIRAS Y TAMBOR) Y VOZ CANTADA/LEÍDA -->
     <script>
-        const music = document.getElementById('bgMusic');
+        let audioCtx = null;
+        let iniciado = false;
 
-        function iniciarAudio() {
-            if (music) {
-                music.play().catch(e => console.log("Esperando interacción para audio"));
+        // FRECUENCIAS LIRA (ESCALA DO MAYOR)
+        const FREQS = {
+            "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+            "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+        };
+
+        // MELODÍA COMPLETA DEL HIMNO
+        const notasMelodia = [
+            { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+            { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+            { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+            { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+            { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+            { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+            { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+            { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+        ];
+
+        // SINTETIZADOR DE LIRA
+        function sonarLira(ctx, freq, t, dur) {
+            if (!freq) return;
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc1.type = 'sine';
+            osc2.type = 'sine';
+            osc1.frequency.setValueAtTime(freq, t);
+            osc2.frequency.setValueAtTime(freq * 2, t);
+            gain.gain.setValueAtTime(0.22, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(ctx.destination);
+            osc1.start(t);
+            osc2.start(t);
+            osc1.stop(t + 1.0);
+            osc2.stop(t + 1.0);
+        }
+
+        // TAMBOR MARCIAL
+        function sonarTambor(ctx, t) {
+            const bufferSize = ctx.sampleRate * 0.04;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 1800;
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0.08, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            noise.start(t);
+        }
+
+        // VOZ LOCUTORA / CANTANTE DEL HIMNO
+        function hablarLetraHimno() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                // Letra completa del Himno Institucional
+                const letraOficial = "¡Bienvenidos al Banco Lasallista 360! " +
+                    "Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. " +
+                    "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. " +
+                    "Como siempre un paso adelante, sencillez, responsabilidad y honor es el lema que tú nos enseñaste, " +
+                    "ejemplo puro que nos diste al crecer. " +
+                    "Sabiduría de grandes mentores, en nuestras aulas se educa con amor. " +
+                    "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. ¡Lealtad!";
+
+                const mensaje = new SpeechSynthesisUtterance(letraOficial);
+                mensaje.lang = 'es-PE'; // Voz en español
+                mensaje.rate = 0.88;    // Cadencia para acompañar el ritmo marcial
+                mensaje.pitch = 1.0;
+
+                const voices = window.speechSynthesis.getVoices();
+                const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Jorge') || v.name.includes('Raul') || v.name.includes('Google') || v.name.includes('Lucia') || v.name.includes('Elena')));
+                if (vozEspanol) {
+                    mensaje.voice = vozEspanol;
+                }
+
+                window.speechSynthesis.speak(mensaje);
             }
         }
 
-        window.addEventListener('load', () => {
-            iniciarAudio();
+        async function arrancarAudioYVoz() {
+            if (iniciado) return;
+            iniciado = true;
 
-            if ('speechSynthesis' in window) {
-                setTimeout(() => {
-                    window.speechSynthesis.cancel();
-                    
-                    const textoHimno = "¡Bienvenidos al Banco Lasallista 360! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. Sencillez, responsabilidad y honor es el lema que tú nos enseñaste.";
-                    const utterance = new SpeechSynthesisUtterance(textoHimno);
-                    utterance.lang = 'es-ES';
-                    utterance.rate = 0.95;
-                    utterance.pitch = 1.05;
+            // 1. Iniciar locución de la letra
+            hablarLetraHimno();
 
-                    const voices = window.speechSynthesis.getVoices();
-                    const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || v.name.includes('Google') || v.name.includes('Sabrina')));
-                    if (vozEspanol) {
-                        utterance.voice = vozEspanol;
-                    }
+            // 2. Iniciar melodía instrumental (Liras + Tambor)
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') {
+                    await audioCtx.resume();
+                }
 
-                    utterance.onend = function() {
-                        iniciarAudio();
-                    };
-
-                    window.speechSynthesis.speak(utterance);
-                }, 600);
+                let t = audioCtx.currentTime + 0.1;
+                notasMelodia.forEach(item => {
+                    const f = FREQS[item.n] || 261.63;
+                    sonarLira(audioCtx, f, t, item.d);
+                    sonarTambor(audioCtx, t);
+                    t += item.d;
+                });
+            } catch (e) {
+                console.log(e);
             }
-        });
+        }
 
-        document.addEventListener('click', iniciarAudio, { once: true });
-        document.addEventListener('touchstart', iniciarAudio, { once: true });
+        // Inicio automático al cargar e interactuar
+        window.addEventListener('load', arrancarAudioYVoz);
+        document.addEventListener('touchstart', arrancarAudioYVoz, { once: true });
+        document.addEventListener('click', arrancarAudioYVoz, { once: true });
+        document.addEventListener('pointerdown', arrancarAudioYVoz, { once: true });
     </script>
 </body>
 </html>
