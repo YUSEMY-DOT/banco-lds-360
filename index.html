@@ -533,7 +533,6 @@
                     asignarVozYNicializar();
                 } else {
                     window.speechSynthesis.onvoiceschanged = asignarVozYNicializar;
-                    // Respaldo por si el evento no dispara
                     setTimeout(() => {
                         if (!window.speechSynthesis.speaking) asignarVozYNicializar();
                     }, 300);
