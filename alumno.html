@@ -488,7 +488,7 @@
     function consultarDatosEstudiante(codigo) {
       // Después de validar la clave, consulta la ficha real del alumno.
       // Usamos ESTUDIANTE, que en el backend apunta a la misma función de consulta.
-      hacerPeticionJSONP({ accion: 'ESTUDIANTE', codigo: codigo }, function(res) {
+      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
         const datos = (res && res.data) ? res.data : res;
         const est = (datos && (datos.estudiante || datos.alumno)) || {};
 
