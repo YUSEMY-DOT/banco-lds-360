@@ -14,7 +14,7 @@
     }
 
     body {
-      background: linear-gradient(rgba(12, 30, 48, 0.65), rgba(12, 30, 48, 0.65)), 
+      background: linear-gradient(rgba(12, 30, 48, 0.70), rgba(12, 30, 48, 0.70)), 
                   url('assets/banco.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
@@ -23,14 +23,14 @@
       color: #333333;
     }
 
-    /* Header Institucional con Insignia */
+    /* Header Institucional */
     header {
       background-color: #0c1e30;
       padding: 10px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 3px solid #f1c40f;
+      border-bottom: 3px solid #38bdf8;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       z-index: 10;
     }
@@ -56,14 +56,14 @@
 
     .school-title p {
       font-size: 0.72rem;
-      color: #f1c40f;
+      color: #38bdf8;
       font-weight: 600;
       font-style: italic;
     }
 
     .inicio-btn {
       background: #152b42;
-      border: 2px solid #f1c40f;
+      border: 2px solid #38bdf8;
       color: #ffffff;
       padding: 6px 16px;
       border-radius: 30px;
@@ -91,10 +91,10 @@
     .card {
       background: rgba(12, 30, 48, 0.95);
       backdrop-filter: blur(10px);
-      border: 2px solid #f1c40f;
+      border: 2px solid #38bdf8;
       border-radius: 24px;
       padding: 30px 24px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(241, 196, 15, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
       color: #ffffff;
     }
 
@@ -108,33 +108,10 @@
 
     .card p.subtitle {
       text-align: center;
-      color: #f1c40f;
+      color: #38bdf8;
       font-size: 0.82rem;
       font-weight: 600;
       margin-bottom: 20px;
-    }
-
-    /* Cuadrito superior con el código escaneado */
-    .codigo-badge {
-      background: rgba(241, 196, 15, 0.15);
-      border: 2px dashed #f1c40f;
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    .codigo-badge span {
-      font-size: 0.72rem;
-      color: #f1c40f;
-      font-weight: 700;
-      text-transform: uppercase;
-      display: block;
-    }
-    .codigo-badge strong {
-      font-size: 1.3rem;
-      color: #ffffff;
-      font-weight: 800;
-      letter-spacing: 1px;
     }
 
     .form-group {
@@ -142,11 +119,19 @@
       text-align: left;
     }
 
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
     .form-control {
       width: 100%;
       height: 52px;
       background: #ffffff;
-      border: 2px solid #1e3a5f;
+      border: 2px solid #38bdf8;
       border-radius: 12px;
       padding: 0 14px;
       font-size: 1.1rem;
@@ -157,28 +142,29 @@
     }
 
     .form-control:focus {
-      border-color: #f1c40f;
-      box-shadow: 0 0 8px rgba(241, 196, 15, 0.4);
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
     }
 
     .btn-primary {
       width: 100%;
       height: 52px;
-      background: linear-gradient(135deg, #f1c40f 0%, #d4ac0d 100%);
-      color: #0c1e30;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff;
       border: none;
       border-radius: 12px;
       font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
       margin-top: 6px;
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(241, 196, 15, 0.5);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+      background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
     }
 
     .hidden { display: none !important; }
@@ -189,7 +175,7 @@
       border-radius: 20px;
       padding: 22px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      border: 2px solid #f1c40f;
+      border: 2px solid #38bdf8;
     }
 
     .saldo-top {
@@ -198,9 +184,9 @@
       align-items: center;
     }
 
-    .saldo-title { font-size: 0.75rem; color: #f1c40f; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; }
-    .avatar-img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #f1c40f; object-fit: cover; background: #fff; }
+    .avatar-img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #38bdf8; object-fit: cover; background: #fff; }
 
     .alumno-nombre { font-size: 1rem; font-weight: 700; color: #ffffff; margin-top: 12px; }
     .alumno-grado { font-size: 0.8rem; color: #cbd5e1; }
@@ -270,7 +256,7 @@
       font-size: 0.78rem;
       color: #ffffff;
       background-color: #0c1e30;
-      border-top: 2px solid #f1c40f;
+      border-top: 2px solid #38bdf8;
       font-weight: 600;
     }
   </style>
@@ -297,28 +283,19 @@
       <h2>Acceso del Estudiante</h2>
       <p class="subtitle">Sistema Financiero Educativo y de Convivencia</p>
       
-      <!-- Cuadrito superior con el código del alumno (Se muestra solo si hay QR) -->
-      <div id="codigoVisual" class="codigo-badge" style="display: none;">
-        <span>CÓDIGO DEL ESTUDIANTE</span>
-        <strong id="textoCodigoVisual">---</strong>
-      </div>
-
-      <!-- Input de Código (Visible si es manual, oculto si viene por QR) -->
-      <div id="grupoCodigoManual" class="form-group">
-        <label style="color: #cbd5e1; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Código de Estudiante</label>
-        <input type="text" id="loginCodigoManualInput" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
-      </div>
-
-      <!-- Input oculto oficial que app.js lee siempre -->
-      <input type="hidden" id="loginCodigo" value="" />
-
-      <!-- Cuadrito para digitar la Clave -->
+      <!-- Código de Estudiante (Totalmente funcional para escribir o recibir QR) -->
       <div class="form-group">
-        <label style="color: #cbd5e1; display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Digite su Clave (6 dígitos)</label>
+        <label>Código de Estudiante</label>
+        <input type="text" id="loginCodigo" placeholder="Ej: LDS-EST-001" class="form-control" style="text-transform: uppercase;" />
+      </div>
+
+      <!-- Clave de 6 dígitos -->
+      <div class="form-group">
+        <label>Clave (6 dígitos)</label>
         <input type="password" id="loginClave" maxlength="6" inputmode="numeric" placeholder="••••••" class="form-control" style="text-align: center; font-size: 1.4rem; letter-spacing: 6px;" />
       </div>
 
-      <button onclick="ejecutarAccesoPortal()" class="btn-primary">
+      <button onclick="procesarLoginAlumno()" class="btn-primary">
         Ingresar
       </button>
 
@@ -465,42 +442,21 @@
       const urlParams = new URLSearchParams(window.location.search);
       let codigoQR = urlParams.get('codigo') || localStorage.getItem('codigoEscaneado');
 
+      const inputCodigo = document.getElementById('loginCodigo');
+
       if (codigoQR && codigoQR.trim() !== "") {
         const codigoLimpio = codigoQR.trim().toUpperCase();
+        inputCodigo.value = codigoLimpio;
         localStorage.setItem('codigoEscaneado', codigoLimpio);
-        document.getElementById('loginCodigo').value = codigoLimpio;
-        document.getElementById('textoCodigoVisual').textContent = codigoLimpio;
         
-        // Mostrar tarjeta QR y ocultar input manual
-        document.getElementById('codigoVisual').style.display = 'block';
-        document.getElementById('grupoCodigoManual').style.display = 'none';
-
         setTimeout(() => {
           document.getElementById('loginClave').focus();
         }, 300);
       } else {
-        // Modo manual: ocultar tarjeta QR y mostrar input manual de código
-        document.getElementById('codigoVisual').style.display = 'none';
-        document.getElementById('grupoCodigoManual').style.display = 'block';
-        document.getElementById('loginCodigoManualInput').focus();
+        inputCodigo.value = "";
+        inputCodigo.focus();
       }
     });
-
-    function ejecutarAccesoPortal() {
-      // Si está en modo manual, pasar el valor al input oculto antes de procesar
-      const manualInput = document.getElementById('loginCodigoManualInput');
-      const grupoManual = document.getElementById('grupoCodigoManual');
-      
-      if (grupoManual.style.display !== 'none' && manualInput) {
-        document.getElementById('loginCodigo').value = manualInput.value.trim().toUpperCase();
-      }
-
-      if (typeof procesarLoginAlumno === 'function') {
-        procesarLoginAlumno();
-      } else {
-        console.error("No se encontró la función procesarLoginAlumno en app.js");
-      }
-    }
 
     function reproducirSonidoExito() {
       try {
@@ -666,11 +622,11 @@
     }
 
     document.getElementById("loginClave").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") ejecutarAccesoPortal();
+      if (e.key === "Enter") procesarLoginAlumno();
     });
-    
-    document.getElementById("loginCodigoManualInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") ejecutarAccesoPortal();
+
+    document.getElementById("loginCodigo").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") document.getElementById("loginClave").focus();
     });
   </script>
 </body>
