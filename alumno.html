@@ -72,6 +72,59 @@
     }
 
     .hidden { display: none !important; }
+    .clave-card {
+      background: #ffffff;
+      color: #0c1e30;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border: 2px solid #38bdf8;
+      text-align: left;
+    }
+    .clave-card h4 {
+      color: #0c1e30;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .clave-card p {
+      color: #64748b;
+      font-size: 0.78rem;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .clave-input {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .clave-btn {
+      width: 100%;
+      height: 48px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .clave-mensaje {
+      min-height: 18px;
+      margin-top: 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
     .saldo-card {
       background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%); color: #ffffff; border-radius: 20px;
       padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 2px solid #38bdf8; text-align: left;
@@ -130,7 +183,29 @@
       <div id="scannerError" style="color: #fca5a5; font-size: 0.85rem; margin-top: 10px; font-weight: 600;"></div>
     </div>
 
-    <!-- VISTA PRINCIPAL (Se muestra automática al leer el QR) -->
+    <!-- VISTA DE CLAVE: el código llega oculto desde QR o ingreso manual -->
+    <div id="vistaClave" class="card hidden">
+      <h2>Acceso del estudiante</h2>
+      <p class="subtitle">Ingresa tu clave para continuar</p>
+
+      <div class="clave-card">
+        <h4>🔐 Clave de acceso</h4>
+        <p>La clave se validará antes de mostrar la información del estudiante.</p>
+        <input
+          type="password"
+          id="inputClave"
+          class="clave-input"
+          placeholder="Ingresa tu clave"
+          autocomplete="current-password"
+        />
+        <button onclick="validarClaveEstudiante()" class="clave-btn">
+          Continuar
+        </button>
+        <div id="mensajeClave" class="clave-mensaje"></div>
+      </div>
+    </div>
+
+    <!-- VISTA PRINCIPAL (Se muestra automática después de validar la clave) -->
     <div id="vistaPrincipal" class="hidden">
       <div class="saldo-card">
         <div class="saldo-top">
@@ -213,7 +288,7 @@
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHpJOXgHX-_uqZxlI5Pm87I9XmlRBJQ2VY2MJ5F3qQeYA2CIaG2HEOOKZUz4nLJLQLZg/exec";
     let html5QrCode = null;
     let codigoEstudianteActual = "";
 
@@ -303,7 +378,15 @@
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      iniciarCamaraScanner();
+      const parametros = new URLSearchParams(window.location.search);
+      const codigoRecibido = parametros.get('codigo');
+
+      if (codigoRecibido && codigoRecibido.trim() !== "") {
+        codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
+        mostrarPantallaClave();
+      } else {
+        iniciarCamaraScanner();
+      }
     });
 
     function iniciarCamaraScanner() {
@@ -332,21 +415,75 @@
 
       codigoEstudianteActual = codigoEncontrado.trim().toUpperCase();
 
-      // Detiene la cámara temporalmente para procesar
+      // Detiene la cámara y pasa a la clave. El código no se muestra.
       if (html5QrCode && html5QrCode.isScanning) {
         html5QrCode.stop().then(() => {
-          consultarDatosEstudiante(codigoEstudianteActual);
+          mostrarPantallaClave();
         }).catch(() => {
-          consultarDatosEstudiante(codigoEstudianteActual);
+          mostrarPantallaClave();
         });
       } else {
-        consultarDatosEstudiante(codigoEstudianteActual);
+        mostrarPantallaClave();
       }
     }
 
     function onScanFailure(error) {
       // Ignora errores continuos de escaneo mientras busca el código en el cuadro
     }
+
+    function mostrarPantallaClave() {
+      document.getElementById('vistaScanner').classList.add('hidden');
+      document.getElementById('vistaPrincipal').classList.add('hidden');
+      document.getElementById('vistaClave').classList.remove('hidden');
+
+      const input = document.getElementById('inputClave');
+      const mensaje = document.getElementById('mensajeClave');
+
+      input.value = '';
+      mensaje.textContent = '';
+
+      setTimeout(() => input.focus(), 100);
+    }
+
+    function validarClaveEstudiante() {
+      const clave = document.getElementById('inputClave').value.trim();
+      const mensaje = document.getElementById('mensajeClave');
+
+      if (!codigoEstudianteActual) {
+        mensaje.style.color = "#dc2626";
+        mensaje.textContent = "No se encontró el código del estudiante.";
+        return;
+      }
+
+      if (!clave) {
+        mensaje.style.color = "#dc2626";
+        mensaje.textContent = "Ingresa tu clave.";
+        return;
+      }
+
+      mensaje.style.color = "#2563eb";
+      mensaje.textContent = "Validando...";
+
+      hacerPeticionJSONP({
+        accion: 'LOGINALUMNO',
+        codigo: codigoEstudianteActual,
+        clave: clave
+      }, function(res) {
+        if (res && (res.ok === true || res.success === true || res.acceso === true || res.autorizado === true)) {
+          mensaje.textContent = "Acceso correcto.";
+          consultarDatosEstudiante(codigoEstudianteActual);
+        } else {
+          mensaje.style.color = "#dc2626";
+          mensaje.textContent = (res && res.mensaje) || "Código o clave incorrectos.";
+        }
+      });
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && !document.getElementById('vistaClave').classList.contains('hidden')) {
+        validarClaveEstudiante();
+      }
+    });
 
     function consultarDatosEstudiante(codigo) {
       hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
@@ -380,6 +517,7 @@
 
     function reiniciarEscanner() {
       document.getElementById('vistaPrincipal').classList.add('hidden');
+      document.getElementById('vistaClave').classList.add('hidden');
       document.getElementById('vistaScanner').classList.remove('hidden');
       document.getElementById('seccionOperacion').classList.add('hidden');
       document.getElementById('seccionMovimientos').classList.remove('hidden');
