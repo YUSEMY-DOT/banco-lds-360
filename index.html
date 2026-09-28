@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banco LDS 360 - IEP La Salle del Sur</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Librería oficial de lectura de QR por cámara -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         * {
             margin: 0;
@@ -151,6 +153,7 @@
             text-decoration: none;
             flex: 1;
             width: 100%;
+            cursor: pointer;
         }
 
         .top-row .img-btn img {
@@ -208,6 +211,51 @@
             object-fit: contain;
             margin-bottom: 0px;
             filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
+        }
+
+        /* Modal o Ventana Emergente de la Cámara QR */
+        #qrScannerModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(12, 30, 48, 0.92);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .scanner-box {
+            width: 100%;
+            max-width: 360px;
+            background: #0c1e30;
+            border: 3px solid #f1c40f;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(241, 196, 15, 0.3);
+            text-align: center;
+        }
+
+        #reader {
+            width: 100% !important;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid #38bdf8;
+        }
+
+        .btn-cerrar-camara {
+            background: #e11d48;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
         }
 
         /* Pie de página */
@@ -270,6 +318,15 @@
         </a>
     </header>
 
+    <!-- VENTANA EMERGENTE DE LA CÁMARA QR -->
+    <div id="qrScannerModal">
+        <div class="scanner-box">
+            <h3 style="color: #f1c40f; margin-bottom: 12px; font-size: 1.1rem; font-weight: 700;">Apunta al código QR</h3>
+            <div id="reader"></div>
+            <button onclick="cerrarCamaraQR()" class="btn-cerrar-camara">✕ Cancelar / Cerrar</button>
+        </div>
+    </div>
+
     <!-- Contenedor Principal -->
     <div class="main-container">
         
@@ -278,9 +335,9 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
+            <!-- Fila Superior: Botón QR (ACTIVA LA CÁMARA) | Niña Dinero | Botón Ingreso -->
             <div class="top-row">
-                <a href="qr.html" class="img-btn">
+                <a onclick="abrirCamaraQR()" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
                 </a>
 
@@ -317,10 +374,52 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPT DE BIENVENIDA JOVIAL, MOTIVADORA Y LIRA INSTITUCIONAL -->
+    <!-- SCRIPTS DE AUDIO, VOZ Y ESCÁNER QR -->
     <script>
         let audioCtx = null;
         let iniciado = false;
+        let html5QrCode = null;
+
+        // ACTIVAR CÁMARA AL PRESIONAR EL BOTÓN CELESTE QR
+        function abrirCamaraQR() {
+            const modal = document.getElementById('qrScannerModal');
+            modal.style.display = 'flex';
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 220, height: 220 } },
+                (decodedText) => {
+                    let codigoEncontrado = decodedText;
+                    try {
+                        if (decodedText.includes("?")) {
+                            const urlObj = new URL(decodedText);
+                            codigoEncontrado = urlObj.searchParams.get("codigo") || decodedText;
+                        }
+                    } catch(e) {}
+
+                    cerrarCamaraQR();
+                    // Redirige automáticamente al portal del alumno con el código escaneado
+                    window.location.href = `alumno.html?codigo=${encodeURIComponent(codigoEncontrado.trim().toUpperCase())}`;
+                },
+                (error) => {}
+            ).catch(err => {
+                alert("No se pudo iniciar la cámara. Verifique los permisos en su navegador.");
+                cerrarCamaraQR();
+            });
+        }
+
+        function cerrarCamaraQR() {
+            const modal = document.getElementById('qrScannerModal');
+            modal.style.display = 'none';
+
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {}).catch(() => {});
+            }
+        }
 
         // FRECUENCIAS LIRA (DO MAYOR)
         const FREQS = {
@@ -402,7 +501,6 @@
             }
         }
 
-        // SALUDO JOVIAL, MOTIVADOR CON INSTRUCCIONES CLARAS
         function darBienvenidaVoz() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -410,8 +508,8 @@
                 const fraseBienvenida = "¡Hola! ¡Qué alegría verte hoy en el Banco LDS 360! Escanea tu código QR o ingresa tu código para gestionar tus monedas con mucha energía. ¡Vamos a aprender y divertirnos!";
                 const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
                 mensaje.lang = 'es-PE';
-                mensaje.rate = 1.05;  // Un poco más dinámico y jovial
-                mensaje.pitch = 1.25; // Tono alegre y amigable
+                mensaje.rate = 1.05;
+                mensaje.pitch = 1.25;
 
                 const voices = window.speechSynthesis.getVoices();
                 const vozFemenina = voices.find(v => v.lang.includes('es') && 
