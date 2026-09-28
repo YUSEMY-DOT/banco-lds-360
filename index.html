@@ -187,7 +187,7 @@
             border-radius: 12px;
         }
 
-        /* Ilustración de la derecha (Profesora y Alumna al filo inferior) */
+        /* Ilustración de la derecha (Profesora y Alumna asentadas al filo) */
         .right-illustration {
             max-width: 360px;
             width: 100%;
@@ -242,8 +242,10 @@
 </head>
 <body>
 
-    <!-- Audio del Himno Institucional (Inicio automático) -->
+    <!-- Audio del Himno Institucional (M4A integrado para inicio automático) -->
     <audio id="bgMusic" autoplay loop preload="auto">
+        <source src="himno.m4a" type="audio/mp4">
+        <source src="assets/himno.m4a" type="audio/mp4">
         <source src="assets/himno.mp3" type="audio/mpeg">
     </audio>
 
@@ -313,7 +315,9 @@
         const music = document.getElementById('bgMusic');
 
         function iniciarAudio() {
-            music.play().catch(e => console.log("Audio listo para sonar"));
+            if (music) {
+                music.play().catch(e => console.log("Esperando interacción para audio"));
+            }
         }
 
         window.addEventListener('load', () => {
@@ -323,7 +327,7 @@
                 setTimeout(() => {
                     window.speechSynthesis.cancel();
                     
-                    const textoHimno = "¡Bienvenidos al Banco Lasallista 360! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+                    const textoHimno = "¡Bienvenidos al Banco Lasallista 360! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. Sencillez, responsabilidad y honor es el lema que tú nos enseñaste.";
                     const utterance = new SpeechSynthesisUtterance(textoHimno);
                     utterance.lang = 'es-ES';
                     utterance.rate = 0.95;
@@ -340,7 +344,7 @@
                     };
 
                     window.speechSynthesis.speak(utterance);
-                }, 800);
+                }, 600);
             }
         });
 
