@@ -306,7 +306,7 @@
         <div class="saldo-top">
           <div>
             <p class="saldo-title">Saldo Disponible</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">1130.00</span> <span style="font-size: 1rem; font-weight: 500;">LDS</span></h3>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 500;">LDS</span></h3>
           </div>
           <img id="alumnoFoto" src="https://via.placeholder.com/100" alt="Foto" class="avatar-img" />
         </div>
@@ -388,7 +388,8 @@
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLINzmjri8dTZx4T-ZIe2TwthpuX7bjbKPCeZhCEa9WQGMjxmgK9QpJKb7cDGJ_8fovg/exec";
+    // Enlace actualizado y sincronizado con tu Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
 
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
@@ -532,14 +533,14 @@
       const errorDiv = document.getElementById('loginError');
       errorDiv.textContent = "";
 
-      if (!codigo || !clave) {
-        errorDiv.textContent = "Complete todos los campos.";
+      if (!codigo) {
+        errorDiv.textContent = "Ingrese o escanee el código del estudiante.";
         return;
       }
 
       errorDiv.textContent = "Conectando al servidor...";
 
-      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
+      hacerPeticionJSONP({ accion: 'estudiante', codigo: codigo }, function(res) {
         if (res && (res.success === true || res.ok === true || res.estudiante)) {
           document.getElementById('vistaLogin').classList.add('hidden');
           document.getElementById('vistaPrincipal').classList.remove('hidden');
@@ -551,7 +552,7 @@
           document.getElementById('alumnoNombre').textContent = nombreCompleto;
           document.getElementById('alumnoGrado').textContent = (est.grado || '') + ' ' + (est.seccion || '');
           
-          const saldo = Number(res.saldoActual || res.saldo || (res.cuenta && res.cuenta.saldoActual) || 1130.00);
+          const saldo = Number(res.saldoActual || res.saldo || (res.cuenta && res.cuenta.saldoActual) || 0);
           document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
           
           if (est.fotoUrl) document.getElementById('alumnoFoto').src = est.fotoUrl;
@@ -630,7 +631,7 @@
       msg.textContent = "Registrando...";
 
       hacerPeticionJSONP({
-        accion: 'REGISTRAR_TRANSACCION',
+        accion: 'registrarMovimiento',
         codigo: codigo,
         tipo: 'EGRESO',
         monto: monto,
@@ -643,9 +644,9 @@
           msg.textContent = "¡Registrado con éxito!";
           reproducirSonidoExito();
 
-          hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(data) {
+          hacerPeticionJSONP({ accion: 'estudiante', codigo: codigo }, function(data) {
             if (data) {
-              const saldo = Number(data.saldoActual || data.saldo || 1130.00);
+              const saldo = Number(data.saldoActual || (data.cuenta && data.cuenta.saldoActual) || 0);
               document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
               if (data.movimientos) {
                 historialMovimientosActual = data.movimientos;
@@ -685,7 +686,7 @@
         item.innerHTML = `
           <div>
             <p style="font-weight: 700; font-size: 0.85rem; color: #0c1e30;">${m.concepto || 'Movimiento'}</p>
-            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || ''}</p>
+            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || m.fechaTexto || ''}</p>
           </div>
           <span style="font-weight: 800; font-size: 0.88rem; color: ${positivo ? '#10b981' : '#f43f5e'};">
             ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
