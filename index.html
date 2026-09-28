@@ -176,7 +176,7 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
         }
 
-        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual (Proporcionales) */
+        /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
         .bottom-row {
             display: flex;
             justify-content: space-between;
@@ -196,7 +196,7 @@
             width: 100%;
             height: auto;
             max-height: 60px;
-            object-fit: contain; /* Mantiene la proporción estética original sin estirar */
+            object-fit: contain;
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
         }
 
@@ -291,7 +291,7 @@
                 </a>
             </div>
 
-            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual (Proporcionales) -->
+            <!-- Fila Inferior: Botón Tienda | Botón Padres | Botón Manual -->
             <div class="bottom-row">
                 <a href="tienda.html" class="img-btn">
                     <img src="assets/tienda.png" alt="Tienda escolar">
@@ -317,7 +317,7 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPT DE MÚSICA EN BUCLE CONTINUO (LIRA Y TAMBOR) Y VOZ DEL HIMNO -->
+    <!-- SCRIPT DE BIENVENIDA HABLADA PRIMERO + MÚSICA SUAVE HASTA EL LEMA -->
     <script>
         let audioCtx = null;
         let iniciado = false;
@@ -328,20 +328,24 @@
             "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
         };
 
-        // NOTAS DE LA MELODÍA DEL HIMNO
-        const notasMelodia = [
+        // MELODÍA HASTA "ENSEÑANZA, DISCIPLINA Y LEALTAD" (SE TOCA UNA SOLA VEZ)
+        const notasMelodiaBreve = [
+            // "Aprendiendo con metas y valores"
             { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
             { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+            // "cual nos diste tú mi gran maestro"
             { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
             { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+            // "Lasallista del Sur es nuestro ejemplo"
             { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
             { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+            // "de enseñanza, disciplina y lealtad." (AQUÍ FINALIZA Y CORTA)
             { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
             { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
         ];
 
-        // SINTETIZADOR DE LIRA
-        function sonarLira(ctx, freq, t, dur) {
+        // SINTETIZADOR DE LIRA CON VOLUMEN TENUE
+        function sonarLiraSuave(ctx, freq, t, dur) {
             if (!freq) return;
             const osc1 = ctx.createOscillator();
             const osc2 = ctx.createOscillator();
@@ -350,20 +354,23 @@
             osc2.type = 'sine';
             osc1.frequency.setValueAtTime(freq, t);
             osc2.frequency.setValueAtTime(freq * 2, t);
-            gain.gain.setValueAtTime(0.22, t);
-            gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+            
+            // Volumen tenue (0.08) para no molestar
+            gain.gain.setValueAtTime(0.08, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+            
             osc1.connect(gain);
             osc2.connect(gain);
             gain.connect(ctx.destination);
             osc1.start(t);
             osc2.start(t);
-            osc1.stop(t + 1.0);
-            osc2.stop(t + 1.0);
+            osc1.stop(t + 0.9);
+            osc2.stop(t + 0.9);
         }
 
-        // TAMBOR MARCIAL DE FONDO
-        function sonarTambor(ctx, t) {
-            const bufferSize = ctx.sampleRate * 0.04;
+        // TAMBOR MARCIAL SUAVE
+        function sonarTamborSuave(ctx, t) {
+            const bufferSize = ctx.sampleRate * 0.03;
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -371,73 +378,21 @@
             noise.buffer = buffer;
             const filter = ctx.createBiquadFilter();
             filter.type = 'highpass';
-            filter.frequency.value = 1800;
+            filter.frequency.value = 2000;
             const gain = ctx.createGain();
-            gain.gain.setValueAtTime(0.08, t);
-            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            
+            // Volumen tenue (0.02)
+            gain.gain.setValueAtTime(0.02, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+            
             noise.connect(filter);
             filter.connect(gain);
             gain.connect(ctx.destination);
             noise.start(t);
         }
 
-        // REPRODUCCIÓN EN BUCLE CONTINUO DE LA MÚSICA
-        function reproducirMelodiaEnBucle() {
-            if (!audioCtx) return;
-            
-            const duracionTotal = notasMelodia.reduce((acc, curr) => acc + curr.d, 0);
-
-            function programarRonda() {
-                let t = audioCtx.currentTime + 0.05;
-                notasMelodia.forEach(item => {
-                    const f = FREQS[item.n] || 261.63;
-                    sonarLira(audioCtx, f, t, item.d);
-                    sonarTambor(audioCtx, t);
-                    t += item.d;
-                });
-
-                setTimeout(programarRonda, (duracionTotal - 0.1) * 1000);
-            }
-
-            programarRonda();
-        }
-
-        // VOZ LOCUTORA DEL HIMNO
-        function hablarLetraHimno() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                
-                const letraOficial = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! " +
-                    "Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. " +
-                    "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. " +
-                    "Como siempre un paso adelante, sencillez, responsabilidad y honor es el lema que tú nos enseñaste, " +
-                    "ejemplo puro que nos diste al crecer. " +
-                    "Sabiduría de grandes mentores, en nuestras aulas se educa con amor. " +
-                    "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. ¡Lealtad!";
-
-                const mensaje = new SpeechSynthesisUtterance(letraOficial);
-                mensaje.lang = 'es-PE';
-                mensaje.rate = 0.88;
-                mensaje.pitch = 1.0;
-
-                const voices = window.speechSynthesis.getVoices();
-                const vozEspanol = voices.find(v => v.lang.includes('es') && (v.name.includes('Jorge') || v.name.includes('Raul') || v.name.includes('Google') || v.name.includes('Lucia') || v.name.includes('Elena')));
-                if (vozEspanol) {
-                    mensaje.voice = vozEspanol;
-                }
-
-                window.speechSynthesis.speak(mensaje);
-            }
-        }
-
-        async function arrancarAudioYVoz() {
-            if (iniciado) return;
-            iniciado = true;
-
-            // 1. Iniciar locución de la letra
-            hablarLetraHimno();
-
-            // 2. Iniciar música en bucle continuo
+        // REPRODUCE LA MÚSICA UNA SOLA VEZ HASTA EL LEMA Y CORTA
+        async function tocarMelodiaHastaLema() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
@@ -445,17 +400,66 @@
                     await audioCtx.resume();
                 }
 
-                reproducirMelodiaEnBucle();
+                let t = audioCtx.currentTime + 0.1;
+                notasMelodiaBreve.forEach(item => {
+                    const f = FREQS[item.n] || 261.63;
+                    sonarLiraSuave(audioCtx, f, t, item.d);
+                    sonarTamborSuave(audioCtx, t);
+                    t += item.d;
+                });
+                // Al terminar de recorrer notasMelodiaBreve, se detiene automáticamente.
             } catch (e) {
-                console.log(e);
+                console.log("Audio no iniciado", e);
             }
         }
 
-        // Inicio automático al cargar la página o al hacer click/toque
-        window.addEventListener('load', arrancarAudioYVoz);
-        document.addEventListener('touchstart', arrancarAudioYVoz, { once: true });
-        document.addEventListener('click', arrancarAudioYVoz, { once: true });
-        document.addEventListener('pointerdown', arrancarAudioYVoz, { once: true });
+        // VOZ FEMENINA DE BIENVENIDA AL INICIO
+        function darBienvenidaVoz() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                const fraseBienvenida = "¡Bienvenidos a la banca LDS 360 de La Salle del Sur!";
+                const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
+                mensaje.lang = 'es-PE';
+                mensaje.rate = 0.95;
+                mensaje.pitch = 1.1; // Tono ligeramente más agudo para voz femenina
+
+                const voices = window.speechSynthesis.getVoices();
+                // Búsqueda prioritaria de voz femenina en español
+                const vozFemenina = voices.find(v => v.lang.includes('es') && 
+                    (v.name.includes('Elena') || v.name.includes('Monica') || v.name.includes('Lucia') || 
+                     v.name.includes('Sabrina') || v.name.includes('Paulina') || v.name.includes('Francisca') || 
+                     v.name.includes('Google español') || v.name.includes('Female')));
+                
+                if (vozFemenina) {
+                    mensaje.voice = vozFemenina;
+                }
+
+                // RECIÉN AL TERMINAR DE HABLAR, ENTRA LA MÚSICA SUAVE
+                mensaje.onend = function() {
+                    tocarMelodiaHastaLema();
+                };
+
+                window.speechSynthesis.speak(mensaje);
+            } else {
+                tocarMelodiaHastaLema();
+            }
+        }
+
+        function iniciarFlujo() {
+            if (iniciado) return;
+            iniciado = true;
+            darBienvenidaVoz();
+        }
+
+        // Inicio automático al cargar o al interactuar
+        window.addEventListener('load', () => {
+            setTimeout(iniciarFlujo, 400);
+        });
+
+        document.addEventListener('touchstart', iniciarFlujo, { once: true });
+        document.addEventListener('click', iniciarFlujo, { once: true });
+        document.addEventListener('pointerdown', iniciarFlujo, { once: true });
     </script>
 </body>
 </html>
