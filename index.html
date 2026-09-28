@@ -278,7 +278,7 @@
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
 
-            <!-- Fila Superior: Botón QR lleva a qr.html | Botón Código lleva a alumno.html -->
+            <!-- Fila Superior: Botón QR | Niña Dinero | Botón Ingreso -->
             <div class="top-row">
                 <a href="qr.html" class="img-btn">
                     <img src="assets/qr.png" alt="Escanea QR">
@@ -317,7 +317,7 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPT DE BIENVENIDA HABLADA PRIMERO + MÚSICA SUAVE HASTA EL LEMA -->
+    <!-- SCRIPT DE BIENVENIDA JOVIAL, MOTIVADORA Y LIRA INSTITUCIONAL -->
     <script>
         let audioCtx = null;
         let iniciado = false;
@@ -328,23 +328,17 @@
             "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
         };
 
-        // MELODÍA HASTA "ENSEÑANZA, DISCIPLINA Y LEALTAD" (SE TOCA UNA SOLA VEZ)
         const notasMelodiaBreve = [
-            // "Aprendiendo con metas y valores"
             { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
             { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
-            // "cual nos diste tú mi gran maestro"
             { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
             { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
-            // "Lasallista del Sur es nuestro ejemplo"
             { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
             { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
-            // "de enseñanza, disciplina y lealtad." (AQUÍ FINALIZA Y CORTA)
             { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
             { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
         ];
 
-        // SINTETIZADOR DE LIRA CON VOLUMEN TENUE
         function sonarLiraSuave(ctx, freq, t, dur) {
             if (!freq) return;
             const osc1 = ctx.createOscillator();
@@ -355,7 +349,6 @@
             osc1.frequency.setValueAtTime(freq, t);
             osc2.frequency.setValueAtTime(freq * 2, t);
             
-            // Volumen tenue (0.08) para no molestar
             gain.gain.setValueAtTime(0.08, t);
             gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
             
@@ -368,7 +361,6 @@
             osc2.stop(t + 0.9);
         }
 
-        // TAMBOR MARCIAL SUAVE
         function sonarTamborSuave(ctx, t) {
             const bufferSize = ctx.sampleRate * 0.03;
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -381,7 +373,6 @@
             filter.frequency.value = 2000;
             const gain = ctx.createGain();
             
-            // Volumen tenue (0.02)
             gain.gain.setValueAtTime(0.02, t);
             gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
             
@@ -391,7 +382,6 @@
             noise.start(t);
         }
 
-        // REPRODUCE LA MÚSICA UNA SOLA VEZ HASTA EL LEMA Y CORTA
         async function tocarMelodiaHastaLema() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -412,16 +402,16 @@
             }
         }
 
-        // VOZ FEMENINA DE BIENVENIDA AL INICIO
+        // SALUDO JOVIAL, MOTIVADOR CON INSTRUCCIONES CLARAS
         function darBienvenidaVoz() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 
-                const fraseBienvenida = "¡Bienvenidos a la banca LDS 360 de La Salle del Sur!";
+                const fraseBienvenida = "¡Hola! ¡Qué alegría verte hoy en el Banco LDS 360! Escanea tu código QR o ingresa tu código para gestionar tus monedas con mucha energía. ¡Vamos a aprender y divertirnos!";
                 const mensaje = new SpeechSynthesisUtterance(fraseBienvenida);
                 mensaje.lang = 'es-PE';
-                mensaje.rate = 0.95;
-                mensaje.pitch = 1.1;
+                mensaje.rate = 1.05;  // Un poco más dinámico y jovial
+                mensaje.pitch = 1.25; // Tono alegre y amigable
 
                 const voices = window.speechSynthesis.getVoices();
                 const vozFemenina = voices.find(v => v.lang.includes('es') && 
@@ -456,7 +446,6 @@
         document.addEventListener('touchstart', iniciarFlujo, { once: true });
         document.addEventListener('click', iniciarFlujo, { once: true });
         document.addEventListener('pointerdown', iniciarFlujo, { once: true });
-        
     </script>
 </body>
 </html>
