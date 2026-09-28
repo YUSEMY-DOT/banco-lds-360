@@ -97,17 +97,17 @@
             z-index: 2;
         }
 
-        /* Tarjeta Amarillo Claro Traslúcida sentada al filo */
+        /* Tarjeta Principal sin cuadro amarillo */
         .portal-card {
-            background: rgba(254, 249, 231, 0.88);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             padding: 20px 18px 24px 18px;
             border-radius: 26px;
             max-width: 520px;
             width: 100%;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
-            border: 3px solid rgba(255, 235, 116, 0.9);
+            box-shadow: none;
+            border: none;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -116,18 +116,20 @@
         }
 
         .bank-title {
-            font-size: 1.85rem;
-            color: #00796b;
+            font-size: 2rem;
+            color: #ffffff;
             font-weight: 800;
             margin-bottom: 2px;
             letter-spacing: 0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 121, 107, 0.6);
         }
 
         .bank-subtitle {
-            font-size: 0.82rem;
-            color: #00897b;
-            font-weight: 600;
+            font-size: 0.88rem;
+            color: #f1c40f;
+            font-weight: 700;
             margin-bottom: 16px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
         }
 
         /* Fila Superior: Botón QR | Niña Dinero | Botón Ingreso */
@@ -150,7 +152,6 @@
             width: 100%;
         }
 
-        /* Botones de QR y Código */
         .top-row .img-btn img {
             width: 100%;
             height: 76px;
@@ -168,7 +169,7 @@
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.22));
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35));
         }
 
         /* Fila Inferior: Botón Tienda | Botón Padres | Botón Manual */
@@ -194,7 +195,7 @@
             height: auto;
             object-fit: contain;
             margin-bottom: 0px;
-            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
         }
 
         /* Pie de página */
@@ -259,7 +260,7 @@
     <!-- Contenedor Principal -->
     <div class="main-container">
         
-        <!-- Cuadro Amarillo Claro Traslúcido del Banco (Sentado al filo) -->
+        <!-- Contenido del Banco LDS 360 -->
         <div class="portal-card">
             <h1 class="bank-title">BANCO LDS 360</h1>
             <p class="bank-subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
@@ -303,18 +304,18 @@
         Lima - Perú | IEP La Salle del Sur — Todos los derechos reservados
     </footer>
 
-    <!-- SCRIPT DE INSTRUMENTOS EN VIVO (LIRAS Y TAMBOR) Y VOZ CANTADA/LEÍDA -->
+    <!-- SCRIPT DE MÚSICA EN BUCLE CONTINUO (LIRA Y TAMBOR) Y VOZ DEL HIMNO -->
     <script>
         let audioCtx = null;
         let iniciado = false;
 
-        // FRECUENCIAS LIRA (ESCALA DO MAYOR)
+        // FRECUENCIAS LIRA (DO MAYOR)
         const FREQS = {
             "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
             "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
         };
 
-        // MELODÍA COMPLETA DEL HIMNO
+        // NOTAS DE LA MELODÍA DEL HIMNO
         const notasMelodia = [
             { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
             { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
@@ -347,7 +348,7 @@
             osc2.stop(t + 1.0);
         }
 
-        // TAMBOR MARCIAL
+        // TAMBOR MARCIAL DE FONDO
         function sonarTambor(ctx, t) {
             const bufferSize = ctx.sampleRate * 0.04;
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -367,13 +368,34 @@
             noise.start(t);
         }
 
-        // VOZ LOCUTORA / CANTANTE DEL HIMNO
+        // REPRODUCCIÓN EN BUCLE CONTINUO DE LA MÚSICA
+        function reproducirMelodiaEnBucle() {
+            if (!audioCtx) return;
+            
+            const duracionTotal = notasMelodia.reduce((acc, curr) => acc + curr.d, 0);
+
+            function programarRonda() {
+                let t = audioCtx.currentTime + 0.05;
+                notasMelodia.forEach(item => {
+                    const f = FREQS[item.n] || 261.63;
+                    sonarLira(audioCtx, f, t, item.d);
+                    sonarTambor(audioCtx, t);
+                    t += item.d;
+                });
+
+                // Re-programar el bucle indefinidamente para que suene todo el tiempo
+                setTimeout(programarRonda, (duracionTotal - 0.1) * 1000);
+            }
+
+            programarRonda();
+        }
+
+        // VOZ LOCUTORA DEL HIMNO
         function hablarLetraHimno() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 
-                // Letra completa del Himno Institucional
-                const letraOficial = "¡Bienvenidos al Banco Lasallista 360! " +
+                const letraOficial = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! " +
                     "Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. " +
                     "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. " +
                     "Como siempre un paso adelante, sencillez, responsabilidad y honor es el lema que tú nos enseñaste, " +
@@ -382,8 +404,8 @@
                     "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. ¡Lealtad!";
 
                 const mensaje = new SpeechSynthesisUtterance(letraOficial);
-                mensaje.lang = 'es-PE'; // Voz en español
-                mensaje.rate = 0.88;    // Cadencia para acompañar el ritmo marcial
+                mensaje.lang = 'es-PE';
+                mensaje.rate = 0.88;
                 mensaje.pitch = 1.0;
 
                 const voices = window.speechSynthesis.getVoices();
@@ -403,7 +425,7 @@
             // 1. Iniciar locución de la letra
             hablarLetraHimno();
 
-            // 2. Iniciar melodía instrumental (Liras + Tambor)
+            // 2. Iniciar música en bucle continuo
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
@@ -411,19 +433,13 @@
                     await audioCtx.resume();
                 }
 
-                let t = audioCtx.currentTime + 0.1;
-                notasMelodia.forEach(item => {
-                    const f = FREQS[item.n] || 261.63;
-                    sonarLira(audioCtx, f, t, item.d);
-                    sonarTambor(audioCtx, t);
-                    t += item.d;
-                });
+                reproducirMelodiaEnBucle();
             } catch (e) {
                 console.log(e);
             }
         }
 
-        // Inicio automático al cargar e interactuar
+        // Inicio automático al cargar la página o al hacer click/toque
         window.addEventListener('load', arrancarAudioYVoz);
         document.addEventListener('touchstart', arrancarAudioYVoz, { once: true });
         document.addEventListener('click', arrancarAudioYVoz, { once: true });
