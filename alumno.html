@@ -497,9 +497,14 @@
       const inputCodigo = document.getElementById('loginCodigo');
 
       if (codigoQR && codigoQR.trim() !== "") {
-        inputCodigo.value = codigoQR.trim().toUpperCase();
-        localStorage.setItem('codigoEscaneado', inputCodigo.value);
-        setTimeout(() => { document.getElementById('loginClave').focus(); }, 300);
+        const codigoLimpio = codigoQR.trim().toUpperCase();
+        inputCodigo.value = codigoLimpio;
+        localStorage.setItem('codigoEscaneado', codigoLimpio);
+        
+        // Autenticación automática al escanear el QR
+        setTimeout(() => {
+          procesarLoginAlumno();
+        }, 300);
       } else {
         inputCodigo.value = "";
         inputCodigo.focus();
