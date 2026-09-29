@@ -5,94 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BANCO LDS 360 - IEP La Salle del Sur</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body {
-      background: linear-gradient(rgba(12, 30, 48, 0.70), rgba(12, 30, 48, 0.70)), 
-                  url('assets/banco.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      color: #333333;
+      color: #1e293b;
     }
     header {
-      background-color: #0c1e30;
-      padding: 10px 24px;
+      background: linear-gradient(90deg, #0c1e30 0%, #1e3a8a 100%);
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 3px solid #38bdf8;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      border-bottom: 4px solid #f59e0b;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       z-index: 10;
     }
     .school-info { display: flex; align-items: center; gap: 12px; }
-    .school-info img { width: 40px; height: 40px; object-fit: contain; }
-    .school-title h1 { font-size: 1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.5px; }
-    .school-title p { font-size: 0.72rem; color: #38bdf8; font-weight: 600; font-style: italic; }
+    .school-info img { width: 42px; height: 42px; object-fit: contain; }
+    .school-title h1 { font-size: 1.05rem; color: #ffffff; font-weight: 800; letter-spacing: 0.5px; }
+    .school-title p { font-size: 0.75rem; color: #38bdf8; font-weight: 600; font-style: italic; }
     .inicio-btn {
-      background: #152b42;
+      background: rgba(255, 255, 255, 0.15);
       border: 2px solid #38bdf8;
       color: #ffffff;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 30px;
       font-weight: 600;
       font-size: 0.85rem;
       text-decoration: none;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: all 0.3s ease;
     }
-    .inicio-btn:hover { background: #203f61; }
+    .inicio-btn:hover { background: rgba(255, 255, 255, 0.25); }
     
-    main { max-width: 480px; width: 100%; margin: auto; padding: 20px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    main { max-width: 500px; width: 100%; margin: auto; padding: 25px 15px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
     
     .hidden { display: none !important; }
 
-    /* ESTILO FICHA PRINCIPAL (Inspirado en la Cuarta Imagen) */
+    /* TARJETA DE SALDO (Cuarta Imagen) */
     .saldo-card {
-      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
       color: #ffffff;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      border: 2px solid #38bdf8;
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: 0 15px 35px rgba(30, 58, 138, 0.25);
+      border: 3px solid #f59e0b;
       text-align: left;
     }
     .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-    .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .saldo-amount { font-size: 2.2rem; font-weight: 800; margin-top: 4px; color: #ffffff; }
+    .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    .saldo-amount { font-size: 2.3rem; font-weight: 800; margin-top: 4px; color: #ffffff; }
     .avatar-img { 
-      width: 125px; 
-      height: 125px; 
+      width: 130px; 
+      height: 130px; 
       border-radius: 50%; 
-      border: 3px solid #38bdf8; 
+      border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       flex-shrink: 0;
     }
-    .alumno-nombre { font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-top: 16px; }
-    .alumno-grado { font-size: 0.82rem; color: #cbd5e1; font-weight: 500; margin-top: 2px; }
+    .alumno-nombre { font-size: 1.15rem; font-weight: 800; color: #ffffff; margin-top: 18px; }
+    .alumno-grado { font-size: 0.85rem; color: #cbd5e1; font-weight: 600; margin-top: 3px; }
     
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-    .action-btn { padding: 14px; border-radius: 16px; font-weight: 700; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.88rem; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.2s; }
-    .action-btn:hover { transform: translateY(-2px); }
-    .btn-pagar { background-color: #e11d48; }
-    .btn-movs { background-color: #7c3aed; }
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .action-btn { 
+      padding: 15px; border-radius: 18px; font-weight: 700; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.9rem; 
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12); transition: transform 0.2s, box-shadow 0.2s; 
+    }
+    .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.18); }
+    .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); }
+    .btn-movs { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); }
     
-    .sub-card { background: #ffffff; color: #333; border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); border: 1px solid #e2e8f0; margin-top: 14px; text-align: left; }
-    .sub-card h4 { font-size: 1rem; color: #0c1e30; font-weight: 800; margin-bottom: 14px; }
+    .sub-card { 
+      background: #ffffff; color: #1e293b; border-radius: 22px; padding: 22px; 
+      box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12); border: 2px solid #e0f2fe; margin-top: 16px; text-align: left; 
+    }
+    .sub-card h4 { font-size: 1.05rem; color: #0c1e30; font-weight: 800; margin-bottom: 16px; }
     .form-group { margin-bottom: 14px; text-align: left; }
-    .input-field { width: 100%; padding: 11px 13px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 0.9rem; outline: none; color: #0c1e30; background: #f8fafc; }
+    .form-group label { display: block; color: #475569; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; }
+    .input-field { 
+      width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 0.92rem; outline: none; color: #0c1e30; background: #f8fafc; transition: border-color 0.2s;
+    }
     .input-field:focus { border-color: #0284c7; background: #fff; }
     .lista-movs { min-height: 140px; max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .btn-primary {
-      width: 100%; height: 50px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff; border: none; border-radius: 14px; font-size: 1rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); margin-top: 6px;
+      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 8px; transition: opacity 0.2s;
     }
-    footer { text-align: center; padding: 12px; font-size: 0.78rem; color: #ffffff; background-color: #0c1e30; border-top: 3px solid #38bdf8; font-weight: 600; }
+    .btn-primary:hover { opacity: 0.95; }
+    
+    footer { 
+      text-align: center; padding: 14px; font-size: 0.8rem; color: #475569; background-color: #ffffff; 
+      border-top: 2px solid #e2e8f0; font-weight: 600; 
+    }
   </style>
 </head>
 <body>
@@ -109,7 +120,7 @@
   </header>
 
   <main>
-    <!-- VISTA PRINCIPAL (Estructura de la Cuarta Imagen) -->
+    <!-- VISTA PRINCIPAL (Ficha del Estudiante - Cuarta Imagen) -->
     <div id="vistaPrincipal">
       <div class="saldo-card">
         <div class="saldo-top">
@@ -133,26 +144,26 @@
         <h4 id="tituloOperacion">Registrar Pago o Gasto</h4>
         
         <div class="form-group">
-          <label style="color:#475569; font-size: 0.8rem; font-weight: 700;">Categoría</label>
+          <label>Categoría</label>
           <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
             <option value="">Seleccione categoría</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label style="color:#475569; font-size: 0.8rem; font-weight: 700;">Concepto</label>
+          <label>Concepto</label>
           <select id="selectConcepto" class="input-field">
             <option value="">Seleccione concepto</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label style="color:#475569; font-size: 0.8rem; font-weight: 700;">Monto LDS</label>
+          <label>Monto LDS</label>
           <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="input-field" />
         </div>
 
         <div class="form-group">
-          <label style="color:#475569; font-size: 0.8rem; font-weight: 700;">Responsable del Registro</label>
+          <label>Responsable del Registro</label>
           <select id="selectResponsable" class="input-field">
             <option value="">Seleccione responsable</option>
             <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
@@ -163,21 +174,21 @@
         </div>
 
         <div class="form-group">
-          <label style="color:#475569; font-size: 0.8rem; font-weight: 700;">Observación</label>
+          <label>Observación</label>
           <textarea id="inputObservacion" rows="2" placeholder="Detalle opcional..." class="input-field" style="resize: none;"></textarea>
         </div>
 
         <button onclick="registrarMovimientoOperacion()" class="btn-primary">
           Confirmar y Registrar Pago
         </button>
-        <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 700;"></div>
+        <div id="mensajeOperacion" style="font-size: 0.82rem; text-align: center; margin-top: 10px; min-height: 18px; font-weight: 700;"></div>
       </div>
 
       <!-- HISTORIAL DE MOVIMIENTOS -->
       <div id="seccionMovimientos" class="sub-card">
         <h4>Historial de Movimientos</h4>
         <div id="listaMovimientos" class="lista-movs">
-          <p style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.82rem;">Sin movimientos recientes.</p>
+          <p style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.85rem;">Sin movimientos recientes.</p>
         </div>
       </div>
     </div>
@@ -423,7 +434,7 @@
       contenedor.innerHTML = '';
 
       if (!Array.isArray(movimientos) || movimientos.length === 0) {
-        contenedor.innerHTML = '<div style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.82rem;">Sin movimientos recientes.</div>';
+        contenedor.innerHTML = '<div style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.85rem;">Sin movimientos recientes.</div>';
         return;
       }
 
@@ -434,13 +445,13 @@
         const fecha = mov.fecha || mov.timestamp || '';
 
         const fila = document.createElement('div');
-        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-bottom: 1px solid #f1f5f9; font-size: 0.82rem;";
+        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem;";
 
         const signo = tipo === 'EGRESO' || tipo === 'GASTO' ? '-' : '+';
         fila.innerHTML = `
           <div style="display: flex; flex-direction: column;">
             <strong style="color: #0c1e30;">${concepto}</strong>
-            <span style="color: #64748b; font-size: 0.72rem;">${fecha}</span>
+            <span style="color: #64748b; font-size: 0.75rem;">${fecha}</span>
           </div>
           <div style="font-weight: 700; color: ${signo === '-' ? '#e11d48' : '#059669'};">
             ${signo} ${Math.abs(monto).toFixed(2)} LDS
