@@ -77,59 +77,6 @@
     #vistaPrincipal {
       margin-top: 105px;
     }
-    .clave-card {
-      background: #ffffff;
-      color: #0c1e30;
-      border-radius: 18px;
-      padding: 20px;
-      margin-top: 14px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-      border: 2px solid #38bdf8;
-      text-align: left;
-    }
-    .clave-card h4 {
-      color: #0c1e30;
-      font-size: 1rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-    .clave-card p {
-      color: #64748b;
-      font-size: 0.78rem;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-    .clave-input {
-      width: 100%;
-      padding: 12px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 1rem;
-      outline: none;
-      text-align: center;
-      letter-spacing: 2px;
-    }
-    .clave-btn {
-      width: 100%;
-      height: 48px;
-      margin-top: 10px;
-      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .clave-mensaje {
-      min-height: 18px;
-      margin-top: 8px;
-      text-align: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
     .saldo-card {
       background: linear-gradient(135deg, #0c1e30 0%, #183b5c 100%); color: #ffffff; border-radius: 20px;
       padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.25); border: 2px solid #38bdf8; text-align: left;
@@ -188,26 +135,42 @@
       <div id="scannerError" style="color: #fca5a5; font-size: 0.85rem; margin-top: 10px; font-weight: 600;"></div>
     </div>
 
-    <!-- VISTA DE CLAVE: el código llega oculto desde QR o ingreso manual -->
+    <!-- VISTA DE ACCESO: código y clave dentro del mismo cuadro -->
     <div id="vistaClave" class="card hidden">
       <h2>Acceso del estudiante</h2>
-      <p class="subtitle">Ingresa tu clave para continuar</p>
+      <p class="subtitle">Ingresa tu código y tu clave para continuar</p>
 
-      <div class="clave-card">
-        <h4>🔐 Clave de acceso</h4>
-        <p>La clave se validará antes de mostrar la información del estudiante.</p>
-        <input
-          type="password"
-          id="inputClave"
-          class="clave-input"
-          placeholder="Ingresa tu clave"
-          autocomplete="current-password"
-        />
-        <button onclick="validarClaveEstudiante()" class="clave-btn">
-          Continuar
-        </button>
-        <div id="mensajeClave" class="clave-mensaje"></div>
-      </div>
+      <label style="display:block; color:#ffffff; font-weight:800; text-align:left; margin:18px 0 8px;">
+        CÓDIGO DEL ESTUDIANTE
+      </label>
+
+      <input
+        type="text"
+        id="codigoEnClave"
+        class="clave-input"
+        placeholder="Código del estudiante"
+        readonly
+        style="box-sizing:border-box; width:100%;"
+      />
+
+      <label style="display:block; color:#ffffff; font-weight:800; text-align:left; margin:16px 0 8px;">
+        🔐 CLAVE DE ACCESO
+      </label>
+
+      <input
+        type="password"
+        id="inputClave"
+        class="clave-input"
+        placeholder="Ingresa tu clave"
+        autocomplete="current-password"
+        style="box-sizing:border-box; width:100%;"
+      />
+
+      <button onclick="validarClaveEstudiante()" class="clave-btn">
+        Continuar
+      </button>
+
+      <div id="mensajeClave" class="clave-mensaje"></div>
     </div>
 
     <!-- VISTA PRINCIPAL (Se muestra automática después de validar la clave) -->
@@ -442,7 +405,12 @@
       document.getElementById('vistaClave').classList.remove('hidden');
 
       const input = document.getElementById('inputClave');
+      const codigoVisible = document.getElementById('codigoEnClave');
       const mensaje = document.getElementById('mensajeClave');
+
+      if (codigoVisible) {
+        codigoVisible.value = codigoEstudianteActual || '';
+      }
 
       input.value = '';
       mensaje.textContent = '';
