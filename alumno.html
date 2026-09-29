@@ -72,6 +72,11 @@
     }
 
     .hidden { display: none !important; }
+
+    /* La ficha del alumno baja para dejar visible el nombre BANCO del fondo */
+    #vistaPrincipal {
+      margin-top: 105px;
+    }
     .clave-card {
       background: #ffffff;
       color: #0c1e30;
@@ -133,8 +138,8 @@
     .saldo-title { font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; }
     .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; }
     .avatar-img { 
-      width: 88px; 
-      height: 88px; 
+      width: 210px; 
+      height: 210px; 
       border-radius: 50%; 
       border: 3px solid #38bdf8; 
       object-fit: cover; 
@@ -151,7 +156,7 @@
     .sub-card h4 { font-size: 0.95rem; color: #0c1e30; font-weight: 700; margin-bottom: 12px; }
     .form-group { margin-bottom: 12px; text-align: left; }
     .input-field { width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.88rem; outline: none; }
-    .lista-movs { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .lista-movs { min-height: 190px; max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     .btn-primary {
       width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
       color: #ffffff; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 800; cursor: pointer;
@@ -495,7 +500,9 @@
           }, function(res) {
             if (res && res.ok === true) {
               mensaje.textContent = "Acceso correcto.";
-              mostrarDatosDelAlumno(res);
+              // La autenticación solo autoriza el acceso.
+              // La información financiera se toma de la consulta real del alumno.
+              consultarDatosEstudiante(codigoEstudianteActual);
             } else {
               mensaje.style.color = "#dc2626";
               mensaje.textContent = (res && res.mensaje) || "Credenciales inválidas o cuenta inactiva.";
@@ -514,8 +521,9 @@
       const movimientos = Array.isArray(res && res.movimientos) ? res.movimientos : [];
 
       if (!est || !est.codigo) {
-        document.getElementById('mensajeClave').style.color = "#dc2626";
-        document.getElementById('mensajeClave').textContent = "No se encontró el estudiante en la base de datos.";
+        const mensaje = document.getElementById('mensajeClave');
+        mensaje.style.color = "#dc2626";
+        mensaje.textContent = "No se encontró el estudiante en la base de datos.";
         return;
       }
 
@@ -531,22 +539,64 @@
       document.getElementById('alumnoGrado').textContent =
         [est.grado, est.seccion].filter(Boolean).join(' ');
 
-      const saldo = Number(cuenta.saldoActual || 0);
-      document.getElementById('saldoLDS').textContent = saldo.toFixed(2);
+      // El saldo se obtiene de los movimientos que YA existen.
+      // No se crean, cambian ni trasladan registros.
+      const saldoMovimientos = calcularSaldoDesdeMovimientos(movimientos);
+      const saldoBackend = Number(
+        cuenta.saldoActual ?? res.saldoActual ?? res.saldo ?? 0
+      );
+      const saldo = movimientos.length > 0 ? saldoMovimientos : saldoBackend;
+
+      document.getElementById('saldoLDS').textContent =
+        (Number.isFinite(saldo) ? saldo : 0).toFixed(2);
 
       const fotoUrl = est.fotoUrl || est.foto || '';
+      const foto = document.getElementById('alumnoFoto');
       if (fotoUrl && String(fotoUrl).trim() !== '') {
-        document.getElementById('alumnoFoto').src = fotoUrl;
-        document.getElementById('alumnoFoto').style.display = 'block';
+        foto.src = String(fotoUrl).trim();
+        foto.style.display = 'block';
       }
 
-      if (typeof movimientos !== 'undefined') {
-        window.movimientosEstudianteActual = movimientos;
-      }
+      window.movimientosEstudianteActual = movimientos;
+      renderizarMovimientos(movimientos);
 
-      // Mantiene el código interno para las operaciones posteriores,
-      // sin mostrarlo en pantalla.
+      // Mantiene internamente el código real del alumno.
+      // No se muestra ni se modifica.
       codigoEstudianteActual = est.codigo || codigoEstudianteActual;
+    }
+
+    function calcularSaldoDesdeMovimientos(movs) {
+      let ingresos = 0;
+      let egresos = 0;
+
+      (movs || []).forEach(function(m) {
+        const tipo = String(
+          m.tipo ||
+          m.tipoMovimiento ||
+          m.tipo_de_movimiento ||
+          m['Tipo de Movimiento'] ||
+          ''
+        ).trim().toUpperCase();
+
+        const monto = Number(
+          m.monto ??
+          m.montoLDS ??
+          m.importe ??
+          m.valor ??
+          m['Monto LDS'] ??
+          0
+        );
+
+        if (!Number.isFinite(monto)) return;
+
+        if (tipo === 'INGRESO' || tipo === 'BONIFICACION' || tipo === 'BONIFICACIÓN') {
+          ingresos += monto;
+        } else if (tipo === 'EGRESO' || tipo === 'GASTO') {
+          egresos += monto;
+        }
+      });
+
+      return ingresos - egresos;
     }
 
     document.addEventListener('keydown', function(event) {
@@ -559,7 +609,7 @@
       // Después de validar la clave, consulta la ficha real del alumno.
       // Usamos ESTUDIANTE, que en el backend apunta a la misma función de consulta.
       hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
-        const datos = (res && res.data) ? res.data : res;
+        const datos = (res && res.data) ? res.data : ((res && res.resultado) ? res.resultado : res);
         const est = (datos && (datos.estudiante || datos.alumno)) || {};
 
         const encontrado = !!(
@@ -585,13 +635,18 @@
             [est.grado, est.seccion].filter(Boolean).join(' ');
 
           const cuenta = (datos && datos.cuenta) || {};
-          const saldo = Number(
+          const movimientos =
+            (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || [];
+          const saldoBackend = Number(
             (datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ??
             (datos && datos.saldo !== undefined ? datos.saldo : undefined) ??
             cuenta.saldoActual ??
             cuenta.saldo ??
             0
           );
+          const saldo = movimientos.length > 0
+            ? calcularSaldoDesdeMovimientos(movimientos)
+            : saldoBackend;
           document.getElementById('saldoLDS').textContent =
             (Number.isFinite(saldo) ? saldo : 0).toFixed(2);
 
@@ -599,8 +654,6 @@
           document.getElementById('alumnoFoto').src =
             fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
 
-          const movimientos =
-            (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || [];
           renderizarMovimientos(movimientos);
           return;
         }
@@ -739,32 +792,63 @@
       });
     }
 
-    function renderizarMovimientos(movs) {
+    function renderizarMovimientos(movimientos) {
       const contenedor = document.getElementById('listaMovimientos');
+      if (!contenedor) return;
+
       contenedor.innerHTML = '';
 
-      if (!movs || movs.length === 0) {
-        contenedor.innerHTML = '<p style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px; font-size: 0.82rem;">Sin movimientos recientes.</p>';
+      if (!Array.isArray(movimientos) || movimientos.length === 0) {
+        contenedor.innerHTML = '<div class="sin-movimientos">Sin movimientos recientes.</div>';
         return;
       }
 
-      movs.forEach(m => {
-        const tipo = String(m.tipo || "").toUpperCase();
-        const monto = Number(m.monto || 0);
-        const positivo = tipo.includes('INGRESO') || monto >= 0;
+      movimientos.forEach(function(mov) {
+        const tipo = String(
+          mov.tipo ||
+          mov.tipoMovimiento ||
+          mov.tipo_de_movimiento ||
+          mov['Tipo de Movimiento'] ||
+          ''
+        ).toUpperCase();
 
-        const item = document.createElement('div');
-        item.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 10px; background: #f8fafc; border-left: 4px solid " + (positivo ? '#10b981' : '#f43f5e') + "; margin-bottom: 6px;";
-        item.innerHTML = `
-          <div>
-            <p style="font-weight: 700; font-size: 0.85rem; color: #0c1e30;">${m.concepto || 'Movimiento'}</p>
-            <p style="font-size: 0.72rem; color: #64748b;">${m.fecha || ''}</p>
+        const concepto =
+          mov.concepto ||
+          mov.descripcion ||
+          mov.detalle ||
+          'Movimiento';
+
+        const monto = Number(
+          mov.monto ??
+          mov.montoLDS ??
+          mov.importe ??
+          mov.valor ??
+          mov['Monto LDS'] ??
+          0
+        );
+
+        const fecha =
+          mov.fecha ||
+          mov.timestamp ||
+          mov.fechaHora ||
+          mov.fechaMovimiento ||
+          '';
+
+        const fila = document.createElement('div');
+        fila.className = 'movimiento-item';
+
+        const signo = tipo === 'EGRESO' || tipo === 'GASTO' ? '-' : '+';
+        fila.innerHTML = `
+          <div class="movimiento-info">
+            <strong>${concepto}</strong>
+            <span>${fecha}</span>
           </div>
-          <span style="font-weight: 800; font-size: 0.88rem; color: ${positivo ? '#10b981' : '#f43f5e'};">
-            ${positivo ? '+' : '-'}${Math.abs(monto).toFixed(2)} LDS
-          </span>
+          <div class="movimiento-monto ${signo === '-' ? 'egreso' : 'ingreso'}">
+            ${signo} ${Math.abs(monto).toFixed(2)} LDS
+          </div>
         `;
-        contenedor.appendChild(item);
+
+        contenedor.appendChild(fila);
       });
     }
   </script>
