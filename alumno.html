@@ -1,45 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal del Alumno - Banco Lasallista 360</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<!-- Header Principal -->
+<header class="bg-[#0b3c65] text-white py-4 shadow-md">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wider">BANCO LDS 360</h1>
+        <p class="text-xs sm:text-sm text-slate-200 mt-0.5">IEP LA SALLE DEL SUR</p>
+        <p class="text-xs text-amber-300 font-medium">Nuevo Sol Lasallista (LDS)</p>
+    </div>
+</header>
 
-    <!-- Header Institucional -->
-    <header class="bg-blue-900 text-white shadow-md">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-amber-400 text-blue-950 font-black px-3 py-2 rounded-lg text-xl shadow">LDS</div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-wide">BANCO LASALLISTA 360</h1>
-                    <p class="text-xs text-blue-200">Sistema Educativo Financiero y de Convivencia</p>
-                </div>
-            </div>
-            <div class="mt-3 sm:mt-0 bg-blue-800 px-4 py-1.5 rounded-full text-xs font-medium border border-blue-700">
-                Moneda Oficial: <span class="text-amber-300 font-semibold">Nuevo Sol Lasallista (LDS)</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Contenido Principal -->
-    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+<!-- Contenido Principal -->
+<main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+    
+    <!-- Identificación del estudiante -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <h2 class="text-base font-bold text-[#0b3c65] mb-4">Identificación del estudiante</h2>
         
-        <!-- Sección de Búsqueda / Acceso -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-2">Consulta de Estudiante</h2>
-            <p class="text-sm text-slate-500 mb-4">Selecciona o ingresa el código de estudiante registrado en la base de datos para ver tu estado de cuenta y perfil.</p>
-            
-            <div class="flex flex-col sm:flex-row gap-3">
-                <select id="studentSelect" class="flex-grow bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">-- Selecciona tu Nombre / Código --</option>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex gap-2">
+                <button class="bg-[#0b3c65] hover:bg-[#082a47] text-white px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm transition">
+                    📷 Escanear QR
+                </button>
+            </div>
+            <div class="flex-grow flex gap-2">
+                <select id="studentSelect" onchange="cargarEstudiante()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0b3c65]">
+                    <option value="">Ingresar código manualmente / Seleccionar...</option>
                     <option value="LDS-EST-001">LDS-EST-001 - DANY SMITH FRANCISCO CRIOLLO</option>
                     <option value="LDS-EST-002">LDS-EST-002 - ADAM STUARD PINEDA ELGUERA</option>
                     <option value="LDS-EST-003">LDS-EST-003 - CAMILA PIZARRO MENDOZA</option>
@@ -48,225 +31,288 @@
                     <option value="LDS-EST-006">LDS-EST-006 - VASCO CARDENAS QUISPE</option>
                     <option value="LDS-EST-008">LDS-EST-008 - MARCHELO PIZARRO MENDOZA</option>
                 </select>
-                <button onclick="consultarAlumno()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl text-sm transition shadow-sm">
-                    Consultar Saldo
-                </button>
             </div>
         </div>
+    </section>
 
-        <!-- Panel de Información del Alumno (Oculto inicialmente hasta buscar) -->
-        <div id="studentPanel" class="hidden space-y-6">
-            <!-- Tarjeta de Perfil y Saldo -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Foto y Datos Básicos -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 text-center flex flex-col items-center">
-                    <img id="studentPhoto" src="" alt="Foto Alumno" class="w-28 h-28 rounded-full object-cover border-4 border-slate-100 shadow-md mb-4 bg-slate-200">
-                    <h3 id="studentName" class="font-bold text-lg text-slate-900">NOMBRE DEL ALUMNO</h3>
-                    <span id="studentCode" class="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full mt-1">LDS-EST-00X</span>
-                    <div class="w-full border-t border-slate-100 my-4"></div>
-                    <div class="text-xs text-slate-500 space-y-1 text-left w-full">
-                        <p><strong>Grado:</strong> <span id="studentGrade">-</span></p>
-                        <p><strong>Sección:</strong> <span id="studentSection">-</span></p>
-                        <p><strong>Teléfono:</strong> <span id="studentPhone">-</span></p>
+    <!-- Tarjeta de Datos del Estudiante -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h2 class="text-base font-bold text-[#0b3c65] mb-4">Datos del estudiante</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+            
+            <!-- Foto del Estudiante -->
+            <div class="flex justify-center md:justify-start">
+                <img id="studentPhoto" src="https://via.placeholder.com/200x240/e2e8f0/64748b?text=FOTO" alt="Foto Alumno" class="w-44 h-52 object-cover rounded-2xl border-2 border-slate-200 shadow-sm bg-slate-50">
+            </div>
+
+            <!-- Cuadrícula de Datos -->
+            <div class="md:col-span-3 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Código</span>
+                        <span id="txtCodigo" class="text-sm font-semibold text-slate-800 mt-0.5 block">-</span>
+                    </div>
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100 sm:col-span-2">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Estudiante</span>
+                        <span id="txtNombre" class="text-sm font-semibold text-slate-800 mt-0.5 block">-</span>
                     </div>
                 </div>
 
-                <!-- Tarjeta de Balance Financiero -->
-                <div class="md:col-span-2 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl shadow-md text-white p-6 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xs uppercase tracking-wider text-blue-300 font-medium">Saldo Actual Disponible</p>
-                                <h4 class="text-4xl font-extrabold mt-1 text-amber-300" id="studentBalance">0.00 LDS</h4>
-                            </div>
-                            <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">Cuenta Activa</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-blue-800/60">
-                            <div>
-                                <p class="text-xs text-blue-300">Total Ingresos Registrados</p>
-                                <p class="text-xl font-bold mt-0.5 text-white" id="studentIncome">0 LDS</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-blue-300">Sueldo Base Mensual Fijo</p>
-                                <p class="text-xl font-bold mt-0.5 text-white">1,130 LDS</p>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Grado</span>
+                        <span id="txtGrado" class="text-sm font-semibold text-slate-800 mt-0.5 block">-</span>
                     </div>
-                    <div class="mt-6 bg-blue-950/40 p-3 rounded-xl text-xs text-blue-200 flex items-center justify-between">
-                        <span>💡 Estado sincronizado con el Banco Lasallista 360</span>
-                        <span class="text-amber-300 font-semibold">Regulado por Tutoría</span>
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Sección</span>
+                        <span id="txtSeccion" class="text-sm font-semibold text-slate-800 mt-0.5 block">-</span>
                     </div>
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Docente / Responsable</span>
+                        <span id="txtDocente" class="text-sm font-semibold text-slate-800 mt-0.5 block">-</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-slate-50/70 p-3.5 rounded-xl border border-slate-100">
+                        <span class="block text-[11px] font-bold text-[#0b3c65] uppercase tracking-wide">Monto base</span>
+                        <span id="txtMontoBase" class="text-sm font-semibold text-slate-800 mt-0.5 block">1130.00 LDS</span>
+                    </div>
+                </div>
+
+                <!-- Saldo Actual Destacado -->
+                <div class="bg-[#f0f6fc] border border-[#d0e1f9] rounded-2xl p-4 text-center">
+                    <span class="text-xs font-semibold text-[#0b3c65] uppercase tracking-wider">Saldo actual</span>
+                    <div id="txtSaldo" class="text-3xl font-extrabold text-[#0b3c65] mt-0.5">0.00 LDS</div>
                 </div>
             </div>
 
-            <!-- Historial de Últimos Movimientos -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h3 class="font-bold text-base text-slate-900 mb-4">Últimos Movimientos en el Aula</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="bg-slate-50 text-slate-700 uppercase text-xs">
-                            <tr>
-                                <th class="px-4 py-3 rounded-l-lg">Concepto / Motivo</th>
-                                <th class="px-4 py-3">Tipo</th>
-                                <th class="px-4 py-3 text-right rounded-r-lg">Monto LDS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="movementsTableBody" class="divide-y divide-slate-100">
-                            <!-- Inyectado por JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
+    </section>
 
-        <!-- Estado por defecto antes de buscar -->
-        <div id="initialState" class="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">🏦</div>
-            <h3 class="text-base font-semibold text-slate-800">Selecciona tu usuario para acceder al panel</h3>
-            <p class="text-sm text-slate-500 mt-1">Tus datos financieros y puntajes de convivencia aparecerán aquí de forma automática.</p>
+    <!-- Operación / Acciones -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <h2 class="text-base font-bold text-[#0b3c65] mb-4">Operación</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button onclick="mostrarAccion('cobrar')" class="bg-[#107c41] hover:bg-[#0e6b37] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2">
+                COBRAR
+            </button>
+            <button onclick="mostrarAccion('pagar')" class="bg-[#e83137] hover:bg-[#d0292e] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2">
+                PAGAR
+            </button>
+            <button onclick="mostrarMovimientos()" class="bg-[#0b3c65] hover:bg-[#082a47] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2">
+                MOVIMIENTOS
+            </button>
         </div>
+    </section>
 
-    </main>
+    <!-- Panel de Historial de Movimientos (Desplegable) -->
+    <div id="modalMovimientos" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mt-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800 text-base">Historial de Movimientos Registrados</h3>
+            <button onclick="cerrarMovimientos()" class="text-xs text-slate-400 hover:text-slate-600 font-semibold">✕ Cerrar</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 uppercase text-xs">
+                    <tr>
+                        <th class="px-4 py-2.5 rounded-l-lg">Concepto / Motivo</th>
+                        <th class="px-4 py-2.5">Tipo</th>
+                        <th class="px-4 py-2.5 text-right rounded-r-lg">Monto LDS</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaMovimientosBody" class="divide-y divide-slate-100">
+                    <!-- Inyectado dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
-        <p>&copy; 2026 Banco Lasallista 360 &bull; Institución Educativa Privada La Salle del Sur</p>
-    </footer>
+</main>
 
-    <!-- Script de Datos y Lógica -->
-    <script>
-        // Base de datos sincronizada desde tus hojas ESTUDIANTES y CUENTAS
-        const alumnosData = {
-            "LDS-EST-001": {
-                nombre: "DANY SMITH FRANCISCO CRIOLLO",
-                grado: "TERCERO",
-                seccion: "LOS DIVERGENTES",
-                telefono: "987348365",
-                saldo: "2,260 LDS",
-                ingresos: "2,260 LDS",
-                foto: "https://drive.google.com/uc?export=view&id=1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,130 LDS" },
-                    { concepto: "Bono Participación destacada en clase", tipo: "INGRESO", monto: "+1,130 LDS" }
-                ]
-            },
-            "LDS-EST-002": {
-                nombre: "ADAM STUARD PINEDA ELGUERA",
-                grado: "QUINTO",
-                seccion: "LOS TECNOLOGICOS",
-                telefono: "941023030",
-                saldo: "2,260 LDS",
-                ingresos: "2,260 LDS",
-                foto: "https://drive.google.com/uc?export=view&id=1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,130 LDS" },
-                    { concepto: "Bono Puntualidad y asistencia perfecta", tipo: "INGRESO", monto: "+1,130 LDS" }
-                ]
-            },
-            "LDS-EST-003": {
-                nombre: "CAMILA PIZARRO MENDOZA",
-                grado: "SEGUNDO",
-                seccion: "LOS AMABLES",
-                telefono: "915933631",
-                saldo: "3,390 LDS",
-                ingresos: "3,390 LDS",
-                foto: "https://drive.google.com/uc?export=view&id=1VaG4GFgdMIxYBIn0DcjFDoUf5yd4LvqA",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,130 LDS" },
-                    { concepto: "Bono por ayuda solidaria / Compañerismo", tipo: "INGRESO", monto: "+2,260 LDS" }
-                ]
-            },
-            "LDS-EST-004": {
-                nombre: "ANA PAULA QUISPE FLORES",
-                grado: "QUINTO",
-                seccion: "LOS TECNOLOGICOS",
-                telefono: "927297915",
-                saldo: "2,260 LDS",
-                ingresos: "2,260 LDS",
-                foto: "https://drive.google.com/uc?export=view&id=19KV30WDkKReEo5vBbx9ia4bebrPpyWPw",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,130 LDS" },
-                    { concepto: "Bono Creatividad e innovación", tipo: "INGRESO", monto: "+1,130 LDS" }
-                ]
-            },
-            "LDS-EST-005": {
-                nombre: "MARCOS MANUEL ROMERO SIESQUEN",
-                grado: "PRIMERO",
-                seccion: "LOS OBSERVADORES",
-                telefono: "983085095",
-                saldo: "2,260 LDS",
-                ingresos: "2,260 LDS",
-                foto: "https://drive.google.com/uc?export=view&id=1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,130 LDS" },
-                    { concepto: "Bono Apoyo destacado en limpieza", tipo: "INGRESO", monto: "+1,130 LDS" }
-                ]
-            },
-            "LDS-EST-006": {
-                nombre: "VASCO CARDENAS QUISPE",
-                grado: "QUINTO",
-                seccion: "LOS TECNOLOGICOS",
-                telefono: "SIN REGISTRO",
-                saldo: "1,600 LDS",
-                ingresos: "1,600 LDS",
-                foto: "https://via.placeholder.com/150/003366/FFFFFF?text=LDS",
-                movimientos: [
-                    { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1,600 LDS" }
-                ]
-            },
-            "LDS-EST-008": {
-                nombre: "MARCHELO PIZARRO MENDOZA",
-                grado: "SECUNDARIA",
-                seccion: "LOS VOLADORES",
-                telefono: "SIN REGISTRO",
-                saldo: "1,600 LDS",
-                ingresos: "1,600 LDS",
-                foto: "https://via.placeholder.com/150/003366/FFFFFF?text=LDS",
-                movimientos: [
-                    { concepto: "Catequesis / Bono Institucional", tipo: "INGRESO", monto: "+1,600 LDS" }
-                ]
-            }
-        };
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-500">
+    <p>&copy; 2026 Banco Lasallista 360 &bull; Sistema Educativo Financiero</p>
+</footer>
 
-        function consultarAlumno() {
-            const selectVal = document.getElementById('studentSelect').value;
-            const panel = document.getElementById('studentPanel');
-            const initialState = document.getElementById('initialState');
-
-            if (!selectVal || !alumnosData[selectVal]) {
-                panel.classList.add('hidden');
-                initialState.classList.remove('hidden');
-                return;
-            }
-
-            const alumno = alumnosData[selectVal];
-
-            // Rellenar datos en pantalla
-            document.getElementById('studentName').innerText = alumno.nombre;
-            document.getElementById('studentCode').innerText = selectVal;
-            document.getElementById('studentGrade').innerText = alumno.grado;
-            document.getElementById('studentSection').innerText = alumno.seccion;
-            document.getElementById('studentPhone').innerText = alumno.telefono;
-            document.getElementById('studentBalance').innerText = alumno.saldo;
-            document.getElementById('studentIncome').innerText = alumno.ingresos;
-            document.getElementById('studentPhoto').src = alumno.foto;
-
-            // Rellenar tabla de movimientos
-            const tbody = document.getElementById('movementsTableBody');
-            tbody.innerHTML = '';
-            alumno.movimientos.forEach(mov => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-slate-900">${mov.concepto}</td>
-                    <td class="px-4 py-3"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">${mov.tipo}</span></td>
-                    <td class="px-4 py-3 text-right font-semibold text-emerald-600">${mov.monto}</td>
-                `;
-                tbody.appendChild(rows = tr);
-            });
-
-            initialState.classList.add('hidden');
-            panel.classList.remove('hidden');
+<!-- Lógica JavaScript -->
+<script>
+    const baseDatosAlumnos = {
+        "LDS-EST-001": {
+            codigo: "LDS-EST-001",
+            nombre: "DANY SMITH FRANCISCO CRIOLLO",
+            grado: "TERCERO",
+            seccion: "LOS DIVERGENTES",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "90.00 LDS",
+            foto: "https://drive.google.com/uc?export=view&id=1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1130.00 LDS" },
+                { concepto: "Pago Compra en la tienda escolar / cafetín", tipo: "PAGO", monto: "-1040.00 LDS" }
+            ]
+        },
+        "LDS-EST-002": {
+            codigo: "LDS-EST-002",
+            nombre: "ADAM STUARD PINEDA ELGUERA",
+            grado: "QUINTO",
+            seccion: "LOS TECNOLOGICOS",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "2260.00 LDS",
+            foto: "https://drive.google.com/uc?export=view&id=1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1130.00 LDS" },
+                { concepto: "Bono Puntualidad y asistencia perfecta", tipo: "INGRESO", monto: "+1130.00 LDS" }
+            ]
+        },
+        "LDS-EST-003": {
+            codigo: "LDS-EST-003",
+            nombre: "CAMILA PIZARRO MENDOZA",
+            grado: "SEGUNDO",
+            seccion: "LOS AMABLES",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "3390.00 LDS",
+            foto: "https://drive.google.com/uc?export=view&id=1VaG4GFgdMIxYBIn0DcjFDoUf5yd4LvqA",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1130.00 LDS" },
+                { concepto: "Bono por ayuda solidaria", tipo: "INGRESO", monto: "+2260.00 LDS" }
+            ]
+        },
+        "LDS-EST-004": {
+            codigo: "LDS-EST-004",
+            nombre: "ANA PAULA QUISPE FLORES",
+            grado: "QUINTO",
+            seccion: "LOS TECNOLOGICOS",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "2260.00 LDS",
+            foto: "https://drive.google.com/uc?export=view&id=19KV30WDkKReEo5vBbx9ia4bebrPpyWPw",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1130.00 LDS" },
+                { concepto: "Bono Creatividad e innovación", tipo: "INGRESO", monto: "+1130.00 LDS" }
+            ]
+        },
+        "LDS-EST-005": {
+            codigo: "LDS-EST-005",
+            nombre: "MARCOS MANUEL ROMERO SIESQUEN",
+            grado: "PRIMERO",
+            seccion: "LOS OBSERVADORES",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "2260.00 LDS",
+            foto: "https://drive.google.com/uc?export=view&id=1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1130.00 LDS" },
+                { concepto: "Bono Apoyo destacado en limpieza", tipo: "INGRESO", monto: "+1130.00 LDS" }
+            ]
+        },
+        "LDS-EST-006": {
+            codigo: "LDS-EST-006",
+            nombre: "VASCO CARDENAS QUISPE",
+            grado: "QUINTO",
+            seccion: "LOS TECNOLOGICOS",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "1600.00 LDS",
+            foto: "https://via.placeholder.com/200x240/0b3c65/FFFFFF?text=LDS",
+            movimientos: [
+                { concepto: "Ingreso Sueldo Base Mensual", tipo: "INGRESO", monto: "+1600.00 LDS" }
+            ]
+        },
+        "LDS-EST-008": {
+            codigo: "LDS-EST-008",
+            nombre: "MARCHELO PIZARRO MENDOZA",
+            grado: "SECUNDARIA",
+            seccion: "LOS VOLADORES",
+            docente: "MISS LILY MELO AZAÑERO",
+            montoBase: "1130.00 LDS",
+            saldo: "1600.00 LDS",
+            foto: "https://via.placeholder.com/200x240/0b3c65/FFFFFF?text=LDS",
+            movimientos: [
+                { concepto: "Catequesis / Bono Institucional", tipo: "INGRESO", monto: "+1600.00 LDS" }
+            ]
         }
-    </script>
-</body>
-</html>
+    };
+
+    let alumnoActual = null;
+
+    function cargarEstudiante() {
+        const codigo = document.getElementById('studentSelect').value;
+        if (!codigo || !baseDatosAlumnos[codigo]) {
+            document.getElementById('txtCodigo').innerText = "-";
+            document.getElementById('txtNombre').innerText = "-";
+            document.getElementById('txtGrado').innerText = "-";
+            document.getElementById('txtSeccion').innerText = "-";
+            document.getElementById('txtDocente').innerText = "-";
+            document.getElementById('txtSaldo').innerText = "0.00 LDS";
+            document.getElementById('studentPhoto').src = "https://via.placeholder.com/200x240/e2e8f0/64748b?text=FOTO";
+            alumnoActual = null;
+            return;
+        }
+
+        const al = baseDatosAlumnos[codigo];
+        alumnoActual = al;
+
+        document.getElementById('txtCodigo').innerText = al.codigo;
+        document.getElementById('txtNombre').innerText = al.nombre;
+        document.getElementById('txtGrado').innerText = al.grado;
+        document.getElementById('txtSeccion').innerText = al.seccion;
+        document.getElementById('txtDocente').innerText = al.docente;
+        document.getElementById('txtMontoBase').innerText = al.montoBase;
+        document.getElementById('txtSaldo').innerText = al.saldo;
+        document.getElementById('studentPhoto').src = al.foto;
+
+        // Ocultar movimientos si cambia de alumno
+        document.getElementById('modalMovimientos').classList.add('hidden');
+    }
+
+    function mostrarAccion(tipo) {
+        if (!alumnoActual) {
+            alert("Por favor, selecciona primero un estudiante del menú desplegable.");
+            return;
+        }
+        if (tipo === 'cobrar') {
+            alert(`Registrando operación de COBRO para ${alumnoActual.nombre}`);
+        } else if (tipo === 'pagar') {
+            alert(`Registrando operación de PAGO para ${alumnoActual.nombre}`);
+        }
+    }
+
+    function mostrarMovimientos() {
+        if (!alumnoActual) {
+            alert("Por favor, selecciona primero un estudiante del menú desplegable.");
+            return;
+        }
+
+        const tbody = document.getElementById('tablaMovimientosBody');
+        tbody.innerHTML = '';
+        
+        alumnoActual.movimientos.forEach(mov => {
+            const tr = document.createElement('tr');
+            const colorMonto = mov.tipo === 'INGRESO' ? 'text-emerald-600' : 'text-rose-600';
+            tr.innerHTML = `
+                <td class="px-4 py-3 font-medium text-slate-800">${mov.concepto}</td>
+                <td class="px-4 py-3"><span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-md font-semibold">${mov.tipo}</span></td>
+                <td class="px-4 py-3 text-right font-bold ${colorMonto}">${mov.monto}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById('modalMovimientos').classList.remove('hidden');
+        document.getElementById('modalMovimientos').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cerrarMovimientos() {
+        document.getElementById('modalMovimientos').classList.add('hidden');
+    }
+
+    // Seleccionar por defecto el primer alumno al cargar (LDS-EST-001) para demostración visual rápida
+    window.onload = function() {
+        document.getElementById('studentSelect').value = "LDS-EST-001";
+        cargarEstudiante();
+    };
+</script>
