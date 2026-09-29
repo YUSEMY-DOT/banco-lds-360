@@ -1,96 +1,262 @@
-<!DOCTYPE html>
+from pathlib import Path
+import base64, html
+
+img_path = Path("/mnt/data/1a5ec02a-789b-49f9-bf66-fdfc29d6e0ee.png")
+data = base64.b64encode(img_path.read_bytes()).decode("ascii")
+
+html_doc = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banco LDS 360 - IEP La Salle del Sur</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Iconos de FontAwesome para los botones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360</title>
+
+<!-- Mantiene la imagen exactamente como fue proporcionada.
+     Los botones transparentes se colocan encima sin alterar el diseño. -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<style>
+    * {{
+        box-sizing: border-box;
+    }}
+
+    html, body {{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100%;
+        background: #061a32;
+    }}
+
+    body {{
+        overflow-x: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+    }}
+
+    .pantalla {{
+        position: relative;
+        width: 100%;
+        max-width: 1671px;
+        margin: 0 auto;
+        aspect-ratio: 1671 / 941;
+        overflow: hidden;
+    }}
+
+    .pantalla > img.fondo {{
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: fill;
+        user-select: none;
+        -webkit-user-drag: none;
+    }}
+
+    /* Zonas transparentes: NO agregan colores ni efectos a la imagen. */
+    .zona {{
+        position: absolute;
+        display: block;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        z-index: 5;
+        outline: none;
+    }}
+
+    .zona:focus-visible {{
+        outline: 3px solid rgba(255,255,255,.8);
+        border-radius: 20px;
+    }}
+
+    /* Coordenadas calculadas sobre la imagen original 1671 x 941 */
+    .zona-qr {{
+        left: 12.7%;
+        top: 63.6%;
+        width: 21.0%;
+        height: 10.7%;
+    }}
+
+    .zona-codigo {{
+        left: 54.5%;
+        top: 63.5%;
+        width: 16.1%;
+        height: 10.8%;
+    }}
+
+    .zona-tienda {{
+        left: 12.6%;
+        top: 75.9%;
+        width: 18.3%;
+        height: 11.9%;
+    }}
+
+    .zona-padres {{
+        left: 31.5%;
+        top: 75.8%;
+        width: 20.0%;
+        height: 11.9%;
+    }}
+
+    .zona-manual {{
+        left: 52.4%;
+        top: 75.8%;
+        width: 18.4%;
+        height: 11.9%;
+    }}
+
+    .zona-admin {{
+        left: 80.8%;
+        top: 1.8%;
+        width: 15.0%;
+        height: 6.0%;
+    }}
+
+    /* Modal QR: solo aparece al pulsar Escanea QR. */
+    #qrScannerModal {{
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 26, 50, .96);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }}
+
+    .scanner-box {{
+        width: min(390px, 94vw);
+        background: #0c1e30;
+        border: 3px solid #f1c40f;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    }}
+
+    #reader {{
+        width: 100% !important;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }}
+
+    .btn-cerrar-camara {{
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 20px;
+        background: #e11d48;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }}
+</style>
 </head>
+
 <body>
 
-    <!-- Header / Barra superior -->
-    <header class="header">
-        <div class="logo-container">
-            <div class="escudo">⭐</div>
-            <div class="colegio-info">
-                <span class="colegio-nombre">IEP LA SALLE DEL SUR</span>
-                <span class="colegio-lema">Formamos personas íntegras</span>
-            </div>
-        </div>
-        <div class="admin-button">
-            <a href="admin.html"><i class="fa-solid fa-lock"></i> Administrador</a>
-        </div>
-    </header>
+<div class="pantalla">
 
-    <!-- Contenido Principal -->
-    <main class="main-container">
-        
-        <!-- Título del Banco -->
-        <section class="bank-title-section">
-            <div class="bank-pill">BANCO</div>
-            <h1>LDS 360</h1>
-            <p class="subtitle">Sistema Financiero Educativo y de Convivencia Escolar</p>
-        </section>
+    <!-- IMAGEN ORIGINAL, SIN MODIFICACIONES -->
+    <img
+        class="fondo"
+        src="data:image/png;base64,{data}"
+        alt="BANCO LDS 360 - IEP La Salle del Sur"
+    >
 
-        <!-- Botones de Acción Principal (Fila Superior) -->
-        <div class="action-row">
-            <a href="escaner.html" class="action-btn qr-btn">
-                <div class="icon-box"><i class="fa-solid fa-qrcode"></i></div>
-                <div class="btn-text">
-                    <strong>Escanea QR</strong>
-                    <span>Presiona aquí para leer tu código</span>
-                </div>
-                <div class="arrow-box"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
+    <!-- Botones transparentes sobre la imagen -->
+    <button class="zona zona-qr" aria-label="Escanea QR" onclick="abrirCamaraQR()"></button>
 
-            <a href="codigo.html" class="action-btn code-btn">
-                <div class="icon-box"><i class="fa-solid fa-calculator"></i></div>
-                <div class="btn-text">
-                    <strong>Ingresa código</strong>
-                    <span>Si no puedes escanear, digítalo.</span>
-                </div>
-                <div class="arrow-box"><i class="fa-solid fa-chevron-right"></i></div>
-            </a>
-        </div>
+    <button class="zona zona-codigo" aria-label="Ingresa código" onclick="ingresarCodigoManual()"></button>
 
-        <!-- Botones de Enlace (Fila Inferior) -->
-        <div class="links-row">
-            <a href="tienda.html" class="sub-btn store">
-                <i class="fa-solid fa-store"></i>
-                <div class="sub-text">
-                    <strong>Tienda escolar</strong>
-                    <span>Canjea tus LDS Coins</span>
-                </div>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+    <a class="zona zona-tienda" href="tienda.html" aria-label="Tienda escolar"></a>
 
-            <a href="padres.html" class="sub-btn parents">
-                <i class="fa-solid fa-users"></i>
-                <div class="sub-text">
-                    <strong>Padres</strong>
-                    <span>Información y acompañamiento</span>
-                </div>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+    <a class="zona zona-padres" href="padres.html" aria-label="Padres"></a>
 
-            <a href="manual.html" class="sub-btn manual">
-                <i class="fa-solid fa-book"></i>
-                <div class="sub-text">
-                    <strong>Manual de sistema</strong>
-                    <span>Guía del banco, guía de uso del banco</span>
-                </div>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
-        </div>
+    <a class="zona zona-manual" href="manual.html" aria-label="Manual del sistema"></a>
 
-    </main>
+    <a class="zona zona-admin" href="admin.html" aria-label="Administrador"></a>
 
-    <!-- Pie de página -->
-    <footer class="footer">
-        <p>KIDSWORK LS — IEP La Salle del Sur — Todos los derechos reservados</p>
-    </footer>
+</div>
+
+<!-- Cámara QR -->
+<div id="qrScannerModal">
+    <div class="scanner-box">
+        <div id="reader"></div>
+        <button class="btn-cerrar-camara" onclick="cerrarCamaraQR()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+let html5QrCode = null;
+
+function abrirCamaraQR() {{
+    const modal = document.getElementById("qrScannerModal");
+    modal.style.display = "flex";
+
+    if (!html5QrCode) {{
+        html5QrCode = new Html5Qrcode("reader");
+    }}
+
+    html5QrCode.start(
+        {{ facingMode: "environment" }},
+        {{ fps: 10, qrbox: {{ width: 220, height: 220 }} }},
+        (decodedText) => {{
+            let codigoEncontrado = decodedText;
+
+            try {{
+                if (decodedText.includes("?")) {{
+                    const urlObj = new URL(decodedText);
+                    codigoEncontrado =
+                        urlObj.searchParams.get("codigo") || decodedText;
+                }}
+            }} catch (e) {{}}
+
+            cerrarCamaraQR();
+
+            window.location.href =
+                `alumno.html?codigo=${{encodeURIComponent(
+                    codigoEncontrado.trim().toUpperCase()
+                )}}`;
+        }},
+        () => {{}}
+    ).catch(() => {{
+        alert("No se pudo iniciar la cámara. Verifique los permisos.");
+        cerrarCamaraQR();
+    }});
+}}
+
+function ingresarCodigoManual() {{
+    const codigo = prompt("Ingresa el código del estudiante:");
+
+    if (!codigo || codigo.trim() === "") {{
+        return;
+    }}
+
+    window.location.href =
+        `alumno.html?codigo=${{encodeURIComponent(
+            codigo.trim().toUpperCase()
+        )}}&modo=manual`;
+}}
+
+function cerrarCamaraQR() {{
+    const modal = document.getElementById("qrScannerModal");
+    modal.style.display = "none";
+
+    if (html5QrCode && html5QrCode.isScanning) {{
+        html5QrCode.stop().then(() => {{}}).catch(() => {{}});
+    }}
+}}
+</script>
 
 </body>
 </html>
+"""
+
+out = "/mnt/data/index_BANCO_LDS360_IMAGEN_EXACTA.html"
+Path(out).write_text(html_doc, encoding="utf-8")
+print(out)
