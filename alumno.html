@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BANCO LDS 360 - IEP LA SALLE DEL SUR</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +13,6 @@
       display: flex;
       flex-direction: column;
       color: #ffffff;
-      overflow-x: hidden;
     }
     header {
       background: #08121e;
@@ -68,43 +67,39 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
-    /* COLUMNA IZQUIERDA: TARJETA DEL ESTUDIANTE (ALEGRE Y DIDÁCTICA) */
+    /* COLUMNA IZQUIERDA: TARJETA DEL ESTUDIANTE (ESTILO ORIGINAL RESTAURADO Y FOTO AMPLIADA) */
     .saldo-card {
-      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #2563eb 100%);
+      background: linear-gradient(135deg, #111827 0%, #1e3a8a 100%);
       color: #ffffff;
       border-radius: 28px;
       padding: 34px 30px;
-      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.4);
-      border: 3px solid #fbbf24;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border: 3px solid #f59e0b;
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
     .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-    .saldo-title { font-size: 0.8rem; color: #fef08a; font-weight: 800; letter-spacing: 1.2px; }
-    .saldo-amount { font-size: 2.6rem; font-weight: 800; margin-top: 8px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .saldo-title { font-size: 0.8rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
+    .saldo-amount { font-size: 2.6rem; font-weight: 800; margin-top: 8px; color: #ffffff; }
     
-    /* FOTO MÁS GRANDE Y DESTACADA */
+    /* FOTO AMPLIADA SOLICITADA */
     .avatar-img { 
-      width: 180px; 
-      height: 180px; 
+      width: 175px; 
+      height: 175px; 
       border-radius: 50%; 
-      border: 5px solid #fbbf24; 
+      border: 5px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
       flex-shrink: 0;
     }
-    @media (max-width: 480px) {
-      .avatar-img { width: 130px; height: 130px; }
-      .saldo-amount { font-size: 2rem; }
-    }
     
-    .alumno-info-box { margin-top: 22px; background: rgba(0, 0, 0, 0.12); padding: 14px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); }
+    .alumno-info-box { margin-top: 22px; }
     .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; cursor: pointer; }
-    .alumno-nombre:hover { color: #fef08a; text-decoration: underline; }
-    .alumno-grado { font-size: 0.95rem; color: #e0e7ff; font-weight: 700; margin-top: 6px; }
+    .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
+    .alumno-grado { font-size: 0.95rem; color: #cbd5e1; font-weight: 700; margin-top: 6px; }
     
     .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
     .action-btn { 
@@ -112,8 +107,8 @@
       box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: transform 0.2s, box-shadow 0.2s; 
     }
     .action-btn:hover { transform: translateY(-2px); }
-    .btn-pagar { background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%); border: 2px solid #fda4af; }
-    .btn-movs { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); border: 2px solid #ddd6fe; }
+    .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border: 2px solid #fb7185; }
+    .btn-movs { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border: 2px solid #c084fc; }
 
     /* COLUMNA DERECHA: PANELES (REGISTRO / HISTORIAL) */
     .sub-card { 
@@ -135,23 +130,22 @@
     }
     .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; }
     
-    /* BOTÓN DE IMPRIMIR ESTILIZADO */
+    /* BOTÓN DE IMPRIMIR INTEGRADO CON ESTILO INSTITUCIONAL */
     .btn-imprimir {
-      background: #0ea5e9;
+      background: #1e3a8a;
       color: #ffffff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 14px;
-      font-size: 0.8rem;
+      border: 2px solid #f59e0b;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 4px 12px rgba(14,165,233,0.35);
       transition: background 0.2s;
     }
-    .btn-imprimir:hover { background: #0284c7; }
+    .btn-imprimir:hover { background: #0c1e30; }
 
     .form-scroll-area { max-height: 380px; overflow-y: auto; padding-right: 6px; }
     .form-group { margin-bottom: 16px; text-align: left; }
@@ -175,7 +169,6 @@
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
     }
 
-    /* CONFIGURACIÓN DE IMPRESIÓN LIMPIA */
     @media print {
       body { background: #ffffff; color: #000000; }
       header, .actions-grid, .inicio-btn, .btn-imprimir, footer, .sub-card:has(#seccionOperacion:not(.hidden)) { display: none !important; }
@@ -299,11 +292,9 @@
   </footer>
 
   <script>
-    // URL OFICIAL DE SU GOOGLE APPS SCRIPT
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
-    // SÍNTESIS DE VOZ MELODIOSA Y CÁLIDA
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
