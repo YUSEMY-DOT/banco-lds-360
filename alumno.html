@@ -153,7 +153,7 @@
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a href="index.html" class="inicio-btn">← INICIO</a>
+    <a href="index.html" class="inicio-btn" onclick="hablarTextoVoz('Regresando al inicio')">← INICIO</a>
   </header>
 
   <main>
@@ -254,6 +254,37 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
+    // SÍNTESIS DE VOZ MELODIOSA Y CÁLIDA
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.1;
+
+        function ejecutarVoz() {
+          const voces = window.speechSynthesis.getVoices();
+          let vozIdeal = voces.find(v => v.lang.includes('es') && (
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('google español') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('elena') || 
+            v.name.toLowerCase().includes('monica')
+          ));
+          if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
+          if (vozIdeal) utterance.voice = vozIdeal;
+          window.speechSynthesis.speak(utterance);
+        }
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = ejecutarVoz;
+        } else {
+          ejecutarVoz();
+        }
+      }
+    }
+
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       let respuestaEnviada = false;
@@ -344,6 +375,11 @@
       const codigoRecibido = parametros.get('codigo') || 'LDS-EST-001';
       codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
       consultarDatosEstudiante(codigoEstudianteActual);
+
+      // Activando la voz de bienvenida al cargar la cuenta del alumno
+      setTimeout(() => {
+        hablarTextoVoz("Cuenta del estudiante cargada. Revisa tus movimientos y ahorros en el Banco L.D.S. 360.");
+      }, 1000);
     });
 
     function cambiarCodigoManual() {
@@ -353,6 +389,7 @@
         window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoLimpio));
         codigoEstudianteActual = codigoLimpio;
         consultarDatosEstudiante(codigoLimpio);
+        hablarTextoVoz("Buscando estudiante.");
       }
     }
 
@@ -392,15 +429,18 @@
           document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
 
           renderizarMovimientos(movimientos);
+          hablarTextoVoz("Bienvenido " + nombreCompleto);
           return;
         }
 
         document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
         document.getElementById('alumnoGrado').textContent = "CÓDIGO BUSCADO: " + codigo;
+        hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
       });
     }
 
     function accionBotonPagar() {
+      hablarTextoVoz("Registrar pago o gasto");
       document.getElementById('seccionOperacion').classList.remove('hidden');
       document.getElementById('seccionMovimientos').classList.add('hidden');
       document.getElementById('tituloOperacion').textContent = "💸 REGISTRAR PAGO O GASTO";
@@ -437,6 +477,7 @@
     }
 
     function accionBotonMovimientos() {
+      hablarTextoVoz("Historial de movimientos");
       document.getElementById('seccionOperacion').classList.add('hidden');
       document.getElementById('seccionMovimientos').classList.remove('hidden');
     }
@@ -452,11 +493,13 @@
       if (!cat || !con || !monto || !resp) {
         msg.style.color = "#dc2626";
         msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
+        hablarTextoVoz("Complete todos los campos obligatorios.");
         return;
       }
 
       msg.style.color = "#2563eb";
       msg.textContent = "REGISTRANDO...";
+      hablarTextoVoz("Registrando transacción.");
 
       hacerPeticionJSONP({
         accion: 'REGISTRAR_TRANSACCION',
@@ -470,6 +513,7 @@
         if (res && (res.success || res.ok)) {
           msg.style.color = "#059669";
           msg.textContent = "¡REGISTRADO CON ÉXITO!";
+          hablarTextoVoz("Registrado con éxito.");
 
           hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigoEstudianteActual }, function(data) {
             if (data) {
@@ -486,6 +530,7 @@
         } else {
           msg.style.color = "#dc2626";
           msg.textContent = res.mensaje || "ERROR AL REGISTRAR.";
+          hablarTextoVoz("Error al registrar.");
         }
       });
     }
@@ -519,6 +564,7 @@
             ${signo} ${Math.abs(monto).toFixed(2)} LDS
           </div>
         `;
+        contenedor.appendChild(x = fila);
         contenedor.appendChild(fila);
       });
     }
