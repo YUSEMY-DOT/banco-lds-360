@@ -426,6 +426,28 @@
       }
     }
 
+    // PETICIÓN ULTRA RÁPIDA MEDIANTE FETCH DIRECTO CON RESPALDO JSONP
+    async function hacerPeticionFetch(parametros) {
+      let url = SCRIPT_URL + '?';
+      const params = [];
+      for (let clave in parametros) {
+        if (parametros[clave] !== undefined && parametros[clave] !== null) {
+          params.push(encodeURIComponent(clave) + '=' + encodeURIComponent(parametros[clave]));
+        }
+      }
+      url += params.join('&');
+
+      try {
+        const response = await fetch(url, { method: 'GET', mode: 'cors', redirect: 'follow' });
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        return new Promise((resolve) => {
+          hacerPeticionJSONP(parametros, resolve);
+        });
+      }
+    }
+
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       let respuestaEnviada = false;
@@ -437,7 +459,7 @@
           if (script && script.parentNode) document.body.removeChild(script);
           callback({ success: false, ok: false, mensaje: "EL SERVIDOR TARDÓ DEMASIADO." });
         }
-      }, 15000);
+      }, 10000);
 
       window[nombreCallback] = function(data) {
         if (respuestaEnviada) return;
@@ -539,91 +561,46 @@
       window.print();
     }
 
-    function calcularSaldoDesdeMovimientos(movs) {
-      let ingresos = 0;
-      let egresos = 0;
-      (movs || []).forEach(function(m) {
-        const tipo = String(m.tipo || m.tipoMovimiento || m['Tipo de Movimiento'] || '').trim().toUpperCase();
-        const monto = Number(m.monto ?? m.montoLDS ?? m['Monto LDS'] ?? 0);
-        if (!Number.isFinite(monto)) return;
-        if (tipo === 'INGRESO' || tipo.includes('BONIF')) ingresos += monto;
-        else if (tipo === 'EGRESO' || tipo === 'GASTO') egresos += monto;
-      });
-      return ingresos - egresos;
-    }
-
-    function consultarDatosEstudiante(codigo) {
+    async function consultarDatosEstudiante(codigo) {
       document.getElementById('alumnoNombre').textContent = "CARGANDO DATOS...";
       
-      // Hacemos la petición contemplando ambas variantes de acción para asegurar compatibilidad total
-      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
-        const datos = (res && res.data) ? res.data : ((res && res.resultado) ? res.resultado : res);
-        const est = (datos && (datos.estudiante || datos.alumno || datos)) || {};
+      let res = await hacerPeticionFetch({ accion: 'CONSULTAR', codigo: codigo });
+      if (!res || (!res.success && !res.ok && !res.estudiante)) {
+        res = await hacerPeticionFetch({ accion: 'estudiante', codigo: codigo });
+      }
 
-        const encontrado = !!(est && (est.codigo || est.nombreCompleto || est.nombre || (datos && datos.encontrado === true) || (res && res.ok === true)));
+      const datos = (res && res.data) ? res.data : ((res && res.resultado) ? res.resultado : res);
+      const est = (datos && (datos.estudiante || datos.alumno || datos)) || {};
+      const encontrado = !!(est && (est.codigo || est.nombreCompleto || est.nombre || (datos && datos.encontrado === true) || (res && res.ok === true)));
 
-        if (encontrado && (est.nombreCompleto || est.nombre || datos.estudiante)) {
-          const alumnoObj = datos.estudiante || est;
-          const nombreCompleto = alumnoObj.nombreCompleto || [alumnoObj.nombre, alumnoObj.apellido].filter(Boolean).join(' ') || codigo;
-          document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          
-          const gradoSeccion = [alumnoObj.grado, alumnoObj.seccion].filter(Boolean).join(' ');
-          document.getElementById('textoGradoSeccion').textContent = gradoSeccion || '---';
+      if (encontrado && (est.nombreCompleto || est.nombre || datos.estudiante)) {
+        const alumnoObj = datos.estudiante || est;
+        const nombreCompleto = alumnoObj.nombreCompleto || [alumnoObj.nombre, alumnoObj.apellido].filter(Boolean).join(' ') || codigo;
+        document.getElementById('alumnoNombre').textContent = nombreCompleto;
+        
+        const gradoSeccion = [alumnoObj.grado, alumnoObj.seccion].filter(Boolean).join(' ');
+        document.getElementById('textoGradoSeccion').textContent = gradoSeccion || '---';
 
-          const cuenta = (datos && datos.cuenta) || (res && res.cuenta) || {};
-          const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || (res && Array.isArray(res.movimientos) ? res.movimientos : []) || [];
-          const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? res.saldoActual ?? 0);
-          const saldo = movimientos.length > 0 ? calcularSaldoDesdeMovimientos(movimientos) : saldoBackend;
-          
-          const saldoFinal = Number.isFinite(saldo) ? saldo : 0;
-          document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
+        const cuenta = (datos && datos.cuenta) || (res && res.cuenta) || {};
+        const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || (res && Array.isArray(res.movimientos) ? res.movimientos : []) || [];
+        const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? res.saldoActual ?? 0);
+        
+        const saldoFinal = Number.isFinite(saldoBackend) ? saldoBackend : 0;
+        document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
 
-          const fotoUrl = alumnoObj.fotoUrl || alumnoObj.foto || '';
-          document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
+        const fotoUrl = alumnoObj.fotoUrl || alumnoObj.foto || '';
+        document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
 
-          renderizarMovimientos(movimientos);
-          hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
-          return;
-        }
-
-        // Segundo intento con 'estudiante' si la primera no devolvió el objeto esperado
-        hacerPeticionJSONP({ accion: 'estudiante', codigo: codigo }, function(res2) {
-          const datos2 = (res2 && res2.data) ? res2.data : ((res2 && res2.resultado) ? res2.resultado : res2);
-          const est2 = (datos2 && (datos2.estudiante || datos2.alumno || datos2)) || {};
-          const encontrado2 = !!(est2 && (est2.codigo || est2.nombreCompleto || est2.nombre || (res2 && res2.ok === true)));
-
-          if (encontrado2) {
-            const alumnoObj2 = datos2.estudiante || est2;
-            const nombreCompleto2 = alumnoObj2.nombreCompleto || [alumnoObj2.nombre, alumnoObj2.apellido].filter(Boolean).join(' ') || codigo;
-            document.getElementById('alumnoNombre').textContent = nombreCompleto2;
-            
-            const gradoSeccion2 = [alumnoObj2.grado, alumnoObj2.seccion].filter(Boolean).join(' ');
-            document.getElementById('textoGradoSeccion').textContent = gradoSeccion2 || '---';
-
-            const cuenta2 = (datos2 && datos2.cuenta) || (res2 && res2.cuenta) || {};
-            const movimientos2 = (datos2 && Array.isArray(datos2.movimientos) ? datos2.movimientos : []) || (res2 && Array.isArray(res2.movimientos) ? res2.movimientos : []) || [];
-            const saldoBackend2 = Number((datos2 && datos2.saldoActual !== undefined ? datos2.saldoActual : undefined) ?? cuenta2.saldoActual ?? res2.saldoActual ?? 0);
-            const saldo2 = movimientos2.length > 0 ? calcularSaldoDesdeMovimientos(movimientos2) : saldoBackend2;
-            
-            const saldoFinal2 = Number.isFinite(saldo2) ? saldo2 : 0;
-            document.getElementById('saldoLDS').textContent = saldoFinal2.toFixed(2);
-
-            const fotoUrl2 = alumnoObj2.fotoUrl || alumnoObj2.foto || '';
-            document.getElementById('alumnoFoto').src = fotoUrl2.trim() !== '' ? fotoUrl2.trim() : 'https://via.placeholder.com/150';
-
-            renderizarMovimientos(movimientos2);
-            hablarTextoVoz("Bienvenido " + nombreCompleto2 + ". Tu saldo disponible es de " + saldoFinal2.toFixed(2) + " L D S.");
-            return;
-          }
-
-          document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
-          document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
-          document.getElementById('saldoLDS').textContent = "0.00";
-          document.getElementById('alumnoFoto').src = 'https://via.placeholder.com/150';
-          document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
-          hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
-        });
-      });
+        renderizarMovimientos(movimientos);
+        hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
+      } else {
+        document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
+        document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
+        document.getElementById('saldoLDS').textContent = "0.00";
+        document.getElementById('alumnoFoto').src = 'https://via.placeholder.com/150';
+        document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
+      }
     }
 
     function accionBotonPagar() {
@@ -669,7 +646,7 @@
       document.getElementById('seccionMovimientos').classList.remove('hidden');
     }
 
-    function registrarMovimientoOperacion() {
+    async function registrarMovimientoOperacion() {
       const cat = document.getElementById('selectCategoria').value;
       const con = document.getElementById('selectConcepto').value;
       const monto = document.getElementById('inputMonto').value.trim();
@@ -688,7 +665,7 @@
       msg.textContent = "REGISTRANDO...";
       hablarTextoVoz("Registrando transacción.");
 
-      hacerPeticionJSONP({
+      const res = await hacerPeticionFetch({
         accion: 'registrarMovimiento',
         codigo: codigoEstudianteActual,
         tipo: 'EGRESO',
@@ -696,23 +673,23 @@
         concepto: con,
         responsable: resp,
         observacion: obs
-      }, function(res) {
-        if (res && (res.success || res.ok)) {
-          msg.style.color = "#059669";
-          msg.textContent = "¡REGISTRADO CON ÉXITO!";
-          hablarTextoVoz("Registrado con éxito.");
-
-          setTimeout(() => {
-            consultarDatosEstudiante(codigoEstudianteActual);
-            accionBotonMovimientos();
-            msg.textContent = '';
-          }, 1500);
-        } else {
-          msg.style.color = "#dc2626";
-          msg.textContent = (res && res.mensaje) ? res.mensaje : "ERROR AL REGISTRAR.";
-          hablarTextoVoz("Error al registrar.");
-        }
       });
+
+      if (res && (res.success || res.ok)) {
+        msg.style.color = "#059669";
+        msg.textContent = "¡REGISTRADO CON ÉXITO!";
+        hablarTextoVoz("Registrado con éxito.");
+
+        setTimeout(() => {
+          consultarDatosEstudiante(codigoEstudianteActual);
+          accionBotonMovimientos();
+          msg.textContent = '';
+        }, 1200);
+      } else {
+        msg.style.color = "#dc2626";
+        msg.textContent = (res && res.mensaje) ? res.mensaje : "ERROR AL REGISTRAR.";
+        hablarTextoVoz("Error al registrar.");
+      }
     }
 
     function renderizarMovimientos(movimientos) {
