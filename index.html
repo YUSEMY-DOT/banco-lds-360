@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANCO LDS 360 - I.E.P. LA SALLE DEL SUR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    body {
+      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 50%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+    }
+    header {
+      background: #08121e;
+      padding: 14px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #f59e0b;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+    .school-info { display: flex; align-items: center; gap: 14px; }
+    .school-info img { width: 45px; height: 45px; object-fit: contain; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
+    .school-title p { font-size: 0.78rem; color: #f59e0b; font-weight: 700; }
+    
+    .admin-access-btn {
+      background: rgba(245, 158, 11, 0.15);
+      border: 2px solid #f59e0b;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .admin-access-btn:hover { background: #f59e0b; color: #0c1e30; }
+
+    main { 
+      max-width: 1100px; 
+      width: 95%; 
+      margin: auto; 
+      padding: 40px 15px; 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .welcome-banner {
+      margin-bottom: 30px;
+    }
+    .welcome-banner h2 { font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .welcome-banner p { font-size: 1rem; color: #f59e0b; font-weight: 700; letter-spacing: 0.5px; }
+
+    /* GRILLA DE LOS 5 BOTONES PRINCIPALES */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 800px) {
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    .menu-card {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 24px 20px;
+      text-decoration: none;
+      color: #0c1e30;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid #f59e0b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(245,158,11,0.35); }
+
+    .menu-icon { font-size: 2.5rem; }
+    .menu-title { font-size: 1rem; font-weight: 800; color: #0c1e30; }
+    .menu-desc { font-size: 0.75rem; color: #64748b; font-weight: 600; line-height: 1.3; }
+
+    /* COLORES DISTINTIVOS PARA CADA BOTÓN */
+    .btn-celeste { border-color: #0ea5e9; }
+    .btn-lila { border-color: #8b5cf6; }
+    .btn-rojo { border-color: #e11d48; }
+    .btn-amarillo { border-color: #f59e0b; }
+    .btn-manual { border-color: #10b981; }
+
+    /* MODAL DE ACCESO ADMINISTRADOR (CAJERAS) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(12, 30, 48, 0.85);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #ffffff;
+      color: #1e293b;
+      padding: 30px;
+      border-radius: 24px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border-top: 6px solid #f59e0b;
+    }
+    .modal-box h3 { font-size: 1.2rem; font-weight: 800; color: #0c1e30; margin-bottom: 6px; }
+    .modal-box p { font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 20px; }
+    
+    .form-group { text-align: left; margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 800; color: #0c1e30; margin-bottom: 4px; }
+    .input-field {
+      width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.85rem; font-weight: 700; outline: none; background: #f8fafc; color: #0c1e30;
+    }
+    .input-field:focus { border-color: #0ea5e9; background: #fff; }
+
+    .btn-modal-ingresar {
+      width: 100%; padding: 12px; background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%); color: #fff; border: none; border-radius: 12px; font-size: 0.9rem; font-weight: 800; cursor: pointer; margin-top: 10px; box-shadow: 0 6px 15px rgba(12,30,48,0.3);
+    }
+    .btn-modal-cerrar {
+      background: none; border: none; color: #e11d48; font-size: 0.78rem; font-weight: 800; cursor: pointer; margin-top: 14px; display: inline-block;
+    }
+    .error-admin { color: #e11d48; font-size: 0.78rem; font-weight: 800; margin-top: 8px; min-height: 16px; }
+
+    footer { 
+      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #08121e; 
+      border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUDIO OCULTO DEL HIMNO INSTITUCIONAL -->
+  <audio id="audioHimno" src="himno.m4a" preload="auto"></audio>
+
+  <header>
+    <div class="school-info">
+      <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+      <div class="school-title">
+        <h1>BANCO LDS 360</h1>
+        <p>I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <button onclick="abrirModalAdmin()" class="admin-access-btn">🔒 MÓDULO ADMINISTRATIVO</button>
+  </header>
+
+  <main>
+    <div class="welcome-banner">
+      <h2>BIENVENIDOS AL BANCO LDS 360</h2>
+      <p>APRENDIENDO EL VALOR DEL AHORRO Y LA RESPONSABILIDAD FINANCIERA</p>
+    </div>
+
+    <!-- LOS 5 BOTONES PRINCIPALES -->
+    <div class="menu-grid">
+      <!-- 1. BOTÓN CELESTE: ESCANEAR QR -->
+      <a href="qr.html" class="menu-card btn-celeste" onclick="hablarTextoVoz('Accediendo a escaneo QR')">
+        <div class="menu-icon">📷</div>
+        <div class="menu-title">ESCANEAR QR</div>
+        <div class="menu-desc">LEE TU CÓDIGO Y ACCEDE A TU CUENTA PERSONAL</div>
+      </a>
+
+      <!-- 2. BOTÓN LILA: INGRESO MANUAL -->
+      <a href="alumno.html" class="menu-card btn-lila" onclick="hablarTextoVoz('Accediendo a ingreso manual')">
+        <div class="menu-icon">💳</div>
+        <div class="menu-title">INGRESO MANUAL</div>
+        <div class="menu-desc">DIGITA TU CÓDIGO Y CONSULTA TUS MOVIMIENTOS</div>
+      </a>
+
+      <!-- 3. BOTÓN ROJO: TIENDA ESCOLAR -->
+      <a href="tienda.html" class="menu-card btn-rojo" onclick="hablarTextoVoz('Accediendo a la tienda escolar')">
+        <div class="menu-icon">🛒</div>
+        <div class="menu-title">TIENDA ESCOLAR</div>
+        <div class="menu-desc">CANJEA TUS AHORROS CON LOS PREMIOS DE FIN DE AÑO</div>
+      </a>
+
+      <!-- 4. BOTÓN AMARILLO: SECCIÓN PADRES -->
+      <a href="padres.html" class="menu-card btn-amarillo" onclick="hablarTextoVoz('Accediendo a la sección de padres')">
+        <div class="menu-icon">👨‍👩‍👧‍👦</div>
+        <div class="menu-title">SECCIÓN PADRES</div>
+        <div class="menu-desc">CONSEJOS, INSTRUCTIVOS Y BUZÓN DE COMENTARIOS</div>
+      </a>
+
+      <!-- 5. BOTÓN VERDE: MANUAL DEL SISTEMA -->
+      <a href="manual.html" class="menu-card btn-manual" onclick="hablarTextoVoz('Accediendo al manual del sistema')">
+        <div class="menu-icon">📖</div>
+        <div class="menu-title">MANUAL DEL SISTEMA</div>
+        <div class="menu-desc">CARACTERÍSTICAS Y TABLA DE ABONOS Y DESCUENTOS</div>
+      </a>
+    </div>
+  </main>
+
+  <!-- MODAL DE ACCESO ADMINISTRATIVO (CON CLAVE 360LDS) -->
+  <div id="modalAdmin" class="modal-overlay">
+    <div class="modal-box">
+      <h3>ACCESO ADMINISTRATIVO</h3>
+      <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE</p>
+      
+      <div class="form-group">
+        <label>DOCENTE / CAJERA</label>
+        <select id="selectDocente" class="input-field">
+          <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
+          <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+          <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+          <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+          <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>CLAVE DE ACCESO</label>
+        <input type="password" id="inputClaveAdmin" class="input-field" placeholder="••••••">
+      </div>
+
+      <button onclick="validarIngresoAdmin()" class="btn-modal-ingresar">INGRESAR AL PANEL</button>
+      <div id="errorAdmin" class="error-admin"></div>
+      <button onclick="cerrarModalAdmin()" class="btn-modal-cerrar">CANCELAR</button>
+    </div>
+  </div>
+
+  <footer>
+    KIDSWork LS - I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
+  </footer>
+
+  <script>
+    // SÍNTESIS DE VOZ MELODIOSA Y REPRODUCCIÓN DEL HIMNO AL CARGAR LA PÁGINA
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.1;
+
+        function ejecutarVoz() {
+          const voces = window.speechSynthesis.getVoices();
+          let vozIdeal = voces.find(v => v.lang.includes('es') && (
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('google español') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('elena') || 
+            v.name.toLowerCase().includes('monica')
+          ));
+          if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
+          if (vozIdeal) utterance.voice = vozIdeal;
+          window.speechSynthesis.speak(utterance);
+        }
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = ejecutarVoz;
+        } else {
+          ejecutarVoz();
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Reproducir Himno institucional en segundo plano
+      const audio = document.getElementById('audioHimno');
+      if (audio) {
+        audio.volume = 0.6;
+        audio.play().catch(() => {
+          // Si el navegador bloquea el autoplay sin interacción, se habilitará al primer clic
+          document.body.addEventListener('click', () => {
+            audio.play();
+          }, { once: true });
+        });
+      }
+
+      // Bienvenida con síntesis de voz melodiosa
+      setTimeout(() => {
+        hablarTextoVoz("Bienvenidos al Banco LDS 360, de la Institución Educativa Privada La Salle del Sur. Aprendiendo el valor del ahorro y la responsabilidad financiera.");
+      }, 1000);
+    });
+
+    // CONTROL DEL MODAL ADMINISTRATIVO
+    function abrirModalAdmin() {
+      hablarTextoVoz("Abriendo módulo administrativo");
+      document.getElementById('modalAdmin').style.display = 'flex';
+    }
+
+    function cerrarModalAdmin() {
+      document.getElementById('modalAdmin').style.display = 'none';
+      document.getElementById('inputClaveAdmin').value = '';
+      document.getElementById('errorAdmin').textContent = '';
+    }
+
+    function validarIngresoAdmin() {
+      const docente = document.getElementById('selectDocente').value;
+      const clave = document.getElementById('inputClaveAdmin').value.trim().toUpperCase();
+      const errorDiv = document.getElementById('errorAdmin');
+
+      if (!docente) {
+        errorDiv.textContent = "SELECCIONE SU NOMBRE.";
+        return;
+      }
+
+      // Clave general solicitada: 360LDS (con respaldo de 2026)
+      if (clave === "360LDS" || clave === "2026") {
+        sessionStorage.setItem("maestraActiva", docente);
+        // Inicializar o verificar fondo de caja de 100,000 LDS
+        if (!localStorage.getItem("fondoCaja_" + docente)) {
+          localStorage.setItem("fondoCaja_" + docente, "100000.00");
+        }
+        hablarTextoVoz("Clave correcta. Bienvenida estimada maestra.");
+        window.location.href = "administrador.html";
+      } else {
+        errorDiv.textContent = "CLAVE INCORRECTA.";
+        hablarTextoVoz("Clave incorrecta.");
+      }
+    }
+  </script>
+</body>
+</html>
