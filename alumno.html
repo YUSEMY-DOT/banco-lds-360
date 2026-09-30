@@ -1,178 +1,720 @@
-function doGet(e) {
-  var params = e.parameter;
-  var callback = params.callback;
-  var accion = (params.accion || "").trim();
-  var result = {};
-
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    if (!ss) {
-      ss = SpreadsheetApp.openById("1j0A6XtLbCXJLkVTBXRpK-GnV3QY4qYQ_SOReARpu9ag");
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANCO LDS 360 - IEP LA SALLE DEL SUR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    body {
+      background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+    }
+    header {
+      background: #040a12;
+      padding: 14px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #f59e0b;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
+    .school-info { display: flex; align-items: center; gap: 14px; }
+    .school-info img { width: 45px; height: 45px; object-fit: contain; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
+    .school-title p { font-size: 0.78rem; color: #f59e0b; font-weight: 700; }
+    .inicio-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #f59e0b;
+      color: #ffffff;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .inicio-btn:hover { background: #f59e0b; color: #06111f; }
+    
+    main { 
+      max-width: 1250px; 
+      width: 96%; 
+      margin: auto; 
+      padding: 30px 15px; 
+      flex: 1; 
+      display: flex; 
+      align-items: center;
     }
 
-    if (accion === "estudiante" || accion === "CONSULTAR") {
-      result = obtenerEstudianteOUsuario(ss, params.codigo);
-    } else if (accion === "registrarMovimiento" || accion === "REGISTRAR_TRANSACCION") {
-      result = registrarMovimiento(ss, params);
-    } else if (accion === "ADMINISTRADOR") {
-      result = verificarAdministrador(params.clave);
-    } else {
-      result = { ok: false, success: false, mensaje: "Acción no reconocida: " + accion };
+    .hidden { display: none !important; }
+
+    /* CONTENEDOR PRINCIPAL COMPARTIDO */
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 520px 1fr;
+      gap: 30px;
+      width: 100%;
+      align-items: stretch;
     }
-  } catch (err) {
-    result = { ok: false, success: false, mensaje: "Error en el servidor: " + err.toString() };
-  }
 
-  var jsonOutput = JSON.stringify(result);
-  if (callback) {
-    return ContentService.createTextOutput(callback + "(" + jsonOutput + ")")
-      .setMimeType(ContentService.MimeType.JAVASCRIPT);
-  } else {
-    return ContentService.createTextOutput(jsonOutput)
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function obtenerUrlImagenDirecta(urlOriginal) {
-  if (!urlOriginal || typeof urlOriginal !== "string") {
-    return "https://via.placeholder.com/150";
-  }
-  urlOriginal = urlOriginal.trim();
-  if (urlOriginal.indexOf("drive.google.com") !== -1 || urlOriginal.indexOf("docs.google.com") !== -1) {
-    var match = urlOriginal.match(/\/d\/(.*?)\//) || urlOriginal.match(/id=([^&]*)/);
-    if (match && match[1]) {
-      return "https://lh3.googleusercontent.com/d/" + match[1];
+    @media (max-width: 950px) {
+      .dashboard-container { grid-template-columns: 1fr; }
     }
-  }
-  if (urlOriginal.indexOf("http") === 0) {
-    return urlOriginal;
-  }
-  return "https://via.placeholder.com/150";
-}
 
-function obtenerEstudianteOUsuario(ss, codigo) {
-  if (!codigo) return { ok: false, success: false, mensaje: "Código no proporcionado" };
-  codigo = codigo.toString().trim().toUpperCase();
+    /* TARJETA DEL ESTUDIANTE */
+    .saldo-card {
+      background: linear-gradient(145deg, #091628 0%, #050d18 100%);
+      color: #ffffff;
+      border-radius: 28px;
+      padding: 30px 26px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      border: 3px solid #f59e0b;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .saldo-card::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
 
-  var sheetEst = ss.getSheetByName("ESTUDIANTES");
-  var lastRowEst = sheetEst.getLastRow();
-  if (lastRowEst < 2) return { ok: false, success: false, mensaje: "No hay estudiantes registrados" };
+    .saldo-top { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 20px; 
+      position: relative; 
+      z-index: 2; 
+    }
 
-  // Cargamos en memoria de un solo golpe para velocidad máxima
-  var dataEst = sheetEst.getRange(1, 1, lastRowEst, 10).getValues();
-  var usuario = null;
-  var esDocente = codigo.indexOf("LDS-DOC") !== -1;
+    .saldo-box-dorado {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+      color: #0c1e30;
+      border-radius: 22px;
+      padding: 18px 16px;
+      flex: 1;
+      text-align: center;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 8px 20px rgba(0,0,0,0.35);
+      border: 2px solid #fbbf24;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .saldo-title { font-size: 0.75rem; color: #78350f; font-weight: 800; letter-spacing: 1.5px; }
+    .saldo-amount { font-size: 2.3rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
+    
+    .avatar-container {
+      flex-shrink: 0;
+    }
+    .avatar-img { 
+      width: 175px; 
+      height: 175px; 
+      border-radius: 50%; 
+      border: 5px solid #f59e0b; 
+      object-fit: cover; 
+      background: #ffffff; 
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+    
+    .alumno-info-box { 
+      margin-top: 22px; 
+      background: rgba(3, 8, 15, 0.85); 
+      padding: 18px; 
+      border-radius: 18px; 
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      width: 100%;
+    }
+    .alumno-nombre { 
+      font-size: 1.25rem; 
+      font-weight: 800; 
+      color: #ffffff; 
+      line-height: 1.35; 
+      cursor: pointer; 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
+    .alumno-grado { 
+      font-size: 1rem; 
+      color: #fde68a; 
+      font-weight: 700; 
+      margin-top: 8px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+    
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; position: relative; z-index: 2; width: 100%; }
+    .action-btn { 
+      padding: 16px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .action-btn:hover { transform: translateY(-2px); }
+    
+    .btn-pagar { 
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
+      color: #ffffff; 
+      border: 2px solid #fca5a5; 
+    }
+    
+    .btn-movs { 
+      background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+      color: #ffffff; 
+      border: 2px solid #6ee7b7; 
+    }
 
-  for (var i = 1; i < dataEst.length; i++) {
-    var row = dataEst[i];
-    var codFila = row[0] ? row[0].toString().trim().toUpperCase() : "";
+    .sub-card { 
+      background: #ffffff; color: #1e293b; border-radius: 28px; padding: 34px; 
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .sub-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+    }
+    .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; }
+    
+    .btn-imprimir {
+      background: #1e3a8a;
+      color: #ffffff;
+      border: 2px solid #f59e0b;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-imprimir:hover { background: #0c1e30; }
 
-    if (codFila === codigo) {
-      var rolUpper = (row[3] || "").toString().toUpperCase();
-      if (esDocente || rolUpper.indexOf("DOCENTE") !== -1 || rolUpper.indexOf("PROMOTORA") !== -1 || rolUpper.indexOf("COORDINADORA") !== -1) {
-        esDocente = true;
+    .form-scroll-area { max-height: 380px; overflow-y: auto; padding-right: 6px; }
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+    .input-field { 
+      width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 0.9rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+    }
+    .input-field:focus { border-color: #0284c7; background: #fff; }
+    
+    .lista-movs { min-height: 280px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    
+    .btn-primary {
+      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 16px; transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.95; }
+    
+    footer { 
+      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #040a12; 
+      border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
+    }
+
+    .print-header { display: none; }
+
+    @media print {
+      body { background: #ffffff; color: #000000; }
+      header, .actions-grid, .inicio-btn, .btn-imprimir, footer, .sub-card:has(#seccionOperacion:not(.hidden)) { display: none !important; }
+      .dashboard-container { display: block; }
+      .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; margin-bottom: 20px; }
+      .saldo-box-dorado { background: #fef3c7 !important; color: #000 !important; border: 1px solid #000 !important; }
+      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; border-color: #000 !important; }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 3px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
       }
-
-      var rawFoto = row[9] || row[8] || "";
-      usuario = {
-        codigo: codFila,
-        nombre: row[1] || "",
-        apellido: row[2] || "",
-        rol: row[3] || (esDocente ? "DOCENTE" : "ALUMNO"),
-        grado: row[4] || "",
-        seccion: row[5] || "",
-        telefono: row[6] || "",
-        nombreCompleto: row[7] || (row[1] + " " + row[2]),
-        foto: rawFoto,
-        fotoUrl: obtenerUrlImagenDirecta(rawFoto),
-        esDocente: esDocente
-      };
-      break;
+      .print-header img { width: 60px; height: 60px; object-fit: contain; }
+      .print-header-text h2 { font-size: 1.2rem; font-weight: 800; }
+      .print-header-text p { font-size: 0.85rem; font-weight: 700; }
     }
-  }
+  </style>
+</head>
+<body>
 
-  if (!usuario) {
-    return { ok: false, success: false, mensaje: "Código no encontrado: " + codigo };
-  }
+  <header>
+    <div class="school-info">
+      <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+      <div class="school-title">
+        <h1>BANCO LDS 360</h1>
+        <p>I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <a href="index.html" class="inicio-btn" onclick="hablarTextoVoz('Regresando al inicio')">← INICIO</a>
+  </header>
 
-  var sheetMov = ss.getSheetByName("MOVIMIENTOS");
-  var lastRowMov = sheetMov.getLastRow();
-  var movimientos = [];
-  var totalIngresos = 0;
-  var totalEgresos = 0;
+  <main>
+    <div class="dashboard-container">
+      
+      <!-- LADO IZQUIERDO: TARJETA DEL ESTUDIANTE -->
+      <div class="saldo-card">
+        <div class="saldo-top">
+          <div class="saldo-box-dorado">
+            <p class="saldo-title">SALDO DISPONIBLE</p>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.9rem; font-weight: 700;">LDS</span></h3>
+          </div>
 
-  if (lastRowMov >= 2) {
-    var dataMov = sheetMov.getRange(1, 1, lastRowMov, 9).getValues();
-    for (var j = 1; j < dataMov.length; j++) {
-      var r = dataMov[j];
-      var codEst = r[1] ? r[1].toString().trim().toUpperCase() : "";
-      var tipo = r[4] ? r[4].toString().trim().toUpperCase() : "";
-      var monto = parseFloat(r[6]) || 0;
+          <div class="avatar-container">
+            <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
+          </div>
+        </div>
 
-      if (codEst === codigo) {
-        if (tipo.indexOf("INGRESO") !== -1 || tipo.includes("BONIF")) {
-          totalIngresos += monto;
-        } else if (tipo.indexOf("EGRESO") !== -1 || tipo.indexOf("GASTO") !== -1) {
-          totalEgresos += monto;
+        <div class="alumno-info-box">
+          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
+          <p class="alumno-grado"><span style="font-size: 1.3rem;">🎓</span> <span id="textoGradoSeccion">---</span></p>
+        </div>
+
+        <div class="actions-grid">
+          <button onclick="accionBotonPagar()" class="action-btn btn-pagar"><span style="font-size: 1.2rem;">💰</span> PAGAR / GASTOS</button>
+          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs"><span style="font-size: 1.2rem;">📊</span> MOVIMIENTOS</button>
+        </div>
+      </div>
+
+      <!-- LADO DERECHO: PANELES COMPARTIDOS -->
+      <div>
+        <!-- FORMULARIO DE REGISTRO DE PAGO O GASTO -->
+        <div id="seccionOperacion" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4 id="tituloOperacion">REGISTRAR PAGO O GASTO</h4>
+          </div>
+          
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>CATEGORÍA</label>
+              <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
+                <option value="">SELECCIONE CATEGORÍA</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>CONCEPTO</label>
+              <select id="selectConcepto" class="input-field">
+                <option value="">SELECCIONE CONCEPTO</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>MONTO LDS</label>
+              <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <label>CAJERO / CAJERA</label>
+              <select id="selectResponsable" class="input-field">
+                <option value="">SELECCIONE CAJERO(A)</option>
+                <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+                <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+                <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+                <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>OBSERVACIÓN (OPCIONAL)</label>
+              <textarea id="inputObservacion" rows="2" placeholder="DETALLE..." class="input-field" style="resize: none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="registrarMovimientoOperacion()" class="btn-primary">
+              CONFIRMAR Y REGISTRAR PAGO
+            </button>
+            <div id="mensajeOperacion" style="font-size: 0.82rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 800;"></div>
+          </div>
+        </div>
+
+        <!-- HISTORIAL DE MOVIMIENTOS -->
+        <div id="seccionMovimientos" class="sub-card">
+          <div class="print-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+              <div class="print-header-text">
+                <h2>BANCO LDS 360 - ESTADO DE CUENTA</h2>
+                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-card-header">
+            <h4>HISTORIAL DE MOVIMIENTOS</h4>
+            <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">
+              🖨️ IMPRIMIR
+            </button>
+          </div>
+          <div id="listaMovimientos" class="lista-movs">
+            <p style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    KIDSWork LS - I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
+  </footer>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
+    let codigoEstudianteActual = "";
+
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.1;
+
+        function ejecutarVoz() {
+          const voces = window.speechSynthesis.getVoices();
+          let vozIdeal = voces.find(v => v.lang.includes('es') && (
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('google español') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('elena') || 
+            v.name.toLowerCase().includes('monica')
+          ));
+          if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
+          if (vozIdeal) utterance.voice = vozIdeal;
+          window.speechSynthesis.speak(utterance);
         }
-        movimientos.push({
-          fechaTexto: r[0] ? r[0].toString() : "",
-          codigo: r[1] ? r[1].toString() : "",
-          estudiante: r[2] ? r[2].toString() : "",
-          grado: r[3] ? r[3].toString() : "",
-          tipo: r[4] ? r[4].toString() : "",
-          concepto: r[5] ? r[5].toString() : "",
-          monto: monto,
-          responsable: r[7] ? r[7].toString() : "",
-          observacion: r[8] ? r[8].toString() : ""
-        });
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = ejecutarVoz;
+        } else {
+          ejecutarVoz();
+        }
       }
     }
-  }
 
-  var saldoActual = totalIngresos - totalEgresos;
+    // PETICIÓN JSONP DIRECTA Y RÁPIDA (COORDINADA CON EL SERVIDOR)
+    function hacerPeticionJSONP(parametros, callback) {
+      const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+      let respuestaEnviada = false;
 
-  return {
-    ok: true,
-    success: true,
-    estudiante: usuario,
-    saldoActual: saldoActual,
-    cuenta: { totalIngresos: totalIngresos, totalEgresos: totalEgresos, saldoActual: saldoActual },
-    movimientos: movimientos
-  };
-}
+      const timeoutSeguridad = setTimeout(() => {
+        if (!respuestaEnviada) {
+          respuestaEnviada = true;
+          delete window[nombreCallback];
+          if (script && script.parentNode) document.body.removeChild(script);
+          callback({ success: false, ok: false, mensaje: "EL SERVIDOR TARDÓ DEMASIADO." });
+        }
+      }, 10000);
 
-function registrarMovimiento(ss, params) {
-  var codigo = params.codigo ? params.codigo.toString().trim().toUpperCase() : "";
-  var tipo = params.tipo ? params.tipo.toString().trim().toUpperCase() : "EGRESO";
-  var concepto = params.concepto || "";
-  var monto = parseFloat(params.monto) || 0;
-  var responsable = params.responsable || "DOCENTE";
-  var observacion = params.observacion || "";
+      window[nombreCallback] = function(data) {
+        if (respuestaEnviada) return;
+        respuestaEnviada = true;
+        clearTimeout(timeoutSeguridad);
+        delete window[nombreCallback];
+        if (script && script.parentNode) document.body.removeChild(script);
+        callback(data);
+      };
 
-  if (!codigo || monto <= 0) return { ok: false, success: false, mensaje: "Datos incompletos o monto inválido" };
+      let url = SCRIPT_URL + '?callback=' + nombreCallback;
+      for (let clave in parametros) {
+        if (parametros[clave] !== undefined && parametros[clave] !== null) {
+          url += '&' + encodeURIComponent(clave) + '=' + encodeURIComponent(parametros[clave]);
+        }
+      }
 
-  var sheetEst = ss.getSheetByName("ESTUDIANTES");
-  var lastRowEst = sheetEst.getLastRow();
-  var dataEst = sheetEst.getRange(1, 1, lastRowEst, 8).getValues();
-  var nombreCompleto = "", grado = "";
-
-  for (var i = 1; i < dataEst.length; i++) {
-    if (dataEst[i][0] && dataEst[i][0].toString().trim().toUpperCase() === codigo) {
-      nombreCompleto = dataEst[i][7] || (dataEst[i][1] + " " + dataEst[i][2]);
-      grado = dataEst[i][4] || "";
-      break;
+      const script = document.createElement('script');
+      script.src = url;
+      script.onerror = function() {
+        if (respuestaEnviada) return;
+        respuestaEnviada = true;
+        clearTimeout(timeoutSeguridad);
+        delete window[nombreCallback];
+        if (script && script.parentNode) document.body.removeChild(script);
+        callback({ success: false, ok: false, mensaje: "ERROR DE CONEXIÓN." });
+      };
+      document.body.appendChild(script);
     }
-  }
 
-  var sheetMov = ss.getSheetByName("MOVIMIENTOS");
-  var timestamp = Utilities.formatDate(new Date(), "America/Lima", "dd/MM/yyyy HH:mm:ss");
+    let catalogoGlobal = {
+      "AHORROS_E_INVERSIONES": [
+        "Depósito a cuenta de ahorros (Ahorro voluntario)", 
+        "Inversión en fondo común del aula / cooperativa", 
+        "Retiro de ahorros (Emergencia o meta cumplida)"
+      ],
+      "PAGOS_Y_GASTOS": [
+        "Pago Compra en la tienda escolar / cafetín", 
+        "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", 
+        "Pago de servicios del aula: Agua", 
+        "Pago de servicios del aula: Energía", 
+        "Compra de material escolar de emergencia", 
+        "Gasto médico imprevisto menor", 
+        "Alquiler de libros de la biblioteca", 
+        "Pago por custodia de equipos tecnológicos", 
+        "Pago por copias extras", 
+        "Comprar stickers", 
+        "Pagar para una actividad extra", 
+        "Pagar por jugar 10 minutos más"
+      ],
+      "SANCIONES_Y_MULTAS": [
+        "Multa por llevar mal el uniforme o incompleto", 
+        "Incumplimiento de tareas o asignaciones a tiempo", 
+        "Llegada tarde al aula o formación", 
+        "Uso no autorizado de dispositivos electrónicos", 
+        "Desorden o indisciplina leve", 
+        "Falta de respeto o modales", 
+        "No traer el material escolar requerido", 
+        "Descuido o daño leve al mobiliario", 
+        "Basura fuera de su lugar / No respetar áreas verdes", 
+        "Inasistencia injustificada a reuniones", 
+        "No ponerse al día en sus pendientes", 
+        "Malograr los cuadernos u objetos personales", 
+        "Faltar a la verdad", 
+        "Llevarse objetos del compañero"
+      ],
+      "COSTOS_Y_OTROS": [
+        "Impuesto escolar mensual por uso de instalaciones", 
+        "Cuota extraordinaria de mantenimiento grupal", 
+        "Transacción personalizada / Ajuste de caja"
+      ]
+    };
 
-  sheetMov.appendRow([timestamp, codigo, nombreCompleto, grado, tipo, concepto, monto, responsable, observacion]);
-  return { ok: true, success: true, mensaje: "Registrado con éxito" };
-}
+    window.addEventListener('DOMContentLoaded', () => {
+      const parametros = new URLSearchParams(window.location.search);
+      const codigoRecibido = parametros.get('codigo') || 'LDS-EST-001';
+      codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
+      
+      if (!parametros.has('codigo')) {
+        window.history.replaceState({}, '', '?codigo=' + codigoEstudianteActual);
+      }
 
-function verificarAdministrador(clave) {
-  var esAdmin = clave && clave.toString().trim().toUpperCase() === "360LDS";
-  return { ok: esAdmin, success: true, autorizado: esAdmin };
-}
+      consultarDatosEstudiante(codigoEstudianteActual);
+    });
+
+    function cambiarCodigoManual() {
+      const nuevoCod = prompt("INGRESE EL CÓDIGO CORRECTO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
+      if (nuevoCod && nuevoCod.trim() !== "") {
+        const codigoLimpio = nuevoCod.trim().toUpperCase();
+        window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoLimpio));
+        codigoEstudianteActual = codigoLimpio;
+        consultarDatosEstudiante(codigoLimpio);
+        hablarTextoVoz("Buscando estudiante.");
+      }
+    }
+
+    function imprimirEstadoCuenta() {
+      hablarTextoVoz("Imprimiendo estado de cuenta");
+      window.print();
+    }
+
+    function calcularSaldoDesdeMovimientos(movs) {
+      let ingresos = 0;
+      let egresos = 0;
+      (movs || []).forEach(function(m) {
+        const tipo = String(m.tipo || m.tipoMovimiento || '').trim().toUpperCase();
+        const monto = Number(m.monto ?? 0);
+        if (!Number.isFinite(monto)) return;
+        if (tipo === 'INGRESO' || tipo.includes('BONIF')) ingresos += monto;
+        else if (tipo === 'EGRESO' || tipo === 'GASTO') egresos += monto;
+      });
+      return ingresos - egresos;
+    }
+
+    function consultarDatosEstudiante(codigo) {
+      document.getElementById('alumnoNombre').textContent = "CARGANDO DATOS...";
+      
+      hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
+        const datos = (res && res.data) ? res.data : ((res && res.resultado) ? res.resultado : res);
+        const est = (datos && (datos.estudiante || datos.alumno)) || (res && res.estudiante) || {};
+
+        const encontrado = !!(est && (est.codigo || est.nombreCompleto || est.nombre || (datos && datos.encontrado === true) || (res && res.ok === true)));
+
+        if (encontrado) {
+          const nombreCompleto = est.nombreCompleto || [est.nombre, est.apellido].filter(Boolean).join(' ') || codigo;
+          document.getElementById('alumnoNombre').textContent = nombreCompleto;
+          
+          const gradoSeccion = [est.grado, est.seccion].filter(Boolean).join(' ');
+          document.getElementById('textoGradoSeccion').textContent = gradoSeccion || '---';
+
+          const cuenta = (datos && datos.cuenta) || (res && res.cuenta) || {};
+          const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || (res && Array.isArray(res.movimientos) ? res.movimientos : []) || [];
+          const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? res.saldoActual ?? 0);
+          const saldo = movimientos.length > 0 ? calcularSaldoDesdeMovimientos(movimientos) : saldoBackend;
+          
+          const saldoFinal = Number.isFinite(saldo) ? saldo : 0;
+          document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
+
+          const fotoUrl = est.fotoUrl || est.foto || '';
+          document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
+
+          renderizarMovimientos(movimientos);
+          hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
+          return;
+        }
+
+        document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
+        document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
+        document.getElementById('saldoLDS').textContent = "0.00";
+        document.getElementById('alumnoFoto').src = 'https://via.placeholder.com/150';
+        document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
+      });
+    }
+
+    function accionBotonPagar() {
+      hablarTextoVoz("Registrar pago o gastos");
+      document.getElementById('seccionOperacion').classList.remove('hidden');
+      document.getElementById('seccionMovimientos').classList.add('hidden');
+      document.getElementById('tituloOperacion').textContent = "💸 REGISTRAR PAGO O GASTO";
+      
+      const selectCat = document.getElementById('selectCategoria');
+      selectCat.innerHTML = '<option value="">SELECCIONE CATEGORÍA</option>';
+
+      Object.keys(catalogoGlobal).forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat.replace(/_/g, " ");
+        selectCat.appendChild(opt);
+      });
+
+      document.getElementById('selectConcepto').innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
+      document.getElementById('inputMonto').value = '';
+      document.getElementById('selectResponsable').value = '';
+      document.getElementById('inputObservacion').value = '';
+      document.getElementById('mensajeOperacion').textContent = '';
+    }
+
+    function alCambiarCategoria() {
+      const cat = document.getElementById('selectCategoria').value;
+      const selectCon = document.getElementById('selectConcepto');
+      selectCon.innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
+      if (!cat || !catalogoGlobal[cat]) return;
+
+      catalogoGlobal[cat].forEach(con => {
+        const opt = document.createElement('option');
+        opt.value = con;
+        opt.textContent = con;
+        selectCon.appendChild(opt);
+      });
+    }
+
+    function accionBotonMovimientos() {
+      hablarTextoVoz("Historial de movimientos");
+      document.getElementById('seccionOperacion').classList.add('hidden');
+      document.getElementById('seccionMovimientos').classList.remove('hidden');
+    }
+
+    function registrarMovimientoOperacion() {
+      const cat = document.getElementById('selectCategoria').value;
+      const con = document.getElementById('selectConcepto').value;
+      const monto = document.getElementById('inputMonto').value.trim();
+      const resp = document.getElementById('selectResponsable').value;
+      const obs = document.getElementById('inputObservacion').value.trim();
+      const msg = document.getElementById('mensajeOperacion');
+
+      if (!cat || !con || !monto || !resp) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
+        hablarTextoVoz("Complete todos los campos obligatorios.");
+        return;
+      }
+
+      msg.style.color = "#2563eb";
+      msg.textContent = "REGISTRANDO...";
+      hablarTextoVoz("Registrando transacción.");
+
+      hacerPeticionJSONP({
+        accion: 'REGISTRAR_TRANSACCION',
+        codigo: codigoEstudianteActual,
+        tipo: 'EGRESO',
+        monto: monto,
+        concepto: con,
+        responsable: resp,
+        observacion: obs
+      }, function(res) {
+        if (res && (res.success || res.ok)) {
+          msg.style.color = "#059669";
+          msg.textContent = "¡REGISTRADO CON ÉXITO!";
+          hablarTextoVoz("Registrado con éxito.");
+
+          setTimeout(() => {
+            consultarDatosEstudiante(codigoEstudianteActual);
+            accionBotonMovimientos();
+            msg.textContent = '';
+          }, 1200);
+        } else {
+          msg.style.color = "#dc2626";
+          msg.textContent = (res && res.mensaje) ? res.mensaje : "ERROR AL REGISTRAR.";
+          hablarTextoVoz("Error al registrar.");
+        }
+      });
+    }
+
+    function renderizarMovimientos(movimientos) {
+      const contenedor = document.getElementById('listaMovimientos');
+      if (!contenedor) return;
+      contenedor.innerHTML = '';
+
+      if (!Array.isArray(movimientos) || movimientos.length === 0) {
+        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        return;
+      }
+
+      movimientos.forEach(function(mov) {
+        const tipo = String(mov.tipo || mov.tipoMovimiento || '').toUpperCase();
+        const concepto = mov.concepto || mov.descripcion || 'MOVIMIENTO';
+        const monto = Number(mov.monto ?? 0);
+        const fecha = mov.fechaTexto || mov.fecha || '';
+
+        const fila = document.createElement('div');
+        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem;";
+
+        const signo = tipo === 'EGRESO' || tipo === 'GASTO' || tipo.includes('EGRESO') ? '-' : '+';
+        fila.innerHTML = `
+          <div style="display: flex; flex-direction: column;">
+            <strong style="color: #0c1e30;">${concepto}</strong>
+            <span style="color: #64748b; font-size: 0.75rem;">${fecha}</span>
+          </div>
+          <div style="font-weight: 800; color: ${signo === '-' ? '#e11d48' : '#059669'};">
+            ${signo} ${Math.abs(monto).toFixed(2)} LDS
+          </div>
+        `;
+        contenedor.appendChild(fila);
+      });
+    }
+  </script>
+</body>
+</html>
