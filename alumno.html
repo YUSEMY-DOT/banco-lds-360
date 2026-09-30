@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>BANCO LDS 360 - IEP LA SALLE DEL SUR</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -13,10 +13,11 @@
       display: flex;
       flex-direction: column;
       color: #ffffff;
+      overflow-x: hidden;
     }
     header {
       background: #08121e;
-      padding: 14px 30px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -24,18 +25,18 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       z-index: 10;
     }
-    .school-info { display: flex; align-items: center; gap: 14px; }
-    .school-info img { width: 45px; height: 45px; object-fit: contain; }
-    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
-    .school-title p { font-size: 0.78rem; color: #f59e0b; font-weight: 700; }
+    .school-info { display: flex; align-items: center; gap: 10px; }
+    .school-info img { width: 38px; height: 38px; object-fit: contain; }
+    .school-title h1 { font-size: 0.95rem; color: #ffffff; font-weight: 800; letter-spacing: 0.5px; }
+    .school-title p { font-size: 0.68rem; color: #f59e0b; font-weight: 700; }
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid #f59e0b;
       color: #ffffff;
-      padding: 8px 20px;
-      border-radius: 30px;
+      padding: 6px 14px;
+      border-radius: 25px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -43,102 +44,113 @@
     .inicio-btn:hover { background: #f59e0b; color: #0c1e30; }
     
     main { 
-      max-width: 1250px; 
-      width: 96%; 
+      max-width: 1200px; 
+      width: 100%; 
       margin: auto; 
-      padding: 30px 15px; 
+      padding: 15px; 
       flex: 1; 
       display: flex; 
       align-items: center;
+      justify-content: center;
     }
 
     .hidden { display: none !important; }
 
-    /* CONTENEDOR PRINCIPAL COMPARTIDO */
+    /* CONTENEDOR ADAPTABLE PARA CELULAR Y PC */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 480px 1fr;
-      gap: 30px;
+      grid-template-columns: 420px 1fr;
+      gap: 20px;
       width: 100%;
       align-items: stretch;
     }
 
-    @media (max-width: 950px) {
-      .dashboard-container { grid-template-columns: 1fr; }
+    /* DISEÑO EXCLUSIVO PARA CELULARES Y TABLETS (PANTALLAS MENORES A 900PX) */
+    @media (max-width: 900px) {
+      .dashboard-container { 
+        grid-template-columns: 1fr; 
+        gap: 15px;
+      }
+      main { padding: 10px; }
     }
 
-    /* COLUMNA IZQUIERDA: TARJETA DEL ESTUDIANTE CON FOTO AMPLIADA */
+    /* TARJETA DEL ESTUDIANTE */
     .saldo-card {
       background: linear-gradient(135deg, #111827 0%, #1e3a8a 100%);
       color: #ffffff;
-      border-radius: 28px;
-      padding: 34px 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
       border: 3px solid #f59e0b;
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-    .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-    .saldo-title { font-size: 0.8rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
-    .saldo-amount { font-size: 2.6rem; font-weight: 800; margin-top: 8px; color: #ffffff; }
+    .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .saldo-title { font-size: 0.75rem; color: #f59e0b; font-weight: 800; letter-spacing: 1px; }
+    .saldo-amount { font-size: 2.2rem; font-weight: 800; margin-top: 4px; color: #ffffff; }
     
+    /* FOTO ADAPTABLE */
     .avatar-img { 
-      width: 175px; 
-      height: 175px; 
+      width: 130px; 
+      height: 130px; 
       border-radius: 50%; 
-      border: 5px solid #f59e0b; 
+      border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
       flex-shrink: 0;
     }
+    @media (max-width: 480px) {
+      .avatar-img { width: 105px; height: 105px; }
+      .saldo-amount { font-size: 1.8rem; }
+    }
     
-    .alumno-info-box { margin-top: 22px; }
-    .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; cursor: pointer; }
+    .alumno-info-box { margin-top: 16px; }
+    .alumno-nombre { font-size: 1.15rem; font-weight: 800; color: #ffffff; line-height: 1.3; cursor: pointer; }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
-    .alumno-grado { font-size: 0.95rem; color: #cbd5e1; font-weight: 700; margin-top: 6px; }
+    .alumno-grado { font-size: 0.85rem; color: #cbd5e1; font-weight: 700; margin-top: 4px; }
     
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
     .action-btn { 
-      padding: 16px 12px; border-radius: 18px; font-weight: 800; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.9rem; 
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: transform 0.2s, box-shadow 0.2s; 
+      padding: 14px 10px; border-radius: 16px; font-weight: 800; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.82rem; 
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: transform 0.2s; 
     }
     .action-btn:hover { transform: translateY(-2px); }
     .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border: 2px solid #fb7185; }
     .btn-movs { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border: 2px solid #c084fc; }
 
-    /* COLUMNA DERECHA: PANELES (REGISTRO / HISTORIAL) */
+    /* PANEL DERECHO */
     .sub-card { 
-      background: #ffffff; color: #1e293b; border-radius: 28px; padding: 34px; 
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
+      background: #ffffff; color: #1e293b; border-radius: 24px; padding: 24px; 
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-    .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+    .sub-card h4 { font-size: 1.05rem; color: #0c1e30; font-weight: 800; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
     
-    .form-scroll-area { max-height: 380px; overflow-y: auto; padding-right: 6px; }
-    .form-group { margin-bottom: 16px; text-align: left; }
-    .form-group label { display: block; color: #334155; font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+    .form-scroll-area { max-height: 320px; overflow-y: auto; padding-right: 4px; }
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.75rem; font-weight: 800; margin-bottom: 4px; }
     .input-field { 
-      width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 0.9rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+      width: 100%; padding: 10px 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.85rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
     }
     .input-field:focus { border-color: #0284c7; background: #fff; }
     
-    .lista-movs { min-height: 280px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .lista-movs { min-height: 240px; max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     
     .btn-primary {
-      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 16px; transition: opacity 0.2s;
+      width: 100%; height: 48px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 14px; font-size: 0.92rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); margin-top: 14px; transition: opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.95; }
     
     footer { 
-      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #08121e; 
+      text-align: center; padding: 12px; font-size: 0.72rem; color: #ffffff; background-color: #08121e; 
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
     }
   </style>
@@ -165,7 +177,7 @@
           <div class="saldo-top">
             <div>
               <p class="saldo-title">SALDO DISPONIBLE</p>
-              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 600;">LDS</span></h3>
+              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.9rem; font-weight: 600;">LDS</span></h3>
             </div>
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
@@ -228,7 +240,7 @@
             <button onclick="registrarMovimientoOperacion()" class="btn-primary">
               CONFIRMAR Y REGISTRAR PAGO
             </button>
-            <div id="mensajeOperacion" style="font-size: 0.82rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 800;"></div>
+            <div id="mensajeOperacion" style="font-size: 0.78rem; text-align: center; margin-top: 6px; min-height: 16px; font-weight: 800;"></div>
           </div>
         </div>
 
@@ -236,7 +248,7 @@
         <div id="seccionMovimientos" class="sub-card">
           <h4>HISTORIAL DE MOVIMIENTOS</h4>
           <div id="listaMovimientos" class="lista-movs">
-            <p style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</p>
+            <p style="color: #64748b; text-align: center; font-style: italic; padding: 25px; font-size: 0.82rem;">SIN MOVIMIENTOS RECIENTES.</p>
           </div>
         </div>
 
@@ -376,7 +388,6 @@
       codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
       consultarDatosEstudiante(codigoEstudianteActual);
 
-      // Activando la voz de bienvenida al cargar la cuenta del alumno
       setTimeout(() => {
         hablarTextoVoz("Cuenta del estudiante cargada. Revisa tus movimientos y ahorros en el Banco L.D.S. 360.");
       }, 1000);
@@ -541,7 +552,7 @@
       contenedor.innerHTML = '';
 
       if (!Array.isArray(movimientos) || movimientos.length === 0) {
-        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 25px; font-size: 0.82rem;">SIN MOVIMIENTOS RECIENTES.</div>';
         return;
       }
 
@@ -552,19 +563,18 @@
         const fecha = mov.fecha || mov.timestamp || '';
 
         const fila = document.createElement('div');
-        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem;";
+        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.82rem;";
 
         const signo = tipo === 'EGRESO' || tipo === 'GASTO' ? '-' : '+';
         fila.innerHTML = `
           <div style="display: flex; flex-direction: column;">
             <strong style="color: #0c1e30;">${concepto}</strong>
-            <span style="color: #64748b; font-size: 0.75rem;">${fecha}</span>
+            <span style="color: #64748b; font-size: 0.7rem;">${fecha}</span>
           </div>
           <div style="font-weight: 800; color: ${signo === '-' ? '#e11d48' : '#059669'};">
             ${signo} ${Math.abs(monto).toFixed(2)} LDS
           </div>
         `;
-        contenedor.appendChild(x = fila);
         contenedor.appendChild(fila);
       });
     }
