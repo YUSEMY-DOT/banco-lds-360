@@ -92,14 +92,27 @@
       pointer-events: none;
     }
 
-    .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; position: relative; z-index: 2; }
-    .saldo-title { font-size: 0.8rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
-    .saldo-amount { font-size: 2.6rem; font-weight: 800; margin-top: 8px; color: #ffffff; }
+    /* SECCIÓN SUPERIOR SALDO Y FOTO (MÁS CENTRADA Y BALANCEADA) */
+    .saldo-top { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 20px; 
+      position: relative; 
+      z-index: 2; 
+    }
+    .saldo-info-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .saldo-title { font-size: 0.82rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
+    .saldo-amount { font-size: 2.8rem; font-weight: 800; margin-top: 6px; color: #ffffff; line-height: 1.1; }
     
     /* FOTO AMPLIADA Y DESTACADA */
     .avatar-img { 
-      width: 175px; 
-      height: 175px; 
+      width: 170px; 
+      height: 170px; 
       border-radius: 50%; 
       border: 5px solid #f59e0b; 
       object-fit: cover; 
@@ -123,6 +136,7 @@
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
     .alumno-grado { font-size: 0.95rem; color: #f59e0b; font-weight: 700; margin-top: 6px; letter-spacing: 0.5px; }
     
+    /* BOTONES INFERIORES DE LA TARJETA (MOVIMIENTOS EN AMARILLO ELEGANTE) */
     .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; position: relative; z-index: 2; }
     .action-btn { 
       padding: 16px 12px; border-radius: 18px; font-weight: 800; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.9rem; 
@@ -130,7 +144,7 @@
     }
     .action-btn:hover { transform: translateY(-2px); }
     .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border: 2px solid #fb7185; }
-    .btn-movs { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border: 2px solid #c084fc; }
+    .btn-movs { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; border: 2px solid #fcd34d; font-weight: 800; }
 
     /* COLUMNA DERECHA */
     .sub-card { 
@@ -233,7 +247,7 @@
       <div class="saldo-card">
         <div>
           <div class="saldo-top">
-            <div>
+            <div class="saldo-info-container">
               <p class="saldo-title">SALDO DISPONIBLE</p>
               <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 600;">LDS</span></h3>
             </div>
