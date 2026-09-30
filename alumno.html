@@ -8,7 +8,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
     body {
-      background: linear-gradient(135deg, #06101c 0%, #0c1e30 50%, #08121e 100%);
+      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 50%, #0f172a 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -46,7 +46,7 @@
       max-width: 1250px; 
       width: 96%; 
       margin: auto; 
-      padding: 30px 15px; 
+      padding: 25px 15px; 
       flex: 1; 
       display: flex; 
       align-items: center;
@@ -57,8 +57,8 @@
     /* CONTENEDOR PRINCIPAL COMPARTIDO */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 500px 1fr;
-      gap: 30px;
+      grid-template-columns: 460px 1fr;
+      gap: 25px;
       width: 100%;
       align-items: stretch;
     }
@@ -67,107 +67,128 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
-    /* TARJETA DEL ESTUDIANTE BASADA EXACTAMENTE EN SU IMAGEN DE REFERENCIA */
+    /* TARJETA DEL ESTUDIANTE: FONDO INSTITUCIONAL ORIGINAL CON TRAMA Y EFECTOS ELEGANTES */
     .saldo-card {
-      background: linear-gradient(135deg, #09192f 0%, #0d2545 100%);
+      background: linear-gradient(135deg, #111827 0%, #1e3a8a 60%, #172554 100%);
       color: #ffffff;
-      border-radius: 28px;
-      padding: 30px 26px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border-radius: 26px;
+      padding: 26px 22px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
       border: 3px solid #f59e0b;
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
+      overflow: hidden;
     }
     
+    .saldo-card::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background-image: radial-gradient(rgba(245, 158, 11, 0.09) 1px, transparent 1px);
+      background-size: 18px 18px;
+      pointer-events: none;
+    }
+
     .saldo-top { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      gap: 15px; 
+      gap: 12px; 
+      position: relative; 
+      z-index: 2; 
     }
 
-    /* CUADRO INTERIOR DORADO PARA EL SALDO DISPONIBLE */
+    /* TARJETA DE SALDO INTERNA ELEGANTE Y PROPORCIONADA */
     .saldo-box-dorado {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
-      color: #0c1e30;
-      border-radius: 20px;
-      padding: 16px 20px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #f59e0b 100%);
+      color: #1e293b;
+      border-radius: 18px;
+      padding: 14px 16px;
       flex: 1;
-      box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 6px 15px rgba(0,0,0,0.2);
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.7), 0 6px 15px rgba(0,0,0,0.25);
       border: 2px solid #fbbf24;
     }
-    .saldo-title { font-size: 0.75rem; color: #78350f; font-weight: 800; letter-spacing: 1px; }
-    .saldo-amount { font-size: 2.2rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
+    .saldo-title { font-size: 0.72rem; color: #78350f; font-weight: 800; letter-spacing: 1px; }
+    .saldo-amount { font-size: 2.1rem; font-weight: 800; margin-top: 3px; color: #0f172a; line-height: 1.1; }
     
-    /* FOTO REDONDA DESTACADA CON BORDE DORADO */
+    /* FOTO REDONDA PROPORCIONADA Y CON BRILLO DORADO */
     .avatar-img { 
-      width: 140px; 
-      height: 140px; 
+      width: 125px; 
+      height: 125px; 
       border-radius: 50%; 
       border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
       flex-shrink: 0;
+      position: relative;
+      z-index: 2;
     }
     
-    /* CAJA DE NOMBRE Y GRADO */
+    /* CAJA DE DATOS DEL ALUMNO CENTRADA Y SIN ESPACIOS VACÍOS */
     .alumno-info-box { 
-      margin-top: 20px; 
+      margin-top: 16px; 
+      background: rgba(8, 18, 30, 0.65); 
+      padding: 14px; 
+      border-radius: 16px; 
+      border: 1px solid rgba(245, 158, 11, 0.35);
       text-align: center;
-      padding: 10px 0;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     .alumno-nombre { 
-      font-size: 1.25rem; 
+      font-size: 1.15rem; 
       font-weight: 800; 
       color: #ffffff; 
       line-height: 1.3; 
       cursor: pointer; 
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
     .alumno-grado { 
-      font-size: 0.88rem; 
+      font-size: 0.85rem; 
       color: #fde68a; 
       font-weight: 700; 
-      margin-top: 6px; 
+      margin-top: 5px; 
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
+      letter-spacing: 0.5px;
     }
     
-    /* BOTONES INFERIORES: PAGAR EN ROJO Y MOVIMIENTOS EN DORADO */
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+    /* BOTONES INFERIORES BIEN DISTRIBUIDOS */
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; position: relative; z-index: 2; }
     .action-btn { 
-      padding: 15px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
+      padding: 14px 10px; border-radius: 16px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.82rem; 
       box-shadow: 0 6px 18px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
     }
     .action-btn:hover { transform: translateY(-2px); }
     
-    /* BOTÓN PAGAR / GASTOS EN ROJO VIBRANTE */
+    /* BOTÓN PAGAR / GASTOS EN ROJO VIBRANTE ELEGANTE */
     .btn-pagar { 
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
       color: #ffffff; 
-      border: 2px solid #fca5a5; 
+      border: 2px solid #f87171; 
     }
     
     /* BOTÓN MOVIMIENTOS EN DORADO ELEGANTE */
     .btn-movs { 
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%); 
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #f59e0b 100%); 
       color: #78350f; 
       border: 2px solid #fbbf24; 
     }
 
     /* COLUMNA DERECHA */
     .sub-card { 
-      background: #ffffff; color: #1e293b; border-radius: 28px; padding: 34px; 
+      background: #ffffff; color: #1e293b; border-radius: 26px; padding: 30px; 
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
       height: 100%;
       display: flex;
@@ -179,11 +200,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border-bottom: 2px solid #e2e8f0;
       padding-bottom: 10px;
     }
-    .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; }
+    .sub-card h4 { font-size: 1.1rem; color: #0c1e30; font-weight: 800; }
     
     .btn-imprimir {
       background: #1e3a8a;
@@ -202,24 +223,24 @@
     .btn-imprimir:hover { background: #0c1e30; }
 
     .form-scroll-area { max-height: 380px; overflow-y: auto; padding-right: 6px; }
-    .form-group { margin-bottom: 16px; text-align: left; }
-    .form-group label { display: block; color: #334155; font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.78rem; font-weight: 800; margin-bottom: 5px; }
     .input-field { 
-      width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 0.9rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+      width: 100%; padding: 11px 13px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.88rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
     }
     .input-field:focus { border-color: #0284c7; background: #fff; }
     
-    .lista-movs { min-height: 280px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .lista-movs { min-height: 260px; max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     
     .btn-primary {
-      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 16px; transition: opacity 0.2s;
+      width: 100%; height: 48px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 14px; font-size: 0.95rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 14px; transition: opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.95; }
     
     footer { 
-      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #08121e; 
+      text-align: center; padding: 12px; font-size: 0.78rem; color: #ffffff; background-color: #08121e; 
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
     }
 
@@ -232,7 +253,7 @@
       .dashboard-container { display: block; }
       .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; margin-bottom: 20px; }
       .saldo-box-dorado { background: #fef3c7 !important; color: #000 !important; border: 1px solid #000 !important; }
-      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; }
+      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; border-color: #000 !important; }
       .print-header {
         display: flex;
         align-items: center;
@@ -269,13 +290,13 @@
           <div class="saldo-top">
             <div class="saldo-box-dorado">
               <p class="saldo-title">SALDO DISPONIBLE</p>
-              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.95rem; font-weight: 700;">LDS</span></h3>
+              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.9rem; font-weight: 700;">LDS</span></h3>
             </div>
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
           <div class="alumno-info-box">
             <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-            <p id="alumnoGrado" class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
+            <p id="alumnogrado" class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
           </div>
         </div>
 
@@ -375,7 +396,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
-    // SÍNTESIS DE VOZ MELODIOSA Y CÁLIDA (MEJORADA CON SALDO Y BOTONES)
+    // SÍNTESIS DE VOZ MELODIOSA Y CÁLIDA QUE DICTA EL SALDO AL NIÑO
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -554,7 +575,7 @@
 
           renderizarMovimientos(movimientos);
           
-          // VOZ INTERACTIVA PARA EL NIÑO: DICTA EL NOMBRE Y SU SALDO DISPONIBLE
+          // LECTOR DE VOZ INTERACTIVO: DICTA EL NOMBRE Y EL SALDO DISPONIBLE
           hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
           return;
         }
