@@ -57,7 +57,7 @@
     /* CONTENEDOR PRINCIPAL COMPARTIDO */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 480px 1fr;
+      grid-template-columns: 500px 1fr;
       gap: 30px;
       width: 100%;
       align-items: stretch;
@@ -67,12 +67,12 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
-    /* TARJETA DEL ESTUDIANTE: AZUL MARINO PROFUNDO CON TRAMA ELEGANTE Y BORDES DORADOS */
+    /* TARJETA DEL ESTUDIANTE: AZUL MARINO PROFUNDO CON TRAMA Y BORDES DORADOS */
     .saldo-card {
       background: linear-gradient(135deg, #0a1727 0%, #10243e 50%, #07111d 100%);
       color: #ffffff;
       border-radius: 28px;
-      padding: 30px 26px;
+      padding: 30px 24px;
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
       border: 3px solid #f59e0b;
       text-align: left;
@@ -83,7 +83,6 @@
       overflow: hidden;
     }
     
-    /* TRAMA SOFISTICADA DE FONDO */
     .saldo-card::before {
       content: "";
       position: absolute;
@@ -93,49 +92,45 @@
       pointer-events: none;
     }
 
+    /* SECCIÓN SUPERIOR: SALDO A LA IZQUIERDA Y FOTO GRANDE A LA DERECHA */
     .saldo-top { 
       display: flex; 
-      flex-direction: column;
-      align-items: center;
-      gap: 20px; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 16px; 
       position: relative; 
       z-index: 2; 
     }
 
-    /* FOTO DEL ALUMNO GRANDE, PROMINENTE Y CENTRADA */
-    .avatar-container {
-      position: relative;
-      z-index: 2;
-    }
-    .avatar-img { 
-      width: 150px; 
-      height: 150px; 
-      border-radius: 50%; 
-      border: 5px solid #f59e0b; 
-      object-fit: cover; 
-      background: #ffffff; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    /* CAJA DE SALDO DISPONIBLE EN TONO DORADO ELEGANTE */
     .saldo-box-dorado {
       background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
       color: #0c1e30;
       border-radius: 20px;
-      padding: 16px 24px;
-      width: 100%;
-      text-align: center;
+      padding: 16px 14px;
+      flex: 1;
+      text-align: left;
       box-shadow: inset 0 2px 5px rgba(255,255,255,0.7), 0 8px 20px rgba(0,0,0,0.3);
       border: 2px solid #fbbf24;
-      position: relative;
-      z-index: 2;
     }
-    .saldo-title { font-size: 0.78rem; color: #78350f; font-weight: 800; letter-spacing: 1.5px; }
-    .saldo-amount { font-size: 2.5rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
+    .saldo-title { font-size: 0.72rem; color: #78350f; font-weight: 800; letter-spacing: 1.2px; }
+    .saldo-amount { font-size: 2.1rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
+    
+    .avatar-container {
+      flex-shrink: 0;
+    }
+    .avatar-img { 
+      width: 145px; 
+      height: 145px; 
+      border-radius: 50%; 
+      border: 5px solid #f59e0b; 
+      object-fit: cover; 
+      background: #ffffff; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
     
     /* CAJA DE DATOS DEL ALUMNO */
     .alumno-info-box { 
-      margin-top: 18px; 
+      margin-top: 20px; 
       background: rgba(4, 11, 20, 0.75); 
       padding: 16px; 
       border-radius: 18px; 
@@ -167,10 +162,10 @@
       letter-spacing: 0.5px;
     }
     
-    /* BOTONES INFERIORES */
+    /* BOTONES INFERIORES: PAGAR EN ROJO Y MOVIMIENTOS EN VERDE FINANCIERO ELEGANTE */
     .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; position: relative; z-index: 2; width: 100%; }
     .action-btn { 
-      padding: 15px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
+      padding: 16px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
       box-shadow: 0 6px 18px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
       display: flex;
       align-items: center;
@@ -186,9 +181,9 @@
     }
     
     .btn-movs { 
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%); 
-      color: #78350f; 
-      border: 2px solid #fbbf24; 
+      background: linear-gradient(135deg, #059669 0%, #047857 100%); 
+      color: #ffffff; 
+      border: 2px solid #6ee7b7; 
     }
 
     /* COLUMNA DERECHA */
@@ -291,28 +286,28 @@
       <!-- LADO IZQUIERDO: TARJETA DEL ESTUDIANTE -->
       <div class="saldo-card">
         <div class="saldo-top">
-          <!-- CAJA DE SALDO SUPERIOR -->
+          <!-- CAJA DE SALDO SUPERIOR IZQUIERDA -->
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 700;">LDS</span></h3>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.9rem; font-weight: 700;">LDS</span></h3>
           </div>
 
-          <!-- FOTO GRANDE Y PROMINENTE -->
+          <!-- FOTO GRANDE Y PROMINENTE A LA DERECHA -->
           <div class="avatar-container">
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
-
-          <!-- CAJA DE DATOS DEL ALUMNO -->
-          <div class="alumno-info-box">
-            <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-            <p class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
-          </div>
         </div>
 
-        <!-- BOTONES INFERIORES -->
+        <!-- CAJA DE DATOS DEL ALUMNO -->
+        <div class="alumno-info-box">
+          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
+          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
+        </div>
+
+        <!-- BOTONES INFERIORES CON ICONOS GRANDES Y AMIGABLES -->
         <div class="actions-grid">
-          <button onclick="accionBotonPagar()" class="action-btn btn-pagar">💸 PAGAR / GASTOS</button>
-          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs">📋 MOVIMIENTOS</button>
+          <button onclick="accionBotonPagar()" class="action-btn btn-pagar"><span style="font-size: 1.2rem;">💰</span> PAGAR / GASTOS</button>
+          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs"><span style="font-size: 1.2rem;">📊</span> MOVIMIENTOS</button>
         </div>
       </div>
 
