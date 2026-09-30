@@ -96,7 +96,8 @@
     }
     
     .alumno-info-box { margin-top: 22px; }
-    .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; }
+    .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; cursor: pointer; }
+    .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
     .alumno-grado { font-size: 0.95rem; color: #cbd5e1; font-weight: 700; margin-top: 6px; }
     
     .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
@@ -146,7 +147,7 @@
 
   <header>
     <div class="school-info">
-      <img src="assets/insignia.png" alt="Insignia La Salle del Sur">
+      <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
       <div class="school-title">
         <h1>BANCO LDS 360</h1>
         <p>I.E.P. LA SALLE DEL SUR</p>
@@ -169,7 +170,8 @@
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
           <div class="alumno-info-box">
-            <p id="alumnoNombre" class="alumno-nombre">CARGANDO DATOS...</p>
+            <!-- Si sale estudiante no encontrado, haz clic en este texto para ingresar el código correcto -->
+            <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
             <p id="alumnoGrado" class="alumno-grado">---</p>
           </div>
         </div>
@@ -344,6 +346,16 @@
       consultarDatosEstudiante(codigoEstudianteActual);
     });
 
+    function cambiarCodigoManual() {
+      const nuevoCod = prompt("INGRESE EL CÓDIGO CORRECTO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
+      if (nuevoCod && nuevoCod.trim() !== "") {
+        const codigoLimpio = nuevoCod.trim().toUpperCase();
+        window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoLimpio));
+        codigoEstudianteActual = codigoLimpio;
+        consultarDatosEstudiante(codigoLimpio);
+      }
+    }
+
     function calcularSaldoDesdeMovimientos(movs) {
       let ingresos = 0;
       let egresos = 0;
@@ -383,7 +395,8 @@
           return;
         }
 
-        document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO";
+        document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
+        document.getElementById('alumnoGrado').textContent = "CÓDIGO BUSCADO: " + codigo;
       });
     }
 
