@@ -8,7 +8,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
     body {
-      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 50%, #0f172a 100%);
+      background: linear-gradient(135deg, #06101c 0%, #0c1e30 50%, #08121e 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -57,7 +57,7 @@
     /* CONTENEDOR PRINCIPAL COMPARTIDO */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 480px 1fr;
+      grid-template-columns: 500px 1fr;
       gap: 30px;
       width: 100%;
       align-items: stretch;
@@ -67,84 +67,103 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
-    /* TARJETA DEL ESTUDIANTE */
+    /* TARJETA DEL ESTUDIANTE BASADA EXACTAMENTE EN SU IMAGEN DE REFERENCIA */
     .saldo-card {
-      background: linear-gradient(135deg, #111827 0%, #1e3a8a 60%, #172554 100%);
+      background: linear-gradient(135deg, #09192f 0%, #0d2545 100%);
       color: #ffffff;
       border-radius: 28px;
-      padding: 34px 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      padding: 30px 26px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
       border: 3px solid #f59e0b;
       text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
-      overflow: hidden;
     }
     
-    .saldo-card::before {
-      content: "";
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background-image: radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
-      background-size: 20px 20px;
-      pointer-events: none;
-    }
-
-    /* SECCIÓN SUPERIOR SALDO Y FOTO (MÁS CENTRADA Y BALANCEADA) */
     .saldo-top { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      gap: 20px; 
-      position: relative; 
-      z-index: 2; 
+      gap: 15px; 
     }
-    .saldo-info-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+
+    /* CUADRO INTERIOR DORADO PARA EL SALDO DISPONIBLE */
+    .saldo-box-dorado {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+      color: #0c1e30;
+      border-radius: 20px;
+      padding: 16px 20px;
+      flex: 1;
+      box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 6px 15px rgba(0,0,0,0.2);
+      border: 2px solid #fbbf24;
     }
-    .saldo-title { font-size: 0.82rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
-    .saldo-amount { font-size: 2.8rem; font-weight: 800; margin-top: 6px; color: #ffffff; line-height: 1.1; }
+    .saldo-title { font-size: 0.75rem; color: #78350f; font-weight: 800; letter-spacing: 1px; }
+    .saldo-amount { font-size: 2.2rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
     
-    /* FOTO AMPLIADA Y DESTACADA */
+    /* FOTO REDONDA DESTACADA CON BORDE DORADO */
     .avatar-img { 
-      width: 170px; 
-      height: 170px; 
+      width: 140px; 
+      height: 140px; 
       border-radius: 50%; 
-      border: 5px solid #f59e0b; 
+      border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
       flex-shrink: 0;
-      position: relative;
-      z-index: 2;
     }
     
+    /* CAJA DE NOMBRE Y GRADO */
     .alumno-info-box { 
-      margin-top: 22px; 
-      background: rgba(8, 18, 30, 0.55); 
-      padding: 16px; 
-      border-radius: 18px; 
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      position: relative;
-      z-index: 2;
+      margin-top: 20px; 
+      text-align: center;
+      padding: 10px 0;
     }
-    .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; cursor: pointer; }
+    .alumno-nombre { 
+      font-size: 1.25rem; 
+      font-weight: 800; 
+      color: #ffffff; 
+      line-height: 1.3; 
+      cursor: pointer; 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
-    .alumno-grado { font-size: 0.95rem; color: #f59e0b; font-weight: 700; margin-top: 6px; letter-spacing: 0.5px; }
+    .alumno-grado { 
+      font-size: 0.88rem; 
+      color: #fde68a; 
+      font-weight: 700; 
+      margin-top: 6px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
     
-    /* BOTONES INFERIORES DE LA TARJETA (MOVIMIENTOS EN AMARILLO ELEGANTE) */
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; position: relative; z-index: 2; }
+    /* BOTONES INFERIORES: PAGAR EN ROJO Y MOVIMIENTOS EN DORADO */
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
     .action-btn { 
-      padding: 16px 12px; border-radius: 18px; font-weight: 800; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.9rem; 
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: transform 0.2s, box-shadow 0.2s; 
+      padding: 15px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .action-btn:hover { transform: translateY(-2px); }
-    .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border: 2px solid #fb7185; }
-    .btn-movs { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; border: 2px solid #fcd34d; font-weight: 800; }
+    
+    /* BOTÓN PAGAR / GASTOS EN ROJO VIBRANTE */
+    .btn-pagar { 
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+      color: #ffffff; 
+      border: 2px solid #fca5a5; 
+    }
+    
+    /* BOTÓN MOVIMIENTOS EN DORADO ELEGANTE */
+    .btn-movs { 
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%); 
+      color: #78350f; 
+      border: 2px solid #fbbf24; 
+    }
 
     /* COLUMNA DERECHA */
     .sub-card { 
@@ -212,7 +231,8 @@
       header, .actions-grid, .inicio-btn, .btn-imprimir, footer, .sub-card:has(#seccionOperacion:not(.hidden)) { display: none !important; }
       .dashboard-container { display: block; }
       .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; margin-bottom: 20px; }
-      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; border-color: #000 !important; }
+      .saldo-box-dorado { background: #fef3c7 !important; color: #000 !important; border: 1px solid #000 !important; }
+      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; }
       .print-header {
         display: flex;
         align-items: center;
@@ -247,15 +267,15 @@
       <div class="saldo-card">
         <div>
           <div class="saldo-top">
-            <div class="saldo-info-container">
+            <div class="saldo-box-dorado">
               <p class="saldo-title">SALDO DISPONIBLE</p>
-              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 1rem; font-weight: 600;">LDS</span></h3>
+              <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.95rem; font-weight: 700;">LDS</span></h3>
             </div>
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
           <div class="alumno-info-box">
             <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-            <p id="alumnoGrado" class="alumno-grado">---</p>
+            <p id="alumnoGrado" class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
           </div>
         </div>
 
@@ -355,6 +375,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
+    // SÍNTESIS DE VOZ MELODIOSA Y CÁLIDA (MEJORADA CON SALDO Y BOTONES)
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -475,10 +496,6 @@
       const codigoRecibido = parametros.get('codigo') || 'LDS-EST-001';
       codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
       consultarDatosEstudiante(codigoEstudianteActual);
-
-      setTimeout(() => {
-        hablarTextoVoz("Cuenta del estudiante cargada. Revisa tus movimientos y ahorros en el Banco L.D.S. 360.");
-      }, 1000);
     });
 
     function cambiarCodigoManual() {
@@ -520,31 +537,36 @@
         if (encontrado) {
           const nombreCompleto = est.nombreCompleto || [est.nombre, est.apellido].filter(Boolean).join(' ') || codigo;
           document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          document.getElementById('alumnoGrado').textContent = [est.grado, est.seccion].filter(Boolean).join(' ');
+          
+          const gradoSeccion = [est.grado, est.seccion].filter(Boolean).join(' ');
+          document.getElementById('textoGradoSeccion').textContent = gradoSeccion || '---';
 
           const cuenta = (datos && datos.cuenta) || {};
           const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || [];
           const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? 0);
           const saldo = movimientos.length > 0 ? calcularSaldoDesdeMovimientos(movimientos) : saldoBackend;
           
-          document.getElementById('saldoLDS').textContent = (Number.isFinite(saldo) ? saldo : 0).toFixed(2);
+          const saldoFinal = Number.isFinite(saldo) ? saldo : 0;
+          document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
 
           const fotoUrl = est.fotoUrl || est.foto || '';
           document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
 
           renderizarMovimientos(movimientos);
-          hablarTextoVoz("Bienvenido " + nombreCompleto);
+          
+          // VOZ INTERACTIVA PARA EL NIÑO: DICTA EL NOMBRE Y SU SALDO DISPONIBLE
+          hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
           return;
         }
 
         document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
-        document.getElementById('alumnoGrado').textContent = "CÓDIGO BUSCADO: " + codigo;
+        document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
         hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
       });
     }
 
     function accionBotonPagar() {
-      hablarTextoVoz("Registrar pago o gasto");
+      hablarTextoVoz("Registrar pago o gastos");
       document.getElementById('seccionOperacion').classList.remove('hidden');
       document.getElementById('seccionMovimientos').classList.add('hidden');
       document.getElementById('tituloOperacion').textContent = "💸 REGISTRAR PAGO O GASTO";
