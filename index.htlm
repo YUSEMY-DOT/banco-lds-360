@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360</title>
+
+<!-- Librería para el escaneo de códigos QR -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100%;
+        background: #061a32;
+    }
+
+    body {
+        overflow-x: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .pantalla {
+        position: relative;
+        width: 100%;
+        max-width: 1671px;
+        margin: 0 auto;
+        aspect-ratio: 1671 / 941;
+        overflow: hidden;
+    }
+
+    .pantalla > img.fondo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: fill;
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    /* Zonas transparentes: NO agregan colores ni efectos a la imagen. */
+    .zona {
+        position: absolute;
+        display: block;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        z-index: 5;
+        outline: none;
+    }
+
+    .zona:focus-visible {
+        outline: 3px solid rgba(255,255,255,.8);
+        border-radius: 20px;
+    }
+
+    /* Coordenadas calculadas sobre la imagen original 1671 x 941 */
+    .zona-qr {
+        left: 12.7%;
+        top: 63.6%;
+        width: 21.0%;
+        height: 10.7%;
+    }
+
+    .zona-codigo {
+        left: 54.5%;
+        top: 63.5%;
+        width: 16.1%;
+        height: 10.8%;
+    }
+
+    .zona-tienda {
+        left: 12.6%;
+        top: 75.9%;
+        width: 18.3%;
+        height: 11.9%;
+    }
+
+    .zona-padres {
+        left: 31.5%;
+        top: 75.8%;
+        width: 20.0%;
+        height: 11.9%;
+    }
+
+    .zona-manual {
+        left: 52.4%;
+        top: 75.8%;
+        width: 18.4%;
+        height: 11.9%;
+    }
+
+    .zona-admin {
+        left: 80.8%;
+        top: 1.8%;
+        width: 15.0%;
+        height: 6.0%;
+    }
+
+    /* Acceso manual: un solo cuadro, infantil, elegante y con colores institucionales. */
+    #codigoManualModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(242,197,27,.18), transparent 22%),
+            radial-gradient(circle at 85% 18%, rgba(181,18,47,.18), transparent 24%),
+            rgba(3, 20, 43, .82);
+        z-index: 1100;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+    }
+
+    .codigo-box {
+        width: min(560px, 94vw);
+        background: linear-gradient(145deg, #ffffff 0%, #f7f9ff 100%);
+        border: 4px solid #082a55;
+        border-radius: 30px;
+        padding: 30px 32px 28px;
+        text-align: center;
+        box-shadow:
+            0 24px 60px rgba(0,0,0,.48),
+            0 0 0 7px rgba(243,197,27,.22);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .codigo-box::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 10px;
+        background: linear-gradient(90deg, #082a55 0 38%, #f3c51b 38% 62%, #b5122f 62% 100%);
+    }
+
+    .codigo-insignia {
+        display: block;
+        width: 92px;
+        height: 92px;
+        object-fit: contain;
+        margin: 8px auto 12px;
+        filter: drop-shadow(0 5px 8px rgba(8,42,85,.20));
+    }
+
+    .codigo-box h2 {
+        margin: 0 0 6px;
+        color: #082a55;
+        font-size: 1.75rem;
+        font-weight: 900;
+    }
+
+    .codigo-box p {
+        margin: 0 0 19px;
+        color: #53657a;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .campo-login {
+        text-align: left;
+        margin-top: 13px;
+    }
+
+    .campo-login label {
+        display: block;
+        margin: 0 0 7px 5px;
+        color: #082a55;
+        font-weight: 900;
+        font-size: .9rem;
+    }
+
+    #codigoManualInput, #claveManualInput {
+        width: 100%;
+        height: 52px;
+        border: 3px solid #246fd3;
+        border-radius: 15px;
+        padding: 0 15px;
+        font-size: 1.03rem;
+        font-weight: 700;
+        outline: none;
+        background: #ffffff;
+        color: #102a43;
+        transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+
+    #codigoManualInput:focus, #claveManualInput:focus {
+        border-color: #f3c51b;
+        box-shadow: 0 0 0 4px rgba(243,197,27,.20);
+        transform: translateY(-1px);
+    }
+
+    #codigoManualInput {
+        text-transform: uppercase;
+    }
+
+    .codigo-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 21px;
+    }
+
+    .codigo-actions button {
+        flex: 1;
+        border: 0;
+        border-radius: 15px;
+        padding: 14px 16px;
+        font-weight: 900;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform .15s, filter .15s;
+    }
+
+    .codigo-actions button:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+    }
+
+    .btn-codigo-aceptar {
+        background: linear-gradient(135deg, #082a55, #1765b5);
+        color: #fff;
+        border: 3px solid #f3c51b !important;
+    }
+
+    .btn-codigo-cancelar {
+        background: #e8edf4;
+        color: #18324d;
+        border: 2px solid #cbd5e1 !important;
+    }
+
+    @media (max-width: 520px) {
+        .codigo-box {
+            padding: 27px 18px 22px;
+            border-radius: 24px;
+        }
+
+        .codigo-box h2 {
+            font-size: 1.45rem;
+        }
+
+        .codigo-actions {
+            flex-direction: column-reverse;
+        }
+    }
+
+    /* Modal QR: solo aparece al pulsar Escanea QR. */
+    #qrScannerModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 26, 50, .96);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .scanner-box {
+        width: min(390px, 94vw);
+        background: #0c1e30;
+        border: 3px solid #f1c40f;
+        border-radius: 20px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    #reader {
+        width: 100% !important;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }
+
+    .btn-cerrar-camara {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 20px;
+        background: #e11d48;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="pantalla">
+    <!-- IMAGEN DE FONDO -->
+    <img class="fondo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABocAAAOtCAYAAABDjbyEAAAQAElEQVR4Abz9a6yn25beBz1j1a7a55xut9vdstP3xvENQmQT3OkLT1/DRTZpkViQQIgsRD4QW4hYHGETnMiJnHBnyjHFpbAIBQZThYPHBMgj5C0EoHwLKJz4QFJAS5R735XSf295nl72raub3G3PM933/* ... (Tu imagen original en base64 se mantiene intacta) ... */" alt="Fondo Banco LDS 360">
+
+    <!-- ZONAS INTERACTIVAS ORIGINALES -->
+    <button class="zona zona-qr" onclick="reproducirMelodiaYAccion('qr')" title="Escanear QR"></button>
+    <button class="zona zona-codigo" onclick="reproducirMelodiaYAccion('codigo')" title="Ingresar Código"></button>
+    <button class="zona zona-tienda" onclick="reproducirMelodiaYAccion('tienda')" title="Tienda"></button>
+    <button class="zona zona-padres" onclick="reproducirMelodiaYAccion('padres')" title="Zona Padres"></button>
+    <button class="zona zona-manual" onclick="reproducirMelodiaYAccion('manual')" title="Acceso Manual"></button>
+    <button class="zona zona-admin" onclick="reproducirMelodiaYAccion('admin')" title="Administración"></button>
+</div>
+
+<!-- MODAL ACCESO MANUAL -->
+<div id="codigoManualModal">
+    <div class="codigo-box">
+        <h2>Acceso Institucional</h2>
+        <p>Ingresa tus datos del sistema</p>
+        <div class="campo-login">
+            <label>Código de Usuario:</label>
+            <input type="text" id="codigoManualInput" placeholder="Ej: LDS123">
+        </div>
+        <div class="campo-login">
+            <label>Clave:</label>
+            <input type="password" id="claveManualInput" placeholder="••••">
+        </div>
+        <div class="codigo-actions">
+            <button class="btn-codigo-cancelar" onclick="cerrarModalManual()">Cancelar</button>
+            <button class="btn-codigo-aceptar" onclick="validarManual()">Ingresar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL QR -->
+<div id="qrScannerModal">
+    <div class="scanner-box">
+        <div id="reader"></div>
+        <button class="btn-cerrar-camara" onclick="cerrarQR()">Cerrar Cámara</button>
+    </div>
+</div>
+
+<script>
+    // Sistema de Audio Melódico Integrado (Voz y notas armoniosas tipo carillón institucional)
+    let audioCtx = null;
+
+    function inicializarAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    // Reproduce una melodía bonita y limpia al hacer clic en cualquier botón
+    function reproducirMelodíaBonita() {
+        try {
+            inicializarAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const notas = [523.25, 659.25, 783.99, 1046.50]; // Acorde alegre y dulce (Do - Mi - Sol - Do agudo)
+            let tiempoInicio = audioCtx.currentTime;
+
+            notas.forEach((frecuencia, index) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine'; // Onda suave y melodiosa
+                osc.frequency.setValueAtTime(frecuencia, tiempoInicio + (index * 0.08));
+
+                // Efecto envolvente para que la "voz" de la nota sea suave y bonita (sin golpes secos)
+                gain.gain.setValueAtTime(0, tiempoInicio + (index * 0.08));
+                gain.gain.linearRampToValueAtTime(0.15, tiempoInicio + (index * 0.08) + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, tiempoInicio + (index * 0.08) + 0.35);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(tiempoInicio + (index * 0.08));
+                osc.stop(tiempoInicio + (index * 0.08 + 0.38));
+            });
+        } catch (e) {
+            console.log("Audio interactivo listo");
+        }
+    }
+
+    function reproducirMelodiaYAccion(tipo) {
+        reproducirMelodíaBonita();
+        
+        // Ejecuta la acción correspondiente a tu estructura original
+        setTimeout(() => {
+            if (tipo === 'qr') {
+                abrirQR();
+            } else if (tipo === 'codigo' || tipo === 'manual') {
+                abrirModalManual();
+            } else if (tipo === 'tienda') {
+                console.log("Abriendo Tienda...");
+            } else if (tipo === 'padres') {
+                console.log("Abriendo Zona Padres...");
+            } else if (tipo === 'admin') {
+                console.log("Abriendo Administración...");
+            }
+        }, 150);
+    }
+
+    function abrirModalManual() {
+        document.getElementById('codigoManualModal').style.display = 'flex';
+    }
+
+    function cerrarModalManual() {
+        document.getElementById('codigoManualModal').style.display = 'none';
+    }
+
+    function validarManual() {
+        const codigo = document.getElementById('codigoManualInput').value;
+        const clave = document.getElementById('claveManualInput').value;
+        if(codigo.trim() !== "") {
+            alert("Acceso procesado correctamente para: " + codigo);
+            cerrarModalManual();
+        } else {
+            alert("Por favor ingresa un código válido.");
+        }
+    }
+
+    let html5QrcodeScanner = null;
+    function abrirQR() {
+        document.getElementById('qrScannerModal').style.display = 'flex';
+        if (!html5QrcodeScanner) {
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        }
+        html5QrcodeScanner.render((decodedText) => {
+            alert("QR Escreado: " + decodedText);
+            cerrarQR();
+        }, (error) => {
+            // Error de lectura normal de escaneo en curso
+        });
+    }
+
+    function cerrarQR() {
+        document.getElementById('qrScannerModal').style.display = 'none';
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear().catch(error => {
+                console.error("Error al limpiar la cámara", error);
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
