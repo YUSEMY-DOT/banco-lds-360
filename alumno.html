@@ -67,9 +67,9 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
-    /* COLUMNA IZQUIERDA: TARJETA DEL ESTUDIANTE (ESTILO ORIGINAL RESTAURADO Y FOTO AMPLIADA) */
+    /* TARJETA DEL ESTUDIANTE */
     .saldo-card {
-      background: linear-gradient(135deg, #111827 0%, #1e3a8a 100%);
+      background: linear-gradient(135deg, #111827 0%, #1e3a8a 60%, #172554 100%);
       color: #ffffff;
       border-radius: 28px;
       padding: 34px 30px;
@@ -79,12 +79,24 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
+      overflow: hidden;
     }
-    .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+    
+    .saldo-card::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background-image: radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+
+    .saldo-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; position: relative; z-index: 2; }
     .saldo-title { font-size: 0.8rem; color: #f59e0b; font-weight: 800; letter-spacing: 1.2px; }
     .saldo-amount { font-size: 2.6rem; font-weight: 800; margin-top: 8px; color: #ffffff; }
     
-    /* FOTO AMPLIADA SOLICITADA */
+    /* FOTO AMPLIADA Y DESTACADA */
     .avatar-img { 
       width: 175px; 
       height: 175px; 
@@ -94,14 +106,24 @@
       background: #ffffff; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.4);
       flex-shrink: 0;
+      position: relative;
+      z-index: 2;
     }
     
-    .alumno-info-box { margin-top: 22px; }
+    .alumno-info-box { 
+      margin-top: 22px; 
+      background: rgba(8, 18, 30, 0.55); 
+      padding: 16px; 
+      border-radius: 18px; 
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      position: relative;
+      z-index: 2;
+    }
     .alumno-nombre { font-size: 1.35rem; font-weight: 800; color: #ffffff; line-height: 1.35; cursor: pointer; }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
-    .alumno-grado { font-size: 0.95rem; color: #cbd5e1; font-weight: 700; margin-top: 6px; }
+    .alumno-grado { font-size: 0.95rem; color: #f59e0b; font-weight: 700; margin-top: 6px; letter-spacing: 0.5px; }
     
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; position: relative; z-index: 2; }
     .action-btn { 
       padding: 16px 12px; border-radius: 18px; font-weight: 800; color: #ffffff; border: none; cursor: pointer; text-align: center; font-size: 0.9rem; 
       box-shadow: 0 6px 18px rgba(0,0,0,0.25); transition: transform 0.2s, box-shadow 0.2s; 
@@ -110,7 +132,7 @@
     .btn-pagar { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border: 2px solid #fb7185; }
     .btn-movs { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border: 2px solid #c084fc; }
 
-    /* COLUMNA DERECHA: PANELES (REGISTRO / HISTORIAL) */
+    /* COLUMNA DERECHA */
     .sub-card { 
       background: #ffffff; color: #1e293b; border-radius: 28px; padding: 34px; 
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
@@ -130,7 +152,6 @@
     }
     .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; }
     
-    /* BOTÓN DE IMPRIMIR INTEGRADO CON ESTILO INSTITUCIONAL */
     .btn-imprimir {
       background: #1e3a8a;
       color: #ffffff;
@@ -169,12 +190,26 @@
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
     }
 
+    /* ENCABEZADO DE IMPRESIÓN CON INSIGNIA PUBLICITARIA */
+    .print-header { display: none; }
+
     @media print {
       body { background: #ffffff; color: #000000; }
       header, .actions-grid, .inicio-btn, .btn-imprimir, footer, .sub-card:has(#seccionOperacion:not(.hidden)) { display: none !important; }
       .dashboard-container { display: block; }
-      .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; }
-      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado { color: #000 !important; }
+      .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; margin-bottom: 20px; }
+      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; border-color: #000 !important; }
+      .print-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 3px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+      .print-header img { width: 60px; height: 60px; object-fit: contain; }
+      .print-header-text h2 { font-size: 1.2rem; font-weight: 800; }
+      .print-header-text p { font-size: 0.85rem; font-weight: 700; }
     }
   </style>
 </head>
@@ -271,6 +306,17 @@
 
         <!-- HISTORIAL DE MOVIMIENTOS -->
         <div id="seccionMovimientos" class="sub-card">
+          <!-- ENCABEZADO EXCLUSIVO CON INSIGNIA PARA IMPRESIÓN -->
+          <div class="print-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+              <div class="print-header-text">
+                <h2>BANCO LDS 360 - ESTADO DE CUENTA</h2>
+                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
+              </div>
+            </div>
+          </div>
+
           <div class="sub-card-header">
             <h4>HISTORIAL DE MOVIMIENTOS</h4>
             <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">
