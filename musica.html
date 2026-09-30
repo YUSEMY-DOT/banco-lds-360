@@ -8,7 +8,7 @@
         <source src="tu-cancion.mp3" type="audio/mpeg">
     </audio>
     <script>
-        // En cuanto el usuario toque o haga clic en cualquier parte de la página por primera vez, suena de frente sin botones visibles
+        // Inicia el audio apenas el usuario haga cualquier clic o toque inicial en la pantalla
         window.addEventListener('pointerdown', () => {
             const audio = document.getElementById('audioFondo');
             if (audio.paused) {
