@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Música de Fondo</title>
+</head>
+<body>
+    <!-- Coloca aquí el enlace de tu archivo de audio o música -->
+    <audio id="audioFondo" autoplay loop>
+        <source src="TU_ENLACE_DE_MUSICA_O_AUDIO.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Fuerza la reproducción por si el navegador la bloquea al inicio
+        window.addEventListener('click', () => {
+            const audio = document.getElementById('audioFondo');
+            audio.play().catch(e => console.log("Reproducción automática bloqueada"));
+        }, { once: true });
+    </script>
+</body>
+</html>
