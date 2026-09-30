@@ -170,7 +170,6 @@
             <img id="alumnoFoto" src="https://via.placeholder.com/150" alt="Foto del Estudiante" class="avatar-img" />
           </div>
           <div class="alumno-info-box">
-            <!-- Si sale estudiante no encontrado, haz clic en este texto para ingresar el código correcto -->
             <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
             <p id="alumnoGrado" class="alumno-grado">---</p>
           </div>
@@ -251,7 +250,8 @@
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHpJOXgHX-_uqZxlI5Pm87I9XmlRBJQ2VY2MJ5F3qQeYA2CIaG2HEOOKZUz4nLJLQLZg/exec";
+    // URL OFICIAL DE SU GOOGLE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
     function hacerPeticionJSONP(parametros, callback) {
