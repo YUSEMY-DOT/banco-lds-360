@@ -41,7 +41,7 @@
     © IEP La Salle del Sur — Banco LDS 360
   </footer>
 
-  <!-- SCRIPT DE SECUENCIA ORDENADA: VOZ DE BIENVENIDA -> HIMNO -> EXPLICACIÓN DE BOTONES -->
+  <!-- SCRIPT CON EL HIMNO COMPLETO Y LA SECUENCIA EXACTA -->
   <script>
     let audioCtx = null;
     let iniciado = false;
@@ -52,16 +52,42 @@
       "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
     };
 
-    // Himno institucional completo
-    const himnoMelodia = [
-      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
-      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
-      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
-      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
-      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
-      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
-      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
-      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+    // Secuencia musical ajustada con la letra del Himno institucional
+    const himnoConLetra = [
+      { n: "C4", d: 0.4, letra: "Aprendiendo" },
+      { n: "E4", d: 0.4, letra: "con metas y" },
+      { n: "G4", d: 0.7, letra: "valores" },
+      { n: "G4", d: 0.7, letra: "cual nos diste" },
+      { n: "A4", d: 0.4, letra: "tú mi gran" },
+      { n: "G4", d: 0.4, letra: "maestro." },
+      { n: "F4", d: 0.4, letra: "Lasallista" },
+      { n: "E4", d: 0.4, letra: "del Sur es" },
+      { n: "D4", d: 0.7, letra: "nuestro ejemplo" },
+      { n: "C4", d: 0.7, letra: "de enseñanza," },
+      { n: "D4", d: 0.4, letra: "disciplina" },
+      { n: "F4", d: 0.4, letra: "y lealtad." },
+      { n: "A4", d: 0.7, letra: "Como siempre" },
+      { n: "A4", d: 0.7, letra: "un paso adelante" },
+      { n: "B4", d: 0.4, letra: "Sencillez," },
+      { n: "A4", d: 0.4, letra: "responsabilidad" },
+      { n: "G4", d: 0.4, letra: "y honor." },
+      { n: "F4", d: 0.4, letra: "Es el lema" },
+      { n: "E4", d: 0.7, letra: "que nos enseñaste" },
+      { n: "D4", d: 0.7, letra: "al crecer." },
+      { n: "E4", d: 0.4, letra: "Sabiduría" },
+      { n: "F4", d: 0.4, letra: "de grandes" },
+      { n: "G4", d: 0.7, letra: "mentores" },
+      { n: "G4", d: 0.4, letra: "en nuestras" },
+      { n: "C5", d: 0.7, letra: "aulas" },
+      { n: "C5", d: 0.7, letra: "se educa con amor." },
+      { n: "B4", d: 0.4, letra: "Lasallista" },
+      { n: "A4", d: 0.4, letra: "del Sur es" },
+      { n: "G4", d: 0.4, letra: "nuestro ejemplo" },
+      { n: "F4", d: 0.4, letra: "de enseñanza," },
+      { n: "E4", d: 0.7, letra: "disciplina" },
+      { n: "D4", d: 0.4, letra: "y lealtad." },
+      { n: "E4", d: 0.4, letra: "Lealtad." },
+      { n: "F4", d: 1.5, letra: "¡La Salle del Sur!" }
     ];
 
     function sonarLira(ctx, freq, t, dur) {
@@ -103,16 +129,26 @@
       noise.start(t);
     }
 
-    function reproducirHimno(ctx) {
+    function reproducirHimnoConVisual(ctx) {
       let t = ctx.currentTime + 0.1;
-      himnoMelodia.forEach(item => {
+      let duracionTotal = 0;
+
+      himnoConLetra.forEach(item => {
         const f = FREQS[item.n] || 261.63;
         sonarLira(ctx, f, t, item.d);
         sonarTambor(ctx, t);
+
+        // Actualiza el texto en la pantalla conforme va sonando cada parte del himno
+        setTimeout(() => {
+          document.getElementById("estadoTexto").textContent = "Himno Institucional";
+          document.getElementById("subEstadoTexto").textContent = `🎵 "${item.letra}"`;
+        }, (t - ctx.currentTime) * 1000);
+
         t += item.d;
+        duracionTotal = t - ctx.currentTime;
       });
-      // Retorna la duración total del himno en segundos
-      return t - ctx.currentTime;
+
+      return duracionTotal;
     }
 
     async function iniciarSecuenciaInstitucional() {
@@ -128,7 +164,7 @@
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
 
-        // PASO 1: Locución inicial de bienvenida
+        // PASO 1: Locución exacta de bienvenida
         document.getElementById("estadoTexto").textContent = "¡Bienvenidos!";
         document.getElementById("subEstadoTexto").textContent = "Bienvenidos a tu entidad financiera...";
 
@@ -138,14 +174,11 @@
         mensajeBienvenida.rate = 0.9;
         mensajeBienvenida.pitch = 1.0;
 
-        // PASO 2: Cuando termina la bienvenida, empieza a sonar el himno
+        // PASO 2: Al terminar la bienvenida, se canta el himno institucional completo
         mensajeBienvenida.onend = function() {
-          document.getElementById("estadoTexto").textContent = "Himno Institucional";
-          document.getElementById("subEstadoTexto").textContent = "Entonando el himno de la institución...";
+          let duracionHimnoSegundos = reproducirHimnoConVisual(audioCtx);
 
-          let duracionHimnoSegundos = reproducirHimno(audioCtx);
-
-          // PASO 3: Cuando termina el himno, se explican las secuencias de los botones
+          // PASO 3: Al terminar el himno, se explican las opciones de los botones
           setTimeout(() => {
             document.getElementById("estadoTexto").textContent = "Panel Principal";
             document.getElementById("subEstadoTexto").textContent = "Listo para iniciar operaciones...";
@@ -164,7 +197,7 @@
       }
     }
 
-    // Activación automática al cargar o ante cualquier interacción del usuario
+    // Activación automática al cargar o ante cualquier interacción
     window.addEventListener('load', () => {
       setTimeout(iniciarSecuenciaInstitucional, 400);
     });
