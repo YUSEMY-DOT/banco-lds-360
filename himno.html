@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IEP La Salle del Sur - Himno Institucional</title>
+  <title>IEP La Salle del Sur - Banco LDS 360</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-6 font-sans select-none">
@@ -11,37 +11,37 @@
   <!-- ENCABEZADO INSTITUCIONAL -->
   <header class="text-center py-6">
     <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-widest mb-2 shadow">
-      IEP La Salle del Sur
+      I.E.P. La Salle del Sur — KIDSWork LS
     </div>
     <h1 class="text-3xl sm:text-4xl font-black text-amber-300 uppercase tracking-wider drop-shadow-lg">
-      Portal Escolar
+      Banco LDS 360
     </h1>
-    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">"Enseñanza, Disciplina y Lealtad"</p>
+    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">"Sencillez, Responsabilidad y Honor"</p>
   </header>
 
-  <!-- VISTA PRINCIPAL AL ESCANEAR -->
+  <!-- VISTA PRINCIPAL DE PORTADA -->
   <main class="max-w-md mx-auto w-full bg-slate-800/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-400/30 space-y-6 my-auto text-center">
     
     <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-400 via-yellow-400 to-sky-500 rounded-full p-1 shadow-2xl flex items-center justify-center">
       <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner animate-pulse">
-        🔔
+        🏛️
       </div>
     </div>
 
     <div class="space-y-2">
       <h2 id="estadoTexto" class="text-2xl font-black text-amber-300">¡Bienvenidos!</h2>
       <p id="subEstadoTexto" class="text-sm text-slate-200 font-medium">
-        Reproduciendo melodía de bienvenida...
+        Iniciando presentación institucional...
       </p>
     </div>
 
   </main>
 
   <footer class="text-center py-4 text-xs text-slate-500">
-    © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
+    © IEP La Salle del Sur — Banco LDS 360
   </footer>
 
-  <!-- SCRIPT DE SECUENCIA ORDENADA: MELODÍA -> VOZ -> HIMNO CONTINUO -->
+  <!-- SCRIPT DE SECUENCIA ORDENADA: VOZ DE BIENVENIDA -> HIMNO -> EXPLICACIÓN DE BOTONES -->
   <script>
     let audioCtx = null;
     let iniciado = false;
@@ -52,13 +52,7 @@
       "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
     };
 
-    // 1. Melodía corta exclusiva de bienvenida
-    const bienvenidaMelodia = [
-      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.6 },
-      { n: "C5", d: 0.8 }, { n: "G4", d: 0.6 }, { n: "C4", d: 1.2 }
-    ];
-
-    // 2. Melodía completa del Himno institucional
+    // Himno institucional completo
     const himnoMelodia = [
       { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
       { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
@@ -109,16 +103,16 @@
       noise.start(t);
     }
 
-    // Reproductor secuencial de notas en el AudioContext
-    function reproducirSecuencia(ctx, notas, tiempoInicio) {
-      let t = tiempoInicio;
-      notas.forEach(item => {
+    function reproducirHimno(ctx) {
+      let t = ctx.currentTime + 0.1;
+      himnoMelodia.forEach(item => {
         const f = FREQS[item.n] || 261.63;
         sonarLira(ctx, f, t, item.d);
         sonarTambor(ctx, t);
         t += item.d;
       });
-      return t; // Devuelve el tiempo exacto en que termina esta secuencia
+      // Retorna la duración total del himno en segundos
+      return t - ctx.currentTime;
     }
 
     async function iniciarSecuenciaInstitucional() {
@@ -131,46 +125,48 @@
         await audioCtx.resume();
       }
 
-      let tiempoActual = audioCtx.currentTime + 0.1;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
 
-      // PASO 1: Reproducir solo la melodía inicial de bienvenida con la lira
-      let finBienvenida = reproducirSecuencia(audioCtx, bienvenidaMelodia, tiempoActual);
+        // PASO 1: Locución inicial de bienvenida
+        document.getElementById("estadoTexto").textContent = "¡Bienvenidos!";
+        document.getElementById("subEstadoTexto").textContent = "Bienvenidos a tu entidad financiera...";
 
-      // Calcular la duración en milisegundos de la melodía inicial para sincronizar la voz
-      let duracionBienvenidaMs = (finBienvenida - tiempoActual) * 1000;
+        const textoBienvenida = "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.";
+        const mensajeBienvenida = new SpeechSynthesisUtterance(textoBienvenida);
+        mensajeBienvenida.lang = 'es-PE';
+        mensajeBienvenida.rate = 0.9;
+        mensajeBienvenida.pitch = 1.0;
 
-      // PASO 2: Al terminar la melodía inicial, hablar las palabras de bienvenida
-      setTimeout(() => {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          document.getElementById("estadoTexto").textContent = "¡Bienvenidos!";
-          document.getElementById("subEstadoTexto").textContent = "Escuchando mensaje institucional...";
+        // PASO 2: Cuando termina la bienvenida, empieza a sonar el himno
+        mensajeBienvenida.onend = function() {
+          document.getElementById("estadoTexto").textContent = "Himno Institucional";
+          document.getElementById("subEstadoTexto").textContent = "Entonando el himno de la institución...";
 
-          const textoVoz = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! Enseñanza, disciplina y lealtad.";
-          const mensaje = new SpeechSynthesisUtterance(textoVoz);
-          mensaje.lang = 'es-PE';
-          mensaje.rate = 0.9;
-          mensaje.pitch = 1.0;
+          let duracionHimnoSegundos = reproducirHimno(audioCtx);
 
-          // PASO 3: Cuando la voz termina de hablar, arranca el himno completo sin cortes ni reinicios
-          mensaje.onend = function() {
-            document.getElementById("estadoTexto").textContent = "Himno Institucional";
-            document.getElementById("subEstadoTexto").textContent = "Entonando el himno de la institución...";
-            
-            if (audioCtx) {
-              let tHimno = audioCtx.currentTime + 0.1;
-              reproducirSecuencia(audioCtx, himnoMelodia, tHimno);
-            }
-          };
+          // PASO 3: Cuando termina el himno, se explican las secuencias de los botones
+          setTimeout(() => {
+            document.getElementById("estadoTexto").textContent = "Panel Principal";
+            document.getElementById("subEstadoTexto").textContent = "Listo para iniciar operaciones...";
 
-          window.speechSynthesis.speak(mensaje);
-        }
-      }, duracionBienvenidaMs);
+            const textoBotones = "Selecciona tu opción en el panel para consultar cuentas, registrar transacciones o atender incidencias.";
+            const mensajeBotones = new SpeechSynthesisUtterance(textoBotones);
+            mensajeBotones.lang = 'es-PE';
+            mensajeBotones.rate = 0.95;
+            mensajeBotones.pitch = 1.0;
+            window.speechSynthesis.speak(mensajeBotones);
+
+          }, duracionHimnoSegundos * 1000);
+        };
+
+        window.speechSynthesis.speak(mensajeBienvenida);
+      }
     }
 
-    // Activación automática al cargar o ante cualquier interacción del usuario en la portada
+    // Activación automática al cargar o ante cualquier interacción del usuario
     window.addEventListener('load', () => {
-      setTimeout(iniciarSecuenciaInstitucional, 500);
+      setTimeout(iniciarSecuenciaInstitucional, 400);
     });
     document.addEventListener('touchstart', iniciarSecuenciaInstitucional, { once: true });
     document.addEventListener('click', iniciarSecuenciaInstitucional, { once: true });
