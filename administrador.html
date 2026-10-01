@@ -348,10 +348,10 @@ main {
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   font-weight: 800;
 }
 
@@ -366,12 +366,25 @@ main {
 .panel.collapsed .toggle-icon { transform: rotate(-90deg); }
 .panel.collapsed .panel-head { border-bottom: none; }
 
-.print-buttons-group {
+.header-actions-group {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-.print-buttons-group .btn {
+
+.header-actions-group select {
+  height: 32px;
+  font-size: 0.7rem;
+  padding: 0 6px;
+  border-radius: 14px;
+  background: #ffffff;
+  font-weight: 800;
+  width: auto;
+}
+
+.header-actions-group .btn {
   padding: 4px 8px;
   font-size: 0.65rem;
   min-height: 28px;
@@ -393,7 +406,8 @@ main {
   max-width: 100%;
 }
 
-.search-row-inputs {
+/* FILA ORDENADA DE BÚSQUEDA SEGÚN TU PETICIÓN */
+.search-row-ordered {
   display: flex;
   gap: 6px;
   width: 100%;
@@ -401,7 +415,7 @@ main {
   align-items: center;
 }
 
-.btn-qr-main {
+.btn-qr-custom {
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #ffffff;
   border: 2px solid var(--dorado);
@@ -414,45 +428,23 @@ main {
   white-space: nowrap;
 }
 
-.search-row-inputs input {
+.btn-search-custom {
   flex: 1;
   height: 42px;
-  font-size: 0.8rem;
-  min-width: 0;
-  padding: 0 8px;
-}
-
-.btn-search-full {
-  width: 100%;
-  height: 42px;
-  margin-top: 6px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   border-radius: 10px;
   font-weight: 800;
+  white-space: nowrap;
 }
 
-.type-selector-box {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 6px;
-  width: 100%;
-}
-
-.type-btn {
-  border: 2px solid var(--borde);
-  border-radius: 8px;
-  padding: 6px;
-  font-weight: 800;
-  font-size: 0.7rem;
-  cursor: pointer;
+.input-code-custom {
+  width: 110px;
+  height: 42px;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  padding: 0 8px;
   text-align: center;
-  background: #f8fafc;
-  color: var(--muted);
 }
-
-.type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
-.type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
 
 .small-label {
   display: block;
@@ -474,9 +466,7 @@ main {
 .message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
 .message.error { display: block; background: #fef2f2; color: var(--rojo); border: 1px solid #fecaca; }
 
-/* =========================================================
-   TARJETA DEL ALUMNO Y FOTO 100% CENTRADAS Y AJUSTADAS
-   ========================================================= */
+/* TARJETA DEL ALUMNO Y FOTO CENTRADAS */
 .student-head {
   display: none;
   border: 2px solid var(--dorado);
@@ -646,6 +636,29 @@ footer {
   font-size: 0.65rem;
   font-weight: 700;
 }
+
+.type-selector-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.type-btn {
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  padding: 6px;
+  font-weight: 800;
+  font-size: 0.7rem;
+  cursor: pointer;
+  text-align: center;
+  background: #f8fafc;
+  color: var(--muted);
+}
+
+.type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
+.type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
 </style>
 </head>
 <body>
@@ -724,35 +737,32 @@ footer {
   <section class="layout">
     <div>
       <div class="panel">
+        <!-- CABECERA CON PERIODO, ALUMNO Y GENERAL -->
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
-          <div class="print-buttons-group">
+          <div class="header-actions-group">
+            <select id="selectAnioEscolar" onchange="cambiarAnioEscolar()">
+              <option value="2026" selected>AÑO 2026</option>
+              <option value="2027">AÑO 2027</option>
+              <option value="2028">AÑO 2028</option>
+              <option value="2029">AÑO 2029</option>
+              <option value="2030">AÑO 2030</option>
+            </select>
             <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">👤 ALUMNO</button>
             <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
           </div>
         </div>
         <div class="panel-body">
           
-          <!-- BLOQUE DE BÚSQUEDA ORDENADO Y RESPONSIVO -->
+          <!-- BLOQUE DE BÚSQUEDA ORDENADO EXACTAMENTE A TU PEDIDO -->
           <div class="search-container">
             <div>
-              <label class="small-label" for="selectAnioEscolar">PERIODO / AÑO ESCOLAR</label>
-              <select id="selectAnioEscolar" class="input-field" onchange="cambiarAnioEscolar()">
-                <option value="2026" selected>AÑO 2026</option>
-                <option value="2027">AÑO 2027</option>
-                <option value="2028">AÑO 2028</option>
-                <option value="2029">AÑO 2029</option>
-                <option value="2030">AÑO 2030</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="small-label" for="codigo">CÓDIGO O QR DEL ESTUDIANTE</label>
-              <div class="search-row-inputs">
-                <button class="btn btn-qr-main" type="button" onclick="abrirEscanerQR()">📷 QR</button>
-                <input id="codigo" class="code-input" placeholder="LDS-EST-001" autocomplete="off">
+              <label class="small-label" for="codigo">CÓDIGO QR / ESTUDIANTE</label>
+              <div class="search-row-ordered">
+                <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+                <button class="btn btn-gold btn-search-custom" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
+                <input id="codigo" class="input-code-custom" placeholder="LDS-001" autocomplete="off">
               </div>
-              <button class="btn btn-gold btn-search-full" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
             </div>
           </div>
 
