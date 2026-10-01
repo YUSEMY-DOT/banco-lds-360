@@ -211,7 +211,7 @@ textarea { height: auto; padding: 8px 10px; }
 
 .primary-btn {
   width: 100%;
-  height: 44px;
+  height: 46px;
   border: 0;
   border-radius: 12px;
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
@@ -340,6 +340,9 @@ main {
   flex-wrap: wrap;
 }
 
+.panel-head.clickable { cursor: pointer; }
+.panel-head.clickable:hover { background: #f1f5f9; }
+
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
@@ -349,6 +352,17 @@ main {
   gap: 5px;
   font-weight: 800;
 }
+
+.toggle-icon {
+  font-size: 0.8rem;
+  color: var(--muted);
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+.panel.collapsed .panel-body { display: none; }
+.panel.collapsed .toggle-icon { transform: rotate(-90deg); }
+.panel.collapsed .panel-head { border-bottom: none; }
 
 .print-buttons-group {
   display: flex;
@@ -653,7 +667,7 @@ footer {
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
           <div class="print-buttons-group">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">🖨️ ALUMNO</button>
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">🖨️️ ALUMNO</button>
             <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
           </div>
         </div>
@@ -743,6 +757,7 @@ footer {
     </div>
 
     <div>
+      <!-- PANEL DE PAGO CERRADO POR DEFECTO -->
       <div id="panelPago" class="panel collapsed">
         <div class="panel-head clickable" onclick="togglePanel('panelPago')">
           <h3>💰 REGISTRAR PAGO / TRANSACCIÓN</h3>
@@ -782,6 +797,7 @@ footer {
         </div>
       </div>
 
+      <!-- PANEL DE INCIDENCIAS CERRADO POR DEFECTO -->
       <div id="panelIncidencias" class="panel collapsed">
         <div class="panel-head clickable" onclick="togglePanel('panelIncidencias')">
           <h3>🛠️ ATENCIÓN DE INCIDENCIAS</h3>
@@ -1283,7 +1299,7 @@ function imprimirReportePersonal() {
     return;
   }
   const anio = document.getElementById("selectAnioEscolar").value;
-  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DES SUR — ESTADO DE CUENTA (" + anio + ")";
+  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA (" + anio + ")";
   
   const nombreEst = datosEstudianteActualGlobal.nombreCompleto || datosEstudianteActualGlobal.nombre || "ESTUDIANTE";
   const metaEst = [datosEstudianteActualGlobal.codigo, "AÑO: " + anio, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
