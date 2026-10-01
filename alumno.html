@@ -426,7 +426,7 @@
       }
     }
 
-    // PETICIÓN JSONP DIRECTA Y RÁPIDA (COORDINADA CON EL SERVIDOR)
+    // COMUNICACIÓN JSONP RÁPIDA Y COMPATIBLE
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       let respuestaEnviada = false;
@@ -540,19 +540,6 @@
       window.print();
     }
 
-    function calcularSaldoDesdeMovimientos(movs) {
-      let ingresos = 0;
-      let egresos = 0;
-      (movs || []).forEach(function(m) {
-        const tipo = String(m.tipo || m.tipoMovimiento || '').trim().toUpperCase();
-        const monto = Number(m.monto ?? 0);
-        if (!Number.isFinite(monto)) return;
-        if (tipo === 'INGRESO' || tipo.includes('BONIF')) ingresos += monto;
-        else if (tipo === 'EGRESO' || tipo === 'GASTO') egresos += monto;
-      });
-      return ingresos - egresos;
-    }
-
     function consultarDatosEstudiante(codigo) {
       document.getElementById('alumnoNombre').textContent = "CARGANDO DATOS...";
       
@@ -572,9 +559,8 @@
           const cuenta = (datos && datos.cuenta) || (res && res.cuenta) || {};
           const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || (res && Array.isArray(res.movimientos) ? res.movimientos : []) || [];
           const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? res.saldoActual ?? 0);
-          const saldo = movimientos.length > 0 ? calcularSaldoDesdeMovimientos(movimientos) : saldoBackend;
           
-          const saldoFinal = Number.isFinite(saldo) ? saldo : 0;
+          const saldoFinal = Number.isFinite(saldoBackend) ? saldoBackend : 0;
           document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
 
           const fotoUrl = est.fotoUrl || est.foto || '';
