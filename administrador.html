@@ -327,6 +327,7 @@ main {
   gap: 10px;
   background: #f8fafc;
   user-select: none;
+  flex-wrap: wrap;
 }
 
 .panel-head.clickable { cursor: pointer; }
@@ -356,11 +357,13 @@ main {
 .print-buttons-group {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 .print-buttons-group .btn {
-  padding: 6px 12px;
-  font-size: 0.75rem;
-  min-height: 32px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  min-height: 36px;
+  border-radius: 20px;
 }
 
 .panel-body { 
@@ -389,23 +392,24 @@ main {
   min-width: 0;
 }
 
+/* ORDEN EXACTO: QR PRIMERO Y BUSCAR DESPUÉS */
 .btn-qr-main {
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #ffffff;
   border: 2px solid var(--dorado);
   font-weight: 800;
-  padding: 0 14px;
+  padding: 0 16px;
   height: 44px;
   flex-shrink: 0;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border-radius: 12px;
 }
 
 .search-row-inputs .btn-gold {
   height: 44px;
-  padding: 0 14px;
+  padding: 0 18px;
   flex-shrink: 0;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border-radius: 12px;
 }
 
@@ -548,7 +552,7 @@ tr:last-child td { border-bottom: 0; }
 .print-only-header { display: none; }
 
 /* =========================================================
-   ADAPTACIÓN MÓVIL (MANTIENE EL MISMO ORDEN HORIZONTAL DE PC)
+   ADAPTACIÓN MÓVIL FLUIDA
    ========================================================= */
 @media(max-width: 768px) {
   body { font-size: 12px; }
@@ -556,9 +560,13 @@ tr:last-child td { border-bottom: 0; }
   .panel { width: 100%; border-radius: 14px; margin-bottom: 12px; }
   .panel-body { padding: 10px; width: 100%; }
 
+  .panel-head { padding: 10px 12px; }
+  .panel-head h3 { font-size: 0.82rem; }
+  .print-buttons-group .btn { padding: 4px 10px; font-size: 0.68rem; min-height: 30px; }
+
   .search-row-inputs {
     display: flex;
-    flex-direction: row; /* Mantiene exactamente la misma fila horizontal de la PC */
+    flex-direction: row; 
     gap: 4px;
     width: 100%;
     align-items: center;
@@ -716,7 +724,7 @@ footer {
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
           <div class="print-buttons-group">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">🖨 ALUMNO</button>
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">👤 ALUMNO</button>
             <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
           </div>
         </div>
@@ -739,8 +747,8 @@ footer {
               <label class="small-label" for="codigo">CÓDIGO O QR DEL ESTUDIANTE</label>
               <div class="search-row-inputs">
                 <input id="codigo" class="code-input" placeholder="LDS-EST-001" autocomplete="off">
-                <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">🔍 BUSCAR</button>
                 <button class="btn btn-qr-main" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+                <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">🔍 BUSCAR</button>
               </div>
             </div>
           </div>
