@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IEP La Salle del Sur - Banco LDS 360</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-950 via-slate-900 to-indigo-950 text-white min-h-screen flex flex-col justify-between p-6 font-sans select-none">
+
+  <!-- ENCABEZADO INSTITUCIONAL -->
+  <header class="text-center py-6">
+    <div class="inline-block bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-widest mb-2 shadow">
+      I.E.P. La Salle del Sur — KIDSWork LS
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-black text-amber-300 uppercase tracking-wider drop-shadow-lg">
+      Banco LDS 360
+    </h1>
+    <p class="text-xs sm:text-sm text-sky-200 mt-1 font-medium">"Sencillez, Responsabilidad y Honor"</p>
+  </header>
+
+  <!-- VISTA PRINCIPAL DE PORTADA -->
+  <main class="max-w-md mx-auto w-full bg-slate-800/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-400/30 space-y-6 my-auto text-center">
+    
+    <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-400 via-yellow-400 to-sky-500 rounded-full p-1 shadow-2xl flex items-center justify-center">
+      <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner animate-pulse">
+        🏛️
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <h2 id="estadoTexto" class="text-2xl font-black text-amber-300">¡Bienvenidos!</h2>
+      <p id="subEstadoTexto" class="text-sm text-slate-200 font-medium">
+        Llamando atención y presentación institucional...
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="text-center py-4 text-xs text-slate-500">
+    © IEP La Salle del Sur — Banco LDS 360
+  </footer>
+
+  <!-- SCRIPT INTEGRADO: INTRODUCCIÓN + MÚSICA DE FONDO + VOZ HABLADA Y CANTADA -->
+  <script>
+    let audioCtx = null;
+    let iniciado = false;
+
+    // FRECUENCIAS LIRA (DO MAYOR)
+    const FREQS = {
+      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+      "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+    };
+
+    // 1. Notas cortas de introducción / llamada de atención
+    const llamadaAtencion = [
+      { n: "C4", d: 0.3 }, { n: "E4", d: 0.3 }, { n: "G4", d: 0.5 }, { n: "C5", d: 0.8 }
+    ];
+
+    // 2. Melodía completa del himno para tocar de fondo
+    const himnoMelodia = [
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+    ];
+
+    function sonarLira(ctx, freq, t, dur) {
+      if (!freq) return;
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, t);
+      osc2.frequency.setValueAtTime(freq * 2, t);
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(ctx.destination);
+      osc1.start(t);
+      osc2.start(t);
+      osc1.stop(t + dur * 1.5);
+      osc2.stop(t + dur * 1.5);
+    }
+
+    function sonarTambor(ctx, t) {
+      const bufferSize = ctx.sampleRate * 0.04;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 1800;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.05, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start(t);
+    }
+
+    // Reproduce la introducción y luego continúa con el himno completo de fondo
+    function reproducirMusicaCompleta(ctx) {
+      let t = ctx.currentTime + 0.1;
+
+      // Sonido de introducción (llamada de atención)
+      llamadaAtencion.forEach(item => {
+        const f = FREQS[item.n] || 261.63;
+        sonarLira(ctx, f, t, item.d);
+        sonarTambor(ctx, t);
+        t += item.d;
+      });
+
+      // Breve pausa antes de continuar con la melodía principal de fondo
+      t += 0.2;
+
+      // Melodía principal del himno de fondo
+      himnoMelodia.forEach(item => {
+        const f = FREQS[item.n] || 261.63;
+        sonarLira(ctx, f, t, item.d);
+        sonarTambor(ctx, t);
+        t += item.d;
+      });
+    }
+
+    async function iniciarSecuenciaInstitucional() {
+      if (iniciado) return;
+      iniciado = true;
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+
+      // 1. Inicia la música completa (Introducción + Himno de fondo)
+      reproducirMusicaCompleta(audioCtx);
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+
+        // 2. La voz del señor da la bienvenida y luego canta/recita el himno completo
+        document.getElementById("estadoTexto").textContent = "Himno e Institución";
+        document.getElementById("subEstadoTexto").textContent = "Presentación oficial de Banco LDS 360...";
+
+        const textoCompleto = "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor. Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. Como siempre un paso adelante. Sencillez, responsabilidad y honor. Es el lema que tú nos enseñaste, ejemplo puro que nos diste al crecer. Sabiduría de grandes mentores, en nuestras aulas se educa con amor. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+        
+        const vozInstitucional = new SpeechSynthesisUtterance(textoCompleto);
+        vozInstitucional.lang = 'es-PE';
+        vozInstitucional.rate = 0.88; // Ritmo pausado y solemne
+        vozInstitucional.pitch = 0.95; // Tono de voz firme
+
+        // 3. Al terminar por completo el canto, se explica la secuencia de los botones
+        vozInstitucional.onend = function() {
+          document.getElementById("estadoTexto").textContent = "Panel Principal";
+          document.getElementById("subEstadoTexto").textContent = "Listo para iniciar operaciones...";
+
+          const vozBotones = new SpeechSynthesisUtterance("Selecciona tu opción en el panel para consultar cuentas, registrar transacciones o atender incidencias.");
+          vozBotones.lang = 'es-PE';
+          vozBotones.rate = 0.95;
+          vozBotones.pitch = 0.95;
+          window.speechSynthesis.speak(vozBotones);
+        };
+
+        window.speechSynthesis.speak(vozInstitucional);
+      }
+    }
+
+    // Activación automática al cargar o ante cualquier interacción del usuario en cualquier parte de la portada
+    window.addEventListener('load', () => {
+      setTimeout(iniciarSecuenciaInstitucional, 400);
+    });
+    document.addEventListener('touchstart', iniciarSecuenciaInstitucional, { once: true });
+    document.addEventListener('click', iniciarSecuenciaInstitucional, { once: true });
+    document.addEventListener('pointerdown', iniciarSecuenciaInstitucional, { once: true });
+  </script>
+</body>
+</html>
