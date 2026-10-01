@@ -529,7 +529,7 @@ tr:last-child td { border-bottom: 0; }
 #reader { width: 100%; border-radius: 14px; overflow: hidden; background: #000; min-height: 220px; border: 2px solid var(--dorado); }
 .close-qr-btn { margin-top: 14px; background: var(--rojo); color: #fff; border: 0; padding: 10px 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.85rem; }
 
-/* CABECERA EXCLUSIVA PARA IMPRESIÓN PROFESIONAL */
+/* CABECERA EXCLUSIVA PARA IMPRESIÓN OFICIAL INSTITUCIONAL */
 .print-header { display: none; }
 
 @media print {
@@ -539,30 +539,36 @@ tr:last-child td { border-bottom: 0; }
   .panel { border: none !important; box-shadow: none !important; margin: 0 !important; }
   .panel-body { padding: 0 !important; }
   
+  /* JERARQUÍA INSTITUCIONAL PRIMERO EN EL ENCABEZADO */
   .print-header {
     display: flex !important;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     border-bottom: 3px solid #000;
     padding-bottom: 12px;
     margin-bottom: 15px;
+    gap: 10px;
   }
-  .print-header-left { display: flex; align-items: center; gap: 12px; }
-  .print-header-left img { width: 55px; height: 55px; object-fit: contain; }
-  .print-header-left h2 { font-size: 1.1rem; font-weight: 800; }
-  .print-header-left p { font-size: 0.8rem; font-weight: 700; }
+  .print-institution-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .print-institution-row img { width: 60px; height: 60px; object-fit: contain; }
+  .print-institution-row h2 { font-size: 1.15rem; font-weight: 900; color: #000; }
+  .print-institution-row p { font-size: 0.8rem; font-weight: 800; color: #333; }
 
-  /* FOTO DE LA MISS / ALUMNO EN EL REPORTE IMPRESO */
-  .print-badge-entity {
+  /* DETALLE DEL ALUMNO O ENTIDAD DESPUÉS DEL ENCABEZADO INSTITUCIONAL */
+  .print-entity-box {
     display: flex !important;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     border: 2px solid #000;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 10px;
-    background: #fdfdfd;
+    background: #f8fafc;
+    margin-top: 5px;
   }
-  .print-badge-entity img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+  .print-entity-box img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
 
   .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 10px !important; }
   table { min-width: 100% !important; }
@@ -697,21 +703,22 @@ footer {
             </div>
           </div>
 
-          <!-- CABECERA PARA IMPRESIÓN CON FOTO DE LA MISS Y DEL ALUMNO -->
+          <!-- CABECERA INSTITUCIONAL PARA IMPRESIÓN -->
           <div class="print-header">
-            <div class="print-header-left">
+            <div class="print-institution-row">
               <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
               <div>
-                <h2 id="printTituloReporte">BANCO LDS 360 - ESTADO DE CUENTA</h2>
-                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
-                <p style="font-size: 0.72rem; color: #333; margin-top: 2px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
+                <h2 id="printTituloReporte">I.E.P. LA SALLE DEL SUR — KIDSWork LS</h2>
+                <p>SISTEMA FINANCIERO ESCOLAR BANCO LDS 360</p>
+                <p style="font-size: 0.75rem; font-weight: 700; color: #444; margin-top: 2px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
               </div>
             </div>
-            <div class="print-badge-entity">
+            
+            <div class="print-entity-box">
               <img id="printFotoEntidad" src="" alt="Foto" onerror="this.style.display='none';">
               <div>
-                <strong id="printNombreEntidad" style="font-size: 0.8rem; display: block;">---</strong>
-                <span id="printMetaEntidad" style="font-size: 0.7rem; color: #555; display: block;">---</span>
+                <strong id="printNombreEntidad" style="font-size: 0.82rem; display: block;">---</strong>
+                <span id="printMetaEntidad" style="font-size: 0.72rem; color: #555; display: block;">---</span>
               </div>
             </div>
           </div>
@@ -1179,7 +1186,7 @@ function consultarEstudiante(){
 
     reproducirSonido('exito');
     const e = respuesta.estudiante;
-    datosEstudianteActualGlobal = e; // Guardamos para la impresión individual
+    datosEstudianteActualGlobal = e;
     const cuenta = respuesta.cuenta || {};
     const nombreUsuario = e.nombreCompleto || e.nombre || "USUARIO";
     const saldoFormateado = formatearLDS(cuenta.saldoActual || 0);
@@ -1260,16 +1267,14 @@ function procesarPagoEstudiante() {
   });
 }
 
-// CONFIGURACIÓN DE IMPRESIÓN PERSONAL (FOTO DEL ALUMNO + MISS)
 function imprimirReportePersonal() {
   reproducirSonido('clic');
   if (!datosEstudianteActualGlobal) {
     alert("PRIMERO DEBES CONSULTAR A UN ESTUDIANTE.");
     return;
   }
-  document.getElementById("printTituloReporte").textContent = "ESTADO DE CUENTA — PERSONAL (CORTE MENSUAL)";
+  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA PERSONAL";
   
-  // Asignar datos del alumno a la credencial de impresión
   const nombreEst = datosEstudianteActualGlobal.nombreCompleto || datosEstudianteActualGlobal.nombre || "ESTUDIANTE";
   const metaEst = [datosEstudianteActualGlobal.codigo, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
   document.getElementById("printNombreEntidad").textContent = nombreEst;
@@ -1283,12 +1288,10 @@ function imprimirReportePersonal() {
   window.print();
 }
 
-// CONFIGURACIÓN DE IMPRESIÓN GRUPAL / GENERAL (FOTO DE LA MISS + RESUMEN GENERAL)
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
-  document.getElementById("printTituloReporte").textContent = "REPORTE GENERAL Y BALANCE ANUAL — GRUPAL";
+  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL Y BALANCE";
   
-  // Asignar datos de la Miss Activa a la credencial de impresión principal
   document.getElementById("printNombreEntidad").textContent = maestraActivaGlobal || "DOCENTE CAJERA";
   document.getElementById("printMetaEntidad").textContent = "TUTORA CAJERA RESPONSABLE — KIDSWork LS";
   document.getElementById("printFotoEntidad").src = FOTOS_DOCENTES[maestraActivaGlobal] || "";
