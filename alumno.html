@@ -44,7 +44,7 @@
     .inicio-btn:hover { background: #f59e0b; color: #06111f; }
     
     main { 
-      max-width: 1100px; 
+      max-width: 950px; /* Reducido para que todo el panel sea más angosto y centrado */
       width: 100%; 
       margin: auto; 
       padding: 20px 15px; 
@@ -55,16 +55,17 @@
 
     .hidden { display: none !important; }
 
-    /* CONTENEDOR PRINCIPAL COMPARTIDO - TAMAÑO ESTÁNDAR PARA PC */
+    /* CONTENEDOR PRINCIPAL COMPARTIDO - CUADRO DERECHO MÁS ANGOSTO */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 450px 1fr;
-      gap: 20px;
+      grid-template-columns: 430px 420px; /* Tarjeta izq y cuadro der más angostos */
+      gap: 25px;
       width: 100%;
+      justify-content: center;
       align-items: stretch;
     }
 
-    @media (max-width: 950px) {
+    @media (max-width: 900px) {
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
@@ -199,7 +200,7 @@
       border: 2px solid #6ee7b7; 
     }
 
-    /* SUB-TARJETA ACHICADA Y MÁS COMPACTA */
+    /* SUB-TARJETA (MOVIMIENTOS / OPERACIÓN) MÁS ANGOSTA */
     .sub-card { 
       background: #ffffff; color: #1e293b; border-radius: 22px; padding: 22px; 
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
@@ -243,7 +244,7 @@
     }
     .input-field:focus { border-color: #0284c7; background: #fff; }
     
-    /* LISTA DE MOVIMIENTOS MÁS COMPACTA Y REDucida */
+    /* LISTA DE MOVIMIENTOS MÁS ANGOSTA Y COMPACTA */
     .lista-movs { min-height: 200px; max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     
     .btn-primary {
@@ -321,7 +322,7 @@
         </div>
       </div>
 
-      <!-- LADO DERECHO: PANELES COMPARTIDOS (MÁS COMPACTOS) -->
+      <!-- LADO DERECHO: PANELES COMPARTIDOS (MÁS ANGOSTOS) -->
       <div>
         <!-- FORMULARIO DE REGISTRO DE PAGO O GASTO -->
         <div id="seccionOperacion" class="sub-card hidden">
@@ -374,7 +375,7 @@
           </div>
         </div>
 
-        <!-- HISTORIAL DE MOVIMIENTOS (REDUCIDO) -->
+        <!-- HISTORIAL DE MOVIMIENTOS (MÁS ANGOSTO) -->
         <div id="seccionMovimientos" class="sub-card">
           <div class="print-header">
             <div style="display: flex; align-items: center; gap: 10px;">
