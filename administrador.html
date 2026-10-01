@@ -327,7 +327,6 @@ main {
   gap: 10px;
   background: #f8fafc;
   user-select: none;
-  flex-wrap: wrap;
 }
 
 .panel-head.clickable { cursor: pointer; }
@@ -357,13 +356,11 @@ main {
 .print-buttons-group {
   display: flex;
   gap: 8px;
-  align-items: center;
 }
 .print-buttons-group .btn {
-  padding: 6px 14px;
-  font-size: 0.78rem;
-  min-height: 36px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  min-height: 32px;
 }
 
 .panel-body { 
@@ -397,18 +394,18 @@ main {
   color: #ffffff;
   border: 2px solid var(--dorado);
   font-weight: 800;
-  padding: 0 16px;
+  padding: 0 14px;
   height: 44px;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   border-radius: 12px;
 }
 
 .search-row-inputs .btn-gold {
   height: 44px;
-  padding: 0 18px;
+  padding: 0 14px;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   border-radius: 12px;
 }
 
@@ -551,7 +548,7 @@ tr:last-child td { border-bottom: 0; }
 .print-only-header { display: none; }
 
 /* =========================================================
-   ADAPTACIÓN MÓVIL EXACTA (CONSERVA EL ORDEN Y COLORES ORIGINALES)
+   ADAPTACIÓN MÓVIL (MANTIENE EL MISMO ORDEN HORIZONTAL DE PC)
    ========================================================= */
 @media(max-width: 768px) {
   body { font-size: 12px; }
@@ -559,21 +556,9 @@ tr:last-child td { border-bottom: 0; }
   .panel { width: 100%; border-radius: 14px; margin-bottom: 12px; }
   .panel-body { padding: 10px; width: 100%; }
 
-  .panel-head {
-    padding: 10px 12px;
-  }
-  .panel-head h3 {
-    font-size: 0.82rem;
-  }
-  .print-buttons-group .btn {
-    padding: 4px 10px;
-    font-size: 0.68rem;
-    min-height: 30px;
-  }
-
   .search-row-inputs {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row; /* Mantiene exactamente la misma fila horizontal de la PC */
     gap: 4px;
     width: 100%;
     align-items: center;
@@ -590,14 +575,14 @@ tr:last-child td { border-bottom: 0; }
   .search-row-inputs .btn-gold {
     flex-shrink: 0;
     height: 40px;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 0.7rem;
   }
 
   .btn-qr-main {
     flex-shrink: 0;
     height: 40px;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 0.7rem;
   }
 }
@@ -731,7 +716,7 @@ footer {
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
           <div class="print-buttons-group">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">👤 ALUMNO</button>
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">🖨 ALUMNO</button>
             <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
           </div>
         </div>
@@ -954,7 +939,7 @@ const CATALOGO_EXCEL = {
     "Bono Lectura destacada y comprensión",
     "Bono Completar un reto educativo",
     "Bono Llegar antes de la hora",
-    "Bono Participación in Escuela para Padres",
+    "Bono Participación en Escuela para Padres",
     "Bono Responsabilidad con materiales",
     "Bono Mantener limpia el aula"
   ],
