@@ -235,7 +235,7 @@ main {
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
-  padding: 12px 10px 25px;
+  padding: 12px 8px 25px;
   display: none;
 }
 
@@ -328,7 +328,7 @@ main {
 }
 
 .panel-head {
-  padding: 12px 16px;
+  padding: 12px 14px;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
   align-items: center;
@@ -345,11 +345,27 @@ main {
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   display: flex;
   align-items: center;
   gap: 6px;
   font-weight: 800;
+}
+
+/* BOTONES DE IMPRESIÓN ADAPTADOS AL CELULAR */
+.print-buttons-group {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+@media(min-width: 480px) {
+  .print-buttons-group { width: auto; }
+}
+.print-buttons-group .btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.7rem;
+  min-height: 34px;
 }
 
 .toggle-icon {
@@ -363,9 +379,8 @@ main {
 .panel.collapsed .toggle-icon { transform: rotate(-90deg); }
 .panel.collapsed .panel-head { border-bottom: none; }
 
-.panel-body { padding: 14px; }
+.panel-body { padding: 12px; }
 
-/* CONTENEDOR DE BÚSQUEDA ADAPTADO A CELULAR VERTICAL */
 .search-container {
   display: flex;
   flex-direction: column;
@@ -374,19 +389,21 @@ main {
 
 .search-row-inputs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
 }
 
 .search-row-inputs input {
   flex: 1;
-  height: 44px;
+  height: 42px;
+  min-width: 0;
 }
 
 .search-row-inputs .btn {
-  height: 44px;
-  padding: 0 14px;
+  height: 42px;
+  padding: 0 12px;
   flex-shrink: 0;
+  font-size: 0.75rem;
 }
 
 .type-selector-box {
@@ -469,23 +486,26 @@ main {
 .student-meta { color: var(--muted); font-size: 0.72rem; font-weight: 700; }
 .saldo { font-size: 1.05rem; font-weight: 900; color: var(--verde); margin-top: 6px; background: #ecfdf5; padding: 4px 12px; border-radius: 12px; display: inline-block; border: 2px solid #a7f3d0; }
 
+/* CONTENEDOR DE TABLA PERFECTO PARA CELULAR CON SCROLL SUAVE */
 .table-wrap {
   overflow-x: auto;
   margin-top: 12px;
   border: 2px solid var(--borde);
   border-radius: 10px;
   -webkit-overflow-scrolling: touch;
+  background: #ffffff;
+  width: 100%;
 }
 
-table { width: 100%; border-collapse: collapse; min-width: 650px; }
-th, td { padding: 7px 9px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.75rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
-td.cell-wrap { white-space: normal; min-width: 120px; }
+table { width: 100%; border-collapse: collapse; min-width: 720px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.75rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
+td.cell-wrap { white-space: normal; min-width: 130px; }
 th { background: #f1f5f9; color: var(--azul); font-size: 0.72rem; font-weight: 800; letter-spacing: .5px; }
 tr:last-child td { border-bottom: 0; }
 
-.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 5px; border-radius: 5px; font-weight: 800; border: 1px solid #a7f3d0; }
-.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 5px; border-radius: 5px; font-weight: 800; border: 2px solid #fecaca; }
-.empty { text-align: center; color: var(--muted); padding: 15px 10px; font-weight: 700; }
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 5px; font-weight: 800; border: 1px solid #a7f3d0; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 5px; font-weight: 800; border: 2px solid #fecaca; }
+.empty { text-align: center; color: var(--muted); padding: 18px 10px; font-weight: 700; }
 
 .incident-list { display: grid; gap: 8px; margin-top: 8px; }
 .incident { border: 2px solid var(--borde); border-radius: 10px; padding: 8px 10px; background: #fafcff; }
@@ -539,7 +559,7 @@ tr:last-child td { border-bottom: 0; }
   }
   .print-entity-box img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
 
-  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 8px !important; }
+  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 8px !important; overflow: visible !important; }
   table { min-width: 100% !important; }
   th { background: #e2e8f0 !important; color: #000 !important; -webkit-print-color-adjust: exact; }
 }
@@ -631,14 +651,14 @@ footer {
       <div class="panel">
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
-          <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 4px 8px; font-size: 0.68rem;">🖨️ ALUMNO</button>
-            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 4px 8px; font-size: 0.68rem;">📊 GENERAL</button>
+          <div class="print-buttons-group">
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">🖨️ ALUMNO</button>
+            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
           </div>
         </div>
         <div class="panel-body">
           
-          <!-- BLOQUE DE BÚSQUEDA Y AÑO ORGANIZADO EN VERTICAL PARA CELULARES -->
+          <!-- BLOQUE DE BÚSQUEDA Y AÑO ORGANIZADO EN VERTICAL -->
           <div class="search-container">
             <div>
               <label class="small-label" for="selectAnioEscolar">PERIODO / AÑO ESCOLAR</label>
@@ -695,6 +715,7 @@ footer {
             </div>
           </div>
 
+          <!-- TABLA CON DESPLAZAMIENTO TÁCTIL SUAVE PARA VER TODAS LAS COLUMNAS -->
           <div class="table-wrap">
             <table>
               <thead>
@@ -1178,7 +1199,7 @@ function consultarEstudiante(){
 
     const esDocente = (e.codigo && e.codigo.includes("LDS-DOC")) || e.esDocente || (e.rol && e.rol.toUpperCase().includes("DOCENTE"));
 
-    document.getElementById("nombre").textContent = (esDocente ? "👩‍‍🏫 DOCENTE: " : "👤 ALUMNO: ") + nombreUsuario;
+    document.getElementById("nombre").textContent = (esDocente ? "👩‍🏫 DOCENTE: " : "👤 ALUMNO: ") + nombreUsuario;
     document.getElementById("meta").textContent = [e.codigo || codigo, "AÑO: " + anioEscolar, e.rol || (esDocente ? "DOCENTE" : "ALUMNO"), e.grado || "", e.seccion || ""].filter(Boolean).join(" · ");
     document.getElementById("saldo").textContent = (esDocente ? "FONDO DISPONIBLE: " : "SALDO: ") + saldoFormateado + " LDS";
 
