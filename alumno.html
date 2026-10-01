@@ -278,6 +278,214 @@
       .print-header-text h2 { font-size: 1.2rem; font-weight: 800; }
       .print-header-text p { font-size: 0.85rem; font-weight: 700; }
     }
+
+    /* =========================================================
+       AJUSTE RESPONSIVO: SOLO CORRIGE CONFLICTOS DE ANCHO
+       NO CAMBIA COLORES, ICONOS, FUNCIONES NI DISEÑO DE PC.
+       ========================================================= */
+
+    html, body {
+      width: 100%;
+      min-width: 0;
+    }
+
+    main,
+    .dashboard-container,
+    .dashboard-container > div,
+    .saldo-card,
+    .sub-card,
+    .sub-card-header,
+    .saldo-top,
+    .saldo-box-dorado,
+    .alumno-info-box,
+    .actions-grid,
+    .action-btn,
+    .form-scroll-area,
+    .lista-movs {
+      min-width: 0;
+    }
+
+    .saldo-box-dorado,
+    .alumno-info-box,
+    .sub-card,
+    .input-field {
+      max-width: 100%;
+    }
+
+    .action-btn {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .sub-card-header h4 {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    /* CELULAR EN VERTICAL */
+    @media (max-width: 600px) {
+      header {
+        padding: 10px 12px;
+      }
+
+      .school-info {
+        min-width: 0;
+        gap: 8px;
+      }
+
+      .school-info img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .school-title {
+        min-width: 0;
+      }
+
+      .school-title h1,
+      .school-title p {
+        overflow-wrap: anywhere;
+      }
+
+      .inicio-btn {
+        flex-shrink: 0;
+        padding: 8px 12px;
+      }
+
+      main {
+        width: 100%;
+        padding: 16px 10px;
+        align-items: stretch;
+      }
+
+      .dashboard-container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+      }
+
+      /*
+        El conflicto principal estaba aquí: .saldo-top intentaba
+        poner la caja y la foto de 175px una al lado de la otra
+        aunque el teléfono no tuviera ancho suficiente.
+        En vertical se apilan, sin eliminar ningún elemento.
+      */
+      .saldo-top {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .saldo-box-dorado {
+        width: 100%;
+        flex: none;
+      }
+
+      .avatar-container {
+        flex-shrink: 0;
+      }
+
+      .saldo-card {
+        padding: 24px 18px;
+      }
+
+      .sub-card {
+        padding: 24px 18px;
+      }
+
+      .sub-card-header {
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .sub-card-header h4 {
+        flex: 1 1 180px;
+      }
+
+      .btn-imprimir {
+        flex-shrink: 0;
+      }
+
+      .actions-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+
+      .form-scroll-area,
+      .lista-movs {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      footer {
+        padding: 12px 10px;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    /* EN PANTALLAS ANGOSTAS NO SE REDUCE EL DISEÑO:
+       se conserva la escala de textos y botones del escritorio.
+       Solo se cambia la distribución cuando el ancho realmente no alcanza. */
+    @media (max-width: 380px) {
+      .school-title h1 { font-size: 1.1rem; }
+      .school-title p { font-size: 0.78rem; }
+      .inicio-btn { font-size: 0.85rem; padding: 8px 12px; }
+      .saldo-card,
+      .sub-card { padding-left: 18px; padding-right: 18px; }
+      .actions-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    /* TABLET Y CELULAR EN HORIZONTAL:
+       se permite usar el ancho disponible sin forzar la página
+       a quedarse con el formato vertical. */
+    @media (min-width: 601px) and (max-width: 950px) {
+      main {
+        width: 100%;
+        padding: 18px 12px;
+        align-items: stretch;
+      }
+
+      .dashboard-container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+      }
+    }
+
+    @media (max-width: 950px) and (orientation: landscape) {
+      main {
+        padding: 14px 12px;
+      }
+
+      .dashboard-container {
+        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .saldo-card {
+        padding: 22px 18px;
+      }
+
+      .saldo-top {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .saldo-box-dorado {
+        min-width: 0;
+      }
+
+      /* Conservamos el tamaño visual de PC; no reducimos la foto. */
+      .avatar-img {
+        width: 175px;
+        height: 175px;
+      }
+
+      .sub-card {
+        padding: 22px 18px;
+      }
+    }
+
+
   </style>
 </head>
 <body>
