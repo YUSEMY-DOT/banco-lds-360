@@ -84,68 +84,6 @@ header {
   font-weight: 700;
 }
 
-/* PERFIL DE LA MISSI GRANDE Y ELEGANTE EN LA CABECERA */
-@keyframes flotarYBrillar {
-  0% { transform: translateY(0px) scale(1); box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-  50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 12px rgba(245, 158, 11, 0.6); }
-  100% { transform: translateY(0px) scale(1); box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-}
-
-.header-admin-profile {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background: rgba(3, 8, 15, 0.9);
-  border: 2px solid var(--dorado);
-  border-radius: 40px;
-  padding: 6px 20px 6px 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-.miss-avatar-wrap {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 3px solid var(--dorado);
-  overflow: hidden;
-  background: #ffffff;
-  flex-shrink: 0;
-  animation: flotarYBrillar 4s ease-in-out infinite;
-  display: grid;
-  place-items: center;
-}
-
-.miss-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
-
-.miss-avatar-placeholder {
-  font-size: 28px;
-  color: var(--azul);
-}
-
-.miss-info-text {
-  text-align: left;
-}
-
-.miss-info-text span {
-  display: block;
-  font-size: 0.68rem;
-  color: #fde68a;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-.miss-info-text strong {
-  font-size: 0.92rem;
-  color: #ffffff;
-  font-weight: 800;
-  display: block;
-}
-
 .btn {
   border: 0;
   border-radius: 30px;
@@ -310,33 +248,95 @@ main {
   display: none;
 }
 
-/* BARRA DE ESTADOS COMPACTA */
-.status-bar-admin {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+/* TARJETA DE PERFIL DE LA MISSI GRANDE Y DESTACADA */
+@keyframes flotarYBrillar {
+  0% { transform: translateY(0px) scale(1); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+  50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(245, 158, 11, 0.6); }
+  100% { transform: translateY(0px) scale(1); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+}
+
+.admin-profile-banner {
+  background: linear-gradient(145deg, #091628 0%, #050d18 100%);
+  border: 3px solid var(--dorado);
+  border-radius: 24px;
+  padding: 16px 24px;
   margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.mini-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  border-radius: 14px;
-  padding: 10px 15px;
-  text-align: center;
-  backdrop-filter: blur(10px);
+.admin-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
-.mini-card span {
-  display: block;
-  font-size: 0.7rem;
+.admin-avatar-wrap {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 4px solid var(--dorado);
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
+  animation: flotarYBrillar 4s ease-in-out infinite;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.admin-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.admin-avatar-placeholder {
+  font-size: 40px;
+  color: var(--azul);
+}
+
+.admin-text-details h3 {
+  font-size: 1.25rem;
+  color: #ffffff;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.admin-text-details p {
   color: #fde68a;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
-.mini-card strong {
-  font-size: 1rem;
+.admin-stats-box {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.stat-pill {
+  background: rgba(3, 8, 15, 0.85);
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  border-radius: 14px;
+  padding: 10px 16px;
+  text-align: center;
+}
+
+.stat-pill span {
+  display: block;
+  font-size: 0.68rem;
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.stat-pill strong {
+  font-size: 1.1rem;
   color: #ffffff;
   font-weight: 800;
 }
@@ -738,7 +738,7 @@ tr:last-child td {
 
 @media print {
   body { background: #ffffff; color: #000000; }
-  header, .status-bar-admin, .search-box, .panel, .btn, footer, .qr-modal { display: none !important; }
+  header, .admin-profile-banner, .search-box, .panel, .btn, footer, .qr-modal { display: none !important; }
   main { display: block !important; padding: 0 !important; }
   .print-header {
     display: flex;
@@ -784,6 +784,13 @@ footer {
   .layout {
     grid-template-columns: 1fr;
   }
+  .admin-profile-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .admin-profile-info {
+    flex-direction: column;
+  }
 }
 </style>
 </head>
@@ -800,21 +807,7 @@ footer {
         <p>I.E.P. LA SALLE DEL SUR · PANEL DE ADMINISTRACIÓN</p>
       </div>
     </div>
-
-    <!-- FOTO DE LA MISSI GRANDE Y ELEGANTE ARRIBA A LA DERECHA -->
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <div class="header-admin-profile">
-        <div class="miss-avatar-wrap">
-          <img id="missFoto" class="miss-avatar-img" src="" alt="Foto Miss">
-          <div id="missPlaceholder" class="miss-avatar-placeholder">👩‍🏫</div>
-        </div>
-        <div class="miss-info-text">
-          <span>MAESTRA ACTIVA</span>
-          <strong id="maestraActivaNombre">—</strong>
-        </div>
-      </div>
-      <a class="btn btn-light" href="index.html" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← INICIO</a>
-    </div>
+    <a class="btn btn-light" href="index.html" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← INICIO</a>
   </div>
 </header>
 
@@ -848,20 +841,41 @@ footer {
 </div>
 
 <main id="panelView">
-  <!-- MINI TARJETAS DE ESTADO ABAJO DE LA CABECERA -->
-  <div class="status-bar-admin">
-    <div class="mini-card"><span>ESTADO DE CONEXIÓN</span><strong id="estadoConexion">LISTA</strong></div>
-    <div class="mini-card"><span>TOTAL MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
-    <div class="mini-card"><span>TOTAL INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
+  <!-- BANNER DE LA MISSI ACTIVA (FOTO GRANDE Y ESTADÍSTICAS) -->
+  <div class="admin-profile-banner">
+    <div class="admin-profile-info">
+      <div class="admin-avatar-wrap">
+        <img id="missFoto" class="admin-avatar-img" src="" alt="Foto Miss">
+        <div id="missPlaceholder" class="admin-avatar-placeholder">👩‍🏫</div>
+      </div>
+      <div class="admin-text-details">
+        <p>DOCENTE TUTORA ACTIVA</p>
+        <h3 id="maestraActivaNombre">—</h3>
+      </div>
+    </div>
+
+    <div class="admin-stats-box">
+      <div class="stat-pill">
+        <span>TOTAL MOVIMIENTOS</span>
+        <strong id="contadorMovimientos">0</strong>
+      </div>
+      <div class="stat-pill">
+        <span>TOTAL INCIDENCIAS</span>
+        <strong id="contadorIncidencias">0</strong>
+      </div>
+    </div>
   </div>
 
-  <!-- ESTRUCTURA PRINCIPAL OPTIMIZADA -->
+  <!-- ESTRUCTURA PRINCIPAL -->
   <section class="layout">
     <div>
       <div class="panel">
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
-          <button class="btn btn-gold" type="button" onclick="imprimirEstadoCuentaAdmin()" style="padding: 6px 14px; font-size: 0.78rem;">🖨️ IMPRIMIR</button>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 5px 10px; font-size: 0.72rem;">🖨️ IMPRIMIR PERSONAL</button>
+            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 5px 10px; font-size: 0.72rem;">📊 IMPRIMIR GRUPAL</button>
+          </div>
         </div>
         <div class="panel-body">
           <div class="search-box">
@@ -889,8 +903,8 @@ footer {
             <div style="display: flex; align-items: center; gap: 12px;">
               <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
               <div>
-                <h2>BANCO LDS 360 - ESTADO DE CUENTA GENERAL</h2>
-                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
+                <h2 id="printTituloReporte">BANCO LDS 360 - REPORTE OFICIAL</h2>
+                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS | DOCENTE: <span id="printNombreMiss">---</span></p>
               </div>
             </div>
           </div>
@@ -1208,6 +1222,7 @@ function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
   document.getElementById("panelView").style.display = "block";
   document.getElementById("maestraActivaNombre").textContent = nombreMaestra || "MAESTRA";
+  document.getElementById("printNombreMiss").textContent = nombreMaestra || "MAESTRA";
   mostrarFotoMaestra(nombreMaestra);
   cargarConceptosPorTipo();
   renderIncidencias();
@@ -1219,6 +1234,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById("loginView").style.display = "none";
     document.getElementById("panelView").style.display = "block";
     document.getElementById("maestraActivaNombre").textContent = guardada;
+    document.getElementById("printNombreMiss").textContent = guardada;
     mostrarFotoMaestra(guardada);
     cargarConceptosPorTipo();
     renderIncidencias();
@@ -1296,7 +1312,6 @@ function llamarAPI(parametros,callback){
     reproducirSonido('error');
     mostrarMensaje("ERROR DE CONEXIÓN.","error");
     hablarTextoVoz("Error de conexión con el servidor.");
-    document.getElementById("estadoConexion").textContent="SIN CONEXIÓN";
   };
   document.body.appendChild(script);
 }
@@ -1327,15 +1342,6 @@ function mostrarFotoEstudiante(e){
   foto.src=urls[0];
 }
 
-function detectarGenero(nombre) {
-  const n = String(nombre || "").trim().toUpperCase();
-  const primer = n.split(" ")[0] || "";
-  if (primer.endsWith("A") && !["ELÍAS", "JOSÉ", "LUCAS", "NICOLÁS", "T."].includes(primer)) {
-    return "F";
-  }
-  return "M";
-}
-
 function consultarEstudiante(){
   reproducirSonido('clic');
   const codigo = document.getElementById("codigo").value.trim().toUpperCase();
@@ -1347,7 +1353,6 @@ function consultarEstudiante(){
   }
   mostrarMensaje("CONSULTANDO...", "ok");
   hablarTextoVoz("Consultando información.");
-  document.getElementById("estadoConexion").textContent = "CONSULTANDO";
 
   llamarAPI({accion: "estudiante", codigo: codigo}, function(respuesta){
     if(!respuesta || respuesta.ok === false || !respuesta.estudiante){
@@ -1355,7 +1360,6 @@ function consultarEstudiante(){
       document.getElementById("estudianteCard").classList.remove("show");
       document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
       document.getElementById("contadorMovimientos").textContent = "0";
-      document.getElementById("estadoConexion").textContent = "CONECTADO";
       mostrarMensaje((respuesta && respuesta.mensaje) || "REGISTRO NO ENCONTRADO.", "error");
       hablarTextoVoz("Registro no encontrado.");
       return;
@@ -1381,13 +1385,12 @@ function consultarEstudiante(){
 
     const movimientos = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
     renderMovimientos(movimientos, e);
-    document.getElementById("estadoConexion").textContent = "CONECTADO";
     mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
 
     if (esDocente) {
-      hablarTextoVoz("Maestra " + nombreUsuario + ". Fondo disponible en caja: " + saldoFormateado + " soles Lasallistas.");
+      hablarTextoVoz("Maestra " + nombreUsuario + ". Fondo disponible: " + saldoFormateado + " LDS.");
     } else {
-      hablarTextoVoz("Estudiante " + nombreUsuario + ". Saldo actual: " + saldoFormateado + " soles Lasallistas.");
+      hablarTextoVoz("Estudiante " + nombreUsuario + ". Saldo actual: " + saldoFormateado + " LDS.");
     }
   });
 }
@@ -1444,9 +1447,19 @@ function procesarPagoEstudiante() {
   });
 }
 
-function imprimirEstadoCuentaAdmin() {
+// OPCIÓN 1: IMPRIMIR REPORTE PERSONAL (ESTUDIANTE SELECCIONADO)
+function imprimirReportePersonal() {
   reproducirSonido('clic');
-  hablarTextoVoz("Imprimiendo estado de cuenta general.");
+  document.getElementById("printTituloReporte").textContent = "REPORTE DE ESTADO DE CUENTA — PERSONAL";
+  hablarTextoVoz("Imprimiendo estado de cuenta personal.");
+  window.print();
+}
+
+// OPCIÓN 2: IMPRIMIR REPORTE GRUPAL / GENERAL (TODOS LOS MOVIMIENTOS)
+function imprimirReporteGrupal() {
+  reproducirSonido('clic');
+  document.getElementById("printTituloReporte").textContent = "REPORTE GENERAL DE MOVIMIENTOS — GRUPAL";
+  hablarTextoVoz("Imprimiendo reporte grupal y general de todos los estudiantes.");
   window.print();
 }
 
