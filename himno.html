@@ -31,7 +31,7 @@
     <div class="space-y-2">
       <h2 id="estadoTexto" class="text-2xl font-black text-amber-300">¡Bienvenidos!</h2>
       <p id="subEstadoTexto" class="text-sm text-slate-200 font-medium">
-        Iniciando presentación institucional...
+        Iniciando presentación y melodía institucional...
       </p>
     </div>
 
@@ -41,7 +41,7 @@
     © IEP La Salle del Sur — Banco LDS 360
   </footer>
 
-  <!-- SCRIPT CON EL HIMNO COMPLETO Y LA SECUENCIA EXACTA -->
+  <!-- SCRIPT INTEGRADO: MELODÍA DE LIRA, TAMBOR, VOZ DE BIENVENIDA, HIMNO Y BOTONES -->
   <script>
     let audioCtx = null;
     let iniciado = false;
@@ -52,42 +52,15 @@
       "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
     };
 
-    // Secuencia musical ajustada con la letra del Himno institucional
-    const himnoConLetra = [
-      { n: "C4", d: 0.4, letra: "Aprendiendo" },
-      { n: "E4", d: 0.4, letra: "con metas y" },
-      { n: "G4", d: 0.7, letra: "valores" },
-      { n: "G4", d: 0.7, letra: "cual nos diste" },
-      { n: "A4", d: 0.4, letra: "tú mi gran" },
-      { n: "G4", d: 0.4, letra: "maestro." },
-      { n: "F4", d: 0.4, letra: "Lasallista" },
-      { n: "E4", d: 0.4, letra: "del Sur es" },
-      { n: "D4", d: 0.7, letra: "nuestro ejemplo" },
-      { n: "C4", d: 0.7, letra: "de enseñanza," },
-      { n: "D4", d: 0.4, letra: "disciplina" },
-      { n: "F4", d: 0.4, letra: "y lealtad." },
-      { n: "A4", d: 0.7, letra: "Como siempre" },
-      { n: "A4", d: 0.7, letra: "un paso adelante" },
-      { n: "B4", d: 0.4, letra: "Sencillez," },
-      { n: "A4", d: 0.4, letra: "responsabilidad" },
-      { n: "G4", d: 0.4, letra: "y honor." },
-      { n: "F4", d: 0.4, letra: "Es el lema" },
-      { n: "E4", d: 0.7, letra: "que nos enseñaste" },
-      { n: "D4", d: 0.7, letra: "al crecer." },
-      { n: "E4", d: 0.4, letra: "Sabiduría" },
-      { n: "F4", d: 0.4, letra: "de grandes" },
-      { n: "G4", d: 0.7, letra: "mentores" },
-      { n: "G4", d: 0.4, letra: "en nuestras" },
-      { n: "C5", d: 0.7, letra: "aulas" },
-      { n: "C5", d: 0.7, letra: "se educa con amor." },
-      { n: "B4", d: 0.4, letra: "Lasallista" },
-      { n: "A4", d: 0.4, letra: "del Sur es" },
-      { n: "G4", d: 0.4, letra: "nuestro ejemplo" },
-      { n: "F4", d: 0.4, letra: "de enseñanza," },
-      { n: "E4", d: 0.7, letra: "disciplina" },
-      { n: "D4", d: 0.4, letra: "y lealtad." },
-      { n: "E4", d: 0.4, letra: "Lealtad." },
-      { n: "F4", d: 1.5, letra: "¡La Salle del Sur!" }
+    const notasMelodia = [
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
     ];
 
     function sonarLira(ctx, freq, t, dur) {
@@ -99,15 +72,15 @@
       osc2.type = 'sine';
       osc1.frequency.setValueAtTime(freq, t);
       osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.22, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
+      gain.gain.setValueAtTime(0.20, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
       osc1.connect(gain);
       osc2.connect(gain);
       gain.connect(ctx.destination);
       osc1.start(t);
       osc2.start(t);
-      osc1.stop(t + dur * 1.5);
-      osc2.stop(t + dur * 1.5);
+      osc1.stop(t + 1.0);
+      osc2.stop(t + 1.0);
     }
 
     function sonarTambor(ctx, t) {
@@ -121,7 +94,7 @@
       filter.type = 'highpass';
       filter.frequency.value = 1800;
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.06, t);
+      gain.gain.setValueAtTime(0.08, t);
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
       noise.connect(filter);
       filter.connect(gain);
@@ -129,26 +102,15 @@
       noise.start(t);
     }
 
-    function reproducirHimnoConVisual(ctx) {
+    function iniciarMelodiaLira(ctx) {
       let t = ctx.currentTime + 0.1;
-      let duracionTotal = 0;
-
-      himnoConLetra.forEach(item => {
+      notasMelodia.forEach(item => {
         const f = FREQS[item.n] || 261.63;
         sonarLira(ctx, f, t, item.d);
         sonarTambor(ctx, t);
-
-        // Actualiza el texto en la pantalla conforme va sonando cada parte del himno
-        setTimeout(() => {
-          document.getElementById("estadoTexto").textContent = "Himno Institucional";
-          document.getElementById("subEstadoTexto").textContent = `🎵 "${item.letra}"`;
-        }, (t - ctx.currentTime) * 1000);
-
         t += item.d;
-        duracionTotal = t - ctx.currentTime;
       });
-
-      return duracionTotal;
+      return t - ctx.currentTime;
     }
 
     async function iniciarSecuenciaInstitucional() {
@@ -161,43 +123,53 @@
         await audioCtx.resume();
       }
 
+      // 1. Iniciar la melodía musical instrumental de liras y tambores
+      iniciarMelodiaLira(audioCtx);
+
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
 
-        // PASO 1: Locución exacta de bienvenida
+        // 2. Voz de bienvenida institucional
         document.getElementById("estadoTexto").textContent = "¡Bienvenidos!";
         document.getElementById("subEstadoTexto").textContent = "Bienvenidos a tu entidad financiera...";
 
-        const textoBienvenida = "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.";
-        const mensajeBienvenida = new SpeechSynthesisUtterance(textoBienvenida);
-        mensajeBienvenida.lang = 'es-PE';
-        mensajeBienvenida.rate = 0.9;
-        mensajeBienvenida.pitch = 1.0;
+        const vozBienvenida = new SpeechSynthesisUtterance("Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.");
+        vozBienvenida.lang = 'es-PE';
+        vozBienvenida.rate = 0.9;
+        vozBienvenida.pitch = 0.95;
 
-        // PASO 2: Al terminar la bienvenida, se canta el himno institucional completo
-        mensajeBienvenida.onend = function() {
-          let duracionHimnoSegundos = reproducirHimnoConVisual(audioCtx);
+        // 3. Al terminar la bienvenida, la voz canta/recita el himno institucional
+        vozBienvenida.onend = function() {
+          document.getElementById("estadoTexto").textContent = "Himno Institucional";
+          document.getElementById("subEstadoTexto").textContent = "Entonando el himno de la institución...";
 
-          // PASO 3: Al terminar el himno, se explican las opciones de los botones
-          setTimeout(() => {
+          const letraHimno = "Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad. Como siempre un paso adelante. Sencillez, responsabilidad y honor. Es el lema que tú nos enseñaste, ejemplo puro que nos diste al crecer. Sabiduría de grandes mentores, en nuestras aulas se educa con amor. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+          
+          const vozHimno = new SpeechSynthesisUtterance(letraHimno);
+          vozHimno.lang = 'es-PE';
+          vozHimno.rate = 0.88;
+          vozHimno.pitch = 0.95;
+
+          // 4. Al terminar el himno, se explican las secuencias de los botones
+          vozHimno.onend = function() {
             document.getElementById("estadoTexto").textContent = "Panel Principal";
             document.getElementById("subEstadoTexto").textContent = "Listo para iniciar operaciones...";
 
-            const textoBotones = "Selecciona tu opción en el panel para consultar cuentas, registrar transacciones o atender incidencias.";
-            const mensajeBotones = new SpeechSynthesisUtterance(textoBotones);
-            mensajeBotones.lang = 'es-PE';
-            mensajeBotones.rate = 0.95;
-            mensajeBotones.pitch = 1.0;
-            window.speechSynthesis.speak(mensajeBotones);
+            const vozBotones = new SpeechSynthesisUtterance("Selecciona tu opción en el panel para consultar cuentas, registrar transacciones o atender incidencias.");
+            vozBotones.lang = 'es-PE';
+            vozBotones.rate = 0.95;
+            vozBotones.pitch = 0.95;
+            window.speechSynthesis.speak(vozBotones);
+          };
 
-          }, duracionHimnoSegundos * 1000);
+          window.speechSynthesis.speak(vozHimno);
         };
 
-        window.speechSynthesis.speak(mensajeBienvenida);
+        window.speechSynthesis.speak(vozBienvenida);
       }
     }
 
-    // Activación automática al cargar o ante cualquier interacción
+    // Activación automática al cargar o ante cualquier interacción del usuario
     window.addEventListener('load', () => {
       setTimeout(iniciarSecuenciaInstitucional, 400);
     });
