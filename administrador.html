@@ -378,6 +378,7 @@ main {
   width: 100%;
 }
 
+/* ORDEN EXACTO SOLICITADO: BOTÓN QR A LA IZQUIERDA, LUEGO INPUT Y AL FINAL BUSCAR */
 .search-row-inputs {
   display: flex;
   gap: 8px;
@@ -385,14 +386,6 @@ main {
   align-items: center;
 }
 
-.search-row-inputs input {
-  flex: 1;
-  height: 44px;
-  font-size: 0.9rem;
-  min-width: 0;
-}
-
-/* ORDEN EXACTO: QR PRIMERO (IZQUIERDA) Y BUSCAR DESPUÉS (DERECHA) */
 .btn-qr-main {
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #ffffff;
@@ -403,6 +396,13 @@ main {
   flex-shrink: 0;
   font-size: 0.85rem;
   border-radius: 12px;
+}
+
+.search-row-inputs input {
+  flex: 1;
+  height: 44px;
+  font-size: 0.9rem;
+  min-width: 0;
 }
 
 .search-row-inputs .btn-gold {
@@ -572,6 +572,13 @@ tr:last-child td { border-bottom: 0; }
     align-items: center;
   }
 
+  .btn-qr-main {
+    flex-shrink: 0;
+    height: 40px;
+    padding: 0 8px;
+    font-size: 0.7rem;
+  }
+
   .search-row-inputs input {
     flex: 1;
     min-width: 0;
@@ -581,13 +588,6 @@ tr:last-child td { border-bottom: 0; }
   }
 
   .search-row-inputs .btn-gold {
-    flex-shrink: 0;
-    height: 40px;
-    padding: 0 8px;
-    font-size: 0.7rem;
-  }
-
-  .btn-qr-main {
     flex-shrink: 0;
     height: 40px;
     padding: 0 8px;
@@ -730,7 +730,7 @@ footer {
         </div>
         <div class="panel-body">
           
-          <!-- BLOQUE DE BÚSQUEDA CON QR A LA IZQUIERDA Y BUSCAR A LA DERECHA -->
+          <!-- BLOQUE DE BÚSQUEDA CON QR A LA IZQUIERDA -->
           <div class="search-container">
             <div>
               <label class="small-label" for="selectAnioEscolar">PERIODO / AÑO ESCOLAR</label>
@@ -746,8 +746,8 @@ footer {
             <div>
               <label class="small-label" for="codigo">CÓDIGO O QR DEL ESTUDIANTE</label>
               <div class="search-row-inputs">
-                <input id="codigo" class="code-input" placeholder="LDS-EST-001" autocomplete="off">
                 <button class="btn btn-qr-main" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+                <input id="codigo" class="code-input" placeholder="LDS-EST-001" autocomplete="off">
                 <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">🔍 BUSCAR</button>
               </div>
             </div>
@@ -755,7 +755,7 @@ footer {
 
           <div id="mensaje" class="message"></div>
           
-          <!-- SECCIÓN DE REGISTRO DEL ALUMNO (SE ACTIVA AL CONSULTAR O ESCANEAR) -->
+          <!-- TARJETA DE REGISTRO DEL ALUMNO (SE ACTIVA AL CONSULTAR O ESCANEAR) -->
           <div id="estudianteCard" class="student-head">
             <div class="student-photo-wrap">
               <img id="fotoEstudiante" class="student-photo" src="" alt="Foto">
