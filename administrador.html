@@ -339,9 +339,6 @@ main {
   flex-wrap: wrap;
 }
 
-.panel-head.clickable { cursor: pointer; }
-.panel-head.clickable:hover { background: #f1f5f9; }
-
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
@@ -352,7 +349,6 @@ main {
   font-weight: 800;
 }
 
-/* BOTONES DE IMPRESIÓN ADAPTADOS AL CELULAR */
 .print-buttons-group {
   display: flex;
   gap: 6px;
@@ -367,17 +363,6 @@ main {
   font-size: 0.7rem;
   min-height: 34px;
 }
-
-.toggle-icon {
-  font-size: 0.8rem;
-  color: var(--muted);
-  transition: transform 0.25s ease;
-  display: inline-block;
-}
-
-.panel.collapsed .panel-body { display: none; }
-.panel.collapsed .toggle-icon { transform: rotate(-90deg); }
-.panel.collapsed .panel-head { border-bottom: none; }
 
 .panel-body { padding: 12px; }
 
@@ -486,26 +471,47 @@ main {
 .student-meta { color: var(--muted); font-size: 0.72rem; font-weight: 700; }
 .saldo { font-size: 1.05rem; font-weight: 900; color: var(--verde); margin-top: 6px; background: #ecfdf5; padding: 4px 12px; border-radius: 12px; display: inline-block; border: 2px solid #a7f3d0; }
 
-/* CONTENEDOR DE TABLA PERFECTO PARA CELULAR CON SCROLL SUAVE */
+/* TABLA 100% RESPONSIVA Y AJUSTADA AL CONTENEDOR */
 .table-wrap {
+  width: 100%;
   overflow-x: auto;
   margin-top: 12px;
   border: 2px solid var(--borde);
   border-radius: 10px;
   -webkit-overflow-scrolling: touch;
   background: #ffffff;
-  width: 100%;
 }
 
-table { width: 100%; border-collapse: collapse; min-width: 720px; }
-th, td { padding: 8px 10px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.75rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
-td.cell-wrap { white-space: normal; min-width: 130px; }
-th { background: #f1f5f9; color: var(--azul); font-size: 0.72rem; font-weight: 800; letter-spacing: .5px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+th, td {
+  padding: 8px 8px;
+  border-bottom: 1px solid #e5eaf0;
+  text-align: left;
+  font-size: 0.72rem;
+  vertical-align: middle;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+th {
+  background: #f1f5f9;
+  color: var(--azul);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
 tr:last-child td { border-bottom: 0; }
 
-.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 5px; font-weight: 800; border: 1px solid #a7f3d0; }
-.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 5px; font-weight: 800; border: 2px solid #fecaca; }
-.empty { text-align: center; color: var(--muted); padding: 18px 10px; font-weight: 700; }
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 5px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; display: inline-block; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 5px; border-radius: 4px; font-weight: 800; border: 2px solid #fecaca; display: inline-block; }
+.empty { text-align: center; color: var(--muted); padding: 18px 10px; font-weight: 700; white-space: nowrap; }
 
 .incident-list { display: grid; gap: 8px; margin-top: 8px; }
 .incident { border: 2px solid var(--borde); border-radius: 10px; padding: 8px 10px; background: #fafcff; }
@@ -520,7 +526,6 @@ tr:last-child td { border-bottom: 0; }
 #reader { width: 100%; border-radius: 12px; overflow: hidden; background: #000; min-height: 200px; border: 2px solid var(--dorado); }
 .close-qr-btn { margin-top: 12px; background: var(--rojo); color: #fff; border: 0; padding: 8px 14px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.8rem; }
 
-/* ENCABEZADO OFICIAL INSTITUCIONAL PARA IMPRESIÓN */
 .print-only-header { display: none; }
 
 @media print {
@@ -658,7 +663,7 @@ footer {
         </div>
         <div class="panel-body">
           
-          <!-- BLOQUE DE BÚSQUEDA Y AÑO ORGANIZADO EN VERTICAL -->
+          <!-- BLOQUE DE BÚSQUEDA Y AÑO -->
           <div class="search-container">
             <div>
               <label class="small-label" for="selectAnioEscolar">PERIODO / AÑO ESCOLAR</label>
@@ -715,7 +720,7 @@ footer {
             </div>
           </div>
 
-          <!-- TABLA CON DESPLAZAMIENTO TÁCTIL SUAVE PARA VER TODAS LAS COLUMNAS -->
+          <!-- TABLA RESPONSIVA DENTRO DEL PANEL -->
           <div class="table-wrap">
             <table>
               <thead>
@@ -1340,10 +1345,10 @@ function renderMovimientos(movimientos, estudianteObj, anioEscolar){
                    '<td>' + escaparHTML(nombre) + '</td>' +
                    '<td>' + escaparHTML(grado) + '</td>' +
                    '<td><span class="' + badgeClase + '">' + escaparHTML(tipo) + '</span></td>' +
-                   '<td class="cell-wrap">' + escaparHTML(concepto) + '</td>' +
+                   '<td style="min-width:140px;">' + escaparHTML(concepto) + '</td>' +
                    '<td><strong>' + formatearLDS(monto) + '</strong></td>' +
                    '<td>' + escaparHTML(responsable) + '</td>' +
-                   '<td class="cell-wrap">' + escaparHTML(observacion) + '</td>';
+                   '<td style="min-width:140px;">' + escaparHTML(observacion) + '</td>';
     tabla.appendChild(tr);
   });
 }
