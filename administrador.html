@@ -248,7 +248,7 @@ main {
   display: none;
 }
 
-/* TARJETA DE PERFIL DE LA MISSI GRANDE Y DESTACADA */
+/* BANNER DE LA MISSI ACTIVA */
 @keyframes flotarYBrillar {
   0% { transform: translateY(0px) scale(1); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
   50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(245, 158, 11, 0.6); }
@@ -341,7 +341,7 @@ main {
   font-weight: 800;
 }
 
-/* ESTRUCTURA PRINCIPAL OPTIMIZADA */
+/* LAYOUT */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
@@ -369,13 +369,8 @@ main {
   user-select: none;
 }
 
-.panel-head.clickable {
-  cursor: pointer;
-}
-
-.panel-head.clickable:hover {
-  background: #f1f5f9;
-}
+.panel-head.clickable { cursor: pointer; }
+.panel-head.clickable:hover { background: #f1f5f9; }
 
 .panel-head h3 {
   margin: 0;
@@ -394,21 +389,11 @@ main {
   display: inline-block;
 }
 
-.panel.collapsed .panel-body {
-  display: none;
-}
+.panel.collapsed .panel-body { display: none; }
+.panel.collapsed .toggle-icon { transform: rotate(-90deg); }
+.panel.collapsed .panel-head { border-bottom: none; }
 
-.panel.collapsed .toggle-icon {
-  transform: rotate(-90deg);
-}
-
-.panel.collapsed .panel-head {
-  border-bottom: none;
-}
-
-.panel-body {
-  padding: 20px;
-}
+.panel-body { padding: 20px; }
 
 .type-selector-box {
   display: grid;
@@ -455,13 +440,8 @@ main {
   gap: 8px;
 }
 
-.search-buttons .btn {
-  flex: 1;
-}
-
-.code-input {
-  text-transform: uppercase;
-}
+.search-buttons .btn { flex: 1; }
+.code-input { text-transform: uppercase; }
 
 .small-label {
   display: block;
@@ -479,20 +459,8 @@ main {
   font-size: 0.82rem;
   font-weight: 700;
 }
-
-.message.ok {
-  display: block;
-  background: #ecfdf3;
-  color: var(--verde);
-  border: 1px solid #a7f3d0;
-}
-
-.message.error {
-  display: block;
-  background: #fef2f2;
-  color: var(--rojo);
-  border: 1px solid #fecaca;
-}
+.message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
+.message.error { display: block; background: #fef2f2; color: var(--rojo); border: 1px solid #fecaca; }
 
 .student-head {
   display: none;
@@ -507,10 +475,7 @@ main {
   gap: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-
-.student-head.show {
-  display: flex;
-}
+.student-head.show { display: flex; }
 
 .student-photo-wrap {
   width: 110px;
@@ -526,48 +491,12 @@ main {
   animation: flotarYBrillar 4s ease-in-out infinite;
 }
 
-.student-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
-
-.student-photo-placeholder {
-  font-size: 42px;
-  color: #8aa0b7;
-}
-
-.student-info-box {
-  width: 100%;
-}
-
-.student-name {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--azul);
-  margin-bottom: 4px;
-  line-height: 1.3;
-}
-
-.student-meta {
-  color: var(--muted);
-  font-size: 0.78rem;
-  line-height: 1.3;
-  font-weight: 700;
-}
-
-.saldo {
-  font-size: 1.15rem;
-  font-weight: 900;
-  color: var(--verde);
-  margin-top: 8px;
-  background: #ecfdf5;
-  padding: 5px 14px;
-  border-radius: 16px;
-  display: inline-block;
-  border: 2px solid #a7f3d0;
-}
+.student-photo { width: 100%; height: 100%; object-fit: cover; display: none; }
+.student-photo-placeholder { font-size: 42px; color: #8aa0b7; }
+.student-info-box { width: 100%; }
+.student-name { font-size: 1.1rem; font-weight: 800; color: var(--azul); margin-bottom: 4px; line-height: 1.3; }
+.student-meta { color: var(--muted); font-size: 0.78rem; line-height: 1.3; font-weight: 700; }
+.saldo { font-size: 1.15rem; font-weight: 900; color: var(--verde); margin-top: 8px; background: #ecfdf5; padding: 5px 14px; border-radius: 16px; display: inline-block; border: 2px solid #a7f3d0; }
 
 .table-wrap {
   overflow-x: auto;
@@ -577,181 +506,67 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 680px;
-}
+table { width: 100%; border-collapse: collapse; min-width: 680px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.78rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
+td.cell-wrap { white-space: normal; min-width: 130px; }
+th { background: #f1f5f9; color: var(--azul); font-size: 0.75rem; font-weight: 800; letter-spacing: .5px; }
+tr:last-child td { border-bottom: 0; }
 
-th, td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e5eaf0;
-  text-align: left;
-  font-size: 0.78rem;
-  vertical-align: middle;
-  white-space: nowrap;
-  font-weight: 600;
-}
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 3px 6px; border-radius: 6px; font-weight: 800; border: 1px solid #a7f3d0; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 3px 6px; border-radius: 6px; font-weight: 800; border: 2px solid #fecaca; box-shadow: 0 0 6px rgba(239, 68, 68, 0.25); }
+.empty { text-align: center; color: var(--muted); padding: 20px 10px; font-weight: 700; }
 
-td.cell-wrap {
-  white-space: normal;
-  min-width: 130px;
-}
+.incident-list { display: grid; gap: 8px; margin-top: 10px; }
+.incident { border: 2px solid var(--borde); border-radius: 12px; padding: 10px 12px; background: #fafcff; }
+.incident-top { display: flex; justify-content: space-between; gap: 10px; font-size: 0.8rem; margin-bottom: 4px; font-weight: 800; }
+.badge { padding: 2px 6px; border-radius: 999px; background: #fff7df; color: #7a5d00; border: 2px solid #ead28a; font-size: 0.7rem; font-weight: 800; }
+.incident small { color: var(--muted); display: block; margin-top: 4px; font-weight: 600; }
+.danger { color: var(--rojo); font-weight: 800; }
 
-th {
-  background: #f1f5f9;
-  color: var(--azul);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: .5px;
-}
+.qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(12, 30, 48, 0.88); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+.qr-modal-content { background: #ffffff; padding: 24px; border-radius: 24px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-top: 6px solid var(--dorado); }
+.qr-modal-content h3 { color: var(--azul); font-size: 1.15rem; margin-bottom: 14px; font-weight: 800; }
+#reader { width: 100%; border-radius: 14px; overflow: hidden; background: #000; min-height: 220px; border: 2px solid var(--dorado); }
+.close-qr-btn { margin-top: 14px; background: var(--rojo); color: #fff; border: 0; padding: 10px 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.85rem; }
 
-tr:last-child td {
-  border-bottom: 0;
-}
-
-.badge-ingreso {
-  color: #047857;
-  background: #ecfdf5;
-  padding: 3px 6px;
-  border-radius: 6px;
-  font-weight: 800;
-  border: 1px solid #a7f3d0;
-}
-
-.badge-egreso {
-  color: #b91c1c;
-  background: #fef2f2;
-  padding: 3px 6px;
-  border-radius: 6px;
-  font-weight: 800;
-  border: 2px solid #fecaca;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.25);
-}
-
-.empty {
-  text-align: center;
-  color: var(--muted);
-  padding: 20px 10px;
-  font-weight: 700;
-}
-
-.incident-list {
-  display: grid;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.incident {
-  border: 2px solid var(--borde);
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: #fafcff;
-}
-
-.incident-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 0.8rem;
-  margin-bottom: 4px;
-  font-weight: 800;
-}
-
-.badge {
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: #fff7df;
-  color: #7a5d00;
-  border: 2px solid #ead28a;
-  font-size: 0.7rem;
-  font-weight: 800;
-}
-
-.incident small {
-  color: var(--muted);
-  display: block;
-  margin-top: 4px;
-  font-weight: 600;
-}
-
-.danger {
-  color: var(--rojo);
-  font-weight: 800;
-}
-
-.qr-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(12, 30, 48, 0.88);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.qr-modal-content {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 24px;
-  max-width: 380px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  border-top: 6px solid var(--dorado);
-}
-
-.qr-modal-content h3 {
-  color: var(--azul);
-  font-size: 1.15rem;
-  margin-bottom: 14px;
-  font-weight: 800;
-}
-
-#reader {
-  width: 100%;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #000;
-  min-height: 220px;
-  border: 2px solid var(--dorado);
-}
-
-.close-qr-btn {
-  margin-top: 14px;
-  background: var(--rojo);
-  color: #fff;
-  border: 0;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  width: 100%;
-  font-size: 0.85rem;
-}
-
+/* CABECERA EXCLUSIVA PARA IMPRESIÓN PROFESIONAL */
 .print-header { display: none; }
 
 @media print {
   body { background: #ffffff; color: #000000; }
-  header, .admin-profile-banner, .search-box, .panel, .btn, footer, .qr-modal { display: none !important; }
-  main { display: block !important; padding: 0 !important; }
+  header, .admin-profile-banner, .search-box, .panel-head div, .panel:has(#panelPago), .panel:has(#panelIncidencias), .btn, footer, .qr-modal { display: none !important; }
+  main { display: block !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+  .panel { border: none !important; box-shadow: none !important; margin: 0 !important; }
+  .panel-body { padding: 0 !important; }
+  
   .print-header {
-    display: flex;
-    align-items: center;
+    display: flex !important;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 3px solid #000;
     padding-bottom: 12px;
     margin-bottom: 15px;
   }
-  .print-header img { width: 50px; height: 50px; object-fit: contain; }
-  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; }
+  .print-header-left { display: flex; align-items: center; gap: 12px; }
+  .print-header-left img { width: 55px; height: 55px; object-fit: contain; }
+  .print-header-left h2 { font-size: 1.1rem; font-weight: 800; }
+  .print-header-left p { font-size: 0.8rem; font-weight: 700; }
+
+  /* FOTO DE LA MISS / ALUMNO EN EL REPORTE IMPRESO */
+  .print-badge-entity {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #000;
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: #fdfdfd;
+  }
+  .print-badge-entity img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+
+  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 10px !important; }
   table { min-width: 100% !important; }
-  th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; }
+  th { background: #e2e8f0 !important; color: #000 !important; -webkit-print-color-adjust: exact; }
 }
 
 footer {
@@ -764,33 +579,16 @@ footer {
 }
 
 @media (min-width: 600px) {
-  .search-box {
-    flex-direction: row;
-    align-items: center;
-  }
-  .search-buttons {
-    flex-shrink: 0;
-  }
-  .student-head {
-    flex-direction: row;
-    text-align: left;
-  }
-  .student-info-box {
-    flex: 1;
-  }
+  .search-box { flex-direction: row; align-items: center; }
+  .search-buttons { flex-shrink: 0; }
+  .student-head { flex-direction: row; text-align: left; }
+  .student-info-box { flex: 1; }
 }
 
 @media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-  .admin-profile-banner {
-    flex-direction: column;
-    text-align: center;
-  }
-  .admin-profile-info {
-    flex-direction: column;
-  }
+  .layout { grid-template-columns: 1fr; }
+  .admin-profile-banner { flex-direction: column; text-align: center; }
+  .admin-profile-info { flex-direction: column; }
 }
 </style>
 </head>
@@ -841,7 +639,7 @@ footer {
 </div>
 
 <main id="panelView">
-  <!-- BANNER DE LA MISSI ACTIVA (FOTO GRANDE Y ESTADÍSTICAS) -->
+  <!-- BANNER DE LA MISSI ACTIVA -->
   <div class="admin-profile-banner">
     <div class="admin-profile-info">
       <div class="admin-avatar-wrap">
@@ -849,7 +647,7 @@ footer {
         <div id="missPlaceholder" class="admin-avatar-placeholder">👩‍🏫</div>
       </div>
       <div class="admin-text-details">
-        <p>DOCENTE TUTORA ACTIVA</p>
+        <p>DOCENTE TUTORA CAJERA ACTIVA</p>
         <h3 id="maestraActivaNombre">—</h3>
       </div>
     </div>
@@ -873,8 +671,8 @@ footer {
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 5px 10px; font-size: 0.72rem;">🖨️ IMPRIMIR PERSONAL</button>
-            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 5px 10px; font-size: 0.72rem;">📊 IMPRIMIR GRUPAL</button>
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 5px 10px; font-size: 0.72rem;">🖨️ IMPRIMIR ESTUDIANTE</button>
+            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 5px 10px; font-size: 0.72rem;">📊 IMPRIMIR REPORTE GENERAL</button>
           </div>
         </div>
         <div class="panel-body">
@@ -899,12 +697,21 @@ footer {
             </div>
           </div>
 
+          <!-- CABECERA PARA IMPRESIÓN CON FOTO DE LA MISS Y DEL ALUMNO -->
           <div class="print-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+            <div class="print-header-left">
+              <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
               <div>
-                <h2 id="printTituloReporte">BANCO LDS 360 - REPORTE OFICIAL</h2>
-                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS | DOCENTE: <span id="printNombreMiss">---</span></p>
+                <h2 id="printTituloReporte">BANCO LDS 360 - ESTADO DE CUENTA</h2>
+                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
+                <p style="font-size: 0.72rem; color: #333; margin-top: 2px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
+              </div>
+            </div>
+            <div class="print-badge-entity">
+              <img id="printFotoEntidad" src="" alt="Foto" onerror="this.style.display='none';">
+              <div>
+                <strong id="printNombreEntidad" style="font-size: 0.8rem; display: block;">---</strong>
+                <span id="printMetaEntidad" style="font-size: 0.7rem; color: #555; display: block;">---</span>
               </div>
             </div>
           </div>
@@ -1168,7 +975,11 @@ const FOTOS_DOCENTES = {
   "MISS KARIN MOLERO ROMANI": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300"
 };
 
+let datosEstudianteActualGlobal = null;
+let maestraActivaGlobal = "";
+
 function mostrarFotoMaestra(nombre) {
+  maestraActivaGlobal = nombre;
   const foto = document.getElementById("missFoto");
   const placeholder = document.getElementById("missPlaceholder");
   const url = FOTOS_DOCENTES[nombre] || "";
@@ -1360,6 +1171,7 @@ function consultarEstudiante(){
       document.getElementById("estudianteCard").classList.remove("show");
       document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
       document.getElementById("contadorMovimientos").textContent = "0";
+      datosEstudianteActualGlobal = null;
       mostrarMensaje((respuesta && respuesta.mensaje) || "REGISTRO NO ENCONTRADO.", "error");
       hablarTextoVoz("Registro no encontrado.");
       return;
@@ -1367,6 +1179,7 @@ function consultarEstudiante(){
 
     reproducirSonido('exito');
     const e = respuesta.estudiante;
+    datosEstudianteActualGlobal = e; // Guardamos para la impresión individual
     const cuenta = respuesta.cuenta || {};
     const nombreUsuario = e.nombreCompleto || e.nombre || "USUARIO";
     const saldoFormateado = formatearLDS(cuenta.saldoActual || 0);
@@ -1447,19 +1260,40 @@ function procesarPagoEstudiante() {
   });
 }
 
-// OPCIÓN 1: IMPRIMIR REPORTE PERSONAL (ESTUDIANTE SELECCIONADO)
+// CONFIGURACIÓN DE IMPRESIÓN PERSONAL (FOTO DEL ALUMNO + MISS)
 function imprimirReportePersonal() {
   reproducirSonido('clic');
-  document.getElementById("printTituloReporte").textContent = "REPORTE DE ESTADO DE CUENTA — PERSONAL";
+  if (!datosEstudianteActualGlobal) {
+    alert("PRIMERO DEBES CONSULTAR A UN ESTUDIANTE.");
+    return;
+  }
+  document.getElementById("printTituloReporte").textContent = "ESTADO DE CUENTA — PERSONAL (CORTE MENSUAL)";
+  
+  // Asignar datos del alumno a la credencial de impresión
+  const nombreEst = datosEstudianteActualGlobal.nombreCompleto || datosEstudianteActualGlobal.nombre || "ESTUDIANTE";
+  const metaEst = [datosEstudianteActualGlobal.codigo, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
+  document.getElementById("printNombreEntidad").textContent = nombreEst;
+  document.getElementById("printMetaEntidad").textContent = metaEst;
+  
+  const originalFoto = String(datosEstudianteActualGlobal.fotoUrl || datosEstudianteActualGlobal.foto || "").trim();
+  const urls = obtenerURLsFoto(originalFoto);
+  document.getElementById("printFotoEntidad").src = urls[0] || "";
+
   hablarTextoVoz("Imprimiendo estado de cuenta personal.");
   window.print();
 }
 
-// OPCIÓN 2: IMPRIMIR REPORTE GRUPAL / GENERAL (TODOS LOS MOVIMIENTOS)
+// CONFIGURACIÓN DE IMPRESIÓN GRUPAL / GENERAL (FOTO DE LA MISS + RESUMEN GENERAL)
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
-  document.getElementById("printTituloReporte").textContent = "REPORTE GENERAL DE MOVIMIENTOS — GRUPAL";
-  hablarTextoVoz("Imprimiendo reporte grupal y general de todos los estudiantes.");
+  document.getElementById("printTituloReporte").textContent = "REPORTE GENERAL Y BALANCE ANUAL — GRUPAL";
+  
+  // Asignar datos de la Miss Activa a la credencial de impresión principal
+  document.getElementById("printNombreEntidad").textContent = maestraActivaGlobal || "DOCENTE CAJERA";
+  document.getElementById("printMetaEntidad").textContent = "TUTORA CAJERA RESPONSABLE — KIDSWork LS";
+  document.getElementById("printFotoEntidad").src = FOTOS_DOCENTES[maestraActivaGlobal] || "";
+
+  hablarTextoVoz("Imprimiendo reporte general y balance grupal.");
   window.print();
 }
 
