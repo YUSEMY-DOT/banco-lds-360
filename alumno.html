@@ -121,6 +121,14 @@
     .avatar-container {
       flex-shrink: 0;
     }
+    
+    /* ANIMACIÓN BONITA Y DIDÁCTICA PARA LA FOTO (FLOTACIÓN Y BRILLO DORADO) */
+    @keyframes flotarYBrillar {
+      0% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+      50% { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 35px rgba(0,0,0,0.7), 0 0 18px rgba(245, 158, 11, 0.6); }
+      100% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+    }
+
     .avatar-img { 
       width: 175px; 
       height: 175px; 
@@ -129,6 +137,11 @@
       object-fit: cover; 
       background: #ffffff; 
       box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      animation: flotarYBrillar 4s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+    .avatar-img:hover {
+      transform: scale(1.06);
     }
     
     .alumno-info-box { 
@@ -277,7 +290,7 @@
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a href="index.html" class="inicio-btn" onclick="hablarTextoVoz('Regresando al inicio')">← INICIO</a>
+    <a href="index.html" class="inicio-btn" onclick="reproducirSonido('clic'); hablarTextoVoz('Regresando al inicio')">← INICIO</a>
   </header>
 
   <main>
@@ -396,6 +409,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
+    // SINTETIZADOR DE VOZ CON INDICACIONES DIDÁCTICAS
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -423,6 +437,47 @@
         } else {
           ejecutarVoz();
         }
+      }
+    }
+
+    // EFECTOS DE SONIDO DIDÁCTICOS (WEB AUDIO API SIN ARCHIVOS EXTERNOS)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function reproducirSonido(tipo) {
+      try {
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const ahora = audioCtx.currentTime;
+
+        if (tipo === 'clic') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, ahora);
+          gain.gain.setValueAtTime(0.1, ahora);
+          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.1);
+          osc.start(ahora);
+          osc.stop(ahora + 0.1);
+        } else if (tipo === 'exito') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, ahora);
+          osc.frequency.setValueAtTime(554.37, ahora + 0.08);
+          osc.frequency.setValueAtTime(659.25, ahora + 0.16);
+          gain.gain.setValueAtTime(0.12, ahora);
+          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.35);
+          osc.start(ahora);
+          osc.stop(ahora + 0.35);
+        } else if (tipo === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200, ahora);
+          osc.frequency.setValueAtTime(150, ahora + 0.15);
+          gain.gain.setValueAtTime(0.15, ahora);
+          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.3);
+          osc.start(ahora);
+          osc.stop(ahora + 0.3);
+        }
+      } catch (e) {
+        console.log("Audio interactivo activado");
       }
     }
 
@@ -525,6 +580,7 @@
     });
 
     function cambiarCodigoManual() {
+      reproducirSonido('clic');
       const nuevoCod = prompt("INGRESE EL CÓDIGO CORRECTO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
       if (nuevoCod && nuevoCod.trim() !== "") {
         const codigoLimpio = nuevoCod.trim().toUpperCase();
@@ -536,8 +592,23 @@
     }
 
     function imprimirEstadoCuenta() {
-      hablarTextoVoz("Imprimiendo estado de cuenta");
+      reproducirSonido('clic');
+      hablarTextoVoz("Imprimiendo estado de cuenta oficial");
       window.print();
+    }
+
+    // DETECCIÓN INTELIGENTE DE GÉNERO PARA SALUDOS CORRECTOS (BIENVENIDO / BIENVENIDA)
+    function detectarGenero(est) {
+      const generoCampo = String(est.genero || est.sexo || '').trim().toUpperCase();
+      if (generoCampo.startsWith('F') || generoCampo === 'MUJER' || generoCampo === 'NIÑA') return 'F';
+      if (generoCampo.startsWith('M') || generoCampo === 'HOMBRE' || generoCampo === 'NIÑO') return 'M';
+
+      const nombre = String(est.nombre || est.nombreCompleto || '').trim().toUpperCase();
+      const primerNombre = nombre.split(' ')[0] || '';
+      if (primerNombre.endsWith('A') && !['ELÍAS', 'JOSÉ', 'LUCAS', 'NICOLÁS', 'T.'].includes(primerNombre)) {
+        return 'F';
+      }
+      return 'M';
     }
 
     function consultarDatosEstudiante(codigo) {
@@ -567,10 +638,16 @@
           document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
 
           renderizarMovimientos(movimientos);
-          hablarTextoVoz("Bienvenido " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
+
+          // Sonido de éxito y saludo de voz adaptado por género
+          reproducirSonido('exito');
+          const genero = detectarGenero(est);
+          const saludoTerm = genero === 'F' ? 'Bienvenida' : 'Bienvenido';
+          hablarTextoVoz(saludoTerm + " " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
           return;
         }
 
+        reproducirSonido('error');
         document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
         document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
         document.getElementById('saldoLDS').textContent = "0.00";
@@ -581,7 +658,8 @@
     }
 
     function accionBotonPagar() {
-      hablarTextoVoz("Registrar pago o gastos");
+      reproducirSonido('clic');
+      hablarTextoVoz("Panel de registro de pagos o gastos. Selecciona la categoría y el concepto.");
       document.getElementById('seccionOperacion').classList.remove('hidden');
       document.getElementById('seccionMovimientos').classList.add('hidden');
       document.getElementById('tituloOperacion').textContent = "💸 REGISTRAR PAGO O GASTO";
@@ -604,6 +682,7 @@
     }
 
     function alCambiarCategoria() {
+      reproducirSonido('clic');
       const cat = document.getElementById('selectCategoria').value;
       const selectCon = document.getElementById('selectConcepto');
       selectCon.innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
@@ -618,7 +697,8 @@
     }
 
     function accionBotonMovimientos() {
-      hablarTextoVoz("Historial de movimientos");
+      reproducirSonido('clic');
+      hablarTextoVoz("Revisando historial de movimientos y estado de cuenta.");
       document.getElementById('seccionOperacion').classList.add('hidden');
       document.getElementById('seccionMovimientos').classList.remove('hidden');
     }
@@ -632,15 +712,17 @@
       const msg = document.getElementById('mensajeOperacion');
 
       if (!cat || !con || !monto || !resp) {
+        reproducirSonido('error');
         msg.style.color = "#dc2626";
         msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
-        hablarTextoVoz("Complete todos los campos obligatorios.");
+        hablarTextoVoz("Atención: Complete todos los campos obligatorios.");
         return;
       }
 
+      reproducirSonido('clic');
       msg.style.color = "#2563eb";
       msg.textContent = "REGISTRANDO...";
-      hablarTextoVoz("Registrando transacción.");
+      hablarTextoVoz("Registrando transacción en el sistema.");
 
       hacerPeticionJSONP({
         accion: 'REGISTRAR_TRANSACCION',
@@ -652,9 +734,10 @@
         observacion: obs
       }, function(res) {
         if (res && (res.success || res.ok)) {
+          reproducirSonido('exito');
           msg.style.color = "#059669";
           msg.textContent = "¡REGISTRADO CON ÉXITO!";
-          hablarTextoVoz("Registrado con éxito.");
+          hablarTextoVoz("¡Transacción registrada con éxito!");
 
           setTimeout(() => {
             consultarDatosEstudiante(codigoEstudianteActual);
@@ -662,9 +745,10 @@
             msg.textContent = '';
           }, 1200);
         } else {
+          reproducirSonido('error');
           msg.style.color = "#dc2626";
           msg.textContent = (res && res.mensaje) ? res.mensaje : "ERROR AL REGISTRAR.";
-          hablarTextoVoz("Error al registrar.");
+          hablarTextoVoz("Error al registrar la transacción.");
         }
       });
     }
