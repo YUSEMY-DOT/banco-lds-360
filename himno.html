@@ -20,7 +20,7 @@
   </header>
 
   <!-- VISTA PRINCIPAL AL ESCANEAR -->
-  <main class="max-w-md mx-auto w-full bg-slate-800/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-400/30 space-y-6 my-auto text-center">
+  <main class="max-w-md mx-auto w-full bg-slate-800/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-amber-400/30 space-y-6 my-auto text-center">
     
     <div class="w-28 h-28 mx-auto bg-gradient-to-tr from-amber-400 via-yellow-400 to-sky-500 rounded-full p-1 shadow-2xl flex items-center justify-center">
       <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-5xl shadow-inner animate-pulse">
@@ -29,9 +29,9 @@
     </div>
 
     <div class="space-y-2">
-      <h2 class="text-2xl font-black text-amber-300">¡Bienvenidos!</h2>
-      <p class="text-sm text-slate-200 font-medium">
-        Escuchando la voz e himno institucional...
+      <h2 id="estadoTexto" class="text-2xl font-black text-amber-300">¡Bienvenidos!</h2>
+      <p id="subEstadoTexto" class="text-sm text-slate-200 font-medium">
+        Reproduciendo melodía de bienvenida...
       </p>
     </div>
 
@@ -41,7 +41,7 @@
     © IEP La Salle del Sur — "Enseñanza, Disciplina y Lealtad"
   </footer>
 
-  <!-- SCRIPT DE MÚSICA Y LOCUCIÓN DE VOZ AUTOMÁTICA -->
+  <!-- SCRIPT DE SECUENCIA ORDENADA: MELODÍA -> VOZ -> HIMNO CONTINUO -->
   <script>
     let audioCtx = null;
     let iniciado = false;
@@ -52,7 +52,14 @@
       "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
     };
 
-    const notasMelodia = [
+    // 1. Melodía corta exclusiva de bienvenida
+    const bienvenidaMelodia = [
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.6 },
+      { n: "C5", d: 0.8 }, { n: "G4", d: 0.6 }, { n: "C4", d: 1.2 }
+    ];
+
+    // 2. Melodía completa del Himno institucional
+    const himnoMelodia = [
       { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
       { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
       { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
@@ -63,7 +70,6 @@
       { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
     ];
 
-    // LIRA
     function sonarLira(ctx, freq, t, dur) {
       if (!freq) return;
       const osc1 = ctx.createOscillator();
@@ -73,18 +79,17 @@
       osc2.type = 'sine';
       osc1.frequency.setValueAtTime(freq, t);
       osc2.frequency.setValueAtTime(freq * 2, t);
-      gain.gain.setValueAtTime(0.20, t); // Volumen suave para no tapar la voz
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+      gain.gain.setValueAtTime(0.22, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
       osc1.connect(gain);
       osc2.connect(gain);
       gain.connect(ctx.destination);
       osc1.start(t);
       osc2.start(t);
-      osc1.stop(t + 1.0);
-      osc2.stop(t + 1.0);
+      osc1.stop(t + dur * 1.5);
+      osc2.stop(t + dur * 1.5);
     }
 
-    // TAMBOR MARCIAL DE FONDO
     function sonarTambor(ctx, t) {
       const bufferSize = ctx.sampleRate * 0.04;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -96,7 +101,7 @@
       filter.type = 'highpass';
       filter.frequency.value = 1800;
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.08, t);
+      gain.gain.setValueAtTime(0.06, t);
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
       noise.connect(filter);
       filter.connect(gain);
@@ -104,51 +109,72 @@
       noise.start(t);
     }
 
-    // VOZ HABLADA (TEXT-TO-SPEECH)
-    function hablarTexto() {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Limpiar llamadas previas
-        const texto = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! Aprendiendo con metas y valores, cual nos diste tú mi gran maestro. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
-        const mensaje = new SpeechSynthesisUtterance(texto);
-        mensaje.lang = 'es-PE'; // Español Perú
-        mensaje.rate = 0.9;     // Velocidad natural de marcha
-        mensaje.pitch = 1.0;
-        window.speechSynthesis.speak(mensaje);
-      }
+    // Reproductor secuencial de notas en el AudioContext
+    function reproducirSecuencia(ctx, notas, tiempoInicio) {
+      let t = tiempoInicio;
+      notas.forEach(item => {
+        const f = FREQS[item.n] || 261.63;
+        sonarLira(ctx, f, t, item.d);
+        sonarTambor(ctx, t);
+        t += item.d;
+      });
+      return t; // Devuelve el tiempo exacto en que termina esta secuencia
     }
 
-    async function arrancarAudioYVoz() {
+    async function iniciarSecuenciaInstitucional() {
       if (iniciado) return;
       iniciado = true;
 
-      // 1. Iniciar voz parlante
-      hablarTexto();
-
-      // 2. Iniciar melodía de liras de fondo
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') {
-          await audioCtx.resume();
-        }
-
-        let t = audioCtx.currentTime + 0.1;
-        notasMelodia.forEach(item => {
-          const f = FREQS[item.n] || 261.63;
-          sonarLira(audioCtx, f, t, item.d);
-          sonarTambor(audioCtx, t);
-          t += item.d;
-        });
-      } catch (e) {
-        console.log(e);
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
       }
+
+      let tiempoActual = audioCtx.currentTime + 0.1;
+
+      // PASO 1: Reproducir solo la melodía inicial de bienvenida con la lira
+      let finBienvenida = reproducirSecuencia(audioCtx, bienvenidaMelodia, tiempoActual);
+
+      // Calcular la duración en milisegundos de la melodía inicial para sincronizar la voz
+      let duracionBienvenidaMs = (finBienvenida - tiempoActual) * 1000;
+
+      // PASO 2: Al terminar la melodía inicial, hablar las palabras de bienvenida
+      setTimeout(() => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          document.getElementById("estadoTexto").textContent = "¡Bienvenidos!";
+          document.getElementById("subEstadoTexto").textContent = "Escuchando mensaje institucional...";
+
+          const textoVoz = "¡Bienvenidos a la Institución Educativa Privada La Salle del Sur! Enseñanza, disciplina y lealtad.";
+          const mensaje = new SpeechSynthesisUtterance(textoVoz);
+          mensaje.lang = 'es-PE';
+          mensaje.rate = 0.9;
+          mensaje.pitch = 1.0;
+
+          // PASO 3: Cuando la voz termina de hablar, arranca el himno completo sin cortes ni reinicios
+          mensaje.onend = function() {
+            document.getElementById("estadoTexto").textContent = "Himno Institucional";
+            document.getElementById("subEstadoTexto").textContent = "Entonando el himno de la institución...";
+            
+            if (audioCtx) {
+              let tHimno = audioCtx.currentTime + 0.1;
+              reproducirSecuencia(audioCtx, himnoMelodia, tHimno);
+            }
+          };
+
+          window.speechSynthesis.speak(mensaje);
+        }
+      }, duracionBienvenidaMs);
     }
 
-    // Ejecución automática inmediata
-    window.addEventListener('load', arrancarAudioYVoz);
-    document.addEventListener('touchstart', arrancarAudioYVoz, { once: true });
-    document.addEventListener('click', arrancarAudioYVoz, { once: true });
-    document.addEventListener('pointerdown', arrancarAudioYVoz, { once: true });
+    // Activación automática al cargar o ante cualquier interacción del usuario en la portada
+    window.addEventListener('load', () => {
+      setTimeout(iniciarSecuenciaInstitucional, 500);
+    });
+    document.addEventListener('touchstart', iniciarSecuenciaInstitucional, { once: true });
+    document.addEventListener('click', iniciarSecuenciaInstitucional, { once: true });
+    document.addEventListener('pointerdown', iniciarSecuenciaInstitucional, { once: true });
   </script>
 </body>
 </html>
