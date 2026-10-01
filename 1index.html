@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BANCO LDS 360 — IEP LA SALLE DEL SUR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    body {
+      background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .badge-insignia {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+      font-size: 0.75rem;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #f59e0b;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .lema {
+      font-size: 0.8rem;
+      color: #bae6fd;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    main {
+      max-width: 420px;
+      width: 100%;
+      margin: auto;
+      background: rgba(8, 18, 30, 0.95);
+      backdrop-blur-xl;
+      border-radius: 24px;
+      padding: 30px 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 3px solid #f59e0b;
+      text-align: center;
+    }
+    .icon-container {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%);
+      border-radius: 50%;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+      animation: flotar 3s ease-in-out infinite;
+    }
+    .icon-inner {
+      width: 100%;
+      height: 100%;
+      background: #0c1e30;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .menu-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .menu-btn {
+      padding: 12px 10px;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.78rem;
+      border: 2px solid #f59e0b;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0c1e30 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .menu-btn:hover {
+      transform: translateY(-2px);
+      background: #f59e0b;
+      color: #0c1e30;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge-insignia">I.E.P. LA SALLE DEL SUR — KIDSWork LS</div>
+    <h1>BANCO LDS 360</h1>
+    <p class="lema">"Sencillez, Responsabilidad y Honor"</p>
+  </header>
+
+  <main>
+    <div class="icon-container">
+      <div class="icon-inner">🏛️️</div>
+    </div>
+
+    <div style="margin-bottom: 20px;">
+      <h2 id="estadoTexto" style="font-size: 1.25rem; font-weight: 800; color: #f59e0b; margin-bottom: 4px;">¡BIENVENIDOS!</h2>
+      <p id="subEstadoTexto" style="font-size: 0.78rem; color: #cbd5e1; font-weight: 600;">
+        Presentación institucional e himno escolar...
+      </p>
+    </div>
+
+    <div class="menu-btns">
+      <a href="alumnos.html" class="menu-btn">
+        <span style="font-size: 1.4rem;">📷</span> ESCANEAR QR
+      </a>
+      <a href="alumnos.html" class="menu-btn">
+        <span style="font-size: 1.4rem;">⌨️</span> CÓDIGO MANUAL
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    © IEP La Salle del Sur — Banco LDS 360
+  </footer>
+
+  <!-- SCRIPT INTEGRADO: LIRA, TAMBOR Y VOZ INSTITUCIONAL -->
+  <script>
+    let audioCtx = null;
+    let iniciado = false;
+
+    // FRECUENCIAS LIRA (DO MAYOR)
+    const FREQS = {
+      "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
+      "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
+    };
+
+    const llamadaAtencion = [
+      { n: "C4", d: 0.3 }, { n: "E4", d: 0.3 }, { n: "G4", d: 0.5 }, { n: "C5", d: 0.8 }
+    ];
+
+    const himnoMelodia = [
+      { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
+      { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
+      { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
+      { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
+      { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
+      { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
+    ];
+
+    function sonarLira(ctx, freq, t, dur) {
+      if (!freq) return;
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc1.type = 'sine'; osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, t);
+      osc2.frequency.setValueAtTime(freq * 2, t);
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
+      osc1.connect(gain); osc2.connect(gain);
+      gain.connect(ctx.destination);
+      osc1.start(t); osc2.start(t);
+      osc1.stop(t + dur * 1.5); osc2.stop(t + dur * 1.5);
+    }
+
+    function sonarTambor(ctx, t) {
+      const bufferSize = ctx.sampleRate * 0.04;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'highpass'; filter.frequency.value = 1800;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.05, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+      noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+      noise.start(t);
+    }
+
+    function reproducirMusicaCompleta(ctx) {
+      let t = ctx.currentTime + 0.1;
+      llamadaAtencion.forEach(item => {
+        sonarLira(ctx, FREQS[item.n], t, item.d);
+        sonarTambor(ctx, t);
+        t += item.d;
+      });
+      t += 0.2;
+      himnoMelodia.forEach(item => {
+        sonarLira(ctx, FREQS[item.n], t, item.d);
+        sonarTambor(ctx, t);
+        t += item.d;
+      });
+    }
+
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 0.88;
+        utterance.pitch = 0.95;
+
+        function seleccionarVozCalida() {
+          const voces = window.speechSynthesis.getVoices();
+          let vozIdeal = voces.find(v => v.lang.includes('es') && (
+            v.name.toLowerCase().includes('female') || 
+            v.name.toLowerCase().includes('google español') || 
+            v.name.toLowerCase().includes('lucia') || 
+            v.name.toLowerCase().includes('elena') || 
+            v.name.toLowerCase().includes('monica')
+          ));
+          if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
+          if (vozIdeal) utterance.voice = vozIdeal;
+          window.speechSynthesis.speak(utterance);
+        }
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = seleccionarVozCalida;
+        } else {
+          seleccionarVozCalida();
+        }
+      }
+    }
+
+    function iniciarSecuenciaInstitucional() {
+      if (iniciado) return;
+      iniciado = true;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+      reproducirMusicaCompleta(audioCtx);
+      
+      document.getElementById("estadoTexto").textContent = "Himno e Institución";
+      document.getElementById("subEstadoTexto").textContent = "Presentación oficial de Banco LDS 360...";
+
+      const textoCompleto = "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor. Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
+      hablarTextoVoz(textoCompleto);
+    }
+
+    window.addEventListener('load', () => { setTimeout(iniciarSecuenciaInstitucional, 400); });
+    ['click', 'touchstart', 'pointerdown'].forEach(evt => {
+      document.addEventListener(evt, iniciarSecuenciaInstitucional, { once: true });
+    });
+  </script>
+</body>
+</html>
