@@ -40,7 +40,7 @@ body {
 header {
   background: #08121e;
   color: #fff;
-  padding: 12px 25px;
+  padding: 10px 15px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   border-bottom: 4px solid var(--dorado);
   width: 100%;
@@ -53,26 +53,26 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand-mark img {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 1.05rem;
-  letter-spacing: 0.8px;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
   font-weight: 800;
   color: #ffffff;
 }
@@ -80,14 +80,14 @@ header {
 .brand p {
   margin: 1px 0 0;
   color: var(--dorado);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
 }
 
 .btn {
   border: 0;
   border-radius: 30px;
-  padding: 8px 18px;
+  padding: 6px 14px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
@@ -95,9 +95,9 @@ header {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   transition: all 0.3s ease;
-  min-height: 38px;
+  min-height: 36px;
 }
 
 .btn-light {
@@ -128,25 +128,25 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
-  padding: 20px 15px;
+  min-height: calc(100vh - 70px);
+  padding: 15px;
 }
 
 .login-card {
-  max-width: 420px;
+  max-width: 400px;
   width: 100%;
   background: #ffffff;
-  border-radius: 28px;
-  padding: 34px 28px;
+  border-radius: 24px;
+  padding: 26px 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
   text-align: center;
   border-top: 8px solid var(--dorado);
 }
 
 .card-insignia-container {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 15px;
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 12px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -166,29 +166,29 @@ header {
 
 .login-card h2 {
   color: var(--azul);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   margin-bottom: 6px;
   font-weight: 800;
 }
 
 .login-card p {
   color: var(--muted);
-  font-size: 0.82rem;
-  margin-bottom: 22px;
+  font-size: 0.78rem;
+  margin-bottom: 18px;
   font-weight: 600;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 800;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .input-field, input, textarea, select {
@@ -197,7 +197,7 @@ header {
   border: 2px solid #cbd5e1;
   border-radius: 12px;
   padding: 0 12px;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   outline: none;
   background: #f8fafc;
   color: var(--texto);
@@ -218,155 +218,132 @@ textarea {
 
 .primary-btn {
   width: 100%;
-  height: 46px;
+  height: 44px;
   border: 0;
   border-radius: 12px;
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  margin-top: 10px;
+  margin-top: 8px;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(12, 30, 48, 0.3);
-  transition: transform 0.2s;
 }
-.primary-btn:hover { transform: translateY(-2px); }
 
 .error-msg {
   color: var(--rojo);
-  font-size: 0.82rem;
-  min-height: 20px;
+  font-size: 0.78rem;
+  min-height: 18px;
   font-weight: 800;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 main {
   max-width: 1400px;
-  width: 98%;
+  width: 100%;
   margin: 0 auto;
-  padding: 20px 10px 30px;
+  padding: 12px 10px 25px;
   display: none;
 }
 
-/* BANNER DE LA MISSI ACTIVA */
 @keyframes flotarYBrillar {
-  0% { transform: translateY(0px) scale(1); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-  50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 15px rgba(245, 158, 11, 0.6); }
-  100% { transform: translateY(0px) scale(1); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+  0% { transform: translateY(0px) scale(1); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+  50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 12px rgba(245, 158, 11, 0.5); }
+  100% { transform: translateY(0px) scale(1); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
 }
 
 .admin-profile-banner {
   background: linear-gradient(145deg, #091628 0%, #050d18 100%);
   border: 3px solid var(--dorado);
-  border-radius: 24px;
-  padding: 16px 24px;
-  margin-bottom: 18px;
+  border-radius: 20px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  gap: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  gap: 15px;
   flex-wrap: wrap;
 }
 
 .admin-profile-info {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .admin-avatar-wrap {
-  width: 85px;
-  height: 85px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  border: 4px solid var(--dorado);
+  border: 3px solid var(--dorado);
   overflow: hidden;
   background: #ffffff;
   flex-shrink: 0;
   animation: flotarYBrillar 4s ease-in-out infinite;
   display: grid;
   place-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
-.admin-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
+.admin-avatar-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.admin-avatar-placeholder { font-size: 34px; color: var(--azul); }
 
-.admin-avatar-placeholder {
-  font-size: 40px;
-  color: var(--azul);
-}
-
-.admin-text-details h3 {
-  font-size: 1.25rem;
-  color: #ffffff;
-  font-weight: 800;
-  margin-bottom: 2px;
-}
-
-.admin-text-details p {
-  color: #fde68a;
-  font-size: 0.82rem;
-  font-weight: 700;
-}
+.admin-text-details h3 { font-size: 1.1rem; color: #ffffff; font-weight: 800; margin-bottom: 2px; }
+.admin-text-details p { color: #fde68a; font-size: 0.75rem; font-weight: 700; }
 
 .admin-stats-box {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+@media(min-width: 600px) {
+  .admin-stats-box { width: auto; }
 }
 
 .stat-pill {
   background: rgba(3, 8, 15, 0.85);
   border: 2px solid rgba(245, 158, 11, 0.4);
-  border-radius: 14px;
-  padding: 10px 16px;
+  border-radius: 12px;
+  padding: 8px 12px;
   text-align: center;
+  flex: 1;
 }
 
-.stat-pill span {
-  display: block;
-  font-size: 0.68rem;
-  color: #cbd5e1;
-  font-weight: 700;
-}
-
-.stat-pill strong {
-  font-size: 1.1rem;
-  color: #ffffff;
-  font-weight: 800;
-}
+.stat-pill span { display: block; font-size: 0.62rem; color: #cbd5e1; font-weight: 700; }
+.stat-pill strong { font-size: 0.95rem; color: #ffffff; font-weight: 800; }
 
 /* LAYOUT */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
-  gap: 18px;
-  align-items: start;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media(min-width: 1024px) {
+  .layout { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); }
 }
 
 .panel {
   background: #ffffff;
   border: 3px solid var(--dorado);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   overflow: hidden;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .panel-head {
-  padding: 14px 20px;
+  padding: 12px 16px;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   background: #f8fafc;
   user-select: none;
+  flex-wrap: wrap;
 }
 
 .panel-head.clickable { cursor: pointer; }
@@ -375,15 +352,15 @@ main {
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-weight: 800;
 }
 
 .toggle-icon {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--muted);
   transition: transform 0.25s ease;
   display: inline-block;
@@ -393,51 +370,49 @@ main {
 .panel.collapsed .toggle-icon { transform: rotate(-90deg); }
 .panel.collapsed .panel-head { border-bottom: none; }
 
-.panel-body { padding: 20px; }
+.panel-body { padding: 14px; }
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+@media(min-width: 500px) {
+  .filter-row { grid-template-columns: 140px 1fr; }
+}
 
 .type-selector-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .type-btn {
   border: 2px solid var(--borde);
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 10px;
+  padding: 8px;
   font-weight: 800;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   cursor: pointer;
   text-align: center;
   background: #f8fafc;
   color: var(--muted);
-  transition: all 0.2s ease;
 }
 
-.type-btn.active-ingreso {
-  background: #ecfdf5;
-  color: #047857;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-}
-
-.type-btn.active-egreso {
-  background: #fef2f2;
-  color: #b91c1c;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
-}
+.type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
+.type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
 
 .search-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .search-buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .search-buttons .btn { flex: 1; }
@@ -445,18 +420,18 @@ main {
 
 .small-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--azul);
-  margin: 12px 0 4px;
+  margin: 10px 0 3px;
   font-weight: 800;
 }
 
 .message {
-  margin-top: 10px;
-  padding: 8px 12px;
-  border-radius: 10px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
   display: none;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 .message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
@@ -465,21 +440,24 @@ main {
 .student-head {
   display: none;
   border: 2px solid var(--dorado);
-  border-radius: 16px;
-  padding: 14px;
-  margin-top: 14px;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 12px;
   background: #f8fafc;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 12px;
+  gap: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 .student-head.show { display: flex; }
+@media(min-width: 550px) {
+  .student-head { flex-direction: row; text-align: left; }
+}
 
 .student-photo-wrap {
-  width: 110px;
-  height: 110px;
+  width: 95px;
+  height: 95px;
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -487,90 +465,88 @@ main {
   border: 3px solid var(--dorado);
   display: grid;
   place-items: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   animation: flotarYBrillar 4s ease-in-out infinite;
 }
 
 .student-photo { width: 100%; height: 100%; object-fit: cover; display: none; }
-.student-photo-placeholder { font-size: 42px; color: #8aa0b7; }
+.student-photo-placeholder { font-size: 38px; color: #8aa0b7; }
 .student-info-box { width: 100%; }
-.student-name { font-size: 1.1rem; font-weight: 800; color: var(--azul); margin-bottom: 4px; line-height: 1.3; }
-.student-meta { color: var(--muted); font-size: 0.78rem; line-height: 1.3; font-weight: 700; }
-.saldo { font-size: 1.15rem; font-weight: 900; color: var(--verde); margin-top: 8px; background: #ecfdf5; padding: 5px 14px; border-radius: 16px; display: inline-block; border: 2px solid #a7f3d0; }
+.student-name { font-size: 1rem; font-weight: 800; color: var(--azul); margin-bottom: 2px; }
+.student-meta { color: var(--muted); font-size: 0.72rem; font-weight: 700; }
+.saldo { font-size: 1.05rem; font-weight: 900; color: var(--verde); margin-top: 6px; background: #ecfdf5; padding: 4px 12px; border-radius: 12px; display: inline-block; border: 2px solid #a7f3d0; }
 
 .table-wrap {
   overflow-x: auto;
-  margin-top: 14px;
+  margin-top: 12px;
   border: 2px solid var(--borde);
-  border-radius: 12px;
+  border-radius: 10px;
   -webkit-overflow-scrolling: touch;
 }
 
-table { width: 100%; border-collapse: collapse; min-width: 680px; }
-th, td { padding: 8px 10px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.78rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
-td.cell-wrap { white-space: normal; min-width: 130px; }
-th { background: #f1f5f9; color: var(--azul); font-size: 0.75rem; font-weight: 800; letter-spacing: .5px; }
+table { width: 100%; border-collapse: collapse; min-width: 650px; }
+th, td { padding: 7px 9px; border-bottom: 1px solid #e5eaf0; text-align: left; font-size: 0.75rem; vertical-align: middle; white-space: nowrap; font-weight: 600; }
+td.cell-wrap { white-space: normal; min-width: 120px; }
+th { background: #f1f5f9; color: var(--azul); font-size: 0.72rem; font-weight: 800; letter-spacing: .5px; }
 tr:last-child td { border-bottom: 0; }
 
-.badge-ingreso { color: #047857; background: #ecfdf5; padding: 3px 6px; border-radius: 6px; font-weight: 800; border: 1px solid #a7f3d0; }
-.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 3px 6px; border-radius: 6px; font-weight: 800; border: 2px solid #fecaca; box-shadow: 0 0 6px rgba(239, 68, 68, 0.25); }
-.empty { text-align: center; color: var(--muted); padding: 20px 10px; font-weight: 700; }
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 5px; border-radius: 5px; font-weight: 800; border: 1px solid #a7f3d0; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 5px; border-radius: 5px; font-weight: 800; border: 2px solid #fecaca; }
+.empty { text-align: center; color: var(--muted); padding: 15px 10px; font-weight: 700; }
 
-.incident-list { display: grid; gap: 8px; margin-top: 10px; }
-.incident { border: 2px solid var(--borde); border-radius: 12px; padding: 10px 12px; background: #fafcff; }
-.incident-top { display: flex; justify-content: space-between; gap: 10px; font-size: 0.8rem; margin-bottom: 4px; font-weight: 800; }
-.badge { padding: 2px 6px; border-radius: 999px; background: #fff7df; color: #7a5d00; border: 2px solid #ead28a; font-size: 0.7rem; font-weight: 800; }
-.incident small { color: var(--muted); display: block; margin-top: 4px; font-weight: 600; }
+.incident-list { display: grid; gap: 8px; margin-top: 8px; }
+.incident { border: 2px solid var(--borde); border-radius: 10px; padding: 8px 10px; background: #fafcff; }
+.incident-top { display: flex; justify-content: space-between; gap: 8px; font-size: 0.78rem; margin-bottom: 2px; font-weight: 800; }
+.badge { padding: 2px 5px; border-radius: 999px; background: #fff7df; color: #7a5d00; border: 2px solid #ead28a; font-size: 0.65rem; font-weight: 800; }
+.incident small { color: var(--muted); display: block; margin-top: 3px; font-weight: 600; }
 .danger { color: var(--rojo); font-weight: 800; }
 
-.qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(12, 30, 48, 0.88); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-.qr-modal-content { background: #ffffff; padding: 24px; border-radius: 24px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-top: 6px solid var(--dorado); }
-.qr-modal-content h3 { color: var(--azul); font-size: 1.15rem; margin-bottom: 14px; font-weight: 800; }
-#reader { width: 100%; border-radius: 14px; overflow: hidden; background: #000; min-height: 220px; border: 2px solid var(--dorado); }
-.close-qr-btn { margin-top: 14px; background: var(--rojo); color: #fff; border: 0; padding: 10px 16px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.85rem; }
+.qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(12, 30, 48, 0.88); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+.qr-modal-content { background: #ffffff; padding: 20px; border-radius: 20px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-top: 6px solid var(--dorado); }
+.qr-modal-content h3 { color: var(--azul); font-size: 1.05rem; margin-bottom: 10px; font-weight: 800; }
+#reader { width: 100%; border-radius: 12px; overflow: hidden; background: #000; min-height: 200px; border: 2px solid var(--dorado); }
+.close-qr-btn { margin-top: 12px; background: var(--rojo); color: #fff; border: 0; padding: 8px 14px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.8rem; }
 
-/* CABECERA EXCLUSIVA PARA IMPRESIÓN OFICIAL INSTITUCIONAL */
-.print-header { display: none; }
+/* ENCABEZADO OFICIAL INSTITUCIONAL PARA IMPRESIÓN */
+.print-only-header { display: none; }
 
 @media print {
   body { background: #ffffff; color: #000000; }
-  header, .admin-profile-banner, .search-box, .panel-head div, .panel:has(#panelPago), .panel:has(#panelIncidencias), .btn, footer, .qr-modal { display: none !important; }
+  header, .admin-profile-banner, .search-box, .panel-head div, .panel:has(#panelPago), .panel:has(#panelIncidencias), .btn, footer, .qr-modal, .student-head, .filter-row { display: none !important; }
   main { display: block !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
   .panel { border: none !important; box-shadow: none !important; margin: 0 !important; }
   .panel-body { padding: 0 !important; }
-  
-  /* JERARQUÍA INSTITUCIONAL PRIMERO EN EL ENCABEZADO */
-  .print-header {
-    display: flex !important;
-    flex-direction: column;
+
+  .print-only-header {
+    display: block !important;
     border-bottom: 3px solid #000;
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    width: 100%;
   }
-  .print-institution-row {
+  .print-institution-top {
     display: flex;
     align-items: center;
-    gap: 14px;
-  }
-  .print-institution-row img { width: 60px; height: 60px; object-fit: contain; }
-  .print-institution-row h2 { font-size: 1.15rem; font-weight: 900; color: #000; }
-  .print-institution-row p { font-size: 0.8rem; font-weight: 800; color: #333; }
-
-  /* DETALLE DEL ALUMNO O ENTIDAD DESPUÉS DEL ENCABEZADO INSTITUCIONAL */
-  .print-entity-box {
-    display: flex !important;
-    align-items: center;
     gap: 12px;
-    border: 2px solid #000;
-    padding: 8px 14px;
-    border-radius: 10px;
-    background: #f8fafc;
-    margin-top: 5px;
+    margin-bottom: 10px;
   }
-  .print-entity-box img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+  .print-institution-top img { width: 55px; height: 55px; object-fit: contain; }
+  .print-institution-top h2 { font-size: 1.1rem; font-weight: 900; color: #000; }
+  .print-institution-top p { font-size: 0.78rem; font-weight: 800; color: #333; }
 
-  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 10px !important; }
+  .print-entity-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #000;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #f8fafc;
+    width: 100%;
+  }
+  .print-entity-box img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
+
+  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 8px !important; }
   table { min-width: 100% !important; }
   th { background: #e2e8f0 !important; color: #000 !important; -webkit-print-color-adjust: exact; }
 }
@@ -578,23 +554,14 @@ tr:last-child td { border-bottom: 0; }
 footer {
   text-align: center;
   color: #cbd5e1;
-  padding: 15px 10px 25px;
-  font-size: 0.78rem;
+  padding: 12px 10px 20px;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
 }
 
-@media (min-width: 600px) {
+@media(min-width: 650px) {
   .search-box { flex-direction: row; align-items: center; }
   .search-buttons { flex-shrink: 0; }
-  .student-head { flex-direction: row; text-align: left; }
-  .student-info-box { flex: 1; }
-}
-
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .admin-profile-banner { flex-direction: column; text-align: center; }
-  .admin-profile-info { flex-direction: column; }
 }
 </style>
 </head>
@@ -604,11 +571,11 @@ footer {
   <div class="header-inner">
     <div class="brand">
       <div class="brand-mark">
-        <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+        <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
       </div>
       <div>
         <h1>BANCO LDS 360</h1>
-        <p>I.E.P. LA SALLE DEL SUR · PANEL DE ADMINISTRACIÓN</p>
+        <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
     <a class="btn btn-light" href="index.html" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← INICIO</a>
@@ -618,7 +585,7 @@ footer {
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
-      <img src="assets/insignia.png" alt="Insignia La Salle del Sur" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
+      <img src="assets/insignia.png" alt="Insignia" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
     </div>
     <h2>ACCESO ADMINISTRATIVO</h2>
     <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE.</p>
@@ -660,11 +627,11 @@ footer {
 
     <div class="admin-stats-box">
       <div class="stat-pill">
-        <span>TOTAL MOVIMIENTOS</span>
+        <span>MOVIMIENTOS</span>
         <strong id="contadorMovimientos">0</strong>
       </div>
       <div class="stat-pill">
-        <span>TOTAL INCIDENCIAS</span>
+        <span>INCIDENCIAS</span>
         <strong id="contadorIncidencias">0</strong>
       </div>
     </div>
@@ -676,19 +643,37 @@ footer {
       <div class="panel">
         <div class="panel-head">
           <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 5px 10px; font-size: 0.72rem;">🖨️ IMPRIMIR ESTUDIANTE</button>
-            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 5px 10px; font-size: 0.72rem;">📊 IMPRIMIR REPORTE GENERAL</button>
+          <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+            <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()" style="padding: 4px 8px; font-size: 0.68rem;">🖨️ ALUMNO</button>
+            <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()" style="padding: 4px 8px; font-size: 0.68rem;">📊 GENERAL</button>
           </div>
         </div>
         <div class="panel-body">
-          <div class="search-box">
-            <input id="codigo" class="code-input" placeholder="EJEMPLO: LDS-EST-001 Ó LDS-DOC-001" autocomplete="off">
-            <div class="search-buttons">
-              <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">CONSULTAR</button>
-              <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+          
+          <!-- SELECTOR DE AÑO ESCOLAR (FUTURO Y PRESENTE) -->
+          <div class="filter-row">
+            <div>
+              <label class="small-label" for="selectAnioEscolar">PERIODO / AÑO</label>
+              <select id="selectAnioEscolar" class="input-field" style="height: 38px; font-size: 0.8rem;" onchange="cambiarAnioEscolar()">
+                <option value="2026" selected>AÑO 2026</option>
+                <option value="2027">AÑO 2027</option>
+                <option value="2028">AÑO 2028</option>
+                <option value="2029">AÑO 2029</option>
+                <option value="2030">AÑO 2030</option>
+              </select>
+            </div>
+            <div>
+              <label class="small-label" for="codigo">CÓDIGO O QR DEL ESTUDIANTE</label>
+              <div class="search-box">
+                <input id="codigo" class="code-input" placeholder="LDS-EST-001" autocomplete="off" style="height: 38px;">
+                <div class="search-buttons">
+                  <button class="btn btn-gold" type="button" onclick="consultarEstudiante()" style="height: 38px;">BUSCAR</button>
+                  <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()" style="height: 38px;">📷 QR</button>
+                </div>
+              </div>
             </div>
           </div>
+
           <div id="mensaje" class="message"></div>
           
           <div id="estudianteCard" class="student-head">
@@ -703,22 +688,22 @@ footer {
             </div>
           </div>
 
-          <!-- CABECERA INSTITUCIONAL PARA IMPRESIÓN -->
-          <div class="print-header">
-            <div class="print-institution-row">
+          <!-- ENCABEZADO INSTITUCIONAL PARA IMPRESIÓN -->
+          <div class="print-only-header">
+            <div class="print-institution-top">
               <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
               <div>
                 <h2 id="printTituloReporte">I.E.P. LA SALLE DEL SUR — KIDSWork LS</h2>
-                <p>SISTEMA FINANCIERO ESCOLAR BANCO LDS 360</p>
-                <p style="font-size: 0.75rem; font-weight: 700; color: #444; margin-top: 2px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
+                <p>SISTEMA FINANCIERO ESCOLAR BANCO LDS 360 (<span id="printAnioLabel">2026</span>)</p>
+                <p style="font-size: 0.72rem; font-weight: 800; color: #333; margin-top: 2px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
               </div>
             </div>
             
             <div class="print-entity-box">
               <img id="printFotoEntidad" src="" alt="Foto" onerror="this.style.display='none';">
               <div>
-                <strong id="printNombreEntidad" style="font-size: 0.82rem; display: block;">---</strong>
-                <span id="printMetaEntidad" style="font-size: 0.72rem; color: #555; display: block;">---</span>
+                <strong id="printNombreEntidad" style="font-size: 0.82rem; display: block; font-weight: 900;">---</strong>
+                <span id="printMetaEntidad" style="font-size: 0.72rem; color: #444; display: block; font-weight: 700;">---</span>
               </div>
             </div>
           </div>
@@ -727,11 +712,12 @@ footer {
             <table>
               <thead>
                 <tr>
+                  <th>AÑO</th>
                   <th>TIMESTAMP</th>
-                  <th>CÓDIGO / QR</th>
+                  <th>CÓDIGO</th>
                   <th>ESTUDIANTE</th>
                   <th>GRADO</th>
-                  <th>TIPO DE MOVIMIENTO</th>
+                  <th>TIPO</th>
                   <th>CONCEPTO</th>
                   <th>MONTO LDS</th>
                   <th>CAJERO(A)</th>
@@ -739,7 +725,7 @@ footer {
                 </tr>
               </thead>
               <tbody id="tablaMovimientos">
-                <tr><td colspan="9" class="empty">INGRESA UN CÓDIGO PARA CONSULTAR.</td></tr>
+                <tr><td colspan="10" class="empty">INGRESA UN CÓDIGO PARA CONSULTAR.</td></tr>
               </tbody>
             </table>
           </div>
@@ -778,9 +764,9 @@ footer {
           <input id="pagoMonto" type="number" step="0.5" min="0" placeholder="EJEMPLO: 50.00">
 
           <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
-          <textarea id="pagoObs" rows="2" placeholder="MOTIVO O DETALLE DEL PAGO..."></textarea>
+          <textarea id="pagoObs" rows="2" placeholder="MOTIVO O DETALLE..."></textarea>
 
-          <button class="btn btn-gold" style="width:100%;margin-top:12px;padding:10px;" type="button" onclick="procesarPagoEstudiante()">
+          <button class="btn btn-gold" style="width:100%;margin-top:10px;padding:10px;" type="button" onclick="procesarPagoEstudiante()">
             💸 REGISTRAR TRANSACCIÓN
           </button>
           <div id="pagoMensaje" class="message"></div>
@@ -805,7 +791,7 @@ footer {
             <option>EN ATENCIÓN</option>
             <option>RESUELTO</option>
           </select>
-          <div style="display:flex;gap:10px;margin-top:10px;">
+          <div style="display:flex;gap:8px;margin-top:10px;">
             <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">GUARDAR</button>
             <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">LIMPIAR</button>
           </div>
@@ -831,6 +817,16 @@ function togglePanel(idPanel) {
   reproducirSonido('clic');
   const panel = document.getElementById(idPanel);
   if (panel) panel.classList.toggle('collapsed');
+}
+
+function cambiarAnioEscolar() {
+  reproducirSonido('clic');
+  const anio = document.getElementById("selectAnioEscolar").value;
+  document.getElementById("printAnioLabel").textContent = anio;
+  hablarTextoVoz("Año escolar cambiado a " + anio);
+  if(document.getElementById("codigo").value.trim()){
+    consultarEstudiante();
+  }
 }
 
 function seleccionarTipoOperacion(tipo) {
@@ -1077,7 +1073,7 @@ function abrirEscanerQR() {
   hablarTextoVoz("Abriendo cámara para escanear código QR.");
   document.getElementById("qrModal").style.display = "flex";
   html5QrCode = new Html5Qrcode("reader");
-  const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+  const config = { fps: 10, qrbox: { width: 200, height: 200 } };
   
   html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
     .catch(() => {
@@ -1163,6 +1159,8 @@ function mostrarFotoEstudiante(e){
 function consultarEstudiante(){
   reproducirSonido('clic');
   const codigo = document.getElementById("codigo").value.trim().toUpperCase();
+  const anioEscolar = document.getElementById("selectAnioEscolar").value;
+
   if(!codigo){
     reproducirSonido('error');
     mostrarMensaje("INGRESA UN CÓDIGO LDS.", "error");
@@ -1172,11 +1170,11 @@ function consultarEstudiante(){
   mostrarMensaje("CONSULTANDO...", "ok");
   hablarTextoVoz("Consultando información.");
 
-  llamarAPI({accion: "estudiante", codigo: codigo}, function(respuesta){
+  llamarAPI({accion: "estudiante", codigo: codigo, anio: anioEscolar}, function(respuesta){
     if(!respuesta || respuesta.ok === false || !respuesta.estudiante){
       reproducirSonido('error');
       document.getElementById("estudianteCard").classList.remove("show");
-      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
+      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="10" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
       document.getElementById("contadorMovimientos").textContent = "0";
       datosEstudianteActualGlobal = null;
       mostrarMensaje((respuesta && respuesta.mensaje) || "REGISTRO NO ENCONTRADO.", "error");
@@ -1194,7 +1192,7 @@ function consultarEstudiante(){
     const esDocente = (e.codigo && e.codigo.includes("LDS-DOC")) || e.esDocente || (e.rol && e.rol.toUpperCase().includes("DOCENTE"));
 
     document.getElementById("nombre").textContent = (esDocente ? "👩‍🏫 DOCENTE: " : "👤 ALUMNO: ") + nombreUsuario;
-    document.getElementById("meta").textContent = [e.codigo || codigo, e.rol || (esDocente ? "DOCENTE" : "ALUMNO"), e.grado || "", e.seccion || ""].filter(Boolean).join(" · ");
+    document.getElementById("meta").textContent = [e.codigo || codigo, "AÑO: " + anioEscolar, e.rol || (esDocente ? "DOCENTE" : "ALUMNO"), e.grado || "", e.seccion || ""].filter(Boolean).join(" · ");
     document.getElementById("saldo").textContent = (esDocente ? "FONDO DISPONIBLE: " : "SALDO: ") + saldoFormateado + " LDS";
 
     mostrarFotoEstudiante(e);
@@ -1204,7 +1202,7 @@ function consultarEstudiante(){
     document.getElementById("incCodigo").value = e.codigo || codigo;
 
     const movimientos = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
-    renderMovimientos(movimientos, e);
+    renderMovimientos(movimientos, e, anioEscolar);
     mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
 
     if (esDocente) {
@@ -1222,6 +1220,7 @@ function procesarPagoEstudiante() {
   const concepto = document.getElementById("pagoConcepto").value;
   const monto = parseFloat(document.getElementById("pagoMonto").value);
   const observacion = document.getElementById("pagoObs").value.trim();
+  const anioEscolar = document.getElementById("selectAnioEscolar").value;
   const responsable = sessionStorage.getItem("maestraActiva") || "DOCENTE";
 
   if (!codigo) {
@@ -1244,6 +1243,7 @@ function procesarPagoEstudiante() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: codigo,
+    anio: anioEscolar,
     tipo: tipoOperacion,
     categoria: categoriaSeleccionada,
     concepto: concepto,
@@ -1273,10 +1273,11 @@ function imprimirReportePersonal() {
     alert("PRIMERO DEBES CONSULTAR A UN ESTUDIANTE.");
     return;
   }
-  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA PERSONAL";
+  const anio = document.getElementById("selectAnioEscolar").value;
+  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA (" + anio + ")";
   
   const nombreEst = datosEstudianteActualGlobal.nombreCompleto || datosEstudianteActualGlobal.nombre || "ESTUDIANTE";
-  const metaEst = [datosEstudianteActualGlobal.codigo, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
+  const metaEst = [datosEstudianteActualGlobal.codigo, "AÑO: " + anio, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
   document.getElementById("printNombreEntidad").textContent = nombreEst;
   document.getElementById("printMetaEntidad").textContent = metaEst;
   
@@ -1290,27 +1291,29 @@ function imprimirReportePersonal() {
 
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
-  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL Y BALANCE";
+  const anio = document.getElementById("selectAnioEscolar").value;
+  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL (" + anio + ")";
   
   document.getElementById("printNombreEntidad").textContent = maestraActivaGlobal || "DOCENTE CAJERA";
-  document.getElementById("printMetaEntidad").textContent = "TUTORA CAJERA RESPONSABLE — KIDSWork LS";
+  document.getElementById("printMetaEntidad").textContent = "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" + anio + ")";
   document.getElementById("printFotoEntidad").src = FOTOS_DOCENTES[maestraActivaGlobal] || "";
 
   hablarTextoVoz("Imprimiendo reporte general y balance grupal.");
   window.print();
 }
 
-function renderMovimientos(movimientos, estudianteObj){
+function renderMovimientos(movimientos, estudianteObj, anioEscolar){
   const tabla=document.getElementById("tablaMovimientos");
   tabla.innerHTML="";
   document.getElementById("contadorMovimientos").textContent=String(movimientos.length);
   if(!movimientos.length){
-    tabla.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
+    tabla.innerHTML='<tr><td colspan="10" class="empty">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO ' + anioEscolar + '.</td></tr>';
     return;
   }
   
   movimientos.forEach(m => {
     const tr = document.createElement("tr");
+    const anioMov = m.anio || m.anioEscolar || anioEscolar;
     const fecha = m.fechaTexto || m.fecha || m.timestamp || "";
     const codigo = m.codigo || m.codigoQR || (estudianteObj ? estudianteObj.codigo : "");
     const nombre = m.estudiante || m.nombre || (estudianteObj ? estudianteObj.nombreCompleto : "");
@@ -1323,7 +1326,8 @@ function renderMovimientos(movimientos, estudianteObj){
 
     const badgeClase = String(tipo).toUpperCase().includes("EGRESO") ? "badge-egreso" : "badge-ingreso";
 
-    tr.innerHTML = '<td>' + escaparHTML(fecha) + '</td>' +
+    tr.innerHTML = '<td><strong>' + escaparHTML(anioMov) + '</strong></td>' +
+                   '<td>' + escaparHTML(fecha) + '</td>' +
                    '<td>' + escaparHTML(codigo) + '</td>' +
                    '<td>' + escaparHTML(nombre) + '</td>' +
                    '<td>' + escaparHTML(grado) + '</td>' +
@@ -1339,7 +1343,7 @@ function renderMovimientos(movimientos, estudianteObj){
 function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS")||"[]");}catch(_){return[];}}
 
 function guardarIncidencia(){
-  const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value;
+  const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value,anio=document.getElementById("selectAnioEscolar").value;
   if(!codigo||!problema){
     reproducirSonido('error');
     alert("INGRESA CÓDIGO Y PROBLEMA.");
@@ -1348,7 +1352,7 @@ function guardarIncidencia(){
   }
   reproducirSonido('exito');
   const items=obtenerIncidencias();
-  items.unshift({id:Date.now(),fecha:new Date().toLocaleString("es-PE"),codigo,problema,solucion,estado});
+  items.unshift({id:Date.now(),fecha:new Date().toLocaleString("es-PE"),anio,codigo,problema,solucion,estado});
   localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
   limpiarIncidencia();
   renderIncidencias();
@@ -1375,7 +1379,7 @@ function renderIncidencias(){
   document.getElementById("contadorIncidencias").textContent=String(items.length);
   const box=document.getElementById("listaIncidencias");
   if(!items.length){box.innerHTML='<div class="empty">TODAVÍA NO HAY INCIDENCIAS.</div>';return;}
-  box.innerHTML=items.slice(0,12).map(x=>`<div class="incident"><div class="incident-top"><strong>${escaparHTML(x.codigo)}</strong><span class="badge">${escaparHTML(x.estado)}</span></div><div>${escaparHTML(x.problema)}</div>${x.solucion?`<small><strong>SOLUCIÓN:</strong> ${escaparHTML(x.solucion)}</small>`:""}<small>${escaparHTML(x.fecha)} · <button type="button" class="danger" style="border:0;background:none;padding:0;cursor:pointer" onclick="eliminarIncidencia(${x.id})">ELIMINAR</button></small></div>`).join("");
+  box.innerHTML=items.slice(0,12).map(x=>`<div class="incident"><div class="incident-top"><strong>[${escaparHTML(x.anio||'2026')}] ${escaparHTML(x.codigo)}</strong><span class="badge">${escaparHTML(x.estado)}</span></div><div>${escaparHTML(x.problema)}</div>${x.solucion?`<small><strong>SOLUCIÓN:</strong> ${escaparHTML(x.solucion)}</small>`:""}<small>${escaparHTML(x.fecha)} · <button type="button" class="danger" style="border:0;background:none;padding:0;cursor:pointer" onclick="eliminarIncidencia(${x.id})">ELIMINAR</button></small></div>`).join("");
 }
 
 document.getElementById("codigo").addEventListener("keydown",e=>{if(e.key==="Enter")consultarEstudiante();});
