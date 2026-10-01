@@ -17,7 +17,7 @@
     }
     header {
       background: #040a12;
-      padding: 12px 25px;
+      padding: 14px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -25,18 +25,18 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       z-index: 10;
     }
-    .school-info { display: flex; align-items: center; gap: 12px; }
-    .school-info img { width: 40px; height: 40px; object-fit: contain; }
-    .school-title h1 { font-size: 1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
-    .school-title p { font-size: 0.72rem; color: #f59e0b; font-weight: 700; }
+    .school-info { display: flex; align-items: center; gap: 14px; }
+    .school-info img { width: 45px; height: 45px; object-fit: contain; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
+    .school-title p { font-size: 0.78rem; color: #f59e0b; font-weight: 700; }
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid #f59e0b;
       color: #ffffff;
-      padding: 6px 16px;
+      padding: 8px 20px;
       border-radius: 30px;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -47,7 +47,7 @@
       max-width: 1350px; 
       width: 96%; 
       margin: auto; 
-      padding: 20px 15px; 
+      padding: 25px 15px; 
       flex: 1; 
       display: flex; 
       flex-direction: column;
@@ -56,142 +56,138 @@
 
     .hidden { display: none !important; }
 
-    /* BARRA SUPERIOR DE LA DOCENTE */
-    .admin-top-bar {
+    /* BARRA SUPERIOR DE LA DOCENTE (ORIGINAL RESTAURADA) */
+    .admin-bar {
       background: linear-gradient(145deg, #091628 0%, #050d18 100%);
       border: 2px solid #f59e0b;
-      border-radius: 16px;
-      padding: 10px 20px;
+      border-radius: 18px;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 25px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
-    .docente-info { display: flex; align-items: center; gap: 12px; }
-    .docente-info img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid #f59e0b; object-fit: cover; }
-    .docente-text span { font-size: 0.6rem; color: #fde68a; font-weight: 800; display: block; }
-    .docente-text h3 { font-size: 0.9rem; color: #ffffff; font-weight: 800; }
-
-    .admin-stats { display: flex; gap: 12px; }
-    .stat-box {
+    .admin-profile { display: flex; align-items: center; gap: 14px; }
+    .admin-profile img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #f59e0b; object-fit: cover; }
+    .admin-info span { font-size: 0.65rem; color: #fde68a; font-weight: 800; display: block; }
+    .admin-info h3 { font-size: 1rem; color: #ffffff; font-weight: 800; }
+    
+    .admin-counters { display: flex; gap: 15px; }
+    .counter-badge {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(245, 158, 11, 0.4);
-      padding: 4px 12px;
-      border-radius: 10px;
+      padding: 6px 16px;
+      border-radius: 12px;
       text-align: center;
     }
-    .stat-box span { font-size: 0.55rem; color: #cbd5e1; font-weight: 700; display: block; }
-    .stat-box strong { font-size: 0.9rem; color: #f59e0b; }
+    .counter-badge span { font-size: 0.6rem; color: #cbd5e1; font-weight: 700; display: block; }
+    .counter-badge strong { font-size: 1rem; color: #f59e0b; }
 
-    /* GRILLA PRINCIPAL DE ESCRITORIO */
-    .admin-layout {
+    /* GRILLA PRINCIPAL ORIGINAL (IZQUIERDA TABLA, DERECHA BOTONES) */
+    .admin-grid {
       display: grid;
-      /* Ajustamos la columna izquierda a un ancho aproximado de 14-15 cm en pantalla (aprox 540px) */
-      grid-template-columns: 540px 320px;
-      gap: 20px;
+      grid-template-columns: 1fr 340px;
+      gap: 25px;
       align-items: start;
     }
 
     @media (max-width: 950px) {
-      .admin-layout { grid-template-columns: 1fr; }
+      .admin-grid { grid-template-columns: 1fr; }
     }
 
-    /* CUADRO DE CONSULTA ANGOSTO (~14-15 CM DE ANCHO) CON ALTURA NORMAL DE PC */
-    .consult-box-card {
+    /* CUADRO DE CONSULTA Y ESTADO DE CUENTA ORIGINAL */
+    .consult-card {
       background: #ffffff; 
       color: #1e293b; 
-      border-radius: 18px; 
-      padding: 18px; 
+      border-radius: 22px; 
+      padding: 22px; 
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
       border: 3px solid #f59e0b; 
       text-align: left;
-      width: 100%;
     }
 
-    .consult-box-header {
+    .consult-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 6px;
+      padding-bottom: 10px;
     }
-    .consult-box-header h4 { font-size: 0.85rem; color: #0c1e30; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .consult-card-header h4 { font-size: 1rem; color: #0c1e30; font-weight: 800; display: flex; align-items: center; gap: 8px; }
 
-    .filter-controls {
+    .consult-filters {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
     }
 
-    .select-anio {
-      padding: 5px 8px;
+    .input-small {
+      padding: 6px 12px;
       border: 2px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 0.72rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
       font-weight: 700;
       color: #0c1e30;
       background: #f8fafc;
       outline: none;
     }
 
-    .btn-modo-filtro {
+    .btn-toggle-modo {
       background: #f59e0b;
       color: #0c1e30;
       border: none;
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 0.7rem;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
     }
 
-    .search-row-box {
+    .search-bar-box {
       background: #f1f5f9;
       border: 2px solid #cbd5e1;
-      border-radius: 12px;
-      padding: 6px 10px;
+      border-radius: 14px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
-    .search-input-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; }
-    .search-input-wrapper input { border: none; background: transparent; outline: none; font-size: 0.8rem; font-weight: 700; color: #0c1e30; width: 100%; }
+    .search-input-group { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .search-input-group input { border: none; background: transparent; outline: none; font-size: 0.9rem; font-weight: 700; color: #0c1e30; width: 100%; }
     
-    .btn-buscar-accion {
+    .btn-buscar-code {
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
       color: #0c1e30;
       border: none;
-      padding: 6px 14px;
-      border-radius: 8px;
+      padding: 8px 18px;
+      border-radius: 10px;
       font-weight: 800;
-      font-size: 0.72rem;
+      font-size: 0.8rem;
       cursor: pointer;
     }
 
-    /* CONTENEDOR DE LA TABLA CON BARRAS DE DESPLAZAMIENTO (VERTICAL Y HORIZONTAL) */
-    .table-scroll-container {
-      max-height: 280px; /* Altura ideal de PC */
-      overflow: auto;    /* Activa ambas barras de desplazamiento si el contenido es grande */
+    /* TABLA DE MOVIMIENTOS CON TAMAÑO IDEAL DE PC */
+    .table-container {
+      max-height: 320px;
+      overflow-y: auto;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #ffffff;
+      border-radius: 12px;
     }
 
     table {
       width: 100%;
-      min-width: 750px; /* Asegura el ancho mínimo para forzar la barra horizontal limpia si hay muchas columnas */
       border-collapse: collapse;
-      font-size: 0.72rem;
+      font-size: 0.8rem;
       text-align: left;
     }
 
     th {
       background: #0c1e30;
       color: #ffffff;
-      padding: 8px 10px;
+      padding: 10px 12px;
       font-weight: 700;
       position: sticky;
       top: 0;
@@ -199,28 +195,27 @@
     }
 
     td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid #f1f5f9;
       color: #334155;
       font-weight: 600;
-      white-space: nowrap; /* Evita que el texto se rompa bruscamente y permite el scroll horizontal fluido */
     }
 
-    /* COLUMNA LATERAL DE BOTONES DE ADMINISTRACIÓN */
-    .admin-menu-col {
+    /* COLUMNA DERECHA DE BOTONES ORIGINALES */
+    .admin-actions-col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
 
-    .menu-action-btn {
+    .admin-menu-btn {
       background: linear-gradient(145deg, #091628 0%, #050d18 100%);
       border: 2px solid #f59e0b;
       color: #ffffff;
-      padding: 14px 16px;
-      border-radius: 14px;
+      padding: 18px 20px;
+      border-radius: 18px;
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -228,12 +223,12 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.4);
       transition: transform 0.2s;
     }
-    .menu-action-btn:hover { transform: translateY(-2px); }
+    .admin-menu-btn:hover { transform: translateY(-2px); }
 
     footer { 
-      text-align: center; padding: 10px; font-size: 0.72rem; color: #ffffff; background-color: #040a12; 
+      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #040a12; 
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
-      margin-top: 20px;
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -252,51 +247,51 @@
 
   <main>
     <!-- BARRA SUPERIOR DE LA DOCENTE -->
-    <div class="admin-top-bar">
-      <div class="docente-info">
+    <div class="admin-bar">
+      <div class="admin-profile">
         <img src="assets/lily.jpg" alt="Docente" onerror="this.src='https://via.placeholder.com/150';">
-        <div class="docente-text">
+        <div class="admin-info">
           <span>DOCENTE TUTORA CAJERA ACTIVA</span>
           <h3>MISS LILY MELO AZAÑERO</h3>
         </div>
       </div>
-      <div class="admin-stats">
-        <div class="stat-box">
+      <div class="admin-counters">
+        <div class="counter-badge">
           <span>MOVIMIENTOS</span>
           <strong id="contadorMovs">0</strong>
         </div>
-        <div class="stat-box">
+        <div class="counter-badge">
           <span>INCIDENCIAS</span>
           <strong id="contadorInci">0</strong>
         </div>
       </div>
     </div>
 
-    <!-- GRILLA PRINCIPAL DE ESCRITORIO -->
-    <div class="admin-layout">
+    <!-- GRILLA PRINCIPAL -->
+    <div class="admin-grid">
       
-      <!-- LADO IZQUIERDO: CUADRO DE CONSULTA ANGOSTO (~14 CM) CON SCROLL -->
-      <div class="consult-box-card">
-        <div class="consult-box-header">
-          <h4>📋 CONSULTA Y ESTADO DE CUENTA</h4>
-          <div class="filter-controls">
-            <select id="selectAnio" class="select-anio">
+      <!-- LADO IZQUIERDO: CUADRO DE CONSULTA Y ESTADO DE CUENTA -->
+      <div class="consult-card">
+        <div class="consult-card-header">
+          <h4>📄 CONSULTA Y ESTADO DE CUENTA</h4>
+          <div class="consult-filters">
+            <select id="selectAnio" class="input-small">
               <option value="2026">AÑO 2026</option>
               <option value="2025">AÑO 2025</option>
             </select>
-            <button class="btn-modo-filtro" id="btnModoFiltro" onclick="alternarModoConsulta()">GENERAL</button>
+            <button class="btn-toggle-modo" id="btnModoFiltro" onclick="alternarModoConsulta()">GENERAL</button>
           </div>
         </div>
 
-        <div class="search-row-box" id="cajaBusquedaCodigo">
-          <div class="search-input-wrapper">
-            <span style="font-size: 1rem;">🔍</span>
+        <div class="search-bar-box" id="cajaBusquedaCodigo">
+          <div class="search-input-group">
+            <span style="font-size: 1.1rem;">🔍</span>
             <input type="text" id="inputCodigoQR" placeholder="CÓDIGO QR / ESTUDIANTE (EJ: LDS-001)" />
           </div>
-          <button onclick="consultarAdminEstudiante()" class="btn-buscar-accion">BUSCAR</button>
+          <button onclick="consultarAdminEstudiante()" class="btn-buscar-code">BUSCAR</button>
         </div>
 
-        <div class="table-scroll-container">
+        <div class="table-container">
           <table>
             <thead>
               <tr>
@@ -314,7 +309,7 @@
             </thead>
             <tbody id="tablaCuerpoMovimientos">
               <tr>
-                <td colspan="10" style="text-align: center; color: #64748b; font-style: italic; padding: 15px; white-space: normal;">INGRESA UN CÓDIGO O CAMBIA A MODO GENERAL PARA CONSULTAR.</td>
+                <td colspan="10" style="text-align: center; color: #64748b; font-style: italic; padding: 25px;">INGRESA UN CÓDIGO O CAMBIA A MODO GENERAL PARA CONSULTAR.</td>
               </tr>
             </tbody>
           </table>
@@ -322,15 +317,15 @@
       </div>
 
       <!-- LADO DERECHO: BOTONES DE ACCIÓN RÁPIDA -->
-      <div class="admin-menu-col">
-        <button onclick="abrirModalPago()" class="menu-action-btn">
-          <span><span style="font-size: 1.1rem;">💰</span> REGISTRAR PAGO / TRANSACCIÓN</span>
-          <span style="font-size: 1rem;">▶</span>
+      <div class="admin-actions-col">
+        <button onclick="abrirModalPago()" class="admin-menu-btn">
+          <span><span style="font-size: 1.2rem;">💰</span> REGISTRAR PAGO / TRANSACCIÓN</span>
+          <span style="font-size: 1.1rem;">▶</span>
         </button>
 
-        <button onclick="abrirModalIncidencias()" class="menu-action-btn">
-          <span><span style="font-size: 1.1rem;">🛠️</span> ATENCIÓN DE INCIDENCIAS</span>
-          <span style="font-size: 1rem;">▶</span>
+        <button onclick="abrirModalIncidencias()" class="admin-menu-btn">
+          <span><span style="font-size: 1.2rem;">🛠️</span> ATENCIÓN DE INCIDENCIAS</span>
+          <span style="font-size: 1.1rem;">▶</span>
         </button>
       </div>
 
