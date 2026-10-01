@@ -40,38 +40,38 @@ body {
 header {
   background: #08121e;
   color: #fff;
-  padding: 14px 30px;
+  padding: 12px 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   border-bottom: 4px solid var(--dorado);
   width: 100%;
 }
 
 .header-inner {
-  max-width: 1250px;
+  max-width: 1300px;
   width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 15px;
   flex-wrap: wrap;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .brand-mark img {
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: 0.8px;
   font-weight: 800;
   color: #ffffff;
@@ -80,14 +80,58 @@ header {
 .brand p {
   margin: 2px 0 0;
   color: var(--dorado);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
+}
+
+/* PERFIL DE LA MISSM EN LA CABECERA */
+.header-profile {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 2px solid var(--dorado);
+}
+
+.header-profile.show {
+  display: flex;
+}
+
+@keyframes flotarYBrillar {
+  0% { transform: translateY(0px) scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 0px rgba(245, 158, 11, 0); }
+  50% { transform: translateY(-3px) scale(1.02); box-shadow: 0 6px 16px rgba(0,0,0,0.5), 0 0 10px rgba(245, 158, 11, 0.6); }
+  100% { transform: translateY(0px) scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 0px rgba(245, 158, 11, 0); }
+}
+
+.header-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid var(--dorado);
+  object-fit: cover;
+  background: #fff;
+  animation: flotarYBrillar 4s ease-in-out infinite;
+}
+
+.header-user-info span {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--dorado);
+  font-weight: 800;
+}
+
+.header-user-info strong {
+  font-size: 0.82rem;
+  color: #fff;
+  font-weight: 800;
 }
 
 .btn {
   border: 0;
   border-radius: 30px;
-  padding: 8px 20px;
+  padding: 8px 18px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
@@ -95,9 +139,9 @@ header {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   transition: all 0.3s ease;
-  min-height: 40px;
+  min-height: 38px;
 }
 
 .btn-light {
@@ -128,25 +172,25 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 85px);
+  min-height: calc(100vh - 80px);
   padding: 20px 15px;
 }
 
 .login-card {
-  max-width: 420px;
+  max-width: 400px;
   width: 100%;
   background: #ffffff;
-  border-radius: 28px;
-  padding: 34px 28px;
+  border-radius: 26px;
+  padding: 30px 24px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
   text-align: center;
   border-top: 8px solid var(--dorado);
 }
 
 .card-insignia-container {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 15px;
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 14px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -166,38 +210,38 @@ header {
 
 .login-card h2 {
   color: var(--azul);
-  font-size: 1.35rem;
-  margin-bottom: 6px;
+  font-size: 1.25rem;
+  margin-bottom: 4px;
   font-weight: 800;
 }
 
 .login-card p {
   color: var(--muted);
-  font-size: 0.82rem;
-  margin-bottom: 22px;
+  font-size: 0.78rem;
+  margin-bottom: 18px;
   font-weight: 600;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 800;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .input-field, input, textarea, select {
   width: 100%;
-  height: 46px;
+  height: 44px;
   border: 2px solid #cbd5e1;
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 0 14px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   outline: none;
   background: #f8fafc;
   color: var(--texto);
@@ -218,14 +262,14 @@ textarea {
 
 .primary-btn {
   width: 100%;
-  height: 50px;
+  height: 48px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  margin-top: 10px;
+  margin-top: 8px;
   cursor: pointer;
   box-shadow: 0 6px 18px rgba(12, 30, 48, 0.3);
   transition: transform 0.2s;
@@ -234,76 +278,56 @@ textarea {
 
 .error-msg {
   color: var(--rojo);
-  font-size: 0.82rem;
-  min-height: 20px;
+  font-size: 0.78rem;
+  min-height: 18px;
   font-weight: 800;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 main {
-  max-width: 1250px;
+  max-width: 1300px;
   width: 96%;
   margin: 0 auto;
-  padding: 25px 15px 40px;
+  padding: 20px 10px 35px;
   display: none;
 }
 
-.intro {
-  margin-bottom: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 18px 24px;
-  border-radius: 20px;
-  border-left: 6px solid var(--dorado);
-  backdrop-filter: blur(10px);
-}
-
-.intro h2 {
-  margin: 0 0 4px;
-  font-size: 1.5rem;
-  color: #ffffff;
-  font-weight: 800;
-}
-
-.intro p {
-  margin: 0;
-  color: #cbd5e1;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
-.cards {
+/* BARRA DE ESTADÍSTICAS COMPACTA */
+.mini-stats-bar {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
-.status-card {
-  background: #ffffff;
+.mini-card {
+  background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--dorado);
-  border-radius: 18px;
-  padding: 16px 18px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.status-card span {
-  display: block;
+.mini-card span {
+  font-size: 0.7rem;
   color: var(--muted);
-  font-size: 0.75rem;
-  margin-bottom: 4px;
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
-.status-card strong {
-  font-size: 1.1rem;
+.mini-card strong {
+  font-size: 0.9rem;
   color: var(--azul);
-  word-break: break-word;
   font-weight: 800;
 }
 
+/* NUEVA ESTRUCTURA EN LAYOUT */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
   gap: 20px;
   align-items: start;
 }
@@ -311,19 +335,19 @@ main {
 .panel {
   background: #ffffff;
   border: 3px solid var(--dorado);
-  border-radius: 24px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .panel-head {
-  padding: 16px 20px;
+  padding: 14px 18px;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   background: #f8fafc;
   user-select: none;
 }
@@ -339,15 +363,15 @@ main {
 .panel-head h3 {
   margin: 0;
   color: var(--azul);
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 800;
 }
 
 .toggle-icon {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--muted);
   transition: transform 0.25s ease;
   display: inline-block;
@@ -366,22 +390,22 @@ main {
 }
 
 .panel-body {
-  padding: 22px;
+  padding: 18px;
 }
 
 .type-selector-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .type-btn {
   border: 2px solid var(--borde);
-  border-radius: 14px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 10px;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   cursor: pointer;
   text-align: center;
   background: #f8fafc;
@@ -406,12 +430,12 @@ main {
 .search-box {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .search-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .search-buttons .btn {
@@ -424,18 +448,18 @@ main {
 
 .small-label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--azul);
-  margin: 14px 0 6px;
+  margin: 12px 0 4px;
   font-weight: 800;
 }
 
 .message {
-  margin-top: 12px;
-  padding: 10px 14px;
-  border-radius: 12px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
   display: none;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
@@ -456,38 +480,32 @@ main {
 .student-head {
   display: none;
   border: 2px solid var(--dorado);
-  border-radius: 18px;
-  padding: 16px;
-  margin-top: 16px;
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 14px;
   background: #f8fafc;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
 .student-head.show {
   display: flex;
 }
 
-@keyframes flotarYBrillar {
-  0% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-  50% { transform: translateY(-5px) scale(1.02); box-shadow: 0 16px 32px rgba(0,0,0,0.7), 0 0 15px rgba(245, 158, 11, 0.6); }
-  100% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-}
-
 .student-photo-wrap {
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
   background: #eaf0f6;
-  border: 4px solid var(--dorado);
+  border: 3px solid var(--dorado);
   display: grid;
   place-items: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
   animation: flotarYBrillar 4s ease-in-out infinite;
 }
 
@@ -499,7 +517,7 @@ main {
 }
 
 .student-photo-placeholder {
-  font-size: 50px;
+  font-size: 45px;
   color: #8aa0b7;
 }
 
@@ -508,27 +526,27 @@ main {
 }
 
 .student-name {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   line-height: 1.3;
 }
 
 .student-meta {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   line-height: 1.4;
   font-weight: 700;
 }
 
 .saldo {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: var(--verde);
-  margin-top: 10px;
+  margin-top: 8px;
   background: #ecfdf5;
-  padding: 6px 16px;
+  padding: 4px 14px;
   border-radius: 20px;
   display: inline-block;
   border: 2px solid #a7f3d0;
@@ -536,23 +554,23 @@ main {
 
 .table-wrap {
   overflow-x: auto;
-  margin-top: 16px;
+  margin-top: 14px;
   border: 2px solid var(--borde);
-  border-radius: 14px;
+  border-radius: 12px;
   -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 700px;
 }
 
 th, td {
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid #e5eaf0;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   vertical-align: middle;
   white-space: nowrap;
   font-weight: 600;
@@ -560,13 +578,13 @@ th, td {
 
 td.cell-wrap {
   white-space: normal;
-  min-width: 140px;
+  min-width: 130px;
 }
 
 th {
   background: #f1f5f9;
   color: var(--azul);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: .5px;
 }
@@ -578,7 +596,7 @@ tr:last-child td {
 .badge-ingreso {
   color: #047857;
   background: #ecfdf5;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
   font-weight: 800;
   border: 1px solid #a7f3d0;
@@ -587,56 +605,56 @@ tr:last-child td {
 .badge-egreso {
   color: #b91c1c;
   background: #fef2f2;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
   font-weight: 800;
   border: 2px solid #fecaca;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.25);
 }
 
 .empty {
   text-align: center;
   color: var(--muted);
-  padding: 24px 10px;
+  padding: 20px 10px;
   font-weight: 700;
 }
 
 .incident-list {
   display: grid;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .incident {
   border: 2px solid var(--borde);
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 10px 12px;
   background: #fafcff;
 }
 
 .incident-top {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  font-size: 0.82rem;
-  margin-bottom: 6px;
+  gap: 8px;
+  font-size: 0.78rem;
+  margin-bottom: 4px;
   font-weight: 800;
 }
 
 .badge {
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 999px;
   background: #fff7df;
   color: #7a5d00;
   border: 2px solid #ead28a;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 800;
 }
 
 .incident small {
   color: var(--muted);
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   font-weight: 600;
 }
 
@@ -661,9 +679,9 @@ tr:last-child td {
 
 .qr-modal-content {
   background: #ffffff;
-  padding: 24px;
-  border-radius: 24px;
-  max-width: 380px;
+  padding: 20px;
+  border-radius: 22px;
+  max-width: 360px;
   width: 100%;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
@@ -672,48 +690,48 @@ tr:last-child td {
 
 .qr-modal-content h3 {
   color: var(--azul);
-  font-size: 1.15rem;
-  margin-bottom: 14px;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
   font-weight: 800;
 }
 
 #reader {
   width: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
   background: #000;
-  min-height: 220px;
+  min-height: 200px;
   border: 2px solid var(--dorado);
 }
 
 .close-qr-btn {
-  margin-top: 14px;
+  margin-top: 12px;
   background: var(--rojo);
   color: #fff;
   border: 0;
-  padding: 12px 18px;
-  border-radius: 14px;
+  padding: 10px 16px;
+  border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
   width: 100%;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .print-header { display: none; }
 
 @media print {
   body { background: #ffffff; color: #000000; }
-  header, .cards, .search-box, .panel, .btn, footer, .qr-modal { display: none !important; }
+  header, .mini-stats-bar, .search-box, .panel:not(:has(#tablaMovimientos)), .btn, footer, .qr-modal { display: none !important; }
   main { display: block !important; padding: 0 !important; }
   .print-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 3px solid #000;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
   }
-  .print-header img { width: 60px; height: 60px; object-fit: contain; }
+  .print-header img { width: 50px; height: 50px; object-fit: contain; }
   .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; }
   table { min-width: 100% !important; }
   th { background: #f1f5f9 !important; -webkit-print-color-adjust: exact; }
@@ -722,8 +740,8 @@ tr:last-child td {
 footer {
   text-align: center;
   color: #cbd5e1;
-  padding: 20px 10px 30px;
-  font-size: 0.8rem;
+  padding: 15px 10px 25px;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
@@ -749,7 +767,7 @@ footer {
   .layout {
     grid-template-columns: 1fr;
   }
-  .cards {
+  .mini-stats-bar {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -768,7 +786,17 @@ footer {
         <p>I.E.P. LA SALLE DEL SUR · PANEL DE ADMINISTRACIÓN</p>
       </div>
     </div>
-    <a class="btn btn-light" href="index.html" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← VOLVER AL BANCO</a>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div id="headerProfile" class="header-profile">
+        <img id="headerAvatarImg" class="header-avatar" src="" alt="Foto Maestra" onerror="this.src='https://via.placeholder.com/150';">
+        <div class="header-user-info">
+          <span>DOCENTE ACTIVA</span>
+          <strong id="headerUserName">—</strong>
+        </div>
+      </div>
+      <a class="btn btn-light" href="index.html" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← INICIO</a>
+    </div>
   </div>
 </header>
 
@@ -784,10 +812,10 @@ footer {
       <label for="docenteSelect">DOCENTE / MAESTRA</label>
       <select id="docenteSelect" class="input-field" onchange="anunciarSeleccion(this)">
         <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
-        <option value="LILY">MISS LILY MELO AZAÑERO</option>
-        <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
-        <option value="ANGHY">MISS ANGHY REYES MELO</option>
-        <option value="KARIN">MISS KARIN MOLERO ROMANI</option>
+        <option value="LILY" data-foto="assets/lily.jpg">MISS LILY MELO AZAÑERO</option>
+        <option value="KIARA" data-foto="assets/kiara.jpg">MISS KIARA MORALES ELGUERA</option>
+        <option value="ANGHY" data-foto="assets/anghy.jpg">MISS ANGHY REYES MELO</option>
+        <option value="KARIN" data-foto="assets/karin.jpg">MISS KARIN MOLERO ROMANI</option>
       </select>
     </div>
 
@@ -802,31 +830,27 @@ footer {
 </div>
 
 <main id="panelView">
-  <section class="intro">
-    <h2>ADMINISTRACIÓN Y CONTROL</h2>
-    <p>CONSULTA MOVIMIENTOS DE ESTUDIANTES, REGISTRA SUS PAGOS Y GESTIONA INCIDENCIAS.</p>
-  </section>
-
-  <section class="cards">
-    <div class="status-card"><span>CONEXIÓN</span><strong id="estadoConexion">LISTA</strong></div>
-    <div class="status-card"><span>MAESTRA ACTIVA</span><strong id="maestraActivaNombre">—</strong></div>
-    <div class="status-card"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
-    <div class="status-card"><span>INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
+  <!-- BARRA DE ESTADÍSTICAS COMPACTA -->
+  <section class="mini-stats-bar">
+    <div class="mini-card"><span>CONEXIÓN</span><strong id="estadoConexion">LISTA</strong></div>
+    <div class="mini-card"><span>MAESTRA</span><strong id="maestraActivaNombre">—</strong></div>
+    <div class="mini-card"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
+    <div class="mini-card"><span>INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
   </section>
 
   <section class="layout">
     <div>
       <div class="panel">
         <div class="panel-head">
-          <h3>📋 MOVIMIENTOS Y ESTADO DE CUENTA</h3>
-          <button class="btn btn-gold" type="button" onclick="imprimirEstadoCuentaAdmin()" style="padding: 6px 14px; font-size: 0.78rem;">🖨️ IMPRIMIR</button>
+          <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
+          <button class="btn btn-gold" type="button" onclick="imprimirEstadoCuentaAdmin()" style="padding: 5px 12px; font-size: 0.75rem;">🖨️ IMPRIMIR</button>
         </div>
         <div class="panel-body">
           <div class="search-box">
-            <input id="codigo" class="code-input" placeholder="EJEMPLO: LDS-EST-001 Ó LDS-DOC-001" autocomplete="off">
+            <input id="codigo" class="code-input" placeholder="EJEMPLO: LDS-EST-001" autocomplete="off">
             <div class="search-buttons">
               <button class="btn btn-gold" type="button" onclick="consultarEstudiante()">CONSULTAR</button>
-              <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 ESCANEAR QR</button>
+              <button class="btn btn-outline" type="button" onclick="abrirEscanerQR()">📷 QR</button>
             </div>
           </div>
           <div id="mensaje" class="message"></div>
@@ -844,10 +868,10 @@ footer {
           </div>
 
           <div class="print-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
               <div>
-                <h2>BANCO LDS 360 - ESTADO DE CUENTA GENERAL</h2>
+                <h2>BANCO LDS 360 - ESTADO DE CUENTA</h2>
                 <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
               </div>
             </div>
@@ -861,7 +885,7 @@ footer {
                   <th>CÓDIGO / QR</th>
                   <th>ESTUDIANTE</th>
                   <th>GRADO</th>
-                  <th>TIPO DE MOVIMIENTO</th>
+                  <th>TIPO</th>
                   <th>CONCEPTO</th>
                   <th>MONTO LDS</th>
                   <th>CAJERO(A)</th>
@@ -907,10 +931,10 @@ footer {
           <label class="small-label" for="pagoMonto">MONTO LDS</label>
           <input id="pagoMonto" type="number" step="0.5" min="0" placeholder="EJEMPLO: 50.00">
 
-          <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
-          <textarea id="pagoObs" rows="2" placeholder="MOTIVO O DETALLE DEL PAGO..."></textarea>
+          <label class="small-label" for="pagoObs">OBSERVACIÓN (OPCIONAL)</label>
+          <textarea id="pagoObs" rows="2" placeholder="MOTIVO..."></textarea>
 
-          <button class="btn btn-gold" style="width:100%;margin-top:14px;padding:12px;" type="button" onclick="procesarPagoEstudiante()">
+          <button class="btn btn-gold" style="width:100%;margin-top:12px;padding:10px;" type="button" onclick="procesarPagoEstudiante()">
             💸 REGISTRAR TRANSACCIÓN
           </button>
           <div id="pagoMensaje" class="message"></div>
@@ -935,8 +959,8 @@ footer {
             <option>EN ATENCIÓN</option>
             <option>RESUELTO</option>
           </select>
-          <div style="display:flex;gap:10px;margin-top:12px;">
-            <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">GUARDAR ATENCIÓN</button>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">GUARDAR</button>
             <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">LIMPIAR</button>
           </div>
           <div id="listaIncidencias" class="incident-list"></div>
@@ -1129,10 +1153,15 @@ function validarAccesoDocente() {
 
   if (clave === "360LDS" || clave === "2026") {
     reproducirSonido('exito');
-    const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
+    const optionSelected = docenteElement.options[docenteElement.selectedIndex];
+    const nombreMaestra = optionSelected.text;
+    const fotoUrl = optionSelected.getAttribute("data-foto") || "assets/insignia.png";
+    
     sessionStorage.setItem("maestraActiva", nombreMaestra);
+    sessionStorage.setItem("maestraFoto", fotoUrl);
+
     hablarTextoVoz("Clave correcta. Bienvenida estimada maestra.");
-    desbloquearPanel(nombreMaestra);
+    desbloquearPanel(nombreMaestra, fotoUrl);
   } else {
     reproducirSonido('error');
     error.textContent = "CLAVE INCORRECTA.";
@@ -1140,10 +1169,17 @@ function validarAccesoDocente() {
   }
 }
 
-function desbloquearPanel(nombreMaestra) {
+function desbloquearPanel(nombreMaestra, fotoUrl) {
   document.getElementById("loginView").style.display = "none";
   document.getElementById("panelView").style.display = "block";
-  document.getElementById("maestraActivaNombre").textContent = nombreMaestra || "MAESTRA";
+  document.getElementById("maestraActivaNombre").textContent = nombreMaestra;
+  
+  // Mostrar foto de la miss en la cabecera superior derecha
+  document.getElementById("headerUserName").textContent = nombreMaestra;
+  const avatarImg = document.getElementById("headerAvatarImg");
+  avatarImg.src = fotoUrl;
+  document.getElementById("headerProfile").classList.add("show");
+
   cargarConceptosPorTipo();
   renderIncidencias();
 }
@@ -1313,8 +1349,7 @@ function consultarEstudiante(){
     if (esDocente) {
       hablarTextoVoz("Maestra " + nombreUsuario + ". Fondo disponible en caja: " + saldoFormateado + " soles Lasallistas.");
     } else {
-      const saludo = genero === "F" ? "Estudiante " : "Estudiante ";
-      hablarTextoVoz(saludo + nombreUsuario + ". Saldo actual: " + saldoFormateado + " soles Lasallistas.");
+      hablarTextoVoz("Estudiante " + nombreUsuario + ". Saldo actual: " + saldoFormateado + " soles Lasallistas.");
     }
   });
 }
