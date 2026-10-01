@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCO LDS 360 - IEP La Salle del Sur</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;background:#071a31}
+body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden}
+.portada{
+  position:relative;
+  width:min(100vw,1895px);
+  aspect-ratio:1895/963;
+  background:url("assets/portada-modelo.png") center top/100% 100% no-repeat;
+}
+.zona{
+  position:absolute;
+  display:block;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  padding:0;
+  z-index:10;
+}
+.zona:hover{background:rgba(255,255,255,.035);border-radius:28px}
+
+/* Posiciones tomadas directamente de la portada-modelo de 1895 × 963 */
+.admin{left:82.8%;top:.5%;width:15.5%;height:7.4%}
+.qr{left:11.4%;top:63.2%;width:20.1%;height:10.7%}
+.codigo{left:49.7%;top:63.1%;width:14.8%;height:10.9%}
+.tienda{left:11.4%;top:75.2%;width:16.9%;height:12.0%}
+.padres{left:28.7%;top:75.2%;width:18.1%;height:12.0%}
+.manual{left:47.5%;top:75.2%;width:17.2%;height:12.0%}
+
+#qrModal{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(3,12,26,.94);
+  align-items:center;justify-content:center;padding:18px
+}
+.qrBox{
+  width:min(92vw,430px);background:#0b2038;color:#fff;
+  border:3px solid #f1c40f;border-radius:22px;padding:18px;
+  text-align:center;box-shadow:0 20px 60px #0008
+}
+.qrBox h2{margin:0 0 8px;color:#f1c40f;font-size:21px}
+.qrBox p{margin:0 0 12px;font-size:14px;line-height:1.35}
+#reader{width:100%;overflow:hidden;border-radius:14px;background:#000}
+.cerrar{
+  width:100%;margin-top:12px;padding:11px;border:0;border-radius:12px;
+  background:#e11d48;color:#fff;font-size:15px;font-weight:700;cursor:pointer
+}
+@media(max-width:600px){
+  .admin{left:78%;width:20%;height:8%}
+  .qr{left:10%;width:22%;top:63%}
+  .codigo{left:49%;width:18%;top:63%}
+  .tienda{left:10%;width:19%;top:75%}
+  .padres{left:29%;width:20%;top:75%}
+  .manual{left:49%;width:19%;top:75%}
+}
+</style>
+</head>
+<body>
+
+<main class="portada" aria-label="BANCO LDS 360">
+
+  <!-- La imagen de fondo es la portada-modelo exacta entregada por la usuaria. -->
+  <a class="zona admin" href="administrador.html" aria-label="Administrador"></a>
+
+  <button class="zona qr" type="button" onclick="abrirQR()" aria-label="Escanea QR"></button>
+
+  <a class="zona codigo" href="alumno.html" aria-label="Ingresa código"></a>
+
+  <a class="zona tienda" href="tienda.html" aria-label="Tienda escolar"></a>
+
+  <a class="zona padres" href="padres.html" aria-label="Padres"></a>
+
+  <a class="zona manual" href="manual.html" aria-label="Manual del sistema"></a>
+
+</main>
+
+<div id="qrModal">
+  <div class="qrBox">
+    <h2>Escanea el código QR</h2>
+    <p>Se identificará al alumno para continuar con su acceso.</p>
+    <div id="reader"></div>
+    <button class="cerrar" type="button" onclick="cerrarQR()">✕ Cancelar</button>
+  </div>
+</div>
+
+<script>
+let lectorQR = null;
+
+function abrirQR(){
+  document.getElementById("qrModal").style.display="flex";
+
+  if(!lectorQR) lectorQR = new Html5Qrcode("reader");
+
+  lectorQR.start(
+    {facingMode:"environment"},
+    {fps:10, qrbox:{width:230,height:230}},
+    function(decodedText){
+      let codigo = decodedText;
+      try{
+        if(decodedText.includes("?")){
+          const u = new URL(decodedText);
+          codigo = u.searchParams.get("codigo") || decodedText;
+        }
+      }catch(e){}
+
+      cerrarQR();
+      window.location.href =
+        "alumno.html?codigo=" +
+        encodeURIComponent(codigo.trim().toUpperCase());
+    },
+    function(){ }
+  ).catch(function(){
+    alert("No se pudo iniciar la cámara. Verifique los permisos.");
+    cerrarQR();
+  });
+}
+
+function cerrarQR(){
+  document.getElementById("qrModal").style.display="none";
+  if(lectorQR && lectorQR.isScanning){
+    lectorQR.stop().catch(function(){});
+  }
+}
+</script>
+
+</body>
+</html>
