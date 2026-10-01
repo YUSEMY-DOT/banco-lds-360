@@ -44,8 +44,8 @@
     .inicio-btn:hover { background: #f59e0b; color: #06111f; }
     
     main { 
-      max-width: 1200px; 
-      width: 100%; 
+      max-width: 1350px; 
+      width: 96%; 
       margin: auto; 
       padding: 20px 15px; 
       flex: 1; 
@@ -84,10 +84,11 @@
     .stat-box span { font-size: 0.55rem; color: #cbd5e1; font-weight: 700; display: block; }
     .stat-box strong { font-size: 0.9rem; color: #f59e0b; }
 
-    /* CONTENEDOR PRINCIPAL ESTÁNDAR PARA PC (GRILLA) */
+    /* GRILLA PRINCIPAL DE ESCRITORIO */
     .admin-layout {
       display: grid;
-      grid-template-columns: 1fr 320px;
+      /* Ajustamos la columna izquierda a un ancho aproximado de 14-15 cm en pantalla (aprox 540px) */
+      grid-template-columns: 540px 320px;
       gap: 20px;
       align-items: start;
     }
@@ -96,15 +97,16 @@
       .admin-layout { grid-template-columns: 1fr; }
     }
 
-    /* CUADRO DE CONSULTA ACHICADO Y COMPACTO */
+    /* CUADRO DE CONSULTA ANGOSTO (~14-15 CM DE ANCHO) CON ALTURA NORMAL DE PC */
     .consult-box-card {
       background: #ffffff; 
       color: #1e293b; 
       border-radius: 18px; 
-      padding: 16px; 
+      padding: 18px; 
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
       border: 3px solid #f59e0b; 
       text-align: left;
+      width: 100%;
     }
 
     .consult-box-header {
@@ -169,16 +171,18 @@
       cursor: pointer;
     }
 
-    /* TABLA DE MOVIMIENTOS MÁS COMPACTA Y BAJA */
+    /* CONTENEDOR DE LA TABLA CON BARRAS DE DESPLAZAMIENTO (VERTICAL Y HORIZONTAL) */
     .table-scroll-container {
-      max-height: 220px;
-      overflow-y: auto;
+      max-height: 280px; /* Altura ideal de PC */
+      overflow: auto;    /* Activa ambas barras de desplazamiento si el contenido es grande */
       border: 1px solid #e2e8f0;
       border-radius: 8px;
+      background: #ffffff;
     }
 
     table {
       width: 100%;
+      min-width: 750px; /* Asegura el ancho mínimo para forzar la barra horizontal limpia si hay muchas columnas */
       border-collapse: collapse;
       font-size: 0.72rem;
       text-align: left;
@@ -187,7 +191,7 @@
     th {
       background: #0c1e30;
       color: #ffffff;
-      padding: 7px 8px;
+      padding: 8px 10px;
       font-weight: 700;
       position: sticky;
       top: 0;
@@ -195,10 +199,11 @@
     }
 
     td {
-      padding: 7px 8px;
+      padding: 8px 10px;
       border-bottom: 1px solid #f1f5f9;
       color: #334155;
       font-weight: 600;
+      white-space: nowrap; /* Evita que el texto se rompa bruscamente y permite el scroll horizontal fluido */
     }
 
     /* COLUMNA LATERAL DE BOTONES DE ADMINISTRACIÓN */
@@ -270,7 +275,7 @@
     <!-- GRILLA PRINCIPAL DE ESCRITORIO -->
     <div class="admin-layout">
       
-      <!-- LADO IZQUIERDO: CUADRO DE CONSULTA Y ESTADO DE CUENTA COMPACTO -->
+      <!-- LADO IZQUIERDO: CUADRO DE CONSULTA ANGOSTO (~14 CM) CON SCROLL -->
       <div class="consult-box-card">
         <div class="consult-box-header">
           <h4>📋 CONSULTA Y ESTADO DE CUENTA</h4>
@@ -309,7 +314,7 @@
             </thead>
             <tbody id="tablaCuerpoMovimientos">
               <tr>
-                <td colspan="10" style="text-align: center; color: #64748b; font-style: italic; padding: 15px;">INGRESA UN CÓDIGO O CAMBIA A MODO GENERAL PARA CONSULTAR.</td>
+                <td colspan="10" style="text-align: center; color: #64748b; font-style: italic; padding: 15px; white-space: normal;">INGRESA UN CÓDIGO O CAMBIA A MODO GENERAL PARA CONSULTAR.</td>
               </tr>
             </tbody>
           </table>
