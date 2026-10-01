@@ -44,10 +44,10 @@
     .inicio-btn:hover { background: #f59e0b; color: #06111f; }
     
     main { 
-      max-width: 1250px; 
-      width: 96%; 
+      max-width: 1100px; 
+      width: 100%; 
       margin: auto; 
-      padding: 30px 15px; 
+      padding: 20px 15px; 
       flex: 1; 
       display: flex; 
       align-items: center;
@@ -55,11 +55,11 @@
 
     .hidden { display: none !important; }
 
-    /* CONTENEDOR PRINCIPAL COMPARTIDO */
+    /* CONTENEDOR PRINCIPAL COMPARTIDO - TAMAÑO ESTÁNDAR PARA PC */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 520px 1fr;
-      gap: 30px;
+      grid-template-columns: 450px 1fr;
+      gap: 20px;
       width: 100%;
       align-items: stretch;
     }
@@ -72,9 +72,9 @@
     .saldo-card {
       background: linear-gradient(145deg, #091628 0%, #050d18 100%);
       color: #ffffff;
-      border-radius: 28px;
-      padding: 30px 26px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       border: 3px solid #f59e0b;
       text-align: left;
       display: flex;
@@ -96,7 +96,7 @@
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      gap: 20px; 
+      gap: 15px; 
       position: relative; 
       z-index: 2; 
     }
@@ -104,39 +104,38 @@
     .saldo-box-dorado {
       background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
       color: #0c1e30;
-      border-radius: 22px;
-      padding: 18px 16px;
+      border-radius: 18px;
+      padding: 14px 12px;
       flex: 1;
       text-align: center;
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 8px 20px rgba(0,0,0,0.35);
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 6px 15px rgba(0,0,0,0.35);
       border: 2px solid #fbbf24;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
     }
-    .saldo-title { font-size: 0.75rem; color: #78350f; font-weight: 800; letter-spacing: 1.5px; }
-    .saldo-amount { font-size: 2.3rem; font-weight: 800; margin-top: 4px; color: #1e293b; line-height: 1.1; }
+    .saldo-title { font-size: 0.7rem; color: #78350f; font-weight: 800; letter-spacing: 1.2px; }
+    .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; color: #1e293b; line-height: 1.1; }
     
     .avatar-container {
       flex-shrink: 0;
     }
     
-    /* ANIMACIÓN BONITA Y DIDÁCTICA PARA LA FOTO (FLOTACIÓN Y BRILLO DORADO) */
     @keyframes flotarYBrillar {
-      0% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-      50% { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 35px rgba(0,0,0,0.7), 0 0 18px rgba(245, 158, 11, 0.6); }
-      100% { transform: translateY(0px) scale(1); box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+      0% { transform: translateY(0px) scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+      50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 14px rgba(245, 158, 11, 0.6); }
+      100% { transform: translateY(0px) scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
     }
 
     .avatar-img { 
-      width: 175px; 
-      height: 175px; 
+      width: 140px; 
+      height: 140px; 
       border-radius: 50%; 
-      border: 5px solid #f59e0b; 
+      border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
       animation: flotarYBrillar 4s ease-in-out infinite;
       transition: transform 0.3s ease;
     }
@@ -145,46 +144,46 @@
     }
     
     .alumno-info-box { 
-      margin-top: 22px; 
+      margin-top: 16px; 
       background: rgba(3, 8, 15, 0.85); 
-      padding: 18px; 
-      border-radius: 18px; 
+      padding: 14px; 
+      border-radius: 14px; 
       border: 1px solid rgba(245, 158, 11, 0.4);
       text-align: center;
       position: relative;
       z-index: 2;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       width: 100%;
     }
     .alumno-nombre { 
-      font-size: 1.25rem; 
+      font-size: 1.1rem; 
       font-weight: 800; 
       color: #ffffff; 
-      line-height: 1.35; 
+      line-height: 1.3; 
       cursor: pointer; 
       text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
     .alumno-grado { 
-      font-size: 1rem; 
+      font-size: 0.9rem; 
       color: #fde68a; 
       font-weight: 700; 
-      margin-top: 8px; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      letter-spacing: 0.5px;
-    }
-    
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; position: relative; z-index: 2; width: 100%; }
-    .action-btn { 
-      padding: 16px 10px; border-radius: 18px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.85rem; 
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
+      margin-top: 6px; 
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      letter-spacing: 0.5px;
+    }
+    
+    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; position: relative; z-index: 2; width: 100%; }
+    .action-btn { 
+      padding: 12px 8px; border-radius: 14px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.8rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
     .action-btn:hover { transform: translateY(-2px); }
     
@@ -200,9 +199,10 @@
       border: 2px solid #6ee7b7; 
     }
 
+    /* SUB-TARJETA ACHICADA Y MÁS COMPACTA */
     .sub-card { 
-      background: #ffffff; color: #1e293b; border-radius: 28px; padding: 34px; 
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
+      background: #ffffff; color: #1e293b; border-radius: 22px; padding: 22px; 
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -213,47 +213,48 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
     }
-    .sub-card h4 { font-size: 1.15rem; color: #0c1e30; font-weight: 800; }
+    .sub-card h4 { font-size: 1rem; color: #0c1e30; font-weight: 800; }
     
     .btn-imprimir {
       background: #1e3a8a;
       color: #ffffff;
       border: 2px solid #f59e0b;
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-size: 0.78rem;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 0.72rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: background 0.2s;
     }
     .btn-imprimir:hover { background: #0c1e30; }
 
-    .form-scroll-area { max-height: 380px; overflow-y: auto; padding-right: 6px; }
-    .form-group { margin-bottom: 16px; text-align: left; }
-    .form-group label { display: block; color: #334155; font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; }
+    .form-scroll-area { max-height: 280px; overflow-y: auto; padding-right: 4px; }
+    .form-group { margin-bottom: 12px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.75rem; font-weight: 800; margin-bottom: 4px; }
     .input-field { 
-      width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: 14px; font-size: 0.9rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+      width: 100%; padding: 9px 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.85rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
     }
     .input-field:focus { border-color: #0284c7; background: #fff; }
     
-    .lista-movs { min-height: 280px; max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    /* LISTA DE MOVIMIENTOS MÁS COMPACTA Y REDucida */
+    .lista-movs { min-height: 200px; max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
     
     .btn-primary {
-      width: 100%; height: 52px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35); margin-top: 16px; transition: opacity 0.2s;
+      width: 100%; height: 44px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 14px; font-size: 0.9rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); margin-top: 12px; transition: opacity 0.2s;
     }
     .btn-primary:hover { opacity: 0.95; }
     
     footer { 
-      text-align: center; padding: 14px; font-size: 0.78rem; color: #ffffff; background-color: #040a12; 
+      text-align: center; padding: 12px; font-size: 0.75rem; color: #ffffff; background-color: #040a12; 
       border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
     }
 
@@ -271,221 +272,13 @@
         align-items: center;
         justify-content: space-between;
         border-bottom: 3px solid #000;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
+        padding-bottom: 12px;
+        margin-bottom: 15px;
       }
-      .print-header img { width: 60px; height: 60px; object-fit: contain; }
-      .print-header-text h2 { font-size: 1.2rem; font-weight: 800; }
-      .print-header-text p { font-size: 0.85rem; font-weight: 700; }
+      .print-header img { width: 50px; height: 50px; object-fit: contain; }
+      .print-header-text h2 { font-size: 1.1rem; font-weight: 800; }
+      .print-header-text p { font-size: 0.8rem; font-weight: 700; }
     }
-
-    /* =========================================================
-       AJUSTE RESPONSIVO: SOLO CORRIGE CONFLICTOS DE ANCHO
-       NO CAMBIA COLORES, ICONOS, FUNCIONES NI DISEÑO DE PC.
-       ========================================================= */
-
-    html, body {
-      width: 100%;
-      min-width: 0;
-    }
-
-    main,
-    .dashboard-container,
-    .dashboard-container > div,
-    .saldo-card,
-    .sub-card,
-    .sub-card-header,
-    .saldo-top,
-    .saldo-box-dorado,
-    .alumno-info-box,
-    .actions-grid,
-    .action-btn,
-    .form-scroll-area,
-    .lista-movs {
-      min-width: 0;
-    }
-
-    .saldo-box-dorado,
-    .alumno-info-box,
-    .sub-card,
-    .input-field {
-      max-width: 100%;
-    }
-
-    .action-btn {
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .sub-card-header h4 {
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    /* CELULAR EN VERTICAL */
-    @media (max-width: 600px) {
-      header {
-        padding: 10px 12px;
-      }
-
-      .school-info {
-        min-width: 0;
-        gap: 8px;
-      }
-
-      .school-info img {
-        width: 40px;
-        height: 40px;
-      }
-
-      .school-title {
-        min-width: 0;
-      }
-
-      .school-title h1,
-      .school-title p {
-        overflow-wrap: anywhere;
-      }
-
-      .inicio-btn {
-        flex-shrink: 0;
-        padding: 8px 12px;
-      }
-
-      main {
-        width: 100%;
-        padding: 16px 10px;
-        align-items: stretch;
-      }
-
-      .dashboard-container {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 16px;
-      }
-
-      /*
-        El conflicto principal estaba aquí: .saldo-top intentaba
-        poner la caja y la foto de 175px una al lado de la otra
-        aunque el teléfono no tuviera ancho suficiente.
-        En vertical se apilan, sin eliminar ningún elemento.
-      */
-      .saldo-top {
-        flex-direction: column;
-        align-items: center;
-        gap: 16px;
-      }
-
-      .saldo-box-dorado {
-        width: 100%;
-        flex: none;
-      }
-
-      .avatar-container {
-        flex-shrink: 0;
-      }
-
-      .saldo-card {
-        padding: 24px 18px;
-      }
-
-      .sub-card {
-        padding: 24px 18px;
-      }
-
-      .sub-card-header {
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-
-      .sub-card-header h4 {
-        flex: 1 1 180px;
-      }
-
-      .btn-imprimir {
-        flex-shrink: 0;
-      }
-
-      .actions-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-
-      .form-scroll-area,
-      .lista-movs {
-        max-width: 100%;
-        overflow-x: hidden;
-      }
-
-      footer {
-        padding: 12px 10px;
-        overflow-wrap: anywhere;
-      }
-    }
-
-    /* EN PANTALLAS ANGOSTAS NO SE REDUCE EL DISEÑO:
-       se conserva la escala de textos y botones del escritorio.
-       Solo se cambia la distribución cuando el ancho realmente no alcanza. */
-    @media (max-width: 380px) {
-      .school-title h1 { font-size: 1.1rem; }
-      .school-title p { font-size: 0.78rem; }
-      .inicio-btn { font-size: 0.85rem; padding: 8px 12px; }
-      .saldo-card,
-      .sub-card { padding-left: 18px; padding-right: 18px; }
-      .actions-grid { grid-template-columns: minmax(0, 1fr); }
-    }
-
-    /* TABLET Y CELULAR EN HORIZONTAL:
-       se permite usar el ancho disponible sin forzar la página
-       a quedarse con el formato vertical. */
-    @media (min-width: 601px) and (max-width: 950px) {
-      main {
-        width: 100%;
-        padding: 18px 12px;
-        align-items: stretch;
-      }
-
-      .dashboard-container {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 18px;
-      }
-    }
-
-    @media (max-width: 950px) and (orientation: landscape) {
-      main {
-        padding: 14px 12px;
-      }
-
-      .dashboard-container {
-        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-        gap: 18px;
-        align-items: stretch;
-      }
-
-      .saldo-card {
-        padding: 22px 18px;
-      }
-
-      .saldo-top {
-        flex-direction: row;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .saldo-box-dorado {
-        min-width: 0;
-      }
-
-      /* Conservamos el tamaño visual de PC; no reducimos la foto. */
-      .avatar-img {
-        width: 175px;
-        height: 175px;
-      }
-
-      .sub-card {
-        padding: 22px 18px;
-      }
-    }
-
-
   </style>
 </head>
 <body>
@@ -509,7 +302,7 @@
         <div class="saldo-top">
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.9rem; font-weight: 700;">LDS</span></h3>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.85rem; font-weight: 700;">LDS</span></h3>
           </div>
 
           <div class="avatar-container">
@@ -519,16 +312,16 @@
 
         <div class="alumno-info-box">
           <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-          <p class="alumno-grado"><span style="font-size: 1.3rem;">🎓</span> <span id="textoGradoSeccion">---</span></p>
+          <p class="alumno-grado"><span style="font-size: 1.1rem;">🎓</span> <span id="textoGradoSeccion">---</span></p>
         </div>
 
         <div class="actions-grid">
-          <button onclick="accionBotonPagar()" class="action-btn btn-pagar"><span style="font-size: 1.2rem;">💰</span> PAGAR / GASTOS</button>
-          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs"><span style="font-size: 1.2rem;">📊</span> MOVIMIENTOS</button>
+          <button onclick="accionBotonPagar()" class="action-btn btn-pagar"><span style="font-size: 1.1rem;">💰</span> PAGAR / GASTOS</button>
+          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs"><span style="font-size: 1.1rem;">📊</span> MOVIMIENTOS</button>
         </div>
       </div>
 
-      <!-- LADO DERECHO: PANELES COMPARTIDOS -->
+      <!-- LADO DERECHO: PANELES COMPARTIDOS (MÁS COMPACTOS) -->
       <div>
         <!-- FORMULARIO DE REGISTRO DE PAGO O GASTO -->
         <div id="seccionOperacion" class="sub-card hidden">
@@ -577,14 +370,14 @@
             <button onclick="registrarMovimientoOperacion()" class="btn-primary">
               CONFIRMAR Y REGISTRAR PAGO
             </button>
-            <div id="mensajeOperacion" style="font-size: 0.82rem; text-align: center; margin-top: 8px; min-height: 18px; font-weight: 800;"></div>
+            <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 6px; min-height: 16px; font-weight: 800;"></div>
           </div>
         </div>
 
-        <!-- HISTORIAL DE MOVIMIENTOS -->
+        <!-- HISTORIAL DE MOVIMIENTOS (REDUCIDO) -->
         <div id="seccionMovimientos" class="sub-card">
           <div class="print-header">
-            <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
               <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
               <div class="print-header-text">
                 <h2>BANCO LDS 360 - ESTADO DE CUENTA</h2>
@@ -600,7 +393,7 @@
             </button>
           </div>
           <div id="listaMovimientos" class="lista-movs">
-            <p style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</p>
+            <p style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</p>
           </div>
         </div>
 
@@ -617,7 +410,6 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
     let codigoEstudianteActual = "";
 
-    // SINTETIZADOR DE VOZ CON INDICACIONES DIDÁCTICAS
     function hablarTextoVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -648,7 +440,6 @@
       }
     }
 
-    // EFECTOS DE SONIDO DIDÁCTICOS (WEB AUDIO API SIN ARCHIVOS EXTERNOS)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function reproducirSonido(tipo) {
       try {
@@ -689,7 +480,6 @@
       }
     }
 
-    // COMUNICACIÓN JSONP RÁPIDA Y COMPATIBLE
     function hacerPeticionJSONP(parametros, callback) {
       const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
       let respuestaEnviada = false;
@@ -805,7 +595,6 @@
       window.print();
     }
 
-    // DETECCIÓN INTELIGENTE DE GÉNERO PARA SALUDOS CORRECTOS (BIENVENIDO / BIENVENIDA)
     function detectarGenero(est) {
       const generoCampo = String(est.genero || est.sexo || '').trim().toUpperCase();
       if (generoCampo.startsWith('F') || generoCampo === 'MUJER' || generoCampo === 'NIÑA') return 'F';
@@ -847,7 +636,6 @@
 
           renderizarMovimientos(movimientos);
 
-          // Sonido de éxito y saludo de voz adaptado por género
           reproducirSonido('exito');
           const genero = detectarGenero(est);
           const saludoTerm = genero === 'F' ? 'Bienvenida' : 'Bienvenido';
@@ -860,7 +648,7 @@
         document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
         document.getElementById('saldoLDS').textContent = "0.00";
         document.getElementById('alumnoFoto').src = 'https://via.placeholder.com/150';
-        document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</div>';
         hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
       });
     }
@@ -967,7 +755,7 @@
       contenedor.innerHTML = '';
 
       if (!Array.isArray(movimientos) || movimientos.length === 0) {
-        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 30px; font-size: 0.88rem;">SIN MOVIMIENTOS RECIENTES.</div>';
+        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</div>';
         return;
       }
 
@@ -978,13 +766,13 @@
         const fecha = mov.fechaTexto || mov.fecha || '';
 
         const fila = document.createElement('div');
-        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem;";
+        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem;";
 
         const signo = tipo === 'EGRESO' || tipo === 'GASTO' || tipo.includes('EGRESO') ? '-' : '+';
         fila.innerHTML = `
           <div style="display: flex; flex-direction: column;">
             <strong style="color: #0c1e30;">${concepto}</strong>
-            <span style="color: #64748b; font-size: 0.75rem;">${fecha}</span>
+            <span style="color: #64748b; font-size: 0.7rem;">${fecha}</span>
           </div>
           <div style="font-weight: 800; color: ${signo === '-' ? '#e11d48' : '#059669'};">
             ${signo} ${Math.abs(monto).toFixed(2)} LDS
