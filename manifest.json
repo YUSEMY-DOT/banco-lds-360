@@ -1,6 +1,6 @@
 {
-  "name": "KIDSWork LS",
-  "short_name": "Banco LS",
+  "name": "BANCO LDS 360",
+  "short_name": "BANCO LDS 360",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
