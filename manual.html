@@ -72,19 +72,15 @@ max-width:980px;
 margin:0 auto;
 display:flex;
 flex-direction:column;
-gap:3px;
+gap:1px;
 }
 
 .card{
 background:var(--blanco);
 border:1px solid var(--borde);
-border-radius:7px;
-padding:8px 10px;
-box-shadow:0 1px 4px rgba(15,23,42,.04);
-transition:
-box-shadow .5s ease,
-border-color .5s ease,
-transform .5s ease;
+border-radius:5px;
+padding:5px 7px;
+box-shadow:0 1px 3px rgba(15,23,42,.03);
 }
 
 .card h2{
@@ -176,24 +172,7 @@ color:var(--rojo);
 /* ILUMINACIÓN AUTOMÁTICA DEL NARRADOR */
 .card.narrando{
 border-color:var(--dorado);
-transform:translateY(-1px);
-box-shadow:
-0 0 0 2px rgba(200,169,81,.22),
-0 4px 14px rgba(18,60,105,.12);
-animation:brillo 1.4s ease-in-out infinite alternate;
-}
-
-@keyframes brillo{
-from{
-box-shadow:
-0 0 0 1px rgba(200,169,81,.18),
-0 3px 10px rgba(18,60,105,.08);
-}
-to{
-box-shadow:
-0 0 0 3px rgba(200,169,81,.30),
-0 5px 16px rgba(18,60,105,.14);
-}
+box-shadow:0 0 0 2px rgba(200,169,81,.18);
 }
 
 footer{
@@ -227,12 +206,12 @@ padding:4px 6px;
 }
 
 .container{
-gap:2px;
+gap:1px;
 }
 
 .card{
-padding:7px 8px;
-border-radius:6px;
+padding:5px 6px;
+border-radius:5px;
 }
 
 .card h2{
@@ -937,8 +916,8 @@ if(elemento){
 elemento.classList.add("narrando");
 
 elemento.scrollIntoView({
-behavior:"smooth",
-block:"center"
+behavior:"auto",
+block:"nearest"
 });
 
 }
@@ -946,7 +925,7 @@ block:"center"
 const vozTexto=new SpeechSynthesisUtterance(parte.texto);
 
 vozTexto.lang="es-PE";
-vozTexto.rate=.88;
+vozTexto.rate=1;
 vozTexto.pitch=1;
 vozTexto.volume=1;
 
@@ -957,12 +936,7 @@ vozTexto.voice=voz;
 vozTexto.onend=()=>{
 
 indice++;
-
-setTimeout(()=>{
-
 narrar();
-
-},350);
 
 };
 
@@ -988,7 +962,7 @@ setTimeout(()=>{
 
 narrar();
 
-},500);
+},100);
 
 }
 
@@ -998,7 +972,7 @@ setTimeout(()=>{
 
 iniciar();
 
-},900);
+},250);
 
 });
 
