@@ -1,4 +1,4 @@
-const CACHE_NAME = 'banco-lds-360-pwa-v3';
+const CACHE_NAME = 'banco-lds-360-pwa-v4';
 const APP_SHELL = [
   './',
   './index.html',
