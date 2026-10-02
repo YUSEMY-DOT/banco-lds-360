@@ -228,6 +228,44 @@ textarea { height: auto; padding: 10px 12px; }
   margin-top: 6px;
 }
 
+.admin-keys-box {
+  margin-top: 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 10px;
+  text-align: left;
+}
+
+.admin-keys-title {
+  color: var(--azul);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 7px;
+}
+
+.admin-keys-grid {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  padding: 5px 8px;
+  background: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.admin-key-row span { color: var(--texto); }
+.admin-key-row strong { color: var(--azul-claro); letter-spacing: 0.04em; }
+
 main {
   max-width: 1600px;
   width: 100%;
@@ -703,6 +741,17 @@ footer {
 
     <button class="primary-btn" type="button" onclick="validarAccesoDocente()">INGRESAR AL PANEL</button>
     <div id="adminError" class="error-msg"></div>
+
+    <div class="admin-keys-box">
+      <div class="admin-keys-title">🔐 LISTA DE INGRESO Y CLAVE</div>
+      <div class="admin-keys-grid">
+        <div class="admin-key-row"><span>MISS LILY</span><strong>360LDS@</strong></div>
+        <div class="admin-key-row"><span>MISS KIARA</span><strong>360LDS@</strong></div>
+        <div class="admin-key-row"><span>MISS ANGHY</span><strong>360LDS@</strong></div>
+        <div class="admin-key-row"><span>MISS KARIN</span><strong>360LDS@</strong></div>
+        <div class="admin-key-row"><span>MISTER ANDREW</span><strong>360LDS@</strong></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1134,7 +1183,7 @@ function validarAccesoDocente() {
     return;
   }
 
-  if (clave === "360LDS" || clave === "2026") {
+  if (clave === "360LDS@") {
     reproducirSonido('exito');
     const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
     sessionStorage.setItem("maestraActiva", nombreMaestra);
