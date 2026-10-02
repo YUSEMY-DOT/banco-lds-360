@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BANCO LDS 360</title>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-<style>*{box-sizing:border-box;}html,body{margin:0;padding:0;width:100%;min-height:100%;background:#061a32;}body{overflow-x:hidden;font-family:Arial,Helvetica,sans-serif;}.pantalla{position:relative;width:100%;max-width:1671px;margin:0 auto;aspect-ratio:1671 / 941;overflow:hidden;}.pantalla>img.fondo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:fill;user-select:none;-webkit-user-drag:none;}.zona{position:absolute;display:block;background:transparent;border:0;padding:0;margin:0;cursor:pointer;z-index:5;outline:none;}.zona:focus-visible{outline:3px solid rgba(255,255,255,.8);border-radius:20px;}.zona-qr{left:12.7%;top:63.6%;width:21.0%;height:10.7%;}.zona-codigo{left:54.5%;top:63.5%;width:16.1%;height:10.8%;}.zona-tienda{left:12.6%;top:75.9%;width:18.3%;height:11.9%;}.zona-padres{left:31.5%;top:75.8%;width:20.0%;height:11.9%;}.zona-manual{left:52.4%;top:75.8%;width:18.4%;height:11.9%;}.zona-admin{left:80.8%;top:1.8%;width:15.0%;height:6.0%;}#codigoManualModal{display:none;position:fixed;inset:0;background:radial-gradient(circle at 15% 20%,rgba(242,197,27,.18),transparent 22%),radial-gradient(circle at 85% 18%,rgba(181,18,47,.18),transparent 24%),rgba(3,20,43,.82);z-index:1100;align-items:center;justify-content:center;padding:18px;}.codigo-box{width:min(560px,94vw);background:linear-gradient(145deg,#ffffff 0%,#f7f9ff 100%);border:4px solid #082a55;border-radius:30px;padding:30px 32px 28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.48),0 0 0 7px rgba(243,197,27,.22);position:relative;overflow:hidden;}.codigo-box::before{content:'';position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,#082a55 0 38%,#f3c51b 38% 62%,#b5122f 62% 100%);}.codigo-insignia{display:block;width:92px;height:92px;object-fit:contain;margin:8px auto 12px;filter:drop-shadow(0 5px 8px rgba(8,42,85,.20));}.codigo-box h2{margin:0 0 6px;color:#082a55;font-size:1.75rem;font-weight:900;}.codigo-box p{margin:0 0 19px;color:#53657a;font-size:1rem;font-weight:600;}.campo-login{text-align:left;margin-top:13px;}.campo-login label{display:block;margin:0 0 7px 5px;color:#082a55;font-weight:900;font-size:.9rem;}#codigoManualInput,#claveManualInput{width:100%;height:52px;border:3px solid #246fd3;border-radius:15px;padding:0 15px;font-size:1.03rem;font-weight:700;outline:none;background:#ffffff;color:#102a43;transition:border-color .2s,box-shadow .2s,transform .2s;}#codigoManualInput:focus,#claveManualInput:focus{border-color:#f3c51b;box-shadow:0 0 0 4px rgba(243,197,27,.20);transform:translateY(-1px);}#codigoManualInput{text-transform:uppercase;}.codigo-actions{display:flex;gap:12px;margin-top:21px;}.codigo-actions button{flex:1;border:0;border-radius:15px;padding:14px 16px;font-weight:900;font-size:1rem;cursor:pointer;transition:transform .15s,filter .15s;}.codigo-actions button:hover{transform:translateY(-2px);filter:brightness(1.05);}.btn-codigo-aceptar{background:linear-gradient(135deg,#082a55,#1765b5);color:#fff;border:3px solid #f3c51b !important;}.btn-codigo-cancelar{background:#e8edf4;color:#18324d;border:2px solid #cbd5e1 !important;}@media (max-width:520px){.codigo-box{padding:27px 18px 22px;border-radius:24px;}.codigo-box h2{font-size:1.45rem;}.codigo-actions{flex-direction:column-reverse;}}#qrScannerModal{display:none;position:fixed;inset:0;background:rgba(6,26,50,.96);z-index:1000;align-items:center;justify-content:center;padding:20px;}.scanner-box{width:min(390px,94vw);background:#0c1e30;border:3px solid #f1c40f;border-radius:20px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.45);}#reader{width:100% !important;background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;}.btn-cerrar-camara{width:100%;border:0;border-radius:12px;padding:11px 20px;background:#e11d48;color:white;font-weight:700;cursor:pointer;}@media (max-width:900px){html,body{min-height:100dvh;}.pantalla{width:100%;max-width:1671px;min-width:0;}.codigo-box{width:min(560px,94vw);max-height:calc(100dvh - 24px);overflow-y:auto;}}@media (orientation:portrait) and (max-width:900px){.pantalla{width:100vw;height:auto;aspect-ratio:1671 / 941;}.zona{touch-action:manipulation;}}@media (orientation:landscape) and (max-width:900px){.pantalla{width:100vw;max-width:1671px;}.codigo-box{max-height:90dvh;}}@media (min-width:901px){.pantalla{width:min(100%,1671px);}}</style>
+<style>*{box-sizing:border-box;}html,body{margin:0;padding:0;width:100%;min-height:100%;background:#061a32;}body{overflow-x:hidden;font-family:Arial,Helvetica,sans-serif;}.pantalla{position:relative;width:100%;max-width:1671px;margin:0 auto;aspect-ratio:1671 / 941;overflow:hidden;}.pantalla>img.fondo{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:fill;user-select:none;-webkit-user-drag:none;}.zona{position:absolute;display:block;background:transparent;border:0;padding:0;margin:0;cursor:pointer;z-index:5;outline:none;}.zona:focus-visible{outline:3px solid rgba(255,255,255,.8);border-radius:20px;}.zona-qr{left:12.7%;top:63.6%;width:21.0%;height:10.7%;}.zona-codigo{left:54.5%;top:63.5%;width:16.1%;height:10.8%;}.zona-tienda{left:12.6%;top:75.9%;width:18.3%;height:11.9%;}.zona-padres{left:31.5%;top:75.8%;width:20.0%;height:11.9%;}.zona-manual{left:52.4%;top:75.8%;width:18.4%;height:11.9%;}.zona-admin{left:80.8%;top:1.8%;width:15.0%;height:6.0%;}#codigoManualModal{display:none;position:fixed;inset:0;background:radial-gradient(circle at 15% 20%,rgba(242,197,27,.18),transparent 22%),radial-gradient(circle at 85% 18%,rgba(181,18,47,.18),transparent 24%),rgba(3,20,43,.82);z-index:1100;align-items:center;justify-content:center;padding:18px;}.codigo-box{width:min(560px,94vw);background:linear-gradient(145deg,#ffffff 0%,#f7f9ff 100%);border:4px solid #082a55;border-radius:30px;padding:30px 32px 28px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.48),0 0 0 7px rgba(243,197,27,.22);position:relative;overflow:hidden;}.codigo-box::before{content:'';position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,#082a55 0 38%,#f3c51b 38% 62%,#b5122f 62% 100%);}.codigo-insignia{display:block;width:92px;height:92px;object-fit:contain;margin:8px auto 12px;filter:drop-shadow(0 5px 8px rgba(8,42,85,.20));}.codigo-box h2{margin:0 0 6px;color:#082a55;font-size:1.75rem;font-weight:900;}.codigo-box p{margin:0 0 19px;color:#53657a;font-size:1rem;font-weight:600;}.campo-login{text-align:left;margin-top:13px;}.campo-login label{display:block;margin:0 0 7px 5px;color:#082a55;font-weight:900;font-size:.9rem;}#codigoManualInput,#claveManualInput{width:100%;height:52px;border:3px solid #246fd3;border-radius:15px;padding:0 15px;font-size:1.03rem;font-weight:700;outline:none;background:#ffffff;color:#102a43;transition:border-color .2s,box-shadow .2s,transform .2s;}#codigoManualInput:focus,#claveManualInput:focus{border-color:#f3c51b;box-shadow:0 0 0 4px rgba(243,197,27,.20);transform:translateY(-1px);}#codigoManualInput{text-transform:uppercase;}.codigo-actions{display:flex;gap:12px;margin-top:21px;}.codigo-actions button{flex:1;border:0;border-radius:15px;padding:14px 16px;font-weight:900;font-size:1rem;cursor:pointer;transition:transform .15s,filter .15s;}.codigo-actions button:hover{transform:translateY(-2px);filter:brightness(1.05);}.btn-codigo-aceptar{background:linear-gradient(135deg,#082a55,#1765b5);color:#fff;border:3px solid #f3c51b !important;}.btn-codigo-cancelar{background:#e8edf4;color:#18324d;border:2px solid #cbd5e1 !important;}@media (max-width:520px){.codigo-box{padding:27px 18px 22px;border-radius:24px;}.codigo-box h2{font-size:1.45rem;}.codigo-actions{flex-direction:column-reverse;}}#qrScannerModal{display:none;position:fixed;inset:0;background:rgba(6,26,50,.96);z-index:1000;align-items:center;justify-content:center;padding:20px;}.scanner-box{width:min(390px,94vw);background:#0c1e30;border:3px solid #f1c40f;border-radius:20px;padding:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.45);}#reader{width:100% !important;background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;}.btn-cerrar-camara{width:100%;border:0;border-radius:12px;padding:11px 20px;background:#e11d48;color:white;font-weight:700;cursor:pointer;}@media (max-width:900px){html,body{min-height:100dvh;}.pantalla{width:100%;max-width:1671px;min-width:0;}.codigo-box{width:min(560px,94vw);max-height:calc(100dvh - 24px);overflow-y:auto;}}@media (orientation:portrait) and (max-width:900px){html,body{overflow-x:hidden;} .pantalla{width:135vw;max-width:none;height:auto;aspect-ratio:1671 / 941;margin-left:-17.5vw;} .zona{touch-action:manipulation;}}@media (orientation:landscape) and (max-width:900px){.pantalla{width:100vw;max-width:1671px;}.codigo-box{max-height:90dvh;}}@media (min-width:901px){.pantalla{width:min(100%,1671px);}}#botonInstalar{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;max-width:calc(100vw - 32px);padding:11px 20px;border:2px solid #f3c51b;border-radius:16px;background:linear-gradient(135deg,#082a55,#1765b5);color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:900;letter-spacing:.2px;cursor:pointer;box-shadow:0 6px 18px rgba(8,42,85,.28);touch-action:manipulation;}#botonInstalar:hover{filter:brightness(1.06);transform:translateY(-1px);}#botonInstalar:active{transform:translateY(0);}#contenedorInstalacion.instalada{display:none !important;}#botonAudioInstitucional{display:none !important;}@media(max-width:600px){#contenedorInstalacion{padding:12px 10px 6px;}#botonInstalar{width:100%;max-width:420px;font-size:14px;padding:11px 14px;border-radius:14px;}}</style>
 </head>
 <body>
 <div class="pantalla">
@@ -21,6 +21,13 @@
     <a class="zona zona-padres" href="padres.html" aria-label="Padres"></a>
     <a class="zona zona-manual" href="manual.html" aria-label="Manual del sistema"></a>
     <a class="zona zona-admin" href="administrador.html" aria-label="Administrador"></a>
+</div>
+
+<!-- BOTÓN DE INSTALACIÓN DE BANCO LDS 360: visible hasta instalar la app. -->
+<div id="contenedorInstalacion" style="display:flex;justify-content:center;align-items:center;padding:14px 12px 4px;width:100%;">
+  <button id="botonInstalar" type="button" aria-label="Instalar BANCO LDS 360">
+    📲 INSTALAR BANCO LDS 360
+  </button>
 </div>
 <div id="codigoManualModal" onclick="cerrarCodigoManualSiFondo(event)">
     <div class="codigo-box">
@@ -423,37 +430,8 @@ function cerrarCamaraQR() {
       );
     }
   }
+  // La presentación institucional se inicia con la primera interacción del usuario.
 
-  // Botón de respaldo: NO sustituye los botones originales; solo asegura que el usuario
-  // pueda activar el audio si el navegador bloquea la reproducción automática.
-  function crearBotonAudio(){
-    if(document.getElementById('botonAudioInstitucional')) return;
-    const b=document.createElement('button');
-    b.id='botonAudioInstitucional';
-    b.type='button';
-    b.textContent='🔊 Iniciar presentación';
-    b.setAttribute('aria-label','Iniciar presentación institucional con campanilla, voz y himno');
-    Object.assign(b.style,{
-      position:'fixed',right:'14px',bottom:'14px',zIndex:'99999',
-      padding:'10px 16px',border:'0',borderRadius:'999px',
-      background:'#061a32',color:'#fff',fontWeight:'700',fontSize:'14px',
-      cursor:'pointer',boxShadow:'0 4px 14px rgba(0,0,0,.35)'
-    });
-    b.addEventListener('click',()=>{
-      if('speechSynthesis' in window) speechSynthesis.cancel();
-      iniciado=false;
-      iniciarSecuenciaInstitucional();
-      b.remove();
-    });
-    document.body.appendChild(b);
-  }
-
-  window.addEventListener('load',()=>{
-    crearBotonAudio();
-    // En PC se intenta iniciar automáticamente; si el navegador lo bloquea,
-    // queda el botón visible para activarlo manualmente.
-    setTimeout(()=>iniciarSecuenciaInstitucional(),450);
-  });
 
   // En celular/tablet el primer toque/clic también activa la presentación.
   ['touchstart','pointerdown','click'].forEach(evt=>{
@@ -464,98 +442,70 @@ function cerrarCamaraQR() {
 })();
 </script>
 
-
-<!-- BOTÓN PWA: solo aparece mientras la app no está instalada -->
-<button id="botonInstalar" type="button" aria-label="Instalar BANCO LDS 360"
-  style="position:fixed;right:18px;bottom:18px;z-index:1200;display:flex;align-items:center;gap:10px;
-  border:2px solid #f3c51b;border-radius:18px;padding:10px 16px;background:linear-gradient(135deg,#082a55,#1765b5);
-  color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.28);font:800 14px/1 Arial,Helvetica,sans-serif;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;">
-  <img src="logo.png" alt="" style="width:34px;height:34px;object-fit:contain;border-radius:8px;background:#fff;">
-  <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
-    <span style="font-size:11px;letter-spacing:.3px;opacity:.9;">DESCARGA</span>
-    <span style="font-size:14px;">BANCO LDS 360</span>
-  </span>
-</button>
-
 </body>
 <script>
-  (() => {
-    const botonInstalar = document.getElementById('botonInstalar');
-    let promptInstalacion = null;
+  // REGISTRO DEL SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
 
-    if (!botonInstalar) return;
+  // INSTALACIÓN DE BANCO LDS 360
+  let promptInstalacion = null;
+  const botonInstalar = document.getElementById('botonInstalar');
+  const contenedorInstalacion = document.getElementById('contenedorInstalacion');
 
-    function appYaInstalada() {
-      return window.matchMedia('(display-mode: standalone)').matches ||
-             window.navigator.standalone === true ||
-             localStorage.getItem('BANCO_LDS_360_INSTALADA') === '1';
+  function appYaInstalada() {
+    return window.matchMedia && window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true ||
+           localStorage.getItem('LDS360_APP_INSTALADA') === '1';
+  }
+
+  function actualizarBotonInstalacion() {
+    if (!botonInstalar || !contenedorInstalacion) return;
+    if (appYaInstalada()) {
+      contenedorInstalacion.classList.add('instalada');
+    } else {
+      contenedorInstalacion.classList.remove('instalada');
     }
+  }
 
-    function ocultarBotonInstalar() {
-      botonInstalar.style.display = 'none';
-    }
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    promptInstalacion = e;
+    actualizarBotonInstalacion();
+  });
 
-    function mostrarBotonInstalar() {
-      if (!appYaInstalada()) {
-        botonInstalar.style.display = 'flex';
-      }
-    }
-
-    // El portal conserva el Service Worker existente.
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
-    }
-
-    // El botón queda visible desde el inicio cuando aún no está instalada.
-    mostrarBotonInstalar();
-
-    // Android/Chrome y navegadores compatibles entregan aquí el aviso nativo.
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      promptInstalacion = e;
-      mostrarBotonInstalar();
-    });
-
+  if (botonInstalar) {
     botonInstalar.addEventListener('click', async () => {
-      if (appYaInstalada()) {
-        ocultarBotonInstalar();
-        return;
-      }
-
       if (promptInstalacion) {
         promptInstalacion.prompt();
-
         try {
           const { outcome } = await promptInstalacion.userChoice;
           if (outcome === 'accepted') {
-            localStorage.setItem('BANCO_LDS_360_INSTALADA', '1');
-            ocultarBotonInstalar();
+            localStorage.setItem('LDS360_APP_INSTALADA', '1');
+            actualizarBotonInstalacion();
           }
         } catch (_) {}
-
         promptInstalacion = null;
         return;
       }
 
-      // En iPhone/iPad, el navegador no ofrece el aviso automático.
-      alert(
-        'Para instalar BANCO LDS 360 en este dispositivo:\\n\\n' +
-        '1. Pulsa Compartir.\\n' +
-        '2. Elige “Añadir a pantalla de inicio”.\\n' +
-        '3. Confirma “Añadir”.'
-      );
+      // iPhone/iPad y otros navegadores sin aviso automático.
+      const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      if (esIOS) {
+        alert('Para instalar BANCO LDS 360: pulsa Compartir y luego “Añadir a pantalla de inicio”.');
+      } else {
+        alert('Para instalar BANCO LDS 360, abre el menú del navegador y selecciona “Instalar app” o “Añadir a pantalla de inicio”.');
+      }
     });
+  }
 
-    // Ocultar definitivamente el botón cuando la instalación termine.
-    window.addEventListener('appinstalled', () => {
-      localStorage.setItem('BANCO_LDS_360_INSTALADA', '1');
-      ocultarBotonInstalar();
-      promptInstalacion = null;
-    });
+  window.addEventListener('appinstalled', () => {
+    localStorage.setItem('LDS360_APP_INSTALADA', '1');
+    promptInstalacion = null;
+    actualizarBotonInstalacion();
+  });
 
-    // Si ya se abrió como aplicación instalada, no mostrar el botón.
-    if (appYaInstalada()) ocultarBotonInstalar();
-  })();
+  actualizarBotonInstalacion();
 </script>
 </html>
