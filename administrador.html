@@ -296,15 +296,36 @@ main {
 .stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
 .stat-pill strong { font-size: 0.9rem; color: #ffffff; font-weight: 800; }
 
-/* LAYOUT ADAPTABLE: 1 columna en celular/tablet, 2 columnas en pantallas grandes */
+/* DISTRIBUCIÓN PRINCIPAL:
+   PC: consulta a la izquierda y pago/incidencias juntos a la derecha.
+   Tablet/celular: una sola columna para evitar desbordes. */
 .layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
   width: 100%;
+  align-items: start;
 }
+
+.right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  min-width: 0;
+  align-self: start;
+}
+
+.right-stack .panel {
+  width: 100%;
+  margin-bottom: 0;
+  height: auto;
+}
+
 @media(min-width: 1100px) {
-  .layout { grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr); }
+  .layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+  }
 }
 
 .panel {
@@ -798,6 +819,8 @@ footer {
       </div>
     </div>
 
+    <div class="right-stack">
+
     <!-- PANEL DE PAGO / TRANSACCIÓN -->
     <div id="panelPago" class="panel collapsed">
       <div class="panel-head clickable" onclick="togglePanel('panelPago')">
@@ -863,6 +886,7 @@ footer {
         </div>
         <div id="listaIncidencias" class="incident-list"></div>
       </div>
+    </div>
     </div>
   </section>
 </main>
