@@ -1,108 +1,64 @@
-<!-- SCRIPT PARA INTEGRAR EL HIMNO Y LA VOZ SIN MODIFICAR TU DISEÑO -->
-<script>
-  let audioCtx = null;
-  let iniciado = false;
-
-  const FREQS = {
-    "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23,
-    "G4": 392.00, "A4": 440.00, "B4": 493.88, "C5": 523.25
-  };
-
-  const llamadaAtencion = [
-    { n: "C4", d: 0.3 }, { n: "E4", d: 0.3 }, { n: "G4", d: 0.5 }, { n: "C5", d: 0.8 }
-  ];
-
-  const himnoMelodia = [
-    { n: "C4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.7 },
-    { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.7 }, { n: "C4", d: 0.7 },
-    { n: "D4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "A4", d: 0.7 }, { n: "A4", d: 0.7 },
-    { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 }, { n: "D4", d: 0.7 },
-    { n: "E4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "G4", d: 0.7 }, { n: "G4", d: 0.4 }, { n: "C5", d: 0.7 }, { n: "C5", d: 0.7 },
-    { n: "B4", d: 0.4 }, { n: "A4", d: 0.4 }, { n: "G4", d: 0.4 }, { n: "F4", d: 0.4 }, { n: "E4", d: 0.7 },
-    { n: "D4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "F4", d: 0.7 }, { n: "F4", d: 0.7 },
-    { n: "F4", d: 0.4 }, { n: "E4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "D4", d: 0.4 }, { n: "C4", d: 1.5 }
-  ];
-
-  function sonarLira(ctx, freq, t, dur) {
-    if (!freq) return;
-    const osc1 = ctx.createOscillator();
-    const osc2 = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc1.type = 'sine';
-    osc2.type = 'sine';
-    osc1.frequency.setValueAtTime(freq, t);
-    osc2.frequency.setValueAtTime(freq * 2, t);
-    gain.gain.setValueAtTime(0.18, t);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur * 1.5);
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(ctx.destination);
-    osc1.start(t);
-    osc2.start(t);
-    osc1.stop(t + dur * 1.5);
-    osc2.stop(t + dur * 1.5);
-  }
-
-  function sonarTambor(ctx, t) {
-    const bufferSize = ctx.sampleRate * 0.04;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'highpass';
-    filter.frequency.value = 1800;
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.05, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    noise.start(t);
-  }
-
-  function reproducirMusicaCompleta(ctx) {
-    let t = ctx.currentTime + 0.1;
-    llamadaAtencion.forEach(item => {
-      const f = FREQS[item.n] || 261.63;
-      sonarLira(ctx, f, t, item.d);
-      sonarTambor(ctx, t);
-      t += item.d;
-    });
-    t += 0.2;
-    himnoMelodia.forEach(item => {
-      const f = FREQS[item.n] || 261.63;
-      sonarLira(ctx, f, t, item.d);
-      sonarTambor(ctx, t);
-      t += item.d;
-    });
-  }
-
-  async function iniciarSecuenciaInstitucional() {
-    if (iniciado) return;
-    iniciado = true;
-
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioCtx = new AudioContext();
-    if (audioCtx.state === 'suspended') {
-      await audioCtx.resume();
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IEP La Salle del Sur - Banco LDS 360</title>
+  <style>
+    /* Centrar todo y poner fondo negro a los bordes si sobra espacio */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    /* Contenedor principal con TU IMAGEN de fondo */
+    .app-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9; /* Mantiene la proporción de tu imagen */
+      background-image: url('467631ef-34e0-4918-9cf5-7dae2b730116.jpg');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
-    reproducirMusicaCompleta(audioCtx);
-
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const textoCompleto = "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.";
-      const vozInstitucional = new SpeechSynthesisUtterance(textoCompleto);
-      vozInstitucional.lang = 'es-PE';
-      vozInstitucional.rate = 0.88;
-      vozInstitucional.pitch = 0.95;
-      window.speechSynthesis.speak(vozInstitucional);
+    /* Clase para crear zonas donde los niños pueden hacer clic */
+    .zona-clic {
+      position: absolute;
+      cursor: pointer;
+      /* border: 2px solid red;  <-- Quita las barras inclinadas y asteriscos de esta línea si quieres ver unos cuadros rojos para ajustar la posición de los botones */
     }
-  }
 
-  // Se activa automáticamente al hacer clic en cualquier parte de tu portada original
-  document.addEventListener('touchstart', iniciarSecuenciaInstitucional, { once: true });
-  document.addEventListener('click', iniciarSecuenciaInstitucional, { once: true });
-</script>
+    /* Coordenadas aproximadas de tus botones reales */
+    .btn-qr { top: 69%; left: 12%; width: 22%; height: 10%; }
+    .btn-codigo { top: 69%; left: 54%; width: 22%; height: 10%; }
+    .btn-tienda { top: 83%; left: 12%; width: 18%; height: 10%; }
+    .btn-padres { top: 83%; left: 31%; width: 18%; height: 10%; }
+    .btn-manual { top: 83%; left: 52%; width: 18%; height: 10%; }
+    .btn-admin { top: 2%; left: 81%; width: 16%; height: 6%; }
+  </style>
+</head>
+<body>
+
+  <!-- TU VERDADERA PORTADA -->
+  <div class="app-container">
+    <!-- Botones transparentes superpuestos sobre tu imagen -->
+    <div class="zona-clic btn-qr" onclick="alert('Aquí se abrirá la cámara QR')"></div>
+    <div class="zona-clic btn-codigo" onclick="alert('Aquí se abrirá el teclado de código')"></div>
+    <div class="zona-clic btn-tienda" onclick="alert('Aquí se abrirá la Tienda escolar')"></div>
+    <div class="zona-clic btn-padres" onclick="alert('Aquí se abrirá el área de Padres')"></div>
+    <div class="zona-clic btn-manual" onclick="alert('Aquí se abrirá el Manual')"></div>
+    <div class="zona-clic btn-admin" onclick="alert('Acceso de Administrador')"></div>
+  </div>
+
+  <!-- Aquí abajo puedes pegar el código <script> de la música y voz que te pasé antes -->
+
+</body>
+</html>
