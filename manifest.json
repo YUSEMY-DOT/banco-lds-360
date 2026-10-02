@@ -1,16 +1,9 @@
 {
-  "id": "./",
-  "name": "BANCO LDS 360 - IEP LA SALLE DEL SUR",
+  "name": "BANCO LDS 360",
   "short_name": "BANCO LDS 360",
-  "description": "Sistema Financiero Educativo y de Convivencia Escolar - IEP La Salle del Sur.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["standalone"],
-  "orientation": "any",
-  "lang": "es-PE",
-  "dir": "ltr",
-  "prefer_related_applications": false,
   "background_color": "#061a32",
   "theme_color": "#061a32",
   "icons": [
