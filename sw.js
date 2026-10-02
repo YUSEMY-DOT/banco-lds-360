@@ -1,10 +1,12 @@
-const CACHE_NAME = 'banco-lds-360-pwa-v5';
+const CACHE_NAME = 'banco-lds-360-pwa-v7';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
+  './assets/icon-512-maskable.png',
+  './assets/splash-screen.webp',
 ];
 
 self.addEventListener('install', (event) => {
