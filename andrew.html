@@ -29,9 +29,10 @@ button,input,select,textarea{font:inherit}
   gap:clamp(24px,5vw,78px)!important;
   overflow:hidden!important;
   z-index:99999!important;
-  background:#061b3f url("assets/FONDO%20ANDREW.png?v=20261002-2") center center / 100% 100% no-repeat!important;
+  background:#061b3f center center / cover no-repeat!important;
 }
 
+#loginAndrew{background-color:#061b3f!important;}
 #loginAndrew::before{
   content:"";
   position:absolute;
@@ -56,6 +57,8 @@ button,input,select,textarea{font:inherit}
 
 #loginAndrew .andrew-login-photo img{
   display:block!important;
+  color:transparent!important;
+  font-size:0!important;
   width:100%!important;
   height:100%!important;
   object-fit:contain!important;
@@ -394,7 +397,7 @@ button{cursor:pointer;}
 
 <div id="loginAndrew">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png?v=20261002-2" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -426,12 +429,24 @@ const MISES = {
 };
 
 const FOTO_ANDREW_CANDIDATAS = [
-  "assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png?v=20261002-2"
+  "MISTER_ANDREW_TRANSPARENTE_NUEVA.png",
+  "ANDREW_TRANSPARENTE_FINAL.png",
+  "ANDREW_TRANSPARENTE.png",
+  "Andrew.png",
+  "ANDREW.png",
+  "Andrew.jpg",
+  "ANDREW.jpg",
+  "MISTER ANDREW(2).png",
+  "MISTER ANDREW.png"
 ];
 
 /* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
 const INSIGNIA_CANDIDATAS = [
-  "assets/insignia-real.png?v=20261002-2"
+  "insignia-real.png",
+  "insignia.png",
+  "insignia.jpg",
+  "Insignia.png",
+  "INSIGNIA.png"
 ];
 
 function urlFotoDrive(url){
@@ -499,28 +514,44 @@ function entrarAndrew(){
   cargarTodo();
 }
 
+function assetUrl(nombre){
+  return new URL("assets/" + encodeURIComponent(nombre), window.location.href).href;
+}
+
 function cargarInsignia(){
   const logo=document.getElementById("logoAndrew");
   if(!logo)return;
   let i=0;
-  logo.onerror=()=>{
-    i++;
-    if(i<INSIGNIA_CANDIDATAS.length) logo.src=INSIGNIA_CANDIDATAS[i];
+  const probar=()=>{
+    if(i>=INSIGNIA_CANDIDATAS.length){ logo.style.display="none"; return; }
+    const src=assetUrl(INSIGNIA_CANDIDATAS[i]);
+    const prueba=new Image();
+    prueba.onload=()=>{ logo.src=src; logo.style.display="block"; };
+    prueba.onerror=()=>{ i++; probar(); };
+    prueba.src=src;
   };
-  logo.src=INSIGNIA_CANDIDATAS[0];
+  probar();
 }
 
 function cargarFoto(){
   const ponerFoto=(img,ph,lista)=>{
+    if(!img)return;
     let i=0;
     img.style.display="none";
-    ph.style.display="grid";
-    img.onload=()=>{img.style.display="block";ph.style.display="none";};
-    img.onerror=()=>{
-      i++;
-      if(i<lista.length){ img.src=lista[i]; }
+    if(ph)ph.style.display="grid";
+    const probar=()=>{
+      if(i>=lista.length){ return; }
+      const src=assetUrl(lista[i]);
+      const prueba=new Image();
+      prueba.onload=()=>{
+        img.src=src;
+        img.style.display="block";
+        if(ph)ph.style.display="none";
+      };
+      prueba.onerror=()=>{ i++; probar(); };
+      prueba.src=src;
     };
-    img.src=lista[0];
+    probar();
   };
   ["andrewFoto","fotoCuenta"].forEach(id=>{
     const img=document.getElementById(id);
@@ -530,9 +561,15 @@ function cargarFoto(){
   const loginImg=document.getElementById("andrewLoginFoto");
   if(loginImg){
     let i=0;
-    loginImg.onload=()=>loginImg.style.display="block";
-    loginImg.onerror=()=>{i++; if(i<FOTO_ANDREW_CANDIDATAS.length) loginImg.src=FOTO_ANDREW_CANDIDATAS[i];};
-    loginImg.src=FOTO_ANDREW_CANDIDATAS[0];
+    const probar=()=>{
+      if(i>=FOTO_ANDREW_CANDIDATAS.length){ loginImg.style.display="none"; return; }
+      const src=assetUrl(FOTO_ANDREW_CANDIDATAS[i]);
+      const prueba=new Image();
+      prueba.onload=()=>{ loginImg.src=src; loginImg.style.display="block"; };
+      prueba.onerror=()=>{ i++; probar(); };
+      prueba.src=src;
+    };
+    probar();
   }
 }
 
