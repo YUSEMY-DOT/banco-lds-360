@@ -1,4 +1,8 @@
-/* BANCO LDS 360 - NOTIFICACIONES */
+/* =========================================================
+   BANCO LDS 360
+   NOTIFICACIONES
+   Todo el sistema de notificaciones en este archivo.
+   ========================================================= */
 
 (() => {
   "use strict";
@@ -7,12 +11,17 @@
     nombre: "BANCO LDS 360",
     rutaBase: "/banco-lds-360/",
     serviceWorker: "/banco-lds-360/sw.js",
-    icono: "/banco-lds-360/assets/insignia.png"
+    icono: "/banco-lds-360/assets/insignia.png",
+    badge: "/banco-lds-360/assets/icon-192.png"
   });
 
   const NotificacionesLDS = {
 
     config: CONFIG,
+
+    /* =========================
+       ESTADO
+       ========================= */
 
     soportado() {
       return (
@@ -29,7 +38,21 @@
       return Notification.permission;
     },
 
-    async pedirPermiso() {
+    estado() {
+      return {
+        soportado: this.soportado(),
+        permiso: this.permiso(),
+        serviceWorker: "serviceWorker" in navigator,
+        seguro: window.isSecureContext === true
+      };
+    },
+
+    /* =========================
+       PERMISO
+       ========================= */
+
+    async solicitarPermiso() {
+
       if (!("Notification" in window)) {
         return "unsupported";
       }
@@ -49,41 +72,79 @@
           "BANCO LDS 360 - Error solicitando permiso:",
           error
         );
+
         return "error";
       }
     },
 
-    async registrarServiceWorker() {
+    /* =========================
+       SERVICE WORKER
+       ========================= */
+
+    async registrar() {
+
       if (!("serviceWorker" in navigator)) {
         return null;
       }
 
       try {
-        const registro = await navigator.serviceWorker.register(
-          CONFIG.serviceWorker,
-          {
-            scope: CONFIG.rutaBase
-          }
-        );
+
+        const registro =
+          await navigator.serviceWorker.register(
+            CONFIG.serviceWorker,
+            {
+              scope: CONFIG.rutaBase
+            }
+          );
 
         return registro;
 
       } catch (error) {
+
         console.error(
-          "BANCO LDS 360 - Error registrando sw.js:",
+          "BANCO LDS 360 - Error registrando Service Worker:",
           error
         );
+
         return null;
       }
     },
 
-    async mostrar({
-      titulo = CONFIG.nombre,
-      mensaje = "",
-      tag = "lds360",
-      url = CONFIG.rutaBase,
-      datos = {}
-    } = {}) {
+    async obtenerRegistro() {
+
+      if (!("serviceWorker" in navigator)) {
+        return null;
+      }
+
+      try {
+
+        let registro =
+          await navigator.serviceWorker.getRegistration(
+            CONFIG.rutaBase
+          );
+
+        if (!registro) {
+          registro = await this.registrar();
+        }
+
+        return registro;
+
+      } catch (error) {
+
+        console.error(
+          "BANCO LDS 360 - Error obteniendo Service Worker:",
+          error
+        );
+
+        return null;
+      }
+    },
+
+    /* =========================
+       MOSTRAR NOTIFICACIÓN
+       ========================= */
+
+    async mostrar(opciones = {}) {
 
       if (!("Notification" in window)) {
         return {
@@ -100,46 +161,61 @@
         };
       }
 
+      const registro =
+        await this.obtenerRegistro();
+
+      if (!registro) {
+        return {
+          ok: false,
+          motivo: "service-worker-no-disponible"
+        };
+      }
+
+      const titulo =
+        opciones.titulo ||
+        CONFIG.nombre;
+
+      const mensaje =
+        opciones.mensaje ||
+        "";
+
+      const tag =
+        opciones.tag ||
+        "lds360-notificacion";
+
+      const url =
+        opciones.url ||
+        CONFIG.rutaBase;
+
+      const datos =
+        opciones.datos ||
+        {};
+
       try {
-        let registro =
-          await navigator.serviceWorker.getRegistration(
-            CONFIG.rutaBase
-          );
-
-        if (!registro) {
-          registro = await this.registrarServiceWorker();
-        }
-
-        if (!registro) {
-          return {
-            ok: false,
-            motivo: "service-worker-no-disponible"
-          };
-        }
-
-        const icono =
-          new URL(
-            CONFIG.icono,
-            window.location.origin
-          ).href;
-
-        const destino =
-          new URL(
-            url,
-            window.location.origin
-          ).href;
 
         await registro.showNotification(
           titulo,
           {
             body: mensaje,
-            icon: icono,
-            badge: icono,
-            tag: tag,
+
+            icon:
+              opciones.icono ||
+              CONFIG.icono,
+
+            badge:
+              opciones.badge ||
+              CONFIG.badge,
+
+            tag,
+
             renotify: true,
+
+            requireInteraction:
+              opciones.requireInteraction === true,
+
             data: {
               ...datos,
-              url: destino
+              url
             }
           }
         );
@@ -149,6 +225,7 @@
         };
 
       } catch (error) {
+
         console.error(
           "BANCO LDS 360 - Error mostrando notificación:",
           error
@@ -156,13 +233,17 @@
 
         return {
           ok: false,
-          motivo: "error",
-          error: String(error)
+          motivo: "error-notificacion"
         };
       }
     },
 
+    /* =========================
+       MENSAJE GENERAL
+       ========================= */
+
     async mensaje(titulo, mensaje, opciones = {}) {
+
       return await this.mostrar({
         ...opciones,
         titulo,
@@ -170,35 +251,39 @@
       });
     },
 
-    async movimiento(movimiento = {}) {
+    /* =========================
+       MOVIMIENTO
+       ========================= */
+
+    async movimiento(datos = {}) {
 
       const tipo =
-        String(movimiento.tipo || "").toUpperCase();
+        String(datos.tipo || "").toUpperCase();
 
       const concepto =
-        movimiento.concepto ||
+        datos.concepto ||
         "Movimiento registrado";
 
       const codigo =
-        movimiento.codigo ||
+        datos.codigo ||
         "";
 
       const monto =
-        Number(movimiento.monto || 0);
+        Number(datos.monto || 0);
 
       const anio =
-        movimiento.anio ||
+        datos.anio ||
         new Date().getFullYear();
 
       let titulo =
-        "BANCO LDS 360";
+        "🔔 BANCO LDS 360";
 
       if (tipo === "INGRESO") {
-        titulo = "💰 Ingreso registrado";
+        titulo = "💰 BANCO LDS 360 - INGRESO";
       }
 
       if (tipo === "EGRESO") {
-        titulo = "💳 Egreso registrado";
+        titulo = "💳 BANCO LDS 360 - EGRESO";
       }
 
       const textoMonto =
@@ -210,13 +295,19 @@
         concepto,
         textoMonto,
         codigo,
-        String(anio)
+        anio
       ].filter(Boolean);
 
       return await this.mostrar({
+
         titulo,
-        mensaje: partes.join(" · "),
-        tag: `lds360-movimiento-${codigo || "general"}`,
+
+        mensaje:
+          partes.join(" · "),
+
+        tag:
+          `lds360-movimiento-${codigo || "general"}`,
+
         datos: {
           tipo,
           concepto,
@@ -227,24 +318,44 @@
       });
     },
 
-    async estado() {
-      let registro = null;
+    /* =========================
+       PRUEBA
+       ========================= */
 
-      if ("serviceWorker" in navigator) {
-        registro =
-          await navigator.serviceWorker.getRegistration(
-            CONFIG.rutaBase
-          );
+    async prueba() {
+
+      const permiso =
+        await this.solicitarPermiso();
+
+      if (permiso !== "granted") {
+        return {
+          ok: false,
+          permiso
+        };
       }
 
-      return {
-        soporte: this.soportado(),
-        permiso: this.permiso(),
-        serviceWorker: !!registro
-      };
+      return await this.mostrar({
+
+        titulo:
+          "🔔 BANCO LDS 360",
+
+        mensaje:
+          "Notificación de prueba funcionando correctamente.",
+
+        tag:
+          "lds360-prueba",
+
+        requireInteraction:
+          true,
+
+        datos: {
+          tipo: "PRUEBA"
+        }
+      });
     }
   };
 
-  window.NotificacionesLDS = NotificacionesLDS;
+  window.NotificacionesLDS =
+    NotificacionesLDS;
 
 })();
