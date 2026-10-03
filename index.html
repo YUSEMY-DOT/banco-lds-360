@@ -94,7 +94,7 @@ padding:5px 7px;
 </div>
 
 <!-- BOTÓN DE INSTALACIÓN DE BANCO LDS 360: visible hasta instalar la app. -->
-<div id="contenedorInstalacion" style="display:flex;justify-content:center;align-items:center;padding:14px 12px 4px;width:100%;">
+<div id="contenedorInstalacion" style="display:none;justify-content:center;align-items:center;padding:14px 12px 4px;width:100%;">
   <button id="botonInstalar" type="button" aria-label="Instalar BANCO LDS 360">
     📲 INSTALAR BANCO LDS 360
   </button>
@@ -577,63 +577,55 @@ function cerrarCamaraQR() {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  // INSTALACIÓN DE BANCO LDS 360
+  // INSTALACIÓN DE BANCO LDS 360 — RESTAURADA SIN AVISOS BLOQUEANTES
+  // Se usa exclusivamente el aviso nativo del navegador cuando está disponible.
   let promptInstalacion = null;
   const botonInstalar = document.getElementById('botonInstalar');
   const contenedorInstalacion = document.getElementById('contenedorInstalacion');
 
   function appYaInstalada() {
-    return window.matchMedia && window.matchMedia('(display-mode: standalone)').matches ||
-           window.navigator.standalone === true ||
-           localStorage.getItem('LDS360_APP_INSTALADA') === '1';
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+           window.navigator.standalone === true;
   }
 
   function actualizarBotonInstalacion() {
     if (!botonInstalar || !contenedorInstalacion) return;
-    if (appYaInstalada()) {
-      contenedorInstalacion.classList.add('instalada');
-    } else {
-      contenedorInstalacion.classList.remove('instalada');
-    }
+    contenedorInstalacion.classList.toggle('instalada', appYaInstalada());
   }
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     promptInstalacion = e;
+    // El botón aparece cuando el navegador confirma que puede instalar la PWA.
+    contenedorInstalacion.style.display = 'flex';
     actualizarBotonInstalacion();
   });
 
   if (botonInstalar) {
     botonInstalar.addEventListener('click', async () => {
-      if (promptInstalacion) {
-        promptInstalacion.prompt();
-        try {
-          const { outcome } = await promptInstalacion.userChoice;
-          if (outcome === 'accepted') {
-            localStorage.setItem('LDS360_APP_INSTALADA', '1');
-            actualizarBotonInstalacion();
-          }
-        } catch (_) {}
-        promptInstalacion = null;
+      if (!promptInstalacion) {
+        // No mostramos alertas. El navegador puede requerir su menú nativo de instalación.
         return;
       }
 
-      // iPhone/iPad y otros navegadores sin aviso automático.
-      const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      if (esIOS) {
-        alert('Para instalar BANCO LDS 360: pulsa Compartir y luego “Añadir a pantalla de inicio”.');
-      } else {
-        alert('Para instalar BANCO LDS 360, abre el menú del navegador y selecciona “Instalar app” o “Añadir a pantalla de inicio”.');
-      }
+      const evento = promptInstalacion;
+      promptInstalacion = null;
+
+      try {
+        evento.prompt();
+        await evento.userChoice;
+      } catch (_) {}
+
+      actualizarBotonInstalacion();
     });
   }
 
   window.addEventListener('appinstalled', () => {
-    localStorage.setItem('LDS360_APP_INSTALADA', '1');
     promptInstalacion = null;
     actualizarBotonInstalacion();
   });
 
+  // No marcamos la instalación con localStorage: solo el estado real del navegador.
   actualizarBotonInstalacion();
 </script>
 </html>
