@@ -769,6 +769,89 @@ footer {
 
 .type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
 .type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
+
+/* ==========================================================
+   SELECTOR VISUAL DE MISES Y CAJERO GENERAL
+   Se conserva el formato de fotos como botones.
+   ========================================================== */
+.mises-fotos-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+  margin:8px 0 10px;
+  width:100%;
+}
+.mise-foto-btn{
+  border:1.5px solid var(--borde);
+  border-radius:10px;
+  background:#f8fafc;
+  padding:7px 5px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  transition:all .2s ease;
+}
+.mise-foto-btn:hover,
+.mise-foto-btn.activa{
+  border-color:var(--dorado);
+  background:#fffaf0;
+  box-shadow:0 2px 8px rgba(0,0,0,.10);
+  transform:translateY(-1px);
+}
+.mise-foto-btn img{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--dorado);
+  background:#fff;
+}
+.mise-foto-btn span{
+  color:var(--azul);
+  font-size:.60rem;
+  line-height:1.15;
+  font-weight:800;
+  text-align:center;
+  word-break:break-word;
+}
+.mise-foto-btn.andrew-btn{
+  border-color:#1e3a8a;
+}
+.mise-foto-btn.andrew-btn img{
+  border-color:#1e3a8a;
+}
+.mise-foto-btn.andrew-btn.activa{
+  border-color:var(--dorado);
+}
+#docenteSelect{
+  display:none !important;
+}
+@media(max-width:700px){
+  .mises-fotos-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:500px){
+  .mises-fotos-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:7px;
+  }
+  .mise-foto-btn{
+    padding:8px 4px;
+  }
+  .mise-foto-btn img{
+    width:54px;
+    height:54px;
+  }
+  .mise-foto-btn span{
+    font-size:.62rem;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -797,8 +880,62 @@ footer {
     <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE.</p>
 
     <div class="form-group">
-      <label for="docenteSelect">DOCENTE / MAESTRA</label>
-      <select id="docenteSelect" class="input-field" onchange="anunciarSeleccion(this)">
+      <label>SELECCIONE SU CAJERA / CAJERO</label>
+
+      <div class="mises-fotos-grid" id="selectorCajerosVisual">
+
+        <button type="button"
+                class="mise-foto-btn"
+                data-mise="LILY"
+                onclick="seleccionarMiseVisual('LILY')">
+          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300"
+               alt="Miss Lily">
+          <span>MISS LILY</span>
+        </button>
+
+        <button type="button"
+                class="mise-foto-btn"
+                data-mise="KIARA"
+                onclick="seleccionarMiseVisual('KIARA')">
+          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300"
+               alt="Miss Kiara">
+          <span>MISS KIARA</span>
+        </button>
+
+        <button type="button"
+                class="mise-foto-btn"
+                data-mise="ANGHY"
+                onclick="seleccionarMiseVisual('ANGHY')">
+          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300"
+               alt="Miss Anghy">
+          <span>MISS ANGHY</span>
+        </button>
+
+        <button type="button"
+                class="mise-foto-btn"
+                data-mise="KARIN"
+                onclick="seleccionarMiseVisual('KARIN')">
+          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
+               alt="Miss Karin">
+          <span>MISS KARIN</span>
+        </button>
+
+        <button type="button"
+                class="mise-foto-btn andrew-btn"
+                data-mise="ANDREW"
+                onclick="seleccionarMiseVisual('ANDREW')">
+          <img src="https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300"
+               alt="Mister Andrew">
+          <span>MISTER ANDREW</span>
+        </button>
+
+      </div>
+
+      <select id="docenteSelect"
+              class="input-field"
+              onchange="anunciarSeleccion(this)"
+              aria-hidden="true"
+              tabindex="-1">
         <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
         <option value="LILY">MISS LILY MELO AZAÑERO</option>
         <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
@@ -1211,8 +1348,43 @@ function reproducirSonido(tipo) {
 
 function anunciarSeleccion(select) {
   reproducirSonido('clic');
-  const texto = select.options[select.selectedIndex].text;
+
+  const texto =
+    select.options[select.selectedIndex].text;
+
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    btn.classList.toggle(
+      'activa',
+      btn.dataset.mise === select.value
+    );
+  });
+
   hablarTextoVoz("Seleccionada: " + texto);
+}
+
+function seleccionarMiseVisual(valor) {
+  const select = document.getElementById("docenteSelect");
+  if (!select) return;
+
+  const opcion = Array.from(select.options)
+    .find(option => option.value === valor);
+
+  if (!opcion) return;
+
+  select.value = valor;
+
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    btn.classList.toggle(
+      'activa',
+      btn.dataset.mise === valor
+    );
+  });
+
+  reproducirSonido('clic');
+
+  hablarTextoVoz(
+    "Seleccionada: " + opcion.text
+  );
 }
 
 /*
@@ -1396,6 +1568,10 @@ function desbloquearPanel(nombreMaestra) {
 
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
+
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    btn.classList.remove('activa');
+  });
   sessionStorage.removeItem("responsableClave");
   sessionStorage.removeItem("esAndrew");
 
