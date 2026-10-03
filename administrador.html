@@ -1,2459 +1,2315 @@
-/**
- * BANCO LDS 360 — I.E.P. LA SALLE DEL SUR
- * BACKEND PRINCIPAL — Código.gs
- *
- * VERSIÓN SEGURA Y NO DESTRUCTIVA
- * - NO borra MOVIMIENTOS.
- * - NO reinicia el banco.
- * - NO elimina ESTUDIANTES.
- * - Reconoce CAJA-ANDREW aunque no exista como fila en ESTUDIANTES.
- * - Andrew = CAJERO GENERAL, fondo inicial S/180,000.
- * - Las 4| Mises tienen su propia caja y reciben únicamente transferencias
- *   o pagos que correspondan a su cuenta.
- * - Las operaciones se registran como movimientos pareados.
- * - Las anulaciones se realizan por reversión; nunca se borra el original.
- *
- * El administrador.html actual consume este backend mediante JSONP GET.
- */
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BANCO LDS 360 — Administración</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<style>
+:root {
+  --azul: #0c1e30;
+  --azul-claro: #1e3a8a;
+  --dorado: #f59e0b;
+  --fondo: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 50%, #0f172a 100%);
+  --blanco: #ffffff;
+  --texto: #1e293b;
+  --muted: #64748b;
+  --borde: #cbd5e1;
+  --verde: #059669;
+  --rojo: #e11d48;
+}
 
-const CONFIG = {
-  SPREADSHEET_ID: "1j0A6XtLbCXJLkVTBXRpK-GnV3QY4qYQ_SOReARpu9ag",
-  HOJA_ESTUDIANTES: "ESTUDIANTES",
-  HOJA_MOVIMIENTOS: "MOVIMIENTOS",
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+}
 
-  CLAVE_MISE: "360LDS@",
-  CLAVE_ANDREW: "360LDS@@@",
-  CLAVE_ADMINISTRADOR: "360LDS",
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
-  CODIGO_ANDREW: "CAJA-ANDREW",
-  NOMBRE_ANDREW: "MISTER ANDREW",
-  ROL_ANDREW: "CAJERO GENERAL",
-  TIPO_CUENTA_ANDREW: "CAJA_GENERAL",
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+  font-size: 13px;
+  line-height: 1.4;
+}
 
-  FONDO_INICIAL_ANDREW: 180000,
-  BONO_MENSUAL_ALUMNO: 1130,
+header {
+  background: #08121e;
+  color: #fff;
+  padding: 10px 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-bottom: 4px solid var(--dorado);
+  width: 100%;
+}
 
-  CUENTAS_MISES_LDS360: {
-    "MISS LILY MELO AZAÑERO": {
-      codigo: "CAJA-LILY",
-      nombre: "MISS LILY MELO AZAÑERO",
-      rol: "DOCENTE TUTORA CAJERA",
-      tipo: "CAJA_MISE"
-    },
-    "MISS KIARA MORALES ELGUERA": {
-      codigo: "CAJA-KIARA",
-      nombre: "MISS KIARA MORALES ELGUERA",
-      rol: "DOCENTE TUTORA CAJERA",
-      tipo: "CAJA_MISE"
-    },
-    "MISS ANGHY REYES MELO": {
-      codigo: "CAJA-ANGHY",
-      nombre: "MISS ANGHY REYES MELO",
-      rol: "DOCENTE TUTORA CAJERA",
-      tipo: "CAJA_MISE"
-    },
-    "MISS KARIN MOLERO ROMANI": {
-      codigo: "CAJA-KARIN",
-      nombre: "MISS KARIN MOLERO ROMANI",
-      rol: "DOCENTE TUTORA CAJERA",
-      tipo: "CAJA_MISE"
-    }
+.header-inner {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brand-mark img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.brand p {
+  margin: 0;
+  color: var(--dorado);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.btn {
+  border: 0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  min-height: 34px;
+}
+
+.btn-light {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--dorado);
+  color: #ffffff;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  border: 1px solid #fcd34d;
+}
+
+.btn-outline {
+  background: #ffffff;
+  border: 1.5px solid var(--borde);
+  color: var(--azul);
+}
+
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  padding: 15px;
+  width: 100%;
+}
+
+.login-card {
+  max-width: 400px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  border-top: 6px solid var(--dorado);
+}
+
+.card-insignia-container {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2.5px solid var(--dorado);
+  overflow: hidden;
+  padding: 3px;
+}
+
+.card-insignia { width: 100%; height: 100%; object-fit: contain; }
+
+.login-card h2 {
+  color: var(--azul);
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  font-weight: 800;
+}
+
+.login-card p {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--azul);
+  margin-bottom: 4px;
+}
+
+.input-field, input, textarea, select {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  outline: none;
+  background: #f8fafc;
+  color: var(--texto);
+  font-family: inherit;
+  font-weight: 700;
+}
+
+textarea { height: auto; padding: 10px 12px; }
+
+.input-field:focus, input:focus, textarea:focus, select:focus {
+  border-color: #0284c7;
+  background: #ffffff;
+}
+
+.primary-btn {
+  width: 100%;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.error-msg {
+  color: var(--rojo);
+  font-size: 0.75rem;
+  min-height: 16px;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+.admin-keys-box {
+  margin-top: 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 10px;
+  text-align: left;
+}
+
+.admin-keys-title {
+  color: var(--azul);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 7px;
+}
+
+.admin-keys-grid {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  padding: 5px 8px;
+  background: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.admin-key-row span { color: var(--texto); }
+.admin-key-row strong { color: var(--azul-claro); letter-spacing: 0.04em; }
+
+main {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 15px;
+  display: none;
+}
+
+.admin-profile-banner {
+  background: linear-gradient(145deg, #091628 0%, #050d18 100%);
+  border: 2px solid var(--dorado);
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.admin-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-avatar-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2.5px solid var(--dorado);
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.admin-avatar-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+.admin-avatar-placeholder { font-size: 22px; color: var(--azul); }
+
+.admin-text-details { min-width: 0; flex: 1; }
+.admin-text-details h3 { font-size: 0.95rem; color: #ffffff; font-weight: 800; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-text-details p { color: #fde68a; font-size: 0.65rem; font-weight: 700; margin: 0; }
+
+.admin-stats-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.stat-pill {
+  background: rgba(3, 8, 15, 0.85);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  padding: 6px 12px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
+.stat-pill strong { font-size: 0.9rem; color: #ffffff; font-weight: 800; }
+
+/* DISTRIBUCIÓN PRINCIPAL:
+   PC: consulta a la izquierda y pago/incidencias juntos a la derecha.
+   Tablet/celular: una sola columna para evitar desbordes. */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  width: 100%;
+  align-items: start;
+}
+
+.right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  min-width: 0;
+  align-self: start;
+}
+
+.right-stack .panel {
+  width: 100%;
+  margin-bottom: 0;
+  height: auto;
+}
+
+@media(min-width: 1100px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
   }
+}
+
+.panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.panel-head {
+  padding: 12px 18px;
+  border-bottom: 1.5px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f8fafc;
+  user-select: none;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.panel-head.clickable { cursor: pointer; }
+.panel-head.clickable:hover { background: #f1f5f9; }
+
+.panel-head h3 {
+  margin: 0;
+  color: var(--azul);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+}
+
+.toggle-icon {
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.panel.collapsed .panel-body { display: none; }
+.panel.collapsed .toggle-icon { transform: rotate(-90deg); }
+.panel.collapsed .panel-head { border-bottom: none; }
+
+.header-actions-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.header-actions-group select {
+  height: 34px;
+  font-size: 0.75rem;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: #ffffff;
+  font-weight: 800;
+  border: 1.5px solid var(--borde);
+  width: auto;
+}
+
+.header-actions-group .btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  min-height: 34px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.panel-body { 
+  padding: 18px;
+  width: 100%;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-row-ordered {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@media(min-width: 500px) {
+  .search-row-ordered { flex-wrap: nowrap; }
+}
+
+.btn-qr-custom {
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #ffffff;
+  border: 1.5px solid var(--dorado);
+  font-weight: 800;
+  padding: 0 14px;
+  height: 42px;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.btn-search-custom {
+  flex: 1;
+  height: 42px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+  padding: 0 10px;
+}
+
+.input-code-custom {
+  width: 120px;
+  height: 42px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  padding: 0 8px;
+  text-align: center;
+}
+@media(max-width: 500px) {
+  .input-code-custom { width: 100%; }
+}
+
+.small-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--azul);
+  margin: 8px 0 4px;
+  font-weight: 800;
+}
+
+.message {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  width: 100%;
+}
+.message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
+.message.error { display: block; background: #fef2f2; color: var(--rojo); border: 1px solid #fecaca; }
+
+.student-head {
+  display: none;
+  border: 1.5px solid var(--dorado);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 12px;
+  background: #f8fafc;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  width: 100%;
+}
+.student-head.show { display: flex; }
+@media(min-width: 550px) {
+  .student-head { flex-direction: row; text-align: left; }
+}
+
+.student-photo-wrap {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  min-height: 60px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #eaf0f6;
+  border: 2px solid var(--dorado);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.student-photo { width: 100%; height: 100%; object-fit: cover; display: none; }
+.student-photo-placeholder { font-size: 24px; color: #8aa0b7; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+
+.student-info-box { width: 100%; min-width: 0; }
+.student-name { font-size: 0.9rem; font-weight: 800; color: var(--azul); margin-bottom: 2px; word-break: break-word; }
+.student-meta { color: var(--muted); font-size: 0.7rem; font-weight: 700; word-break: break-word; }
+.saldo { font-size: 0.9rem; font-weight: 900; color: var(--verde); margin-top: 4px; background: #ecfdf5; padding: 3px 10px; border-radius: 6px; display: inline-block; border: 1px solid #a7f3d0; }
+
+/* TABLA CON LÍMITE DE 12 FILAS Y SCROLL VERTICAL/HORIZONTAL */
+.table-wrap {
+  width: 100%;
+  max-height: 480px;
+  overflow-y: auto;
+  overflow-x: auto;
+  margin-top: 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  min-width: 700px;
+}
+
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5eaf0;
+  text-align: left;
+  font-size: 0.78rem;
+  vertical-align: middle;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+th {
+  background: #f1f5f9;
+  color: var(--azul);
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+tr:last-child td { border-bottom: 0; }
+
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; display: inline-block; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #fecaca; display: inline-block; }
+.empty { text-align: center; color: var(--muted); padding: 20px; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+
+.incident-list { display: grid; gap: 6px; margin-top: 8px; width: 100%; }
+.incident { border: 1.5px solid var(--borde); border-radius: 8px; padding: 8px 10px; background: #fafcff; width: 100%; }
+.incident-top { display: flex; justify-content: space-between; gap: 6px; font-size: 0.78rem; margin-bottom: 3px; font-weight: 800; }
+.badge { padding: 1px 6px; border-radius: 999px; background: #fff7df; color: #7a5d00; border: 1px solid #ead28a; font-size: 0.6rem; font-weight: 800; }
+.incident small { color: var(--muted); display: block; margin-top: 2px; font-weight: 600; font-size: 0.7rem; }
+.danger { color: var(--rojo); font-weight: 800; }
+
+.qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(12, 30, 48, 0.88); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+.qr-modal-content { background: #ffffff; padding: 20px 15px; border-radius: 14px; max-width: 360px; width: 100%; text-align: center; border-top: 5px solid var(--dorado); }
+.qr-modal-content h3 { color: var(--azul); font-size: 0.95rem; margin-bottom: 10px; font-weight: 800; }
+#reader { width: 100%; border-radius: 8px; overflow: hidden; background: #000; min-height: 220px; border: 1.5px solid var(--dorado); }
+.close-qr-btn { margin-top: 12px; background: var(--rojo); color: #fff; border: 0; padding: 8px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; font-size: 0.8rem; }
+
+.print-only-header { display: none; }
+
+@media print {
+  body { background: #ffffff; color: #000000; }
+  header, .admin-profile-banner, .search-container, .panel-head div, .panel:has(#panelPago), .panel:has(#panelIncidencias), .btn, footer, .qr-modal, .student-head { display: none !important; }
+  main { display: block !important; padding: 0 !important; width: 100% !important; }
+  .panel { border: none !important; box-shadow: none !important; margin: 0 !important; }
+  .panel-body { padding: 0 !important; }
+
+  .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #000;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .print-institution-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .print-institution-top img { width: 40px; height: 40px; object-fit: contain; }
+  .print-institution-top h2 { font-size: 0.9rem; font-weight: 900; color: #000; }
+  .print-institution-top p { font-size: 0.7rem; font-weight: 800; color: #333; }
+
+  .print-entity-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid #000;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #f8fafc;
+    width: 100%;
+  }
+  .print-entity-box img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #000; }
+
+  .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 8px !important; max-height: none !important; overflow: visible !important; width: 100% !important; }
+  table { width: 100% !important; }
+  th { background: #e2e8f0 !important; color: #000 !important; position: static !important; -webkit-print-color-adjust: exact; }
+}
+
+footer {
+  text-align: center;
+  color: #cbd5e1;
+  padding: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 100%;
+}
+
+.type-selector-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.type-btn {
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  padding: 6px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: center;
+  background: #f8fafc;
+  color: var(--muted);
+  transition: all 0.2s;
+}
+
+.type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
+.type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+      </div>
+      <div>
+        <h1>BANCO LDS 360</h1>
+        <p>I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <a class="btn btn-light" href="./" onclick="reproducirSonido('clic'); hablarTextoVoz('Volviendo al inicio')">← INICIO</a>
+  </div>
+</header>
+
+<div id="loginView" class="login-wrapper">
+  <div class="login-card">
+    <div class="card-insignia-container">
+      <img src="assets/insignia.png" alt="Insignia" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
+    </div>
+    <h2>ACCESO ADMINISTRATIVO</h2>
+    <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE.</p>
+
+    <div class="form-group">
+      <label for="docenteSelect">DOCENTE / MAESTRA</label>
+      <select id="docenteSelect" class="input-field" onchange="anunciarSeleccion(this)">
+        <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
+        <option value="LILY">MISS LILY MELO AZAÑERO</option>
+        <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
+        <option value="ANGHY">MISS ANGHY REYES MELO</option>
+        <option value="KARIN">MISS KARIN MOLERO ROMANI</option>
+        <option value="ANDREW">MISTER ANDREW</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="claveDocente">CLAVE DE ACCESO DOCENTE</label>
+      <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
+    </div>
+
+    <button class="primary-btn" type="button" onclick="validarAccesoDocente()">INGRESAR AL PANEL</button>
+    <div id="adminError" class="error-msg"></div>
+
+  </div>
+</div>
+
+<main id="panelView">
+  <!-- BANNER DE LA MISSI ACTIVA -->
+  <div class="admin-profile-banner">
+    <div class="admin-profile-info">
+      <div class="admin-avatar-wrap">
+        <img id="missFoto" class="admin-avatar-img" src="" alt="Foto Miss">
+        <div id="missPlaceholder" class="admin-avatar-placeholder">👩‍🏫</div>
+      </div>
+      <div class="admin-text-details">
+        <p>DOCENTE TUTORA CAJERA ACTIVA</p>
+        <h3 id="maestraActivaNombre">—</h3>
+      </div>
+    </div>
+
+    <div class="admin-stats-box">
+      <div class="stat-pill">
+        <span>MOVIMIENTOS</span>
+        <strong id="contadorMovimientos">0</strong>
+      </div>
+      <div class="stat-pill">
+        <span>INCIDENCIAS</span>
+        <strong id="contadorIncidencias">0</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTRUCTURA PRINCIPAL ADAPTABLE -->
+  <section class="layout">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
+        <div class="header-actions-group">
+          <select id="selectAnioEscolar" onchange="cambiarAnioEscolar()">
+            <option value="2026" selected>AÑO 2026</option>
+            <option value="2027">AÑO 2027</option>
+            <option value="2028">AÑO 2028</option>
+            <option value="2029">AÑO 2029</option>
+            <option value="2030">AÑO 2030</option>
+          </select>
+          <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">👤 ALUMNO</button>
+          <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        
+        <div class="search-container">
+          <div>
+            <label class="small-label" for="codigo">CÓDIGO QR / ESTUDIANTE</label>
+            <div class="search-row-ordered">
+              <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+              <button class="btn btn-gold btn-search-custom" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
+              <input id="codigo" class="input-code-custom" placeholder="LDS-001" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div id="mensaje" class="message"></div>
+        
+        <div id="estudianteCard" class="student-head">
+          <div class="student-photo-wrap">
+            <img id="fotoEstudiante" class="student-photo" src="" alt="Foto">
+            <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
+          </div>
+          <div class="student-info-box">
+            <div id="nombre" class="student-name">—</div>
+            <div id="meta" class="student-meta">—</div>
+            <div id="saldo" class="saldo">0.00 LDS</div>
+          </div>
+        </div>
+
+        <div class="print-only-header">
+          <div class="print-institution-top">
+            <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+            <div>
+              <h2 id="printTituloReporte">I.E.P. LA SALLE DEL SUR — KIDSWork LS</h2>
+              <p>SISTEMA FINANCIERO ESCOLAR BANCO LDS 360 (<span id="printAnioLabel">2026</span>)</p>
+              <p style="font-size: 0.75rem; font-weight: 800; color: #333; margin-top: 4px;">DOCENTE RESPONSABLE: <span id="printNombreMiss">---</span></p>
+            </div>
+          </div>
+          
+          <div class="print-entity-box">
+            <img id="printFotoEntidad" src="" alt="Foto" onerror="this.style.display='none';">
+            <div>
+              <strong id="printNombreEntidad" style="font-size: 0.85rem; display: block; font-weight: 900;">---</strong>
+              <span id="printMetaEntidad" style="font-size: 0.75rem; color: #444; display: block; font-weight: 700;">---</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLA DE MOVIMIENTOS ADAPTABLE (MÁXIMO 12 FILAS VISIBLES CON SCROLL) -->
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>AÑO</th>
+                <th>TIMESTAMP</th>
+                <th>ESTUDIANTE</th>
+                <th>GRADO</th>
+                <th>TIPO</th>
+                <th>CONCEPTO</th>
+                <th>MONTO LDS</th>
+                <th>CAJERO(A)</th>
+                <th>OBSERVACIÓN</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMovimientos">
+              <tr><td colspan="9" class="empty">INGRESA UN CÓDIGO PARA CONSULTAR.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-stack">
+
+    <!-- PANEL DE PAGO / TRANSACCIÓN -->
+    <div id="panelPago" class="panel collapsed">
+      <div class="panel-head clickable" onclick="togglePanel('panelPago')">
+        <h3>💰 REGISTRAR PAGO / TRANSACCIÓN</h3>
+        <span class="toggle-icon">▼</span>
+      </div>
+      <div class="panel-body">
+        <label class="small-label">TIPO DE MOVIMIENTO</label>
+        <div class="type-selector-box">
+          <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
+          <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
+        </div>
+        <input type="hidden" id="pagoOperacionVal" value="INGRESO">
+
+        <label class="small-label" for="pagoCodigo">CÓDIGO DE ESTUDIANTE</label>
+        <input id="pagoCodigo" placeholder="LDS-EST-001" readonly style="background:#f1f5f9;">
+
+        <label class="small-label" for="pagoTipo">CATEGORÍA DE TRANSACCIÓN</label>
+        <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
+          <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
+          <option value="PREMIOS_Y_BONIFICACIONES" selected>PREMIOS Y BONIFICACIONES</option>
+          <option value="COSTOS_Y_OTROS">COSTOS Y OTROS</option>
+        </select>
+
+        <label class="small-label" for="pagoConcepto">CONCEPTO</label>
+        <select id="pagoConcepto"></select>
+
+        <label class="small-label" for="pagoMonto">MONTO LDS</label>
+        <input id="pagoMonto" type="number" step="0.5" min="0" placeholder="EJEMPLO: 50.00">
+
+        <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
+        <textarea id="pagoObs" rows="3" placeholder="MOTIVO O DETALLE..."></textarea>
+
+        <button class="btn btn-gold" style="width:100%;margin-top:15px;padding:12px;" type="button" onclick="procesarPagoEstudiante()">
+          💸 REGISTRAR TRANSACCIÓN
+        </button>
+        <div id="pagoMensaje" class="message"></div>
+      </div>
+    </div>
+
+    <!-- PANEL DE INCIDENCIAS -->
+    <div id="panelIncidencias" class="panel collapsed">
+      <div class="panel-head clickable" onclick="togglePanel('panelIncidencias')">
+        <h3>🛠 ATENCIÓN DE INCIDENCIAS</h3>
+        <span class="toggle-icon">▼</span>
+      </div>
+      <div class="panel-body">
+        <label class="small-label" for="incCodigo">CÓDIGO</label>
+        <input id="incCodigo" placeholder="LDS-EST-001">
+        <label class="small-label" for="incProblema">PROBLEMA REPORTADO</label>
+        <textarea id="incProblema" rows="2" placeholder="DESCRIBE QUÉ OCURRIÓ..."></textarea>
+        <label class="small-label" for="incSolucion">SOLUCIÓN REALIZADA</label>
+        <textarea id="incSolucion" rows="2" placeholder="DESCRIBE LA SOLUCIÓN..."></textarea>
+        <label class="small-label" for="incEstado">ESTADO</label>
+        <select id="incEstado">
+          <option>PENDIENTE</option>
+          <option>EN ATENCIÓN</option>
+          <option>RESUELTO</option>
+        </select>
+        <div style="display:flex;gap:12px;margin-top:15px;">
+          <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">GUARDAR</button>
+          <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">LIMPIAR</button>
+        </div>
+        <div id="listaIncidencias" class="incident-list"></div>
+      </div>
+    </div>
+    </div>
+  </section>
+</main>
+
+<div id="qrModal" class="qr-modal">
+  <div class="qr-modal-content">
+    <h3>ESCANEAR CÓDIGO QR</h3>
+    <div id="reader"></div>
+    <button class="close-qr-btn" type="button" onclick="cerrarEscanerQR()">CERRAR CÁMARA</button>
+  </div>
+</div>
+
+<footer>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
+
+
+<script>
+function togglePanel(idPanel) {
+  reproducirSonido('clic');
+  const panel = document.getElementById(idPanel);
+  if (panel) panel.classList.toggle('collapsed');
+}
+
+function cambiarAnioEscolar() {
+  reproducirSonido('clic');
+  const anio = document.getElementById("selectAnioEscolar").value;
+  document.getElementById("printAnioLabel").textContent = anio;
+  hablarTextoVoz("Año escolar cambiado a " + anio);
+  if (document.getElementById("codigo").value.trim()) {
+    consultarEstudiante();
+  }
+}
+
+function seleccionarTipoOperacion(tipo) {
+  reproducirSonido('clic');
+  const btnIngreso = document.getElementById("btnTipoIngreso");
+  const btnEgreso = document.getElementById("btnTipoEgreso");
+  const hiddenInput = document.getElementById("pagoOperacionVal");
+
+  hiddenInput.value = tipo;
+
+  if (tipo === 'INGRESO') {
+    btnIngreso.className = 'type-btn active-ingreso';
+    btnEgreso.className = 'type-btn';
+    hablarTextoVoz("Operación seleccionada: Ingreso");
+  } else {
+    btnIngreso.className = 'type-btn';
+    btnEgreso.className = 'type-btn active-egreso';
+    hablarTextoVoz("Operación seleccionada: Egreso");
+  }
+}
+
+const CATALOGO_EXCEL = {
+  "INGRESOS_Y_SUELDOS": [
+    "Ingreso Sueldo Base Mensual",
+    "Ingreso Sueldo por Rol de Liderazgo",
+    "Ingreso Bono por desempeño"
+  ],
+  "PREMIOS_Y_BONIFICACIONES": [
+    "Bono por llevar el uniforme impecable y reglamentario",
+    "Bono Participación destacada en clase",
+    "Bono Premio por primer lugar en concurso académico o deportivo",
+    "Bono Puntualidad y asistencia perfecta",
+    "Bono Apoyo destacado en limpieza, orden o ecología",
+    "Bono por ayuda solidaria y compañerismo",
+    "Bono Creatividad e innovación en proyectos",
+    "Bono Representar dignamente al colegio",
+    "Bono Lectura destacada y comprensión",
+    "Bono Completar un reto educativo",
+    "Bono Llegar antes de la hora",
+    "Bono Participación en Escuela para Padres",
+    "Bono Responsabilidad con materiales",
+    "Bono Mantener limpia el aula"
+  ],
+  "COSTOS_Y_OTROS": [
+    "Impuesto escolar mensual por uso de instalaciones",
+    "Cuota extraordinaria de mantenimiento grupal",
+    "Transacción personalizada / Ajuste de caja"
+  ]
 };
 
+function cargarConceptosPorTipo() {
+  const tipo = document.getElementById("pagoTipo").value;
+  const selectConcepto = document.getElementById("pagoConcepto");
+  selectConcepto.innerHTML = "";
 
-/* ============================================================
-   ENTRADAS WEB
-   ============================================================ */
-
-function doGet(e) {
-  try {
-    const params = (e && e.parameter) ? e.parameter : {};
-    const respuesta = procesarSolicitud_(params);
-
-    if (params.callback) {
-      return respuestaJSONP_(params.callback, respuesta);
-    }
-
-    return ContentService
-      .createTextOutput(JSON.stringify(respuesta))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch (err) {
-    const respuesta = {
-      ok: false,
-      mensaje: "ERROR DEL SERVIDOR: " +
-        (err && err.message ? err.message : String(err))
-    };
-
-    if (e && e.parameter && e.parameter.callback) {
-      return respuestaJSONP_(e.parameter.callback, respuesta);
-    }
-
-    return ContentService
-      .createTextOutput(JSON.stringify(respuesta))
-      .setMimeType(ContentService.MimeType.JSON);
+  if (tipo === "COSTOS_Y_OTROS") {
+    seleccionarTipoOperacion("EGRESO");
+  } else {
+    seleccionarTipoOperacion("INGRESO");
   }
+
+  const lista = CATALOGO_EXCEL[tipo] || [];
+
+  lista.forEach(concepto => {
+    const opt = document.createElement("option");
+    opt.value = concepto;
+    opt.textContent = concepto.toUpperCase();
+    selectConcepto.appendChild(opt);
+  });
 }
 
+function hablarTextoVoz(texto) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
 
-function doPost(e) {
-  try {
-    let params = {};
+    const textoLimpio = String(texto)
+      .replace(/\./g, ',')
+      .replace(/\?/g, '')
+      .replace(/!/g, '');
 
-    if (e && e.postData && e.postData.contents) {
-      const contenido = String(e.postData.contents);
+    const utterance = new SpeechSynthesisUtterance(textoLimpio);
+    utterance.lang = 'es-PE';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.1;
 
-      try {
-        params = JSON.parse(contenido);
-      } catch (_) {
-        params = e.parameter || {};
+    function ejecutarVoz() {
+      const voces = window.speechSynthesis.getVoices();
+
+      let vozIdeal = voces.find(v =>
+        v.lang.includes('es') &&
+        (
+          v.name.toLowerCase().includes('female') ||
+          v.name.toLowerCase().includes('google español') ||
+          v.name.toLowerCase().includes('lucia') ||
+          v.name.toLowerCase().includes('elena') ||
+          v.name.toLowerCase().includes('monica')
+        )
+      );
+
+      if (!vozIdeal) {
+        vozIdeal = voces.find(v => v.lang.includes('es'));
       }
+
+      if (vozIdeal) {
+        utterance.voice = vozIdeal;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = ejecutarVoz;
     } else {
-      params = (e && e.parameter) ? e.parameter : {};
+      ejecutarVoz();
+    }
+  }
+}
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function reproducirSonido(tipo) {
+  try {
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
     }
 
-    const respuesta = procesarSolicitud_(params);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
-    return ContentService
-      .createTextOutput(JSON.stringify(respuesta))
-      .setMimeType(ContentService.MimeType.JSON);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
 
-  } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        ok: false,
-        mensaje: "ERROR DEL SERVIDOR: " +
-          (err && err.message ? err.message : String(err))
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
+    const ahora = audioCtx.currentTime;
 
+    if (tipo === 'clic') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(580, ahora);
+      gain.gain.setValueAtTime(0.08, ahora);
+      gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.08);
+      osc.start(ahora);
+      osc.stop(ahora + 0.08);
 
-function respuestaJSONP_(callback, objeto) {
-  const nombre = String(callback || "").trim();
+    } else if (tipo === 'exito') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ahora);
+      osc.frequency.setValueAtTime(554.37, ahora + 0.08);
+      osc.frequency.setValueAtTime(659.25, ahora + 0.16);
+      gain.gain.setValueAtTime(0.1, ahora);
+      gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.3);
+      osc.start(ahora);
+      osc.stop(ahora + 0.3);
 
-  if (!/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(nombre)) {
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        ok: false,
-        mensaje: "CALLBACK NO VÁLIDO."
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-
-  return ContentService
-    .createTextOutput(
-      nombre + "(" + JSON.stringify(objeto) + ");"
-    )
-    .setMimeType(ContentService.MimeType.JAVASCRIPT);
-}
-
-
-/* ============================================================
-   ROUTER
-   ============================================================ */
-
-function procesarSolicitud_(p) {
-  const accion = normalizar_(p.accion);
-
-  switch (accion) {
-    case "ESTUDIANTE":
-      return consultarCuenta_(p);
-
-    case "REGISTRARMOVIMIENTO":
-      return registrarMovimiento_(p);
-
-    case "ANULARMOVIMIENTO":
-      return anularMovimiento_(p);
-
-    case "MOVIMIENTOS":
-      return consultarMovimientosGenerales_(p);
-
-    case "CUENTAS":
-      return consultarCuentas_(p);
-
-    case "SALUD":
-    case "PING":
-      return {
-        ok: true,
-        mensaje: "BANCO LDS 360 ACTIVO.",
-        servidor: "BANCO LDS 360",
-        fecha: new Date()
-      };
-
-    default:
-      return {
-        ok: false,
-        mensaje: "ACCIÓN NO RECONOCIDA: " + String(p.accion || "")
-      };
-  }
-}
-
-
-/* ============================================================
-   CONSULTA DE CUENTA
-   ============================================================ */
-
-function consultarCuenta_(p) {
-  const codigo = normalizarCodigo_(p.codigo);
-
-  if (!codigo) {
-    return {
-      ok: false,
-      mensaje: "CÓDIGO NO ENVIADO."
-    };
-  }
-
-  const anio = normalizarAnio_(p.anio);
-  const datos = cargarDatosBase_();
-  const entidad = buscarEntidad_(codigo, datos);
-
-  if (codigo === CONFIG.CODIGO_ANDREW) {
-    return {
-      ok: true,
-      estudiante: entidadAndrew_(),
-      cuenta: construirCuentaCaja_(
-        codigo,
-        datos.movimientos,
-        anio
-      ),
-      movimientos: movimientosDeCuenta_(
-        codigo,
-        datos.movimientos,
-        anio
-      )
-    };
-  }
-
-  const mise = obtenerMisePorCodigo_(codigo);
-
-  if (mise) {
-    return {
-      ok: true,
-      estudiante: {
-        codigo: mise.codigo,
-        nombreCompleto: mise.nombre,
-        nombre: mise.nombre,
-        grado: "",
-        seccion: "",
-        rol: mise.rol,
-        tipoCuenta: mise.tipo,
-        esDocente: true
-      },
-      cuenta: construirCuentaCaja_(
-        codigo,
-        datos.movimientos,
-        anio
-      ),
-      movimientos: movimientosDeCuenta_(
-        codigo,
-        datos.movimientos,
-        anio
-      )
-    };
-  }
-
-  if (!entidad) {
-    return {
-      ok: false,
-      mensaje: "CÓDIGO NO ENCONTRADO: " + codigo
-    };
-  }
-
-  return {
-    ok: true,
-    estudiante: entidad,
-    cuenta: construirCuentaCuentaEntidad_(
-      codigo,
-      datos.movimientos,
-      entidad,
-      anio
-    ),
-    movimientos: movimientosDeCuenta_(
-      codigo,
-      datos.movimientos,
-      anio
-    )
-  };
-}
-
-
-function entidadAndrew_() {
-  return {
-    codigo: CONFIG.CODIGO_ANDREW,
-    nombreCompleto: CONFIG.NOMBRE_ANDREW,
-    nombre: CONFIG.NOMBRE_ANDREW,
-    grado: "CAJA GENERAL",
-    seccion: "",
-    rol: CONFIG.ROL_ANDREW,
-    tipoCuenta: CONFIG.TIPO_CUENTA_ANDREW,
-    esDocente: true,
-    esAndrew: true
-  };
-}
-
-
-function construirCuentaCaja_(codigo, movimientos, anio) {
-  let saldo = 0;
-  let cantidad = 0;
-
-  movimientos.forEach(function(m) {
-    if (normalizarCodigo_(m.codigo) !== codigo) return;
-    if (normalizar_(m.estado) === "ANULADO") return;
-
-    const monto = numero_(m.monto);
-    const tipo = normalizar_(m.tipo);
-
-    if (tipo === "INGRESO") {
-      saldo += monto;
-    } else if (tipo === "EGRESO") {
-      saldo -= monto;
+    } else if (tipo === 'error') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, ahora);
+      osc.frequency.setValueAtTime(140, ahora + 0.15);
+      gain.gain.setValueAtTime(0.12, ahora);
+      gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.28);
+      osc.start(ahora);
+      osc.stop(ahora + 0.28);
     }
-
-    if (!anio || String(m.anio) === String(anio)) {
-      cantidad++;
-    }
-  });
-
-  return {
-    saldoActual: redondear_(saldo),
-    saldo: redondear_(saldo),
-    movimientos: cantidad,
-    codigoCuenta: codigo
-  };
+  } catch (e) {}
 }
 
-
-function construirCuentaCuentaEntidad_(
-  codigo,
-  movimientos,
-  entidad,
-  anio
-) {
-  let saldo = 0;
-  let cantidad = 0;
-
-  movimientos.forEach(function(m) {
-    if (normalizarCodigo_(m.codigo) !== codigo) return;
-    if (normalizar_(m.estado) === "ANULADO") return;
-
-    const monto = numero_(m.monto);
-    const tipo = normalizar_(m.tipo);
-
-    if (tipo === "INGRESO") {
-      saldo += monto;
-    } else if (tipo === "EGRESO") {
-      saldo -= monto;
-    }
-
-    if (!anio || String(m.anio) === String(anio)) {
-      cantidad++;
-    }
-  });
-
-  return {
-    saldoActual: redondear_(saldo),
-    saldo: redondear_(saldo),
-    movimientos: cantidad,
-    codigoCuenta: codigo,
-    bonoMensual:
-      entidad.bonoMensual || CONFIG.BONO_MENSUAL_ALUMNO
-  };
+function anunciarSeleccion(select) {
+  reproducirSonido('clic');
+  const texto = select.options[select.selectedIndex].text;
+  hablarTextoVoz("Seleccionada: " + texto);
 }
-
-
-/* ============================================================
-   REGISTRO DE MOVIMIENTOS
-   ============================================================ */
 
 /*
-  EGRESO:
-    La cuenta activa/responsable PAGA a la seleccionada.
-
-  INGRESO:
-    La cuenta seleccionada PAGA a la cuenta activa/responsable.
-
-  Ejemplo Lily activa + alumno seleccionado:
-    EGRESO = Lily -> alumno
-    INGRESO = alumno -> Lily
-
-  Ejemplo Andrew activo + Lily seleccionada:
-    EGRESO = Andrew -> Lily
-    INGRESO = Lily -> Andrew
+  FOTOS DEL PERSONAL ADMINISTRATIVO
 */
+const FOTOS_DOCENTES = {
+  "MISS ANGHY REYES MELO": "https://drive.google.com/file/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U/view?usp=sharing",
+  "MISS KARIN MOLERO ROMANI": "https://drive.google.com/file/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv/view?usp=sharing",
+  "MISS KIARA MORALES ELGUERA": "https://drive.google.com/file/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O/view?usp=sharing",
+  "MISS LILY MELO AZAÑERO": "https://drive.google.com/file/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE/view?usp=sharing",
+  "MISTER ANDREW": "https://drive.google.com/file/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW/view?usp=sharing"
+};
 
-function registrarMovimiento_(p) {
-  const codigoSeleccionado =
-    normalizarCodigo_(p.codigo);
+let datosEstudianteActualGlobal = null;
+let maestraActivaGlobal = "";
 
-  const tipo = normalizar_(p.tipo);
-  const monto = numero_(p.monto);
-  const anio = normalizarAnio_(p.anio);
+/*
+  IMPORTANTE:
+  Este archivo conserva la URL que ya tenía administrador.html.
+  Cuando uses la NUEVA implementación de Código.gs, reemplaza
+  solamente esta constante por la URL /exec de esa implementación.
+*/
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
 
-  const responsable =
-    String(p.responsable || "").trim();
+function mostrarFotoMaestra(nombre) {
+  maestraActivaGlobal = nombre;
 
-  const responsableClave =
-    String(p.responsableClave || "").trim();
+  const foto = document.getElementById("missFoto");
+  const placeholder = document.getElementById("missPlaceholder");
 
-  if (!codigoSeleccionado) {
-    return {
-      ok: false,
-      mensaje:
-        "DEBES INDICAR EL CÓDIGO DE LA CUENTA SELECCIONADA."
-    };
+  const original = String(FOTOS_DOCENTES[nombre] || "").trim();
+  const urls = obtenerURLsFoto(original);
+
+  foto.dataset.intento = "0";
+  foto.style.display = "none";
+  placeholder.style.display = "grid";
+  foto.removeAttribute("src");
+  foto.onerror = null;
+
+  if (!urls.length) return;
+
+  foto.onerror = function() {
+    const siguiente = Number(foto.dataset.intento || "0") + 1;
+    foto.dataset.intento = String(siguiente);
+
+    if (siguiente < urls.length) {
+      foto.src = urls[siguiente];
+    } else {
+      foto.style.display = "none";
+      placeholder.style.display = "grid";
+    }
+  };
+
+  foto.onload = function() {
+    foto.style.display = "block";
+    placeholder.style.display = "none";
+  };
+
+  foto.src = urls[0];
+}
+
+/*
+==============================================================
+ACCESO ADMINISTRATIVO
+==============================================================
+Mises:
+  360LDS@
+
+MISTER ANDREW:
+  360LDS@@@
+
+Andrew:
+  CAJA-ANDREW
+  CAJERO GENERAL
+==============================================================
+*/
+function validarAccesoDocente() {
+  const docenteElement = document.getElementById("docenteSelect");
+  const claveElement = document.getElementById("claveDocente");
+  const error = document.getElementById("adminError");
+
+  const docente = String(docenteElement.value || "").trim().toUpperCase();
+  const clave = String(claveElement.value || "").trim();
+
+  error.textContent = "";
+
+  if (!docente) {
+    reproducirSonido('error');
+    error.textContent = "SELECCIONE SU NOMBRE.";
+    hablarTextoVoz("Por favor seleccione su nombre.");
+    return;
   }
 
-  if (tipo !== "INGRESO" && tipo !== "EGRESO") {
-    return {
-      ok: false,
-      mensaje: "TIPO DE MOVIMIENTO NO VÁLIDO."
-    };
+  if (!clave) {
+    reproducirSonido('error');
+    error.textContent = "INGRESE SU CLAVE.";
+    hablarTextoVoz("Por favor ingrese su clave.");
+    return;
   }
 
-  if (!(monto > 0)) {
-    return {
-      ok: false,
-      mensaje: "EL MONTO DEBE SER MAYOR QUE CERO."
-    };
+  const esAndrew = docente === "ANDREW";
+  const claveCorrecta = esAndrew ? "360LDS@@@" : "360LDS@";
+
+  if (clave !== claveCorrecta) {
+    reproducirSonido('error');
+    error.textContent = "CLAVE INCORRECTA.";
+    hablarTextoVoz("Clave incorrecta.");
+    return;
   }
 
-  const actor = identificarResponsable_(
-    responsable,
-    responsableClave
-  );
+  reproducirSonido('exito');
 
-  if (!actor.ok) return actor;
+  const nombreMaestra =
+    docenteElement.options[docenteElement.selectedIndex].text;
 
-  const datos = cargarDatosBase_();
+  sessionStorage.setItem("maestraActiva", nombreMaestra);
+  sessionStorage.setItem("responsableClave", clave);
+  sessionStorage.setItem("esAndrew", esAndrew ? "1" : "0");
 
-  const cuentaOrigenCodigo =
-    tipo === "EGRESO"
-      ? actor.codigo
-      : codigoSeleccionado;
-
-  const cuentaDestinoCodigo =
-    tipo === "EGRESO"
-      ? codigoSeleccionado
-      : actor.codigo;
-
-  if (cuentaOrigenCodigo === cuentaDestinoCodigo) {
-    return {
-      ok: false,
-      mensaje:
-        "NO SE PUEDE HACER UNA TRANSFERENCIA A LA MISMA CUENTA."
-    };
+  if (esAndrew) {
+    hablarTextoVoz(
+      "Clave correcta. Bienvenido Mister Andrew, cajero general."
+    );
+  } else {
+    hablarTextoVoz(
+      "Clave correcta. Bienvenida estimada maestra."
+    );
   }
 
-  const origen = obtenerEntidadCuenta_(
-    cuentaOrigenCodigo,
-    datos
-  );
+  desbloquearPanel(nombreMaestra);
+}
 
-  const destino = obtenerEntidadCuenta_(
-    cuentaDestinoCodigo,
-    datos
-  );
+function desbloquearPanel(nombreMaestra) {
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("panelView").style.display = "block";
 
-  if (!origen) {
-    return {
-      ok: false,
-      mensaje:
-        "CUENTA ORIGEN NO ENCONTRADA: " +
-        cuentaOrigenCodigo
-    };
+  document.getElementById("maestraActivaNombre").textContent =
+    nombreMaestra || "MAESTRA";
+
+  document.getElementById("printNombreMiss").textContent =
+    nombreMaestra || "MAESTRA";
+
+  mostrarFotoMaestra(nombreMaestra);
+  cargarConceptosPorTipo();
+  renderIncidencias();
+
+  const esAndrew = sessionStorage.getItem("esAndrew") === "1";
+  const rolBanner = document.querySelector(".admin-text-details p");
+
+  if (rolBanner) {
+    rolBanner.textContent = esAndrew
+      ? "CAJERO GENERAL · CONSULTANDO FONDO..."
+      : "DOCENTE TUTORA CAJERA ACTIVA";
   }
 
-  if (!destino) {
-    return {
-      ok: false,
-      mensaje:
-        "CUENTA DESTINO NO ENCONTRADA: " +
-        cuentaDestinoCodigo
-    };
+  /*
+    Andrew entra directamente a su cuenta.
+    No se escribe S/180,000 en el frontend:
+    el saldo se obtiene de MOVIMIENTOS mediante el backend.
+  */
+  if (esAndrew) {
+    const codigoAndrew = "CAJA-ANDREW";
+
+    document.getElementById("codigo").value = codigoAndrew;
+    document.getElementById("pagoCodigo").value = codigoAndrew;
+    document.getElementById("incCodigo").value = codigoAndrew;
+
+    setTimeout(() => {
+      consultarEstudiante(true);
+    }, 250);
   }
+}
 
-  const saldoOrigen = saldoCuentaActual_(
-    cuentaOrigenCodigo,
-    datos.movimientos
-  );
+window.addEventListener('DOMContentLoaded', () => {
+  sessionStorage.removeItem("maestraActiva");
+  sessionStorage.removeItem("responsableClave");
+  sessionStorage.removeItem("esAndrew");
 
-  if (saldoOrigen < monto) {
-    return {
-      ok: false,
-      mensaje:
-        "SALDO INSUFICIENTE EN " +
-        origen.nombre +
-        ". SALDO DISPONIBLE: S/ " +
-        formatearNumero_(saldoOrigen)
-    };
+  document.getElementById("loginView").style.display = "flex";
+  document.getElementById("panelView").style.display = "none";
+
+  setTimeout(() => {
+    hablarTextoVoz(
+      "Acceso administrativo. Seleccione su nombre e ingrese su clave."
+    );
+  }, 700);
+});
+
+document.getElementById("claveDocente").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    validarAccesoDocente();
   }
+});
 
-  const tx = "TX-" + Utilities.getUuid();
-  const ahora = new Date();
+let html5QrCode = null;
 
-  const concepto = String(
-    p.concepto ||
-    p.categoria ||
-    "MOVIMIENTO"
-  ).trim();
+function abrirEscanerQR() {
+  reproducirSonido('clic');
+  hablarTextoVoz("Abriendo cámara para escanear código QR.");
 
-  const categoria = String(
-    p.categoria || ""
-  ).trim();
+  document.getElementById("qrModal").style.display = "flex";
 
-  const observacionBase = String(
-    p.observacion || ""
-  ).trim();
+  html5QrCode = new Html5Qrcode("reader");
 
-  const obsComun = unirObservaciones_(
-    observacionBase,
-    "TX=" + tx,
-    "CUENTA_ORIGEN=" + cuentaOrigenCodigo,
-    "CUENTA_DESTINO=" + cuentaDestinoCodigo
-  );
+  const config = {
+    fps: 10,
+    qrbox: { width: 220, height: 220 }
+  };
 
-  const movimientoOrigen = construirMovimiento_({
-    fecha: ahora,
-    anio: anio,
-    codigo: cuentaOrigenCodigo,
-    entidad: origen,
-    tipo: "EGRESO",
-    categoria: categoria,
-    concepto: concepto,
-    monto: monto,
-    responsable:
-      responsable || actor.nombre,
-    observacion: obsComun,
-    tx: tx,
-    rolResponsable: actor.rol
+  html5QrCode.start(
+    { facingMode: "environment" },
+    config,
+    onScanSuccess
+  ).catch(() => {
+    html5QrCode.start(
+      { facingMode: "user" },
+      config,
+      onScanSuccess
+    ).catch(() => {
+      reproducirSonido('error');
+      alert("No se pudo acceder a la cámara.");
+      cerrarEscanerQR();
+    });
   });
+}
 
-  const movimientoDestino = construirMovimiento_({
-    fecha: ahora,
-    anio: anio,
-    codigo: cuentaDestinoCodigo,
-    entidad: destino,
-    tipo: "INGRESO",
-    categoria: categoria,
-    concepto: concepto,
-    monto: monto,
-    responsable:
-      responsable || actor.nombre,
-    observacion: obsComun,
-    tx: tx,
-    rolResponsable: actor.rol
-  });
+function onScanSuccess(decodedText) {
+  cerrarEscanerQR();
 
-  escribirMovimientoPareado_(
-    movimientoOrigen,
-    movimientoDestino
-  );
+  document.getElementById("codigo").value =
+    String(decodedText || "").trim().toUpperCase();
 
-  return {
-    ok: true,
-    mensaje:
-      "TRANSACCIÓN REGISTRADA CORRECTAMENTE.",
-    tx: tx,
-    origen: {
-      codigo: cuentaOrigenCodigo,
-      nombre: origen.nombre,
-      tipo: "EGRESO",
-      monto: monto,
-      saldoAnterior:
-        redondear_(saldoOrigen),
-      saldoNuevo:
-        redondear_(saldoOrigen - monto)
-    },
-    destino: {
-      codigo: cuentaDestinoCodigo,
-      nombre: destino.nombre,
-      tipo: "INGRESO",
-      monto: monto,
-      saldoNuevo:
-        redondear_(
-          saldoCuentaActual_(
-            cuentaDestinoCodigo,
-            datos.movimientos
-          ) + monto
+  consultarEstudiante();
+}
+
+function cerrarEscanerQR() {
+  reproducirSonido('clic');
+
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => {
+      html5QrCode.clear();
+      document.getElementById("qrModal").style.display = "none";
+    }).catch(() => {
+      document.getElementById("qrModal").style.display = "none";
+    });
+  } else {
+    document.getElementById("qrModal").style.display = "none";
+  }
+}
+
+function formatearLDS(valor) {
+  const n = Number(valor);
+  return Number.isFinite(n) ? n.toFixed(2) : "0.00";
+}
+
+function escaparHTML(texto) {
+  return String(texto ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\x27/g, "&#39;")
+    .replace(/"/g, "&quot;");
+}
+
+function mostrarMensaje(texto, tipo) {
+  const el = document.getElementById("mensaje");
+  el.textContent = texto;
+  el.className = "message " + tipo;
+}
+
+function mostrarMensajePago(texto, tipo) {
+  const el = document.getElementById("pagoMensaje");
+  el.textContent = texto;
+  el.className = "message " + tipo;
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback =
+    "callbackAdminLDS_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 100000);
+
+  const query = Object.keys(parametros)
+    .map(k =>
+      encodeURIComponent(k) +
+      "=" +
+      encodeURIComponent(parametros[k])
+    )
+    .join("&");
+
+  const script = document.createElement("script");
+
+  script.src =
+    APP_SCRIPT_URL +
+    "?" +
+    query +
+    "&callback=" +
+    encodeURIComponent(nombreCallback);
+
+  window[nombreCallback] = function(respuesta) {
+    try {
+      callback(respuesta);
+    } finally {
+      delete window[nombreCallback];
+      script.remove();
+    }
+  };
+
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+
+    reproducirSonido('error');
+    mostrarMensaje("ERROR DE CONEXIÓN.", "error");
+    hablarTextoVoz("Error de conexión con el servidor.");
+  };
+
+  document.body.appendChild(script);
+}
+
+function obtenerURLsFoto(url) {
+  const texto = String(url || "").trim();
+
+  if (!texto) return [];
+
+  let id = "";
+
+  const matchArchivo =
+    texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+  const matchParametro =
+    texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+  if (matchArchivo) {
+    id = matchArchivo[1];
+  } else if (matchParametro) {
+    id = matchParametro[1];
+  }
+
+  if (!id) return [texto];
+
+  return [
+    texto,
+    "https://drive.google.com/thumbnail?id=" +
+      encodeURIComponent(id) +
+      "&sz=w800",
+    "https://drive.google.com/uc?export=view&id=" +
+      encodeURIComponent(id),
+    "https://lh3.googleusercontent.com/d/" +
+      encodeURIComponent(id) +
+      "=w800"
+  ];
+}
+
+function mostrarFotoEstudiante(e) {
+  const foto = document.getElementById("fotoEstudiante");
+  const placeholder = document.getElementById("fotoPlaceholder");
+
+  const esAndrewFoto =
+    sessionStorage.getItem("esAndrew") === "1" ||
+    String(e.codigo || "").trim().toUpperCase() === "CAJA-ANDREW" ||
+    String(e.nombreCompleto || e.nombre || "").trim().toUpperCase() === "MISTER ANDREW";
+
+  const original = String(
+    esAndrewFoto
+      ? FOTOS_DOCENTES["MISTER ANDREW"]
+      : (
+          e.fotoUrl ||
+          e.fotoURL ||
+          e.foto_url ||
+          e.FOTO_URL ||
+          e.foto ||
+          e.FOTO ||
+          ""
         )
-    }
-  };
-}
-
-
-function identificarResponsable_(
-  responsable,
-  clave
-) {
-  const nombre = normalizar_(responsable);
-  const c = String(clave || "").trim();
-
-  if (
-    c === CONFIG.CLAVE_ANDREW ||
-    nombre === "ANDREW" ||
-    nombre ===
-      normalizar_(CONFIG.NOMBRE_ANDREW)
-  ) {
-    return {
-      ok: true,
-      codigo: CONFIG.CODIGO_ANDREW,
-      nombre: CONFIG.NOMBRE_ANDREW,
-      rol: CONFIG.ROL_ANDREW,
-      tipo: CONFIG.TIPO_CUENTA_ANDREW
-    };
-  }
-
-  if (c === CONFIG.CLAVE_MISE) {
-    const misePorNombre =
-      CONFIG.CUENTAS_MISES_LDS360[nombre];
-
-    if (misePorNombre) {
-      return {
-        ok: true,
-        codigo: misePorNombre.codigo,
-        nombre: misePorNombre.nombre,
-        rol: misePorNombre.rol,
-        tipo: misePorNombre.tipo
-      };
-    }
-
-    const mise =
-      buscarMisePorNombre_(responsable);
-
-    if (mise) {
-      return {
-        ok: true,
-        codigo: mise.codigo,
-        nombre: mise.nombre,
-        rol: mise.rol,
-        tipo: mise.tipo
-      };
-    }
-  }
-
-  return {
-    ok: false,
-    mensaje:
-      "RESPONSABLE NO AUTORIZADO O CLAVE INCORRECTA."
-  };
-}
-
-
-/* ============================================================
-   ANULACIÓN POR REVERSIÓN
-   ============================================================ */
-
-function anularMovimiento_(p) {
-  const txBuscada = String(
-    p.tx ||
-    p.transaccion ||
-    p.idMovimiento ||
-    ""
   ).trim();
 
-  const codigoSolicitado =
-    normalizarCodigo_(p.codigo);
+  const urls = obtenerURLsFoto(original);
 
-  const responsable =
-    String(p.responsable || "").trim();
+  foto.dataset.intento = "0";
+  placeholder.style.display = "flex";
+  foto.style.display = "none";
+  foto.removeAttribute("src");
+  foto.onerror = null;
 
-  const responsableClave =
-    String(p.responsableClave || "").trim();
+  if (!urls.length) return;
 
-  const actor = identificarResponsable_(
-    responsable,
-    responsableClave
-  );
+  foto.onerror = function() {
+    const siguiente =
+      Number(foto.dataset.intento || "0") + 1;
 
-  if (!actor.ok) return actor;
+    foto.dataset.intento = String(siguiente);
 
-  if (!txBuscada && !codigoSolicitado) {
-    return {
-      ok: false,
-      mensaje:
-        "INDICA TX O CÓDIGO DEL MOVIMIENTO A ANULAR."
-    };
+    if (siguiente < urls.length) {
+      foto.src = urls[siguiente];
+    } else {
+      foto.style.display = "none";
+      placeholder.style.display = "flex";
+    }
+  };
+
+  foto.onload = function() {
+    foto.style.display = "block";
+    placeholder.style.display = "none";
+  };
+
+  foto.src = urls[0];
+}
+
+function actualizarBannerCuenta(saldo, esAndrew) {
+  const rolBanner =
+    document.querySelector(".admin-text-details p");
+
+  if (!rolBanner) return;
+
+  const saldoTexto = formatearLDS(saldo);
+
+  rolBanner.textContent = esAndrew
+    ? "CAJERO GENERAL · FONDO DISPONIBLE: S/ " + saldoTexto
+    : "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
+}
+
+function consultarEstudiante(esConsultaAutomatica = false) {
+  if (!esConsultaAutomatica) {
+    reproducirSonido('clic');
   }
 
-  const datos = cargarDatosBase_();
+  const codigo =
+    document.getElementById("codigo").value.trim().toUpperCase();
 
-  let encontrados = [];
+  const anioEscolar =
+    document.getElementById("selectAnioEscolar").value;
 
-  datos.movimientos.forEach(function(m, i) {
-    const tx = extraerTX_(m.observacion);
+  if (!codigo) {
+    reproducirSonido('error');
+    mostrarMensaje("INGRESA UN CÓDIGO LDS.", "error");
+    hablarTextoVoz("Por favor ingresa un código.");
+    return;
+  }
 
-    if (txBuscada && tx === txBuscada) {
-      encontrados.push({
-        movimiento: m,
-        fila: i + 2
-      });
-      return;
-    }
+  mostrarMensaje("CONSULTANDO...", "ok");
 
-    if (
-      !txBuscada &&
-      codigoSolicitado &&
-      normalizarCodigo_(m.codigo) ===
-        codigoSolicitado
-    ) {
-      const id = String(m.id || "");
+  if (!esConsultaAutomatica) {
+    hablarTextoVoz("Consultando información.");
+  }
 
+  llamarAPI(
+    {
+      accion: "estudiante",
+      codigo: codigo,
+      anio: anioEscolar
+    },
+    function(respuesta) {
       if (
-        id ===
-        String(p.idMovimiento || "")
+        !respuesta ||
+        respuesta.ok === false ||
+        !respuesta.estudiante
       ) {
-        encontrados.push({
-          movimiento: m,
-          fila: i + 2
-        });
+        reproducirSonido('error');
+
+        document
+          .getElementById("estudianteCard")
+          .classList.remove("show");
+
+        document.getElementById("tablaMovimientos").innerHTML =
+          '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
+
+        document.getElementById("contadorMovimientos").textContent = "0";
+        datosEstudianteActualGlobal = null;
+
+        mostrarMensaje(
+          (respuesta && respuesta.mensaje) ||
+          "REGISTRO NO ENCONTRADO.",
+          "error"
+        );
+
+        if (sessionStorage.getItem("esAndrew") === "1") {
+          const rolBanner =
+            document.querySelector(".admin-text-details p");
+
+          if (rolBanner) {
+            rolBanner.textContent =
+              "CAJERO GENERAL · NO SE PUDO CONSULTAR CAJA-ANDREW";
+          }
+        }
+
+        hablarTextoVoz("Registro no encontrado.");
+        return;
+      }
+
+      reproducirSonido('exito');
+
+      const e = respuesta.estudiante;
+      datosEstudianteActualGlobal = e;
+
+      const cuenta = respuesta.cuenta || {};
+
+      const nombreUsuario =
+        e.nombreCompleto ||
+        e.nombre ||
+        "USUARIO";
+
+      const saldoActual =
+        Number(cuenta.saldoActual || 0);
+
+      const saldoFormateado =
+        formatearLDS(saldoActual);
+
+      const codigoRespuesta =
+        String(e.codigo || codigo).toUpperCase();
+
+      const rolRespuesta =
+        String(e.rol || "").toUpperCase();
+
+      const esAndrew =
+        sessionStorage.getItem("esAndrew") === "1" ||
+        codigoRespuesta === "CAJA-ANDREW" ||
+        String(nombreUsuario).toUpperCase() === "MISTER ANDREW";
+
+      const esDocente =
+        !esAndrew &&
+        (
+          (e.codigo &&
+            String(e.codigo)
+              .toUpperCase()
+              .includes("LDS-DOC")) ||
+          e.esDocente ||
+          rolRespuesta.includes("DOCENTE") ||
+          rolRespuesta.includes("MAESTRA")
+        );
+
+      if (esAndrew) {
+        document.getElementById("nombre").textContent =
+          "💰 CAJERO GENERAL: " + nombreUsuario;
+      } else if (esDocente) {
+        document.getElementById("nombre").textContent =
+          "👩‍🏫 DOCENTE: " + nombreUsuario;
+      } else {
+        document.getElementById("nombre").textContent =
+          "👤 ALUMNO: " + nombreUsuario;
+      }
+
+      const rolMostrar =
+        esAndrew
+          ? "CAJERO GENERAL"
+          : e.rol ||
+            (esDocente ? "DOCENTE" : "ALUMNO");
+
+      document.getElementById("meta").textContent =
+        [
+          e.codigo || codigo,
+          "AÑO: " + anioEscolar,
+          rolMostrar,
+          e.grado || "",
+          e.seccion || ""
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+      document.getElementById("saldo").textContent =
+        (
+          esAndrew || esDocente
+            ? "FONDO DISPONIBLE: S/ "
+            : "SALDO: "
+        ) +
+        saldoFormateado +
+        " LDS";
+
+      if (esAndrew) {
+        actualizarBannerCuenta(saldoActual, true);
+      } else if (esDocente) {
+        actualizarBannerCuenta(saldoActual, false);
+      }
+
+      mostrarFotoEstudiante(e);
+
+      document.getElementById(
+        "estudianteCard"
+      ).classList.add("show");
+
+      document.getElementById("pagoCodigo").value =
+        e.codigo || codigo;
+
+      document.getElementById("incCodigo").value =
+        e.codigo || codigo;
+
+      const movimientos =
+        Array.isArray(respuesta.movimientos)
+          ? respuesta.movimientos
+          : [];
+
+      renderMovimientos(
+        movimientos,
+        e,
+        anioEscolar
+      );
+
+      mostrarMensaje(
+        "CONSULTA REALIZADA CORRECTAMENTE.",
+        "ok"
+      );
+
+      if (esAndrew) {
+        hablarTextoVoz(
+          "Mister Andrew. Cajero general. " +
+          "Fondo disponible: " +
+          saldoFormateado +
+          " soles."
+        );
+      } else if (esDocente) {
+        hablarTextoVoz(
+          "Maestra " +
+          nombreUsuario +
+          ". Fondo disponible: " +
+          saldoFormateado +
+          " soles."
+        );
+      } else {
+        hablarTextoVoz(
+          "Estudiante " +
+          nombreUsuario +
+          ". Saldo actual: " +
+          saldoFormateado +
+          " LDS."
+        );
       }
     }
-  });
+  );
+}
 
-  if (!encontrados.length) {
-    return {
-      ok: false,
-      mensaje:
-        "NO SE ENCONTRÓ EL MOVIMIENTO PARA ANULAR."
-    };
-  }
+function procesarPagoEstudiante() {
+  const codigo =
+    document.getElementById("pagoCodigo")
+      .value.trim().toUpperCase();
 
-  const yaAnulado =
-    encontrados.some(function(x) {
-      return (
-        normalizar_(x.movimiento.estado) ===
-        "ANULADO"
-      );
-    });
+  const tipoOperacion =
+    document.getElementById("pagoOperacionVal").value;
 
-  if (yaAnulado) {
-    return {
-      ok: false,
-      mensaje:
-        "LA TRANSACCIÓN YA SE ENCUENTRA ANULADA."
-    };
-  }
-
-  const txOriginal =
-    txBuscada ||
-    extraerTX_(
-      encontrados[0].movimiento.observacion
-    );
-
-  if (!txOriginal) {
-    return {
-      ok: false,
-      mensaje:
-        "EL MOVIMIENTO NO TIENE TX. NO SE ANULA AUTOMÁTICAMENTE PARA EVITAR ALTERAR HISTORIAL."
-    };
-  }
-
-  const grupo =
-    datos.movimientos.filter(function(m) {
-      return (
-        extraerTX_(m.observacion) ===
-        txOriginal
-      );
-    });
-
-  if (grupo.length !== 2) {
-    return {
-      ok: false,
-      mensaje:
-        "LA TRANSACCIÓN " +
-        txOriginal +
-        " NO TIENE EL PAR COMPLETO. NO SE ALTERÓ NADA."
-    };
-  }
-
-  const monto = numero_(grupo[0].monto);
-
-  if (!(monto > 0)) {
-    return {
-      ok: false,
-      mensaje:
-        "MONTO INVÁLIDO EN LA TRANSACCIÓN ORIGINAL."
-    };
-  }
-
-  const hoja =
-    obtenerHojaMovimientos_();
-
-  grupo.forEach(function(m) {
-    const fila =
-      encontrarFilaPorMovimiento_(
-        datos.movimientos,
-        m
-      );
-
-    if (fila > 1) {
-      establecerCampo_(
-        hoja,
-        fila,
-        "ESTADO",
-        "ANULADO"
-      );
-
-      establecerCampo_(
-        hoja,
-        fila,
-        "OBSERVACION",
-        unirObservaciones_(
-          m.observacion,
-          "ANULADO_POR=" +
-            actor.codigo,
-          "FECHA_ANULACION=" +
-            Utilities.formatDate(
-              new Date(),
-              Session.getScriptTimeZone() ||
-                "America/Lima",
-              "dd/MM/yyyy HH:mm:ss"
-            )
-        )
-      );
-    }
-  });
-
-  const egresoOriginal =
-    grupo.find(function(m) {
-      return (
-        normalizar_(m.tipo) ===
-        "EGRESO"
-      );
-    });
-
-  const ingresoOriginal =
-    grupo.find(function(m) {
-      return (
-        normalizar_(m.tipo) ===
-        "INGRESO"
-      );
-    });
-
-  if (!egresoOriginal || !ingresoOriginal) {
-    return {
-      ok: false,
-      mensaje:
-        "EL PAR ORIGINAL NO TIENE EGRESO E INGRESO."
-    };
-  }
-
-  const txReversion =
-    "REV-" + Utilities.getUuid();
-
-  const ahora = new Date();
-
-  const anio =
-    normalizarAnio_(
-      p.anio ||
-      egresoOriginal.anio ||
-      ingresoOriginal.anio
-    );
-
-  const entidadOrigen =
-    obtenerEntidadCuenta_(
-      normalizarCodigo_(
-        ingresoOriginal.codigo
-      ),
-      datos
-    );
-
-  const entidadDestino =
-    obtenerEntidadCuenta_(
-      normalizarCodigo_(
-        egresoOriginal.codigo
-      ),
-      datos
-    );
-
-  if (!entidadOrigen || !entidadDestino) {
-    return {
-      ok: false,
-      mensaje:
-        "NO SE PUDO IDENTIFICAR EL PAR PARA LA REVERSIÓN."
-    };
-  }
+  const categoriaSeleccionada =
+    document.getElementById("pagoTipo").value;
 
   const concepto =
-    "REVERSIÓN DE " +
-    (
-      egresoOriginal.concepto ||
-      "MOVIMIENTO"
+    document.getElementById("pagoConcepto").value;
+
+  const monto =
+    parseFloat(
+      document.getElementById("pagoMonto").value
     );
 
-  const obsComun =
-    unirObservaciones_(
-      "REVERSIÓN DE TX=" +
-        txOriginal,
-      "TX=" + txReversion,
-      "CUENTA_ORIGEN=" +
-        egresoOriginal.codigo,
-      "CUENTA_DESTINO=" +
-        ingresoOriginal.codigo
+  const observacion =
+    document.getElementById("pagoObs").value.trim();
+
+  const anioEscolar =
+    document.getElementById("selectAnioEscolar").value;
+
+  const responsable =
+    sessionStorage.getItem("maestraActiva") ||
+    "DOCENTE";
+
+  const responsableClave =
+    sessionStorage.getItem("responsableClave") ||
+    "";
+
+  if (!codigo) {
+    reproducirSonido('error');
+    mostrarMensajePago(
+      "PRIMERO CONSULTA A UN USUARIO.",
+      "error"
     );
-
-  const reversoEgreso =
-    construirMovimiento_({
-      fecha: ahora,
-      anio: anio,
-      codigo:
-        normalizarCodigo_(
-          ingresoOriginal.codigo
-        ),
-      entidad: entidadOrigen,
-      tipo: "EGRESO",
-      categoria: "ANULACION",
-      concepto: concepto,
-      monto: monto,
-      responsable: actor.nombre,
-      observacion: obsComun,
-      tx: txReversion,
-      rolResponsable: actor.rol
-    });
-
-  const reversoIngreso =
-    construirMovimiento_({
-      fecha: ahora,
-      anio: anio,
-      codigo:
-        normalizarCodigo_(
-          egresoOriginal.codigo
-        ),
-      entidad: entidadDestino,
-      tipo: "INGRESO",
-      categoria: "ANULACION",
-      concepto: concepto,
-      monto: monto,
-      responsable: actor.nombre,
-      observacion: obsComun,
-      tx: txReversion,
-      rolResponsable: actor.rol
-    });
-
-  escribirMovimientoPareado_(
-    reversoEgreso,
-    reversoIngreso
-  );
-
-  return {
-    ok: true,
-    mensaje:
-      "MOVIMIENTO ANULADO MEDIANTE REVERSIÓN.",
-    txOriginal: txOriginal,
-    txReversion: txReversion,
-    monto: monto
-  };
-}
-
-
-/* ============================================================
-   CONSULTAS GENERALES
-   ============================================================ */
-
-function consultarMovimientosGenerales_(p) {
-  const anio = normalizarAnio_(p.anio);
-  const datos = cargarDatosBase_();
-
-  let movimientos =
-    datos.movimientos;
-
-  if (anio) {
-    movimientos =
-      movimientos.filter(function(m) {
-        return String(m.anio) ===
-          String(anio);
-      });
+    hablarTextoVoz(
+      "Primero consulta a un usuario."
+    );
+    return;
   }
 
-  return {
-    ok: true,
-    movimientos: movimientos
-  };
+  if (!monto || monto <= 0) {
+    reproducirSonido('error');
+    mostrarMensajePago(
+      "INGRESA UN MONTO VÁLIDO.",
+      "error"
+    );
+    hablarTextoVoz(
+      "Ingresa un monto válido."
+    );
+    return;
+  }
+
+  reproducirSonido('clic');
+
+  mostrarMensajePago(
+    "PROCESANDO PAGO...",
+    "ok"
+  );
+
+  hablarTextoVoz(
+    "Procesando transacción."
+  );
+
+  llamarAPI(
+    {
+      accion: "registrarMovimiento",
+      codigo: codigo,
+      anio: anioEscolar,
+      tipo: tipoOperacion,
+      categoria: categoriaSeleccionada,
+      concepto: concepto,
+      monto: monto,
+      responsable: responsable,
+      responsableClave: responsableClave,
+      observacion: observacion
+    },
+    function(respuesta) {
+      if (respuesta && respuesta.ok) {
+        reproducirSonido('exito');
+
+        mostrarMensajePago(
+          "¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!",
+          "ok"
+        );
+
+        hablarTextoVoz(
+          "Transacción registrada correctamente."
+        );
+
+        document.getElementById("pagoMonto").value = "";
+        document.getElementById("pagoObs").value = "";
+        document.getElementById("panelPago").classList.add("collapsed");
+
+        consultarEstudiante(
+          sessionStorage.getItem("esAndrew") === "1"
+        );
+
+      } else {
+        reproducirSonido('error');
+
+        mostrarMensajePago(
+          (respuesta && respuesta.mensaje) ||
+          "ERROR AL REGISTRAR.",
+          "error"
+        );
+
+        hablarTextoVoz(
+          "Error al registrar."
+        );
+      }
+    }
+  );
 }
 
+function imprimirReportePersonal() {
+  reproducirSonido('clic');
 
-function consultarCuentas_(p) {
+  if (!datosEstudianteActualGlobal) {
+    alert(
+      "PRIMERO DEBES CONSULTAR A UN ESTUDIANTE."
+    );
+    return;
+  }
+
   const anio =
-    normalizarAnio_(p.anio);
+    document.getElementById(
+      "selectAnioEscolar"
+    ).value;
 
-  const datos =
-    cargarDatosBase_();
+  document.getElementById(
+    "printTituloReporte"
+  ).textContent =
+    "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA (" +
+    anio +
+    ")";
 
-  const cuentas = [];
+  const nombreEst =
+    datosEstudianteActualGlobal.nombreCompleto ||
+    datosEstudianteActualGlobal.nombre ||
+    "ESTUDIANTE";
 
-  cuentas.push({
-    codigo: CONFIG.CODIGO_ANDREW,
-    nombre: CONFIG.NOMBRE_ANDREW,
-    rol: CONFIG.ROL_ANDREW,
-    tipoCuenta:
-      CONFIG.TIPO_CUENTA_ANDREW,
-    saldoActual:
-      saldoCuentaActual_(
-        CONFIG.CODIGO_ANDREW,
-        datos.movimientos
-      )
-  });
+  const metaEst = [
+    datosEstudianteActualGlobal.codigo,
+    "AÑO: " + anio,
+    datosEstudianteActualGlobal.grado,
+    datosEstudianteActualGlobal.seccion
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-  Object.keys(
-    CONFIG.CUENTAS_MISES_LDS360
-  ).forEach(function(k) {
-    const m =
-      CONFIG.CUENTAS_MISES_LDS360[k];
+  document.getElementById(
+    "printNombreEntidad"
+  ).textContent = nombreEst;
 
-    cuentas.push({
-      codigo: m.codigo,
-      nombre: m.nombre,
-      rol: m.rol,
-      tipoCuenta: m.tipo,
-      saldoActual:
-        saldoCuentaActual_(
-          m.codigo,
-          datos.movimientos
-        )
-    });
-  });
+  document.getElementById(
+    "printMetaEntidad"
+  ).textContent = metaEst;
 
-  datos.estudiantes.forEach(
-    function(e) {
-      const codigo =
-        normalizarCodigo_(e.codigo);
+  const originalFoto =
+    String(
+      datosEstudianteActualGlobal.fotoUrl ||
+      datosEstudianteActualGlobal.foto ||
+      ""
+    ).trim();
 
-      if (!codigo) return;
+  const urls =
+    obtenerURLsFoto(originalFoto);
 
-      cuentas.push({
-        codigo: codigo,
-        nombre:
-          e.nombreCompleto ||
-          e.nombre ||
-          "",
-        rol:
-          e.rol ||
-          "ALUMNO",
-        grado:
-          e.grado || "",
-        seccion:
-          e.seccion || "",
-        tipoCuenta:
-          e.tipoCuenta ||
-          "ALUMNO",
-        saldoActual:
-          saldoCuentaActual_(
-            codigo,
-            datos.movimientos
-          ),
-        anio: anio
-      });
-    }
+  document.getElementById(
+    "printFotoEntidad"
+  ).src =
+    urls[0] || "";
+
+  hablarTextoVoz(
+    "Imprimiendo estado de cuenta personal."
   );
 
-  return {
-    ok: true,
-    cuentas: cuentas
-  };
+  window.print();
 }
 
+function imprimirReporteGrupal() {
+  reproducirSonido('clic');
 
-/* ============================================================
-   CARGA DE DATOS
-   ============================================================ */
+  const anio =
+    document.getElementById(
+      "selectAnioEscolar"
+    ).value;
 
-function cargarDatosBase_() {
-  const ss =
-    SpreadsheetApp.openById(
-      CONFIG.SPREADSHEET_ID
+  const esAndrew =
+    sessionStorage.getItem("esAndrew") === "1";
+
+  document.getElementById(
+    "printTituloReporte"
+  ).textContent =
+    "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL (" +
+    anio +
+    ")";
+
+  document.getElementById(
+    "printNombreEntidad"
+  ).textContent =
+    maestraActivaGlobal ||
+    "DOCENTE CAJERA";
+
+  document.getElementById(
+    "printMetaEntidad"
+  ).textContent =
+    esAndrew
+      ? "CAJERO GENERAL — BANCO LDS 360 (" +
+        anio +
+        ")"
+      : "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" +
+        anio +
+        ")";
+
+  const fotoResponsable =
+    obtenerURLsFoto(
+      FOTOS_DOCENTES[
+        maestraActivaGlobal
+      ] || ""
     );
 
-  const hojaEst =
-    ss.getSheetByName(
-      CONFIG.HOJA_ESTUDIANTES
-    );
+  document.getElementById(
+    "printFotoEntidad"
+  ).src =
+    fotoResponsable[0] || "";
 
-  const hojaMov =
-    ss.getSheetByName(
-      CONFIG.HOJA_MOVIMIENTOS
-    );
+  hablarTextoVoz(
+    "Imprimiendo reporte general y balance grupal."
+  );
 
-  if (!hojaEst) {
-    throw new Error(
-      "NO EXISTE LA HOJA " +
-      CONFIG.HOJA_ESTUDIANTES
-    );
-  }
-
-  if (!hojaMov) {
-    throw new Error(
-      "NO EXISTE LA HOJA " +
-      CONFIG.HOJA_MOVIMIENTOS
-    );
-  }
-
-  return {
-    spreadsheet: ss,
-    hojaEstudiantes: hojaEst,
-    hojaMovimientos: hojaMov,
-    estudiantes:
-      leerEstudiantes_(hojaEst),
-    movimientos:
-      leerMovimientos_(hojaMov)
-  };
+  window.print();
 }
 
-
-function leerEstudiantes_(hoja) {
-  const values =
-    hoja.getDataRange().getValues();
-
-  if (!values.length) return [];
-
-  const encabezados =
-    values[0].map(
-      normalizarEncabezado_
+function renderMovimientos(
+  movimientos,
+  estudianteObj,
+  anioEscolar
+) {
+  const tabla =
+    document.getElementById(
+      "tablaMovimientos"
     );
 
-  const salida = [];
+  tabla.innerHTML = "";
 
-  for (
-    let i = 1;
-    i < values.length;
-    i++
-  ) {
-    const fila = values[i];
+  document.getElementById(
+    "contadorMovimientos"
+  ).textContent =
+    String(movimientos.length);
 
-    if (
-      fila.every(function(v) {
-        return String(
-          v == null ? "" : v
-        ).trim() === "";
-      })
-    ) {
-      continue;
-    }
-
-    const obj =
-      filaAObjeto_(
-        fila,
-        encabezados
-      );
-
-    const codigo =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "CODIGO",
-          "CODIGOQR",
-          "QR",
-          "CODIGOESTUDIANTE",
-          "CODIGOALUMNO",
-          "ID"
-        ]
-      );
-
-    if (
-      !String(codigo || "")
-        .trim()
-    ) {
-      continue;
-    }
-
-    const nombre =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "NOMBRECOMPLETO",
-          "NOMBRE",
-          "ESTUDIANTE",
-          "ALUMNO",
-          "APELLIDOSYNOMBRES",
-          "APELLIDOSNOMBRES"
-        ]
-      ) || "";
-
-    const grado =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "GRADO",
-          "NIVELGRADO"
-        ]
-      ) || "";
-
-    const seccion =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "SECCION",
-          "SECC"
-        ]
-      ) || "";
-
-    const rol =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "ROL",
-          "TIPO",
-          "PERFIL"
-        ]
-      ) || "ALUMNO";
-
-    const foto =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "FOTOURL",
-          "FOTO",
-          "IMAGEN",
-          "URLFOTO"
-        ]
-      ) || "";
-
-    salida.push({
-      codigo:
-        normalizarCodigo_(codigo),
-      nombreCompleto:
-        String(nombre),
-      nombre:
-        String(nombre),
-      grado:
-        String(grado),
-      seccion:
-        String(seccion),
-      rol:
-        String(rol),
-      fotoUrl:
-        String(foto),
-      fila:
-        i + 1,
-      bonoMensual:
-        CONFIG.BONO_MENSUAL_ALUMNO,
-      esDocente:
-        normalizar_(rol)
-          .includes("DOCENTE") ||
-        normalizar_(rol)
-          .includes("MAESTRA")
-    });
+  if (!movimientos.length) {
+    tabla.innerHTML =
+      '<tr><td colspan="9" class="empty">' +
+      'NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO ' +
+      anioEscolar +
+      '.</td></tr>';
+    return;
   }
 
-  return salida;
-}
+  movimientos.forEach(m => {
+    const tr =
+      document.createElement("tr");
 
-
-function leerMovimientos_(hoja) {
-  const values =
-    hoja.getDataRange().getValues();
-
-  if (!values.length) return [];
-
-  const encabezados =
-    values[0].map(
-      normalizarEncabezado_
-    );
-
-  const salida = [];
-
-  for (
-    let i = 1;
-    i < values.length;
-    i++
-  ) {
-    const fila = values[i];
-
-    if (
-      fila.every(function(v) {
-        return String(
-          v == null ? "" : v
-        ).trim() === "";
-      })
-    ) {
-      continue;
-    }
-
-    const obj =
-      filaAObjeto_(
-        fila,
-        encabezados
-      );
-
-    const codigo =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "CODIGO",
-          "CODIGOQR",
-          "CODIGOESTUDIANTE",
-          "CUENTA",
-          "ID"
-        ]
-      );
-
-    if (
-      !String(codigo || "")
-        .trim()
-    ) {
-      continue;
-    }
+    const anioMov =
+      m.anio ||
+      m.anioEscolar ||
+      anioEscolar;
 
     const fecha =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "TIMESTAMP",
-          "FECHA",
-          "FECHAHORA",
-          "FECHAOPERACION"
-        ]
+      m.fechaTexto ||
+      m.fecha ||
+      m.timestamp ||
+      "";
+
+    const nombre =
+      m.estudiante ||
+      m.nombre ||
+      (
+        estudianteObj
+          ? estudianteObj.nombreCompleto
+          : ""
       );
 
-    const anio =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "ANIO",
-          "ANIOESCOLAR",
-          "ANO",
-          "YEAR"
-        ]
-      ) ||
+    const grado =
+      m.grado ||
       (
-        fecha instanceof Date
-          ? fecha.getFullYear()
+        estudianteObj
+          ? estudianteObj.grado
           : ""
       );
 
     const tipo =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "TIPO",
-          "TIPOMOVIMIENTO",
-          "MOVIMIENTO"
-        ]
-      ) || "";
+      m.tipo ||
+      m.tipoMovimiento ||
+      "";
 
     const concepto =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "CONCEPTO",
-          "DESCRIPCION"
-        ]
-      ) || "";
+      m.concepto ||
+      "";
 
     const monto =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "MONTO",
-          "MONTOLDS",
-          "MONTO_DLS",
-          "VALOR",
-          "IMPORTE"
-        ]
-      ) || 0;
+      m.monto ??
+      m.montoLDS ??
+      0;
 
     const responsable =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "RESPONSABLE",
-          "CAJERO",
-          "CAJEROA"
-        ]
-      ) || "";
+      m.responsable ||
+      "";
 
     const observacion =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "OBSERVACION",
-          "OBSERVACIONES",
-          "DETALLE"
-        ]
-      ) || "";
+      m.observacion ||
+      "";
 
-    const estado =
-      buscarValorPorClaves_(
-        obj,
-        [
-          "ESTADO",
-          "STATUS"
-        ]
-      ) || "";
+    const badgeClase =
+      String(tipo)
+        .toUpperCase()
+        .includes("EGRESO")
+          ? "badge-egreso"
+          : "badge-ingreso";
 
-    salida.push({
-      fila:
-        i + 1,
-      id:
-        String(
-          buscarValorPorClaves_(
-            obj,
-            [
-              "ID",
-              "IDMOVIMIENTO",
-              "MOVIMIENTOID"
-            ]
-          ) ||
-          ("ROW-" + i)
-        ),
-      fecha:
-        fecha,
-      fechaTexto:
-        formatearFecha_(fecha),
-      anio:
-        String(anio || ""),
-      codigo:
-        normalizarCodigo_(codigo),
-      estudiante:
-        String(
-          buscarValorPorClaves_(
-            obj,
-            [
-              "ESTUDIANTE",
-              "NOMBRE",
-              "NOMBRECOMPLETO",
-              "ALUMNO"
-            ]
-          ) || ""
-        ),
-      grado:
-        String(
-          buscarValorPorClaves_(
-            obj,
-            ["GRADO"]
-          ) || ""
-        ),
-      tipo:
-        normalizar_(tipo),
-      categoria:
-        String(
-          buscarValorPorClaves_(
-            obj,
-            [
-              "CATEGORIA",
-              "TIPOCATEGORIA"
-            ]
-          ) || ""
-        ),
-      concepto:
-        String(concepto),
-      monto:
-        numero_(monto),
-      responsable:
-        String(responsable),
-      observacion:
-        String(observacion),
-      estado:
-        String(estado),
-      tx:
-        extraerTX_(observacion)
-    });
-  }
+    tr.innerHTML =
+      '<td><strong>' +
+      escaparHTML(anioMov) +
+      '</strong></td>' +
 
-  return salida;
+      '<td>' +
+      escaparHTML(fecha) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(nombre) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(grado) +
+      '</td>' +
+
+      '<td><span class="' +
+      badgeClase +
+      '">' +
+      escaparHTML(tipo) +
+      '</span></td>' +
+
+      '<td>' +
+      escaparHTML(concepto) +
+      '</td>' +
+
+      '<td><strong>' +
+      formatearLDS(monto) +
+      '</strong></td>' +
+
+      '<td>' +
+      escaparHTML(responsable) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(observacion) +
+      '</td>';
+
+    tabla.appendChild(tr);
+  });
 }
 
-
-/* ============================================================
-   ENTIDADES / CUENTAS
-   ============================================================ */
-
-function buscarEntidad_(codigo, datos) {
-  const c =
-    normalizarCodigo_(codigo);
-
-  return (
-    datos.estudiantes.find(
-      function(e) {
-        return (
-          normalizarCodigo_(
-            e.codigo
-          ) === c
-        );
-      }
-    ) || null
-  );
-}
-
-
-function obtenerEntidadCuenta_(
-  codigo,
-  datos
-) {
-  const c =
-    normalizarCodigo_(codigo);
-
-  if (
-    c === CONFIG.CODIGO_ANDREW
-  ) {
-    return {
-      codigo:
-        CONFIG.CODIGO_ANDREW,
-      nombre:
-        CONFIG.NOMBRE_ANDREW,
-      rol:
-        CONFIG.ROL_ANDREW,
-      tipoCuenta:
-        CONFIG.TIPO_CUENTA_ANDREW,
-      grado:
-        "CAJA GENERAL",
-      seccion:
-        "",
-      esDocente:
-        true,
-      esAndrew:
-        true
-    };
-  }
-
-  const mise =
-    obtenerMisePorCodigo_(c);
-
-  if (mise) {
-    return {
-      codigo:
-        mise.codigo,
-      nombre:
-        mise.nombre,
-      rol:
-        mise.rol,
-      tipoCuenta:
-        mise.tipo,
-      grado:
-        "",
-      seccion:
-        "",
-      esDocente:
-        true
-    };
-  }
-
-  return buscarEntidad_(
-    c,
-    datos
-  );
-}
-
-
-function obtenerMisePorCodigo_(
-  codigo
-) {
-  const c =
-    normalizarCodigo_(codigo);
-
-  const claves =
-    Object.keys(
-      CONFIG.CUENTAS_MISES_LDS360
-    );
-
-  for (
-    let i = 0;
-    i < claves.length;
-    i++
-  ) {
-    const m =
-      CONFIG.CUENTAS_MISES_LDS360[
-        claves[i]
-      ];
-
-    if (
-      normalizarCodigo_(
-        m.codigo
-      ) === c
-    ) {
-      return m;
-    }
-  }
-
-  return null;
-}
-
-
-function buscarMisePorNombre_(
-  nombre
-) {
-  const n =
-    normalizar_(nombre);
-
-  const claves =
-    Object.keys(
-      CONFIG.CUENTAS_MISES_LDS360
-    );
-
-  for (
-    let i = 0;
-    i < claves.length;
-    i++
-  ) {
-    const m =
-      CONFIG.CUENTAS_MISES_LDS360[
-        claves[i]
-      ];
-
-    const mn =
-      normalizar_(m.nombre);
-
-    if (
-      mn === n ||
-      mn.includes(n) ||
-      n.includes(mn)
-    ) {
-      return m;
-    }
-  }
-
-  return null;
-}
-
-
-/* ============================================================
-   SALDOS
-   ============================================================ */
-
-function saldoCuentaActual_(
-  codigo,
-  movimientos
-) {
-  const c =
-    normalizarCodigo_(codigo);
-
-  let saldo = 0;
-
-  movimientos.forEach(
-    function(m) {
-      if (
-        normalizarCodigo_(
-          m.codigo
-        ) !== c
-      ) {
-        return;
-      }
-
-      if (
-        normalizar_(m.estado) ===
-        "ANULADO"
-      ) {
-        return;
-      }
-
-      const monto =
-        numero_(m.monto);
-
-      const tipo =
-        normalizar_(m.tipo);
-
-      if (tipo === "INGRESO") {
-        saldo += monto;
-      } else if (
-        tipo === "EGRESO"
-      ) {
-        saldo -= monto;
-      }
-    }
-  );
-
-  return redondear_(saldo);
-}
-
-
-function movimientosDeCuenta_(
-  codigo,
-  movimientos,
-  anio
-) {
-  const c =
-    normalizarCodigo_(codigo);
-
-  return movimientos
-    .filter(function(m) {
-      if (
-        normalizarCodigo_(
-          m.codigo
-        ) !== c
-      ) {
-        return false;
-      }
-
-      if (
-        anio &&
-        String(m.anio) !==
-          String(anio)
-      ) {
-        return false;
-      }
-
-      return true;
-    })
-    .sort(function(a, b) {
-      const da =
-        a.fecha instanceof Date
-          ? a.fecha.getTime()
-          : 0;
-
-      const db =
-        b.fecha instanceof Date
-          ? b.fecha.getTime()
-          : 0;
-
-      return db - da;
-    })
-    .map(function(m) {
-      return {
-        id: m.id,
-        fila: m.fila,
-        anio: m.anio,
-        timestamp:
-          m.fechaTexto,
-        fecha:
-          m.fechaTexto,
-        fechaTexto:
-          m.fechaTexto,
-        codigo:
-          m.codigo,
-        codigoQR:
-          m.codigo,
-        estudiante:
-          m.estudiante,
-        nombre:
-          m.estudiante,
-        grado:
-          m.grado,
-        tipo:
-          m.tipo,
-        tipoMovimiento:
-          m.tipo,
-        categoria:
-          m.categoria,
-        concepto:
-          m.concepto,
-        monto:
-          m.monto,
-        montoLDS:
-          m.monto,
-        responsable:
-          m.responsable,
-        observacion:
-          m.observacion,
-        estado:
-          m.estado,
-        tx:
-          m.tx
-      };
-    });
-}
-
-
-/* ============================================================
-   ESCRITURA — NO DESTRUCTIVA
-   ============================================================ */
-
-function obtenerHojaMovimientos_() {
-  const ss =
-    SpreadsheetApp.openById(
-      CONFIG.SPREADSHEET_ID
-    );
-
-  const hoja =
-    ss.getSheetByName(
-      CONFIG.HOJA_MOVIMIENTOS
-    );
-
-  if (!hoja) {
-    throw new Error(
-      "NO EXISTE LA HOJA " +
-      CONFIG.HOJA_MOVIMIENTOS
-    );
-  }
-
-  return hoja;
-}
-
-
-function escribirMovimientoPareado_(
-  mov1,
-  mov2
-) {
-  const hoja =
-    obtenerHojaMovimientos_();
-
-  const lock =
-    LockService.getScriptLock();
-
-  lock.waitLock(30000);
-
+function obtenerIncidencias() {
   try {
-    const encabezados =
-      obtenerEncabezados_(hoja);
-
-    const fila1 =
-      movimientoAFila_(
-        mov1,
-        encabezados
-      );
-
-    const fila2 =
-      movimientoAFila_(
-        mov2,
-        encabezados
-      );
-
-    const ultimaColumna =
-      Math.max(
-        hoja.getLastColumn(),
-        encabezados.length
-      );
-
-    const filaFinal1 =
-      ajustarLongitudFila_(
-        fila1,
-        ultimaColumna
-      );
-
-    const filaFinal2 =
-      ajustarLongitudFila_(
-        fila2,
-        ultimaColumna
-      );
-
-    const filaNueva =
-      Math.max(
-        hoja.getLastRow() + 1,
-        2
-      );
-
-    hoja
-      .getRange(
-        filaNueva,
-        1,
-        2,
-        ultimaColumna
-      )
-      .setValues([
-        filaFinal1,
-        filaFinal2
-      ]);
-
-    SpreadsheetApp.flush();
-
-  } finally {
-    lock.releaseLock();
+    return JSON.parse(
+      localStorage.getItem(
+        "BANCO_LDS_360_INCIDENCIAS"
+      ) || "[]"
+    );
+  } catch (_) {
+    return [];
   }
 }
 
+function guardarIncidencia() {
+  const codigo =
+    document.getElementById("incCodigo")
+      .value.trim().toUpperCase();
 
-function ajustarLongitudFila_(
-  fila,
-  longitud
-) {
-  const salida =
-    fila.slice(0);
+  const problema =
+    document.getElementById("incProblema")
+      .value.trim();
 
-  while (
-    salida.length <
-    longitud
-  ) {
-    salida.push("");
+  const solucion =
+    document.getElementById("incSolucion")
+      .value.trim();
+
+  const estado =
+    document.getElementById("incEstado")
+      .value;
+
+  const anio =
+    document.getElementById("selectAnioEscolar")
+      .value;
+
+  if (!codigo || !problema) {
+    reproducirSonido('error');
+    alert(
+      "INGRESA CÓDIGO Y PROBLEMA."
+    );
+    hablarTextoVoz(
+      "Ingresa código y problema."
+    );
+    return;
   }
 
-  if (
-    salida.length >
-    longitud
-  ) {
-    salida.length =
-      longitud;
-  }
-
-  return salida;
-}
-
-
-function movimientoAFila_(
-  m,
-  encabezados
-) {
-  const salida =
-    new Array(
-      encabezados.length
-    ).fill("");
-
-  encabezados.forEach(
-    function(h, i) {
-      switch (h) {
-        case "TIMESTAMP":
-        case "FECHA":
-        case "FECHAHORA":
-          salida[i] = m.fecha;
-          break;
-
-        case "ANIO":
-        case "ANIOESCOLAR":
-        case "ANO":
-        case "YEAR":
-          salida[i] = m.anio;
-          break;
-
-        case "CODIGO":
-        case "CODIGOQR":
-        case "CODIGOESTUDIANTE":
-        case "CUENTA":
-          salida[i] = m.codigo;
-          break;
-
-        case "ESTUDIANTE":
-        case "NOMBRE":
-        case "NOMBRECOMPLETO":
-        case "ALUMNO":
-          salida[i] =
-            m.entidad.nombre || "";
-          break;
-
-        case "GRADO":
-          salida[i] =
-            m.entidad.grado || "";
-          break;
-
-        case "TIPO":
-        case "TIPOMOVIMIENTO":
-        case "MOVIMIENTO":
-          salida[i] = m.tipo;
-          break;
-
-        case "CATEGORIA":
-        case "TIPOCATEGORIA":
-          salida[i] = m.categoria;
-          break;
-
-        case "CONCEPTO":
-        case "DESCRIPCION":
-          salida[i] = m.concepto;
-          break;
-
-        case "MONTO":
-        case "MONTOLDS":
-        case "VALOR":
-        case "IMPORTE":
-          salida[i] = m.monto;
-          break;
-
-        case "RESPONSABLE":
-        case "CAJERO":
-        case "CAJEROA":
-          salida[i] =
-            m.responsable;
-          break;
-
-        case "RESPONSABLECLAVE":
-          salida[i] = "";
-          break;
-
-        case "OBSERVACION":
-        case "OBSERVACIONES":
-        case "DETALLE":
-          salida[i] =
-            m.observacion;
-          break;
-
-        case "ESTADO":
-        case "STATUS":
-          salida[i] = "ACTIVO";
-          break;
-
-        case "TX":
-        case "TRANSACCION":
-        case "IDTRANSACCION":
-          salida[i] = m.tx;
-          break;
-
-        case "ID":
-        case "IDMOVIMIENTO":
-        case "MOVIMIENTOID":
-          salida[i] =
-            m.id || m.tx;
-          break;
-
-        case "ROLRESPONSABLE":
-          salida[i] =
-            m.rolResponsable ||
-            "";
-          break;
-
-        default:
-          break;
-      }
-    }
-  );
-
-  return salida;
-}
-
-
-function construirMovimiento_(o) {
-  return {
-    id:
-      o.tx +
-      "-" +
-      normalizarCodigo_(
-        o.codigo
-      ),
-    fecha:
-      o.fecha || new Date(),
-    anio:
-      String(o.anio || ""),
-    codigo:
-      normalizarCodigo_(
-        o.codigo
-      ),
-    entidad:
-      o.entidad,
-    tipo:
-      normalizar_(o.tipo),
-    categoria:
-      String(
-        o.categoria || ""
-      ),
-    concepto:
-      String(
-        o.concepto || ""
-      ),
-    monto:
-      redondear_(
-        numero_(o.monto)
-      ),
-    responsable:
-      String(
-        o.responsable || ""
-      ),
-    observacion:
-      String(
-        o.observacion || ""
-      ),
-    tx:
-      String(o.tx || ""),
-    rolResponsable:
-      String(
-        o.rolResponsable || ""
-      )
-  };
-}
-
-
-/* ============================================================
-   UTILIDADES DE HOJAS
-   ============================================================ */
-
-function obtenerEncabezados_(
-  hoja
-) {
-  const ultima =
-    Math.max(
-      hoja.getLastColumn(),
-      1
-    );
-
-  return hoja
-    .getRange(
-      1,
-      1,
-      1,
-      ultima
-    )
-    .getValues()[0]
-    .map(
-      normalizarEncabezado_
-    );
-}
-
-
-function establecerCampo_(
-  hoja,
-  fila,
-  nombreCampo,
-  valor
-) {
-  const encabezados =
-    obtenerEncabezados_(hoja);
-
-  const campo =
-    normalizarEncabezado_(
-      nombreCampo
-    );
-
-  const indice =
-    encabezados.indexOf(
-      campo
-    );
-
-  if (indice >= 0) {
-    hoja
-      .getRange(
-        fila,
-        indice + 1
-      )
-      .setValue(valor);
-
-    return true;
-  }
-
-  return false;
-}
-
-
-function encontrarFilaPorMovimiento_(
-  movimientos,
-  buscado
-) {
-  const tx =
-    extraerTX_(
-      buscado.observacion
-    );
-
-  if (tx) {
-    const encontrado =
-      movimientos.find(
-        function(m) {
-          return (
-            extraerTX_(
-              m.observacion
-            ) === tx &&
-            normalizarCodigo_(
-              m.codigo
-            ) ===
-              normalizarCodigo_(
-                buscado.codigo
-              ) &&
-            normalizar_(
-              m.tipo
-            ) ===
-              normalizar_(
-                buscado.tipo
-              )
-          );
-        }
-      );
-
-    if (encontrado) {
-      return encontrado.fila;
-    }
-  }
-
-  return buscado.fila || 0;
-}
-
-
-/* ============================================================
-   OBJETOS / NORMALIZACIÓN
-   ============================================================ */
-
-function filaAObjeto_(
-  fila,
-  encabezados
-) {
-  const obj = {};
-
-  encabezados.forEach(
-    function(h, i) {
-      if (h) {
-        obj[h] =
-          fila[i];
-      }
-    }
-  );
-
-  return obj;
-}
-
-
-function buscarValorPorClaves_(
-  obj,
-  claves
-) {
-  for (
-    let i = 0;
-    i < claves.length;
-    i++
-  ) {
-    const clave =
-      normalizarEncabezado_(
-        claves[i]
-      );
-
-    if (
-      Object.prototype
-        .hasOwnProperty.call(
-          obj,
-          clave
-        ) &&
-      obj[clave] !== "" &&
-      obj[clave] !== null &&
-      obj[clave] !==
-        undefined
-    ) {
-      return obj[clave];
-    }
-  }
-
-  return "";
-}
-
-
-function normalizarEncabezado_(
-  valor
-) {
-  return normalizar_(valor)
-    .replace(
-      /[^A-Z0-9]/g,
-      ""
-    );
-}
-
-
-function normalizar_(valor) {
-  return String(
-    valor == null
-      ? ""
-      : valor
-  )
-    .trim()
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    );
-}
-
-
-function normalizarCodigo_(
-  valor
-) {
-  return String(
-    valor == null
-      ? ""
-      : valor
-  )
-    .trim()
-    .toUpperCase();
-}
-
-
-function normalizarAnio_(
-  valor
-) {
-  const n =
-    parseInt(
-      String(valor || ""),
-      10
-    );
-
-  if (isNaN(n)) return "";
-
-  return String(n);
-}
-
-
-function numero_(valor) {
-  if (
-    typeof valor ===
-    "number"
-  ) {
-    return isFinite(valor)
-      ? valor
-      : 0;
-  }
-
-  let texto =
-    String(
-      valor == null
-        ? ""
-        : valor
-    ).trim();
-
-  if (!texto) return 0;
-
-  texto =
-    texto.replace(
-      /[^\d,.\-]/g,
-      ""
-    );
-
-  const tieneComa =
-    texto.indexOf(",") >= 0;
-
-  const tienePunto =
-    texto.indexOf(".") >= 0;
-
-  if (
-    tieneComa &&
-    tienePunto
-  ) {
-    if (
-      texto.lastIndexOf(",") >
-      texto.lastIndexOf(".")
-    ) {
-      texto =
-        texto
-          .replace(/\./g, "")
-          .replace(",", ".");
-    } else {
-      texto =
-        texto.replace(
-          /,/g,
-          ""
-        );
-    }
-  } else if (
-    tieneComa
-  ) {
-    texto =
-      texto.replace(
-        ",",
-        "."
-      );
-  }
-
-  const n =
-    parseFloat(texto);
-
-  return isFinite(n)
-    ? n
-    : 0;
-}
-
-
-function redondear_(n) {
-  return Math.round(
-    numero_(n) * 100
-  ) / 100;
-}
-
-
-function formatearNumero_(n) {
-  return redondear_(n)
-    .toFixed(2);
-}
-
-
-function formatearFecha_(
-  valor
-) {
-  if (!valor) return "";
-
-  if (
-    Object.prototype
-      .toString.call(valor) ===
-      "[object Date]" &&
-    !isNaN(valor.getTime())
-  ) {
-    return Utilities
-      .formatDate(
-        valor,
-        Session.getScriptTimeZone() ||
-          "America/Lima",
-        "dd/MM/yyyy HH:mm:ss"
-      );
-  }
-
-  return String(valor);
-}
-
-
-function unirObservaciones_() {
-  return Array.prototype
-    .slice
-    .call(arguments)
-    .map(function(v) {
-      return String(
-        v || ""
-      ).trim();
-    })
-    .filter(Boolean)
-    .join(" | ");
-}
-
-
-function extraerTX_(
-  observacion
-) {
-  const texto =
-    String(
-      observacion || ""
-    );
-
-  const match =
-    texto.match(
-      /(?:^|\|)\s*TX\s*=\s*([^|]+)/i
-    );
-
-  return match
-    ? String(
-        match[1]
-      ).trim()
-    : "";
-}
-
-
-/* ============================================================
-   DIAGNÓSTICO NO DESTRUCTIVO
-   ============================================================ */
-
-function diagnosticoBancoLDS360() {
-  const datos =
-    cargarDatosBase_();
-
-  const resultado = {
-    ok: true,
-    hojaEstudiantes:
-      CONFIG.HOJA_ESTUDIANTES,
-    hojaMovimientos:
-      CONFIG.HOJA_MOVIMIENTOS,
-    estudiantes:
-      datos.estudiantes.length,
-    movimientos:
-      datos.movimientos.length,
-    andrew: {
-      codigo:
-        CONFIG.CODIGO_ANDREW,
-      nombre:
-        CONFIG.NOMBRE_ANDREW,
-      saldo:
-        saldoCuentaActual_(
-          CONFIG.CODIGO_ANDREW,
-          datos.movimientos
-        )
-    },
-    mises: {}
-  };
-
-  Object.keys(
-    CONFIG.CUENTAS_MISES_LDS360
-  ).forEach(function(k) {
-    const m =
-      CONFIG.CUENTAS_MISES_LDS360[
-        k
-      ];
-
-    resultado.mises[
-      m.codigo
-    ] = {
-      nombre:
-        m.nombre,
-      saldo:
-        saldoCuentaActual_(
-          m.codigo,
-          datos.movimientos
-        )
-    };
+  reproducirSonido('exito');
+
+  const items =
+    obtenerIncidencias();
+
+  items.unshift({
+    id: Date.now(),
+    fecha: new Date().toLocaleString("es-PE"),
+    anio,
+    codigo,
+    problema,
+    solucion,
+    estado
   });
 
-  Logger.log(
-    JSON.stringify(
-      resultado,
-      null,
-      2
-    )
+  localStorage.setItem(
+    "BANCO_LDS_360_INCIDENCIAS",
+    JSON.stringify(items)
   );
 
-  return resultado;
+  limpiarIncidencia();
+  renderIncidencias();
+
+  hablarTextoVoz(
+    "Incidencia guardada correctamente."
+  );
+
+  document
+    .getElementById("panelIncidencias")
+    .classList.add("collapsed");
 }
+
+function limpiarIncidencia() {
+  reproducirSonido('clic');
+
+  document.getElementById(
+    "incProblema"
+  ).value = "";
+
+  document.getElementById(
+    "incSolucion"
+  ).value = "";
+
+  document.getElementById(
+    "incEstado"
+  ).value = "PENDIENTE";
+}
+
+function eliminarIncidencia(id) {
+  reproducirSonido('clic');
+
+  const items =
+    obtenerIncidencias()
+      .filter(x => x.id !== id);
+
+  localStorage.setItem(
+    "BANCO_LDS_360_INCIDENCIAS",
+    JSON.stringify(items)
+  );
+
+  renderIncidencias();
+}
+
+function renderIncidencias() {
+  const items =
+    obtenerIncidencias();
+
+  document.getElementById(
+    "contadorIncidencias"
+  ).textContent =
+    String(items.length);
+
+  const box =
+    document.getElementById(
+      "listaIncidencias"
+    );
+
+  if (!items.length) {
+    box.innerHTML =
+      '<div class="empty">' +
+      'TODAVÍA NO HAY INCIDENCIAS.' +
+      '</div>';
+    return;
+  }
+
+  box.innerHTML =
+    items
+      .slice(0, 12)
+      .map(
+        x =>
+          `<div class="incident">
+            <div class="incident-top">
+              <strong>
+                [${escaparHTML(x.anio || '2026')}]
+                ${escaparHTML(x.codigo)}
+              </strong>
+
+              <span class="badge">
+                ${escaparHTML(x.estado)}
+              </span>
+            </div>
+
+            <div>
+              ${escaparHTML(x.problema)}
+            </div>
+
+            ${
+              x.solucion
+                ? `<small>
+                    <strong>SOLUCIÓN:</strong>
+                    ${escaparHTML(x.solucion)}
+                  </small>`
+                : ""
+            }
+
+            <small>
+              ${escaparHTML(x.fecha)}
+              ·
+              <button
+                type="button"
+                class="danger"
+                style="border:0;background:none;padding:0;cursor:pointer"
+                onclick="eliminarIncidencia(${x.id})"
+              >
+                ELIMINAR
+              </button>
+            </small>
+          </div>`
+      )
+      .join("");
+}
+
+document.getElementById("codigo").addEventListener(
+  "keydown",
+  e => {
+    if (e.key === "Enter") {
+      consultarEstudiante();
+    }
+  }
+);
+</script>
+
+</body>
+</html>
