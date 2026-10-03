@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1230,6 +1231,20 @@ const FOTOS_DOCENTES = {
 let datosEstudianteActualGlobal = null;
 let maestraActivaGlobal = "";
 
+/* CUENTAS PROPIAS DE LAS MISES
+   Al ingresar una Mise, su propia caja se consulta automáticamente. */
+const CODIGOS_MISE_POR_NOMBRE = {
+  "MISS LILY MELO AZAÑERO": "CAJA-LILY",
+  "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
+  "MISS ANGHY REYES MELO": "CAJA-ANGHY",
+  "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
+};
+
+function obtenerCodigoCajaMise(nombre) {
+  const n = String(nombre || "").trim().toUpperCase();
+  return CODIGOS_MISE_POR_NOMBRE[n] || "";
+}
+
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
 
 function mostrarFotoMaestra(nombre) {
@@ -1330,6 +1345,21 @@ function desbloquearPanel(nombreMaestra) {
   mostrarFotoMaestra(nombreMaestra);
   cargarConceptosPorTipo();
   renderIncidencias();
+
+  /* IMPORTANTE:
+     La Mise no debe esperar a buscar un alumno para conocer su fondo.
+     Al entrar, consultamos automáticamente SU PROPIA CAJA.
+     Andrew conserva su flujo independiente. */
+  const codigoCajaMise = obtenerCodigoCajaMise(nombreMaestra);
+
+  if (codigoCajaMise) {
+    const campoCodigo = document.getElementById("codigo");
+    if (campoCodigo) campoCodigo.value = codigoCajaMise;
+
+    setTimeout(() => {
+      consultarEstudiante(true);
+    }, 180);
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1412,6 +1442,40 @@ function cerrarEscanerQR() {
 function formatearLDS(valor) {
   const n = Number(valor);
   return Number.isFinite(n) ? n.toFixed(2) : "0.00";
+}
+
+/* Lectura de montos LDS: acepta 15000, 15.000, 15,000 y 15000.00. */
+function parseMontoLDS(valor) {
+  if (typeof valor === "number") return Number.isFinite(valor) ? valor : 0;
+
+  let s = String(valor ?? "").trim().replace(/[^0-9,.-]/g, "");
+  if (!s) return 0;
+
+  const tieneComa = s.includes(",");
+  const tienePunto = s.includes(".");
+
+  if (tieneComa && tienePunto) {
+    if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
+      s = s.replace(/\./g, "").replace(",", ".");
+    } else {
+      s = s.replace(/,/g, "");
+    }
+  } else if (tienePunto) {
+    const partes = s.split(".");
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
+      s = partes.join("");
+    }
+  } else if (tieneComa) {
+    const partes = s.split(",");
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
+      s = partes.join("");
+    } else {
+      s = s.replace(",", ".");
+    }
+  }
+
+  const n = Number(s);
+  return Number.isFinite(n) ? n : 0;
 }
 
 function escaparHTML(texto) {
@@ -1759,7 +1823,7 @@ function procesarPagoEstudiante() {
     document.getElementById("pagoConcepto").value;
 
   const monto =
-    parseFloat(
+    parseMontoLDS(
       document.getElementById("pagoMonto").value
     );
 
@@ -2302,3 +2366,4 @@ document.getElementById("codigo").addEventListener(
 
 </body>
 </html>
+```
