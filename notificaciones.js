@@ -1,7 +1,6 @@
 /* =========================================================
    BANCO LDS 360
-   NOTIFICACIONES
-   Todo el sistema de notificaciones en este archivo.
+   SISTEMA DE NOTIFICACIONES
    ========================================================= */
 
 (() => {
@@ -18,10 +17,6 @@
   const NotificacionesLDS = {
 
     config: CONFIG,
-
-    /* =========================
-       ESTADO
-       ========================= */
 
     soportado() {
       return (
@@ -47,12 +42,7 @@
       };
     },
 
-    /* =========================
-       PERMISO
-       ========================= */
-
     async solicitarPermiso() {
-
       if (!("Notification" in window)) {
         return "unsupported";
       }
@@ -77,30 +67,19 @@
       }
     },
 
-    /* =========================
-       SERVICE WORKER
-       ========================= */
-
     async registrar() {
-
       if (!("serviceWorker" in navigator)) {
         return null;
       }
 
       try {
-
-        const registro =
-          await navigator.serviceWorker.register(
-            CONFIG.serviceWorker,
-            {
-              scope: CONFIG.rutaBase
-            }
-          );
-
-        return registro;
-
+        return await navigator.serviceWorker.register(
+          CONFIG.serviceWorker,
+          {
+            scope: CONFIG.rutaBase
+          }
+        );
       } catch (error) {
-
         console.error(
           "BANCO LDS 360 - Error registrando Service Worker:",
           error
@@ -111,13 +90,11 @@
     },
 
     async obtenerRegistro() {
-
       if (!("serviceWorker" in navigator)) {
         return null;
       }
 
       try {
-
         let registro =
           await navigator.serviceWorker.getRegistration(
             CONFIG.rutaBase
@@ -130,7 +107,6 @@
         return registro;
 
       } catch (error) {
-
         console.error(
           "BANCO LDS 360 - Error obteniendo Service Worker:",
           error
@@ -139,10 +115,6 @@
         return null;
       }
     },
-
-    /* =========================
-       MOSTRAR NOTIFICACIÓN
-       ========================= */
 
     async mostrar(opciones = {}) {
 
@@ -238,10 +210,6 @@
       }
     },
 
-    /* =========================
-       MENSAJE GENERAL
-       ========================= */
-
     async mensaje(titulo, mensaje, opciones = {}) {
 
       return await this.mostrar({
@@ -249,11 +217,8 @@
         titulo,
         mensaje
       });
-    },
 
-    /* =========================
-       MOVIMIENTO
-       ========================= */
+    },
 
     async movimiento(datos = {}) {
 
@@ -279,11 +244,13 @@
         "🔔 BANCO LDS 360";
 
       if (tipo === "INGRESO") {
-        titulo = "💰 BANCO LDS 360 - INGRESO";
+        titulo =
+          "💰 BANCO LDS 360 - INGRESO";
       }
 
       if (tipo === "EGRESO") {
-        titulo = "💳 BANCO LDS 360 - EGRESO";
+        titulo =
+          "💳 BANCO LDS 360 - EGRESO";
       }
 
       const textoMonto =
@@ -315,12 +282,9 @@
           monto,
           anio
         }
+
       });
     },
-
-    /* =========================
-       PRUEBA
-       ========================= */
 
     async prueba() {
 
@@ -351,6 +315,7 @@
         datos: {
           tipo: "PRUEBA"
         }
+
       });
     }
   };
