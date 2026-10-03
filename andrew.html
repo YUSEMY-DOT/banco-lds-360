@@ -29,7 +29,11 @@ button,input,select,textarea{font:inherit}
   gap:clamp(24px,5vw,78px)!important;
   overflow:hidden!important;
   z-index:99999!important;
-  background:#061b3f center center / cover no-repeat!important;
+  background-color:#061b3f!important;
+  background-image:none!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
 }
 
 #loginAndrew{background-color:#061b3f!important;}
@@ -199,6 +203,8 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
 
 button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
+/* El fondo real se carga también por CSS para que esté disponible desde el primer instante. */
+#loginAndrew{background-image:url("assets/FONDO%20ANDREW.png?v=20261002-3") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
 </style>
 </head>
 <body class="login-screen">
@@ -576,10 +582,16 @@ function cargarFoto(){
 function cargarFondoAndrew(){
   const portada = document.getElementById("loginAndrew");
   if(!portada) return;
-  portada.style.backgroundImage = 'url("assets/FONDO%20ANDREW.png?v=20261002-2")';
-  portada.style.backgroundSize = "100% 100%";
-  portada.style.backgroundPosition = "center center";
-  portada.style.backgroundRepeat = "no-repeat";
+
+  /* FONDO REAL DEL COLEGIO: la ruta contiene un espacio, por eso se codifica. */
+  const fondo = 'url("assets/FONDO%20ANDREW.png?v=20261002-3")';
+
+  /* IMPORTANTE: el CSS de la portada usa !important. Por eso también
+     aplicamos el background-image con !important desde JavaScript. */
+  portada.style.setProperty("background-image", fondo, "important");
+  portada.style.setProperty("background-size", "100% 100%", "important");
+  portada.style.setProperty("background-position", "center center", "important");
+  portada.style.setProperty("background-repeat", "no-repeat", "important");
 }
 
 
