@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,6 +7,7 @@
 <title>BANCO LDS 360 — Administración</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="notificaciones.js"></script>
 <style>
 :root {
   --azul: #0c1e30;
@@ -672,80 +674,6 @@ footer {
   width: 100%;
 }
 
-
-/* SELECTOR DE ALUMNO PARA TRANSACCIONES */
-.pago-alumno-search {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-}
-
-.pago-alumno-search input {
-  min-width: 0;
-  background: #ffffff !important;
-  border: 1.5px solid #94a3b8;
-  text-transform: uppercase;
-}
-
-.btn-pago-buscar,
-.btn-pago-limpiar {
-  height: 42px;
-  border-radius: 8px;
-  padding: 0 13px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.btn-pago-buscar {
-  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
-  color: #ffffff;
-  border: 1.5px solid var(--dorado);
-}
-
-.btn-pago-limpiar {
-  background: #ffffff;
-  color: var(--azul);
-  border: 1.5px solid var(--borde);
-}
-
-.pago-alumno-card {
-  display: none;
-  margin-top: 8px;
-  padding: 9px 11px;
-  border: 1.5px solid var(--dorado);
-  border-radius: 9px;
-  background: #f8fafc;
-}
-
-.pago-alumno-card.show { display: block; }
-.pago-alumno-nombre { font-size: 0.82rem; font-weight: 900; color: var(--azul); }
-.pago-alumno-meta { margin-top: 2px; color: var(--muted); font-size: 0.68rem; font-weight: 700; }
-.pago-alumno-saldo { margin-top: 5px; display: inline-block; padding: 3px 8px; border-radius: 5px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; font-size: 0.68rem; font-weight: 900; }
-
-.pago-ayuda {
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 0.64rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.pago-acciones-secundarias {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-@media(max-width: 520px) {
-  .pago-alumno-search { grid-template-columns: 1fr; }
-  .btn-pago-buscar, .btn-pago-limpiar { width: 100%; }
-}
-
 .type-selector-box {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -770,16 +698,12 @@ footer {
 .type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
 .type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
 
-/* ==========================================================
-   SELECTOR VISUAL DE MISES Y CAJERO GENERAL
-   Se conserva el formato de fotos como botones.
-   ========================================================== */
+/* FOTOS DE LAS MISES EN ACCESO ADMINISTRATIVO */
 .mises-fotos-grid{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:8px;
   margin:8px 0 10px;
-  width:100%;
 }
 .mise-foto-btn{
   border:1.5px solid var(--borde);
@@ -800,56 +724,32 @@ footer {
   border-color:var(--dorado);
   background:#fffaf0;
   box-shadow:0 2px 8px rgba(0,0,0,.10);
-  transform:translateY(-1px);
 }
 .mise-foto-btn img{
-  width:54px;
-  height:54px;
+  width:48px;
+  height:48px;
   border-radius:50%;
   object-fit:cover;
   border:2px solid var(--dorado);
   background:#fff;
 }
+/* OCULTAR SELECTOR: LA SELECCIÓN SE HACE SOLO CON LAS FOTOS */
+#docenteSelect{
+  display:none !important;
+}
 .mise-foto-btn span{
   color:var(--azul);
-  font-size:.60rem;
+  font-size:.58rem;
   line-height:1.15;
   font-weight:800;
   text-align:center;
   word-break:break-word;
 }
-.mise-foto-btn.andrew-btn{
-  border-color:#1e3a8a;
-}
-.mise-foto-btn.andrew-btn img{
-  border-color:#1e3a8a;
-}
-.mise-foto-btn.andrew-btn.activa{
-  border-color:var(--dorado);
-}
-#docenteSelect{
-  display:none !important;
-}
-@media(max-width:700px){
-  .mises-fotos-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-}
 @media(max-width:500px){
-  .mises-fotos-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:7px;
-  }
-  .mise-foto-btn{
-    padding:8px 4px;
-  }
-  .mise-foto-btn img{
-    width:54px;
-    height:54px;
-  }
-  .mise-foto-btn span{
-    font-size:.62rem;
-  }
+  .mises-fotos-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+  .mise-foto-btn{padding:8px 4px;}
+  .mise-foto-btn img{width:54px;height:54px;}
+  .mise-foto-btn span{font-size:.62rem;}
 }
 
 </style>
@@ -880,68 +780,31 @@ footer {
     <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE.</p>
 
     <div class="form-group">
-      <label>SELECCIONE SU CAJERA / CAJERO</label>
-
-      <div class="mises-fotos-grid" id="selectorCajerosVisual">
-
-        <button type="button"
-                class="mise-foto-btn"
-                data-mise="LILY"
-                onclick="seleccionarMiseVisual('LILY')">
-          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300"
-               alt="Miss Lily">
+      <div class="mises-fotos-grid">
+        <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
+          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
           <span>MISS LILY</span>
         </button>
-
-        <button type="button"
-                class="mise-foto-btn"
-                data-mise="KIARA"
-                onclick="seleccionarMiseVisual('KIARA')">
-          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300"
-               alt="Miss Kiara">
+        <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="seleccionarMiseVisual('KIARA')">
+          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300" alt="Miss Kiara">
           <span>MISS KIARA</span>
         </button>
-
-        <button type="button"
-                class="mise-foto-btn"
-                data-mise="ANGHY"
-                onclick="seleccionarMiseVisual('ANGHY')">
-          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300"
-               alt="Miss Anghy">
+        <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="seleccionarMiseVisual('ANGHY')">
+          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300" alt="Miss Anghy">
           <span>MISS ANGHY</span>
         </button>
-
-        <button type="button"
-                class="mise-foto-btn"
-                data-mise="KARIN"
-                onclick="seleccionarMiseVisual('KARIN')">
-          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
-               alt="Miss Karin">
+        <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="seleccionarMiseVisual('KARIN')">
+          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300" alt="Miss Karin">
           <span>MISS KARIN</span>
         </button>
-
-        <button type="button"
-                class="mise-foto-btn andrew-btn"
-                data-mise="ANDREW"
-                onclick="seleccionarMiseVisual('ANDREW')">
-          <img src="https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300"
-               alt="Mister Andrew">
-          <span>MISTER ANDREW</span>
-        </button>
-
       </div>
 
-      <select id="docenteSelect"
-              class="input-field"
-              onchange="anunciarSeleccion(this)"
-              aria-hidden="true"
-              tabindex="-1">
+      <select id="docenteSelect" aria-hidden="true" tabindex="-1">
         <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
         <option value="LILY">MISS LILY MELO AZAÑERO</option>
         <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
         <option value="ANGHY">MISS ANGHY REYES MELO</option>
         <option value="KARIN">MISS KARIN MOLERO ROMANI</option>
-        <option value="ANDREW">MISTER ANDREW</option>
       </select>
     </div>
 
@@ -971,6 +834,10 @@ footer {
     </div>
 
     <div class="admin-stats-box">
+      <div class="stat-pill">
+        <span>SALDO INICIAL</span>
+        <strong id="saldoInicialMise">S/ 0.00</strong>
+      </div>
       <div class="stat-pill">
         <span>MOVIMIENTOS</span>
         <strong id="contadorMovimientos">0</strong>
@@ -1074,31 +941,19 @@ footer {
     <!-- PANEL DE PAGO / TRANSACCIÓN -->
     <div id="panelPago" class="panel collapsed">
       <div class="panel-head clickable" onclick="togglePanel('panelPago')">
-        <h3>💰 PAGAR / INGRESAR A CUENTA</h3>
+        <h3>💰 REGISTRAR PAGO / TRANSACCIÓN</h3>
         <span class="toggle-icon">▼</span>
       </div>
       <div class="panel-body">
-
-        <label class="small-label">OPERACIÓN</label>
+        <label class="small-label">TIPO DE MOVIMIENTO</label>
         <div class="type-selector-box">
-          <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESAR')">🟢 INGRESAR (+)</button>
-          <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('PAGAR')">🔴 PAGAR (-)</button>
+          <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
+          <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
         </div>
         <input type="hidden" id="pagoOperacionVal" value="INGRESO">
-        <div class="pago-ayuda">
-          PAGAR = LA CUENTA ACTIVA ENTREGA DINERO AL ALUMNO. · INGRESAR = EL ALUMNO ENTREGA DINERO A LA CUENTA ACTIVA.
-        </div>
 
-        <label class="small-label" for="pagoCodigo">CÓDIGO DEL ALUMNO</label>
-        <div class="pago-alumno-search">
-          <input id="pagoCodigo" placeholder="INGRESA CÓDIGO LDS DEL ALUMNO" autocomplete="off">
-          <button class="btn-pago-buscar" type="button" onclick="buscarAlumnoParaPago()">🔍 BUSCAR ALUMNO</button>
-        </div>
-        <div class="pago-alumno-card" id="pagoAlumnoCard">
-          <div class="pago-alumno-nombre" id="pagoAlumnoNombre">—</div>
-          <div class="pago-alumno-meta" id="pagoAlumnoMeta">—</div>
-          <div class="pago-alumno-saldo" id="pagoAlumnoSaldo">SALDO: S/ 0.00</div>
-        </div>
+        <label class="small-label" for="pagoCodigo">CÓDIGO DE ESTUDIANTE</label>
+        <input id="pagoCodigo" placeholder="LDS-EST-001" readonly style="background:#f1f5f9;">
 
         <label class="small-label" for="pagoTipo">CATEGORÍA DE TRANSACCIÓN</label>
         <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
@@ -1116,14 +971,9 @@ footer {
         <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
         <textarea id="pagoObs" rows="3" placeholder="MOTIVO O DETALLE..."></textarea>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px;">
-          <button class="btn btn-gold" style="width:100%;padding:12px;" type="button" onclick="procesarPagoEstudiante()">
-            💸 REGISTRAR
-          </button>
-          <button class="btn btn-outline" style="width:100%;padding:12px;" type="button" onclick="limpiarFormularioPago()">
-            🧹 LIMPIAR
-          </button>
-        </div>
+        <button class="btn btn-gold" style="width:100%;margin-top:15px;padding:12px;" type="button" onclick="procesarPagoEstudiante()">
+          💸 REGISTRAR TRANSACCIÓN
+        </button>
         <div id="pagoMensaje" class="message"></div>
       </div>
     </div>
@@ -1188,25 +1038,21 @@ function cambiarAnioEscolar() {
 
 function seleccionarTipoOperacion(tipo) {
   reproducirSonido('clic');
-
   const btnIngreso = document.getElementById("btnTipoIngreso");
   const btnEgreso = document.getElementById("btnTipoEgreso");
   const hiddenInput = document.getElementById("pagoOperacionVal");
 
-  const operacion = String(tipo || "").toUpperCase();
+  hiddenInput.value = tipo;
 
-  if (operacion === "PAGAR" || operacion === "EGRESO") {
-    hiddenInput.value = "EGRESO";
-    btnIngreso.className = "type-btn";
-    btnEgreso.className = "type-btn active-egreso";
-    hablarTextoVoz("Operación seleccionada: pagar");
-    return;
+  if (tipo === 'INGRESO') {
+    btnIngreso.className = 'type-btn active-ingreso';
+    btnEgreso.className = 'type-btn';
+    hablarTextoVoz("Operación seleccionada: Ingreso");
+  } else {
+    btnIngreso.className = 'type-btn';
+    btnEgreso.className = 'type-btn active-egreso';
+    hablarTextoVoz("Operación seleccionada: Egreso");
   }
-
-  hiddenInput.value = "INGRESO";
-  btnIngreso.className = "type-btn active-ingreso";
-  btnEgreso.className = "type-btn";
-  hablarTextoVoz("Operación seleccionada: ingresar");
 }
 
 const CATALOGO_EXCEL = {
@@ -1242,6 +1088,12 @@ function cargarConceptosPorTipo() {
   const tipo = document.getElementById("pagoTipo").value;
   const selectConcepto = document.getElementById("pagoConcepto");
   selectConcepto.innerHTML = "";
+
+  if (tipo === "COSTOS_Y_OTROS") {
+    seleccionarTipoOperacion("EGRESO");
+  } else {
+    seleccionarTipoOperacion("INGRESO");
+  }
 
   const lista = CATALOGO_EXCEL[tipo] || [];
 
@@ -1348,17 +1200,10 @@ function reproducirSonido(tipo) {
 
 function anunciarSeleccion(select) {
   reproducirSonido('clic');
-
-  const texto =
-    select.options[select.selectedIndex].text;
-
+  const texto = select.options[select.selectedIndex].text;
   document.querySelectorAll('.mise-foto-btn').forEach(btn => {
-    btn.classList.toggle(
-      'activa',
-      btn.dataset.mise === select.value
-    );
+    btn.classList.toggle('activa', btn.dataset.mise === select.value);
   });
-
   hablarTextoVoz("Seleccionada: " + texto);
 }
 
@@ -1366,25 +1211,15 @@ function seleccionarMiseVisual(valor) {
   const select = document.getElementById("docenteSelect");
   if (!select) return;
 
-  const opcion = Array.from(select.options)
-    .find(option => option.value === valor);
-
-  if (!opcion) return;
-
   select.value = valor;
 
   document.querySelectorAll('.mise-foto-btn').forEach(btn => {
-    btn.classList.toggle(
-      'activa',
-      btn.dataset.mise === valor
-    );
+    btn.classList.toggle('activa', btn.dataset.mise === valor);
   });
 
+  const texto = select.options[select.selectedIndex].text;
   reproducirSonido('clic');
-
-  hablarTextoVoz(
-    "Seleccionada: " + opcion.text
-  );
+  hablarTextoVoz("Seleccionada: " + texto);
 }
 
 /*
@@ -1394,17 +1229,14 @@ const FOTOS_DOCENTES = {
   "MISS ANGHY REYES MELO": "https://drive.google.com/file/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U/view?usp=sharing",
   "MISS KARIN MOLERO ROMANI": "https://drive.google.com/file/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv/view?usp=sharing",
   "MISS KIARA MORALES ELGUERA": "https://drive.google.com/file/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O/view?usp=sharing",
-  "MISS LILY MELO AZAÑERO": "https://drive.google.com/file/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE/view?usp=sharing",
-  "MISTER ANDREW": "https://drive.google.com/file/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW/view?usp=sharing"
+  "MISS LILY MELO AZAÑERO": "https://drive.google.com/file/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE/view?usp=sharing"
 };
 
 let datosEstudianteActualGlobal = null;
 let maestraActivaGlobal = "";
 
-/* ==========================================================
-   CAJA PROPIA DE CADA MISE
-   Se utiliza para consultar automáticamente su fondo.
-   ========================================================== */
+/* CUENTAS PROPIAS DE LAS MISES
+   Al ingresar una Mise, su propia caja se consulta automáticamente. */
 const CODIGOS_MISE_POR_NOMBRE = {
   "MISS LILY MELO AZAÑERO": "CAJA-LILY",
   "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
@@ -1417,14 +1249,6 @@ function obtenerCodigoCajaMise(nombre) {
   return CODIGOS_MISE_POR_NOMBRE[n] || "";
 }
 
-
-
-/*
-  IMPORTANTE:
-  Este archivo conserva la URL que ya tenía administrador.html.
-  Cuando uses la NUEVA implementación de Código.gs, reemplaza
-  solamente esta constante por la URL /exec de esa implementación.
-*/
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
 
 function mostrarFotoMaestra(nombre) {
@@ -1464,21 +1288,6 @@ function mostrarFotoMaestra(nombre) {
   foto.src = urls[0];
 }
 
-/*
-==============================================================
-ACCESO ADMINISTRATIVO
-==============================================================
-Mises:
-  360LDS@
-
-MISTER ANDREW:
-  360LDS@@@
-
-Andrew:
-  CAJA-ANDREW
-  CAJERO GENERAL
-==============================================================
-*/
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -1503,8 +1312,7 @@ function validarAccesoDocente() {
     return;
   }
 
-  const esAndrew = docente === "ANDREW";
-  const claveCorrecta = esAndrew ? "360LDS@@@" : "360LDS@";
+  const claveCorrecta = "360LDS@";
 
   if (clave !== claveCorrecta) {
     reproducirSonido('error');
@@ -1519,18 +1327,11 @@ function validarAccesoDocente() {
     docenteElement.options[docenteElement.selectedIndex].text;
 
   sessionStorage.setItem("maestraActiva", nombreMaestra);
-  sessionStorage.setItem("responsableClave", docente);
-  sessionStorage.setItem("esAndrew", esAndrew ? "1" : "0");
+  sessionStorage.setItem("responsableClave", clave);
 
-  if (esAndrew) {
-    hablarTextoVoz(
-      "Clave correcta. Bienvenido Mister Andrew, cajero general."
-    );
-  } else {
-    hablarTextoVoz(
-      "Clave correcta. Bienvenida estimada maestra."
-    );
-  }
+  hablarTextoVoz(
+    "Clave correcta. Bienvenida estimada maestra."
+  );
 
   desbloquearPanel(nombreMaestra);
 }
@@ -1546,71 +1347,34 @@ function desbloquearPanel(nombreMaestra) {
     nombreMaestra || "MAESTRA";
 
   mostrarFotoMaestra(nombreMaestra);
-
-  // El panel de pago SIEMPRE comienza sin alumno seleccionado.
-  // La cuenta activa es el pagador/cobrador, no el alumno.
-  limpiarFormularioPago();
-  seleccionarTipoOperacion("PAGAR");
   cargarConceptosPorTipo();
-
   renderIncidencias();
 
-  const esAndrew = sessionStorage.getItem("esAndrew") === "1";
-  const rolBanner = document.querySelector(".admin-text-details p");
+  /* IMPORTANTE:
+     La Mise no debe esperar a buscar un alumno para conocer su fondo.
+     Al entrar, consultamos automáticamente SU PROPIA CAJA.
+     Andrew conserva su flujo independiente. */
+  const codigoCajaMise = obtenerCodigoCajaMise(nombreMaestra);
 
-  if (rolBanner) {
-    rolBanner.textContent = esAndrew
-      ? "CAJERO GENERAL · CONSULTANDO FONDO..."
-      : "DOCENTE TUTORA CAJERA · CONSULTANDO FONDO...";
-  }
-
-  /*
-    Andrew entra directamente a su cuenta.
-    No se escribe S/180,000 en el frontend:
-    el saldo se obtiene de MOVIMIENTOS mediante el backend.
-  */
-  if (esAndrew) {
-    const codigoAndrew = "CAJA-ANDREW";
-
-    // Andrew consulta automáticamente su Caja General.
-    document.getElementById("codigo").value = codigoAndrew;
-    document.getElementById("pagoCodigo").value = "";
-    document.getElementById("incCodigo").value = codigoAndrew;
+  if (codigoCajaMise) {
+    const campoCodigo = document.getElementById("codigo");
+    if (campoCodigo) campoCodigo.value = codigoCajaMise;
 
     setTimeout(() => {
       consultarEstudiante(true);
-    }, 250);
-
-  } else {
-    // Cada Mise consulta automáticamente SU PROPIA CAJA
-    // para mostrar inmediatamente su fondo disponible.
-    const codigoCajaMise = obtenerCodigoCajaMise(nombreMaestra);
-
-    if (codigoCajaMise) {
-      document.getElementById("codigo").value = codigoCajaMise;
-
-      // Nunca se copia la caja de la Mise al campo del alumno.
-      document.getElementById("pagoCodigo").value = "";
-      document.getElementById("incCodigo").value = codigoCajaMise;
-
-      setTimeout(() => {
-        consultarEstudiante(true);
-      }, 250);
-    }
+    }, 180);
   }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
-
-  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
-    btn.classList.remove('activa');
-  });
   sessionStorage.removeItem("responsableClave");
-  sessionStorage.removeItem("esAndrew");
 
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
+
+  const saldoInicialInicio = document.getElementById("saldoInicialMise");
+  if (saldoInicialInicio) saldoInicialInicio.textContent = "S/ 0.00";
 
   setTimeout(() => {
     hablarTextoVoz(
@@ -1685,6 +1449,40 @@ function cerrarEscanerQR() {
 function formatearLDS(valor) {
   const n = Number(valor);
   return Number.isFinite(n) ? n.toFixed(2) : "0.00";
+}
+
+/* Lectura de montos LDS: acepta 15000, 15.000, 15,000 y 15000.00. */
+function parseMontoLDS(valor) {
+  if (typeof valor === "number") return Number.isFinite(valor) ? valor : 0;
+
+  let s = String(valor ?? "").trim().replace(/[^0-9,.-]/g, "");
+  if (!s) return 0;
+
+  const tieneComa = s.includes(",");
+  const tienePunto = s.includes(".");
+
+  if (tieneComa && tienePunto) {
+    if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
+      s = s.replace(/\./g, "").replace(",", ".");
+    } else {
+      s = s.replace(/,/g, "");
+    }
+  } else if (tienePunto) {
+    const partes = s.split(".");
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
+      s = partes.join("");
+    }
+  } else if (tieneComa) {
+    const partes = s.split(",");
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
+      s = partes.join("");
+    } else {
+      s = s.replace(",", ".");
+    }
+  }
+
+  const n = Number(s);
+  return Number.isFinite(n) ? n : 0;
 }
 
 function escaparHTML(texto) {
@@ -1791,11 +1589,6 @@ function mostrarFotoEstudiante(e) {
   const foto = document.getElementById("fotoEstudiante");
   const placeholder = document.getElementById("fotoPlaceholder");
 
-  const esAndrewFoto =
-    sessionStorage.getItem("esAndrew") === "1" ||
-    String(e.codigo || "").trim().toUpperCase() === "CAJA-ANDREW" ||
-    String(e.nombreCompleto || e.nombre || "").trim().toUpperCase() === "MISTER ANDREW";
-
   const original = String(
     e.fotoUrl ||
     e.fotoURL ||
@@ -1803,7 +1596,6 @@ function mostrarFotoEstudiante(e) {
     e.FOTO_URL ||
     e.foto ||
     e.FOTO ||
-    (esAndrewFoto ? FOTOS_DOCENTES["MISTER ANDREW"] : "") ||
     ""
   ).trim();
 
@@ -1839,7 +1631,7 @@ function mostrarFotoEstudiante(e) {
   foto.src = urls[0];
 }
 
-function actualizarBannerCuenta(saldo, esAndrew) {
+function actualizarBannerCuenta(saldo) {
   const rolBanner =
     document.querySelector(".admin-text-details p");
 
@@ -1847,9 +1639,51 @@ function actualizarBannerCuenta(saldo, esAndrew) {
 
   const saldoTexto = formatearLDS(saldo);
 
-  rolBanner.textContent = esAndrew
-    ? "CAJERO GENERAL · FONDO DISPONIBLE: S/ " + saldoTexto
-    : "DOCENTE TUTORA CAJERA · FONDO DISPONIBLE: S/ " + saldoTexto;
+  rolBanner.textContent =
+    "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
+}
+
+function obtenerSaldoInicialMise(movimientos, codigoCuenta) {
+  const codigo = String(codigoCuenta || "").trim().toUpperCase();
+  const nombresMise = Object.values(CODIGOS_MISE_POR_NOMBRE);
+  if (!nombresMise.includes(codigo)) return 0;
+
+  const lista = Array.isArray(movimientos) ? movimientos.slice() : [];
+
+  const candidatos = lista.filter(m => {
+    const c = String(m.codigo || m.codigoQR || "").trim().toUpperCase();
+    const tipo = String(m.tipo || m.tipoMovimiento || "").trim().toUpperCase();
+    const estado = String(m.estado || "ACTIVO").trim().toUpperCase();
+    const concepto = String(m.concepto || "").trim().toUpperCase();
+    const observacion = String(m.observacion || "").trim().toUpperCase();
+    const responsable = String(m.responsable || "").trim().toUpperCase();
+
+    if (c !== codigo) return false;
+    if (tipo !== "INGRESO") return false;
+    if (estado === "ANULADO") return false;
+
+    /* El saldo inicial de cada MISE se toma del primer ingreso de fondo
+       registrado para su propia caja. No se inventa ni se fija un monto. */
+    return (
+      concepto.includes("FONDO") ||
+      concepto.includes("TRANSFERENCIA") ||
+      observacion.includes("FONDO") ||
+      observacion.includes("TRANSFERENCIA") ||
+      responsable.includes("ANDREW")
+    );
+  });
+
+  candidatos.sort((a, b) => {
+    const da = Date.parse(a.fecha || a.fechaTexto || a.timestamp || "") || 0;
+    const db = Date.parse(b.fecha || b.fechaTexto || b.timestamp || "") || 0;
+    return da - db;
+  });
+
+  if (!candidatos.length) return 0;
+
+  return parseMontoLDS(
+    candidatos[0].monto ?? candidatos[0].montoLDS ?? 0
+  );
 }
 
 function consultarEstudiante(esConsultaAutomatica = false) {
@@ -1898,6 +1732,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
 
         document.getElementById("contadorMovimientos").textContent = "0";
+        const saldoInicialError = document.getElementById("saldoInicialMise");
+        if (saldoInicialError) saldoInicialError.textContent = "S/ 0.00";
         datosEstudianteActualGlobal = null;
 
         mostrarMensaje(
@@ -1905,16 +1741,6 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           "REGISTRO NO ENCONTRADO.",
           "error"
         );
-
-        if (sessionStorage.getItem("esAndrew") === "1") {
-          const rolBanner =
-            document.querySelector(".admin-text-details p");
-
-          if (rolBanner) {
-            rolBanner.textContent =
-              "CAJERO GENERAL · NO SE PUDO CONSULTAR CAJA-ANDREW";
-          }
-        }
 
         hablarTextoVoz("Registro no encontrado.");
         return;
@@ -1944,27 +1770,16 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       const rolRespuesta =
         String(e.rol || "").toUpperCase();
 
-      const esAndrew =
-        sessionStorage.getItem("esAndrew") === "1" ||
-        codigoRespuesta === "CAJA-ANDREW" ||
-        String(nombreUsuario).toUpperCase() === "MISTER ANDREW";
-
       const esDocente =
-        !esAndrew &&
-        (
-          (e.codigo &&
-            String(e.codigo)
-              .toUpperCase()
-              .includes("LDS-DOC")) ||
-          e.esDocente ||
-          rolRespuesta.includes("DOCENTE") ||
-          rolRespuesta.includes("MAESTRA")
-        );
+        (e.codigo &&
+          String(e.codigo)
+            .toUpperCase()
+            .includes("LDS-DOC")) ||
+        e.esDocente ||
+        rolRespuesta.includes("DOCENTE") ||
+        rolRespuesta.includes("MAESTRA");
 
-      if (esAndrew) {
-        document.getElementById("nombre").textContent =
-          "💰 CAJERO GENERAL: " + nombreUsuario;
-      } else if (esDocente) {
+      if (esDocente) {
         document.getElementById("nombre").textContent =
           "👩‍🏫 DOCENTE: " + nombreUsuario;
       } else {
@@ -1973,10 +1788,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       }
 
       const rolMostrar =
-        esAndrew
-          ? "CAJERO GENERAL"
-          : e.rol ||
-            (esDocente ? "DOCENTE" : "ALUMNO");
+        e.rol ||
+        (esDocente ? "DOCENTE" : "ALUMNO");
 
       document.getElementById("meta").textContent =
         [
@@ -1990,18 +1803,12 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           .join(" · ");
 
       document.getElementById("saldo").textContent =
-        (
-          esAndrew || esDocente
-            ? "FONDO DISPONIBLE: S/ "
-            : "SALDO: "
-        ) +
+        (esDocente ? "FONDO DISPONIBLE: S/ " : "SALDO: ") +
         saldoFormateado +
         " LDS";
 
-      if (esAndrew) {
-        actualizarBannerCuenta(saldoActual, true);
-      } else if (esDocente) {
-        actualizarBannerCuenta(saldoActual, false);
+      if (esDocente) {
+        actualizarBannerCuenta(saldoActual);
       }
 
       mostrarFotoEstudiante(e);
@@ -2010,18 +1817,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         "estudianteCard"
       ).classList.add("show");
 
-      // El código del panel de pago solo se rellena cuando la consulta
-      // corresponde realmente a un ALUMNO. Nunca se copia CAJA-LILY,
-      // CAJA-KIARA, CAJA-ANGHY, CAJA-KARIN ni CAJA-ANDREW.
-      if (!esAndrew && !esDocente) {
-        document.getElementById("pagoCodigo").value =
-          e.codigo || codigo;
-        mostrarAlumnoSeleccionadoPago(e, cuenta);
-      } else {
-        document.getElementById("pagoCodigo").value = "";
-        const pagoCard = document.getElementById("pagoAlumnoCard");
-        if (pagoCard) pagoCard.classList.remove("show");
-      }
+      document.getElementById("pagoCodigo").value =
+        e.codigo || codigo;
 
       document.getElementById("incCodigo").value =
         e.codigo || codigo;
@@ -2030,6 +1827,19 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         Array.isArray(respuesta.movimientos)
           ? respuesta.movimientos
           : [];
+
+      const codigoCuentaMise = String(e.codigo || codigo).trim().toUpperCase();
+      const saldoInicialMise = obtenerSaldoInicialMise(
+        movimientos,
+        codigoCuentaMise
+      );
+
+      const saldoInicialEl = document.getElementById("saldoInicialMise");
+      if (saldoInicialEl) {
+        saldoInicialEl.textContent = saldoInicialMise > 0
+          ? "S/ " + formatearLDS(saldoInicialMise)
+          : "NO REGISTRADO";
+      }
 
       renderMovimientos(
         movimientos,
@@ -2042,14 +1852,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         "ok"
       );
 
-      if (esAndrew) {
-        hablarTextoVoz(
-          "Mister Andrew. Cajero general. " +
-          "Fondo disponible: " +
-          saldoFormateado +
-          " soles."
-        );
-      } else if (esDocente) {
+      if (esDocente) {
         hablarTextoVoz(
           "Maestra " +
           nombreUsuario +
@@ -2070,156 +1873,6 @@ function consultarEstudiante(esConsultaAutomatica = false) {
   );
 }
 
-function mostrarAlumnoSeleccionadoPago(e, cuenta) {
-  const card = document.getElementById("pagoAlumnoCard");
-  const nombre = document.getElementById("pagoAlumnoNombre");
-  const meta = document.getElementById("pagoAlumnoMeta");
-  const saldo = document.getElementById("pagoAlumnoSaldo");
-
-  if (!e || !card) return;
-
-  const saldoActual = Number((cuenta || {}).saldoActual || 0);
-
-  nombre.textContent =
-    "👤 " + String(e.nombreCompleto || e.nombre || "ALUMNO").toUpperCase();
-
-  meta.textContent = [
-    e.codigo || "",
-    e.grado || "",
-    e.seccion || "",
-    "AÑO " + (document.getElementById("selectAnioEscolar").value || "2026")
-  ].filter(Boolean).join(" · ");
-
-  saldo.textContent = "SALDO ACTUAL: S/ " + formatearLDS(saldoActual);
-  card.classList.add("show");
-}
-
-function limpiarFormularioPago() {
-  reproducirSonido('clic');
-
-  document.getElementById("pagoCodigo").value = "";
-  document.getElementById("pagoMonto").value = "";
-  document.getElementById("pagoObs").value = "";
-
-  const card = document.getElementById("pagoAlumnoCard");
-  if (card) card.classList.remove("show");
-
-  document.getElementById("pagoAlumnoNombre").textContent = "—";
-  document.getElementById("pagoAlumnoMeta").textContent = "—";
-  document.getElementById("pagoAlumnoSaldo").textContent = "SALDO: S/ 0.00";
-
-  mostrarMensajePago("", "");
-}
-
-function buscarAlumnoParaPago() {
-  reproducirSonido('clic');
-
-  const codigo = String(
-    document.getElementById("pagoCodigo").value || ""
-  ).trim().toUpperCase();
-
-  const anio = document.getElementById("selectAnioEscolar").value;
-
-  if (!codigo) {
-    reproducirSonido('error');
-    mostrarMensajePago("INGRESA EL CÓDIGO DEL ALUMNO.", "error");
-    hablarTextoVoz("Ingresa el código del alumno.");
-    return;
-  }
-
-  mostrarMensajePago("BUSCANDO ALUMNO...", "ok");
-
-  llamarAPI(
-    {
-      accion: "estudiante",
-      codigo: codigo,
-      anio: anio
-    },
-    function(respuesta) {
-      if (!respuesta || respuesta.ok === false || !respuesta.estudiante) {
-        reproducirSonido('error');
-        mostrarMensajePago(
-          (respuesta && respuesta.mensaje) || "ALUMNO NO ENCONTRADO.",
-          "error"
-        );
-        document.getElementById("pagoAlumnoCard").classList.remove("show");
-        hablarTextoVoz("Alumno no encontrado.");
-        return;
-      }
-
-      const e = respuesta.estudiante;
-      const rol = String(e.rol || "").toUpperCase();
-      const tipoCuenta = String(e.tipoCuenta || "").toUpperCase();
-
-      const esCaja =
-        e.esDocente === true ||
-        e.esAndrew === true ||
-        rol.includes("DOCENTE") ||
-        rol.includes("CAJERO") ||
-        tipoCuenta.includes("CAJA") ||
-        codigo === "CAJA-ANDREW" ||
-        codigo.indexOf("CAJA-") === 0;
-
-      if (esCaja) {
-        reproducirSonido('error');
-        mostrarMensajePago(
-          "ESE CÓDIGO CORRESPONDE A UNA CAJA. INGRESA EL CÓDIGO DE UN ALUMNO.",
-          "error"
-        );
-        document.getElementById("pagoAlumnoCard").classList.remove("show");
-        hablarTextoVoz("Ese código corresponde a una caja. Ingresa el código de un alumno.");
-        return;
-      }
-
-      reproducirSonido('exito');
-
-      document.getElementById("pagoCodigo").value =
-        String(e.codigo || codigo).toUpperCase();
-
-      mostrarAlumnoSeleccionadoPago(e, respuesta.cuenta || {});
-
-      mostrarMensajePago(
-        "ALUMNO ENCONTRADO. YA PUEDES REGISTRAR LA OPERACIÓN.",
-        "ok"
-      );
-
-      // También deja cargada la consulta principal, sin convertir al alumno
-      // en la cuenta activa.
-      document.getElementById("codigo").value =
-        String(e.codigo || codigo).toUpperCase();
-
-      renderMovimientos(
-        Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [],
-        e,
-        anio
-      );
-
-      document.getElementById("nombre").textContent =
-        "👤 ALUMNO: " + String(e.nombreCompleto || e.nombre || "").toUpperCase();
-
-      document.getElementById("meta").textContent = [
-        e.codigo || codigo,
-        "AÑO: " + anio,
-        "ALUMNO",
-        e.grado || "",
-        e.seccion || ""
-      ].filter(Boolean).join(" · ");
-
-      document.getElementById("saldo").textContent =
-        "SALDO: " + formatearLDS(Number((respuesta.cuenta || {}).saldoActual || 0)) + " LDS";
-
-      document.getElementById("estudianteCard").classList.add("show");
-      datosEstudianteActualGlobal = e;
-
-      hablarTextoVoz(
-        "Alumno encontrado. " +
-        String(e.nombreCompleto || e.nombre || "") +
-        "."
-      );
-    }
-  );
-}
-
 function procesarPagoEstudiante() {
   const codigo =
     document.getElementById("pagoCodigo")
@@ -2235,7 +1888,7 @@ function procesarPagoEstudiante() {
     document.getElementById("pagoConcepto").value;
 
   const monto =
-    parseFloat(
+    parseMontoLDS(
       document.getElementById("pagoMonto").value
     );
 
@@ -2256,24 +1909,11 @@ function procesarPagoEstudiante() {
   if (!codigo) {
     reproducirSonido('error');
     mostrarMensajePago(
-      "PRIMERO BUSCA Y SELECCIONA UN ALUMNO.",
+      "PRIMERO CONSULTA A UN USUARIO.",
       "error"
     );
     hablarTextoVoz(
-      "Primero busca y selecciona un alumno."
-    );
-    return;
-  }
-
-  const pagoAlumnoCard = document.getElementById("pagoAlumnoCard");
-  if (!pagoAlumnoCard || !pagoAlumnoCard.classList.contains("show")) {
-    reproducirSonido('error');
-    mostrarMensajePago(
-      "DEBES BUSCAR Y VALIDAR EL ALUMNO ANTES DE REGISTRAR.",
-      "error"
-    );
-    hablarTextoVoz(
-      "Debes buscar y validar el alumno antes de registrar."
+      "Primero consulta a un usuario."
     );
     return;
   }
@@ -2318,6 +1958,16 @@ function procesarPagoEstudiante() {
       if (respuesta && respuesta.ok) {
         reproducirSonido('exito');
 
+        if (window.NotificacionesLDS) {
+          NotificacionesLDS.movimiento({
+            tipo: tipoOperacion,
+            concepto: concepto,
+            codigo: codigo,
+            monto: monto,
+            anio: anioEscolar
+          });
+        }
+
         mostrarMensajePago(
           "¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!",
           "ok"
@@ -2331,9 +1981,7 @@ function procesarPagoEstudiante() {
         document.getElementById("pagoObs").value = "";
         document.getElementById("panelPago").classList.add("collapsed");
 
-        consultarEstudiante(
-          sessionStorage.getItem("esAndrew") === "1"
-        );
+        consultarEstudiante();
 
       } else {
         reproducirSonido('error');
@@ -2426,9 +2074,6 @@ function imprimirReporteGrupal() {
       "selectAnioEscolar"
     ).value;
 
-  const esAndrew =
-    sessionStorage.getItem("esAndrew") === "1";
-
   document.getElementById(
     "printTituloReporte"
   ).textContent =
@@ -2445,13 +2090,9 @@ function imprimirReporteGrupal() {
   document.getElementById(
     "printMetaEntidad"
   ).textContent =
-    esAndrew
-      ? "CAJERO GENERAL — BANCO LDS 360 (" +
-        anio +
-        ")"
-      : "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" +
-        anio +
-        ")";
+    "TUTORA CAJERA RESPONSABLE — BANCO LDS 360 (" +
+    anio +
+    ")";
 
   const fotoResponsable =
     obtenerURLsFoto(
@@ -2790,3 +2431,4 @@ document.getElementById("codigo").addEventListener(
 
 </body>
 </html>
+```
