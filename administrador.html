@@ -940,6 +940,7 @@ footer {
 
 <footer>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
 
+
 <script>
 function togglePanel(idPanel) {
   reproducirSonido('clic');
@@ -952,7 +953,7 @@ function cambiarAnioEscolar() {
   const anio = document.getElementById("selectAnioEscolar").value;
   document.getElementById("printAnioLabel").textContent = anio;
   hablarTextoVoz("Año escolar cambiado a " + anio);
-  if(document.getElementById("codigo").value.trim()){
+  if (document.getElementById("codigo").value.trim()) {
     consultarEstudiante();
   }
 }
@@ -962,8 +963,9 @@ function seleccionarTipoOperacion(tipo) {
   const btnIngreso = document.getElementById("btnTipoIngreso");
   const btnEgreso = document.getElementById("btnTipoEgreso");
   const hiddenInput = document.getElementById("pagoOperacionVal");
-  
+
   hiddenInput.value = tipo;
+
   if (tipo === 'INGRESO') {
     btnIngreso.className = 'type-btn active-ingreso';
     btnEgreso.className = 'type-btn';
@@ -1008,7 +1010,7 @@ function cargarConceptosPorTipo() {
   const tipo = document.getElementById("pagoTipo").value;
   const selectConcepto = document.getElementById("pagoConcepto");
   selectConcepto.innerHTML = "";
-  
+
   if (tipo === "COSTOS_Y_OTROS") {
     seleccionarTipoOperacion("EGRESO");
   } else {
@@ -1016,6 +1018,7 @@ function cargarConceptosPorTipo() {
   }
 
   const lista = CATALOGO_EXCEL[tipo] || [];
+
   lista.forEach(concepto => {
     const opt = document.createElement("option");
     opt.value = concepto;
@@ -1027,7 +1030,12 @@ function cargarConceptosPorTipo() {
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
-    const textoLimpio = texto.replace(/\./g, ',').replace(/\?/g, '').replace(/!/g, '');
+
+    const textoLimpio = String(texto)
+      .replace(/\./g, ',')
+      .replace(/\?/g, '')
+      .replace(/!/g, '');
+
     const utterance = new SpeechSynthesisUtterance(textoLimpio);
     utterance.lang = 'es-PE';
     utterance.rate = 0.95;
@@ -1035,15 +1043,26 @@ function hablarTextoVoz(texto) {
 
     function ejecutarVoz() {
       const voces = window.speechSynthesis.getVoices();
-      let vozIdeal = voces.find(v => v.lang.includes('es') && (
-        v.name.toLowerCase().includes('female') || 
-        v.name.toLowerCase().includes('google español') || 
-        v.name.toLowerCase().includes('lucia') || 
-        v.name.toLowerCase().includes('elena') || 
-        v.name.toLowerCase().includes('monica')
-      ));
-      if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
-      if (vozIdeal) utterance.voice = vozIdeal;
+
+      let vozIdeal = voces.find(v =>
+        v.lang.includes('es') &&
+        (
+          v.name.toLowerCase().includes('female') ||
+          v.name.toLowerCase().includes('google español') ||
+          v.name.toLowerCase().includes('lucia') ||
+          v.name.toLowerCase().includes('elena') ||
+          v.name.toLowerCase().includes('monica')
+        )
+      );
+
+      if (!vozIdeal) {
+        vozIdeal = voces.find(v => v.lang.includes('es'));
+      }
+
+      if (vozIdeal) {
+        utterance.voice = vozIdeal;
+      }
+
       window.speechSynthesis.speak(utterance);
     }
 
@@ -1056,13 +1075,19 @@ function hablarTextoVoz(texto) {
 }
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 function reproducirSonido(tipo) {
   try {
-    if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
+
     osc.connect(gain);
     gain.connect(audioCtx.destination);
+
     const ahora = audioCtx.currentTime;
 
     if (tipo === 'clic') {
@@ -1072,6 +1097,7 @@ function reproducirSonido(tipo) {
       gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.08);
       osc.start(ahora);
       osc.stop(ahora + 0.08);
+
     } else if (tipo === 'exito') {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(440, ahora);
@@ -1081,6 +1107,7 @@ function reproducirSonido(tipo) {
       gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.3);
       osc.start(ahora);
       osc.stop(ahora + 0.3);
+
     } else if (tipo === 'error') {
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(200, ahora);
@@ -1101,9 +1128,6 @@ function anunciarSeleccion(select) {
 
 /*
   FOTOS DEL PERSONAL ADMINISTRATIVO
-  Cada valor puede ser una URL normal o una URL de Google Drive.
-  Para Drive, usa el enlace de COMPARTIR del archivo y deja el archivo
-  habilitado para que pueda ser visto por quien tenga el enlace.
 */
 const FOTOS_DOCENTES = {
   "MISS ANGHY REYES MELO": "https://drive.google.com/file/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U/view?usp=sharing",
@@ -1116,24 +1140,35 @@ const FOTOS_DOCENTES = {
 let datosEstudianteActualGlobal = null;
 let maestraActivaGlobal = "";
 
+/*
+  IMPORTANTE:
+  Este archivo conserva la URL que ya tenía administrador.html.
+  Cuando uses la NUEVA implementación de Código.gs, reemplaza
+  solamente esta constante por la URL /exec de esa implementación.
+*/
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE1b9clbWMDQpvaddO7wumVnXvumRU24FaWHCwifzemqkjBwsIsVlUVWplGFzO__NN/exec";
+
 function mostrarFotoMaestra(nombre) {
   maestraActivaGlobal = nombre;
+
   const foto = document.getElementById("missFoto");
   const placeholder = document.getElementById("missPlaceholder");
+
   const original = String(FOTOS_DOCENTES[nombre] || "").trim();
   const urls = obtenerURLsFoto(original);
-  
+
   foto.dataset.intento = "0";
   foto.style.display = "none";
   placeholder.style.display = "grid";
   foto.removeAttribute("src");
   foto.onerror = null;
-  
+
   if (!urls.length) return;
-  
+
   foto.onerror = function() {
     const siguiente = Number(foto.dataset.intento || "0") + 1;
     foto.dataset.intento = String(siguiente);
+
     if (siguiente < urls.length) {
       foto.src = urls[siguiente];
     } else {
@@ -1141,22 +1176,38 @@ function mostrarFotoMaestra(nombre) {
       placeholder.style.display = "grid";
     }
   };
-  
+
   foto.onload = function() {
     foto.style.display = "block";
     placeholder.style.display = "none";
   };
-  
+
   foto.src = urls[0];
 }
 
+/*
+==============================================================
+ACCESO ADMINISTRATIVO
+==============================================================
+Mises:
+  360LDS@
+
+MISTER ANDREW:
+  360LDS@@@
+
+Andrew:
+  CAJA-ANDREW
+  CAJERO GENERAL
+==============================================================
+*/
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
   const error = document.getElementById("adminError");
-  
-  const docente = docenteElement.value;
-  const clave = claveElement.value.trim().toUpperCase();
+
+  const docente = String(docenteElement.value || "").trim().toUpperCase();
+  const clave = String(claveElement.value || "").trim();
+
   error.textContent = "";
 
   if (!docente) {
@@ -1165,6 +1216,7 @@ function validarAccesoDocente() {
     hablarTextoVoz("Por favor seleccione su nombre.");
     return;
   }
+
   if (!clave) {
     reproducirSonido('error');
     error.textContent = "INGRESE SU CLAVE.";
@@ -1172,35 +1224,92 @@ function validarAccesoDocente() {
     return;
   }
 
-  if (clave === "360LDS@") {
-    reproducirSonido('exito');
-    const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
-    sessionStorage.setItem("maestraActiva", nombreMaestra);
-    hablarTextoVoz("Clave correcta. Bienvenida estimada maestra.");
-    desbloquearPanel(nombreMaestra);
-  } else {
+  const esAndrew = docente === "ANDREW";
+  const claveCorrecta = esAndrew ? "360LDS@@@" : "360LDS@";
+
+  if (clave !== claveCorrecta) {
     reproducirSonido('error');
     error.textContent = "CLAVE INCORRECTA.";
     hablarTextoVoz("Clave incorrecta.");
+    return;
   }
+
+  reproducirSonido('exito');
+
+  const nombreMaestra =
+    docenteElement.options[docenteElement.selectedIndex].text;
+
+  sessionStorage.setItem("maestraActiva", nombreMaestra);
+  sessionStorage.setItem("responsableClave", docente);
+  sessionStorage.setItem("esAndrew", esAndrew ? "1" : "0");
+
+  if (esAndrew) {
+    hablarTextoVoz(
+      "Clave correcta. Bienvenido Mister Andrew, cajero general."
+    );
+  } else {
+    hablarTextoVoz(
+      "Clave correcta. Bienvenida estimada maestra."
+    );
+  }
+
+  desbloquearPanel(nombreMaestra);
 }
 
 function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
   document.getElementById("panelView").style.display = "block";
-  document.getElementById("maestraActivaNombre").textContent = nombreMaestra || "MAESTRA";
-  document.getElementById("printNombreMiss").textContent = nombreMaestra || "MAESTRA";
+
+  document.getElementById("maestraActivaNombre").textContent =
+    nombreMaestra || "MAESTRA";
+
+  document.getElementById("printNombreMiss").textContent =
+    nombreMaestra || "MAESTRA";
+
   mostrarFotoMaestra(nombreMaestra);
   cargarConceptosPorTipo();
   renderIncidencias();
+
+  const esAndrew = sessionStorage.getItem("esAndrew") === "1";
+  const rolBanner = document.querySelector(".admin-text-details p");
+
+  if (rolBanner) {
+    rolBanner.textContent = esAndrew
+      ? "CAJERO GENERAL · CONSULTANDO FONDO..."
+      : "DOCENTE TUTORA CAJERA ACTIVA";
+  }
+
+  /*
+    Andrew entra directamente a su cuenta.
+    No se escribe S/180,000 en el frontend:
+    el saldo se obtiene de MOVIMIENTOS mediante el backend.
+  */
+  if (esAndrew) {
+    const codigoAndrew = "CAJA-ANDREW";
+
+    document.getElementById("codigo").value = codigoAndrew;
+    document.getElementById("pagoCodigo").value = codigoAndrew;
+    document.getElementById("incCodigo").value = codigoAndrew;
+
+    setTimeout(() => {
+      consultarEstudiante(true);
+    }, 250);
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Cada entrada al módulo ADMINISTRADOR debe comenzar nuevamente desde el acceso.
   sessionStorage.removeItem("maestraActiva");
+  sessionStorage.removeItem("responsableClave");
+  sessionStorage.removeItem("esAndrew");
+
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
-  setTimeout(() => { hablarTextoVoz("Acceso administrativo. Seleccione su nombre e ingrese su clave."); }, 700);
+
+  setTimeout(() => {
+    hablarTextoVoz(
+      "Acceso administrativo. Seleccione su nombre e ingrese su clave."
+    );
+  }, 700);
 });
 
 document.getElementById("claveDocente").addEventListener("keydown", function(e) {
@@ -1215,29 +1324,45 @@ let html5QrCode = null;
 function abrirEscanerQR() {
   reproducirSonido('clic');
   hablarTextoVoz("Abriendo cámara para escanear código QR.");
+
   document.getElementById("qrModal").style.display = "flex";
+
   html5QrCode = new Html5Qrcode("reader");
-  const config = { fps: 10, qrbox: { width: 220, height: 220 } };
-  
-  html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
-    .catch(() => {
-      html5QrCode.start({ facingMode: "user" }, config, onScanSuccess)
-        .catch(() => {
-          reproducirSonido('error');
-          alert("No se pudo acceder a la cámara.");
-          cerrarEscanerQR();
-        });
+
+  const config = {
+    fps: 10,
+    qrbox: { width: 220, height: 220 }
+  };
+
+  html5QrCode.start(
+    { facingMode: "environment" },
+    config,
+    onScanSuccess
+  ).catch(() => {
+    html5QrCode.start(
+      { facingMode: "user" },
+      config,
+      onScanSuccess
+    ).catch(() => {
+      reproducirSonido('error');
+      alert("No se pudo acceder a la cámara.");
+      cerrarEscanerQR();
     });
+  });
 }
 
 function onScanSuccess(decodedText) {
   cerrarEscanerQR();
-  document.getElementById("codigo").value = decodedText;
+
+  document.getElementById("codigo").value =
+    String(decodedText || "").trim().toUpperCase();
+
   consultarEstudiante();
 }
 
 function cerrarEscanerQR() {
   reproducirSonido('clic');
+
   if (html5QrCode) {
     html5QrCode.stop().then(() => {
       html5QrCode.clear();
@@ -1250,282 +1375,932 @@ function cerrarEscanerQR() {
   }
 }
 
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE1b9clbWMDQpvaddO7wumVnXvumRU24FaWHCwifzemqkjBwsIsVlUVWplGFzO__NN/exec";
+function formatearLDS(valor) {
+  const n = Number(valor);
+  return Number.isFinite(n) ? n.toFixed(2) : "0.00";
+}
 
-function formatearLDS(valor){const n=Number(valor);return Number.isFinite(n)?n.toFixed(2):"0.00";}
-function escaparHTML(texto){return String(texto??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\x27/g,"&#39;").replace(/"/g,"&quot;");}
-function mostrarMensaje(texto,tipo){const el=document.getElementById("mensaje");el.textContent=texto;el.className="message "+tipo;}
-function mostrarMensajePago(texto,tipo){const el=document.getElementById("pagoMensaje");el.textContent=texto;el.className="message "+tipo;}
+function escaparHTML(texto) {
+  return String(texto ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\x27/g, "&#39;")
+    .replace(/"/g, "&quot;");
+}
 
-function llamarAPI(parametros,callback){
-  const nombreCallback="callbackAdminLDS_"+Date.now()+"_"+Math.floor(Math.random()*100000);
-  const query=Object.keys(parametros).map(k=>encodeURIComponent(k)+"="+encodeURIComponent(parametros[k])).join("&");
-  const script=document.createElement("script");
-  script.src=APP_SCRIPT_URL+"?"+query+"&callback="+encodeURIComponent(nombreCallback);
-  window[nombreCallback]=function(respuesta){
-    try{callback(respuesta);}finally{delete window[nombreCallback];script.remove();}
+function mostrarMensaje(texto, tipo) {
+  const el = document.getElementById("mensaje");
+  el.textContent = texto;
+  el.className = "message " + tipo;
+}
+
+function mostrarMensajePago(texto, tipo) {
+  const el = document.getElementById("pagoMensaje");
+  el.textContent = texto;
+  el.className = "message " + tipo;
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback =
+    "callbackAdminLDS_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 100000);
+
+  const query = Object.keys(parametros)
+    .map(k =>
+      encodeURIComponent(k) +
+      "=" +
+      encodeURIComponent(parametros[k])
+    )
+    .join("&");
+
+  const script = document.createElement("script");
+
+  script.src =
+    APP_SCRIPT_URL +
+    "?" +
+    query +
+    "&callback=" +
+    encodeURIComponent(nombreCallback);
+
+  window[nombreCallback] = function(respuesta) {
+    try {
+      callback(respuesta);
+    } finally {
+      delete window[nombreCallback];
+      script.remove();
+    }
   };
-  script.onerror=function(){
-    delete window[nombreCallback];script.remove();
+
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+
     reproducirSonido('error');
-    mostrarMensaje("ERROR DE CONEXIÓN.","error");
+    mostrarMensaje("ERROR DE CONEXIÓN.", "error");
     hablarTextoVoz("Error de conexión con el servidor.");
   };
+
   document.body.appendChild(script);
 }
 
-function obtenerURLsFoto(url){
-  const texto=String(url||"").trim();if(!texto)return[];
-  let id="";
-  const matchArchivo=texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  const matchParametro=texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if(matchArchivo){id=matchArchivo[1];}else if(matchParametro){id=matchParametro[1];}
-  if(!id)return[texto];
-  return[texto,"https://drive.google.com/thumbnail?id="+encodeURIComponent(id)+"&sz=w800","https://drive.google.com/uc?export=view&id="+encodeURIComponent(id),"https://lh3.googleusercontent.com/d/"+encodeURIComponent(id)+"=w800"];
+function obtenerURLsFoto(url) {
+  const texto = String(url || "").trim();
+
+  if (!texto) return [];
+
+  let id = "";
+
+  const matchArchivo =
+    texto.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+  const matchParametro =
+    texto.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+  if (matchArchivo) {
+    id = matchArchivo[1];
+  } else if (matchParametro) {
+    id = matchParametro[1];
+  }
+
+  if (!id) return [texto];
+
+  return [
+    texto,
+    "https://drive.google.com/thumbnail?id=" +
+      encodeURIComponent(id) +
+      "&sz=w800",
+    "https://drive.google.com/uc?export=view&id=" +
+      encodeURIComponent(id),
+    "https://lh3.googleusercontent.com/d/" +
+      encodeURIComponent(id) +
+      "=w800"
+  ];
 }
 
-function mostrarFotoEstudiante(e){
-  const foto=document.getElementById("fotoEstudiante");
-  const placeholder=document.getElementById("fotoPlaceholder");
-  const original=String(e.fotoUrl||e.fotoURL||e.foto_url||e.FOTO_URL||e.foto||e.FOTO||"").trim();
-  const urls=obtenerURLsFoto(original);
-  foto.dataset.intento="0";placeholder.style.display="flex";foto.style.display="none";foto.removeAttribute("src");foto.onerror=null;
-  if(!urls.length)return;
-  foto.onerror=function(){
-    const siguiente=Number(foto.dataset.intento||"0")+1;
-    foto.dataset.intento=String(siguiente);
-    if(siguiente<urls.length){foto.src=urls[siguiente];}else{foto.style.display="none";placeholder.style.display="flex";}
+function mostrarFotoEstudiante(e) {
+  const foto = document.getElementById("fotoEstudiante");
+  const placeholder = document.getElementById("fotoPlaceholder");
+
+  const original = String(
+    e.fotoUrl ||
+    e.fotoURL ||
+    e.foto_url ||
+    e.FOTO_URL ||
+    e.foto ||
+    e.FOTO ||
+    ""
+  ).trim();
+
+  const urls = obtenerURLsFoto(original);
+
+  foto.dataset.intento = "0";
+  placeholder.style.display = "flex";
+  foto.style.display = "none";
+  foto.removeAttribute("src");
+  foto.onerror = null;
+
+  if (!urls.length) return;
+
+  foto.onerror = function() {
+    const siguiente =
+      Number(foto.dataset.intento || "0") + 1;
+
+    foto.dataset.intento = String(siguiente);
+
+    if (siguiente < urls.length) {
+      foto.src = urls[siguiente];
+    } else {
+      foto.style.display = "none";
+      placeholder.style.display = "flex";
+    }
   };
-  foto.onload=function(){foto.style.display="block";placeholder.style.display="none";};
-  foto.src=urls[0];
+
+  foto.onload = function() {
+    foto.style.display = "block";
+    placeholder.style.display = "none";
+  };
+
+  foto.src = urls[0];
 }
 
-function consultarEstudiante(){
-  reproducirSonido('clic');
-  const codigo = document.getElementById("codigo").value.trim().toUpperCase();
-  const anioEscolar = document.getElementById("selectAnioEscolar").value;
+function actualizarBannerCuenta(saldo, esAndrew) {
+  const rolBanner =
+    document.querySelector(".admin-text-details p");
 
-  if(!codigo){
+  if (!rolBanner) return;
+
+  const saldoTexto = formatearLDS(saldo);
+
+  rolBanner.textContent = esAndrew
+    ? "CAJERO GENERAL · FONDO DISPONIBLE: S/ " + saldoTexto
+    : "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
+}
+
+function consultarEstudiante(esConsultaAutomatica = false) {
+  if (!esConsultaAutomatica) {
+    reproducirSonido('clic');
+  }
+
+  const codigo =
+    document.getElementById("codigo").value.trim().toUpperCase();
+
+  const anioEscolar =
+    document.getElementById("selectAnioEscolar").value;
+
+  if (!codigo) {
     reproducirSonido('error');
     mostrarMensaje("INGRESA UN CÓDIGO LDS.", "error");
     hablarTextoVoz("Por favor ingresa un código.");
     return;
   }
+
   mostrarMensaje("CONSULTANDO...", "ok");
-  hablarTextoVoz("Consultando información.");
 
-  llamarAPI({accion: "estudiante", codigo: codigo, anio: anioEscolar}, function(respuesta){
-    if(!respuesta || respuesta.ok === false || !respuesta.estudiante){
-      reproducirSonido('error');
-      document.getElementById("estudianteCard").classList.remove("show");
-      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
-      document.getElementById("contadorMovimientos").textContent = "0";
-      datosEstudianteActualGlobal = null;
-      mostrarMensaje((respuesta && respuesta.mensaje) || "REGISTRO NO ENCONTRADO.", "error");
-      hablarTextoVoz("Registro no encontrado.");
-      return;
+  if (!esConsultaAutomatica) {
+    hablarTextoVoz("Consultando información.");
+  }
+
+  llamarAPI(
+    {
+      accion: "estudiante",
+      codigo: codigo,
+      anio: anioEscolar
+    },
+    function(respuesta) {
+      if (
+        !respuesta ||
+        respuesta.ok === false ||
+        !respuesta.estudiante
+      ) {
+        reproducirSonido('error');
+
+        document
+          .getElementById("estudianteCard")
+          .classList.remove("show");
+
+        document.getElementById("tablaMovimientos").innerHTML =
+          '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
+
+        document.getElementById("contadorMovimientos").textContent = "0";
+        datosEstudianteActualGlobal = null;
+
+        mostrarMensaje(
+          (respuesta && respuesta.mensaje) ||
+          "REGISTRO NO ENCONTRADO.",
+          "error"
+        );
+
+        if (sessionStorage.getItem("esAndrew") === "1") {
+          const rolBanner =
+            document.querySelector(".admin-text-details p");
+
+          if (rolBanner) {
+            rolBanner.textContent =
+              "CAJERO GENERAL · NO SE PUDO CONSULTAR CAJA-ANDREW";
+          }
+        }
+
+        hablarTextoVoz("Registro no encontrado.");
+        return;
+      }
+
+      reproducirSonido('exito');
+
+      const e = respuesta.estudiante;
+      datosEstudianteActualGlobal = e;
+
+      const cuenta = respuesta.cuenta || {};
+
+      const nombreUsuario =
+        e.nombreCompleto ||
+        e.nombre ||
+        "USUARIO";
+
+      const saldoActual =
+        Number(cuenta.saldoActual || 0);
+
+      const saldoFormateado =
+        formatearLDS(saldoActual);
+
+      const codigoRespuesta =
+        String(e.codigo || codigo).toUpperCase();
+
+      const rolRespuesta =
+        String(e.rol || "").toUpperCase();
+
+      const esAndrew =
+        sessionStorage.getItem("esAndrew") === "1" ||
+        codigoRespuesta === "CAJA-ANDREW" ||
+        String(nombreUsuario).toUpperCase() === "MISTER ANDREW";
+
+      const esDocente =
+        !esAndrew &&
+        (
+          (e.codigo &&
+            String(e.codigo)
+              .toUpperCase()
+              .includes("LDS-DOC")) ||
+          e.esDocente ||
+          rolRespuesta.includes("DOCENTE") ||
+          rolRespuesta.includes("MAESTRA")
+        );
+
+      if (esAndrew) {
+        document.getElementById("nombre").textContent =
+          "💰 CAJERO GENERAL: " + nombreUsuario;
+      } else if (esDocente) {
+        document.getElementById("nombre").textContent =
+          "👩‍🏫 DOCENTE: " + nombreUsuario;
+      } else {
+        document.getElementById("nombre").textContent =
+          "👤 ALUMNO: " + nombreUsuario;
+      }
+
+      const rolMostrar =
+        esAndrew
+          ? "CAJERO GENERAL"
+          : e.rol ||
+            (esDocente ? "DOCENTE" : "ALUMNO");
+
+      document.getElementById("meta").textContent =
+        [
+          e.codigo || codigo,
+          "AÑO: " + anioEscolar,
+          rolMostrar,
+          e.grado || "",
+          e.seccion || ""
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+      document.getElementById("saldo").textContent =
+        (
+          esAndrew || esDocente
+            ? "FONDO DISPONIBLE: S/ "
+            : "SALDO: "
+        ) +
+        saldoFormateado +
+        " LDS";
+
+      if (esAndrew) {
+        actualizarBannerCuenta(saldoActual, true);
+      } else if (esDocente) {
+        actualizarBannerCuenta(saldoActual, false);
+      }
+
+      mostrarFotoEstudiante(e);
+
+      document.getElementById(
+        "estudianteCard"
+      ).classList.add("show");
+
+      document.getElementById("pagoCodigo").value =
+        e.codigo || codigo;
+
+      document.getElementById("incCodigo").value =
+        e.codigo || codigo;
+
+      const movimientos =
+        Array.isArray(respuesta.movimientos)
+          ? respuesta.movimientos
+          : [];
+
+      renderMovimientos(
+        movimientos,
+        e,
+        anioEscolar
+      );
+
+      mostrarMensaje(
+        "CONSULTA REALIZADA CORRECTAMENTE.",
+        "ok"
+      );
+
+      if (esAndrew) {
+        hablarTextoVoz(
+          "Mister Andrew. Cajero general. " +
+          "Fondo disponible: " +
+          saldoFormateado +
+          " soles."
+        );
+      } else if (esDocente) {
+        hablarTextoVoz(
+          "Maestra " +
+          nombreUsuario +
+          ". Fondo disponible: " +
+          saldoFormateado +
+          " soles."
+        );
+      } else {
+        hablarTextoVoz(
+          "Estudiante " +
+          nombreUsuario +
+          ". Saldo actual: " +
+          saldoFormateado +
+          " LDS."
+        );
+      }
     }
-
-    reproducirSonido('exito');
-    const e = respuesta.estudiante;
-    datosEstudianteActualGlobal = e;
-    const cuenta = respuesta.cuenta || {};
-    const nombreUsuario = e.nombreCompleto || e.nombre || "USUARIO";
-    const saldoFormateado = formatearLDS(cuenta.saldoActual || 0);
-
-    const esDocente = (e.codigo && e.codigo.includes("LDS-DOC")) || e.esDocente || (e.rol && e.rol.toUpperCase().includes("DOCENTE"));
-
-    document.getElementById("nombre").textContent = (esDocente ? "👩‍🏫 DOCENTE: " : "👤 ALUMNO: ") + nombreUsuario;
-    document.getElementById("meta").textContent = [e.codigo || codigo, "AÑO: " + anioEscolar, e.rol || (esDocente ? "DOCENTE" : "ALUMNO"), e.grado || "", e.seccion || ""].filter(Boolean).join(" · ");
-    document.getElementById("saldo").textContent = (esDocente ? "FONDO DISPONIBLE: " : "SALDO: ") + saldoFormateado + " LDS";
-
-    mostrarFotoEstudiante(e);
-    document.getElementById("estudianteCard").classList.add("show");
-    
-    document.getElementById("pagoCodigo").value = e.codigo || codigo;
-    document.getElementById("incCodigo").value = e.codigo || codigo;
-
-    const movimientos = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
-    renderMovimientos(movimientos, e, anioEscolar);
-    mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
-
-    if (esDocente) {
-      hablarTextoVoz("Maestra " + nombreUsuario + ". Fondo disponible: " + saldoFormateado + " LDS.");
-    } else {
-      hablarTextoVoz("Estudiante " + nombreUsuario + ". Saldo actual: " + saldoFormateado + " LDS.");
-    }
-  });
+  );
 }
 
 function procesarPagoEstudiante() {
-  const codigo = document.getElementById("pagoCodigo").value.trim().toUpperCase();
-  const tipoOperacion = document.getElementById("pagoOperacionVal").value;
-  const categoriaSeleccionada = document.getElementById("pagoTipo").value;
-  const concepto = document.getElementById("pagoConcepto").value;
-  const monto = parseFloat(document.getElementById("pagoMonto").value);
-  const observacion = document.getElementById("pagoObs").value.trim();
-  const anioEscolar = document.getElementById("selectAnioEscolar").value;
-  const responsable = sessionStorage.getItem("maestraActiva") || "DOCENTE";
+  const codigo =
+    document.getElementById("pagoCodigo")
+      .value.trim().toUpperCase();
+
+  const tipoOperacion =
+    document.getElementById("pagoOperacionVal").value;
+
+  const categoriaSeleccionada =
+    document.getElementById("pagoTipo").value;
+
+  const concepto =
+    document.getElementById("pagoConcepto").value;
+
+  const monto =
+    parseFloat(
+      document.getElementById("pagoMonto").value
+    );
+
+  const observacion =
+    document.getElementById("pagoObs").value.trim();
+
+  const anioEscolar =
+    document.getElementById("selectAnioEscolar").value;
+
+  const responsable =
+    sessionStorage.getItem("maestraActiva") ||
+    "DOCENTE";
+
+  const responsableClave =
+    sessionStorage.getItem("responsableClave") ||
+    "";
 
   if (!codigo) {
     reproducirSonido('error');
-    mostrarMensajePago("PRIMERO CONSULTA A UN USUARIO.", "error");
-    hablarTextoVoz("Primero consulta a un usuario.");
+    mostrarMensajePago(
+      "PRIMERO CONSULTA A UN USUARIO.",
+      "error"
+    );
+    hablarTextoVoz(
+      "Primero consulta a un usuario."
+    );
     return;
   }
+
   if (!monto || monto <= 0) {
     reproducirSonido('error');
-    mostrarMensajePago("INGRESA UN MONTO VÁLIDO.", "error");
-    hablarTextoVoz("Ingresa un monto válido.");
+    mostrarMensajePago(
+      "INGRESA UN MONTO VÁLIDO.",
+      "error"
+    );
+    hablarTextoVoz(
+      "Ingresa un monto válido."
+    );
     return;
   }
 
   reproducirSonido('clic');
-  mostrarMensajePago("PROCESANDO PAGO...", "ok");
-  hablarTextoVoz("Procesando transacción.");
 
-  llamarAPI({
-    accion: "registrarMovimiento",
-    codigo: codigo,
-    anio: anioEscolar,
-    tipo: tipoOperacion,
-    categoria: categoriaSeleccionada,
-    concepto: concepto,
-    monto: monto,
-    responsable: responsable,
-    observacion: observacion
-  }, function(respuesta) {
-    if (respuesta && respuesta.ok) {
-      reproducirSonido('exito');
-      mostrarMensajePago("¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!", "ok");
-      hablarTextoVoz("Transacción registrada correctamente.");
-      document.getElementById("pagoMonto").value = "";
-      document.getElementById("pagoObs").value = "";
-      document.getElementById("panelPago").classList.add("collapsed");
-      consultarEstudiante();
-    } else {
-      reproducirSonido('error');
-      mostrarMensajePago((respuesta && respuesta.mensaje) || "ERROR AL REGISTRAR.", "error");
-      hablarTextoVoz("Error al registrar.");
+  mostrarMensajePago(
+    "PROCESANDO PAGO...",
+    "ok"
+  );
+
+  hablarTextoVoz(
+    "Procesando transacción."
+  );
+
+  llamarAPI(
+    {
+      accion: "registrarMovimiento",
+      codigo: codigo,
+      anio: anioEscolar,
+      tipo: tipoOperacion,
+      categoria: categoriaSeleccionada,
+      concepto: concepto,
+      monto: monto,
+      responsable: responsable,
+      responsableClave: responsableClave,
+      observacion: observacion
+    },
+    function(respuesta) {
+      if (respuesta && respuesta.ok) {
+        reproducirSonido('exito');
+
+        mostrarMensajePago(
+          "¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!",
+          "ok"
+        );
+
+        hablarTextoVoz(
+          "Transacción registrada correctamente."
+        );
+
+        document.getElementById("pagoMonto").value = "";
+        document.getElementById("pagoObs").value = "";
+        document.getElementById("panelPago").classList.add("collapsed");
+
+        consultarEstudiante(
+          sessionStorage.getItem("esAndrew") === "1"
+        );
+
+      } else {
+        reproducirSonido('error');
+
+        mostrarMensajePago(
+          (respuesta && respuesta.mensaje) ||
+          "ERROR AL REGISTRAR.",
+          "error"
+        );
+
+        hablarTextoVoz(
+          "Error al registrar."
+        );
+      }
     }
-  });
+  );
 }
 
 function imprimirReportePersonal() {
   reproducirSonido('clic');
+
   if (!datosEstudianteActualGlobal) {
-    alert("PRIMERO DEBES CONSULTAR A UN ESTUDIANTE.");
+    alert(
+      "PRIMERO DEBES CONSULTAR A UN ESTUDIANTE."
+    );
     return;
   }
-  const anio = document.getElementById("selectAnioEscolar").value;
-  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA (" + anio + ")";
-  
-  const nombreEst = datosEstudianteActualGlobal.nombreCompleto || datosEstudianteActualGlobal.nombre || "ESTUDIANTE";
-  const metaEst = [datosEstudianteActualGlobal.codigo, "AÑO: " + anio, datosEstudianteActualGlobal.grado, datosEstudianteActualGlobal.seccion].filter(Boolean).join(" · ");
-  document.getElementById("printNombreEntidad").textContent = nombreEst;
-  document.getElementById("printMetaEntidad").textContent = metaEst;
-  
-  const originalFoto = String(datosEstudianteActualGlobal.fotoUrl || datosEstudianteActualGlobal.foto || "").trim();
-  const urls = obtenerURLsFoto(originalFoto);
-  document.getElementById("printFotoEntidad").src = urls[0] || "";
 
-  hablarTextoVoz("Imprimiendo estado de cuenta personal.");
+  const anio =
+    document.getElementById(
+      "selectAnioEscolar"
+    ).value;
+
+  document.getElementById(
+    "printTituloReporte"
+  ).textContent =
+    "I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA (" +
+    anio +
+    ")";
+
+  const nombreEst =
+    datosEstudianteActualGlobal.nombreCompleto ||
+    datosEstudianteActualGlobal.nombre ||
+    "ESTUDIANTE";
+
+  const metaEst = [
+    datosEstudianteActualGlobal.codigo,
+    "AÑO: " + anio,
+    datosEstudianteActualGlobal.grado,
+    datosEstudianteActualGlobal.seccion
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  document.getElementById(
+    "printNombreEntidad"
+  ).textContent = nombreEst;
+
+  document.getElementById(
+    "printMetaEntidad"
+  ).textContent = metaEst;
+
+  const originalFoto =
+    String(
+      datosEstudianteActualGlobal.fotoUrl ||
+      datosEstudianteActualGlobal.foto ||
+      ""
+    ).trim();
+
+  const urls =
+    obtenerURLsFoto(originalFoto);
+
+  document.getElementById(
+    "printFotoEntidad"
+  ).src =
+    urls[0] || "";
+
+  hablarTextoVoz(
+    "Imprimiendo estado de cuenta personal."
+  );
+
   window.print();
 }
 
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
-  const anio = document.getElementById("selectAnioEscolar").value;
-  document.getElementById("printTituloReporte").textContent = "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL (" + anio + ")";
-  
-  document.getElementById("printNombreEntidad").textContent = maestraActivaGlobal || "DOCENTE CAJERA";
-  document.getElementById("printMetaEntidad").textContent = "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" + anio + ")";
-  const fotoResponsable = obtenerURLsFoto(FOTOS_DOCENTES[maestraActivaGlobal] || "");
-  document.getElementById("printFotoEntidad").src = fotoResponsable[0] || "";
 
-  hablarTextoVoz("Imprimiendo reporte general y balance grupal.");
+  const anio =
+    document.getElementById(
+      "selectAnioEscolar"
+    ).value;
+
+  const esAndrew =
+    sessionStorage.getItem("esAndrew") === "1";
+
+  document.getElementById(
+    "printTituloReporte"
+  ).textContent =
+    "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL (" +
+    anio +
+    ")";
+
+  document.getElementById(
+    "printNombreEntidad"
+  ).textContent =
+    maestraActivaGlobal ||
+    "DOCENTE CAJERA";
+
+  document.getElementById(
+    "printMetaEntidad"
+  ).textContent =
+    esAndrew
+      ? "CAJERO GENERAL — BANCO LDS 360 (" +
+        anio +
+        ")"
+      : "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" +
+        anio +
+        ")";
+
+  const fotoResponsable =
+    obtenerURLsFoto(
+      FOTOS_DOCENTES[
+        maestraActivaGlobal
+      ] || ""
+    );
+
+  document.getElementById(
+    "printFotoEntidad"
+  ).src =
+    fotoResponsable[0] || "";
+
+  hablarTextoVoz(
+    "Imprimiendo reporte general y balance grupal."
+  );
+
   window.print();
 }
 
-function renderMovimientos(movimientos, estudianteObj, anioEscolar){
-  const tabla=document.getElementById("tablaMovimientos");
-  tabla.innerHTML="";
-  document.getElementById("contadorMovimientos").textContent=String(movimientos.length);
-  if(!movimientos.length){
-    tabla.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO ' + anioEscolar + '.</td></tr>';
+function renderMovimientos(
+  movimientos,
+  estudianteObj,
+  anioEscolar
+) {
+  const tabla =
+    document.getElementById(
+      "tablaMovimientos"
+    );
+
+  tabla.innerHTML = "";
+
+  document.getElementById(
+    "contadorMovimientos"
+  ).textContent =
+    String(movimientos.length);
+
+  if (!movimientos.length) {
+    tabla.innerHTML =
+      '<tr><td colspan="9" class="empty">' +
+      'NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO ' +
+      anioEscolar +
+      '.</td></tr>';
     return;
   }
-  
+
   movimientos.forEach(m => {
-    const tr = document.createElement("tr");
-    const anioMov = m.anio || m.anioEscolar || anioEscolar;
-    const fecha = m.fechaTexto || m.fecha || m.timestamp || "";
-    const nombre = m.estudiante || m.nombre || (estudianteObj ? estudianteObj.nombreCompleto : "");
-    const grado = m.grado || (estudianteObj ? estudianteObj.grado : "");
-    const tipo = m.tipo || m.tipoMovimiento || "";
-    const concepto = m.concepto || "";
-    const monto = m.monto ?? m.montoLDS ?? 0;
-    const responsable = m.responsable || "";
-    const observacion = m.observacion || "";
+    const tr =
+      document.createElement("tr");
 
-    const badgeClase = String(tipo).toUpperCase().includes("EGRESO") ? "badge-egreso" : "badge-ingreso";
+    const anioMov =
+      m.anio ||
+      m.anioEscolar ||
+      anioEscolar;
 
-    tr.innerHTML = '<td><strong>' + escaparHTML(anioMov) + '</strong></td>' +
-                   '<td>' + escaparHTML(fecha) + '</td>' +
-                   '<td>' + escaparHTML(nombre) + '</td>' +
-                   '<td>' + escaparHTML(grado) + '</td>' +
-                   '<td><span class="' + badgeClase + '">' + escaparHTML(tipo) + '</span></td>' +
-                   '<td>' + escaparHTML(concepto) + '</td>' +
-                   '<td><strong>' + formatearLDS(monto) + '</strong></td>' +
-                   '<td>' + escaparHTML(responsable) + '</td>' +
-                   '<td>' + escaparHTML(observacion) + '</td>';
+    const fecha =
+      m.fechaTexto ||
+      m.fecha ||
+      m.timestamp ||
+      "";
+
+    const nombre =
+      m.estudiante ||
+      m.nombre ||
+      (
+        estudianteObj
+          ? estudianteObj.nombreCompleto
+          : ""
+      );
+
+    const grado =
+      m.grado ||
+      (
+        estudianteObj
+          ? estudianteObj.grado
+          : ""
+      );
+
+    const tipo =
+      m.tipo ||
+      m.tipoMovimiento ||
+      "";
+
+    const concepto =
+      m.concepto ||
+      "";
+
+    const monto =
+      m.monto ??
+      m.montoLDS ??
+      0;
+
+    const responsable =
+      m.responsable ||
+      "";
+
+    const observacion =
+      m.observacion ||
+      "";
+
+    const badgeClase =
+      String(tipo)
+        .toUpperCase()
+        .includes("EGRESO")
+          ? "badge-egreso"
+          : "badge-ingreso";
+
+    tr.innerHTML =
+      '<td><strong>' +
+      escaparHTML(anioMov) +
+      '</strong></td>' +
+
+      '<td>' +
+      escaparHTML(fecha) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(nombre) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(grado) +
+      '</td>' +
+
+      '<td><span class="' +
+      badgeClase +
+      '">' +
+      escaparHTML(tipo) +
+      '</span></td>' +
+
+      '<td>' +
+      escaparHTML(concepto) +
+      '</td>' +
+
+      '<td><strong>' +
+      formatearLDS(monto) +
+      '</strong></td>' +
+
+      '<td>' +
+      escaparHTML(responsable) +
+      '</td>' +
+
+      '<td>' +
+      escaparHTML(observacion) +
+      '</td>';
+
     tabla.appendChild(tr);
   });
 }
 
-function obtenerIncidencias(){try{return JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS")||"[]");}catch(_){return[];}}
+function obtenerIncidencias() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(
+        "BANCO_LDS_360_INCIDENCIAS"
+      ) || "[]"
+    );
+  } catch (_) {
+    return [];
+  }
+}
 
-function guardarIncidencia(){
-  const codigo=document.getElementById("incCodigo").value.trim().toUpperCase(),problema=document.getElementById("incProblema").value.trim(),solucion=document.getElementById("incSolucion").value.trim(),estado=document.getElementById("incEstado").value,anio=document.getElementById("selectAnioEscolar").value;
-  if(!codigo||!problema){
+function guardarIncidencia() {
+  const codigo =
+    document.getElementById("incCodigo")
+      .value.trim().toUpperCase();
+
+  const problema =
+    document.getElementById("incProblema")
+      .value.trim();
+
+  const solucion =
+    document.getElementById("incSolucion")
+      .value.trim();
+
+  const estado =
+    document.getElementById("incEstado")
+      .value;
+
+  const anio =
+    document.getElementById("selectAnioEscolar")
+      .value;
+
+  if (!codigo || !problema) {
     reproducirSonido('error');
-    alert("INGRESA CÓDIGO Y PROBLEMA.");
-    hablarTextoVoz("Ingresa código y problema.");
+    alert(
+      "INGRESA CÓDIGO Y PROBLEMA."
+    );
+    hablarTextoVoz(
+      "Ingresa código y problema."
+    );
     return;
   }
+
   reproducirSonido('exito');
-  const items=obtenerIncidencias();
-  items.unshift({id:Date.now(),fecha:new Date().toLocaleString("es-PE"),anio,codigo,problema,solucion,estado});
-  localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
+
+  const items =
+    obtenerIncidencias();
+
+  items.unshift({
+    id: Date.now(),
+    fecha: new Date().toLocaleString("es-PE"),
+    anio,
+    codigo,
+    problema,
+    solucion,
+    estado
+  });
+
+  localStorage.setItem(
+    "BANCO_LDS_360_INCIDENCIAS",
+    JSON.stringify(items)
+  );
+
   limpiarIncidencia();
   renderIncidencias();
-  hablarTextoVoz("Incidencia guardada correctamente.");
-  document.getElementById("panelIncidencias").classList.add("collapsed");
+
+  hablarTextoVoz(
+    "Incidencia guardada correctamente."
+  );
+
+  document
+    .getElementById("panelIncidencias")
+    .classList.add("collapsed");
 }
 
-function limpiarIncidencia(){
+function limpiarIncidencia() {
   reproducirSonido('clic');
-  document.getElementById("incProblema").value="";
-  document.getElementById("incSolucion").value="";
-  document.getElementById("incEstado").value="PENDIENTE";
+
+  document.getElementById(
+    "incProblema"
+  ).value = "";
+
+  document.getElementById(
+    "incSolucion"
+  ).value = "";
+
+  document.getElementById(
+    "incEstado"
+  ).value = "PENDIENTE";
 }
 
-function eliminarIncidencia(id){
+function eliminarIncidencia(id) {
   reproducirSonido('clic');
-  const items=obtenerIncidencias().filter(x=>x.id!==id);
-  localStorage.setItem("BANCO_LDS_360_INCIDENCIAS",JSON.stringify(items));
+
+  const items =
+    obtenerIncidencias()
+      .filter(x => x.id !== id);
+
+  localStorage.setItem(
+    "BANCO_LDS_360_INCIDENCIAS",
+    JSON.stringify(items)
+  );
+
   renderIncidencias();
 }
 
-function renderIncidencias(){
-  const items=obtenerIncidencias();
-  document.getElementById("contadorIncidencias").textContent=String(items.length);
-  const box=document.getElementById("listaIncidencias");
-  if(!items.length){box.innerHTML='<div class="empty">TODAVÍA NO HAY INCIDENCIAS.</div>';return;}
-  box.innerHTML=items.slice(0,12).map(x=>`<div class="incident"><div class="incident-top"><strong>[${escaparHTML(x.anio||'2026')}] ${escaparHTML(x.codigo)}</strong><span class="badge">${escaparHTML(x.estado)}</span></div><div>${escaparHTML(x.problema)}</div>${x.solucion?`<small><strong>SOLUCIÓN:</strong> ${escaparHTML(x.solucion)}</small>`:""}<small>${escaparHTML(x.fecha)} · <button type="button" class="danger" style="border:0;background:none;padding:0;cursor:pointer" onclick="eliminarIncidencia(${x.id})">ELIMINAR</button></small></div>`).join("");
+function renderIncidencias() {
+  const items =
+    obtenerIncidencias();
+
+  document.getElementById(
+    "contadorIncidencias"
+  ).textContent =
+    String(items.length);
+
+  const box =
+    document.getElementById(
+      "listaIncidencias"
+    );
+
+  if (!items.length) {
+    box.innerHTML =
+      '<div class="empty">' +
+      'TODAVÍA NO HAY INCIDENCIAS.' +
+      '</div>';
+    return;
+  }
+
+  box.innerHTML =
+    items
+      .slice(0, 12)
+      .map(
+        x =>
+          `<div class="incident">
+            <div class="incident-top">
+              <strong>
+                [${escaparHTML(x.anio || '2026')}]
+                ${escaparHTML(x.codigo)}
+              </strong>
+
+              <span class="badge">
+                ${escaparHTML(x.estado)}
+              </span>
+            </div>
+
+            <div>
+              ${escaparHTML(x.problema)}
+            </div>
+
+            ${
+              x.solucion
+                ? `<small>
+                    <strong>SOLUCIÓN:</strong>
+                    ${escaparHTML(x.solucion)}
+                  </small>`
+                : ""
+            }
+
+            <small>
+              ${escaparHTML(x.fecha)}
+              ·
+              <button
+                type="button"
+                class="danger"
+                style="border:0;background:none;padding:0;cursor:pointer"
+                onclick="eliminarIncidencia(${x.id})"
+              >
+                ELIMINAR
+              </button>
+            </small>
+          </div>`
+      )
+      .join("");
 }
 
-document.getElementById("codigo").addEventListener("keydown",e=>{if(e.key==="Enter")consultarEstudiante();});
+document.getElementById("codigo").addEventListener(
+  "keydown",
+  e => {
+    if (e.key === "Enter") {
+      consultarEstudiante();
+    }
+  }
+);
 </script>
+
 </body>
 </html>
