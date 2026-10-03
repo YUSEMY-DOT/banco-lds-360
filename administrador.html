@@ -6,6 +6,7 @@
 <title>BANCO LDS 360 — Administración</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="notificaciones.js"></script>
 <style>
 :root {
   --azul: #0c1e30;
@@ -1736,6 +1737,16 @@ function procesarPagoEstudiante() {
     function(respuesta) {
       if (respuesta && respuesta.ok) {
         reproducirSonido('exito');
+
+        if (window.NotificacionesLDS) {
+          NotificacionesLDS.movimiento({
+            tipo: tipoOperacion,
+            concepto: concepto,
+            codigo: codigo,
+            monto: monto,
+            anio: anioEscolar
+          });
+        }
 
         mostrarMensajePago(
           "¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!",
