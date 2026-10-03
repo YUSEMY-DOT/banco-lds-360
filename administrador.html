@@ -732,6 +732,10 @@ footer {
   border:2px solid var(--dorado);
   background:#fff;
 }
+/* OCULTAR SELECTOR: LA SELECCIÓN SE HACE SOLO CON LAS FOTOS */
+#docenteSelect{
+  display:none !important;
+}
 .mise-foto-btn span{
   color:var(--azul);
   font-size:.58rem;
@@ -775,8 +779,6 @@ footer {
     <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE.</p>
 
     <div class="form-group">
-      <label for="docenteSelect">DOCENTE / MAESTRA</label>
-
       <div class="mises-fotos-grid">
         <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
           <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
@@ -796,7 +798,7 @@ footer {
         </button>
       </div>
 
-      <select id="docenteSelect" class="input-field" onchange="anunciarSeleccion(this)">
+      <select id="docenteSelect" aria-hidden="true" tabindex="-1">
         <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
         <option value="LILY">MISS LILY MELO AZAÑERO</option>
         <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
