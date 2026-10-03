@@ -696,6 +696,57 @@ footer {
 
 .type-btn.active-ingreso { background: #ecfdf5; color: #047857; border-color: #10b981; }
 .type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
+
+/* FOTOS DE LAS MISES EN ACCESO ADMINISTRATIVO */
+.mises-fotos-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:8px 0 10px;
+}
+.mise-foto-btn{
+  border:1.5px solid var(--borde);
+  border-radius:10px;
+  background:#f8fafc;
+  padding:7px 5px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  transition:all .2s ease;
+}
+.mise-foto-btn:hover,
+.mise-foto-btn.activa{
+  border-color:var(--dorado);
+  background:#fffaf0;
+  box-shadow:0 2px 8px rgba(0,0,0,.10);
+}
+.mise-foto-btn img{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--dorado);
+  background:#fff;
+}
+.mise-foto-btn span{
+  color:var(--azul);
+  font-size:.58rem;
+  line-height:1.15;
+  font-weight:800;
+  text-align:center;
+  word-break:break-word;
+}
+@media(max-width:500px){
+  .mises-fotos-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;}
+  .mise-foto-btn{padding:8px 4px;}
+  .mise-foto-btn img{width:54px;height:54px;}
+  .mise-foto-btn span{font-size:.62rem;}
+}
+
 </style>
 </head>
 <body>
@@ -725,6 +776,26 @@ footer {
 
     <div class="form-group">
       <label for="docenteSelect">DOCENTE / MAESTRA</label>
+
+      <div class="mises-fotos-grid">
+        <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
+          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
+          <span>MISS LILY</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="seleccionarMiseVisual('KIARA')">
+          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300" alt="Miss Kiara">
+          <span>MISS KIARA</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="seleccionarMiseVisual('ANGHY')">
+          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300" alt="Miss Anghy">
+          <span>MISS ANGHY</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="seleccionarMiseVisual('KARIN')">
+          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300" alt="Miss Karin">
+          <span>MISS KARIN</span>
+        </button>
+      </div>
+
       <select id="docenteSelect" class="input-field" onchange="anunciarSeleccion(this)">
         <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
         <option value="LILY">MISS LILY MELO AZAÑERO</option>
@@ -1123,6 +1194,24 @@ function reproducirSonido(tipo) {
 function anunciarSeleccion(select) {
   reproducirSonido('clic');
   const texto = select.options[select.selectedIndex].text;
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    btn.classList.toggle('activa', btn.dataset.mise === select.value);
+  });
+  hablarTextoVoz("Seleccionada: " + texto);
+}
+
+function seleccionarMiseVisual(valor) {
+  const select = document.getElementById("docenteSelect");
+  if (!select) return;
+
+  select.value = valor;
+
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    btn.classList.toggle('activa', btn.dataset.mise === valor);
+  });
+
+  const texto = select.options[select.selectedIndex].text;
+  reproducirSonido('clic');
   hablarTextoVoz("Seleccionada: " + texto);
 }
 
