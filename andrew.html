@@ -11,7 +11,9 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvet
 body{background:#061b3f;color:var(--texto);overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 
-/* PORTADA ANDREW: independiente de cualquier otro estilo del panel */
+/* ==========================================================
+   PORTADA ANDREW — FONDO REAL + FOTO TRANSPARENTE
+   ========================================================== */
 #loginAndrew{
   position:fixed!important;
   inset:0!important;
@@ -19,39 +21,37 @@ button,input,select,textarea{font:inherit}
   height:100vh!important;
   min-height:100vh!important;
   margin:0!important;
-  padding:clamp(70px,9vh,105px) clamp(18px,4vw,70px) clamp(18px,4vh,40px)!important;
+  padding:clamp(92px,11vh,125px) clamp(24px,5vw,80px) clamp(20px,3vh,32px)!important;
   display:flex!important;
   flex-direction:row!important;
-  align-items:flex-end!important;
+  align-items:center!important;
   justify-content:center!important;
-  gap:clamp(20px,5vw,80px)!important;
+  gap:clamp(24px,5vw,78px)!important;
   overflow:hidden!important;
   z-index:99999!important;
-  background-color:#061b3f!important;
-  background-image:url("assets/FONDO%20ANDREW.png")!important;
-  background-position:center center!important;
-  background-size:cover!important;
-  background-repeat:no-repeat!important;
+  background:#061b3f url("assets/FONDO%20ANDREW.png?v=20261002-2") center center / 100% 100% no-repeat!important;
 }
 
 #loginAndrew::before{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(90deg,rgba(2,18,48,.10),rgba(2,18,48,.03));
-  pointer-events:none;
+  background:transparent!important;
+  pointer-events:none!important;
+  z-index:0!important;
 }
 
 #loginAndrew .andrew-login-photo{
   position:relative!important;
   z-index:2!important;
-  width:min(40vw,560px)!important;
-  height:min(82vh,730px)!important;
-  flex:0 1 560px!important;
+  width:min(39vw,540px)!important;
+  height:min(76vh,700px)!important;
+  flex:0 1 540px!important;
   display:flex!important;
   align-items:flex-end!important;
   justify-content:center!important;
-  margin:0!important;
+  margin:clamp(25px,5vh,55px) 0 0!important;
+  pointer-events:none!important;
 }
 
 #loginAndrew .andrew-login-photo img{
@@ -62,36 +62,40 @@ button,input,select,textarea{font:inherit}
   object-position:center bottom!important;
   background:transparent!important;
   mix-blend-mode:normal!important;
-  filter:drop-shadow(0 20px 28px rgba(0,0,0,.45));
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));
 }
 
 #loginAndrew > .panel{
   position:relative!important;
-  z-index:3!important;
-  width:min(460px,40vw)!important;
-  max-width:470px!important;
-  flex:0 1 470px!important;
-  margin:0 0 7vh 0!important;
-  border:2px solid var(--dorado)!important;
+  z-index:5!important;
+  width:min(430px,39vw)!important;
+  max-width:430px!important;
+  flex:0 1 430px!important;
+  margin:clamp(10px,4vh,40px) 0 0!important;
+  border:2px solid #f5b400!important;
   border-radius:22px!important;
   overflow:hidden!important;
   background:#fff!important;
-  box-shadow:0 24px 60px rgba(0,0,0,.55)!important;
+  box-shadow:0 22px 55px rgba(0,0,0,.48)!important;
+  pointer-events:auto!important;
 }
 
 #loginAndrew .panel-head{
   padding:20px 24px!important;
   background:linear-gradient(135deg,#061b3f,#12366f)!important;
-  border-bottom:2px solid var(--dorado)!important;
+  border-bottom:2px solid #f5b400!important;
 }
 #loginAndrew .panel-head h3{
   margin:0!important;
   color:#fff!important;
-  font-size:clamp(1rem,1.5vw,1.25rem)!important;
+  font-size:clamp(1rem,1.45vw,1.25rem)!important;
   line-height:1.35!important;
   font-weight:900!important;
 }
-#loginAndrew .panel-body{padding:26px!important}
+#loginAndrew .panel-body{padding:24px!important}
 #loginAndrew .panel-body>p{
   margin:0 0 18px!important;
   color:#334155!important;
@@ -101,14 +105,14 @@ button,input,select,textarea{font:inherit}
 }
 #loginAndrew .small-label{
   display:block!important;
-  margin:0 0 6px!important;
+  margin:0 0 7px!important;
   color:#0b2f67!important;
   font-size:.76rem!important;
   font-weight:900!important;
 }
 #loginAndrew #claveAndrew{
   width:100%!important;
-  height:54px!important;
+  height:56px!important;
   padding:0 15px!important;
   border:1.5px solid #b9c7d8!important;
   border-radius:12px!important;
@@ -117,21 +121,46 @@ button,input,select,textarea{font:inherit}
   font-size:1rem!important;
   font-weight:700!important;
   outline:none!important;
+  pointer-events:auto!important;
 }
 #loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
-#loginAndrew .btn-gold{
+#loginAndrew .login-action,
+#loginAndrew .login-home{
+  position:relative!important;
+  z-index:20!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  display:flex!important;
   width:100%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-weight:900!important;
+}
+#loginAndrew .login-action{
   min-height:54px!important;
   margin-top:15px!important;
   border:1px solid #fcd34d!important;
   border-radius:12px!important;
   background:linear-gradient(135deg,#ffd23f,#f2a900)!important;
   color:#08214a!important;
-  font-size:.95rem!important;
-  font-weight:900!important;
-  cursor:pointer!important;
 }
-#loginAndrew #errorLogin{margin-top:10px!important}
+#loginAndrew .login-home{
+  min-height:48px!important;
+  margin-top:10px!important;
+  background:#fff!important;
+  color:#0b2f67!important;
+  border:1.5px solid #0b2f67!important;
+  border-radius:12px!important;
+}
+#loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
+#loginAndrew .login-home:hover{background:#f1f5f9!important}
+
+/* Mientras se solicita la clave, NADA del panel interno puede interferir. */
+body.login-screen > #appHeader,
+body.login-screen > #andrewApp,
+body.login-screen > #appFooter{display:none!important}
+body.login-screen #loginAndrew{display:flex!important}
+body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
 
 /* El resto de la aplicación queda oculto mientras se solicita la clave */
 body.login-screen > #appHeader,
@@ -164,6 +193,9 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
  #loginAndrew .andrew-login-photo{height:39vh!important;width:82vw!important}
  #loginAndrew>.panel{max-height:52vh;overflow:auto}
 }
+
+button, a, input, select, textarea{pointer-events:auto;}
+button{cursor:pointer;}
 </style>
 </head>
 <body class="login-screen">
@@ -362,7 +394,7 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
 
 <div id="loginAndrew">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png?v=20261002-2" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -370,7 +402,8 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
       <p style="font-weight:800;color:#334155;margin-bottom:18px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
       <label class="small-label">CLAVE DE ACCESO</label>
       <input id="claveAndrew" type="password" placeholder="INGRESE LA CLAVE" autocomplete="off">
-      <button class="btn btn-gold" style="width:100%;margin-top:15px;" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
+      <button type="button" class="btn btn-gold login-action" >INGRESAR A CAJA GENERAL</button>
+      <button type="button" class="btn btn-outline login-home" >← DEVOLVER AL INICIO</button>
       <div id="errorLogin" class="message"></div>
     </div>
   </div>
@@ -393,21 +426,12 @@ const MISES = {
 };
 
 const FOTO_ANDREW_CANDIDATAS = [
-  "assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png",
-  "assets/ANDREW_TRANSPARENTE.png",
-  "assets/ANDREW.png",
-  "assets/ANDREW.jpg",
-  "assets/ANDREW.jpeg",
-  "assets/ANDREW.webp"
+  "assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png?v=20261002-2"
 ];
 
 /* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
 const INSIGNIA_CANDIDATAS = [
-  "assets/insignia-real.png",
-  "assets/photo_13_2025-01-25_10-11-15-removebg-preview(3).png",
-  "assets/photo_13_2025-01-25_10-11-15-removebg-preview(2).png",
-  "assets/insignia.png",
-  "assets/insignia.jpg"
+  "assets/insignia-real.png?v=20261002-2"
 ];
 
 function urlFotoDrive(url){
@@ -451,6 +475,10 @@ function llamarAPI(params,callback){
     s.remove();
   };
   document.body.appendChild(s);
+}
+
+function volverInicio(){
+  window.location.href = "index.html";
 }
 
 function entrarAndrew(){
@@ -509,7 +537,12 @@ function cargarFoto(){
 }
 
 function cargarFondoAndrew(){
-  /* El fondo de la portada se controla exclusivamente por CSS en #loginAndrew. */
+  const portada = document.getElementById("loginAndrew");
+  if(!portada) return;
+  portada.style.backgroundImage = 'url("assets/FONDO%20ANDREW.png?v=20261002-2")';
+  portada.style.backgroundSize = "100% 100%";
+  portada.style.backgroundPosition = "center center";
+  portada.style.backgroundRepeat = "no-repeat";
 }
 
 
@@ -676,6 +709,14 @@ document.getElementById("claveAndrew").addEventListener("keydown", function(e){
     e.preventDefault();
     entrarAndrew();
   }
+});
+
+/* Botones de portada: listeners directos además del onclick. */
+document.addEventListener("DOMContentLoaded",()=>{
+  const b1=document.querySelector("#loginAndrew .login-action");
+  const b2=document.querySelector("#loginAndrew .login-home");
+  if(b1) b1.addEventListener("click", entrarAndrew);
+  if(b2) b2.addEventListener("click", volverInicio);
 });
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
