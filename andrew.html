@@ -1,1487 +1,2516 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANCO LDS 360 — Caja General</title>
-<style>
-:root{--azul:#061b3f;--azul2:#0b2f67;--dorado:#f5b400;--texto:#14213d;--borde:#cbd5e1;--verde:#059669;--rojo:#dc2626}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif}
-body{background:#061b3f;color:var(--texto);overflow-x:hidden}
-button,input,select,textarea{font:inherit}
+/**
+ * BANCO LDS 360 — I.E.P. LA SALLE DEL SUR
+ * BACKEND PRINCIPAL — Código.gs
+ *
+ * VERSIÓN SEGURA Y NO DESTRUCTIVA
+ * - NO borra MOVIMIENTOS.
+ * - NO reinicia el banco.
+ * - NO elimina ESTUDIANTES.
+ * - Reconoce CAJA-ANDREW aunque no exista como fila en ESTUDIANTES.
+ * - Andrew = CAJERO GENERAL, fondo inicial S/180,000.
+ * - Las 4 Mises tienen su propia caja y reciben únicamente transferencias
+ *   o pagos que correspondan a su cuenta.
+ * - Las operaciones se registran como movimientos pareados.
+ * - Las anulaciones se realizan por reversión; nunca se borra el original.
+ *
+ * El administrador.html actual consume este backend mediante JSONP GET.
+ */
 
-/* ==========================================================
-   PORTADA ANDREW — FONDO REAL + FOTO TRANSPARENTE
-   ========================================================== */
-#loginAndrew{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100vh!important;
-  min-height:100vh!important;
-  margin:0!important;
-  padding:clamp(92px,11vh,125px) clamp(24px,5vw,80px) clamp(20px,3vh,32px)!important;
-  display:flex!important;
-  flex-direction:row!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:clamp(24px,5vw,78px)!important;
-  overflow:hidden!important;
-  z-index:99999!important;
-  background-color:#061b3f!important;
-  background-image:none!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  background-size:100% 100%!important;
-}
+const CONFIG = {
+  SPREADSHEET_ID: "1j0A6XtLbCXJLkVTBXRpK-GnV3QY4qYQ_SOReARpu9ag",
+  HOJA_ESTUDIANTES: "ESTUDIANTES",
+  HOJA_MOVIMIENTOS: "MOVIMIENTOS",
 
-#loginAndrew{background-color:#061b3f!important;}
-#loginAndrew::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:transparent!important;
-  pointer-events:none!important;
-  z-index:0!important;
-}
+  CLAVE_MISE: "360LDS@",
+  CLAVE_ANDREW: "360LDS@@@",
+  CLAVE_ADMINISTRADOR: "360LDS",
 
-#loginAndrew .login-bg-image{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-  display:block!important;
-  z-index:0!important;
-  pointer-events:none!important;
-  user-select:none!important;
-}
+  CODIGO_ANDREW: "CAJA-ANDREW",
+  NOMBRE_ANDREW: "MISTER ANDREW",
+  ROL_ANDREW: "CAJERO GENERAL",
+  TIPO_CUENTA_ANDREW: "CAJA_GENERAL",
 
-#loginAndrew .andrew-login-photo{
-  position:relative!important;
-  z-index:2!important;
-  width:min(39vw,540px)!important;
-  height:min(76vh,700px)!important;
-  flex:0 1 540px!important;
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  margin:clamp(25px,5vh,55px) 0 0!important;
-  pointer-events:none!important;
-}
+  FONDO_INICIAL_ANDREW: 180000,
+  BONO_MENSUAL_ALUMNO: 1130,
 
-#loginAndrew .andrew-login-photo img{
-  display:block!important;
-  color:transparent!important;
-  font-size:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-  background:transparent!important;
-  mix-blend-mode:normal!important;
-  border:0!important;
-  outline:0!important;
-  box-shadow:none!important;
-  filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));
-}
-
-#loginAndrew > .panel{
-  position:relative!important;
-  z-index:5!important;
-  width:min(430px,39vw)!important;
-  max-width:430px!important;
-  flex:0 1 430px!important;
-  margin:clamp(10px,4vh,40px) 0 0!important;
-  border:2px solid #f5b400!important;
-  border-radius:22px!important;
-  overflow:hidden!important;
-  background:#fff!important;
-  box-shadow:0 22px 55px rgba(0,0,0,.48)!important;
-  pointer-events:auto!important;
-}
-
-#loginAndrew .panel-head{
-  padding:20px 24px!important;
-  background:linear-gradient(135deg,#061b3f,#12366f)!important;
-  border-bottom:2px solid #f5b400!important;
-}
-#loginAndrew .panel-head h3{
-  margin:0!important;
-  color:#fff!important;
-  font-size:clamp(1rem,1.45vw,1.25rem)!important;
-  line-height:1.35!important;
-  font-weight:900!important;
-}
-#loginAndrew .panel-body{padding:24px!important}
-#loginAndrew .panel-body>p{
-  margin:0 0 18px!important;
-  color:#334155!important;
-  font-size:.92rem!important;
-  line-height:1.5!important;
-  font-weight:800!important;
-}
-#loginAndrew .small-label{
-  display:block!important;
-  margin:0 0 7px!important;
-  color:#0b2f67!important;
-  font-size:.76rem!important;
-  font-weight:900!important;
-}
-#loginAndrew #claveAndrew{
-  width:100%!important;
-  height:56px!important;
-  padding:0 15px!important;
-  border:1.5px solid #b9c7d8!important;
-  border-radius:12px!important;
-  background:#f8fafc!important;
-  color:#14213d!important;
-  font-size:1rem!important;
-  font-weight:700!important;
-  outline:none!important;
-  pointer-events:auto!important;
-}
-#loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
-#loginAndrew .login-action,
-#loginAndrew .login-home{
-  position:relative!important;
-  z-index:20!important;
-  pointer-events:auto!important;
-  cursor:pointer!important;
-  display:flex!important;
-  width:100%!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-weight:900!important;
-}
-#loginAndrew .login-action{
-  min-height:54px!important;
-  margin-top:15px!important;
-  border:1px solid #fcd34d!important;
-  border-radius:12px!important;
-  background:linear-gradient(135deg,#ffd23f,#f2a900)!important;
-  color:#08214a!important;
-}
-#loginAndrew .login-home{
-  min-height:48px!important;
-  margin-top:10px!important;
-  background:#fff!important;
-  color:#0b2f67!important;
-  border:1.5px solid #0b2f67!important;
-  border-radius:12px!important;
-}
-#loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
-#loginAndrew .login-home:hover{background:#f1f5f9!important}
-
-/* Mientras se solicita la clave, NADA del panel interno puede interferir. */
-body.login-screen > #appHeader,
-body.login-screen > #andrewApp,
-body.login-screen > #appFooter{display:none!important}
-body.login-screen #loginAndrew{display:flex!important}
-body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
-
-/* El resto de la aplicación queda oculto mientras se solicita la clave */
-body.login-screen > #appHeader,
-body.login-screen > #andrewApp,
-body.login-screen > #appFooter{display:none!important}
-body:not(.login-screen) > #loginAndrew{display:none!important}
-
-/* PANEL INTERNO */
-header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
-.topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
-.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
-main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head.accordion-head:focus-visible{outline:3px solid rgba(245,180,0,.35);outline-offset:-3px}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}.admin-profile-banner{background:#091628;border:2px solid var(--dorado);border-radius:12px;padding:12px 18px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;gap:12px}.admin-profile-info{display:flex;align-items:center;gap:12px}.admin-avatar-wrap{width:48px;height:48px;border-radius:50%;border:2px solid var(--dorado);overflow:hidden;background:#fff}.admin-avatar-img{width:100%;height:100%;object-fit:cover}.admin-text-details h3{font-size:.95rem;color:#fff;margin:0}.admin-text-details p{color:#fde68a;font-size:.65rem;font-weight:700;margin:0}.admin-stats-box{display:flex;gap:8px}.stat-pill{background:#03080f;border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:6px 12px;text-align:center}.stat-pill span{display:block;font-size:.55rem;color:#cbd5e1;font-weight:700}.stat-pill strong{font-size:.9rem;color:#fff}.student-head{display:flex;align-items:center;gap:12px}.student-photo-wrap{width:65px;height:65px;border-radius:12px;overflow:hidden;border:2px solid var(--dorado);background:#fff}.student-photo{width:100%;height:100%;object-fit:cover}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}.small-label{display:block;font-size:.75rem;color:#0b2f67;margin:8px 0 4px;font-weight:900}select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}.message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
-
-@media(max-width:900px){
- #loginAndrew{gap:18px;padding:55px 18px 20px!important}
- #loginAndrew .andrew-login-photo{width:43vw!important;height:70vh!important}
- #loginAndrew>.panel{width:45vw!important;flex-basis:45vw!important;margin-bottom:4vh!important}
- .layout{grid-template-columns:1fr}
-}
-@media(max-width:700px){
- #loginAndrew{position:fixed!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;gap:0!important;padding:25px 12px 14px!important;background-position:center!important}
- #loginAndrew .andrew-login-photo{width:min(82vw,390px)!important;height:min(48vh,390px)!important;flex:0 0 auto!important;margin-bottom:-2px!important}
- #loginAndrew>.panel{width:min(100%,440px)!important;max-width:440px!important;flex:0 0 auto!important;margin:0!important}
- #loginAndrew .panel-head{padding:14px 17px!important}
- #loginAndrew .panel-body{padding:18px!important}
- #loginAndrew .panel-body>p{font-size:.82rem!important}
-}
-@media(max-width:430px){
- #loginAndrew .andrew-login-photo{height:39vh!important;width:82vw!important}
- #loginAndrew>.panel{max-height:52vh;overflow:auto}
-}
-
-button, a, input, select, textarea{pointer-events:auto;}
-button{cursor:pointer;}
-/* El fondo real se carga también por CSS para que esté disponible desde el primer instante. */
-#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
-
-/* ==========================================================
-   PANEL ANDREW — RESPONSIVO, LEGIBLE Y A PANTALLA COMPLETA
-   ========================================================== */
-#appHeader{width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
-#appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
-#appHeader .brand{flex:1 1 auto;min-width:0;}
-#appHeader .btn-outline{min-width:125px;min-height:44px;padding:10px 18px;font-size:.9rem;box-shadow:0 5px 14px rgba(0,0,0,.22);}
-#appHeader .brand-title{font-size:clamp(1.05rem,1.8vw,1.45rem);}
-#appHeader .brand-subtitle{font-size:clamp(.6rem,.8vw,.75rem);}
-#andrewApp{max-width:none!important;width:100%!important;margin:0!important;padding:clamp(12px,1.5vw,24px)!important;}
-#andrewApp .layout{width:100%;max-width:1800px;margin:0 auto;grid-template-columns:minmax(0,1.65fr) minmax(360px,.75fr);gap:clamp(14px,1.5vw,24px);}
-#andrewApp .main-dashboard-panel{min-width:0;}
-#andrewApp .main-panel-head{padding:14px 18px;min-height:66px;align-items:center;}
-#andrewApp .main-title-wrap{display:flex;align-items:baseline;gap:12px;min-width:0;}
-#andrewApp .main-panel-head h3{font-size:clamp(.95rem,1.15vw,1.15rem);}
-#andrewApp .year-caption{font-size:.7rem;color:#64748b;font-weight:900;white-space:nowrap;}
-#andrewApp .header-actions-group{display:flex;gap:8px;align-items:center;min-width:250px;}
-#andrewApp .header-actions-group select{width:150px;min-height:40px;}
-#andrewApp .header-actions-group .btn{min-height:40px;}
-#andrewApp .dashboard-body{padding:clamp(12px,1.5vw,22px);}
-#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(240px,1.5fr) minmax(150px,.7fr) minmax(150px,.7fr);gap:12px;align-items:stretch;margin-bottom:14px;}
-#andrewApp .resumen-identidad,#andrewApp .resumen-metrica{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;}
-#andrewApp .resumen-identidad{display:flex;align-items:center;gap:11px;}
-#andrewApp .resumen-avatar{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:#061b3f;border:2px solid #f5b400;font-size:1.25rem;flex:0 0 auto;}
-#andrewApp .resumen-identidad strong{display:block;color:#0b2f67;font-size:.9rem;font-weight:900;}
-#andrewApp .resumen-identidad small{display:block;color:#64748b;font-size:.66rem;font-weight:800;margin-top:3px;}
-#andrewApp .resumen-metrica{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
-#andrewApp .resumen-metrica span{font-size:.62rem;color:#64748b;font-weight:900;letter-spacing:.03em;}
-#andrewApp .resumen-metrica strong{font-size:clamp(1rem,1.5vw,1.35rem);color:#0b2f67;margin-top:3px;}
-#andrewApp .inner-panel{margin-top:14px;border-color:#e5a000;box-shadow:none;}
-#andrewApp .inner-panel .panel-head{padding:11px 14px;}
-#andrewApp .inner-panel .panel-body{padding:13px;}
-#andrewApp .mises-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-#andrewApp .mises-grid>div{border:1.5px solid #e5a000!important;border-radius:12px!important;padding:13px!important;background:#f8fafc!important;min-width:0;}
-#andrewApp .mises-grid>div div:first-child{font-size:.82rem!important;line-height:1.25;}
-#andrewApp .movement-head{flex-wrap:wrap;}
-#andrewApp .movement-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
-#andrewApp .btn-report{background:linear-gradient(135deg,#0b2f67,#16488f);color:#fff;border:1px solid #0b2f67;}
-#andrewApp .btn-report:hover{filter:brightness(1.08);transform:translateY(-1px);}
-#andrewApp .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-#andrewApp table{min-width:900px;}
-#andrewApp .right-stack{gap:14px;}
-#andrewApp .right-stack .panel-head h3{font-size:.88rem;}
-#andrewApp .right-stack .panel-body{padding:14px;}
-#andrewApp .right-stack .btn{min-height:42px;}
-#andrewApp .small-label{font-size:.7rem;margin-top:8px;}
-#andrewApp select,#andrewApp input,#andrewApp textarea{min-height:40px;font-size:.82rem;}
-
-/* ==========================================================
-   ANDREW — FOTO, ENCABEZADO FIJO, SALDO Y TABLAS CLARAS
-   ========================================================== */
-#appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;}
-#appHeader .brand{min-height:52px;}
-#appHeader .brand img{display:block!important;width:54px!important;height:54px!important;object-fit:contain!important;flex:0 0 54px;}
-#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:12px!important;}
-#andrewApp .andrew-mini-photo{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;border:2px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.18);}
-#andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
-#andrewApp .andrew-mini-photo span{display:none;font-size:1.5rem;}
-#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:1rem;font-weight:900;}
-#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.68rem;font-weight:900;margin-top:4px;}
-#andrewApp .resumen-metrica:first-of-type{background:linear-gradient(135deg,#fffdf0,#fff)!important;border:2px solid #f5b400!important;}
-#andrewApp .resumen-metrica:first-of-type strong{font-size:clamp(1.2rem,2vw,1.75rem)!important;color:#008f68!important;}
-#andrewApp .table-wrap{background:#fff!important;border-radius:0 0 12px 12px;}
-#andrewApp table,#andrewApp table tbody,#andrewApp table tr,#andrewApp table td{background:#fff!important;}
-#andrewApp table thead th{background:#eef3f8!important;color:#0b2f67!important;position:sticky;top:0;z-index:2;}
-#andrewApp #panelTodo{background:#fff!important;}
-@media(max-width:600px){
-  #appHeader .brand img{width:46px!important;height:46px!important;flex-basis:46px;}
-  #andrewApp .andrew-mini-photo{width:56px;height:56px;flex-basis:56px;}
-  #andrewApp .andrew-identidad-text strong{font-size:.88rem;}
-}
-
-/* AJUSTE FINAL DE LA SEGUNDA PANTALLA */
-#andrewApp{min-height:calc(100vh - 72px);}
-#andrewApp .layout{width:min(100%,1680px);grid-template-columns:minmax(0,1.72fr) minmax(350px,.72fr);align-items:start;}
-#andrewApp .main-dashboard-panel{height:auto;}
-#andrewApp .main-panel-head{background:#f8fafc;}
-#andrewApp .caja-resumen-compacto{grid-template-columns:minmax(180px,1fr) minmax(190px,1fr) minmax(170px,.8fr);}
-#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .resumen-cuenta strong{color:#0b2f67;font-size:.9rem;font-weight:900;}
-#andrewApp .resumen-cuenta span{color:#64748b;font-size:.66rem;font-weight:800;margin-top:3px;}
-#andrewApp .right-stack{position:sticky;top:12px;align-self:start;}
-#andrewApp .right-stack .accordion-panel{margin:0;}
-#andrewApp .right-stack .accordion-body[hidden]{display:none!important;}
-#andrewApp .right-stack .accordion-head{min-height:52px;}
-#andrewApp .movement-head{min-height:52px;}
-#andrewApp .movement-actions .btn{min-height:40px;}
-
-@media(max-width:1100px){
-  #andrewApp .layout{grid-template-columns:minmax(0,1.35fr) minmax(320px,.8fr);}
-}
-@media(max-width:820px){
-  #andrewApp{min-height:auto;}
-  #andrewApp .layout{grid-template-columns:1fr;}
-  #andrewApp .right-stack{position:static;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  #andrewApp .right-stack .accordion-panel:last-child{grid-column:1/-1;}
-  #andrewApp .caja-resumen-compacto{grid-template-columns:1fr 1fr;}
-  #andrewApp .resumen-cuenta{grid-column:1/-1;}
-}
-@media(max-width:600px){
-  #andrewApp .layout{gap:10px;}
-  #andrewApp .right-stack{grid-template-columns:1fr;}
-  #andrewApp .right-stack .accordion-panel:last-child{grid-column:auto;}
-  #andrewApp .caja-resumen-compacto{grid-template-columns:1fr 1fr;}
-  #andrewApp .resumen-cuenta{grid-column:1/-1;}
-}
-@media(max-width:430px){
-  #andrewApp .caja-resumen-compacto{grid-template-columns:1fr;}
-  #andrewApp .resumen-cuenta{grid-column:auto;}
-}
-
-
-/* Ventana de reportes */
-.reportes-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,12,28,.72);z-index:100000;}
-.reportes-modal.open{display:flex;}
-.reportes-card{width:min(620px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.42);overflow:hidden;}
-.reportes-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;padding:18px 20px;background:linear-gradient(135deg,#061b3f,#12366f);color:#fff;}
-.reportes-head h3{margin:0;font-size:1.05rem;}
-.reportes-head p{margin:5px 0 0;color:#dbeafe;font-size:.76rem;font-weight:700;}
-.btn-close-report{width:38px;height:38px;padding:0;background:#fff;color:#0b2f67;border-radius:10px;}
-.reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
-.report-option{min-height:150px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;text-align:left;padding:18px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#14213d;}
-.report-option:hover{border-color:#f5b400;box-shadow:0 7px 20px rgba(0,0,0,.1);transform:translateY(-1px);}
-.report-option span{font-size:1.6rem;}
-.report-option strong{color:#0b2f67;font-size:.88rem;}
-.report-option small{color:#64748b;font-size:.7rem;line-height:1.35;font-weight:700;}
-
-/* Impresión */
-@media print{
-  #appHeader{position:static!important;display:flex!important;background:#061b3f!important;color:#fff!important;border-bottom:2px solid #f5b400!important;}
-  #appHeader .btn-outline{display:none!important;}
-  #andrewApp table thead{display:table-header-group!important;}
-  #andrewApp .table-wrap{overflow:visible!important;background:#fff!important;}
-  body{background:#fff!important;color:#111!important;}
-  #appHeader,.right-stack,#mensaje,.reportes-modal,#panelTodo .panel-head button,.movement-actions,#andrewApp>.panel>.panel-head .header-actions-group{display:none!important;}
-  #andrewApp{display:block!important;padding:0!important;max-width:none!important;}
-  #andrewApp .layout{display:block!important;max-width:none!important;}
-  #andrewApp .panel,#andrewApp .inner-panel{border:1px solid #999!important;box-shadow:none!important;}
-  #andrewApp .caja-resumen{grid-template-columns:2fr 1fr 1fr;}
-  #andrewApp table{min-width:0;font-size:9px;}
-  #andrewApp th,#andrewApp td{padding:4px;}
-  #panelTodo{display:block!important;}
-}
-
-@media(max-width:1100px){
-  #andrewApp .layout{grid-template-columns:minmax(0,1fr) minmax(320px,.65fr);}
-  #andrewApp .mises-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-}
-@media(max-width:820px){
-  #appHeader{min-height:64px;}
-  #appHeader .brand img{width:40px;height:40px;}
-  #appHeader .btn-outline{min-width:112px;min-height:40px;padding:8px 13px;}
-  #andrewApp .layout{grid-template-columns:1fr;}
-  #andrewApp .right-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
-  #andrewApp .right-stack .panel:last-child{grid-column:1/-1;}
-  #andrewApp .caja-resumen{grid-template-columns:1fr 1fr;}
-  #andrewApp .resumen-identidad{grid-column:1/-1;}
-}
-@media(max-width:600px){
-  #appHeader{padding:8px 10px!important;}
-  #appHeader .brand-title{font-size:1rem;}
-  #appHeader .brand-subtitle{font-size:.55rem;}
-  #appHeader .btn-outline{min-width:96px;font-size:.78rem;}
-  #andrewApp{padding:9px!important;}
-  #andrewApp .main-panel-head{align-items:stretch;flex-direction:column;gap:10px;}
-  #andrewApp .main-title-wrap{justify-content:space-between;}
-  #andrewApp .header-actions-group{width:100%;min-width:0;}
-  #andrewApp .header-actions-group select{flex:1;width:auto;}
-  #andrewApp .header-actions-group .btn{flex:0 0 auto;}
-  #andrewApp .mises-grid{grid-template-columns:1fr 1fr;}
-  #andrewApp .right-stack{grid-template-columns:1fr;}
-  #andrewApp .right-stack .panel:last-child{grid-column:auto;}
-  #andrewApp .movement-actions{width:100%;justify-content:stretch;}
-  #andrewApp .movement-actions .btn{flex:1 1 140px;}
-  .reportes-options{grid-template-columns:1fr;}
-}
-@media(max-width:430px){
-  #andrewApp .caja-resumen{grid-template-columns:1fr;}
-  #andrewApp .resumen-identidad{grid-column:auto;}
-  #andrewApp .mises-grid{grid-template-columns:1fr;}
-  #andrewApp .main-title-wrap{align-items:flex-start;flex-direction:column;gap:2px;}
-  #andrewApp .header-actions-group{flex-direction:column;}
-  #andrewApp .header-actions-group select,#andrewApp .header-actions-group .btn{width:100%;}
-}
-</style>
-<style>
-@media (max-width: 700px){
-  .right-stack{gap:8px}
-  .right-stack .panel-head.accordion-head{padding:10px 11px;min-height:46px}
-  .right-stack .panel-head h3{font-size:.78rem}
-  .accordion-hint{font-size:.52rem}
-  .accordion-arrow{width:27px;height:27px;flex-basis:27px}
-  .right-stack .panel-body.accordion-body{padding:0 11px 13px}
-}
-@media (max-width: 430px){
-  .accordion-title-wrap{gap:5px}
-  .accordion-hint{display:none}
-  .right-stack .panel-head h3{font-size:.75rem}
-}
-</style>
-<meta name="andrew-screen" content="segunda-pantalla-responsiva">
-
-<style id="lds-mobile-final-fix">
-/* ==========================================================
-   BANCO LDS 360 — AJUSTE FINAL PARA CELULAR
-   Solo afecta pantallas táctiles pequeñas. NO modifica PC.
-   ========================================================== */
-@media screen and (max-width: 600px) and (pointer: coarse){
-  html,body{
-    width:100%;
-    min-width:0!important;
-    overflow-x:hidden!important;
-    -webkit-text-size-adjust:100%;
+  CUENTAS_MISES_LDS360: {
+    "MISS LILY MELO AZAÑERO": {
+      codigo: "CAJA-LILY",
+      nombre: "MISS LILY MELO AZAÑERO",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS KIARA MORALES ELGUERA": {
+      codigo: "CAJA-KIARA",
+      nombre: "MISS KIARA MORALES ELGUERA",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS ANGHY REYES MELO": {
+      codigo: "CAJA-ANGHY",
+      nombre: "MISS ANGHY REYES MELO",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS KARIN MOLERO ROMANI": {
+      codigo: "CAJA-KARIN",
+      nombre: "MISS KARIN MOLERO ROMANI",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    }
   }
-
-  /* CABECERA */
-  #appHeader{
-    min-height:64px!important;
-    height:auto!important;
-    padding:9px 10px!important;
-    gap:8px!important;
-  }
-  #appHeader .brand{gap:8px!important;min-width:0!important;}
-  #appHeader .brand img{width:44px!important;height:44px!important;flex:0 0 44px!important;}
-  #appHeader .brand-title{font-size:1.02rem!important;line-height:1.05!important;}
-  #appHeader .brand-subtitle{font-size:.58rem!important;line-height:1.1!important;}
-  #appHeader .btn-outline{
-    min-width:108px!important;
-    min-height:46px!important;
-    padding:10px 12px!important;
-    font-size:.82rem!important;
-    line-height:1.1!important;
-    white-space:normal!important;
-  }
-
-  /* PANTALLA PRINCIPAL */
-  #andrewApp{
-    width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
-    margin:0!important;
-    padding:10px!important;
-  }
-  #andrewApp .layout{
-    width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
-    display:block!important;
-  }
-  #andrewApp .main-dashboard-panel,
-  #andrewApp .panel,
-  #andrewApp .inner-panel,
-  #andrewApp .right-stack,
-  #andrewApp .right-stack .panel{
-    width:100%!important;
-    min-width:0!important;
-  }
-
-  /* TÍTULOS Y CONTROLES */
-  #andrewApp .main-panel-head{
-    padding:13px 14px!important;
-    gap:10px!important;
-  }
-  #andrewApp .main-panel-head h3{font-size:1rem!important;line-height:1.2!important;}
-  #andrewApp .year-caption{font-size:.72rem!important;}
-  #andrewApp .header-actions-group{
-    width:100%!important;
-    min-width:0!important;
-    display:flex!important;
-    gap:9px!important;
-  }
-  #andrewApp .header-actions-group select,
-  #andrewApp .header-actions-group .btn{
-    min-height:50px!important;
-    font-size:.9rem!important;
-  }
-  #andrewApp .header-actions-group select{flex:1 1 50%!important;width:auto!important;}
-  #andrewApp .header-actions-group .btn{flex:1 1 50%!important;width:auto!important;}
-
-  /* BOTONES: GRANDES Y CÓMODOS PARA EL DEDO */
-  #andrewApp .btn,
-  #andrewApp button.btn,
-  #andrewApp .movement-actions .btn,
-  #andrewApp .right-stack .btn{
-    min-height:50px!important;
-    padding:12px 13px!important;
-    font-size:.9rem!important;
-    line-height:1.15!important;
-    white-space:normal!important;
-    text-align:center!important;
-  }
-
-  /* RESUMEN */
-  #andrewApp .caja-resumen{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:9px!important;
-  }
-  #andrewApp .resumen-cuenta,
-  #andrewApp .resumen-metrica{
-    min-height:72px!important;
-    padding:12px 14px!important;
-  }
-  #andrewApp .andrew-mini-photo{width:58px!important;height:58px!important;flex-basis:58px!important;}
-  #andrewApp .andrew-identidad-text strong{font-size:.98rem!important;}
-  #andrewApp .andrew-identidad-text span{font-size:.7rem!important;}
-  #andrewApp .resumen-metrica span{font-size:.7rem!important;}
-  #andrewApp .resumen-metrica strong{font-size:1.45rem!important;}
-
-  /* CAMPOS */
-  #andrewApp input,
-  #andrewApp select,
-  #andrewApp textarea{
-    min-height:50px!important;
-    padding:11px 12px!important;
-    font-size:.92rem!important;
-  }
-  #andrewApp .small-label{font-size:.76rem!important;}
-
-  /* ACORDEONES */
-  #andrewApp .right-stack .panel-head.accordion-head{
-    min-height:56px!important;
-    padding:12px 13px!important;
-  }
-  #andrewApp .right-stack .panel-head h3{font-size:.9rem!important;line-height:1.2!important;}
-  #andrewApp .accordion-arrow{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:1rem!important;}
-  #andrewApp .right-stack .panel-body.accordion-body{padding:0 13px 15px!important;}
-
-  /* MOVIMIENTOS */
-  #andrewApp .movement-head{padding:12px 13px!important;min-height:56px!important;}
-  #andrewApp .movement-head h3{font-size:.9rem!important;}
-  #andrewApp .movement-actions{
-    width:100%!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:9px!important;
-  }
-  #andrewApp .table-wrap{
-    width:100%!important;
-    max-width:100%!important;
-    overflow-x:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-  }
-  #andrewApp table{min-width:780px!important;font-size:.75rem!important;}
-  #andrewApp th,#andrewApp td{padding:9px 8px!important;}
-
-  /* REPORTES */
-  .reportes-card{width:min(94vw,520px)!important;}
-  .report-option{min-height:72px!important;padding:13px!important;}
-  .report-option strong{font-size:.9rem!important;}
-
-  /* MENSAJES */
-  #andrewApp .message{font-size:.84rem!important;padding:10px 12px!important;}
-
-  /* LOGIN DE ANDREW */
-  #loginAndrew{
-    width:100%!important;
-    min-width:0!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    padding:18px 12px 14px!important;
-    gap:10px!important;
-  }
-  #loginAndrew .andrew-login-photo{
-    width:min(78vw,330px)!important;
-    height:min(38vh,320px)!important;
-    max-height:320px!important;
-  }
-  #loginAndrew>.panel{
-    width:100%!important;
-    max-width:440px!important;
-    min-width:0!important;
-  }
-  #loginAndrew .panel-head{padding:14px 15px!important;}
-  #loginAndrew .panel-head h3{font-size:1rem!important;line-height:1.25!important;}
-  #loginAndrew .panel-body{padding:16px!important;}
-  #loginAndrew .panel-body>p{font-size:.9rem!important;line-height:1.45!important;}
-  #loginAndrew .small-label{font-size:.78rem!important;}
-  #loginAndrew input{
-    min-height:54px!important;
-    padding:12px 14px!important;
-    font-size:1rem!important;
-  }
-  #loginAndrew .btn{
-    width:100%!important;
-    min-height:54px!important;
-    padding:13px 14px!important;
-    font-size:.95rem!important;
-  }
-}
-
-@media screen and (max-width:380px) and (pointer: coarse){
-  #appHeader .brand-title{font-size:.92rem!important;}
-  #appHeader .brand-subtitle{font-size:.52rem!important;}
-  #appHeader .btn-outline{min-width:100px!important;font-size:.76rem!important;}
-  #andrewApp{padding:8px!important;}
-  #andrewApp .header-actions-group{flex-direction:column!important;}
-  #andrewApp .header-actions-group select,
-  #andrewApp .header-actions-group .btn{width:100%!important;min-height:50px!important;}
-  #loginAndrew{padding:12px 10px 12px!important;}
-  #loginAndrew .andrew-login-photo{height:min(34vh,285px)!important;width:76vw!important;}
-}
-</style>
-
-</head>
-<body class="login-screen">
-
-<header class="topbar" id="appHeader">
-  <div class="brand">
-    <img id="logoAndrew" src="assets/insignia.png?v=20261003-2" alt="Insignia La Salle del Sur">
-    <div>
-      <div class="brand-title">BANCO LDS 360</div>
-      <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
-    </div>
-  </div>
-  <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
-</header>
-
-<main id="andrewApp" style="display:none;">
-  <section class="layout">
-    <div>
-      <div class="panel main-dashboard-panel">
-        <div class="panel-head main-panel-head">
-          <div class="main-title-wrap">
-            <h3>🏦 CAJA ANDREW</h3>
-            <span class="year-caption">BANCO LDS 360 · <span id="metaAnio">2026</span></span>
-          </div>
-          <div class="header-actions-group">
-            <select id="anio" aria-label="Año de consulta">
-              <option value="2026" selected>AÑO 2026</option>
-              <option value="2027">AÑO 2027</option>
-              <option value="2028">AÑO 2028</option>
-              <option value="2029">AÑO 2029</option>
-              <option value="2030">AÑO 2030</option>
-            </select>
-            <button class="btn btn-gold" onclick="cargarTodo()">↻ ACTUALIZAR</button>
-          </div>
-        </div>
-        <div class="panel-body dashboard-body">
-          <div class="caja-resumen caja-resumen-compacto">
-            <div class="resumen-cuenta resumen-identidad-andrew">
-              <div class="andrew-mini-photo">
-                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew">
-                <span id="andrewPlaceholder" aria-hidden="true">👤</span>
-              </div>
-              <div class="andrew-identidad-text">
-                <strong>MISTER ANDREW</strong>
-                <span>CAJA-ANDREW · CAJA GENERAL</span>
-              </div>
-            </div>
-            <div class="resumen-metrica">
-              <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 0.00</strong>
-            </div>
-            <div class="resumen-metrica">
-              <span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong>
-            </div>
-          </div>
-
-          <div id="mensaje" class="message"></div>
-
-          <div class="panel inner-panel">
-            <div class="panel-head"><h3>👩‍🏫 SALDOS DE LAS MISS</h3></div>
-            <div class="panel-body">
-              <div id="cuentasMises" class="mises-grid"></div>
-            </div>
-          </div>
-
-          <div class="panel inner-panel">
-            <div class="panel-head movement-head">
-              <h3>📋 MOVIMIENTOS DE CAJA</h3>
-              <div class="movement-actions">
-                <button class="btn btn-report" onclick="abrirReportes()">🖨️ REPORTES</button>
-                <button class="btn btn-outline" onclick="mostrarTodos()">🌐 VER TODO EL BANCO</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th>
-                    <th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaAndrew">
-                  <tr><td colspan="9" class="empty">CARGANDO...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="panel inner-panel" style="display:none;" id="panelTodo">
-            <div class="panel-head movement-head">
-              <h3>🌐 MOVIMIENTOS GENERALES DEL BANCO</h3>
-              <div class="movement-actions">
-                <button class="btn btn-report" onclick="imprimirReporteColectivo()">🖨️ IMPRIMIR REPORTE</button>
-                <button class="btn btn-outline" onclick="cerrarTodo()">✕ CERRAR</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th>
-                    <th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaTodo">
-                  <tr><td colspan="10" class="empty">CARGANDO...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="right-stack" id="accionesAndrew">
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>💸 TRANSFERIR FONDO A UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">MISS DESTINO</label>
-          <select id="miseDestino">
-            <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
-          </select>
-
-          <label class="small-label">MONTO LDS</label>
-          <input id="montoTransferencia" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 10000.00">
-
-          <label class="small-label">CONCEPTO</label>
-          <select id="conceptoTransferencia">
-            <option>TRANSFERENCIA DE FONDO A CAJA MISS</option>
-            <option>FONDO OPERATIVO</option>
-            <option>FONDO PARA ACTIVIDADES</option>
-            <option>FONDO PARA PAGOS A ALUMNOS</option>
-            <option>OTRA TRANSFERENCIA AUTORIZADA</option>
-          </select>
-
-          <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsTransferencia" rows="3" placeholder="DETALLE DE LA TRANSFERENCIA..."></textarea>
-
-          <button class="btn btn-gold" style="width:100%;margin-top:15px;" onclick="transferirAMise()">
-            💰 TRANSFERIR A MISS
-          </button>
-          <div id="mensajeTransferencia" class="message"></div>
-        </div>
-      </div>
-
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>↩️ RECIBIR DEVOLUCIÓN DE UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">MISS QUE DEVUELVE</label>
-          <select id="miseOrigen">
-            <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
-          </select>
-
-          <label class="small-label">MONTO LDS</label>
-          <input id="montoDevolucion" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 2000.00">
-
-          <label class="small-label">CONCEPTO</label>
-          <select id="conceptoDevolucion">
-            <option>DEVOLUCIÓN DE FONDO A CAJA GENERAL</option>
-            <option>REINTEGRO DE FONDO</option>
-            <option>DEVOLUCIÓN DE EXCEDENTE</option>
-          </select>
-
-          <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsDevolucion" rows="3" placeholder="DETALLE DE LA DEVOLUCIÓN..."></textarea>
-
-          <button class="btn btn-outline" style="width:100%;margin-top:15px;" onclick="recibirDevolucion()">
-            ↩️ REGISTRAR DEVOLUCIÓN
-          </button>
-          <div id="mensajeDevolucion" class="message"></div>
-        </div>
-      </div>
-
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>🔎 CONSULTAR CUENTA</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">CÓDIGO DE CUENTA / ALUMNO</label>
-          <input id="codigoConsulta" placeholder="LDS-001 / CAJA-LILY">
-          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">
-            🔍 CONSULTAR
-          </button>
-          <div id="resultadoConsulta" class="message"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<div id="reportesModal" class="reportes-modal" aria-hidden="true">
-  <div class="reportes-card">
-    <div class="reportes-head">
-      <div>
-        <h3>📄 REPORTES LDS 360</h3>
-        <p>Selecciona el reporte que deseas imprimir.</p>
-      </div>
-      <button class="btn btn-close-report" onclick="cerrarReportes()">✕</button>
-    </div>
-    <div class="reportes-options">
-      <button class="report-option" onclick="imprimirReporteIndividual()">
-        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew · año seleccionado</small>
-      </button>
-      <button class="report-option" onclick="imprimirReporteColectivo()">
-        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Todos los movimientos del Banco LDS 360 · año seleccionado</small>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="loginAndrew">
-  <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
-  <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
-  </div>
-  <div class="panel">
-    <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
-    <div class="panel-body">
-      <p style="font-weight:800;color:#334155;margin-bottom:18px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
-      <label class="small-label">CLAVE DE ACCESO</label>
-      <input id="claveAndrew" type="password" placeholder="INGRESE LA CLAVE" autocomplete="off">
-      <button type="button" class="btn btn-gold login-action" >INGRESAR A CAJA GENERAL</button>
-      <button type="button" class="btn btn-outline login-home" >← DEVOLVER AL INICIO</button>
-      <div id="errorLogin" class="message"></div>
-    </div>
-  </div>
-</div>
-
-<footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
-
-<script src="notificaciones.js"></script>
-
-<script>
-
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
-const CLAVE_ANDREW = "360LDS@@@";
-const CODIGO_ANDREW = "CAJA-ANDREW";
-const NOMBRE_ANDREW = "MISTER ANDREW";
-
-const MISES = {
-  "CAJA-LILY": "MISS LILY MELO AZAÑERO",
-  "CAJA-KIARA": "MISS KIARA MORALES ELGUERA",
-  "CAJA-ANGHY": "MISS ANGHY REYES MELO",
-  "CAJA-KARIN": "MISS KARIN MOLERO ROMANI"
 };
 
-const FOTO_ANDREW_CANDIDATAS = [
-  "ANDREW.png"
-];
 
-/* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
-const INSIGNIA_CANDIDATAS = [
-  "insignia.png"
-];
+/* ============================================================
+   ENTRADAS WEB
+   ============================================================ */
 
-function urlFotoDrive(url){
-  const m = String(url || "").match(/\/d\/([^/]+)/);
-  return m ? "https://drive.google.com/uc?export=view&id=" + m[1] : url;
-}
+function doGet(e) {
+  try {
+    const params = (e && e.parameter) ? e.parameter : {};
+    const respuesta = procesarSolicitud_(params);
 
-function formato(n){
-  return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-
-function escapar(v){
-  return String(v == null ? "" : v)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function mostrarMensaje(id,texto,tipo="ok"){
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.textContent=texto;
-  el.className="message "+tipo;
-}
-
-function llamarAPI(params,callback){
-  const cb="ldsAndrew_"+Date.now()+"_"+Math.floor(Math.random()*10000);
-  window[cb]=function(data){
-    try{ callback(data); } finally {
-      delete window[cb];
-      const s=document.getElementById("jsonp_"+cb);
-      if(s)s.remove();
+    if (params.callback) {
+      return respuestaJSONP_(params.callback, respuesta);
     }
-  };
-  const q=new URLSearchParams({...params,callback:cb});
-  const s=document.createElement("script");
-  s.id="jsonp_"+cb;
-  s.src=APP_SCRIPT_URL+"?"+q.toString();
-  s.onerror=function(){
-    callback({ok:false,mensaje:"NO SE PUDO CONECTAR CON BANCO LDS 360."});
-    delete window[cb];
-    s.remove();
-  };
-  document.body.appendChild(s);
-}
 
-function volverInicio(){
-  window.location.href = "index.html";
-}
+    return ContentService
+      .createTextOutput(JSON.stringify(respuesta))
+      .setMimeType(ContentService.MimeType.JSON);
 
-/* ==========================================================
-   AUDIO DE BIENVENIDA Y SONIDOS DE OPERACIÓN
-   ========================================================== */
-let audioAndrew=null;
-function activarAudioAndrew(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC) return null;
-    if(!audioAndrew) audioAndrew=new AC();
-    if(audioAndrew.state==="suspended") audioAndrew.resume();
-    return audioAndrew;
-  }catch(e){ return null; }
-}
-function sonidoAndrew(tipo="ok"){
-  const ac=activarAudioAndrew();
-  if(!ac) return;
-  const ahora=ac.currentTime;
-  const notas=tipo==="error"?[220,165]:tipo==="click"?[520]:[523,659,784];
-  notas.forEach((f,i)=>{
-    const o=ac.createOscillator(), g=ac.createGain();
-    o.type="sine"; o.frequency.value=f;
-    g.gain.setValueAtTime(0,ahora+i*.09);
-    g.gain.linearRampToValueAtTime(.055,ahora+i*.09+.015);
-    g.gain.exponentialRampToValueAtTime(.001,ahora+i*.09+.18);
-    o.connect(g); g.connect(ac.destination);
-    o.start(ahora+i*.09); o.stop(ahora+i*.09+.2);
-  });
-}
-function hablarAndrew(texto){
-  if(!texto || !("speechSynthesis" in window)) return false;
-  try{
-    const ss=window.speechSynthesis;
-    ss.cancel();
-    const emitir=()=>{
-      const u=new SpeechSynthesisUtterance(String(texto));
-      u.lang="es-PE"; u.rate=.92; u.pitch=1; u.volume=1;
-      const voces=ss.getVoices ? ss.getVoices() : [];
-      const voz=voces.find(v=>/^es(-|_)/i.test(v.lang)) || voces.find(v=>/spanish|español/i.test(v.name));
-      if(voz) u.voice=voz;
-      ss.speak(u);
+  } catch (err) {
+    const respuesta = {
+      ok: false,
+      mensaje: "ERROR DEL SERVIDOR: " +
+        (err && err.message ? err.message : String(err))
     };
-    if(ss.getVoices && ss.getVoices().length){ emitir(); }
-    else { ss.onvoiceschanged=()=>{ ss.onvoiceschanged=null; emitir(); }; setTimeout(()=>{ if(!ss.speaking) emitir(); },120); }
-    return true;
-  }catch(e){ return false; }
-}
-function bienvenidaAndrew(){
-  activarAudioAndrew();
-  sonidoAndrew("ok");
-  hablarAndrew("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
+
+    if (e && e.parameter && e.parameter.callback) {
+      return respuestaJSONP_(e.parameter.callback, respuesta);
+    }
+
+    return ContentService
+      .createTextOutput(JSON.stringify(respuesta))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
-function entrarAndrew(){
-  const clave=document.getElementById("claveAndrew").value.trim();
-  if(clave!==CLAVE_ANDREW){
-    mostrarMensaje("errorLogin","CLAVE INCORRECTA.","error");
-    sonidoAndrew("error");
-    hablarAndrew("La clave es incorrecta. Por favor, inténtalo nuevamente.");
-    return;
+
+function doPost(e) {
+  try {
+    let params = {};
+
+    if (e && e.postData && e.postData.contents) {
+      const contenido = String(e.postData.contents);
+
+      try {
+        params = JSON.parse(contenido);
+      } catch (_) {
+        params = e.parameter || {};
+      }
+    } else {
+      params = (e && e.parameter) ? e.parameter : {};
+    }
+
+    const respuesta = procesarSolicitud_(params);
+
+    return ContentService
+      .createTextOutput(JSON.stringify(respuesta))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        ok: false,
+        mensaje: "ERROR DEL SERVIDOR: " +
+          (err && err.message ? err.message : String(err))
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+
+function respuestaJSONP_(callback, objeto) {
+  const nombre = String(callback || "").trim();
+
+  if (!/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(nombre)) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        ok: false,
+        mensaje: "CALLBACK NO VÁLIDO."
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
 
-  /* La voz se dispara dentro de la acción del botón para conservar
-     la autorización de reproducción del navegador. */
-  bienvenidaAndrew();
-
-  sessionStorage.setItem("andrew360","1");
-  document.body.classList.remove("login-screen");
-  document.getElementById("loginAndrew").style.display="none";
-  document.getElementById("appHeader").style.display="block";
-  document.getElementById("andrewApp").style.display="block";
-  document.getElementById("appFooter").style.display="block";
-  cargarInsignia();
-  cargarFoto();
-  cargarFondoAndrew();
-  cerrarTodosLosPanelesAndrew();
-  cargarTodo();
+  return ContentService
+    .createTextOutput(
+      nombre + "(" + JSON.stringify(objeto) + ");"
+    )
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
-function assetUrl(nombre){
-  return new URL("assets/" + encodeURIComponent(nombre), window.location.href).href;
-}
 
-function cargarInsignia(){
-  const logo=document.getElementById("logoAndrew");
-  if(!logo)return;
-  let i=0;
-  const probar=()=>{
-    if(i>=INSIGNIA_CANDIDATAS.length){ logo.style.display="none"; return; }
-    const src=assetUrl(INSIGNIA_CANDIDATAS[i]);
-    const prueba=new Image();
-    prueba.onload=()=>{ logo.src=src; logo.style.display="block"; };
-    prueba.onerror=()=>{ i++; probar(); };
-    prueba.src=src;
-  };
-  probar();
-}
+/* ============================================================
+   ROUTER
+   ============================================================ */
 
-function cargarFoto(){
-  const ponerFoto=(img,ph,lista)=>{
-    if(!img)return;
-    let i=0;
-    img.style.display="none";
-    if(ph)ph.style.display="grid";
-    const probar=()=>{
-      if(i>=lista.length){ return; }
-      const src=assetUrl(lista[i]);
-      const prueba=new Image();
-      prueba.onload=()=>{
-        img.src=src;
-        img.style.display="block";
-        if(ph)ph.style.display="none";
+function procesarSolicitud_(p) {
+  const accion = normalizar_(p.accion);
+
+  switch (accion) {
+    case "ESTUDIANTE":
+      return consultarCuenta_(p);
+
+    case "REGISTRARMOVIMIENTO":
+      return registrarMovimiento_(p);
+
+    case "ANULARMOVIMIENTO":
+      return anularMovimiento_(p);
+
+    case "MOVIMIENTOS":
+      return consultarMovimientosGenerales_(p);
+
+    case "CUENTAS":
+      return consultarCuentas_(p);
+
+    case "SALUD":
+    case "PING":
+      return {
+        ok: true,
+        mensaje: "BANCO LDS 360 ACTIVO.",
+        servidor: "BANCO LDS 360",
+        fecha: new Date()
       };
-      prueba.onerror=()=>{ i++; probar(); };
-      prueba.src=src;
+
+    default:
+      return {
+        ok: false,
+        mensaje: "ACCIÓN NO RECONOCIDA: " + String(p.accion || "")
+      };
+  }
+}
+
+
+/* ============================================================
+   CONSULTA DE CUENTA
+   ============================================================ */
+
+function consultarCuenta_(p) {
+  const codigo = normalizarCodigo_(p.codigo);
+
+  if (!codigo) {
+    return {
+      ok: false,
+      mensaje: "CÓDIGO NO ENVIADO."
     };
-    probar();
+  }
+
+  const anio = normalizarAnio_(p.anio);
+  const datos = cargarDatosBase_();
+  const entidad = buscarEntidad_(codigo, datos);
+
+  if (codigo === CONFIG.CODIGO_ANDREW) {
+    return {
+      ok: true,
+      estudiante: entidadAndrew_(),
+      cuenta: construirCuentaCaja_(
+        codigo,
+        datos.movimientos,
+        anio
+      ),
+      movimientos: movimientosDeCuenta_(
+        codigo,
+        datos.movimientos,
+        anio
+      )
+    };
+  }
+
+  const mise = obtenerMisePorCodigo_(codigo);
+
+  if (mise) {
+    return {
+      ok: true,
+      estudiante: {
+        codigo: mise.codigo,
+        nombreCompleto: mise.nombre,
+        nombre: mise.nombre,
+        grado: "",
+        seccion: "",
+        rol: mise.rol,
+        tipoCuenta: mise.tipo,
+        esDocente: true
+      },
+      cuenta: construirCuentaCaja_(
+        codigo,
+        datos.movimientos,
+        anio
+      ),
+      movimientos: movimientosDeCuenta_(
+        codigo,
+        datos.movimientos,
+        anio
+      )
+    };
+  }
+
+  if (!entidad) {
+    return {
+      ok: false,
+      mensaje: "CÓDIGO NO ENCONTRADO: " + codigo
+    };
+  }
+
+  return {
+    ok: true,
+    estudiante: entidad,
+    cuenta: construirCuentaCuentaEntidad_(
+      codigo,
+      datos.movimientos,
+      entidad,
+      anio
+    ),
+    movimientos: movimientosDeCuenta_(
+      codigo,
+      datos.movimientos,
+      anio
+    )
   };
-  ["andrewFoto","fotoCuenta"].forEach(id=>{
-    const img=document.getElementById(id);
-    const ph=document.getElementById(id==="andrewFoto"?"andrewPlaceholder":"fotoCuentaPlaceholder");
-    if(!img) return;
-    img.src="assets/ANDREW.png?v=20261003-2";
-    img.style.display="block";
-    img.onerror=()=>{ if(ph) ph.style.display="grid"; img.style.display="none"; };
-    if(ph) ph.style.display="none";
-  });
-  const loginImg=document.getElementById("andrewLoginFoto");
-  if(loginImg){
-    loginImg.src="assets/ANDREW.png?v=20261003-1";
-    loginImg.style.display="block";
-  }
-}
-
-function cargarFondoAndrew(){
-  const fondo = document.getElementById("fondoAndrewLogin");
-  if(!fondo) return;
-  // NOMBRE EXACTO DEL ARCHIVO EN GitHub: "FONDO ANDREW .png"
-  fondo.src = "assets/FONDO%20ANDREW%20.png?v=20261003-1";
 }
 
 
+function entidadAndrew_() {
+  return {
+    codigo: CONFIG.CODIGO_ANDREW,
+    nombreCompleto: CONFIG.NOMBRE_ANDREW,
+    nombre: CONFIG.NOMBRE_ANDREW,
+    grado: "CAJA GENERAL",
+    seccion: "",
+    rol: CONFIG.ROL_ANDREW,
+    tipoCuenta: CONFIG.TIPO_CUENTA_ANDREW,
+    esDocente: true,
+    esAndrew: true
+  };
+}
 
-function cargarTodo(){
-  const anio=document.getElementById("anio").value;
-  document.getElementById("metaAnio").textContent=anio;
-  mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
 
-  /* Una sola fuente para el SALDO: CUENTAS.
-     MOVIMIENTOS se usa para la tabla y el contador, pero NO vuelve a
-     sobrescribir el saldo con cero. Así evitamos la duplicación que
-     estaba provocando que S/ 180,000 terminara convertido en S/ 0.00. */
-  let saldoCuentaServidor=null;
+function movimientoInicialAndrewVirtual_() {
+  return {
+    id: "FONDO-INICIAL-ANDREW",
+    fila: 0,
+    anio: "2026",
+    timestamp: "02/10/2026 18:58:32",
+    fecha: "02/10/2026 18:58:32",
+    fechaTexto: "02/10/2026 18:58:32",
+    codigo: CONFIG.CODIGO_ANDREW,
+    codigoQR: CONFIG.CODIGO_ANDREW,
+    estudiante: CONFIG.NOMBRE_ANDREW,
+    nombre: CONFIG.NOMBRE_ANDREW,
+    grado: "CAJA GENERAL",
+    tipo: "INGRESO",
+    tipoMovimiento: "INGRESO",
+    categoria: "GENERAL",
+    concepto: "FONDO GENERAL",
+    monto: CONFIG.FONDO_INICIAL_ANDREW,
+    montoLDS: CONFIG.FONDO_INICIAL_ANDREW,
+    responsable: CONFIG.NOMBRE_ANDREW,
+    observacion: "FONDO GENERAL INICIAL DE CAJA GENERAL",
+    estado: "ACTIVO"
+  };
+}
 
-  llamarAPI({accion:"cuentas",anio},function(r){
-    if(!r || !r.ok){
-      mostrarMensaje("mensaje",(r&&r.mensaje)||"NO SE PUDIERON CARGAR LAS CUENTAS.","error");
-      return;
-    }
 
-    const andrew=(r.cuentas||[]).find(c=>
-      String(c.codigo||"").trim().toUpperCase()===CODIGO_ANDREW
+function asegurarMovimientoInicialAndrew_(movimientos) {
+  const existe = movimientos.some(function(m) {
+    return (
+      normalizarCodigo_(m.codigo) === CONFIG.CODIGO_ANDREW &&
+      normalizar_(m.estado) !== "ANULADO"
     );
-
-    saldoCuentaServidor=andrew && Number.isFinite(Number(andrew.saldoActual))
-      ? Number(andrew.saldoActual)
-      : null;
-
-    /* Si el backend aún no está sirviendo el movimiento inicial pero
-       estamos en 2026 y todavía no existen movimientos reales de Andrew,
-       mantenemos visible el fondo inicial oficial de S/ 180,000.
-       En cuanto existan movimientos de Andrew, se usa el saldo calculado
-       por el backend. */
-    if(saldoCuentaServidor===null){
-      saldoCuentaServidor=0;
-    }
-
-    document.getElementById("saldoCuenta").textContent=formato(saldoCuentaServidor);
-
-    const mises=(r.cuentas||[]).filter(c=>
-      Object.prototype.hasOwnProperty.call(MISES,String(c.codigo||"").toUpperCase())
-    );
-
-    document.getElementById("cuentasMises").innerHTML=mises.map(c=>`
-      <div style="border:2px solid #e5a000;border-radius:14px;padding:15px;background:#f8fafc;">
-        <div style="font-weight:900;color:#14213d;">👩‍🏫 ${escapar(c.nombre)}</div>
-        <div style="font-size:.85rem;color:#64748b;font-weight:800;">${escapar(c.codigo)} · CAJA MISS</div>
-        <div style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:8px;">${formato(c.saldoActual)}</div>
-      </div>`).join("");
-
-    mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
   });
 
-  llamarAPI({accion:"movimientos",anio},function(r){
-    if(!r || !r.ok){
-      document.getElementById("tablaAndrew").innerHTML='<tr><td colspan="9" class="empty">NO SE PUDIERON CARGAR LOS MOVIMIENTOS.</td></tr>';
-      return;
+  if (existe) return movimientos;
+
+  const copia = movimientos.slice(0);
+  copia.push(movimientoInicialAndrewVirtual_());
+  return copia;
+}
+
+
+function construirCuentaCaja_(codigo, movimientos, anio) {
+  let saldo = 0;
+  let cantidad = 0;
+
+  const movimientosCuenta =
+    codigo === CONFIG.CODIGO_ANDREW
+      ? asegurarMovimientoInicialAndrew_(movimientos)
+      : movimientos;
+
+  movimientosCuenta.forEach(function(m) {
+    if (normalizarCodigo_(m.codigo) !== codigo) return;
+    if (normalizar_(m.estado) === "ANULADO") return;
+
+    const monto = numero_(m.monto);
+    const tipo = normalizar_(m.tipo);
+
+    if (tipo === "INGRESO") {
+      saldo += monto;
+    } else if (tipo === "EGRESO") {
+      saldo -= monto;
     }
 
-    let todos=(r.movimientos||[]);
-    let mov=todos.filter(esMovimientoAndrew);
-
-    /* El fondo inicial oficial pertenece a 2026. Solo se crea como
-       respaldo visual si el servidor no devuelve ningún movimiento
-       de Andrew. Si el backend ya devuelve el movimiento real,
-       NO se duplica. */
-    if(mov.length===0 && anio==="2026" && (saldoCuentaServidor===0 || saldoCuentaServidor===null)){
-      mov=[{
-        anio:"2026",
-        fechaTexto:"02/10/2026 18:58:32",
-        codigo:CODIGO_ANDREW,
-        estudiante:NOMBRE_ANDREW,
-        grado:"CAJA GENERAL",
-        tipo:"INGRESO",
-        concepto:"FONDO GENERAL",
-        monto:180000,
-        responsable:NOMBRE_ANDREW,
-        observacion:"FONDO GENERAL INICIAL DE CAJA GENERAL",
-        estado:"ACTIVO",
-        __virtualAndrew:true
-      }];
-
-      /* Solo en este caso el saldo mostrado es el fondo inicial.
-         No se agrega otra fila si el backend ya entregó la real. */
-      if(saldoCuentaServidor===0 || saldoCuentaServidor===null){
-        document.getElementById("saldoCuenta").textContent=formato(180000);
-      }
+    if (!anio || String(m.anio) === String(anio)) {
+      cantidad++;
     }
-
-    document.getElementById("contadorMovimientos").textContent=mov.length;
-
-    /* Si el servidor devolvió movimientos de Andrew pero CUENTAS llegó
-       con saldo 0, calculamos desde esos mismos movimientos. Esto corrige
-       instalaciones donde la cuenta ya tiene el movimiento inicial real
-       pero el endpoint de CUENTAS todavía no lo está reflejando. */
-    if(mov.length>0 && saldoCuentaServidor===0){
-      const saldoCalculado=mov.reduce((total,m)=>{
-        if(String(m.estado||"").toUpperCase()==="ANULADO") return total;
-        const tipo=String(m.tipo||"").toUpperCase();
-        const monto=Number(m.monto||0);
-        return total + (tipo==="INGRESO" ? monto : tipo==="EGRESO" ? -monto : 0);
-      },0);
-      document.getElementById("saldoCuenta").textContent=formato(saldoCalculado);
-    }
-
-    renderTablaAndrew(mov);
   });
+
+  return {
+    saldoActual: redondear_(saldo),
+    saldo: redondear_(saldo),
+    movimientos: cantidad,
+    codigoCuenta: codigo
+  };
 }
 
-function esMovimientoAndrew(m){
-  const codigo=String(m.codigo||"").trim().toUpperCase();
-  const obs=String(m.observacion||"").toUpperCase();
-  const estudiante=String(m.estudiante||"").trim().toUpperCase();
-  return codigo===CODIGO_ANDREW
-    || obs.includes("CUENTA="+CODIGO_ANDREW)
-    || estudiante===NOMBRE_ANDREW;
+
+function construirCuentaCuentaEntidad_(
+  codigo,
+  movimientos,
+  entidad,
+  anio
+) {
+  let saldo = 0;
+  let cantidad = 0;
+
+  movimientos.forEach(function(m) {
+    if (normalizarCodigo_(m.codigo) !== codigo) return;
+    if (normalizar_(m.estado) === "ANULADO") return;
+
+    const monto = numero_(m.monto);
+    const tipo = normalizar_(m.tipo);
+
+    if (tipo === "INGRESO") {
+      saldo += monto;
+    } else if (tipo === "EGRESO") {
+      saldo -= monto;
+    }
+
+    if (!anio || String(m.anio) === String(anio)) {
+      cantidad++;
+    }
+  });
+
+  return {
+    saldoActual: redondear_(saldo),
+    saldo: redondear_(saldo),
+    movimientos: cantidad,
+    codigoCuenta: codigo,
+    bonoMensual:
+      entidad.bonoMensual || CONFIG.BONO_MENSUAL_ALUMNO
+  };
 }
 
-function renderTablaAndrew(mov){
-  const tbody=document.getElementById("tablaAndrew");
-  if(!mov.length){
-    tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS DE CAJA GENERAL PARA EL AÑO SELECCIONADO.</td></tr>';
-    return;
+
+/* ============================================================
+   REGISTRO DE MOVIMIENTOS
+   ============================================================ */
+
+/*
+  EGRESO:
+    La cuenta activa/responsable PAGA a la seleccionada.
+
+  INGRESO:
+    La cuenta seleccionada PAGA a la cuenta activa/responsable.
+
+  Ejemplo Lily activa + alumno seleccionado:
+    EGRESO = Lily -> alumno
+    INGRESO = alumno -> Lily
+
+  Ejemplo Andrew activo + Lily seleccionada:
+    EGRESO = Andrew -> Lily
+    INGRESO = Lily -> Andrew
+*/
+
+function registrarMovimiento_(p) {
+  const codigoSeleccionado =
+    normalizarCodigo_(p.codigo);
+
+  const tipo = normalizar_(p.tipo);
+  const monto = numero_(p.monto);
+  const anio = normalizarAnio_(p.anio);
+
+  const responsable =
+    String(p.responsable || "").trim();
+
+  const responsableClave =
+    String(p.responsableClave || "").trim();
+
+  if (!codigoSeleccionado) {
+    return {
+      ok: false,
+      mensaje:
+        "DEBES INDICAR EL CÓDIGO DE LA CUENTA SELECCIONADA."
+    };
   }
-  tbody.innerHTML=mov.map(m=>`
-    <tr>
-      <td>${escapar(m.anio)}</td>
-      <td>${escapar(m.fechaTexto||"")}</td>
-      <td>${escapar(m.estudiante||NOMBRE_ANDREW)}</td>
-      <td>${escapar(m.grado||"CAJA GENERAL")}</td>
-      <td>${escapar(m.tipo)}</td>
-      <td>${escapar(m.concepto)}</td>
-      <td>${formato(m.monto)}</td>
-      <td>${escapar(m.responsable||"")}</td>
-      <td>${escapar(m.observacion||"")}</td>
-    </tr>`).join("");
-}
 
-function mostrarTodos(){
-  document.getElementById("panelTodo").style.display="block";
-  const anio=document.getElementById("anio").value;
-  document.getElementById("tablaTodo").innerHTML='<tr><td colspan="10" class="empty">CARGANDO MOVIMIENTOS...</td></tr>';
-  llamarAPI({accion:"movimientos",anio},function(r){
-    if(!r || !r.ok){
-      document.getElementById("tablaTodo").innerHTML='<tr><td colspan="10" class="empty">ERROR AL CONSULTAR MOVIMIENTOS.</td></tr>';
-      return;
-    }
-    const mov=r.movimientos||[];
-    if(!mov.length){
-      document.getElementById("tablaTodo").innerHTML='<tr><td colspan="10" class="empty">NO HAY MOVIMIENTOS PARA EL AÑO '+escapar(anio)+'.</td></tr>';
-      return;
-    }
-    document.getElementById("tablaTodo").innerHTML=mov.map(m=>`
-      <tr>
-        <td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto||"")}</td><td>${escapar(m.codigo)}</td>
-        <td>${escapar(m.estudiante||"")}</td><td>${escapar(m.grado||"")}</td><td>${escapar(m.tipo)}</td>
-        <td>${escapar(m.concepto)}</td><td>${formato(m.monto)}</td><td>${escapar(m.responsable||"")}</td>
-        <td>${escapar(m.observacion||"")}</td>
-      </tr>`).join("");
+  if (tipo !== "INGRESO" && tipo !== "EGRESO") {
+    return {
+      ok: false,
+      mensaje: "TIPO DE MOVIMIENTO NO VÁLIDO."
+    };
+  }
+
+  if (!(monto > 0)) {
+    return {
+      ok: false,
+      mensaje: "EL MONTO DEBE SER MAYOR QUE CERO."
+    };
+  }
+
+  const actor = identificarResponsable_(
+    responsable,
+    responsableClave
+  );
+
+  if (!actor.ok) return actor;
+
+  const datos = cargarDatosBase_();
+
+  const cuentaOrigenCodigo =
+    tipo === "EGRESO"
+      ? actor.codigo
+      : codigoSeleccionado;
+
+  const cuentaDestinoCodigo =
+    tipo === "EGRESO"
+      ? codigoSeleccionado
+      : actor.codigo;
+
+  if (cuentaOrigenCodigo === cuentaDestinoCodigo) {
+    return {
+      ok: false,
+      mensaje:
+        "NO SE PUEDE HACER UNA TRANSFERENCIA A LA MISMA CUENTA."
+    };
+  }
+
+  const origen = obtenerEntidadCuenta_(
+    cuentaOrigenCodigo,
+    datos
+  );
+
+  const destino = obtenerEntidadCuenta_(
+    cuentaDestinoCodigo,
+    datos
+  );
+
+  if (!origen) {
+    return {
+      ok: false,
+      mensaje:
+        "CUENTA ORIGEN NO ENCONTRADA: " +
+        cuentaOrigenCodigo
+    };
+  }
+
+  if (!destino) {
+    return {
+      ok: false,
+      mensaje:
+        "CUENTA DESTINO NO ENCONTRADA: " +
+        cuentaDestinoCodigo
+    };
+  }
+
+  const saldoOrigen = saldoCuentaActual_(
+    cuentaOrigenCodigo,
+    datos.movimientos
+  );
+
+  if (saldoOrigen < monto) {
+    return {
+      ok: false,
+      mensaje:
+        "SALDO INSUFICIENTE EN " +
+        origen.nombre +
+        ". SALDO DISPONIBLE: S/ " +
+        formatearNumero_(saldoOrigen)
+    };
+  }
+
+  const tx = "TX-" + Utilities.getUuid();
+  const ahora = new Date();
+
+  const concepto = String(
+    p.concepto ||
+    p.categoria ||
+    "MOVIMIENTO"
+  ).trim();
+
+  const categoria = String(
+    p.categoria || ""
+  ).trim();
+
+  const observacionBase = String(
+    p.observacion || ""
+  ).trim();
+
+  const obsComun = unirObservaciones_(
+    observacionBase,
+    "TX=" + tx,
+    "CUENTA_ORIGEN=" + cuentaOrigenCodigo,
+    "CUENTA_DESTINO=" + cuentaDestinoCodigo
+  );
+
+  const movimientoOrigen = construirMovimiento_({
+    fecha: ahora,
+    anio: anio,
+    codigo: cuentaOrigenCodigo,
+    entidad: origen,
+    tipo: "EGRESO",
+    categoria: categoria,
+    concepto: concepto,
+    monto: monto,
+    responsable:
+      responsable || actor.nombre,
+    observacion: obsComun,
+    tx: tx,
+    rolResponsable: actor.rol
   });
+
+  const movimientoDestino = construirMovimiento_({
+    fecha: ahora,
+    anio: anio,
+    codigo: cuentaDestinoCodigo,
+    entidad: destino,
+    tipo: "INGRESO",
+    categoria: categoria,
+    concepto: concepto,
+    monto: monto,
+    responsable:
+      responsable || actor.nombre,
+    observacion: obsComun,
+    tx: tx,
+    rolResponsable: actor.rol
+  });
+
+  escribirMovimientoPareado_(
+    movimientoOrigen,
+    movimientoDestino
+  );
+
+  return {
+    ok: true,
+    mensaje:
+      "TRANSACCIÓN REGISTRADA CORRECTAMENTE.",
+    tx: tx,
+    origen: {
+      codigo: cuentaOrigenCodigo,
+      nombre: origen.nombre,
+      tipo: "EGRESO",
+      monto: monto,
+      saldoAnterior:
+        redondear_(saldoOrigen),
+      saldoNuevo:
+        redondear_(saldoOrigen - monto)
+    },
+    destino: {
+      codigo: cuentaDestinoCodigo,
+      nombre: destino.nombre,
+      tipo: "INGRESO",
+      monto: monto,
+      saldoNuevo:
+        redondear_(
+          saldoCuentaActual_(
+            cuentaDestinoCodigo,
+            datos.movimientos
+          ) + monto
+        )
+    }
+  };
 }
 
-function cerrarTodo(){document.getElementById("panelTodo").style.display="none";}
 
-function transferirAMise(){
-  const codigo=document.getElementById("miseDestino").value;
-  const monto=Number(document.getElementById("montoTransferencia").value);
-  const concepto=document.getElementById("conceptoTransferencia").value;
-  const obs=document.getElementById("obsTransferencia").value.trim();
-  if(!codigo){mostrarMensaje("mensajeTransferencia","SELECCIONA UNA MISS.","error");return;}
-  if(!(monto>0)){mostrarMensaje("mensajeTransferencia","INGRESA UN MONTO VÁLIDO.","error");return;}
+function identificarResponsable_(
+  responsable,
+  clave
+) {
+  const nombre = normalizar_(responsable);
+  const c = String(clave || "").trim();
 
-  mostrarMensaje("mensajeTransferencia","PROCESANDO TRANSFERENCIA...","ok");
-  llamarAPI({
-    accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,
-    tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto,monto,
-    responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
-  },function(r){
-    if(r&&r.ok){
-      if(window.NotificacionesLDS){
-        NotificacionesLDS.movimiento({
-          tipo:"EGRESO",
-          concepto:concepto,
-          codigo:codigo,
-          monto:monto,
-          anio:document.getElementById("anio").value
+  if (
+    c === CONFIG.CLAVE_ANDREW ||
+    nombre === "ANDREW" ||
+    nombre ===
+      normalizar_(CONFIG.NOMBRE_ANDREW)
+  ) {
+    return {
+      ok: true,
+      codigo: CONFIG.CODIGO_ANDREW,
+      nombre: CONFIG.NOMBRE_ANDREW,
+      rol: CONFIG.ROL_ANDREW,
+      tipo: CONFIG.TIPO_CUENTA_ANDREW
+    };
+  }
+
+  if (c === CONFIG.CLAVE_MISE) {
+    const misePorNombre =
+      CONFIG.CUENTAS_MISES_LDS360[nombre];
+
+    if (misePorNombre) {
+      return {
+        ok: true,
+        codigo: misePorNombre.codigo,
+        nombre: misePorNombre.nombre,
+        rol: misePorNombre.rol,
+        tipo: misePorNombre.tipo
+      };
+    }
+
+    const mise =
+      buscarMisePorNombre_(responsable);
+
+    if (mise) {
+      return {
+        ok: true,
+        codigo: mise.codigo,
+        nombre: mise.nombre,
+        rol: mise.rol,
+        tipo: mise.tipo
+      };
+    }
+  }
+
+  return {
+    ok: false,
+    mensaje:
+      "RESPONSABLE NO AUTORIZADO O CLAVE INCORRECTA."
+  };
+}
+
+
+/* ============================================================
+   ANULACIÓN POR REVERSIÓN
+   ============================================================ */
+
+function anularMovimiento_(p) {
+  const txBuscada = String(
+    p.tx ||
+    p.transaccion ||
+    p.idMovimiento ||
+    ""
+  ).trim();
+
+  const codigoSolicitado =
+    normalizarCodigo_(p.codigo);
+
+  const responsable =
+    String(p.responsable || "").trim();
+
+  const responsableClave =
+    String(p.responsableClave || "").trim();
+
+  const actor = identificarResponsable_(
+    responsable,
+    responsableClave
+  );
+
+  if (!actor.ok) return actor;
+
+  if (!txBuscada && !codigoSolicitado) {
+    return {
+      ok: false,
+      mensaje:
+        "INDICA TX O CÓDIGO DEL MOVIMIENTO A ANULAR."
+    };
+  }
+
+  const datos = cargarDatosBase_();
+
+  let encontrados = [];
+
+  datos.movimientos.forEach(function(m, i) {
+    const tx = extraerTX_(m.observacion);
+
+    if (txBuscada && tx === txBuscada) {
+      encontrados.push({
+        movimiento: m,
+        fila: i + 2
+      });
+      return;
+    }
+
+    if (
+      !txBuscada &&
+      codigoSolicitado &&
+      normalizarCodigo_(m.codigo) ===
+        codigoSolicitado
+    ) {
+      const id = String(m.id || "");
+
+      if (
+        id ===
+        String(p.idMovimiento || "")
+      ) {
+        encontrados.push({
+          movimiento: m,
+          fila: i + 2
         });
       }
-      mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
-      document.getElementById("montoTransferencia").value="";
-      document.getElementById("obsTransferencia").value="";
-      cargarTodo();
-    }else{
-      mostrarMensaje("mensajeTransferencia",(r&&r.mensaje)||"NO SE PUDO REGISTRAR.","error");
     }
   });
+
+  if (!encontrados.length) {
+    return {
+      ok: false,
+      mensaje:
+        "NO SE ENCONTRÓ EL MOVIMIENTO PARA ANULAR."
+    };
+  }
+
+  const yaAnulado =
+    encontrados.some(function(x) {
+      return (
+        normalizar_(x.movimiento.estado) ===
+        "ANULADO"
+      );
+    });
+
+  if (yaAnulado) {
+    return {
+      ok: false,
+      mensaje:
+        "LA TRANSACCIÓN YA SE ENCUENTRA ANULADA."
+    };
+  }
+
+  const txOriginal =
+    txBuscada ||
+    extraerTX_(
+      encontrados[0].movimiento.observacion
+    );
+
+  if (!txOriginal) {
+    return {
+      ok: false,
+      mensaje:
+        "EL MOVIMIENTO NO TIENE TX. NO SE ANULA AUTOMÁTICAMENTE PARA EVITAR ALTERAR HISTORIAL."
+    };
+  }
+
+  const grupo =
+    datos.movimientos.filter(function(m) {
+      return (
+        extraerTX_(m.observacion) ===
+        txOriginal
+      );
+    });
+
+  if (grupo.length !== 2) {
+    return {
+      ok: false,
+      mensaje:
+        "LA TRANSACCIÓN " +
+        txOriginal +
+        " NO TIENE EL PAR COMPLETO. NO SE ALTERÓ NADA."
+    };
+  }
+
+  const monto = numero_(grupo[0].monto);
+
+  if (!(monto > 0)) {
+    return {
+      ok: false,
+      mensaje:
+        "MONTO INVÁLIDO EN LA TRANSACCIÓN ORIGINAL."
+    };
+  }
+
+  const hoja =
+    obtenerHojaMovimientos_();
+
+  grupo.forEach(function(m) {
+    const fila =
+      encontrarFilaPorMovimiento_(
+        datos.movimientos,
+        m
+      );
+
+    if (fila > 1) {
+      establecerCampo_(
+        hoja,
+        fila,
+        "ESTADO",
+        "ANULADO"
+      );
+
+      establecerCampo_(
+        hoja,
+        fila,
+        "OBSERVACION",
+        unirObservaciones_(
+          m.observacion,
+          "ANULADO_POR=" +
+            actor.codigo,
+          "FECHA_ANULACION=" +
+            Utilities.formatDate(
+              new Date(),
+              Session.getScriptTimeZone() ||
+                "America/Lima",
+              "dd/MM/yyyy HH:mm:ss"
+            )
+        )
+      );
+    }
+  });
+
+  const egresoOriginal =
+    grupo.find(function(m) {
+      return (
+        normalizar_(m.tipo) ===
+        "EGRESO"
+      );
+    });
+
+  const ingresoOriginal =
+    grupo.find(function(m) {
+      return (
+        normalizar_(m.tipo) ===
+        "INGRESO"
+      );
+    });
+
+  if (!egresoOriginal || !ingresoOriginal) {
+    return {
+      ok: false,
+      mensaje:
+        "EL PAR ORIGINAL NO TIENE EGRESO E INGRESO."
+    };
+  }
+
+  const txReversion =
+    "REV-" + Utilities.getUuid();
+
+  const ahora = new Date();
+
+  const anio =
+    normalizarAnio_(
+      p.anio ||
+      egresoOriginal.anio ||
+      ingresoOriginal.anio
+    );
+
+  const entidadOrigen =
+    obtenerEntidadCuenta_(
+      normalizarCodigo_(
+        ingresoOriginal.codigo
+      ),
+      datos
+    );
+
+  const entidadDestino =
+    obtenerEntidadCuenta_(
+      normalizarCodigo_(
+        egresoOriginal.codigo
+      ),
+      datos
+    );
+
+  if (!entidadOrigen || !entidadDestino) {
+    return {
+      ok: false,
+      mensaje:
+        "NO SE PUDO IDENTIFICAR EL PAR PARA LA REVERSIÓN."
+    };
+  }
+
+  const concepto =
+    "REVERSIÓN DE " +
+    (
+      egresoOriginal.concepto ||
+      "MOVIMIENTO"
+    );
+
+  const obsComun =
+    unirObservaciones_(
+      "REVERSIÓN DE TX=" +
+        txOriginal,
+      "TX=" + txReversion,
+      "CUENTA_ORIGEN=" +
+        egresoOriginal.codigo,
+      "CUENTA_DESTINO=" +
+        ingresoOriginal.codigo
+    );
+
+  const reversoEgreso =
+    construirMovimiento_({
+      fecha: ahora,
+      anio: anio,
+      codigo:
+        normalizarCodigo_(
+          ingresoOriginal.codigo
+        ),
+      entidad: entidadOrigen,
+      tipo: "EGRESO",
+      categoria: "ANULACION",
+      concepto: concepto,
+      monto: monto,
+      responsable: actor.nombre,
+      observacion: obsComun,
+      tx: txReversion,
+      rolResponsable: actor.rol
+    });
+
+  const reversoIngreso =
+    construirMovimiento_({
+      fecha: ahora,
+      anio: anio,
+      codigo:
+        normalizarCodigo_(
+          egresoOriginal.codigo
+        ),
+      entidad: entidadDestino,
+      tipo: "INGRESO",
+      categoria: "ANULACION",
+      concepto: concepto,
+      monto: monto,
+      responsable: actor.nombre,
+      observacion: obsComun,
+      tx: txReversion,
+      rolResponsable: actor.rol
+    });
+
+  escribirMovimientoPareado_(
+    reversoEgreso,
+    reversoIngreso
+  );
+
+  return {
+    ok: true,
+    mensaje:
+      "MOVIMIENTO ANULADO MEDIANTE REVERSIÓN.",
+    txOriginal: txOriginal,
+    txReversion: txReversion,
+    monto: monto
+  };
 }
 
-function recibirDevolucion(){
-  const codigo=document.getElementById("miseOrigen").value;
-  const monto=Number(document.getElementById("montoDevolucion").value);
-  const concepto=document.getElementById("conceptoDevolucion").value;
-  const obs=document.getElementById("obsDevolucion").value.trim();
-  if(!codigo){mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS.","error");return;}
-  if(!(monto>0)){mostrarMensaje("mensajeDevolucion","INGRESA UN MONTO VÁLIDO.","error");return;}
 
-  mostrarMensaje("mensajeDevolucion","PROCESANDO DEVOLUCIÓN...","ok");
-  /*
-    INGRESO sobre la cuenta seleccionada significa:
-    MISE EGRESA -> ANDREW INGRESA.
-  */
-  llamarAPI({
-    accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,
-    tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto,monto,
-    responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
-  },function(r){
-    if(r&&r.ok){
-      if(window.NotificacionesLDS){
-        NotificacionesLDS.movimiento({
-          tipo:"INGRESO",
-          concepto:concepto,
-          codigo:codigo,
-          monto:monto,
-          anio:document.getElementById("anio").value
-        });
+/* ============================================================
+   CONSULTAS GENERALES
+   ============================================================ */
+
+function consultarMovimientosGenerales_(p) {
+  const anio = normalizarAnio_(p.anio);
+  const datos = cargarDatosBase_();
+
+  let movimientos =
+    datos.movimientos;
+
+  if (anio) {
+    movimientos =
+      movimientos.filter(function(m) {
+        return String(m.anio) ===
+          String(anio);
+      });
+  }
+
+  return {
+    ok: true,
+    movimientos: movimientos
+  };
+}
+
+
+function consultarCuentas_(p) {
+  const anio =
+    normalizarAnio_(p.anio);
+
+  const datos =
+    cargarDatosBase_();
+
+  const cuentas = [];
+
+  cuentas.push({
+    codigo: CONFIG.CODIGO_ANDREW,
+    nombre: CONFIG.NOMBRE_ANDREW,
+    rol: CONFIG.ROL_ANDREW,
+    tipoCuenta:
+      CONFIG.TIPO_CUENTA_ANDREW,
+    saldoActual:
+      saldoCuentaActual_(
+        CONFIG.CODIGO_ANDREW,
+        datos.movimientos
+      )
+  });
+
+  Object.keys(
+    CONFIG.CUENTAS_MISES_LDS360
+  ).forEach(function(k) {
+    const m =
+      CONFIG.CUENTAS_MISES_LDS360[k];
+
+    cuentas.push({
+      codigo: m.codigo,
+      nombre: m.nombre,
+      rol: m.rol,
+      tipoCuenta: m.tipo,
+      saldoActual:
+        saldoCuentaActual_(
+          m.codigo,
+          datos.movimientos
+        )
+    });
+  });
+
+  datos.estudiantes.forEach(
+    function(e) {
+      const codigo =
+        normalizarCodigo_(e.codigo);
+
+      if (!codigo) return;
+
+      cuentas.push({
+        codigo: codigo,
+        nombre:
+          e.nombreCompleto ||
+          e.nombre ||
+          "",
+        rol:
+          e.rol ||
+          "ALUMNO",
+        grado:
+          e.grado || "",
+        seccion:
+          e.seccion || "",
+        tipoCuenta:
+          e.tipoCuenta ||
+          "ALUMNO",
+        saldoActual:
+          saldoCuentaActual_(
+            codigo,
+            datos.movimientos
+          ),
+        anio: anio
+      });
+    }
+  );
+
+  return {
+    ok: true,
+    cuentas: cuentas
+  };
+}
+
+
+/* ============================================================
+   CARGA DE DATOS
+   ============================================================ */
+
+function cargarDatosBase_() {
+  const ss =
+    SpreadsheetApp.openById(
+      CONFIG.SPREADSHEET_ID
+    );
+
+  const hojaEst =
+    ss.getSheetByName(
+      CONFIG.HOJA_ESTUDIANTES
+    );
+
+  const hojaMov =
+    ss.getSheetByName(
+      CONFIG.HOJA_MOVIMIENTOS
+    );
+
+  if (!hojaEst) {
+    throw new Error(
+      "NO EXISTE LA HOJA " +
+      CONFIG.HOJA_ESTUDIANTES
+    );
+  }
+
+  if (!hojaMov) {
+    throw new Error(
+      "NO EXISTE LA HOJA " +
+      CONFIG.HOJA_MOVIMIENTOS
+    );
+  }
+
+  return {
+    spreadsheet: ss,
+    hojaEstudiantes: hojaEst,
+    hojaMovimientos: hojaMov,
+    estudiantes:
+      leerEstudiantes_(hojaEst),
+    movimientos:
+      leerMovimientos_(hojaMov)
+  };
+}
+
+
+function leerEstudiantes_(hoja) {
+  const values =
+    hoja.getDataRange().getValues();
+
+  if (!values.length) return [];
+
+  const encabezados =
+    values[0].map(
+      normalizarEncabezado_
+    );
+
+  const salida = [];
+
+  for (
+    let i = 1;
+    i < values.length;
+    i++
+  ) {
+    const fila = values[i];
+
+    if (
+      fila.every(function(v) {
+        return String(
+          v == null ? "" : v
+        ).trim() === "";
+      })
+    ) {
+      continue;
+    }
+
+    const obj =
+      filaAObjeto_(
+        fila,
+        encabezados
+      );
+
+    const codigo =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "CODIGO",
+          "CODIGOQR",
+          "QR",
+          "CODIGOESTUDIANTE",
+          "CODIGOALUMNO",
+          "ID"
+        ]
+      );
+
+    if (
+      !String(codigo || "")
+        .trim()
+    ) {
+      continue;
+    }
+
+    const nombre =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "NOMBRECOMPLETO",
+          "NOMBRE",
+          "ESTUDIANTE",
+          "ALUMNO",
+          "APELLIDOSYNOMBRES",
+          "APELLIDOSNOMBRES"
+        ]
+      ) || "";
+
+    const grado =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "GRADO",
+          "NIVELGRADO"
+        ]
+      ) || "";
+
+    const seccion =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "SECCION",
+          "SECC"
+        ]
+      ) || "";
+
+    const rol =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "ROL",
+          "TIPO",
+          "PERFIL"
+        ]
+      ) || "ALUMNO";
+
+    const foto =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "FOTOURL",
+          "FOTO",
+          "IMAGEN",
+          "URLFOTO"
+        ]
+      ) || "";
+
+    salida.push({
+      codigo:
+        normalizarCodigo_(codigo),
+      nombreCompleto:
+        String(nombre),
+      nombre:
+        String(nombre),
+      grado:
+        String(grado),
+      seccion:
+        String(seccion),
+      rol:
+        String(rol),
+      fotoUrl:
+        String(foto),
+      fila:
+        i + 1,
+      bonoMensual:
+        CONFIG.BONO_MENSUAL_ALUMNO,
+      esDocente:
+        normalizar_(rol)
+          .includes("DOCENTE") ||
+        normalizar_(rol)
+          .includes("MAESTRA")
+    });
+  }
+
+  return salida;
+}
+
+
+function leerMovimientos_(hoja) {
+  const values =
+    hoja.getDataRange().getValues();
+
+  if (!values.length) return [];
+
+  const encabezados =
+    values[0].map(
+      normalizarEncabezado_
+    );
+
+  const salida = [];
+
+  for (
+    let i = 1;
+    i < values.length;
+    i++
+  ) {
+    const fila = values[i];
+
+    if (
+      fila.every(function(v) {
+        return String(
+          v == null ? "" : v
+        ).trim() === "";
+      })
+    ) {
+      continue;
+    }
+
+    const obj =
+      filaAObjeto_(
+        fila,
+        encabezados
+      );
+
+    const codigo =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "CODIGO",
+          "CODIGOQR",
+          "CODIGOESTUDIANTE",
+          "CUENTA",
+          "ID"
+        ]
+      );
+
+    if (
+      !String(codigo || "")
+        .trim()
+    ) {
+      continue;
+    }
+
+    const fecha =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "TIMESTAMP",
+          "FECHA",
+          "FECHAHORA",
+          "FECHAOPERACION"
+        ]
+      );
+
+    const anio =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "ANIO",
+          "ANIOESCOLAR",
+          "ANO",
+          "YEAR"
+        ]
+      ) ||
+      (
+        fecha instanceof Date
+          ? fecha.getFullYear()
+          : ""
+      );
+
+    const tipo =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "TIPO",
+          "TIPOMOVIMIENTO",
+          "MOVIMIENTO"
+        ]
+      ) || "";
+
+    const concepto =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "CONCEPTO",
+          "DESCRIPCION"
+        ]
+      ) || "";
+
+    const monto =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "MONTO",
+          "MONTOLDS",
+          "MONTO_DLS",
+          "VALOR",
+          "IMPORTE"
+        ]
+      ) || 0;
+
+    const responsable =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "RESPONSABLE",
+          "CAJERO",
+          "CAJEROA"
+        ]
+      ) || "";
+
+    const observacion =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "OBSERVACION",
+          "OBSERVACIONES",
+          "DETALLE"
+        ]
+      ) || "";
+
+    const estado =
+      buscarValorPorClaves_(
+        obj,
+        [
+          "ESTADO",
+          "STATUS"
+        ]
+      ) || "";
+
+    salida.push({
+      fila:
+        i + 1,
+      id:
+        String(
+          buscarValorPorClaves_(
+            obj,
+            [
+              "ID",
+              "IDMOVIMIENTO",
+              "MOVIMIENTOID"
+            ]
+          ) ||
+          ("ROW-" + i)
+        ),
+      fecha:
+        fecha,
+      fechaTexto:
+        formatearFecha_(fecha),
+      anio:
+        String(anio || ""),
+      codigo:
+        normalizarCodigo_(codigo),
+      estudiante:
+        String(
+          buscarValorPorClaves_(
+            obj,
+            [
+              "ESTUDIANTE",
+              "NOMBRE",
+              "NOMBRECOMPLETO",
+              "ALUMNO"
+            ]
+          ) || ""
+        ),
+      grado:
+        String(
+          buscarValorPorClaves_(
+            obj,
+            ["GRADO"]
+          ) || ""
+        ),
+      tipo:
+        normalizar_(tipo),
+      categoria:
+        String(
+          buscarValorPorClaves_(
+            obj,
+            [
+              "CATEGORIA",
+              "TIPOCATEGORIA"
+            ]
+          ) || ""
+        ),
+      concepto:
+        String(concepto),
+      monto:
+        numero_(monto),
+      responsable:
+        String(responsable),
+      observacion:
+        String(observacion),
+      estado:
+        String(estado),
+      tx:
+        extraerTX_(observacion)
+    });
+  }
+
+  return salida;
+}
+
+
+/* ============================================================
+   ENTIDADES / CUENTAS
+   ============================================================ */
+
+function buscarEntidad_(codigo, datos) {
+  const c =
+    normalizarCodigo_(codigo);
+
+  return (
+    datos.estudiantes.find(
+      function(e) {
+        return (
+          normalizarCodigo_(
+            e.codigo
+          ) === c
+        );
       }
-      mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
-      document.getElementById("montoDevolucion").value="";
-      document.getElementById("obsDevolucion").value="";
-      cargarTodo();
-    }else{
-      mostrarMensaje("mensajeDevolucion",(r&&r.mensaje)||"NO SE PUDO REGISTRAR.","error");
+    ) || null
+  );
+}
+
+
+function obtenerEntidadCuenta_(
+  codigo,
+  datos
+) {
+  const c =
+    normalizarCodigo_(codigo);
+
+  if (
+    c === CONFIG.CODIGO_ANDREW
+  ) {
+    return {
+      codigo:
+        CONFIG.CODIGO_ANDREW,
+      nombre:
+        CONFIG.NOMBRE_ANDREW,
+      rol:
+        CONFIG.ROL_ANDREW,
+      tipoCuenta:
+        CONFIG.TIPO_CUENTA_ANDREW,
+      grado:
+        "CAJA GENERAL",
+      seccion:
+        "",
+      esDocente:
+        true,
+      esAndrew:
+        true
+    };
+  }
+
+  const mise =
+    obtenerMisePorCodigo_(c);
+
+  if (mise) {
+    return {
+      codigo:
+        mise.codigo,
+      nombre:
+        mise.nombre,
+      rol:
+        mise.rol,
+      tipoCuenta:
+        mise.tipo,
+      grado:
+        "",
+      seccion:
+        "",
+      esDocente:
+        true
+    };
+  }
+
+  return buscarEntidad_(
+    c,
+    datos
+  );
+}
+
+
+function obtenerMisePorCodigo_(
+  codigo
+) {
+  const c =
+    normalizarCodigo_(codigo);
+
+  const claves =
+    Object.keys(
+      CONFIG.CUENTAS_MISES_LDS360
+    );
+
+  for (
+    let i = 0;
+    i < claves.length;
+    i++
+  ) {
+    const m =
+      CONFIG.CUENTAS_MISES_LDS360[
+        claves[i]
+      ];
+
+    if (
+      normalizarCodigo_(
+        m.codigo
+      ) === c
+    ) {
+      return m;
     }
-  });
+  }
+
+  return null;
 }
 
-function abrirReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){modal.classList.add("open");modal.setAttribute("aria-hidden","false");}
-}
-function cerrarReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){modal.classList.remove("open");modal.setAttribute("aria-hidden","true");}
-}
-function abrirVentanaImpresion(titulo, subtitulo, contenido){
-  const w=window.open("","_blank","width=1200,height=800");
-  if(!w){mostrarMensaje("mensaje","EL NAVEGADOR BLOQUEÓ LA VENTANA DE IMPRESIÓN. PERMITE LAS VENTANAS EMERGENTES PARA ESTE SITIO.","error");return;}
-  w.document.write(`<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>${escapar(titulo)}</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;color:#14213d;margin:28px}h1{color:#0b2f67;font-size:22px;margin:0 0 5px}p{color:#64748b;font-weight:700;margin:0 0 18px;font-size:12px}.cab{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:2px solid #f5b400;padding-bottom:12px;margin-bottom:16px}.marca{font-weight:900;color:#f0a900}.res{font-size:13px;font-weight:900}.res strong{font-size:18px;color:#0b2f67}table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #cbd5e1;padding:6px;text-align:left}th{background:#eef2f7;color:#0b2f67}tfoot td{font-weight:900} @media print{body{margin:12px}}</style><meta name="andrew-screen" content="segunda-pantalla-responsiva">
-</head><body>
-  <div class="cab"><div><div class="marca">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</div><h1>${escapar(titulo)}</h1><p>${escapar(subtitulo)}</p></div></div>
-  ${contenido}</body></html>`);
-  w.document.close();
-  w.focus();
-  setTimeout(()=>w.print(),350);
-}
-function imprimirReporteIndividual(){
-  cerrarReportes();
-  const anio=document.getElementById("anio").value;
-  const saldo=document.getElementById("saldoCuenta").textContent;
-  const filas=document.querySelectorAll("#tablaAndrew tr");
-  let rows=""; let total=0;
-  filas.forEach(tr=>{
-    if(tr.classList.contains("empty"))return;
-    const cells=[...tr.querySelectorAll("td")];
-    if(cells.length<9)return;
-    rows += "<tr>"+cells.map(c=>"<td>"+c.innerHTML+"</td>").join("")+"</tr>";
-    const monto=Number((cells[6].textContent||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",","."));
-    if(Number.isFinite(monto)) total+=monto;
-  });
-  if(!rows) rows='<tr><td colspan="9">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>';
-  const contenido=`<p class="res">Año: ${escapar(anio)} · Saldo actual: <strong>${escapar(saldo)}</strong></p><table><thead><tr><th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table>`;
-  abrirVentanaImpresion("Reporte individual — Caja General",`MISTER ANDREW · CAJA-ANDREW · AÑO ${anio}`,contenido);
-}
-function imprimirReporteColectivo(){
-  const panel=document.getElementById("panelTodo");
-  const estabaOculto=panel.style.display==="none";
-  if(estabaOculto){mostrarTodos();setTimeout(()=>imprimirReporteColectivo(),600);return;}
-  cerrarReportes();
-  const anio=document.getElementById("anio").value;
-  const tabla=document.querySelector("#panelTodo table");
-  if(!tabla){return;}
-  const contenido=`<p class="res">Año: ${escapar(anio)} · Reporte colectivo de todos los movimientos registrados.</p>${tabla.outerHTML}`;
-  abrirVentanaImpresion("Reporte colectivo — Banco LDS 360",`MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,contenido);
-}
 
-function consultarCuenta(){
-  const codigo=document.getElementById("codigoConsulta").value.trim().toUpperCase();
-  const anio=document.getElementById("anio").value;
-  if(!codigo){mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error");return;}
-  mostrarMensaje("resultadoConsulta","CONSULTANDO...","ok");
-  llamarAPI({accion:"estudiante",codigo,anio},function(r){
-    if(!r||!r.ok){
-      mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error");
-      return;
+function buscarMisePorNombre_(
+  nombre
+) {
+  const n =
+    normalizar_(nombre);
+
+  const claves =
+    Object.keys(
+      CONFIG.CUENTAS_MISES_LDS360
+    );
+
+  for (
+    let i = 0;
+    i < claves.length;
+    i++
+  ) {
+    const m =
+      CONFIG.CUENTAS_MISES_LDS360[
+        claves[i]
+      ];
+
+    const mn =
+      normalizar_(m.nombre);
+
+    if (
+      mn === n ||
+      mn.includes(n) ||
+      n.includes(mn)
+    ) {
+      return m;
     }
-    const c=r.cuenta||{};
-    const e=r.estudiante||{};
-    mostrarMensaje("resultadoConsulta",
-      (e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+Number(c.movimientos||0),
-      "ok");
-  });
+  }
+
+  return null;
 }
 
-function toggleAndrewPanel(head){
-  const panel=head.closest(".accordion-panel");
-  const container=document.getElementById("accionesAndrew");
-  if(!panel || !container) return;
-  const abrir=!panel.classList.contains("is-open");
-  container.querySelectorAll(".accordion-panel").forEach(p=>{
-    p.classList.remove("is-open");
-    const h=p.querySelector(".accordion-head");
-    const b=p.querySelector(".accordion-body");
-    if(h) h.setAttribute("aria-expanded","false");
-    if(b) b.hidden=true;
-  });
-  if(abrir){
-    const body=panel.querySelector(".accordion-body");
-    panel.classList.add("is-open");
-    head.setAttribute("aria-expanded","true");
-    if(body) body.hidden=false;
+
+/* ============================================================
+   SALDOS
+   ============================================================ */
+
+function saldoCuentaActual_(
+  codigo,
+  movimientos
+) {
+  const c =
+    normalizarCodigo_(codigo);
+
+  let saldo = 0;
+
+  const movimientosFuente =
+    c === CONFIG.CODIGO_ANDREW
+      ? asegurarMovimientoInicialAndrew_(movimientos)
+      : movimientos;
+
+  movimientosFuente.forEach(
+    function(m) {
+      if (
+        normalizarCodigo_(
+          m.codigo
+        ) !== c
+      ) {
+        return;
+      }
+
+      if (
+        normalizar_(m.estado) ===
+        "ANULADO"
+      ) {
+        return;
+      }
+
+      const monto =
+        numero_(m.monto);
+
+      const tipo =
+        normalizar_(m.tipo);
+
+      if (tipo === "INGRESO") {
+        saldo += monto;
+      } else if (
+        tipo === "EGRESO"
+      ) {
+        saldo -= monto;
+      }
+    }
+  );
+
+  return redondear_(saldo);
+}
+
+
+function movimientosDeCuenta_(
+  codigo,
+  movimientos,
+  anio
+) {
+  const c =
+    normalizarCodigo_(codigo);
+
+  const movimientosFuente =
+    c === CONFIG.CODIGO_ANDREW
+      ? asegurarMovimientoInicialAndrew_(movimientos)
+      : movimientos;
+
+  return movimientosFuente
+    .filter(function(m) {
+      if (
+        normalizarCodigo_(
+          m.codigo
+        ) !== c
+      ) {
+        return false;
+      }
+
+      if (
+        anio &&
+        String(m.anio) !==
+          String(anio)
+      ) {
+        return false;
+      }
+
+      return true;
+    })
+    .sort(function(a, b) {
+      const da =
+        a.fecha instanceof Date
+          ? a.fecha.getTime()
+          : 0;
+
+      const db =
+        b.fecha instanceof Date
+          ? b.fecha.getTime()
+          : 0;
+
+      return db - da;
+    })
+    .map(function(m) {
+      return {
+        id: m.id,
+        fila: m.fila,
+        anio: m.anio,
+        timestamp:
+          m.fechaTexto,
+        fecha:
+          m.fechaTexto,
+        fechaTexto:
+          m.fechaTexto,
+        codigo:
+          m.codigo,
+        codigoQR:
+          m.codigo,
+        estudiante:
+          m.estudiante,
+        nombre:
+          m.estudiante,
+        grado:
+          m.grado,
+        tipo:
+          m.tipo,
+        tipoMovimiento:
+          m.tipo,
+        categoria:
+          m.categoria,
+        concepto:
+          m.concepto,
+        monto:
+          m.monto,
+        montoLDS:
+          m.monto,
+        responsable:
+          m.responsable,
+        observacion:
+          m.observacion,
+        estado:
+          m.estado,
+        tx:
+          m.tx
+      };
+    });
+}
+
+
+/* ============================================================
+   ESCRITURA — NO DESTRUCTIVA
+   ============================================================ */
+
+function obtenerHojaMovimientos_() {
+  const ss =
+    SpreadsheetApp.openById(
+      CONFIG.SPREADSHEET_ID
+    );
+
+  const hoja =
+    ss.getSheetByName(
+      CONFIG.HOJA_MOVIMIENTOS
+    );
+
+  if (!hoja) {
+    throw new Error(
+      "NO EXISTE LA HOJA " +
+      CONFIG.HOJA_MOVIMIENTOS
+    );
+  }
+
+  return hoja;
+}
+
+
+function escribirMovimientoPareado_(
+  mov1,
+  mov2
+) {
+  const hoja =
+    obtenerHojaMovimientos_();
+
+  const lock =
+    LockService.getScriptLock();
+
+  lock.waitLock(30000);
+
+  try {
+    const encabezados =
+      obtenerEncabezados_(hoja);
+
+    const fila1 =
+      movimientoAFila_(
+        mov1,
+        encabezados
+      );
+
+    const fila2 =
+      movimientoAFila_(
+        mov2,
+        encabezados
+      );
+
+    const ultimaColumna =
+      Math.max(
+        hoja.getLastColumn(),
+        encabezados.length
+      );
+
+    const filaFinal1 =
+      ajustarLongitudFila_(
+        fila1,
+        ultimaColumna
+      );
+
+    const filaFinal2 =
+      ajustarLongitudFila_(
+        fila2,
+        ultimaColumna
+      );
+
+    const filaNueva =
+      Math.max(
+        hoja.getLastRow() + 1,
+        2
+      );
+
+    hoja
+      .getRange(
+        filaNueva,
+        1,
+        2,
+        ultimaColumna
+      )
+      .setValues([
+        filaFinal1,
+        filaFinal2
+      ]);
+
+    SpreadsheetApp.flush();
+
+  } finally {
+    lock.releaseLock();
   }
 }
 
-function cerrarTodosLosPanelesAndrew(){
-  const container=document.getElementById("accionesAndrew");
-  if(!container) return;
-  container.querySelectorAll(".accordion-panel").forEach(p=>{
-    p.classList.remove("is-open");
-    const h=p.querySelector(".accordion-head");
-    const b=p.querySelector(".accordion-body");
-    if(h) h.setAttribute("aria-expanded","false");
-    if(b) b.hidden=true;
-  });
+
+function ajustarLongitudFila_(
+  fila,
+  longitud
+) {
+  const salida =
+    fila.slice(0);
+
+  while (
+    salida.length <
+    longitud
+  ) {
+    salida.push("");
+  }
+
+  if (
+    salida.length >
+    longitud
+  ) {
+    salida.length =
+      longitud;
+  }
+
+  return salida;
 }
-document.addEventListener("keydown",function(e){
-  const h=e.target.closest && e.target.closest(".accordion-head");
-  if(h && (e.key==="Enter" || e.key===" ")){
-    e.preventDefault();
-    toggleAndrewPanel(h);
+
+
+function movimientoAFila_(
+  m,
+  encabezados
+) {
+  const salida =
+    new Array(
+      encabezados.length
+    ).fill("");
+
+  encabezados.forEach(
+    function(h, i) {
+      switch (h) {
+        case "TIMESTAMP":
+        case "FECHA":
+        case "FECHAHORA":
+          salida[i] = m.fecha;
+          break;
+
+        case "ANIO":
+        case "ANIOESCOLAR":
+        case "ANO":
+        case "YEAR":
+          salida[i] = m.anio;
+          break;
+
+        case "CODIGO":
+        case "CODIGOQR":
+        case "CODIGOESTUDIANTE":
+        case "CUENTA":
+          salida[i] = m.codigo;
+          break;
+
+        case "ESTUDIANTE":
+        case "NOMBRE":
+        case "NOMBRECOMPLETO":
+        case "ALUMNO":
+          salida[i] =
+            m.entidad.nombre || "";
+          break;
+
+        case "GRADO":
+          salida[i] =
+            m.entidad.grado || "";
+          break;
+
+        case "TIPO":
+        case "TIPOMOVIMIENTO":
+        case "MOVIMIENTO":
+          salida[i] = m.tipo;
+          break;
+
+        case "CATEGORIA":
+        case "TIPOCATEGORIA":
+          salida[i] = m.categoria;
+          break;
+
+        case "CONCEPTO":
+        case "DESCRIPCION":
+          salida[i] = m.concepto;
+          break;
+
+        case "MONTO":
+        case "MONTOLDS":
+        case "VALOR":
+        case "IMPORTE":
+          salida[i] = m.monto;
+          break;
+
+        case "RESPONSABLE":
+        case "CAJERO":
+        case "CAJEROA":
+          salida[i] =
+            m.responsable;
+          break;
+
+        case "RESPONSABLECLAVE":
+          salida[i] = "";
+          break;
+
+        case "OBSERVACION":
+        case "OBSERVACIONES":
+        case "DETALLE":
+          salida[i] =
+            m.observacion;
+          break;
+
+        case "ESTADO":
+        case "STATUS":
+          salida[i] = "ACTIVO";
+          break;
+
+        case "TX":
+        case "TRANSACCION":
+        case "IDTRANSACCION":
+          salida[i] = m.tx;
+          break;
+
+        case "ID":
+        case "IDMOVIMIENTO":
+        case "MOVIMIENTOID":
+          salida[i] =
+            m.id || m.tx;
+          break;
+
+        case "ROLRESPONSABLE":
+          salida[i] =
+            m.rolResponsable ||
+            "";
+          break;
+
+        default:
+          break;
+      }
+    }
+  );
+
+  return salida;
+}
+
+
+function construirMovimiento_(o) {
+  return {
+    id:
+      o.tx +
+      "-" +
+      normalizarCodigo_(
+        o.codigo
+      ),
+    fecha:
+      o.fecha || new Date(),
+    anio:
+      String(o.anio || ""),
+    codigo:
+      normalizarCodigo_(
+        o.codigo
+      ),
+    entidad:
+      o.entidad,
+    tipo:
+      normalizar_(o.tipo),
+    categoria:
+      String(
+        o.categoria || ""
+      ),
+    concepto:
+      String(
+        o.concepto || ""
+      ),
+    monto:
+      redondear_(
+        numero_(o.monto)
+      ),
+    responsable:
+      String(
+        o.responsable || ""
+      ),
+    observacion:
+      String(
+        o.observacion || ""
+      ),
+    tx:
+      String(o.tx || ""),
+    rolResponsable:
+      String(
+        o.rolResponsable || ""
+      )
+  };
+}
+
+
+/* ============================================================
+   UTILIDADES DE HOJAS
+   ============================================================ */
+
+function obtenerEncabezados_(
+  hoja
+) {
+  const ultima =
+    Math.max(
+      hoja.getLastColumn(),
+      1
+    );
+
+  return hoja
+    .getRange(
+      1,
+      1,
+      1,
+      ultima
+    )
+    .getValues()[0]
+    .map(
+      normalizarEncabezado_
+    );
+}
+
+
+function establecerCampo_(
+  hoja,
+  fila,
+  nombreCampo,
+  valor
+) {
+  const encabezados =
+    obtenerEncabezados_(hoja);
+
+  const campo =
+    normalizarEncabezado_(
+      nombreCampo
+    );
+
+  const indice =
+    encabezados.indexOf(
+      campo
+    );
+
+  if (indice >= 0) {
+    hoja
+      .getRange(
+        fila,
+        indice + 1
+      )
+      .setValue(valor);
+
+    return true;
   }
-});
 
-document.getElementById("reportesModal").addEventListener("click",function(e){if(e.target===this)cerrarReportes();});
-document.addEventListener("keydown",function(e){if(e.key==="Escape")cerrarReportes();});
+  return false;
+}
 
-document.getElementById("claveAndrew").addEventListener("keydown", function(e){
-  if(e.key === "Enter"){
-    e.preventDefault();
-    entrarAndrew();
+
+function encontrarFilaPorMovimiento_(
+  movimientos,
+  buscado
+) {
+  const tx =
+    extraerTX_(
+      buscado.observacion
+    );
+
+  if (tx) {
+    const encontrado =
+      movimientos.find(
+        function(m) {
+          return (
+            extraerTX_(
+              m.observacion
+            ) === tx &&
+            normalizarCodigo_(
+              m.codigo
+            ) ===
+              normalizarCodigo_(
+                buscado.codigo
+              ) &&
+            normalizar_(
+              m.tipo
+            ) ===
+              normalizar_(
+                buscado.tipo
+              )
+          );
+        }
+      );
+
+    if (encontrado) {
+      return encontrado.fila;
+    }
   }
-});
 
-/* Botones de portada: listeners directos además del onclick. */
-document.addEventListener("DOMContentLoaded",()=>{
-  const b1=document.querySelector("#loginAndrew .login-action");
-  const b2=document.querySelector("#loginAndrew .login-home");
-  if(b1) b1.addEventListener("click", entrarAndrew);
-  if(b2) b2.addEventListener("click", ()=>{
-    hablarAndrew("Regresando al inicio de Banco LDS 360.");
-    setTimeout(volverInicio,320);
+  return buscado.fila || 0;
+}
+
+
+/* ============================================================
+   OBJETOS / NORMALIZACIÓN
+   ============================================================ */
+
+function filaAObjeto_(
+  fila,
+  encabezados
+) {
+  const obj = {};
+
+  encabezados.forEach(
+    function(h, i) {
+      if (h) {
+        obj[h] =
+          fila[i];
+      }
+    }
+  );
+
+  return obj;
+}
+
+
+function buscarValorPorClaves_(
+  obj,
+  claves
+) {
+  for (
+    let i = 0;
+    i < claves.length;
+    i++
+  ) {
+    const clave =
+      normalizarEncabezado_(
+        claves[i]
+      );
+
+    if (
+      Object.prototype
+        .hasOwnProperty.call(
+          obj,
+          clave
+        ) &&
+      obj[clave] !== "" &&
+      obj[clave] !== null &&
+      obj[clave] !==
+        undefined
+    ) {
+      return obj[clave];
+    }
+  }
+
+  return "";
+}
+
+
+function normalizarEncabezado_(
+  valor
+) {
+  return normalizar_(valor)
+    .replace(
+      /[^A-Z0-9]/g,
+      ""
+    );
+}
+
+
+function normalizar_(valor) {
+  return String(
+    valor == null
+      ? ""
+      : valor
+  )
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    );
+}
+
+
+function normalizarCodigo_(
+  valor
+) {
+  return String(
+    valor == null
+      ? ""
+      : valor
+  )
+    .trim()
+    .toUpperCase();
+}
+
+
+function normalizarAnio_(
+  valor
+) {
+  const n =
+    parseInt(
+      String(valor || ""),
+      10
+    );
+
+  if (isNaN(n)) return "";
+
+  return String(n);
+}
+
+
+function numero_(valor) {
+  if (
+    typeof valor ===
+    "number"
+  ) {
+    return isFinite(valor)
+      ? valor
+      : 0;
+  }
+
+  let texto =
+    String(
+      valor == null
+        ? ""
+        : valor
+    ).trim();
+
+  if (!texto) return 0;
+
+  texto =
+    texto.replace(
+      /[^\d,.\-]/g,
+      ""
+    );
+
+  const tieneComa =
+    texto.indexOf(",") >= 0;
+
+  const tienePunto =
+    texto.indexOf(".") >= 0;
+
+  if (
+    tieneComa &&
+    tienePunto
+  ) {
+    if (
+      texto.lastIndexOf(",") >
+      texto.lastIndexOf(".")
+    ) {
+      texto =
+        texto
+          .replace(/\./g, "")
+          .replace(",", ".");
+    } else {
+      texto =
+        texto.replace(
+          /,/g,
+          ""
+        );
+    }
+  } else if (
+    tieneComa
+  ) {
+    texto =
+      texto.replace(
+        ",",
+        "."
+      );
+  }
+
+  const n =
+    parseFloat(texto);
+
+  return isFinite(n)
+    ? n
+    : 0;
+}
+
+
+function redondear_(n) {
+  return Math.round(
+    numero_(n) * 100
+  ) / 100;
+}
+
+
+function formatearNumero_(n) {
+  return redondear_(n)
+    .toFixed(2);
+}
+
+
+function formatearFecha_(
+  valor
+) {
+  if (!valor) return "";
+
+  if (
+    Object.prototype
+      .toString.call(valor) ===
+      "[object Date]" &&
+    !isNaN(valor.getTime())
+  ) {
+    return Utilities
+      .formatDate(
+        valor,
+        Session.getScriptTimeZone() ||
+          "America/Lima",
+        "dd/MM/yyyy HH:mm:ss"
+      );
+  }
+
+  return String(valor);
+}
+
+
+function unirObservaciones_() {
+  return Array.prototype
+    .slice
+    .call(arguments)
+    .map(function(v) {
+      return String(
+        v || ""
+      ).trim();
+    })
+    .filter(Boolean)
+    .join(" | ");
+}
+
+
+function extraerTX_(
+  observacion
+) {
+  const texto =
+    String(
+      observacion || ""
+    );
+
+  const match =
+    texto.match(
+      /(?:^|\|)\s*TX\s*=\s*([^|]+)/i
+    );
+
+  return match
+    ? String(
+        match[1]
+      ).trim()
+    : "";
+}
+
+
+/* ============================================================
+   DIAGNÓSTICO NO DESTRUCTIVO
+   ============================================================ */
+
+function diagnosticoBancoLDS360() {
+  const datos =
+    cargarDatosBase_();
+
+  const resultado = {
+    ok: true,
+    hojaEstudiantes:
+      CONFIG.HOJA_ESTUDIANTES,
+    hojaMovimientos:
+      CONFIG.HOJA_MOVIMIENTOS,
+    estudiantes:
+      datos.estudiantes.length,
+    movimientos:
+      datos.movimientos.length,
+    andrew: {
+      codigo:
+        CONFIG.CODIGO_ANDREW,
+      nombre:
+        CONFIG.NOMBRE_ANDREW,
+      saldo:
+        saldoCuentaActual_(
+          CONFIG.CODIGO_ANDREW,
+          datos.movimientos
+        )
+    },
+    mises: {}
+  };
+
+  Object.keys(
+    CONFIG.CUENTAS_MISES_LDS360
+  ).forEach(function(k) {
+    const m =
+      CONFIG.CUENTAS_MISES_LDS360[
+        k
+      ];
+
+    resultado.mises[
+      m.codigo
+    ] = {
+      nombre:
+        m.nombre,
+      saldo:
+        saldoCuentaActual_(
+          m.codigo,
+          datos.movimientos
+        )
+    };
   });
-});
 
-document.getElementById("anio").addEventListener("change",cargarTodo);
+  Logger.log(
+    JSON.stringify(
+      resultado,
+      null,
+      2
+    )
+  );
 
-document.addEventListener("click",(ev)=>{
-  const b=ev.target.closest("#andrewApp button, #andrewApp .accordion-head");
-  if(!b) return;
-  sonidoAndrew("click");
-
-  let texto="";
-  if(b.matches(".accordion-head")){
-    const titulo=b.querySelector("h3")?.textContent?.trim() || "";
-    if(/TRANSFERIR FONDO/i.test(titulo)) texto="Transferir fondo a una Miss. Presiona para abrir las opciones de transferencia.";
-    else if(/DEVOLUCIÓN/i.test(titulo)) texto="Recibir devolución de una Miss. Presiona para abrir las opciones de devolución.";
-    else if(/CONSULTAR CUENTA/i.test(titulo)) texto="Consultar cuenta. Presiona para abrir la consulta.";
-  }else if(b.id==="" && /ACTUALIZAR/i.test(b.textContent)) texto="Actualizando la Caja General y los saldos del Banco LDS 360.";
-  else if(/REPORTES/i.test(b.textContent)) texto="Reportes. Selecciona el reporte que deseas imprimir.";
-  else if(/VER TODO EL BANCO/i.test(b.textContent)) texto="Mostrando todos los movimientos del Banco LDS 360.";
-  else if(/TRANSFERIR A MISS/i.test(b.textContent)) texto="Transferencia a la Miss. Verificando y registrando el movimiento.";
-  else if(/REGISTRAR DEVOLUCIÓN/i.test(b.textContent)) texto="Registrando la devolución de la Miss a la Caja General.";
-  else if(/CONSULTAR/i.test(b.textContent)) texto="Consultando la cuenta seleccionada.";
-  else if(/IMPRIMIR REPORTE/i.test(b.textContent)) texto="Preparando el reporte colectivo del Banco LDS 360.";
-  else if(/CERRAR/i.test(b.textContent)) texto="Cerrando la vista de movimientos generales.";
-  if(texto) hablarAndrew(texto);
-});
-
-document.addEventListener("DOMContentLoaded",()=>{
-  /* SIEMPRE MOSTRAR LA PORTADA DE ACCESO AL ABRIR andrew.html.
-     Esto evita que una sesión anterior o la caché salten directamente al panel. */
-  sessionStorage.removeItem("andrew360");
-
-  cargarInsignia();
-  cargarFoto();
-  cargarFondoAndrew();
-
-  document.body.classList.add("login-screen");
-  document.getElementById("loginAndrew").style.display="flex";
-  document.getElementById("andrewApp").style.display="none";
-  document.getElementById("appHeader").style.display="none";
-  document.getElementById("appFooter").style.display="none";
-});
-
-</script>
-</body>
-</html>
+  return resultado;
+}
