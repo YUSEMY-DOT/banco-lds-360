@@ -254,6 +254,12 @@ button{cursor:pointer;}
 #andrewApp .mises-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
 #andrewApp .mises-grid>div{border:1.5px solid #e5a000!important;border-radius:12px!important;padding:13px!important;background:#f8fafc!important;min-width:0;}
 #andrewApp .mises-grid>div div:first-child{font-size:.82rem!important;line-height:1.25;}
+#andrewApp .mise-card-top{display:flex;align-items:center;gap:9px;min-width:0;}
+#andrewApp .mise-card-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;flex:0 0 44px;}
+#andrewApp .mise-card-name{font-weight:900;color:#14213d;font-size:.78rem;line-height:1.18;}
+#andrewApp .mise-card-code{font-size:.72rem;color:#64748b;font-weight:800;margin-top:2px;}
+@media(max-width:600px){#andrewApp .mise-card-photo{width:40px;height:40px;flex-basis:40px;}#andrewApp .mise-card-name{font-size:.72rem;}}
+
 #andrewApp .movement-head{flex-wrap:wrap;}
 #andrewApp .movement-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
 #andrewApp .btn-report{background:linear-gradient(135deg,#0b2f67,#16488f);color:#fff;border:1px solid #0b2f67;}
@@ -903,7 +909,7 @@ function cargarTodo(){
 
     /* Si el backend aún no está sirviendo el movimiento inicial pero
        estamos en 2026 y todavía no existen movimientos reales de Andrew,
-       mantenemos visible el fondo inicial oficial de S/ 180,000.
+       mantenemos visible el fondo inicial oficial de S/ 200,000.
        En cuanto existan movimientos de Andrew, se usa el saldo calculado
        por el backend. */
     if(saldoCuentaServidor===null){
@@ -916,12 +922,28 @@ function cargarTodo(){
       Object.prototype.hasOwnProperty.call(MISES,String(c.codigo||"").toUpperCase())
     );
 
-    document.getElementById("cuentasMises").innerHTML=mises.map(c=>`
-      <div style="border:2px solid #e5a000;border-radius:14px;padding:15px;background:#f8fafc;">
-        <div style="font-weight:900;color:#14213d;">👩‍🏫 ${escapar(c.nombre)}</div>
-        <div style="font-size:.85rem;color:#64748b;font-weight:800;">${escapar(c.codigo)} · CAJA MISS</div>
-        <div style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:8px;">${formato(c.saldoActual)}</div>
-      </div>`).join("");
+    const fotosMises={
+      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300",
+      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300",
+      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300",
+      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
+    };
+
+    document.getElementById("cuentasMises").innerHTML=mises.map(c=>{
+      const codigo=String(c.codigo||"").toUpperCase();
+      const foto=fotosMises[codigo]||"";
+      return `
+      <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
+        <div class="mise-card-top">
+          <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" onerror="this.style.display='none';">
+          <div style="min-width:0;">
+            <div class="mise-card-name">${escapar(c.nombre)}</div>
+            <div class="mise-card-code">${escapar(c.codigo)} · CAJA MISS</div>
+          </div>
+        </div>
+        <div style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
+      </div>`;
+    }).join("");
 
     mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
   });
@@ -948,7 +970,7 @@ function cargarTodo(){
         grado:"CAJA GENERAL",
         tipo:"INGRESO",
         concepto:"FONDO GENERAL",
-        monto:180000,
+        monto:200000,
         responsable:NOMBRE_ANDREW,
         observacion:"FONDO GENERAL INICIAL DE CAJA GENERAL",
         estado:"ACTIVO",
@@ -958,7 +980,7 @@ function cargarTodo(){
       /* Solo en este caso el saldo mostrado es el fondo inicial.
          No se agrega otra fila si el backend ya entregó la real. */
       if(saldoCuentaServidor===0 || saldoCuentaServidor===null){
-        document.getElementById("saldoCuenta").textContent=formato(180000);
+        document.getElementById("saldoCuenta").textContent=formato(200000);
       }
     }
 
