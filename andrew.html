@@ -34,7 +34,7 @@ html, body {
 }
 
 body {
-  background: #061b3f url("assets/FONDO%20ANDREW.png") center center / cover no-repeat fixed;
+  background: var(--fondo);
   color: var(--texto);
   min-height: 100vh;
   font-size: 13px;
@@ -123,65 +123,161 @@ header {
 }
 
 #loginAndrew {
-  min-height:calc(100vh - 92px) !important;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:32px 5vw 45px !important;
+  min-height: 100vh !important;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 70px);
+  padding: 150px 4vw 42px !important;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
 }
 
-#loginAndrew .andrew-login-photo{
-  width:min(38vw,520px);
-  height:min(72vh,650px);
-  margin-right:3vw;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  flex:0 1 520px;
+/* En la portada de acceso se utiliza directamente el fondo institucional.
+   El encabezado y pie se ocultan para no duplicar el logo que ya trae la imagen. */
+body.login-screen {
+  background: #061b3f url("assets/FONDO%20ANDREW.png") center center / cover no-repeat fixed !important;
 }
-#loginAndrew .andrew-login-photo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center bottom;
-  filter:drop-shadow(0 20px 25px rgba(0,0,0,.48));
-  display:none;
+
+body.login-screen > header,
+body.login-screen > footer {
+  display: none !important;
+}
+
+#loginAndrew .andrew-login-photo {
+  width: min(42vw, 570px);
+  height: min(76vh, 700px);
+  flex: 0 1 570px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
+  margin: 0;
+}
+
+#loginAndrew .andrew-login-photo img {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  background: transparent !important;
+  filter: drop-shadow(0 22px 28px rgba(0,0,0,.48));
 }
 
 #loginAndrew > .panel {
-  position:relative;
-  z-index:2;
-  margin-left:auto;
-  margin-right:5vw;
-  max-width:500px !important;
-  border:2px solid var(--dorado);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 25px 60px rgba(0,0,0,.48);
-  background:rgba(255,255,255,.97);
+  position: relative;
+  z-index: 4;
+  width: min(100%, 560px);
+  max-width: 560px !important;
+  margin: 0 0 3vh 0;
+  border: 2px solid #f5b400;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 24px 65px rgba(0,0,0,.55);
+  background: rgba(255,255,255,.97);
 }
 
 #loginAndrew .panel-head {
-  padding:17px 20px;
-  background:linear-gradient(135deg,#071b3d,#12366f);
-  color:#fff;
+  padding: 20px 24px;
+  background: linear-gradient(135deg,#071b3d,#12366f);
+  color: #fff;
+  border-bottom: 2px solid #f5b400;
 }
 
 #loginAndrew .panel-head h3 {
-  color:#fff;
-  font-size:1rem;
+  color: #fff;
+  font-size: clamp(.95rem, 1.3vw, 1.15rem);
+  line-height: 1.35;
 }
 
-#loginAndrew .panel-body { padding:25px 24px 28px; }
+#loginAndrew .panel-body {
+  padding: 28px 28px 30px;
+}
 
-@media(max-width:850px){
-  #loginAndrew{padding:25px 16px 35px !important;}
-  #loginAndrew .andrew-login-photo{
-    width:min(100%,430px); height:300px; margin:0 auto 8px; flex:none;
+#loginAndrew .panel-body > p {
+  color: #334155 !important;
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
+#loginAndrew .input-field,
+#loginAndrew input {
+  height: 52px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+#loginAndrew .btn-gold {
+  min-height: 52px;
+  font-size: .95rem;
+  border-radius: 12px;
+}
+
+@media(max-width: 980px){
+  #loginAndrew {
+    align-items: center;
+    padding: 135px 24px 35px !important;
+    gap: 20px;
   }
-  #loginAndrew{flex-direction:column;}
-  #loginAndrew > .panel{margin:0; width:100%; max-width:520px !important;}
+  #loginAndrew .andrew-login-photo {
+    width: min(44vw, 480px);
+    height: min(68vh, 570px);
+  }
+  #loginAndrew > .panel {
+    width: min(48vw, 500px);
+    margin: 0;
+  }
 }
+
+@media(max-width: 760px){
+  body.login-screen {
+    background-position: center center;
+    background-attachment: scroll;
+  }
+  #loginAndrew {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 100vh !important;
+    padding: 125px 16px 25px !important;
+    gap: 0;
+  }
+  #loginAndrew .andrew-login-photo {
+    width: min(82vw, 430px);
+    height: min(47vh, 390px);
+    flex: 0 0 auto;
+    margin-bottom: -10px;
+  }
+  #loginAndrew > .panel {
+    width: min(100%, 500px);
+    max-width: 500px !important;
+    margin: 0;
+  }
+  #loginAndrew .panel-body {
+    padding: 22px 20px 24px;
+  }
+}
+
+@media(max-width: 480px){
+  #loginAndrew {
+    padding-top: 105px !important;
+  }
+  #loginAndrew .andrew-login-photo {
+    height: 330px;
+    width: 90vw;
+  }
+  #loginAndrew .panel-head {
+    padding: 16px 18px;
+  }
+  #loginAndrew .panel-body {
+    padding: 19px 17px 21px;
+  }
+}
+
 
 .form-group {
   text-align: left;
@@ -707,186 +803,6 @@ footer {
 .type-btn.active-egreso { background: #fef2f2; color: #b91c1c; border-color: #ef4444; }
 
 </style>
-
-<style id="andrew-final-visual">
-/* =========================================================
-   DISEÑO FINAL CAJA GENERAL — MISTER ANDREW
-   Usa directamente los dos archivos proporcionados:
-   assets/FONDO ANDREW.png
-   assets/ANDREW.png
-   ========================================================= */
-
-html, body {
-  min-height: 100%;
-}
-
-body {
-  background-color: #061b3f !important;
-  background-image: url("assets/FONDO%20ANDREW.png") !important;
-  background-position: center center !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-}
-
-/* El fondo ya contiene el encabezado de BANCO LDS 360.
-   Dejamos únicamente el botón funcional sobre él. */
-.topbar {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 18px 28px !important;
-  max-width: none !important;
-}
-
-.topbar .brand {
-  display: none !important;
-}
-
-.topbar .btn {
-  margin-left: auto;
-  background: rgba(3, 16, 42, .86) !important;
-  border: 2px solid #f4c52d !important;
-  color: #fff !important;
-  min-height: 44px;
-  padding: 8px 18px;
-  border-radius: 12px;
-  font-weight: 900;
-  box-shadow: 0 8px 22px rgba(0,0,0,.28);
-}
-
-/* Pantalla de acceso */
-#loginAndrew {
-  min-height: 100vh !important;
-  width: 100%;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: space-between !important;
-  gap: clamp(20px, 4vw, 70px);
-  padding: 105px clamp(28px, 6vw, 100px) 28px !important;
-  position: relative;
-}
-
-/* Foto real de Andrew */
-#loginAndrew .andrew-login-photo {
-  width: min(40vw, 540px) !important;
-  height: min(78vh, 750px) !important;
-  margin: 0 !important;
-  flex: 0 1 540px !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: center !important;
-  position: relative;
-  z-index: 3;
-}
-
-#loginAndrew .andrew-login-photo img {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  object-position: center bottom !important;
-  filter: drop-shadow(0 22px 30px rgba(0,0,0,.48));
-}
-
-/* Tarjeta de acceso */
-#loginAndrew > .panel {
-  width: min(100%, 455px) !important;
-  max-width: 455px !important;
-  margin: 0 clamp(0px, 4vw, 65px) 7vh 0 !important;
-  position: relative;
-  z-index: 5;
-  border: 2px solid #f4c52d !important;
-  border-radius: 20px !important;
-  overflow: hidden;
-  background: rgba(255,255,255,.98) !important;
-  box-shadow: 0 24px 60px rgba(0,0,0,.50) !important;
-}
-
-#loginAndrew .panel-head {
-  padding: 18px 20px !important;
-  background: linear-gradient(135deg,#061d45,#0b3675) !important;
-}
-
-#loginAndrew .panel-head h3 {
-  color: #fff !important;
-  font-size: 1.02rem !important;
-  line-height: 1.3;
-}
-
-#loginAndrew .panel-body {
-  padding: 25px 25px 28px !important;
-}
-
-#loginAndrew .panel-body p {
-  line-height: 1.55;
-}
-
-/* Al entrar, la aplicación mantiene su funcionamiento normal */
-#andrewApp {
-  position: relative;
-  z-index: 2;
-  padding-top: 82px;
-}
-
-/* Adaptación móvil */
-@media (max-width: 900px) {
-  body {
-    background-attachment: scroll !important;
-    background-position: center top !important;
-  }
-
-  #loginAndrew {
-    min-height: 100vh !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    padding: 92px 16px 24px !important;
-    gap: 8px !important;
-  }
-
-  #loginAndrew .andrew-login-photo {
-    width: min(86vw, 420px) !important;
-    height: min(52vh, 500px) !important;
-    flex: none !important;
-  }
-
-  #loginAndrew > .panel {
-    width: min(94vw, 470px) !important;
-    margin: 0 0 12px 0 !important;
-  }
-
-  .topbar {
-    padding: 14px 14px !important;
-  }
-
-  .topbar .btn {
-    min-height: 40px;
-    padding: 7px 13px;
-    font-size: .75rem;
-  }
-}
-
-@media (max-width: 520px) {
-  #loginAndrew .andrew-login-photo {
-    height: 42vh !important;
-  }
-
-  #loginAndrew > .panel {
-    border-radius: 16px !important;
-  }
-
-  #loginAndrew .panel-body {
-    padding: 20px 18px 22px !important;
-  }
-}
-</style>
-
 </head>
 <body>
 
@@ -898,7 +814,7 @@ body {
       <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
     </div>
   </div>
-  <button class="btn btn-outline" onclick="window.location.href='index.html'">← DEVOLVER AL INICIO</button>
+  <button class="btn btn-outline" onclick="window.location.href='index.html'">← INICIO</button>
 </header>
 
 <main id="andrewApp" style="display:none;">
@@ -1084,7 +1000,7 @@ body {
 
 <div id="loginAndrew">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW.png" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/ANDREW_TRANSPARENTE.png" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -1115,6 +1031,7 @@ const MISES = {
 };
 
 const FOTO_ANDREW_CANDIDATAS = [
+  "assets/ANDREW_TRANSPARENTE.png",
   "assets/ANDREW.png",
   "assets/ANDREW.jpg",
   "assets/ANDREW.jpeg",
@@ -1171,6 +1088,7 @@ function entrarAndrew(){
     return;
   }
   sessionStorage.setItem("andrew360","1");
+  document.body.classList.remove("login-screen");
   document.getElementById("loginAndrew").style.display="none";
   document.getElementById("andrewApp").style.display="block";
   cargarFoto();
@@ -1211,18 +1129,25 @@ function cargarFondoAndrew(){
     "assets/FONDO%20ANDREW.jpeg",
     "assets/FONDO%20ANDREW.webp"
   ];
+
   let i=0;
-  const prueba=new Image();
-  prueba.onload=()=>{
-    document.body.style.backgroundImage=
-      'linear-gradient(rgba(3,12,28,.58),rgba(3,12,28,.78)),url("'+rutas[i]+'")';
+  const aplicar=()=>{
+    document.body.style.backgroundImage='url("'+rutas[i]+'")';
+    document.body.style.backgroundPosition='center center';
+    document.body.style.backgroundSize='cover';
+    document.body.style.backgroundRepeat='no-repeat';
+    document.body.style.backgroundAttachment=window.innerWidth > 760 ? 'fixed' : 'scroll';
   };
+
+  const prueba=new Image();
+  prueba.onload=aplicar;
   prueba.onerror=()=>{
     i++;
     if(i<rutas.length) prueba.src=rutas[i];
   };
   prueba.src=rutas[0];
 }
+
 
 function cargarTodo(){
   const anio=document.getElementById("anio").value;
@@ -1385,18 +1310,20 @@ document.getElementById("anio").addEventListener("change",cargarTodo);
 
 document.addEventListener("DOMContentLoaded",()=>{
   cargarFoto();
+  cargarFondoAndrew();
+
   if(sessionStorage.getItem("andrew360")==="1"){
+    document.body.classList.remove("login-screen");
     document.getElementById("loginAndrew").style.display="none";
     document.getElementById("andrewApp").style.display="block";
     cargarTodo();
+  } else {
+    document.body.classList.add("login-screen");
+    document.getElementById("loginAndrew").style.display="flex";
+    document.getElementById("andrewApp").style.display="none";
   }
 });
 
-
-window.addEventListener("DOMContentLoaded",function(){
-  cargarFondoAndrew();
-  cargarFoto();
-});
 </script>
 </body>
 </html>
