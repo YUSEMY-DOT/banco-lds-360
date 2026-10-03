@@ -267,6 +267,31 @@ button{cursor:pointer;}
 #andrewApp .small-label{font-size:.7rem;margin-top:8px;}
 #andrewApp select,#andrewApp input,#andrewApp textarea{min-height:40px;font-size:.82rem;}
 
+/* ==========================================================
+   ANDREW — FOTO, ENCABEZADO FIJO, SALDO Y TABLAS CLARAS
+   ========================================================== */
+#appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;}
+#appHeader .brand{min-height:52px;}
+#appHeader .brand img{display:block!important;width:54px!important;height:54px!important;object-fit:contain!important;flex:0 0 54px;}
+#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:12px!important;}
+#andrewApp .andrew-mini-photo{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;border:2px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.18);}
+#andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
+#andrewApp .andrew-mini-photo span{display:none;font-size:1.5rem;}
+#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
+#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:1rem;font-weight:900;}
+#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.68rem;font-weight:900;margin-top:4px;}
+#andrewApp .resumen-metrica:first-of-type{background:linear-gradient(135deg,#fffdf0,#fff)!important;border:2px solid #f5b400!important;}
+#andrewApp .resumen-metrica:first-of-type strong{font-size:clamp(1.2rem,2vw,1.75rem)!important;color:#008f68!important;}
+#andrewApp .table-wrap{background:#fff!important;border-radius:0 0 12px 12px;}
+#andrewApp table,#andrewApp table tbody,#andrewApp table tr,#andrewApp table td{background:#fff!important;}
+#andrewApp table thead th{background:#eef3f8!important;color:#0b2f67!important;position:sticky;top:0;z-index:2;}
+#andrewApp #panelTodo{background:#fff!important;}
+@media(max-width:600px){
+  #appHeader .brand img{width:46px!important;height:46px!important;flex-basis:46px;}
+  #andrewApp .andrew-mini-photo{width:56px;height:56px;flex-basis:56px;}
+  #andrewApp .andrew-identidad-text strong{font-size:.88rem;}
+}
+
 /* AJUSTE FINAL DE LA SEGUNDA PANTALLA */
 #andrewApp{min-height:calc(100vh - 72px);}
 #andrewApp .layout{width:min(100%,1680px);grid-template-columns:minmax(0,1.72fr) minmax(350px,.72fr);align-items:start;}
@@ -324,6 +349,10 @@ button{cursor:pointer;}
 
 /* Impresión */
 @media print{
+  #appHeader{position:static!important;display:flex!important;background:#061b3f!important;color:#fff!important;border-bottom:2px solid #f5b400!important;}
+  #appHeader .btn-outline{display:none!important;}
+  #andrewApp table thead{display:table-header-group!important;}
+  #andrewApp .table-wrap{overflow:visible!important;background:#fff!important;}
   body{background:#fff!important;color:#111!important;}
   #appHeader,.right-stack,#mensaje,.reportes-modal,#panelTodo .panel-head button,.movement-actions,#andrewApp>.panel>.panel-head .header-actions-group{display:none!important;}
   #andrewApp{display:block!important;padding:0!important;max-width:none!important;}
@@ -397,7 +426,7 @@ button{cursor:pointer;}
 
 <header class="topbar" id="appHeader">
   <div class="brand">
-    <img id="logoAndrew" src="" alt="Insignia La Salle del Sur">
+    <img id="logoAndrew" src="assets/insignia.png?v=20261003-2" alt="Insignia La Salle del Sur">
     <div>
       <div class="brand-title">BANCO LDS 360</div>
       <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
@@ -428,9 +457,15 @@ button{cursor:pointer;}
         </div>
         <div class="panel-body dashboard-body">
           <div class="caja-resumen caja-resumen-compacto">
-            <div class="resumen-cuenta">
-              <strong>MISTER ANDREW</strong>
-              <span>CAJA-ANDREW</span>
+            <div class="resumen-cuenta resumen-identidad-andrew">
+              <div class="andrew-mini-photo">
+                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew">
+                <span id="andrewPlaceholder" aria-hidden="true">👤</span>
+              </div>
+              <div class="andrew-identidad-text">
+                <strong>MISTER ANDREW</strong>
+                <span>CAJA-ANDREW · CAJA GENERAL</span>
+              </div>
             </div>
             <div class="resumen-metrica">
               <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 0.00</strong>
@@ -649,11 +684,7 @@ const FOTO_ANDREW_CANDIDATAS = [
 
 /* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
 const INSIGNIA_CANDIDATAS = [
-  "insignia-real.png",
-  "insignia.png",
-  "insignia.jpg",
-  "Insignia.png",
-  "INSIGNIA.png"
+  "insignia.png"
 ];
 
 function urlFotoDrive(url){
@@ -703,10 +734,50 @@ function volverInicio(){
   window.location.href = "index.html";
 }
 
+/* ==========================================================
+   AUDIO DE BIENVENIDA Y SONIDOS DE OPERACIÓN
+   ========================================================== */
+let audioAndrew=null;
+function activarAudioAndrew(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return null;
+    if(!audioAndrew) audioAndrew=new AC();
+    if(audioAndrew.state==="suspended") audioAndrew.resume();
+    return audioAndrew;
+  }catch(e){ return null; }
+}
+function sonidoAndrew(tipo="ok"){
+  const ac=activarAudioAndrew();
+  if(!ac) return;
+  const ahora=ac.currentTime;
+  const notas=tipo==="error"?[220,165]:tipo==="click"?[520]:[523,659,784];
+  notas.forEach((f,i)=>{
+    const o=ac.createOscillator(), g=ac.createGain();
+    o.type="sine"; o.frequency.value=f;
+    g.gain.setValueAtTime(0,ahora+i*.09);
+    g.gain.linearRampToValueAtTime(.055,ahora+i*.09+.015);
+    g.gain.exponentialRampToValueAtTime(.001,ahora+i*.09+.18);
+    o.connect(g); g.connect(ac.destination);
+    o.start(ahora+i*.09); o.stop(ahora+i*.09+.2);
+  });
+}
+function bienvenidaAndrew(){
+  activarAudioAndrew();
+  sonidoAndrew("ok");
+  if("speechSynthesis" in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
+    u.lang="es-PE"; u.rate=.92; u.pitch=1; u.volume=1;
+    window.speechSynthesis.speak(u);
+  }
+}
+
 function entrarAndrew(){
   const clave=document.getElementById("claveAndrew").value.trim();
   if(clave!==CLAVE_ANDREW){
     mostrarMensaje("errorLogin","CLAVE INCORRECTA.","error");
+    sonidoAndrew("error");
     return;
   }
   sessionStorage.setItem("andrew360","1");
@@ -720,6 +791,7 @@ function entrarAndrew(){
   cargarFondoAndrew();
   cerrarTodosLosPanelesAndrew();
   cargarTodo();
+  setTimeout(bienvenidaAndrew,180);
 }
 
 function assetUrl(nombre){
@@ -764,7 +836,11 @@ function cargarFoto(){
   ["andrewFoto","fotoCuenta"].forEach(id=>{
     const img=document.getElementById(id);
     const ph=document.getElementById(id==="andrewFoto"?"andrewPlaceholder":"fotoCuentaPlaceholder");
-    ponerFoto(img,ph,FOTO_ANDREW_CANDIDATAS);
+    if(!img) return;
+    img.src="assets/ANDREW.png?v=20261003-2";
+    img.style.display="block";
+    img.onerror=()=>{ if(ph) ph.style.display="grid"; img.style.display="none"; };
+    if(ph) ph.style.display="none";
   });
   const loginImg=document.getElementById("andrewLoginFoto");
   if(loginImg){
@@ -814,10 +890,33 @@ function cargarTodo(){
       document.getElementById("tablaAndrew").innerHTML='<tr><td colspan="9" class="empty">NO SE PUDIERON CARGAR LOS MOVIMIENTOS.</td></tr>';
       return;
     }
-    const mov=(r.movimientos||[]).filter(m=>String(m.codigo||"").toUpperCase()===CODIGO_ANDREW);
+    const todos=(r.movimientos||[]);
+    const mov=todos.filter(esMovimientoAndrew);
     document.getElementById("contadorMovimientos").textContent=mov.length;
+
+    // El saldo real de Andrew se obtiene de sus propios movimientos:
+    // INGRESO suma, EGRESO resta. Esto conserva el fondo inicial de S/ 180,000
+    // y también refleja transferencias, devoluciones y anulaciones registradas.
+    const saldoMovimientos=mov.reduce((total,m)=>{
+      const tipo=String(m.tipo||"").toUpperCase();
+      const monto=Number(m.monto||0);
+      if(String(m.estado||"").toUpperCase()==="ANULADO") return total;
+      return total + (tipo==="INGRESO" ? monto : tipo==="EGRESO" ? -monto : 0);
+    },0);
+
+    const saldoFinal=Number.isFinite(saldoMovimientos) ? saldoMovimientos : 0;
+    document.getElementById("saldoCuenta").textContent=formato(saldoFinal);
     renderTablaAndrew(mov);
   });
+}
+
+function esMovimientoAndrew(m){
+  const codigo=String(m.codigo||"").trim().toUpperCase();
+  const obs=String(m.observacion||"").toUpperCase();
+  const estudiante=String(m.estudiante||"").trim().toUpperCase();
+  return codigo===CODIGO_ANDREW
+    || obs.includes("CUENTA="+CODIGO_ANDREW)
+    || estudiante===NOMBRE_ANDREW;
 }
 
 function renderTablaAndrew(mov){
@@ -1046,6 +1145,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
+
+document.addEventListener("click",(ev)=>{
+  const b=ev.target.closest("#andrewApp button, #andrewApp .accordion-head");
+  if(b) sonidoAndrew("click");
+});
 
 document.addEventListener("DOMContentLoaded",()=>{
   /* SIEMPRE MOSTRAR LA PORTADA DE ACCESO AL ABRIR andrew.html.
