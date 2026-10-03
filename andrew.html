@@ -421,6 +421,209 @@ button{cursor:pointer;}
 }
 </style>
 <meta name="andrew-screen" content="segunda-pantalla-responsiva">
+
+<style id="lds-mobile-final-fix">
+/* ==========================================================
+   BANCO LDS 360 — AJUSTE FINAL PARA CELULAR
+   Solo afecta pantallas táctiles pequeñas. NO modifica PC.
+   ========================================================== */
+@media screen and (max-width: 600px) and (pointer: coarse){
+  html,body{
+    width:100%;
+    min-width:0!important;
+    overflow-x:hidden!important;
+    -webkit-text-size-adjust:100%;
+  }
+
+  /* CABECERA */
+  #appHeader{
+    min-height:64px!important;
+    height:auto!important;
+    padding:9px 10px!important;
+    gap:8px!important;
+  }
+  #appHeader .brand{gap:8px!important;min-width:0!important;}
+  #appHeader .brand img{width:44px!important;height:44px!important;flex:0 0 44px!important;}
+  #appHeader .brand-title{font-size:1.02rem!important;line-height:1.05!important;}
+  #appHeader .brand-subtitle{font-size:.58rem!important;line-height:1.1!important;}
+  #appHeader .btn-outline{
+    min-width:108px!important;
+    min-height:46px!important;
+    padding:10px 12px!important;
+    font-size:.82rem!important;
+    line-height:1.1!important;
+    white-space:normal!important;
+  }
+
+  /* PANTALLA PRINCIPAL */
+  #andrewApp{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:10px!important;
+  }
+  #andrewApp .layout{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    display:block!important;
+  }
+  #andrewApp .main-dashboard-panel,
+  #andrewApp .panel,
+  #andrewApp .inner-panel,
+  #andrewApp .right-stack,
+  #andrewApp .right-stack .panel{
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  /* TÍTULOS Y CONTROLES */
+  #andrewApp .main-panel-head{
+    padding:13px 14px!important;
+    gap:10px!important;
+  }
+  #andrewApp .main-panel-head h3{font-size:1rem!important;line-height:1.2!important;}
+  #andrewApp .year-caption{font-size:.72rem!important;}
+  #andrewApp .header-actions-group{
+    width:100%!important;
+    min-width:0!important;
+    display:flex!important;
+    gap:9px!important;
+  }
+  #andrewApp .header-actions-group select,
+  #andrewApp .header-actions-group .btn{
+    min-height:50px!important;
+    font-size:.9rem!important;
+  }
+  #andrewApp .header-actions-group select{flex:1 1 50%!important;width:auto!important;}
+  #andrewApp .header-actions-group .btn{flex:1 1 50%!important;width:auto!important;}
+
+  /* BOTONES: GRANDES Y CÓMODOS PARA EL DEDO */
+  #andrewApp .btn,
+  #andrewApp button.btn,
+  #andrewApp .movement-actions .btn,
+  #andrewApp .right-stack .btn{
+    min-height:50px!important;
+    padding:12px 13px!important;
+    font-size:.9rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  /* RESUMEN */
+  #andrewApp .caja-resumen{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  #andrewApp .resumen-cuenta,
+  #andrewApp .resumen-metrica{
+    min-height:72px!important;
+    padding:12px 14px!important;
+  }
+  #andrewApp .andrew-mini-photo{width:58px!important;height:58px!important;flex-basis:58px!important;}
+  #andrewApp .andrew-identidad-text strong{font-size:.98rem!important;}
+  #andrewApp .andrew-identidad-text span{font-size:.7rem!important;}
+  #andrewApp .resumen-metrica span{font-size:.7rem!important;}
+  #andrewApp .resumen-metrica strong{font-size:1.45rem!important;}
+
+  /* CAMPOS */
+  #andrewApp input,
+  #andrewApp select,
+  #andrewApp textarea{
+    min-height:50px!important;
+    padding:11px 12px!important;
+    font-size:.92rem!important;
+  }
+  #andrewApp .small-label{font-size:.76rem!important;}
+
+  /* ACORDEONES */
+  #andrewApp .right-stack .panel-head.accordion-head{
+    min-height:56px!important;
+    padding:12px 13px!important;
+  }
+  #andrewApp .right-stack .panel-head h3{font-size:.9rem!important;line-height:1.2!important;}
+  #andrewApp .accordion-arrow{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:1rem!important;}
+  #andrewApp .right-stack .panel-body.accordion-body{padding:0 13px 15px!important;}
+
+  /* MOVIMIENTOS */
+  #andrewApp .movement-head{padding:12px 13px!important;min-height:56px!important;}
+  #andrewApp .movement-head h3{font-size:.9rem!important;}
+  #andrewApp .movement-actions{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+  }
+  #andrewApp .table-wrap{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  #andrewApp table{min-width:780px!important;font-size:.75rem!important;}
+  #andrewApp th,#andrewApp td{padding:9px 8px!important;}
+
+  /* REPORTES */
+  .reportes-card{width:min(94vw,520px)!important;}
+  .report-option{min-height:72px!important;padding:13px!important;}
+  .report-option strong{font-size:.9rem!important;}
+
+  /* MENSAJES */
+  #andrewApp .message{font-size:.84rem!important;padding:10px 12px!important;}
+
+  /* LOGIN DE ANDREW */
+  #loginAndrew{
+    width:100%!important;
+    min-width:0!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    padding:18px 12px 14px!important;
+    gap:10px!important;
+  }
+  #loginAndrew .andrew-login-photo{
+    width:min(78vw,330px)!important;
+    height:min(38vh,320px)!important;
+    max-height:320px!important;
+  }
+  #loginAndrew>.panel{
+    width:100%!important;
+    max-width:440px!important;
+    min-width:0!important;
+  }
+  #loginAndrew .panel-head{padding:14px 15px!important;}
+  #loginAndrew .panel-head h3{font-size:1rem!important;line-height:1.25!important;}
+  #loginAndrew .panel-body{padding:16px!important;}
+  #loginAndrew .panel-body>p{font-size:.9rem!important;line-height:1.45!important;}
+  #loginAndrew .small-label{font-size:.78rem!important;}
+  #loginAndrew input{
+    min-height:54px!important;
+    padding:12px 14px!important;
+    font-size:1rem!important;
+  }
+  #loginAndrew .btn{
+    width:100%!important;
+    min-height:54px!important;
+    padding:13px 14px!important;
+    font-size:.95rem!important;
+  }
+}
+
+@media screen and (max-width:380px) and (pointer: coarse){
+  #appHeader .brand-title{font-size:.92rem!important;}
+  #appHeader .brand-subtitle{font-size:.52rem!important;}
+  #appHeader .btn-outline{min-width:100px!important;font-size:.76rem!important;}
+  #andrewApp{padding:8px!important;}
+  #andrewApp .header-actions-group{flex-direction:column!important;}
+  #andrewApp .header-actions-group select,
+  #andrewApp .header-actions-group .btn{width:100%!important;min-height:50px!important;}
+  #loginAndrew{padding:12px 10px 12px!important;}
+  #loginAndrew .andrew-login-photo{height:min(34vh,285px)!important;width:76vw!important;}
+}
+</style>
+
 </head>
 <body class="login-screen">
 
@@ -762,51 +965,28 @@ function sonidoAndrew(tipo="ok"){
     o.start(ahora+i*.09); o.stop(ahora+i*.09+.2);
   });
 }
+function hablarAndrew(texto){
+  if(!texto || !("speechSynthesis" in window)) return false;
+  try{
+    const ss=window.speechSynthesis;
+    ss.cancel();
+    const emitir=()=>{
+      const u=new SpeechSynthesisUtterance(String(texto));
+      u.lang="es-PE"; u.rate=.92; u.pitch=1; u.volume=1;
+      const voces=ss.getVoices ? ss.getVoices() : [];
+      const voz=voces.find(v=>/^es(-|_)/i.test(v.lang)) || voces.find(v=>/spanish|español/i.test(v.name));
+      if(voz) u.voice=voz;
+      ss.speak(u);
+    };
+    if(ss.getVoices && ss.getVoices().length){ emitir(); }
+    else { ss.onvoiceschanged=()=>{ ss.onvoiceschanged=null; emitir(); }; setTimeout(()=>{ if(!ss.speaking) emitir(); },120); }
+    return true;
+  }catch(e){ return false; }
+}
 function bienvenidaAndrew(){
   activarAudioAndrew();
   sonidoAndrew("ok");
-
-  /* VOZ DE BIENVENIDA:
-     Se ejecuta inmediatamente después de la interacción de acceso.
-     No se deja para un setTimeout porque algunos navegadores bloquean
-     speechSynthesis cuando la llamada queda fuera de la activación del botón. */
-  if(!("speechSynthesis" in window)) return;
-
-  const mensaje="Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.";
-  const hablarAhora=()=>{
-    try{
-      const sintesis=window.speechSynthesis;
-      sintesis.cancel();
-      if(typeof sintesis.resume==="function") sintesis.resume();
-
-      const u=new SpeechSynthesisUtterance(mensaje);
-      u.lang="es-PE";
-      u.rate=.92;
-      u.pitch=1;
-      u.volume=1;
-
-      const voces=sintesis.getVoices();
-      const vozEspanol=voces.find(v=>/^es(-|_)/i.test(String(v.lang||"")))
-        || voces.find(v=>String(v.lang||"").toLowerCase().includes("es"));
-      if(vozEspanol) u.voice=vozEspanol;
-
-      u.onerror=()=>{};
-      sintesis.speak(u);
-    }catch(e){}
-  };
-
-  /* En Chrome/Edge las voces pueden cargarse después del documento. */
-  const vocesDisponibles=window.speechSynthesis.getVoices();
-  if(vocesDisponibles.length){
-    hablarAhora();
-  }else{
-    window.speechSynthesis.onvoiceschanged=()=>{
-      window.speechSynthesis.onvoiceschanged=null;
-      hablarAhora();
-    };
-    /* Respaldo: algunos navegadores no disparan voiceschanged. */
-    setTimeout(hablarAhora,120);
-  }
+  hablarAndrew("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
 }
 
 function entrarAndrew(){
@@ -814,6 +994,7 @@ function entrarAndrew(){
   if(clave!==CLAVE_ANDREW){
     mostrarMensaje("errorLogin","CLAVE INCORRECTA.","error");
     sonidoAndrew("error");
+    hablarAndrew("La clave es incorrecta. Por favor, inténtalo nuevamente.");
     return;
   }
 
@@ -1235,14 +1416,34 @@ document.addEventListener("DOMContentLoaded",()=>{
   const b1=document.querySelector("#loginAndrew .login-action");
   const b2=document.querySelector("#loginAndrew .login-home");
   if(b1) b1.addEventListener("click", entrarAndrew);
-  if(b2) b2.addEventListener("click", volverInicio);
+  if(b2) b2.addEventListener("click", ()=>{
+    hablarAndrew("Regresando al inicio de Banco LDS 360.");
+    setTimeout(volverInicio,320);
+  });
 });
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
 
 document.addEventListener("click",(ev)=>{
   const b=ev.target.closest("#andrewApp button, #andrewApp .accordion-head");
-  if(b) sonidoAndrew("click");
+  if(!b) return;
+  sonidoAndrew("click");
+
+  let texto="";
+  if(b.matches(".accordion-head")){
+    const titulo=b.querySelector("h3")?.textContent?.trim() || "";
+    if(/TRANSFERIR FONDO/i.test(titulo)) texto="Transferir fondo a una Miss. Presiona para abrir las opciones de transferencia.";
+    else if(/DEVOLUCIÓN/i.test(titulo)) texto="Recibir devolución de una Miss. Presiona para abrir las opciones de devolución.";
+    else if(/CONSULTAR CUENTA/i.test(titulo)) texto="Consultar cuenta. Presiona para abrir la consulta.";
+  }else if(b.id==="" && /ACTUALIZAR/i.test(b.textContent)) texto="Actualizando la Caja General y los saldos del Banco LDS 360.";
+  else if(/REPORTES/i.test(b.textContent)) texto="Reportes. Selecciona el reporte que deseas imprimir.";
+  else if(/VER TODO EL BANCO/i.test(b.textContent)) texto="Mostrando todos los movimientos del Banco LDS 360.";
+  else if(/TRANSFERIR A MISS/i.test(b.textContent)) texto="Transferencia a la Miss. Verificando y registrando el movimiento.";
+  else if(/REGISTRAR DEVOLUCIÓN/i.test(b.textContent)) texto="Registrando la devolución de la Miss a la Caja General.";
+  else if(/CONSULTAR/i.test(b.textContent)) texto="Consultando la cuenta seleccionada.";
+  else if(/IMPRIMIR REPORTE/i.test(b.textContent)) texto="Preparando el reporte colectivo del Banco LDS 360.";
+  else if(/CERRAR/i.test(b.textContent)) texto="Cerrando la vista de movimientos generales.";
+  if(texto) hablarAndrew(texto);
 });
 
 document.addEventListener("DOMContentLoaded",()=>{
