@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -946,7 +945,10 @@ footer {
           <button id="btnTipoIngreso" type="button" class="type-btn active-ingreso" onclick="seleccionarTipoOperacion('INGRESO')">🟢 INGRESO (+)</button>
           <button id="btnTipoEgreso" type="button" class="type-btn" onclick="seleccionarTipoOperacion('EGRESO')">🔴 EGRESO (-)</button>
         </div>
-        <input type="hidden" id="pagoOperacionVal" value="INGRESO">
+        <input type="hidden" id="pagoOperacionVal" value="EGRESO">
+        <div style="font-size:0.68rem;color:#64748b;font-weight:700;margin:-2px 0 8px;line-height:1.35;">
+          EGRESO: LA CUENTA ACTIVA PAGA A LA CUENTA SELECCIONADA. &nbsp;|&nbsp; INGRESO: LA CUENTA SELECCIONADA PAGA A LA CUENTA ACTIVA.
+        </div>
 
         <label class="small-label" for="pagoCodigo">CÓDIGO DE ESTUDIANTE</label>
         <input id="pagoCodigo" placeholder="LDS-EST-001" readonly style="background:#f1f5f9;">
@@ -1085,11 +1087,12 @@ function cargarConceptosPorTipo() {
   const selectConcepto = document.getElementById("pagoConcepto");
   selectConcepto.innerHTML = "";
 
-  if (tipo === "COSTOS_Y_OTROS") {
-    seleccionarTipoOperacion("EGRESO");
-  } else {
-    seleccionarTipoOperacion("INGRESO");
-  }
+  // REGLA BANCO LDS 360:
+  // EGRESO = la cuenta activa entrega dinero a la cuenta seleccionada.
+  // INGRESO = la cuenta seleccionada entrega dinero a la cuenta activa.
+  // Los conceptos de sueldos y bonificaciones son pagos realizados
+  // por la cuenta activa hacia el alumno seleccionado.
+  seleccionarTipoOperacion("EGRESO");
 
   const lista = CATALOGO_EXCEL[tipo] || [];
 
@@ -2366,4 +2369,3 @@ document.getElementById("codigo").addEventListener(
 
 </body>
 </html>
-```
