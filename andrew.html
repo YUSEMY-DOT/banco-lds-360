@@ -867,6 +867,8 @@ button{cursor:pointer;}
 
 <footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
 
+<script src="notificaciones.js"></script>
+
 <script>
 
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
@@ -1255,6 +1257,15 @@ function transferirAMise(){
     responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
   },function(r){
     if(r&&r.ok){
+      if(window.NotificacionesLDS){
+        NotificacionesLDS.movimiento({
+          tipo:"EGRESO",
+          concepto:concepto,
+          codigo:codigo,
+          monto:monto,
+          anio:document.getElementById("anio").value
+        });
+      }
       mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
       document.getElementById("montoTransferencia").value="";
       document.getElementById("obsTransferencia").value="";
@@ -1284,6 +1295,15 @@ function recibirDevolucion(){
     responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
   },function(r){
     if(r&&r.ok){
+      if(window.NotificacionesLDS){
+        NotificacionesLDS.movimiento({
+          tipo:"INGRESO",
+          concepto:concepto,
+          codigo:codigo,
+          monto:monto,
+          anio:document.getElementById("anio").value
+        });
+      }
       mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
       document.getElementById("montoDevolucion").value="";
       document.getElementById("obsDevolucion").value="";
