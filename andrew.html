@@ -27,7 +27,11 @@ button,input,select,textarea{font:inherit}
   gap:clamp(20px,5vw,80px)!important;
   overflow:hidden!important;
   z-index:99999!important;
-  background:#061b3f url("assets/FONDO%20ANDREW.png") center/cover no-repeat!important;
+  background-color:#061b3f!important;
+  background-image:url("assets/FONDO%20ANDREW.png")!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
 }
 
 #loginAndrew::before{
@@ -41,8 +45,8 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .andrew-login-photo{
   position:relative!important;
   z-index:2!important;
-  width:min(42vw,560px)!important;
-  height:min(82vh,760px)!important;
+  width:min(40vw,560px)!important;
+  height:min(82vh,730px)!important;
   flex:0 1 560px!important;
   display:flex!important;
   align-items:flex-end!important;
@@ -57,13 +61,14 @@ button,input,select,textarea{font:inherit}
   object-fit:contain!important;
   object-position:center bottom!important;
   background:transparent!important;
+  mix-blend-mode:normal!important;
   filter:drop-shadow(0 20px 28px rgba(0,0,0,.45));
 }
 
 #loginAndrew > .panel{
   position:relative!important;
   z-index:3!important;
-  width:min(470px,42vw)!important;
+  width:min(460px,40vw)!important;
   max-width:470px!important;
   flex:0 1 470px!important;
   margin:0 0 7vh 0!important;
@@ -129,7 +134,10 @@ button,input,select,textarea{font:inherit}
 #loginAndrew #errorLogin{margin-top:10px!important}
 
 /* El resto de la aplicación queda oculto mientras se solicita la clave */
-body.login-screen>header,body.login-screen>footer,body.login-screen>#andrewApp{display:none!important}
+body.login-screen > #appHeader,
+body.login-screen > #andrewApp,
+body.login-screen > #appFooter{display:none!important}
+body:not(.login-screen) > #loginAndrew{display:none!important}
 
 /* PANEL INTERNO */
 header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
@@ -158,11 +166,11 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
 }
 </style>
 </head>
-<body>
+<body class="login-screen">
 
-<header class="topbar">
+<header class="topbar" id="appHeader">
   <div class="brand">
-    <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+    <img id="logoAndrew" src="" alt="Insignia La Salle del Sur">
     <div>
       <div class="brand-title">BANCO LDS 360</div>
       <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
@@ -354,7 +362,7 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
 
 <div id="loginAndrew">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW_TRANSPARENTE.png" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -368,7 +376,7 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
   </div>
 </div>
 
-<footer style="text-align:center;padding:28px;font-weight:900;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
+<footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
 
 <script>
 
@@ -385,11 +393,21 @@ const MISES = {
 };
 
 const FOTO_ANDREW_CANDIDATAS = [
+  "assets/MISTER_ANDREW_TRANSPARENTE_NUEVA.png",
   "assets/ANDREW_TRANSPARENTE.png",
   "assets/ANDREW.png",
   "assets/ANDREW.jpg",
   "assets/ANDREW.jpeg",
   "assets/ANDREW.webp"
+];
+
+/* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
+const INSIGNIA_CANDIDATAS = [
+  "assets/insignia-real.png",
+  "assets/photo_13_2025-01-25_10-11-15-removebg-preview(3).png",
+  "assets/photo_13_2025-01-25_10-11-15-removebg-preview(2).png",
+  "assets/insignia.png",
+  "assets/insignia.jpg"
 ];
 
 function urlFotoDrive(url){
@@ -444,10 +462,24 @@ function entrarAndrew(){
   sessionStorage.setItem("andrew360","1");
   document.body.classList.remove("login-screen");
   document.getElementById("loginAndrew").style.display="none";
+  document.getElementById("appHeader").style.display="block";
   document.getElementById("andrewApp").style.display="block";
+  document.getElementById("appFooter").style.display="block";
+  cargarInsignia();
   cargarFoto();
   cargarFondoAndrew();
   cargarTodo();
+}
+
+function cargarInsignia(){
+  const logo=document.getElementById("logoAndrew");
+  if(!logo)return;
+  let i=0;
+  logo.onerror=()=>{
+    i++;
+    if(i<INSIGNIA_CANDIDATAS.length) logo.src=INSIGNIA_CANDIDATAS[i];
+  };
+  logo.src=INSIGNIA_CANDIDATAS[0];
 }
 
 function cargarFoto(){
@@ -477,30 +509,9 @@ function cargarFoto(){
 }
 
 function cargarFondoAndrew(){
-  const rutas=[
-    "assets/FONDO%20ANDREW.png",
-    "assets/FONDO%20ANDREW.jpg",
-    "assets/FONDO%20ANDREW.jpeg",
-    "assets/FONDO%20ANDREW.webp"
-  ];
-
-  let i=0;
-  const aplicar=()=>{
-    document.body.style.backgroundImage='url("'+rutas[i]+'")';
-    document.body.style.backgroundPosition='center center';
-    document.body.style.backgroundSize='cover';
-    document.body.style.backgroundRepeat='no-repeat';
-    document.body.style.backgroundAttachment=window.innerWidth > 760 ? 'fixed' : 'scroll';
-  };
-
-  const prueba=new Image();
-  prueba.onload=aplicar;
-  prueba.onerror=()=>{
-    i++;
-    if(i<rutas.length) prueba.src=rutas[i];
-  };
-  prueba.src=rutas[0];
+  /* El fondo de la portada se controla exclusivamente por CSS en #loginAndrew. */
 }
+
 
 
 function cargarTodo(){
@@ -655,7 +666,7 @@ function consultarCuenta(){
     const c=r.cuenta||{};
     const e=r.estudiante||{};
     mostrarMensaje("resultadoConsulta",
-      (e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+((c.movimientos||[]).length),
+      (e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+Number(c.movimientos||0),
       "ok");
   });
 }
@@ -674,12 +685,15 @@ document.addEventListener("DOMContentLoaded",()=>{
      Esto evita que una sesión anterior o la caché salten directamente al panel. */
   sessionStorage.removeItem("andrew360");
 
+  cargarInsignia();
   cargarFoto();
   cargarFondoAndrew();
 
   document.body.classList.add("login-screen");
   document.getElementById("loginAndrew").style.display="flex";
   document.getElementById("andrewApp").style.display="none";
+  document.getElementById("appHeader").style.display="none";
+  document.getElementById("appFooter").style.display="none";
 });
 
 </script>
