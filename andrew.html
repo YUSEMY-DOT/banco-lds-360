@@ -46,6 +46,19 @@ button,input,select,textarea{font:inherit}
   z-index:0!important;
 }
 
+#loginAndrew .login-bg-image{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  display:block!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  user-select:none!important;
+}
+
 #loginAndrew .andrew-login-photo{
   position:relative!important;
   z-index:2!important;
@@ -402,8 +415,9 @@ button{cursor:pointer;}
 </main>
 
 <div id="loginAndrew">
+  <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -435,15 +449,7 @@ const MISES = {
 };
 
 const FOTO_ANDREW_CANDIDATAS = [
-  "MISTER_ANDREW_TRANSPARENTE_NUEVA.png",
-  "ANDREW_TRANSPARENTE_FINAL.png",
-  "ANDREW_TRANSPARENTE.png",
-  "Andrew.png",
-  "ANDREW.png",
-  "Andrew.jpg",
-  "ANDREW.jpg",
-  "MISTER ANDREW(2).png",
-  "MISTER ANDREW.png"
+  "ANDREW.png"
 ];
 
 /* INSIGNIA REAL ENTREGADA POR EL COLEGIO — NO usar logos generados. */
@@ -566,32 +572,16 @@ function cargarFoto(){
   });
   const loginImg=document.getElementById("andrewLoginFoto");
   if(loginImg){
-    let i=0;
-    const probar=()=>{
-      if(i>=FOTO_ANDREW_CANDIDATAS.length){ loginImg.style.display="none"; return; }
-      const src=assetUrl(FOTO_ANDREW_CANDIDATAS[i]);
-      const prueba=new Image();
-      prueba.onload=()=>{ loginImg.src=src; loginImg.style.display="block"; };
-      prueba.onerror=()=>{ i++; probar(); };
-      prueba.src=src;
-    };
-    probar();
+    loginImg.src="assets/ANDREW.png?v=20261003-1";
+    loginImg.style.display="block";
   }
 }
 
 function cargarFondoAndrew(){
-  const portada = document.getElementById("loginAndrew");
-  if(!portada) return;
-
-  /* FONDO REAL DEL COLEGIO: la ruta contiene un espacio, por eso se codifica. */
-  const fondo = 'url("assets/FONDO%20ANDREW.png?v=20261002-3")';
-
-  /* IMPORTANTE: el CSS de la portada usa !important. Por eso también
-     aplicamos el background-image con !important desde JavaScript. */
-  portada.style.setProperty("background-image", fondo, "important");
-  portada.style.setProperty("background-size", "100% 100%", "important");
-  portada.style.setProperty("background-position", "center center", "important");
-  portada.style.setProperty("background-repeat", "no-repeat", "important");
+  const fondo = document.getElementById("fondoAndrewLogin");
+  if(!fondo) return;
+  // NOMBRE EXACTO DEL ARCHIVO EN GitHub: "FONDO ANDREW .png"
+  fondo.src = "assets/FONDO%20ANDREW%20.png?v=20261003-1";
 }
 
 
