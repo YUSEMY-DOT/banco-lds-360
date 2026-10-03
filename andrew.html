@@ -421,209 +421,6 @@ button{cursor:pointer;}
 }
 </style>
 <meta name="andrew-screen" content="segunda-pantalla-responsiva">
-
-<style id="lds-mobile-final-fix">
-/* ==========================================================
-   BANCO LDS 360 — AJUSTE FINAL PARA CELULAR
-   Solo afecta pantallas táctiles pequeñas. NO modifica PC.
-   ========================================================== */
-@media screen and (max-width: 600px) and (pointer: coarse){
-  html,body{
-    width:100%;
-    min-width:0!important;
-    overflow-x:hidden!important;
-    -webkit-text-size-adjust:100%;
-  }
-
-  /* CABECERA */
-  #appHeader{
-    min-height:64px!important;
-    height:auto!important;
-    padding:9px 10px!important;
-    gap:8px!important;
-  }
-  #appHeader .brand{gap:8px!important;min-width:0!important;}
-  #appHeader .brand img{width:44px!important;height:44px!important;flex:0 0 44px!important;}
-  #appHeader .brand-title{font-size:1.02rem!important;line-height:1.05!important;}
-  #appHeader .brand-subtitle{font-size:.58rem!important;line-height:1.1!important;}
-  #appHeader .btn-outline{
-    min-width:108px!important;
-    min-height:46px!important;
-    padding:10px 12px!important;
-    font-size:.82rem!important;
-    line-height:1.1!important;
-    white-space:normal!important;
-  }
-
-  /* PANTALLA PRINCIPAL */
-  #andrewApp{
-    width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
-    margin:0!important;
-    padding:10px!important;
-  }
-  #andrewApp .layout{
-    width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
-    display:block!important;
-  }
-  #andrewApp .main-dashboard-panel,
-  #andrewApp .panel,
-  #andrewApp .inner-panel,
-  #andrewApp .right-stack,
-  #andrewApp .right-stack .panel{
-    width:100%!important;
-    min-width:0!important;
-  }
-
-  /* TÍTULOS Y CONTROLES */
-  #andrewApp .main-panel-head{
-    padding:13px 14px!important;
-    gap:10px!important;
-  }
-  #andrewApp .main-panel-head h3{font-size:1rem!important;line-height:1.2!important;}
-  #andrewApp .year-caption{font-size:.72rem!important;}
-  #andrewApp .header-actions-group{
-    width:100%!important;
-    min-width:0!important;
-    display:flex!important;
-    gap:9px!important;
-  }
-  #andrewApp .header-actions-group select,
-  #andrewApp .header-actions-group .btn{
-    min-height:50px!important;
-    font-size:.9rem!important;
-  }
-  #andrewApp .header-actions-group select{flex:1 1 50%!important;width:auto!important;}
-  #andrewApp .header-actions-group .btn{flex:1 1 50%!important;width:auto!important;}
-
-  /* BOTONES: GRANDES Y CÓMODOS PARA EL DEDO */
-  #andrewApp .btn,
-  #andrewApp button.btn,
-  #andrewApp .movement-actions .btn,
-  #andrewApp .right-stack .btn{
-    min-height:50px!important;
-    padding:12px 13px!important;
-    font-size:.9rem!important;
-    line-height:1.15!important;
-    white-space:normal!important;
-    text-align:center!important;
-  }
-
-  /* RESUMEN */
-  #andrewApp .caja-resumen{
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:9px!important;
-  }
-  #andrewApp .resumen-cuenta,
-  #andrewApp .resumen-metrica{
-    min-height:72px!important;
-    padding:12px 14px!important;
-  }
-  #andrewApp .andrew-mini-photo{width:58px!important;height:58px!important;flex-basis:58px!important;}
-  #andrewApp .andrew-identidad-text strong{font-size:.98rem!important;}
-  #andrewApp .andrew-identidad-text span{font-size:.7rem!important;}
-  #andrewApp .resumen-metrica span{font-size:.7rem!important;}
-  #andrewApp .resumen-metrica strong{font-size:1.45rem!important;}
-
-  /* CAMPOS */
-  #andrewApp input,
-  #andrewApp select,
-  #andrewApp textarea{
-    min-height:50px!important;
-    padding:11px 12px!important;
-    font-size:.92rem!important;
-  }
-  #andrewApp .small-label{font-size:.76rem!important;}
-
-  /* ACORDEONES */
-  #andrewApp .right-stack .panel-head.accordion-head{
-    min-height:56px!important;
-    padding:12px 13px!important;
-  }
-  #andrewApp .right-stack .panel-head h3{font-size:.9rem!important;line-height:1.2!important;}
-  #andrewApp .accordion-arrow{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:1rem!important;}
-  #andrewApp .right-stack .panel-body.accordion-body{padding:0 13px 15px!important;}
-
-  /* MOVIMIENTOS */
-  #andrewApp .movement-head{padding:12px 13px!important;min-height:56px!important;}
-  #andrewApp .movement-head h3{font-size:.9rem!important;}
-  #andrewApp .movement-actions{
-    width:100%!important;
-    display:grid!important;
-    grid-template-columns:1fr!important;
-    gap:9px!important;
-  }
-  #andrewApp .table-wrap{
-    width:100%!important;
-    max-width:100%!important;
-    overflow-x:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-  }
-  #andrewApp table{min-width:780px!important;font-size:.75rem!important;}
-  #andrewApp th,#andrewApp td{padding:9px 8px!important;}
-
-  /* REPORTES */
-  .reportes-card{width:min(94vw,520px)!important;}
-  .report-option{min-height:72px!important;padding:13px!important;}
-  .report-option strong{font-size:.9rem!important;}
-
-  /* MENSAJES */
-  #andrewApp .message{font-size:.84rem!important;padding:10px 12px!important;}
-
-  /* LOGIN DE ANDREW */
-  #loginAndrew{
-    width:100%!important;
-    min-width:0!important;
-    overflow-y:auto!important;
-    overflow-x:hidden!important;
-    padding:18px 12px 14px!important;
-    gap:10px!important;
-  }
-  #loginAndrew .andrew-login-photo{
-    width:min(78vw,330px)!important;
-    height:min(38vh,320px)!important;
-    max-height:320px!important;
-  }
-  #loginAndrew>.panel{
-    width:100%!important;
-    max-width:440px!important;
-    min-width:0!important;
-  }
-  #loginAndrew .panel-head{padding:14px 15px!important;}
-  #loginAndrew .panel-head h3{font-size:1rem!important;line-height:1.25!important;}
-  #loginAndrew .panel-body{padding:16px!important;}
-  #loginAndrew .panel-body>p{font-size:.9rem!important;line-height:1.45!important;}
-  #loginAndrew .small-label{font-size:.78rem!important;}
-  #loginAndrew input{
-    min-height:54px!important;
-    padding:12px 14px!important;
-    font-size:1rem!important;
-  }
-  #loginAndrew .btn{
-    width:100%!important;
-    min-height:54px!important;
-    padding:13px 14px!important;
-    font-size:.95rem!important;
-  }
-}
-
-@media screen and (max-width:380px) and (pointer: coarse){
-  #appHeader .brand-title{font-size:.92rem!important;}
-  #appHeader .brand-subtitle{font-size:.52rem!important;}
-  #appHeader .btn-outline{min-width:100px!important;font-size:.76rem!important;}
-  #andrewApp{padding:8px!important;}
-  #andrewApp .header-actions-group{flex-direction:column!important;}
-  #andrewApp .header-actions-group select,
-  #andrewApp .header-actions-group .btn{width:100%!important;min-height:50px!important;}
-  #loginAndrew{padding:12px 10px 12px!important;}
-  #loginAndrew .andrew-login-photo{height:min(34vh,285px)!important;width:76vw!important;}
-}
-</style>
-
 </head>
 <body class="login-screen">
 
@@ -866,8 +663,6 @@ button{cursor:pointer;}
 </div>
 
 <footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
-
-<script src="notificaciones.js"></script>
 
 <script>
 
@@ -1242,9 +1037,38 @@ function mostrarTodos(){
 
 function cerrarTodo(){document.getElementById("panelTodo").style.display="none";}
 
+function parseMontoLDS(valor){
+  let texto=String(valor==null?"":valor).trim();
+  if(!texto) return 0;
+  texto=texto.replace(/[^\d,.\-]/g,"");
+  const tieneComa=texto.indexOf(",")>=0;
+  const tienePunto=texto.indexOf(".")>=0;
+  if(tieneComa && tienePunto){
+    if(texto.lastIndexOf(",")>texto.lastIndexOf(".")){
+      texto=texto.replace(/\./g,"").replace(",",".");
+    }else{
+      texto=texto.replace(/,/g,"");
+    }
+  }else if(tienePunto){
+    const partes=texto.split(".");
+    if(partes.length===2 && partes[1].length===3){
+      texto=texto.replace(/\./g,"");
+    }
+  }else if(tieneComa){
+    const partes=texto.split(",");
+    if(partes.length===2 && partes[1].length===3){
+      texto=texto.replace(/,/g,"");
+    }else{
+      texto=texto.replace(",",".");
+    }
+  }
+  const n=Number(texto);
+  return Number.isFinite(n) ? n : 0;
+}
+
 function transferirAMise(){
   const codigo=document.getElementById("miseDestino").value;
-  const monto=Number(document.getElementById("montoTransferencia").value);
+  const monto=parseMontoLDS(document.getElementById("montoTransferencia").value);
   const concepto=document.getElementById("conceptoTransferencia").value;
   const obs=document.getElementById("obsTransferencia").value.trim();
   if(!codigo){mostrarMensaje("mensajeTransferencia","SELECCIONA UNA MISS.","error");return;}
@@ -1257,15 +1081,6 @@ function transferirAMise(){
     responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
   },function(r){
     if(r&&r.ok){
-      if(window.NotificacionesLDS){
-        NotificacionesLDS.movimiento({
-          tipo:"EGRESO",
-          concepto:concepto,
-          codigo:codigo,
-          monto:monto,
-          anio:document.getElementById("anio").value
-        });
-      }
       mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
       document.getElementById("montoTransferencia").value="";
       document.getElementById("obsTransferencia").value="";
@@ -1278,7 +1093,7 @@ function transferirAMise(){
 
 function recibirDevolucion(){
   const codigo=document.getElementById("miseOrigen").value;
-  const monto=Number(document.getElementById("montoDevolucion").value);
+  const monto=parseMontoLDS(document.getElementById("montoDevolucion").value);
   const concepto=document.getElementById("conceptoDevolucion").value;
   const obs=document.getElementById("obsDevolucion").value.trim();
   if(!codigo){mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS.","error");return;}
@@ -1295,15 +1110,6 @@ function recibirDevolucion(){
     responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:obs
   },function(r){
     if(r&&r.ok){
-      if(window.NotificacionesLDS){
-        NotificacionesLDS.movimiento({
-          tipo:"INGRESO",
-          concepto:concepto,
-          codigo:codigo,
-          monto:monto,
-          anio:document.getElementById("anio").value
-        });
-      }
       mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA CORRECTAMENTE. TX: "+r.tx,"ok");
       document.getElementById("montoDevolucion").value="";
       document.getElementById("obsDevolucion").value="";
