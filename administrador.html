@@ -730,7 +730,6 @@ footer {
         <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
         <option value="ANGHY">MISS ANGHY REYES MELO</option>
         <option value="KARIN">MISS KARIN MOLERO ROMANI</option>
-        <option value="ANDREW">MISTER ANDREW</option>
       </select>
     </div>
 
@@ -1133,19 +1132,12 @@ const FOTOS_DOCENTES = {
   "MISS ANGHY REYES MELO": "https://drive.google.com/file/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U/view?usp=sharing",
   "MISS KARIN MOLERO ROMANI": "https://drive.google.com/file/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv/view?usp=sharing",
   "MISS KIARA MORALES ELGUERA": "https://drive.google.com/file/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O/view?usp=sharing",
-  "MISS LILY MELO AZAÑERO": "https://drive.google.com/file/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE/view?usp=sharing",
-  "MISTER ANDREW": "https://drive.google.com/file/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW/view?usp=sharing"
+  "MISS LILY MELO AZAÑERO": "https://drive.google.com/file/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE/view?usp=sharing"
 };
 
 let datosEstudianteActualGlobal = null;
 let maestraActivaGlobal = "";
 
-/*
-  IMPORTANTE:
-  Este archivo conserva la URL que ya tenía administrador.html.
-  Cuando uses la NUEVA implementación de Código.gs, reemplaza
-  solamente esta constante por la URL /exec de esa implementación.
-*/
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
 
 function mostrarFotoMaestra(nombre) {
@@ -1185,21 +1177,6 @@ function mostrarFotoMaestra(nombre) {
   foto.src = urls[0];
 }
 
-/*
-==============================================================
-ACCESO ADMINISTRATIVO
-==============================================================
-Mises:
-  360LDS@
-
-MISTER ANDREW:
-  360LDS@@@
-
-Andrew:
-  CAJA-ANDREW
-  CAJERO GENERAL
-==============================================================
-*/
 function validarAccesoDocente() {
   const docenteElement = document.getElementById("docenteSelect");
   const claveElement = document.getElementById("claveDocente");
@@ -1224,8 +1201,7 @@ function validarAccesoDocente() {
     return;
   }
 
-  const esAndrew = docente === "ANDREW";
-  const claveCorrecta = esAndrew ? "360LDS@@@" : "360LDS@";
+  const claveCorrecta = "360LDS@";
 
   if (clave !== claveCorrecta) {
     reproducirSonido('error');
@@ -1241,17 +1217,10 @@ function validarAccesoDocente() {
 
   sessionStorage.setItem("maestraActiva", nombreMaestra);
   sessionStorage.setItem("responsableClave", clave);
-  sessionStorage.setItem("esAndrew", esAndrew ? "1" : "0");
 
-  if (esAndrew) {
-    hablarTextoVoz(
-      "Clave correcta. Bienvenido Mister Andrew, cajero general."
-    );
-  } else {
-    hablarTextoVoz(
-      "Clave correcta. Bienvenida estimada maestra."
-    );
-  }
+  hablarTextoVoz(
+    "Clave correcta. Bienvenida estimada maestra."
+  );
 
   desbloquearPanel(nombreMaestra);
 }
@@ -1269,38 +1238,11 @@ function desbloquearPanel(nombreMaestra) {
   mostrarFotoMaestra(nombreMaestra);
   cargarConceptosPorTipo();
   renderIncidencias();
-
-  const esAndrew = sessionStorage.getItem("esAndrew") === "1";
-  const rolBanner = document.querySelector(".admin-text-details p");
-
-  if (rolBanner) {
-    rolBanner.textContent = esAndrew
-      ? "CAJERO GENERAL · CONSULTANDO FONDO..."
-      : "DOCENTE TUTORA CAJERA ACTIVA";
-  }
-
-  /*
-    Andrew entra directamente a su cuenta.
-    No se escribe S/180,000 en el frontend:
-    el saldo se obtiene de MOVIMIENTOS mediante el backend.
-  */
-  if (esAndrew) {
-    const codigoAndrew = "CAJA-ANDREW";
-
-    document.getElementById("codigo").value = codigoAndrew;
-    document.getElementById("pagoCodigo").value = codigoAndrew;
-    document.getElementById("incCodigo").value = codigoAndrew;
-
-    setTimeout(() => {
-      consultarEstudiante(true);
-    }, 250);
-  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
   sessionStorage.removeItem("responsableClave");
-  sessionStorage.removeItem("esAndrew");
 
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
@@ -1484,23 +1426,14 @@ function mostrarFotoEstudiante(e) {
   const foto = document.getElementById("fotoEstudiante");
   const placeholder = document.getElementById("fotoPlaceholder");
 
-  const esAndrewFoto =
-    sessionStorage.getItem("esAndrew") === "1" ||
-    String(e.codigo || "").trim().toUpperCase() === "CAJA-ANDREW" ||
-    String(e.nombreCompleto || e.nombre || "").trim().toUpperCase() === "MISTER ANDREW";
-
   const original = String(
-    esAndrewFoto
-      ? FOTOS_DOCENTES["MISTER ANDREW"]
-      : (
-          e.fotoUrl ||
-          e.fotoURL ||
-          e.foto_url ||
-          e.FOTO_URL ||
-          e.foto ||
-          e.FOTO ||
-          ""
-        )
+    e.fotoUrl ||
+    e.fotoURL ||
+    e.foto_url ||
+    e.FOTO_URL ||
+    e.foto ||
+    e.FOTO ||
+    ""
   ).trim();
 
   const urls = obtenerURLsFoto(original);
@@ -1535,7 +1468,7 @@ function mostrarFotoEstudiante(e) {
   foto.src = urls[0];
 }
 
-function actualizarBannerCuenta(saldo, esAndrew) {
+function actualizarBannerCuenta(saldo) {
   const rolBanner =
     document.querySelector(".admin-text-details p");
 
@@ -1543,9 +1476,8 @@ function actualizarBannerCuenta(saldo, esAndrew) {
 
   const saldoTexto = formatearLDS(saldo);
 
-  rolBanner.textContent = esAndrew
-    ? "CAJERO GENERAL · FONDO DISPONIBLE: S/ " + saldoTexto
-    : "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
+  rolBanner.textContent =
+    "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
 }
 
 function consultarEstudiante(esConsultaAutomatica = false) {
@@ -1602,16 +1534,6 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           "error"
         );
 
-        if (sessionStorage.getItem("esAndrew") === "1") {
-          const rolBanner =
-            document.querySelector(".admin-text-details p");
-
-          if (rolBanner) {
-            rolBanner.textContent =
-              "CAJERO GENERAL · NO SE PUDO CONSULTAR CAJA-ANDREW";
-          }
-        }
-
         hablarTextoVoz("Registro no encontrado.");
         return;
       }
@@ -1640,27 +1562,16 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       const rolRespuesta =
         String(e.rol || "").toUpperCase();
 
-      const esAndrew =
-        sessionStorage.getItem("esAndrew") === "1" ||
-        codigoRespuesta === "CAJA-ANDREW" ||
-        String(nombreUsuario).toUpperCase() === "MISTER ANDREW";
-
       const esDocente =
-        !esAndrew &&
-        (
-          (e.codigo &&
-            String(e.codigo)
-              .toUpperCase()
-              .includes("LDS-DOC")) ||
-          e.esDocente ||
-          rolRespuesta.includes("DOCENTE") ||
-          rolRespuesta.includes("MAESTRA")
-        );
+        (e.codigo &&
+          String(e.codigo)
+            .toUpperCase()
+            .includes("LDS-DOC")) ||
+        e.esDocente ||
+        rolRespuesta.includes("DOCENTE") ||
+        rolRespuesta.includes("MAESTRA");
 
-      if (esAndrew) {
-        document.getElementById("nombre").textContent =
-          "💰 CAJERO GENERAL: " + nombreUsuario;
-      } else if (esDocente) {
+      if (esDocente) {
         document.getElementById("nombre").textContent =
           "👩‍🏫 DOCENTE: " + nombreUsuario;
       } else {
@@ -1669,10 +1580,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       }
 
       const rolMostrar =
-        esAndrew
-          ? "CAJERO GENERAL"
-          : e.rol ||
-            (esDocente ? "DOCENTE" : "ALUMNO");
+        e.rol ||
+        (esDocente ? "DOCENTE" : "ALUMNO");
 
       document.getElementById("meta").textContent =
         [
@@ -1686,18 +1595,12 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           .join(" · ");
 
       document.getElementById("saldo").textContent =
-        (
-          esAndrew || esDocente
-            ? "FONDO DISPONIBLE: S/ "
-            : "SALDO: "
-        ) +
+        (esDocente ? "FONDO DISPONIBLE: S/ " : "SALDO: ") +
         saldoFormateado +
         " LDS";
 
-      if (esAndrew) {
-        actualizarBannerCuenta(saldoActual, true);
-      } else if (esDocente) {
-        actualizarBannerCuenta(saldoActual, false);
+      if (esDocente) {
+        actualizarBannerCuenta(saldoActual);
       }
 
       mostrarFotoEstudiante(e);
@@ -1728,14 +1631,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         "ok"
       );
 
-      if (esAndrew) {
-        hablarTextoVoz(
-          "Mister Andrew. Cajero general. " +
-          "Fondo disponible: " +
-          saldoFormateado +
-          " soles."
-        );
-      } else if (esDocente) {
+      if (esDocente) {
         hablarTextoVoz(
           "Maestra " +
           nombreUsuario +
@@ -1854,9 +1750,7 @@ function procesarPagoEstudiante() {
         document.getElementById("pagoObs").value = "";
         document.getElementById("panelPago").classList.add("collapsed");
 
-        consultarEstudiante(
-          sessionStorage.getItem("esAndrew") === "1"
-        );
+        consultarEstudiante();
 
       } else {
         reproducirSonido('error');
@@ -1949,9 +1843,6 @@ function imprimirReporteGrupal() {
       "selectAnioEscolar"
     ).value;
 
-  const esAndrew =
-    sessionStorage.getItem("esAndrew") === "1";
-
   document.getElementById(
     "printTituloReporte"
   ).textContent =
@@ -1968,13 +1859,9 @@ function imprimirReporteGrupal() {
   document.getElementById(
     "printMetaEntidad"
   ).textContent =
-    esAndrew
-      ? "CAJERO GENERAL — BANCO LDS 360 (" +
-        anio +
-        ")"
-      : "TUTORA CAJERA RESPONSABLE — KIDSWork LS (" +
-        anio +
-        ")";
+    "TUTORA CAJERA RESPONSABLE — BANCO LDS 360 (" +
+    anio +
+    ")";
 
   const fotoResponsable =
     obtenerURLsFoto(
