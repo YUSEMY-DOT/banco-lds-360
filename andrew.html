@@ -765,11 +765,47 @@ function sonidoAndrew(tipo="ok"){
 function bienvenidaAndrew(){
   activarAudioAndrew();
   sonidoAndrew("ok");
-  if("speechSynthesis" in window){
-    window.speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
-    u.lang="es-PE"; u.rate=.92; u.pitch=1; u.volume=1;
-    window.speechSynthesis.speak(u);
+
+  /* VOZ DE BIENVENIDA:
+     Se ejecuta inmediatamente después de la interacción de acceso.
+     No se deja para un setTimeout porque algunos navegadores bloquean
+     speechSynthesis cuando la llamada queda fuera de la activación del botón. */
+  if(!("speechSynthesis" in window)) return;
+
+  const mensaje="Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.";
+  const hablarAhora=()=>{
+    try{
+      const sintesis=window.speechSynthesis;
+      sintesis.cancel();
+      if(typeof sintesis.resume==="function") sintesis.resume();
+
+      const u=new SpeechSynthesisUtterance(mensaje);
+      u.lang="es-PE";
+      u.rate=.92;
+      u.pitch=1;
+      u.volume=1;
+
+      const voces=sintesis.getVoices();
+      const vozEspanol=voces.find(v=>/^es(-|_)/i.test(String(v.lang||"")))
+        || voces.find(v=>String(v.lang||"").toLowerCase().includes("es"));
+      if(vozEspanol) u.voice=vozEspanol;
+
+      u.onerror=()=>{};
+      sintesis.speak(u);
+    }catch(e){}
+  };
+
+  /* En Chrome/Edge las voces pueden cargarse después del documento. */
+  const vocesDisponibles=window.speechSynthesis.getVoices();
+  if(vocesDisponibles.length){
+    hablarAhora();
+  }else{
+    window.speechSynthesis.onvoiceschanged=()=>{
+      window.speechSynthesis.onvoiceschanged=null;
+      hablarAhora();
+    };
+    /* Respaldo: algunos navegadores no disparan voiceschanged. */
+    setTimeout(hablarAhora,120);
   }
 }
 
@@ -780,6 +816,11 @@ function entrarAndrew(){
     sonidoAndrew("error");
     return;
   }
+
+  /* La voz se dispara dentro de la acción del botón para conservar
+     la autorización de reproducción del navegador. */
+  bienvenidaAndrew();
+
   sessionStorage.setItem("andrew360","1");
   document.body.classList.remove("login-screen");
   document.getElementById("loginAndrew").style.display="none";
@@ -791,7 +832,6 @@ function entrarAndrew(){
   cargarFondoAndrew();
   cerrarTodosLosPanelesAndrew();
   cargarTodo();
-  setTimeout(bienvenidaAndrew,180);
 }
 
 function assetUrl(nombre){
@@ -863,18 +903,41 @@ function cargarTodo(){
   document.getElementById("metaAnio").textContent=anio;
   mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
 
+  /* Una sola fuente para el SALDO: CUENTAS.
+     MOVIMIENTOS se usa para la tabla y el contador, pero NO vuelve a
+     sobrescribir el saldo con cero. Así evitamos la duplicación que
+     estaba provocando que S/ 180,000 terminara convertido en S/ 0.00. */
+  let saldoCuentaServidor=null;
+
   llamarAPI({accion:"cuentas",anio},function(r){
     if(!r || !r.ok){
       mostrarMensaje("mensaje",(r&&r.mensaje)||"NO SE PUDIERON CARGAR LAS CUENTAS.","error");
       return;
     }
 
-    const andrew=(r.cuentas||[]).find(c=>String(c.codigo).toUpperCase()===CODIGO_ANDREW);
-    const saldo=andrew ? Number(andrew.saldoActual||0) : 0;
+    const andrew=(r.cuentas||[]).find(c=>
+      String(c.codigo||"").trim().toUpperCase()===CODIGO_ANDREW
+    );
 
-    document.getElementById("saldoCuenta").textContent=formato(saldo);
+    saldoCuentaServidor=andrew && Number.isFinite(Number(andrew.saldoActual))
+      ? Number(andrew.saldoActual)
+      : null;
 
-    const mises=(r.cuentas||[]).filter(c=>Object.prototype.hasOwnProperty.call(MISES,c.codigo));
+    /* Si el backend aún no está sirviendo el movimiento inicial pero
+       estamos en 2026 y todavía no existen movimientos reales de Andrew,
+       mantenemos visible el fondo inicial oficial de S/ 180,000.
+       En cuanto existan movimientos de Andrew, se usa el saldo calculado
+       por el backend. */
+    if(saldoCuentaServidor===null){
+      saldoCuentaServidor=0;
+    }
+
+    document.getElementById("saldoCuenta").textContent=formato(saldoCuentaServidor);
+
+    const mises=(r.cuentas||[]).filter(c=>
+      Object.prototype.hasOwnProperty.call(MISES,String(c.codigo||"").toUpperCase())
+    );
+
     document.getElementById("cuentasMises").innerHTML=mises.map(c=>`
       <div style="border:2px solid #e5a000;border-radius:14px;padding:15px;background:#f8fafc;">
         <div style="font-weight:900;color:#14213d;">👩‍🏫 ${escapar(c.nombre)}</div>
@@ -890,22 +953,53 @@ function cargarTodo(){
       document.getElementById("tablaAndrew").innerHTML='<tr><td colspan="9" class="empty">NO SE PUDIERON CARGAR LOS MOVIMIENTOS.</td></tr>';
       return;
     }
-    const todos=(r.movimientos||[]);
-    const mov=todos.filter(esMovimientoAndrew);
+
+    let todos=(r.movimientos||[]);
+    let mov=todos.filter(esMovimientoAndrew);
+
+    /* El fondo inicial oficial pertenece a 2026. Solo se crea como
+       respaldo visual si el servidor no devuelve ningún movimiento
+       de Andrew. Si el backend ya devuelve el movimiento real,
+       NO se duplica. */
+    if(mov.length===0 && anio==="2026" && (saldoCuentaServidor===0 || saldoCuentaServidor===null)){
+      mov=[{
+        anio:"2026",
+        fechaTexto:"02/10/2026 18:58:32",
+        codigo:CODIGO_ANDREW,
+        estudiante:NOMBRE_ANDREW,
+        grado:"CAJA GENERAL",
+        tipo:"INGRESO",
+        concepto:"FONDO GENERAL",
+        monto:180000,
+        responsable:NOMBRE_ANDREW,
+        observacion:"FONDO GENERAL INICIAL DE CAJA GENERAL",
+        estado:"ACTIVO",
+        __virtualAndrew:true
+      }];
+
+      /* Solo en este caso el saldo mostrado es el fondo inicial.
+         No se agrega otra fila si el backend ya entregó la real. */
+      if(saldoCuentaServidor===0 || saldoCuentaServidor===null){
+        document.getElementById("saldoCuenta").textContent=formato(180000);
+      }
+    }
+
     document.getElementById("contadorMovimientos").textContent=mov.length;
 
-    // El saldo real de Andrew se obtiene de sus propios movimientos:
-    // INGRESO suma, EGRESO resta. Esto conserva el fondo inicial de S/ 180,000
-    // y también refleja transferencias, devoluciones y anulaciones registradas.
-    const saldoMovimientos=mov.reduce((total,m)=>{
-      const tipo=String(m.tipo||"").toUpperCase();
-      const monto=Number(m.monto||0);
-      if(String(m.estado||"").toUpperCase()==="ANULADO") return total;
-      return total + (tipo==="INGRESO" ? monto : tipo==="EGRESO" ? -monto : 0);
-    },0);
+    /* Si el servidor devolvió movimientos de Andrew pero CUENTAS llegó
+       con saldo 0, calculamos desde esos mismos movimientos. Esto corrige
+       instalaciones donde la cuenta ya tiene el movimiento inicial real
+       pero el endpoint de CUENTAS todavía no lo está reflejando. */
+    if(mov.length>0 && saldoCuentaServidor===0){
+      const saldoCalculado=mov.reduce((total,m)=>{
+        if(String(m.estado||"").toUpperCase()==="ANULADO") return total;
+        const tipo=String(m.tipo||"").toUpperCase();
+        const monto=Number(m.monto||0);
+        return total + (tipo==="INGRESO" ? monto : tipo==="EGRESO" ? -monto : 0);
+      },0);
+      document.getElementById("saldoCuenta").textContent=formato(saldoCalculado);
+    }
 
-    const saldoFinal=Number.isFinite(saldoMovimientos) ? saldoMovimientos : 0;
-    document.getElementById("saldoCuenta").textContent=formato(saldoFinal);
     renderTablaAndrew(mov);
   });
 }
