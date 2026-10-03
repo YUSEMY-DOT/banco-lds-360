@@ -1401,6 +1401,24 @@ const FOTOS_DOCENTES = {
 let datosEstudianteActualGlobal = null;
 let maestraActivaGlobal = "";
 
+/* ==========================================================
+   CAJA PROPIA DE CADA MISE
+   Se utiliza para consultar automáticamente su fondo.
+   ========================================================== */
+const CODIGOS_MISE_POR_NOMBRE = {
+  "MISS LILY MELO AZAÑERO": "CAJA-LILY",
+  "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
+  "MISS ANGHY REYES MELO": "CAJA-ANGHY",
+  "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
+};
+
+function obtenerCodigoCajaMise(nombre) {
+  const n = String(nombre || "").trim().toUpperCase();
+  return CODIGOS_MISE_POR_NOMBRE[n] || "";
+}
+
+
+
 /*
   IMPORTANTE:
   Este archivo conserva la URL que ya tenía administrador.html.
@@ -1543,7 +1561,7 @@ function desbloquearPanel(nombreMaestra) {
   if (rolBanner) {
     rolBanner.textContent = esAndrew
       ? "CAJERO GENERAL · CONSULTANDO FONDO..."
-      : "DOCENTE TUTORA CAJERA ACTIVA";
+      : "DOCENTE TUTORA CAJERA · CONSULTANDO FONDO...";
   }
 
   /*
@@ -1554,15 +1572,31 @@ function desbloquearPanel(nombreMaestra) {
   if (esAndrew) {
     const codigoAndrew = "CAJA-ANDREW";
 
+    // Andrew consulta automáticamente su Caja General.
     document.getElementById("codigo").value = codigoAndrew;
-    // NO colocar CAJA-ANDREW en el selector de alumno.
-    // El alumno siempre se busca manualmente o mediante QR.
     document.getElementById("pagoCodigo").value = "";
     document.getElementById("incCodigo").value = codigoAndrew;
 
     setTimeout(() => {
       consultarEstudiante(true);
     }, 250);
+
+  } else {
+    // Cada Mise consulta automáticamente SU PROPIA CAJA
+    // para mostrar inmediatamente su fondo disponible.
+    const codigoCajaMise = obtenerCodigoCajaMise(nombreMaestra);
+
+    if (codigoCajaMise) {
+      document.getElementById("codigo").value = codigoCajaMise;
+
+      // Nunca se copia la caja de la Mise al campo del alumno.
+      document.getElementById("pagoCodigo").value = "";
+      document.getElementById("incCodigo").value = codigoCajaMise;
+
+      setTimeout(() => {
+        consultarEstudiante(true);
+      }, 250);
+    }
   }
 }
 
@@ -1815,7 +1849,7 @@ function actualizarBannerCuenta(saldo, esAndrew) {
 
   rolBanner.textContent = esAndrew
     ? "CAJERO GENERAL · FONDO DISPONIBLE: S/ " + saldoTexto
-    : "DOCENTE TUTORA CAJERA · FONDO: S/ " + saldoTexto;
+    : "DOCENTE TUTORA CAJERA · FONDO DISPONIBLE: S/ " + saldoTexto;
 }
 
 function consultarEstudiante(esConsultaAutomatica = false) {
