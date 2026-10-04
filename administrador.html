@@ -2553,6 +2553,40 @@ function obtenerSaldoInicialMise(movimientos, codigoCuenta) {
   );
 }
 
+function obtenerAnioMovimientoCliente(m, anioPorDefecto) {
+  const candidatos = [
+    m?.anio,
+    m?.anioEscolar,
+    m?.year
+  ];
+
+  for (const v of candidatos) {
+    const n = Number(String(v ?? "").trim());
+    if (Number.isFinite(n) && n >= 1900 && n <= 2100) return String(Math.trunc(n));
+  }
+
+  const fechas = [m?.fecha, m?.fechaTexto, m?.timestamp];
+  for (const valor of fechas) {
+    const txt = String(valor ?? "").trim();
+    const match = txt.match(/(?:^|[^0-9])(20\d{2})(?:[^0-9]|$)/);
+    if (match) return match[1];
+    const d = new Date(txt);
+    if (!Number.isNaN(d.getTime())) return String(d.getFullYear());
+  }
+
+  // Algunos movimientos antiguos de MOVIMIENTOS fueron grabados sin fecha/año.
+  // Si la consulta se está haciendo sobre el año operativo seleccionado, se consideran del año activo.
+  return String(anioPorDefecto || "2026");
+}
+
+function filtrarMovimientosPorAnioCliente(movimientos, anioEscolar) {
+  const lista = Array.isArray(movimientos) ? movimientos : [];
+  const anio = String(anioEscolar || "2026");
+  return lista
+    .filter(m => String(m?.estado || "ACTIVO").trim().toUpperCase() !== "ANULADO")
+    .filter(m => obtenerAnioMovimientoCliente(m, anio) === anio);
+}
+
 function consultarEstudiante(esConsultaAutomatica = false) {
   if (!esConsultaAutomatica) {
     reproducirSonido('clic');
@@ -2577,13 +2611,15 @@ function consultarEstudiante(esConsultaAutomatica = false) {
     hablarTextoVoz("Consultando información.");
   }
 
+  // Pedimos TODOS los movimientos de la cuenta y filtramos el año en el navegador.
+  // Esto evita que movimientos válidos queden ocultos cuando la fila histórica de MOVIMIENTOS
+  // no tiene la columna AÑO/fecha correctamente poblada.
   llamarAPI(
     {
       accion: "estudiante",
-      codigo: codigo,
-      anio: anioEscolar
+      codigo: codigo
     },
-    function(respuesta) {
+    async function(respuesta) {
       if (
         !respuesta ||
         respuesta.ok === false ||
@@ -2691,7 +2727,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       const incCodigoEl = document.getElementById("incCodigo");
       if (incCodigoEl) incCodigoEl.value = e.codigo || codigo;
 
-      const movimientos =
+      const codigoCuenta = String(e.codigo || codigo).trim().toUpperCase();
+      const movimientosRespuesta =
         Array.isArray(respuesta.movimientos)
           ? respuesta.movimientos
           : Array.isArray(respuesta.transacciones)
@@ -2702,12 +2739,27 @@ function consultarEstudiante(esConsultaAutomatica = false) {
                 ? cuenta.transacciones
                 : [];
 
+      // FUENTE ROBUSTA DEL HISTORIAL: consultamos MOVIMIENTOS completo y no
+      // dependemos del filtro de año del endpoint ESTUDIANTE. Esto corrige el
+      // caso actual en el que el saldo se actualiza pero la cartilla aparece vacía.
+      const respuestaMovimientos = await llamarAPIPromise({accion:"movimientos"}, 15000);
+      const movimientosGenerales = Array.isArray(respuestaMovimientos?.movimientos)
+        ? respuestaMovimientos.movimientos
+        : movimientosRespuesta;
+
+      const movimientosCuenta = (Array.isArray(movimientosGenerales) ? movimientosGenerales : [])
+        .filter(m => String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === codigoCuenta);
+
+      const movimientos = filtrarMovimientosPorAnioCliente(
+        movimientosCuenta.length ? movimientosCuenta : movimientosRespuesta,
+        anioEscolar
+      );
+
       movimientosActualesGlobal = movimientos.slice();
 
-      const codigoCuentaMise = String(e.codigo || codigo).trim().toUpperCase();
-      const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuentaMise);
+      const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuenta);
       if (esCajaMise) {
-        const calcMise = calcularSaldoMiseLocal(movimientos, codigoCuentaMise, saldoActual);
+        const calcMise = calcularSaldoMiseLocal(movimientosGenerales, codigoCuenta, saldoActual);
         actualizarSaldosMise(calcMise.abono, calcMise.saldo);
       } else if (esDocente) {
         actualizarSaldosMise(0, saldoActual);
@@ -2839,6 +2891,7 @@ function procesarMovimientoAlumno(tipoOperacion){
       document.getElementById("pagoObs").value="";
       cargarSaldoMiseAlIngresar(responsable);
       document.getElementById("codigo").value=codigo;
+      // Refresca saldo + estado de cuenta + movimientos recién registrados.
       consultarEstudiante(true);
       prepararAccionesPagoAlumno();
     }else{
@@ -2999,13 +3052,20 @@ async function imprimirReporteGrupal() {
     return;
   }
 
+  const respuestaMovimientos = await llamarAPIPromise({accion:'movimientos'}, 15000);
+  const todosMovimientos = Array.isArray(respuestaMovimientos?.movimientos) ? respuestaMovimientos.movimientos : [];
+
   const resultados = await Promise.all(alumnos.map(async a => {
     const codigo = String(a.codigo || '').trim().toUpperCase();
-    const r = await llamarAPIPromise({accion:'estudiante', codigo, anio});
-    if (r && r.ok !== false && r.estudiante) {
-      return {cuenta:a, estudiante:r.estudiante, movimientos:Array.isArray(r.movimientos)?r.movimientos:[]};
-    }
-    return {cuenta:a, estudiante:{codigo, nombreCompleto:a.nombre || '', grado:a.grado || '', seccion:a.seccion || ''}, movimientos:[]};
+    const r = await llamarAPIPromise({accion:'estudiante', codigo});
+    const estudiante = (r && r.ok !== false && r.estudiante)
+      ? r.estudiante
+      : {codigo, nombreCompleto:a.nombre || '', grado:a.grado || '', seccion:a.seccion || ''};
+    const movimientosCuenta = todosMovimientos.filter(m =>
+      String(m?.codigo || m?.codigoQR || '').trim().toUpperCase() === codigo
+    );
+    const movimientos = filtrarMovimientosPorAnioCliente(movimientosCuenta, anio);
+    return {cuenta:a, estudiante, movimientos};
   }));
 
   const totalMovimientos = resultados.reduce((n, x) => n + x.movimientos.length, 0);
