@@ -308,8 +308,8 @@ main {
 }
 
 .admin-avatar-wrap {
-  width: 48px;
-  height: 48px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
   border: 2.5px solid var(--dorado);
   overflow: hidden;
@@ -323,7 +323,7 @@ main {
 .admin-avatar-placeholder { font-size: 22px; color: var(--azul); }
 
 .admin-text-details { min-width: 0; flex: 1; }
-.admin-text-details h3 { font-size: 0.95rem; color: #ffffff; font-weight: 800; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-text-details h3 { font-size: 1.05rem; color: #ffffff; font-weight: 800; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .admin-text-details p { color: #fde68a; font-size: 0.65rem; font-weight: 700; margin: 0; }
 
 .admin-stats-box {
@@ -337,9 +337,23 @@ main {
   background: rgba(3, 8, 15, 0.85);
   border: 1px solid rgba(245, 158, 11, 0.4);
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 7px 12px;
   text-align: center;
   min-width: 90px;
+}
+
+.stat-pill:first-child {
+  min-width: 165px;
+  padding: 8px 16px;
+}
+
+.stat-pill:first-child span {
+  font-size: 0.62rem;
+}
+
+.stat-pill:first-child strong {
+  font-size: 1.35rem;
+  line-height: 1.15;
 }
 
 .stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
@@ -787,16 +801,18 @@ footer {
 
 .search-row-ordered{
   display:grid;
-  grid-template-columns:82px minmax(130px,1fr) minmax(190px,1.4fr) 155px;
+  grid-template-columns:1fr 1fr;
   gap:8px;
   width:100%;
   align-items:center;
 }
-.search-row-ordered .btn-qr-custom{width:100%;}
-.search-row-ordered .btn-search-custom{width:100%;}
-.input-code-custom{width:100%;min-width:0;}
-.btn-lista-codigos{
+.search-row-ordered .btn-qr-custom,
+.search-row-ordered .btn-lista-codigos{
+  width:100%;
   height:42px;
+}
+.input-code-custom{display:none!important;}
+.btn-lista-codigos{
   border-radius:8px;
   border:1.5px solid var(--dorado);
   background:#fff;
@@ -855,9 +871,9 @@ footer {
 
 @media(max-width:900px){
   .search-row-ordered{
-    grid-template-columns:76px minmax(120px,1fr) minmax(170px,1.2fr);
+    grid-template-columns:1fr 1fr;
   }
-  .btn-lista-codigos{grid-column:1 / -1;width:100%;}
+  .btn-lista-codigos{grid-column:auto;width:100%;}
 }
 
 @media(max-width:650px){
@@ -877,15 +893,17 @@ footer {
     grid-template-columns:1fr 1fr;
     gap:8px;
   }
-  .btn-qr-custom{grid-column:1;grid-row:1;}
-  .btn-lista-codigos{grid-column:2;grid-row:1;width:100%;}
-  .input-code-custom{grid-column:1 / -1;grid-row:2;width:100%;}
-  .btn-search-custom{grid-column:1 / -1;grid-row:3;width:100%;}
+  .btn-qr-custom{grid-column:auto;grid-row:auto;}
+  .btn-lista-codigos{grid-column:auto;grid-row:auto;width:100%;}
   .admin-profile-banner{padding:12px;}
-  .admin-stats-box{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+  .admin-avatar-wrap{width:68px;height:68px;}
+  .admin-stats-box{width:100%;display:grid;grid-template-columns:1.35fr .825fr .825fr;}
   .stat-pill{min-width:0;padding:7px 5px;}
+  .stat-pill:first-child{min-width:0;padding:8px 5px;}
   .stat-pill strong{font-size:.78rem;}
+  .stat-pill:first-child strong{font-size:1.05rem;}
   .stat-pill span{font-size:.48rem;}
+  .stat-pill:first-child span{font-size:.5rem;}
 }
 
 @media(max-width:400px){
@@ -1013,13 +1031,12 @@ footer {
         
         <div class="search-container">
           <div>
-            <label class="small-label" for="codigo">CÓDIGO QR / ESTUDIANTE</label>
+            <label class="small-label">CONSULTA DE ALUMNOS</label>
             <div class="search-row-ordered">
               <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
-              <input id="codigo" class="input-code-custom" placeholder="LDS-001" autocomplete="off" inputmode="text">
-              <button id="btnBuscarEstudiante" class="btn btn-gold btn-search-custom" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
               <button class="btn-lista-codigos" type="button" onclick="abrirListaCodigos()">📋 LISTA DE CÓDIGOS</button>
             </div>
+            <input id="codigo" class="input-code-custom" type="hidden" value="" autocomplete="off" inputmode="text">
           </div>
         </div>
 
@@ -1216,7 +1233,14 @@ function abrirListaCodigos() {
           const rol = String(c.rol || '').trim().toUpperCase();
           return codigo && !codigo.startsWith('CAJA-') && tipo !== 'CAJA_GENERAL' && !rol.includes('DOCENTE');
         })
-        .sort((a,b) => String(a.nombre || '').localeCompare(String(b.nombre || ''), 'es', {sensitivity:'base'}));
+        .sort((a,b) => {
+          const ca = String(a.codigo || '').trim().toUpperCase();
+          const cb = String(b.codigo || '').trim().toUpperCase();
+          const na = Number((ca.match(/(\d+)$/) || ["", "999999"])[1]);
+          const nb = Number((cb.match(/(\d+)$/) || ["", "999999"])[1]);
+          if (na !== nb) return na - nb;
+          return ca.localeCompare(cb, 'es', {sensitivity:'base'});
+        });
 
       renderListaCodigos(window.listaCodigosAlumnos);
     }
@@ -1616,7 +1640,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("panelView").style.display = "none";
 
   const saldoInicialInicio = document.getElementById("saldoInicialMise");
-  if (saldoInicialInicio) saldoInicialInicio.textContent = "S/ 0.00";
+  if (saldoInicialInicio) saldoInicialInicio.textContent = "CARGANDO...";
 
   setTimeout(() => {
     hablarTextoVoz(
@@ -1984,7 +2008,13 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       const movimientos =
         Array.isArray(respuesta.movimientos)
           ? respuesta.movimientos
-          : [];
+          : Array.isArray(respuesta.transacciones)
+            ? respuesta.transacciones
+            : Array.isArray(cuenta.movimientos)
+              ? cuenta.movimientos
+              : Array.isArray(cuenta.transacciones)
+                ? cuenta.transacciones
+                : [];
 
       const codigoCuentaMise = String(e.codigo || codigo).trim().toUpperCase();
       const saldoInicialMise = obtenerSaldoInicialMise(
@@ -1992,10 +2022,35 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         codigoCuentaMise
       );
 
+      const saldoInicialBackend = parseMontoLDS(
+        cuenta.saldoInicial ??
+        cuenta.fondoInicial ??
+        cuenta.fondo ??
+        e.saldoInicial ??
+        e.fondo ??
+        0
+      );
+
       const saldoInicialEl = document.getElementById("saldoInicialMise");
       if (saldoInicialEl) {
         const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuentaMise);
-        const saldoParaMostrar = saldoInicialMise > 0 ? saldoInicialMise : (esCajaMise ? saldoActual : 0);
+
+        let saldoParaMostrar = saldoInicialMise;
+
+        if (saldoParaMostrar <= 0 && saldoInicialBackend > 0) {
+          saldoParaMostrar = saldoInicialBackend;
+        }
+
+        /*
+          Para una caja de Mise, si el backend todavía no expone un campo
+          separado de saldo inicial ni devuelve el movimiento de fondo,
+          mostramos el fondo actual disponible como respaldo visual.
+          No se altera ningún movimiento ni el saldo contable.
+        */
+        if (saldoParaMostrar <= 0 && esCajaMise && saldoActual > 0) {
+          saldoParaMostrar = saldoActual;
+        }
+
         saldoInicialEl.textContent = saldoParaMostrar > 0
           ? "S/ " + formatearLDS(saldoParaMostrar)
           : "NO REGISTRADO";
