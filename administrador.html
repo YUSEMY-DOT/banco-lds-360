@@ -440,14 +440,14 @@ main {
 
 /* BOTONES SUPERIORES */
 .header-actions-group .select-anio-amarillo{
-  background:#facc15 !important;
-  border:1.5px solid #eab308 !important;
+  background:#a78bfa !important;
+  border:1.5px solid #8b5cf6 !important;
   color:#172554 !important;
   font-weight:900 !important;
 }
 .header-actions-group .btn-header-alumnos{
-  background:#16a34a !important;
-  border:1.5px solid #15803d !important;
+  background:#38bdf8 !important;
+  border:1.5px solid #0ea5e9 !important;
   color:#fff !important;
   font-weight:900 !important;
 }
@@ -488,6 +488,18 @@ main {
 .mises-dropdown .header-list-row{grid-template-columns:110px 1fr 150px;}
 .mises-dropdown .header-list-row{cursor:default;}
 .mises-dropdown .header-list-row .saldo{color:#b91c1c;font-size:.88rem;}
+
+.impresiones-dropdown .header-list-items{padding:10px;}
+.impresiones-opciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
+.impresion-opcion{border:1.5px solid #f59e0b;background:#fff7ed;color:#9a3412;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;font-size:.75rem;}
+.impresion-opcion:hover{background:#ffedd5;}
+.pago-alumno-card{display:flex;align-items:center;gap:12px;margin:8px 0 12px;padding:10px;border:1.5px solid #bae6fd;border-radius:10px;background:#f0f9ff;}
+.pago-alumno-foto{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
+.pago-alumno-datos{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.pago-alumno-datos strong{font-size:.86rem;color:#0f172a;}
+.pago-alumno-datos span{font-size:.68rem;color:#475569;font-weight:700;}
+.pago-alumno-datos b{font-size:.72rem;color:#15803d;}
+@media(max-width:700px){.impresiones-opciones{grid-template-columns:1fr;}}
 .header-list-loading{padding:18px;text-align:center;color:#64748b;font-weight:800;font-size:.75rem;}
 @media(max-width:700px){
   .header-dropdown-head{flex-direction:column;align-items:stretch;}
@@ -1147,7 +1159,7 @@ footer {
           </select>
           <button id="btnHeaderAlumnos" class="btn btn-header-alumnos" type="button" onclick="abrirListaCodigos()">👤 ALUMNOS</button>
           <button id="btnHeaderMises" class="btn btn-header-mises" type="button" onclick="abrirListaMises()">👩‍🏫 MISES</button>
-          <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
+          <button id="btnHeaderImpresiones" class="btn btn-gold" type="button" onclick="abrirImpresiones()">🖨️ IMPRESIONES</button>
         </div>
       </div>
 
@@ -1159,6 +1171,16 @@ footer {
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
           <div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>
+        </div>
+      </div>
+
+      <div id="listaImpresionesDropdown" class="header-dropdown-list impresiones-dropdown" style="display:none;">
+        <div class="header-dropdown-head">
+          <strong>🖨️ IMPRESIONES</strong>
+        </div>
+        <div class="impresiones-opciones">
+          <button type="button" class="impresion-opcion" onclick="imprimirReportePersonal()">👤 ESTADO DE CUENTA INDIVIDUAL</button>
+          <button type="button" class="impresion-opcion" onclick="imprimirReporteGrupal()">👥 ESTADO DE CUENTA GRUPAL</button>
         </div>
       </div>
 
@@ -1243,18 +1265,22 @@ footer {
         <label class="small-label" for="pagoCodigo">ALUMNO A PAGAR</label>
         <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA O QR" readonly style="background:#f1f5f9;">
 
-        <label class="small-label" for="pagoTipo">CONCEPTO DEL PAGO</label>
-        <select id="pagoTipo" onchange="cargarConceptosPorTipo()">
-          <option value="PREMIOS_Y_BONIFICACIONES" selected>PREMIOS Y BONIFICACIONES</option>
-          <option value="INGRESOS_Y_SUELDOS">OTROS INGRESOS</option>
-          <option value="COSTOS_Y_OTROS">COSTOS Y OTROS</option>
+        <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
+          <img id="pagoAlumnoFoto" class="pago-alumno-foto" src="" alt="Foto del alumno">
+          <div class="pago-alumno-datos">
+            <strong id="pagoAlumnoNombre">ALUMNO</strong>
+            <span id="pagoAlumnoMeta">—</span>
+            <b id="pagoAlumnoSaldo">SALDO ACTUAL: S/ 0.00</b>
+          </div>
+        </div>
+
+        <label class="small-label" for="pagoConcepto">CONCEPTO DEL PAGO</label>
+        <select id="pagoConcepto">
+          <option value="BONO MENSUAL ALUMNO" selected>BONO MENSUAL ALUMNO</option>
         </select>
 
-        <label class="small-label" for="pagoConcepto">CONCEPTO</label>
-        <select id="pagoConcepto"></select>
-
         <label class="small-label" for="pagoMonto">MONTO LDS</label>
-        <input id="pagoMonto" type="number" step="0.5" min="0" placeholder="EJEMPLO: 50.00">
+        <input id="pagoMonto" type="number" step="0.5" min="0" value="1130" placeholder="1130.00">
 
         <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
         <textarea id="pagoObs" rows="3" placeholder="MOTIVO O DETALLE..."></textarea>
@@ -1296,7 +1322,7 @@ footer {
   </section>
 </main>
 
-<div id="codigoModal" class="codigo-modal">
+<div id="codigoModal" class="codigo-modal" style="display:none !important;">
   <div class="codigo-modal-content">
     <div class="codigo-modal-head">
       <h3>📋 LISTA DE ALUMNOS — CÓDIGOS LDS</h3>
@@ -1314,7 +1340,7 @@ footer {
   </div>
 </div>
 
-<div id="misesModal" class="codigo-modal">
+<div id="misesModal" class="codigo-modal" style="display:none !important;">
   <div class="codigo-modal-content mises-modal-content">
     <div class="codigo-modal-head">
       <h3>👩‍🏫 LISTA DE MISES Y SALDOS</h3>
@@ -1367,8 +1393,19 @@ function cambiarAnioEscolar() {
 function cerrarListasSuperiores(excepto) {
   const alumnos = document.getElementById('listaAlumnosDropdown');
   const mises = document.getElementById('listaMisesDropdown');
+  const impresiones = document.getElementById('listaImpresionesDropdown');
   if (alumnos && excepto !== 'alumnos') alumnos.style.display = 'none';
   if (mises && excepto !== 'mises') mises.style.display = 'none';
+  if (impresiones && excepto !== 'impresiones') impresiones.style.display = 'none';
+}
+
+function abrirImpresiones() {
+  reproducirSonido('clic');
+  const panel = document.getElementById('listaImpresionesDropdown');
+  if (!panel) return;
+  const abrir = panel.style.display === 'none' || !panel.style.display;
+  cerrarListasSuperiores('impresiones');
+  panel.style.display = abrir ? 'block' : 'none';
 }
 
 function abrirListaCodigos() {
@@ -1850,7 +1887,7 @@ function cargarSaldoMiseAlIngresar(nombreMaestra) {
     },
     function(respuesta) {
       if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        saldoEl.textContent = "NO REGISTRADO";
+        saldoEl.textContent = "S/ 30,000.00";
         return;
       }
 
@@ -1859,7 +1896,7 @@ function cargarSaldoMiseAlIngresar(nombreMaestra) {
       );
 
       if (!cuenta) {
-        saldoEl.textContent = "NO REGISTRADO";
+        saldoEl.textContent = "S/ 30,000.00";
         return;
       }
 
@@ -1916,7 +1953,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("panelView").style.display = "none";
 
   const saldoInicialInicio = document.getElementById("saldoInicialMise");
-  if (saldoInicialInicio) saldoInicialInicio.textContent = "CARGANDO...";
+  if (saldoInicialInicio) saldoInicialInicio.textContent = "S/ 30,000.00";
 
   setTimeout(() => {
     hablarTextoVoz(
@@ -2288,6 +2325,32 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         }
       }
 
+      const pagoCard = document.getElementById("pagoAlumnoCard");
+      const pagoFoto = document.getElementById("pagoAlumnoFoto");
+      const pagoNombre = document.getElementById("pagoAlumnoNombre");
+      const pagoMeta = document.getElementById("pagoAlumnoMeta");
+      const pagoSaldo = document.getElementById("pagoAlumnoSaldo");
+      if (pagoCard && pagoFoto && pagoNombre && pagoMeta && pagoSaldo) {
+        if (!esCuentaMise && !esDocente && String(e.codigo || codigo).toUpperCase().startsWith("LDS-EST-")) {
+          const fotoAlumno = obtenerURLsFoto(String(e.fotoUrl || e.foto || "").trim());
+          pagoFoto.dataset.intento = "0";
+          pagoFoto.style.display = "block";
+          pagoFoto.src = fotoAlumno[0] || "";
+          pagoFoto.onerror = function() {
+            const i = Number(pagoFoto.dataset.intento || "0") + 1;
+            pagoFoto.dataset.intento = String(i);
+            if (fotoAlumno[i]) pagoFoto.src = fotoAlumno[i];
+            else pagoFoto.style.display = "none";
+          };
+          pagoNombre.textContent = String(e.nombreCompleto || e.nombre || "ALUMNO").toUpperCase();
+          pagoMeta.textContent = [e.codigo || codigo, e.grado || "", e.seccion || "", "AÑO " + anioEscolar].filter(Boolean).join(" · ");
+          pagoSaldo.textContent = "SALDO ACTUAL: S/ " + saldoFormateado;
+          pagoCard.style.display = "flex";
+        } else {
+          pagoCard.style.display = "none";
+        }
+      }
+
       const incCodigoEl = document.getElementById("incCodigo");
       if (incCodigoEl) incCodigoEl.value = e.codigo || codigo;
 
@@ -2339,7 +2402,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
 
         saldoInicialEl.textContent = saldoParaMostrar > 0
           ? "S/ " + formatearLDS(saldoParaMostrar)
-          : "NO REGISTRADO";
+          : (esCajaMise ? "S/ 30,000.00" : "S/ 0.00");
       }
 
       renderMovimientos(
@@ -2381,11 +2444,10 @@ function procesarPagoEstudiante() {
 
   const tipoOperacion = "EGRESO";
 
-  const categoriaSeleccionada =
-    document.getElementById("pagoTipo").value;
+  const categoriaSeleccionada = "PAGOS A ALUMNOS";
 
   const concepto =
-    document.getElementById("pagoConcepto").value;
+    document.getElementById("pagoConcepto").value || "BONO MENSUAL ALUMNO";
 
   const monto =
     parseMontoLDS(
@@ -2517,11 +2579,12 @@ function procesarPagoEstudiante() {
 
 function imprimirReportePersonal() {
   reproducirSonido('clic');
+  const imp = document.getElementById('listaImpresionesDropdown');
+  if (imp) imp.style.display = 'none';
 
   if (!datosEstudianteActualGlobal) {
-    alert(
-      "PRIMERO DEBES CONSULTAR A UN ESTUDIANTE."
-    );
+    mostrarMensaje("PRIMERO SELECCIONA UN ALUMNO PARA IMPRIMIR SU ESTADO DE CUENTA.", "error");
+    hablarTextoVoz("Primero selecciona un alumno para imprimir su estado de cuenta.");
     return;
   }
 
@@ -2583,6 +2646,8 @@ function imprimirReportePersonal() {
 
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
+  const imp = document.getElementById('listaImpresionesDropdown');
+  if (imp) imp.style.display = 'none';
 
   const anio =
     document.getElementById(
