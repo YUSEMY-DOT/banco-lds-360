@@ -438,6 +438,64 @@ main {
 .panel.collapsed .toggle-icon { transform: rotate(-90deg); }
 .panel.collapsed .panel-head { border-bottom: none; }
 
+/* BOTONES SUPERIORES */
+.header-actions-group .select-anio-amarillo{
+  background:#facc15 !important;
+  border:1.5px solid #eab308 !important;
+  color:#172554 !important;
+  font-weight:900 !important;
+}
+.header-actions-group .btn-header-alumnos{
+  background:#16a34a !important;
+  border:1.5px solid #15803d !important;
+  color:#fff !important;
+  font-weight:900 !important;
+}
+.header-actions-group .btn-header-mises{
+  background:#dc2626 !important;
+  border:1.5px solid #b91c1c !important;
+  color:#fff !important;
+  font-weight:900 !important;
+}
+.header-dropdown-list{
+  margin:0 16px 12px;
+  border:1.5px solid #f59e0b;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(15,23,42,.12);
+  overflow:hidden;
+}
+.header-dropdown-head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 12px; background:#f8fafc; border-bottom:1px solid #e2e8f0;
+}
+.header-dropdown-head strong{font-size:.78rem;color:#0f172a;font-weight:900;}
+.header-dropdown-head input{
+  width:min(300px,48%); height:32px; padding:0 10px; border:1px solid #cbd5e1;
+  border-radius:7px; font-size:.72rem; font-weight:700;
+}
+.header-list-items{max-height:280px;overflow:auto;padding:6px;}
+.header-list-row{
+  display:grid; grid-template-columns:105px 1fr 120px 90px; gap:8px; align-items:center;
+  padding:9px 10px; border-bottom:1px solid #edf2f7; cursor:pointer; font-size:.72rem;
+}
+.header-list-row:hover{background:#eff6ff;}
+.header-list-row:last-child{border-bottom:0;}
+.header-list-row .code{font-weight:900;color:#1d4ed8;}
+.header-list-row .name{font-weight:800;color:#0f172a;}
+.header-list-row .meta{font-weight:700;color:#64748b;}
+.header-list-row .saldo{font-weight:900;color:#15803d;text-align:right;}
+.mises-dropdown .header-list-row{grid-template-columns:110px 1fr 150px;}
+.mises-dropdown .header-list-row{cursor:default;}
+.mises-dropdown .header-list-row .saldo{color:#b91c1c;font-size:.88rem;}
+.header-list-loading{padding:18px;text-align:center;color:#64748b;font-weight:800;font-size:.75rem;}
+@media(max-width:700px){
+  .header-dropdown-head{flex-direction:column;align-items:stretch;}
+  .header-dropdown-head input{width:100%;}
+  .header-list-row,.mises-dropdown .header-list-row{grid-template-columns:1fr;gap:3px;}
+  .header-list-row .saldo{text-align:left;}
+}
+
 .header-actions-group {
   display: flex;
   gap: 6px;
@@ -1061,7 +1119,7 @@ footer {
     <div class="admin-stats-box">
       <div class="stat-pill">
         <span>SALDO INICIAL</span>
-        <strong id="saldoInicialMise">S/ 0.00</strong>
+        <strong id="saldoInicialMise">S/ 30,000.00</strong>
       </div>
       <div class="stat-pill">
         <span>MOVIMIENTOS</span>
@@ -1080,17 +1138,39 @@ footer {
       <div class="panel-head">
         <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
         <div class="header-actions-group">
-          <select id="selectAnioEscolar" onchange="cambiarAnioEscolar()">
+          <select id="selectAnioEscolar" class="select-anio-amarillo" onchange="cambiarAnioEscolar()">
             <option value="2026" selected>AÑO 2026</option>
             <option value="2027">AÑO 2027</option>
             <option value="2028">AÑO 2028</option>
             <option value="2029">AÑO 2029</option>
             <option value="2030">AÑO 2030</option>
           </select>
-          <button class="btn btn-outline" type="button" onclick="imprimirReportePersonal()">👤 ALUMNO</button>
+          <button id="btnHeaderAlumnos" class="btn btn-header-alumnos" type="button" onclick="abrirListaCodigos()">👤 ALUMNOS</button>
+          <button id="btnHeaderMises" class="btn btn-header-mises" type="button" onclick="abrirListaMises()">👩‍🏫 MISES</button>
           <button class="btn btn-gold" type="button" onclick="imprimirReporteGrupal()">📊 GENERAL</button>
         </div>
       </div>
+
+      <!-- LISTAS DIRECTAS: se despliegan desde los botones superiores, sin modal adicional -->
+      <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
+        <div class="header-dropdown-head">
+          <strong>📋 LISTA DE ALUMNOS</strong>
+          <input id="filtroCodigosInline" type="search" placeholder="BUSCAR ALUMNO O CÓDIGO..." autocomplete="off" oninput="filtrarListaCodigosInline()">
+        </div>
+        <div id="listaAlumnosItems" class="header-list-items">
+          <div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>
+        </div>
+      </div>
+
+      <div id="listaMisesDropdown" class="header-dropdown-list mises-dropdown" style="display:none;">
+        <div class="header-dropdown-head">
+          <strong>👩‍🏫 LISTA DE MISES Y SALDOS</strong>
+        </div>
+        <div id="listaMisesItems" class="header-list-items">
+          <div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>
+        </div>
+      </div>
+
       <div class="panel-body">
         
         <div class="search-container">
@@ -1098,10 +1178,6 @@ footer {
             <label class="small-label">CONSULTA DE ALUMNOS</label>
             <div class="search-row-ordered">
               <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
-              <button class="btn-lista-codigos" type="button" onclick="abrirListaCodigos()">📋 LISTA DE ALUMNOS</button>
-            </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:9px;">
-              <button class="btn-lista-mises" type="button" onclick="abrirListaMises()">👩‍🏫 LISTA DE MISES Y SALDOS</button>
             </div>
             <input id="codigo" class="input-code-custom" type="hidden" value="" autocomplete="off" inputmode="text">
           </div>
@@ -1288,15 +1364,27 @@ function cambiarAnioEscolar() {
 }
 
 
+function cerrarListasSuperiores(excepto) {
+  const alumnos = document.getElementById('listaAlumnosDropdown');
+  const mises = document.getElementById('listaMisesDropdown');
+  if (alumnos && excepto !== 'alumnos') alumnos.style.display = 'none';
+  if (mises && excepto !== 'mises') mises.style.display = 'none';
+}
+
 function abrirListaCodigos() {
   reproducirSonido('clic');
-  const modal = document.getElementById('codigoModal');
-  if (!modal) return;
-  modal.style.display = 'flex';
-  const filtro = document.getElementById('filtroCodigos');
+  const panel = document.getElementById('listaAlumnosDropdown');
+  const items = document.getElementById('listaAlumnosItems');
+  const filtro = document.getElementById('filtroCodigosInline');
+  if (!panel || !items) return;
+
+  const abrir = panel.style.display === 'none' || !panel.style.display;
+  cerrarListasSuperiores('alumnos');
+  panel.style.display = abrir ? 'block' : 'none';
+  if (!abrir) return;
+
   if (filtro) filtro.value = '';
-  const tabla = document.getElementById('tablaCodigosAlumnos');
-  if (tabla) tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">CARGANDO LISTA DE ALUMNOS...</td></tr>';
+  items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
 
   llamarAPI(
     {
@@ -1305,18 +1393,13 @@ function abrirListaCodigos() {
     },
     function(respuesta) {
       if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        if (tabla) tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">NO SE PUDO CARGAR LA LISTA.</td></tr>';
+        items.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA.</div>';
         reproducirSonido('error');
         return;
       }
 
       window.listaCodigosAlumnos = respuesta.cuentas
-        .filter(c => {
-          const codigo = String(c.codigo || '').trim().toUpperCase();
-          const tipo = String(c.tipoCuenta || '').trim().toUpperCase();
-          const rol = String(c.rol || '').trim().toUpperCase();
-          return codigo.startsWith('LDS-EST-') && tipo !== 'CAJA_GENERAL' && !codigo.startsWith('CAJA-') && !rol.includes('DOCENTE');
-        })
+        .filter(c => String(c.codigo || '').trim().toUpperCase().startsWith('LDS-EST-'))
         .sort((a,b) => {
           const ca = String(a.codigo || '').trim().toUpperCase();
           const cb = String(b.codigo || '').trim().toUpperCase();
@@ -1326,45 +1409,51 @@ function abrirListaCodigos() {
           return ca.localeCompare(cb, 'es', {sensitivity:'base'});
         });
 
-      renderListaCodigos(window.listaCodigosAlumnos);
+      renderListaCodigosInline(window.listaCodigosAlumnos);
     }
   );
 }
 
-function renderListaCodigos(lista) {
-  const tabla = document.getElementById('tablaCodigosAlumnos');
-  if (!tabla) return;
+function renderListaCodigosInline(lista) {
+  const cont = document.getElementById('listaAlumnosItems');
+  if (!cont) return;
   const items = Array.isArray(lista) ? lista : [];
   window.listaCodigosVisible = items;
 
   if (!items.length) {
-    tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">NO HAY ALUMNOS PARA MOSTRAR.</td></tr>';
+    cont.innerHTML = '<div class="header-list-loading">NO HAY ALUMNOS PARA MOSTRAR.</div>';
     return;
   }
 
-  tabla.innerHTML = items.map((c, i) => {
+  cont.innerHTML = items.map((c, i) => {
     const codigo = escaparHTML(c.codigo || '');
     const nombre = escaparHTML(c.nombre || c.nombreCompleto || '');
     const grado = escaparHTML(c.grado || '');
     const seccion = escaparHTML(c.seccion || '');
-    return `<tr class="codigo-row" data-index="${i}" onclick="seleccionarCodigoDeLista(${i})">\n      <td class="codigo-cell">${codigo}</td>\n      <td>${nombre}</td>\n      <td>${grado}</td>\n      <td>${seccion}</td>\n    </tr>`;
+    return `<div class="header-list-row" data-index="${i}" onclick="seleccionarCodigoDeLista(${i})">
+      <span class="code">${codigo}</span>
+      <span class="name">${nombre}</span>
+      <span class="meta">${grado}${seccion ? ' · ' + seccion : ''}</span>
+      <span class="meta">SELECCIONAR</span>
+    </div>`;
   }).join('');
 }
 
-function filtrarListaCodigos() {
-  const texto = String(document.getElementById('filtroCodigos')?.value || '').trim().toUpperCase();
+function filtrarListaCodigosInline() {
+  const texto = String(document.getElementById('filtroCodigosInline')?.value || '').trim().toUpperCase();
   const base = Array.isArray(window.listaCodigosAlumnos) ? window.listaCodigosAlumnos : [];
-  if (!texto) {
-    renderListaCodigos(base);
-    return;
-  }
-  renderListaCodigos(base.filter(c => {
+  if (!texto) return renderListaCodigosInline(base);
+  renderListaCodigosInline(base.filter(c => {
     const codigo = String(c.codigo || '').toUpperCase();
     const nombre = String(c.nombre || c.nombreCompleto || '').toUpperCase();
     const grado = String(c.grado || '').toUpperCase();
     return codigo.includes(texto) || nombre.includes(texto) || grado.includes(texto);
   }));
 }
+
+// Compatibilidad con funciones antiguas.
+function renderListaCodigos(lista) { renderListaCodigosInline(lista); }
+function filtrarListaCodigos() { filtrarListaCodigosInline(); }
 
 function seleccionarCodigoDeLista(index) {
   const lista = Array.isArray(window.listaCodigosVisible) ? window.listaCodigosVisible : [];
@@ -1382,18 +1471,22 @@ function seleccionarCodigoDeLista(index) {
 }
 
 function cerrarListaCodigos() {
-  const modal = document.getElementById('codigoModal');
-  if (modal) modal.style.display = 'none';
+  const panel = document.getElementById('listaAlumnosDropdown');
+  if (panel) panel.style.display = 'none';
 }
 
 function abrirListaMises() {
   reproducirSonido('clic');
-  const modal = document.getElementById('misesModal');
-  const tabla = document.getElementById('tablaMises');
-  if (!modal || !tabla) return;
+  const panel = document.getElementById('listaMisesDropdown');
+  const cont = document.getElementById('listaMisesItems');
+  if (!panel || !cont) return;
 
-  modal.style.display = 'flex';
-  tabla.innerHTML = '<tr><td colspan="3" class="codigo-empty">CARGANDO CUENTAS DE MISES...</td></tr>';
+  const abrir = panel.style.display === 'none' || !panel.style.display;
+  cerrarListasSuperiores('mises');
+  panel.style.display = abrir ? 'block' : 'none';
+  if (!abrir) return;
+
+  cont.innerHTML = '<div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>';
 
   llamarAPI(
     {
@@ -1402,7 +1495,7 @@ function abrirListaMises() {
     },
     function(respuesta) {
       if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        tabla.innerHTML = '<tr><td colspan="3" class="codigo-empty">NO SE PUDO CARGAR LA LISTA DE MISES.</td></tr>';
+        cont.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>';
         reproducirSonido('error');
         return;
       }
@@ -1412,39 +1505,33 @@ function abrirListaMises() {
         Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([nombre, codigo]) => [codigo, nombre])
       );
 
-      const mises = respuesta.cuentas
-        .filter(c => {
-          const codigo = String(c.codigo || '').trim().toUpperCase();
-          return permitidas.has(codigo);
-        })
-        .sort((a,b) => {
-          const ca = String(a.codigo || '').toUpperCase();
-          const cb = String(b.codigo || '').toUpperCase();
-          return ca.localeCompare(cb);
-        });
+      const mises = respuesta.cuentas.filter(c => {
+        const codigo = String(c.codigo || '').trim().toUpperCase();
+        return permitidas.has(codigo);
+      }).sort((a,b) => String(a.codigo || '').localeCompare(String(b.codigo || '')));
 
       if (!mises.length) {
-        tabla.innerHTML = '<tr><td colspan="3" class="codigo-empty">NO HAY CUENTAS DE MISES REGISTRADAS.</td></tr>';
+        cont.innerHTML = '<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';
         return;
       }
 
-      tabla.innerHTML = mises.map(c => {
+      cont.innerHTML = mises.map(c => {
         const codigo = String(c.codigo || '').trim().toUpperCase();
         const nombre = c.nombre || c.nombreCompleto || nombresPorCodigo[codigo] || 'MISE';
         const saldo = Number(c.saldoActual ?? c.saldo ?? c.fondoActual ?? 0) || 0;
-        return `<tr class="mise-row">
-          <td class="codigo-cell">${escaparHTML(codigo)}</td>
-          <td>${escaparHTML(nombre)}</td>
-          <td class="mises-saldo">S/ ${formatearLDS(saldo)}</td>
-        </tr>`;
+        return `<div class="header-list-row">
+          <span class="code">${escaparHTML(codigo)}</span>
+          <span class="name">${escaparHTML(nombre)}</span>
+          <span class="saldo">S/ ${formatearLDS(saldo)}</span>
+        </div>`;
       }).join('');
     }
   );
 }
 
 function cerrarListaMises() {
-  const modal = document.getElementById('misesModal');
-  if (modal) modal.style.display = 'none';
+  const panel = document.getElementById('listaMisesDropdown');
+  if (panel) panel.style.display = 'none';
 }
 
 function seleccionarTipoOperacion(tipo) {
@@ -1752,7 +1839,9 @@ function cargarSaldoMiseAlIngresar(nombreMaestra) {
   const saldoEl = document.getElementById("saldoInicialMise");
   if (!codigoMise || !saldoEl) return;
 
-  saldoEl.textContent = "CARGANDO...";
+  // El fondo inicial oficial de cada Mise es S/ 30,000.00.
+  // Se muestra de inmediato y luego se reemplaza por el saldo real del servidor.
+  saldoEl.textContent = "S/ 30,000.00";
 
   llamarAPI(
     {
