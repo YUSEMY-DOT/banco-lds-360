@@ -1092,13 +1092,7 @@ function consultarCuentas_(p) {
             datos.movimientos
           ),
         fotoUrl:
-          e.fotoUrl ||
-          e.foto ||
-          "",
-        foto:
-          e.fotoUrl ||
-          e.foto ||
-          "",
+          e.fotoUrl || e.foto || "",
         anio: anio
       });
     }
@@ -1357,7 +1351,7 @@ function leerMovimientos_(hoja) {
         [
           "TIMESTAMP",
           "IDOMARCATEMPORALTIMESTAMP",
-          "MARCATEMPORALTIMESTAMP",
+          "IDOMARCATEMPORALTIMESTAMP",
           "MARCATEMPORAL",
           "FECHA",
           "FECHAHORA",
@@ -1946,7 +1940,6 @@ function movimientoAFila_(
       switch (h) {
         case "TIMESTAMP":
         case "IDOMARCATEMPORALTIMESTAMP":
-        case "MARCATEMPORALTIMESTAMP":
         case "MARCATEMPORAL":
         case "FECHA":
         case "FECHAHORA":
