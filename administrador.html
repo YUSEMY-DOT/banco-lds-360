@@ -1,3 +1,4 @@
+````
 ```
 <!DOCTYPE html>
 <html lang="es">
@@ -3058,23 +3059,56 @@ function normalizarFechaVisibleImpresion(valor) {
 }
 
 function obtenerTimestampMovimientoVisible(m) {
+  if (!m || typeof m !== 'object') return '';
+
+  // Primero probamos los nombres que normalmente entrega el backend.
   const campos = [
-    m?.timestamp,
-    m?.fechaTexto,
-    m?.fecha,
-    m?.fechaHora,
-    m?.fechaOperacion,
-    m?.marcaTemporal,
-    m?.idOMarcaTemporalTimestamp,
-    m?.idOMarcaTemporal,
-    m?.marcaTemporalTimestamp,
-    m?.createdAt,
-    m?.created_at
+    m.timestamp,
+    m.fechaTexto,
+    m.fecha,
+    m.fechaHora,
+    m.fechaOperacion,
+    m.marcaTemporal,
+    m.idOMarcaTemporalTimestamp,
+    m.idOMarcaTemporal,
+    m.marcaTemporalTimestamp,
+    m.createdAt,
+    m.created_at,
+    m.date,
+    m.datetime,
+    m.fechaRegistro,
+    m.fechaMovimiento,
+    m.horaRegistro
   ];
+
   for (const valor of campos) {
     const texto = normalizarFechaVisibleImpresion(valor);
     if (texto) return texto;
   }
+
+  // Si el servidor devuelve la columna con su encabezado original,
+  // por ejemplo "ID o Marca temporal / Timestamp", la detectamos sin
+  // modificar ninguna otra parte del movimiento.
+  for (const clave of Object.keys(m)) {
+    const k = String(clave)
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Z0-9]/g, '');
+
+    if (
+      k.includes('TIMESTAMP') ||
+      k.includes('MARCATEMPORAL') ||
+      k.includes('FECHAHORA') ||
+      k === 'FECHA' ||
+      k.includes('FECHAMOVIMIENTO') ||
+      k.includes('FECHAREGISTRO')
+    ) {
+      const texto = normalizarFechaVisibleImpresion(m[clave]);
+      if (texto) return texto;
+    }
+  }
+
   return '';
 }
 
@@ -3572,3 +3606,4 @@ seleccionarCategoriaPago(document.getElementById("pagoCategoria")?.value || "PRE
 </body>
 </html>
 ```
+````
