@@ -483,7 +483,7 @@ main {
 }
 .header-list-items{max-height:280px;overflow:auto;padding:6px;}
 .header-list-row{
-  display:grid; grid-template-columns:105px 1fr 120px 90px; gap:8px; align-items:center;
+  display:grid; grid-template-columns:36px 105px 1fr 120px 90px; gap:8px; align-items:center;
   padding:9px 10px; border-bottom:1px solid #edf2f7; cursor:pointer; font-size:.72rem;
 }
 .header-list-row:hover{background:#eff6ff;}
@@ -1059,6 +1059,43 @@ footer {
 }
 </style>
 
+
+<style id="admin-enhancements">
+.search-row-ordered{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px;width:100%;align-items:center}
+.search-row-ordered .btn-admin-action{height:42px;border-radius:10px;font-weight:900;font-size:.78rem;white-space:nowrap;cursor:pointer;transition:.2s ease;border:1.5px solid transparent}
+.btn-actualizar{background:linear-gradient(135deg,#fef3c7,#f59e0b);color:#78350f;border-color:#f59e0b!important}
+.btn-actualizar:hover{transform:translateY(-1px);filter:brightness(1.03)}
+.btn-prestamo{background:linear-gradient(135deg,#e0e7ff,#4f46e5);color:#fff;border-color:#4338ca!important}
+.btn-prestamo:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.btn-qr-custom{width:100%}
+.categorias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:5px 0 8px}
+.categoria-btn{border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;border-radius:10px;padding:11px 8px;font-size:.72rem;font-weight:900;cursor:pointer;line-height:1.2;min-height:52px;transition:.2s ease}
+.categoria-btn:hover{transform:translateY(-1px);border-color:#94a3b8}
+.categoria-btn.active{border-color:#f59e0b;background:linear-gradient(135deg,#fff7d6,#fef3c7);color:#92400e;box-shadow:0 4px 12px rgba(245,158,11,.18)}
+.categoria-btn.personal{border-color:#93c5fd}
+.categoria-btn.personal.active{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e3a8a;border-color:#2563eb}
+.categoria-btn.ahorro.active{background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:#166534;border-color:#16a34a}
+#pagoCategoria{display:none!important}
+.mises-table-head,.mises-summary-row{display:grid;grid-template-columns:46px 1.6fr 1fr 1fr 1.15fr 1.2fr;gap:8px;align-items:center}
+.mises-summary-row{padding:10px 12px;border-bottom:1px solid #e5e7eb;font-size:.72rem}
+.mises-summary-row:hover{background:#f8fafc}
+.mises-summary-row .num{font-weight:900;color:#64748b;text-align:center}
+.mises-summary-row .name{font-weight:900;color:#0f172a}
+.mises-summary-row .money{font-weight:900;text-align:right}
+.mises-summary-row .in{color:#15803d}.mises-summary-row .out{color:#b91c1c}.mises-summary-row .available{color:#0f766e}
+.mises-header{padding:12px;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:12px;margin-bottom:10px}
+.mises-header-title{font-size:.9rem;font-weight:900;margin-bottom:4px}
+.mises-header-sub{font-size:.68rem;font-weight:700;opacity:.9}
+.mises-table-head{padding:8px 12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;font-size:.66rem;font-weight:900;color:#475569}
+.loan-modal-content{width:min(560px,100%);background:#fff;border-radius:18px;border-top:6px solid #4f46e5;box-shadow:0 18px 50px rgba(0,0,0,.3);overflow:hidden}
+.loan-head{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-bottom:1px solid #c7d2fe}
+.loan-head h3{font-size:1rem;color:#1e3a8a;font-weight:900}
+.loan-body{padding:16px}.loan-note{font-size:.68rem;font-weight:800;color:#475569;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:9px;margin-bottom:12px}
+.loan-modal-content label{display:block;font-size:.69rem;font-weight:900;margin:10px 0 5px;color:#334155}
+.loan-modal-content input,.loan-modal-content select,.loan-modal-content textarea{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:9px 10px;height:auto;font-size:.8rem;font-weight:700;outline:none}
+.loan-actions{display:flex;gap:8px;margin-top:14px}.loan-actions button{flex:1}
+@media(max-width:760px){.search-row-ordered{grid-template-columns:1fr}.categorias-grid{grid-template-columns:1fr}.mises-table-head,.mises-summary-row{grid-template-columns:35px 1.2fr 1fr;}.mises-table-head span:nth-child(n+4),.mises-summary-row > *:nth-child(n+4){display:none}}
+</style>
 <style id="print-report-overrides">
 .pago-categoria-nota{display:none;margin:-2px 0 8px;padding:6px 9px;border-radius:7px;font-size:.68rem;font-weight:800;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;}
 .pago-categoria-nota.visible{display:block;}
@@ -1076,10 +1113,13 @@ footer {
   .print-report-header h1{font-size:13pt;font-weight:900;margin:0 0 2px;text-transform:uppercase;}
   .print-report-header p{font-size:8.5pt;font-weight:700;margin:1px 0;text-transform:uppercase;}
   .print-student-box{display:flex;align-items:center;gap:12px;border:1.3px solid #000;border-radius:8px;padding:9px 11px;margin:8px 0 10px;page-break-inside:avoid;}
-  .print-student-photo{width:78px;height:78px;flex:0 0 78px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#f8fafc;}
-  .print-student-placeholder{width:78px;height:78px;flex:0 0 78px;border-radius:50%;border:2px solid #000;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;}
+  .print-student-photo{width:86px;height:86px;flex:0 0 78px;border-radius:50%;object-fit:cover;border:2px solid #000;background:#f8fafc;}
+  .print-student-placeholder{width:86px;height:86px;flex:0 0 78px;border-radius:50%;border:2px solid #000;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;}
   .print-student-box h2{font-size:12pt;font-weight:900;margin:0 0 3px;text-transform:uppercase;}
   .print-student-box .meta{font-size:8.5pt;font-weight:700;margin:2px 0;text-transform:uppercase;}
+
+  .print-student-box{display:flex;align-items:center;gap:14px;background:#fff;}
+  .print-detail{break-inside:avoid;}
   .print-report-table{width:100%;border-collapse:collapse;margin-top:7px;table-layout:fixed;}
   .print-report-table th,.print-report-table td{border:1px solid #000;padding:4px 5px;font-size:7.6pt;vertical-align:top;word-break:break-word;text-transform:uppercase;}
   .print-report-table th{font-weight:900;background:#e5e7eb !important;-webkit-print-color-adjust:exact;}
@@ -1245,6 +1285,8 @@ footer {
             <label class="small-label">CONSULTA DE ALUMNOS</label>
             <div class="search-row-ordered">
               <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
+              <button class="btn btn-admin-action btn-actualizar" type="button" onclick="actualizarPanelAdmin()">🔄 ACTUALIZAR</button>
+              <button class="btn btn-admin-action btn-prestamo" type="button" onclick="abrirModalPrestamo()">🤝 PRÉSTAMO</button>
             </div>
             <input id="codigo" class="input-code-custom" type="hidden" value="" autocomplete="off" inputmode="text">
           </div>
@@ -1319,9 +1361,16 @@ footer {
           </div>
         </div>
 
-        <label class="small-label" for="pagoCategoria">CATEGORÍA DEL MOVIMIENTO</label>
-        <select id="pagoCategoria" onchange="cargarConceptosPorTipo()">
-          <option value="">SELECCIONA LA CATEGORÍA</option>
+        <label class="small-label">CATEGORÍA DEL MOVIMIENTO</label>
+        <div class="categorias-grid" id="categoriasPagoBotones">
+          <button type="button" class="categoria-btn personal" data-categoria="INGRESOS_Y_SUELDOS" onclick="seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
+          <button type="button" class="categoria-btn" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
+          <button type="button" class="categoria-btn ahorro" data-categoria="AHORROS_E_INVERSIONES" onclick="seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
+        </div>
+        <select id="pagoCategoria" aria-hidden="true" tabindex="-1">
+          <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
+          <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
+          <option value="AHORROS_E_INVERSIONES">AHORROS E INVERSIONES</option>
         </select>
         <div id="pagoCategoriaNota" class="pago-categoria-nota"></div>
 
@@ -1411,6 +1460,30 @@ footer {
   </div>
 </div>
 
+
+<div id="prestamoModal" class="codigo-modal" style="display:none;">
+  <div class="loan-modal-content">
+    <div class="loan-head">
+      <h3>🤝 PRÉSTAMO</h3>
+      <button class="codigo-close" type="button" onclick="cerrarModalPrestamo()">CERRAR</button>
+    </div>
+    <div class="loan-body">
+      <div class="loan-note">EL DINERO SALE DE LA CAJA DE LA MISE ACTIVA. PUEDES PRESTAR A OTRA MISE O A UN ALUMNO.</div>
+      <label for="prestamoDestino">USUARIO DEL PRÉSTAMO</label>
+      <select id="prestamoDestino"><option value="">SELECCIONA EL USUARIO</option></select>
+      <label for="prestamoMonto">CANTIDAD</label>
+      <input id="prestamoMonto" type="number" min="0" step="0.5" placeholder="INGRESA EL MONTO">
+      <label for="prestamoMotivo">MOTIVO / OBSERVACIÓN</label>
+      <textarea id="prestamoMotivo" rows="3" placeholder="DETALLE DEL PRÉSTAMO..."></textarea>
+      <div id="prestamoMensaje" class="message"></div>
+      <div class="loan-actions">
+        <button type="button" class="btn btn-outline" onclick="cerrarModalPrestamo()">CANCELAR</button>
+        <button type="button" class="btn btn-gold" onclick="registrarPrestamo()">🤝 REGISTRAR PRÉSTAMO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="qrModal" class="qr-modal">
   <div class="qr-modal-content">
     <h3>ESCANEAR CÓDIGO QR</h3>
@@ -1491,10 +1564,9 @@ function abrirListaCodigos() {
 }
 function renderListaAlumnosDesdeCuentas(cuentas){
   window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
-    const rol=String(c.rol||'').trim().toUpperCase();
     const codigo=String(c.codigo||'').trim().toUpperCase();
-    return rol==='ALUMNO' || (!rol && codigo.startsWith('LDS-EST-'));
-  }).sort((a,b)=>String(a.nombre||a.nombreCompleto||'').localeCompare(String(b.nombre||b.nombreCompleto||''),'es',{sensitivity:'base'}));
+    return codigo.startsWith('LDS-EST-');
+  }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
   renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
@@ -1515,6 +1587,7 @@ function renderListaCodigosInline(lista) {
     const grado = escaparHTML(c.grado || '');
     const seccion = escaparHTML(c.seccion || '');
     return `<div class="header-list-row" data-index="${i}" onclick="seleccionarCodigoDeLista(${i})">
+      <span class="meta" style="text-align:center;font-weight:900;color:#0f172a">${i+1}</span>
       <span class="code">${codigo}</span>
       <span class="name">${nombre}</span>
       <span class="meta">${grado}${seccion ? ' · ' + seccion : ''}</span>
@@ -1568,10 +1641,104 @@ function abrirListaMises(){
   llamarAPI({accion:'cuentas',anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!Array.isArray(r.cuentas)){cont.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>';return;} cacheCuentasEscolares[document.getElementById('selectAnioEscolar').value]=r.cuentas; renderListaMisesDesdeCuentas(r.cuentas);});
 }
 function renderListaMisesDesdeCuentas(cuentas){
-  const cont=document.getElementById('listaMisesItems'); if(!cont)return; const permitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE)); const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
+  const cont=document.getElementById('listaMisesItems'); if(!cont)return;
+  cont.innerHTML='<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CALCULANDO SALDOS...</div></div>';
+  const permitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
+  const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
   const mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=>permitidas.has(String(c.codigo||'').trim().toUpperCase()));
   if(!mises.length){cont.innerHTML='<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';return;}
-  cont.innerHTML=mises.map(c=>{const codigo=String(c.codigo||'').trim().toUpperCase();const nombre=c.nombre||c.nombreCompleto||nombres[codigo]||'MISE';const saldo=Number(c.saldoActual??c.saldo??c.fondoActual??0)||0;return `<div class="header-list-row"><span class="code">${escaparHTML(codigo)}</span><span class="name">${escaparHTML(nombre)}</span><span class="saldo">S/ ${formatearLDS(saldo)}</span></div>`;}).join('');
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  Promise.all(mises.map(async c=>{
+    const codigo=String(c.codigo||'').trim().toUpperCase();
+    const r=await llamarAPIPromise({accion:'estudiante',codigo,anio},10000);
+    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
+    const calculo=calcularResumenMise(mov,codigo,Number(c.saldoActual??0));
+    return {codigo,nombre:c.nombre||nombres[codigo]||'MISE',...calculo};
+  })).then(lista=>{
+    const host=document.getElementById('misesResumenFilas'); if(!host)return;
+    host.innerHTML=lista.map((m,i)=>`<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">S/ ${formatearLDS(m.abono)}</span><span class="money in">S/ ${formatearLDS(m.ingresos)}</span><span class="money out">S/ ${formatearLDS(m.egresos)}</span><span class="money available">S/ ${formatearLDS(m.saldo)}</span></div>`).join('');
+  }).catch(()=>{const host=document.getElementById('misesResumenFilas');if(host)host.innerHTML='<div class="header-list-loading">NO SE PUDIERON CALCULAR LOS SALDOS.</div>';});
+}
+
+
+function esMiseCode(codigo){
+  return Object.values(CODIGOS_MISE_POR_NOMBRE).includes(String(codigo||'').trim().toUpperCase());
+}
+function calcularResumenMise(movimientos,codigo,saldoBackend){
+  const c=String(codigo||'').trim().toUpperCase();
+  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c && String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO');
+  let ingresos=0, egresos=0, abono=0;
+  lista.forEach(m=>{
+    const monto=parseMontoLDS(m.monto??m.montoLDS??0);
+    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m))abono+=monto;}
+    if(tipo==='EGRESO')egresos+=monto;
+  });
+  let saldo=ingresos-egresos;
+  const backend=Number(saldoBackend);
+  if(Number.isFinite(backend)) saldo=backend;
+  return {abono:Math.max(0,abono),ingresos:Math.max(0,ingresos),egresos:Math.max(0,egresos),saldo:Math.max(0,saldo)};
+}
+
+function actualizarPanelAdmin(){
+  reproducirSonido('clic');
+  cacheCuentasEscolares={}; cacheCuentasCargando={};
+  const codigo=String(document.getElementById('codigo')?.value||'').trim().toUpperCase();
+  const maestra=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
+  if(maestra) cargarSaldoMiseAlIngresar(maestra);
+  precargarCuentasEscolares();
+  if(codigo) consultarEstudiante(true); else { mostrarMensaje('DATOS ACTUALIZADOS.','ok'); hablarTextoVoz('Datos actualizados.'); }
+}
+
+function seleccionarCategoriaPago(categoria){
+  const sel=document.getElementById('pagoCategoria'); if(!sel)return;
+  sel.value=categoria;
+  document.querySelectorAll('#categoriasPagoBotones .categoria-btn').forEach(b=>b.classList.toggle('active',b.dataset.categoria===categoria));
+  cargarConceptosPorTipo();
+}
+
+function poblarDestinosPrestamo(){
+  const sel=document.getElementById('prestamoDestino'); if(!sel)return;
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  const cache=obtenerCuentasCacheadas();
+  const usar=(cuentas)=>{
+    const misesPermitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
+    const lista=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
+      const codigo=String(c.codigo||'').trim().toUpperCase();
+      const rol=String(c.rol||'').trim().toUpperCase();
+      return codigo.startsWith('LDS-EST-') || (misesPermitidas.has(codigo));
+    }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
+    sel.innerHTML='<option value="">SELECCIONA EL USUARIO</option>'+lista.map(c=>`<option value="${escaparAtributoHTML(c.codigo)}">${escaparHTML(c.nombre||c.nombreCompleto||c.codigo)} · ${escaparHTML(c.codigo)}</option>`).join('');
+  };
+  if(cache){usar(cache);return;}
+  sel.innerHTML='<option value="">CARGANDO USUARIOS...</option>';
+  llamarAPI({accion:'cuentas',anio},r=>{if(r&&r.ok!==false){cacheCuentasEscolares[anio]=r.cuentas||[];usar(r.cuentas||[]);}else sel.innerHTML='<option value="">NO SE PUDO CARGAR</option>';});
+}
+function abrirModalPrestamo(){
+  reproducirSonido('clic');
+  const m=document.getElementById('prestamoModal'); if(!m)return;
+  m.style.display='flex';
+  document.getElementById('prestamoMonto').value='';
+  document.getElementById('prestamoMotivo').value='';
+  document.getElementById('prestamoMensaje').innerHTML='';
+  poblarDestinosPrestamo();
+}
+function cerrarModalPrestamo(){const m=document.getElementById('prestamoModal');if(m)m.style.display='none';}
+function registrarPrestamo(){
+  const destino=String(document.getElementById('prestamoDestino')?.value||'').trim().toUpperCase();
+  const monto=parseMontoLDS(document.getElementById('prestamoMonto')?.value);
+  const motivo=String(document.getElementById('prestamoMotivo')?.value||'').trim();
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  const responsable=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
+  const clave=sessionStorage.getItem('responsableClave')||'';
+  const msg=document.getElementById('prestamoMensaje');
+  if(!destino){msg.textContent='SELECCIONA EL USUARIO DEL PRÉSTAMO.';msg.className='message error';return;}
+  if(!monto||monto<=0){msg.textContent='INGRESA UNA CANTIDAD VÁLIDA.';msg.className='message error';return;}
+  if(esMiseCode(destino) && !Object.values(CODIGOS_MISE_POR_NOMBRE).includes(destino)){msg.textContent='CUENTA NO VÁLIDA.';msg.className='message error';return;}
+  msg.textContent='PROCESANDO PRÉSTAMO...';msg.className='message ok';
+  llamarAPI({accion:'registrarMovimiento',codigo:destino,anio,tipo:'EGRESO',categoria:'PRESTAMO',concepto:'PRÉSTAMO',monto,responsable,responsableClave:clave,observacion:motivo||'PRÉSTAMO REGISTRADO DESDE PANEL DE ADMINISTRACIÓN'},r=>{
+    if(r&&r.ok){msg.textContent='PRÉSTAMO REGISTRADO CORRECTAMENTE.';msg.className='message ok';reproducirSonido('exito');cargarSaldoMiseAlIngresar(responsable);cacheCuentasEscolares={};precargarCuentasEscolares();setTimeout(cerrarModalPrestamo,700);}else{msg.textContent=(r&&r.mensaje)||'ERROR AL REGISTRAR EL PRÉSTAMO.';msg.className='message error';reproducirSonido('error');}
+  });
 }
 
 function cerrarListaMises() {
@@ -1714,6 +1881,7 @@ function cargarCategoriasPago(destinatarioRol = "ALUMNO") {
     selectCategoria.value = "INGRESOS_Y_SUELDOS";
   }
   cargarConceptosPorTipo();
+  seleccionarCategoriaPago(selectCategoria.value);
 }
 
 function cargarConceptosPorTipo() {
@@ -1989,7 +2157,25 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
-function cargarSaldoMiseAlIngresar(nombreMaestra){const codigo=obtenerCodigoCajaMise(nombreMaestra);if(!codigo)return;actualizarSaldosMise(0,0);llamarAPI({accion:'estudiante',codigo},r=>{if(!r||r.ok===false||!r.estudiante)return;const cuenta=r.cuenta||{},mov=Array.isArray(r.movimientos)?r.movimientos:[],calc=calcularSaldoMiseLocal(mov,codigo,Number(cuenta.saldoActual));actualizarSaldosMise(calc.abono,calc.saldo);});}
+function cargarSaldoMiseAlIngresar(nombreMaestra){
+  const codigo=obtenerCodigoCajaMise(nombreMaestra); if(!codigo)return;
+  actualizarSaldosMise(0,0);
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  llamarAPI({accion:'movimientos',anio},r=>{
+    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
+    if(mov.length){
+      const calc=calcularResumenMise(mov,codigo,null);
+      actualizarSaldosMise(calc.abono,calc.saldo);
+      return;
+    }
+    llamarAPI({accion:'estudiante',codigo,anio},rr=>{
+      if(!rr||rr.ok===false)return;
+      const mov2=Array.isArray(rr.movimientos)?rr.movimientos:[];
+      const calc=calcularResumenMise(mov2,codigo,Number(rr?.cuenta?.saldoActual??0));
+      actualizarSaldosMise(calc.abono,calc.saldo);
+    });
+  });
+}
 
 function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
@@ -2642,7 +2828,7 @@ function htmlFotoEstudiante(src, clase="print-student-photo") {
   const inicial = urls[0] || "";
   if (!inicial) return `<div class="${clase === "print-roster-card" ? "print-roster-placeholder" : "print-student-placeholder"}">👤</div>`;
   const fallbacks = JSON.stringify(urls);
-  return `<img class="${clase}" src="${escaparAtributoHTML(inicial)}" data-fallbacks='${escaparAtributoHTML(fallbacks)}' data-idx="0" alt="Foto del alumno">`;
+  return `<img class="${clase}" src="${escaparAtributoHTML(inicial)}" data-fallbacks='${escaparAtributoHTML(fallbacks)}' data-idx="0" referrerpolicy="no-referrer" loading="eager" alt="Foto del alumno">`;
 }
 
 function prepararFotosImpresion(container) {
@@ -2717,7 +2903,7 @@ async function imprimirReportePersonal() {
     <div class="print-firma"><span>BANCO LDS 360</span><span>RESPONSABLE: ${escaparHTML(responsable)}</span></div>
   </section>`;
 
-  document.body.classList.add('imprimiendo-reporte');
+  document.body.classList.add('imprimiendo-reporte','imprimiendo-individual');
   const fotos = prepararFotosImpresion(cont);
   hablarTextoVoz("Preparando estado de cuenta individual.");
   await fotos;
@@ -2744,9 +2930,8 @@ async function imprimirReporteGrupal() {
 
   const alumnos = (Array.isArray(cuentas) ? cuentas : []).filter(c => {
     const codigo = String(c.codigo || '').trim().toUpperCase();
-    const rol = String(c.rol || '').trim().toUpperCase();
-    return rol === 'ALUMNO' || codigo.startsWith('LDS-EST-');
-  }).sort((a,b) => String(a.nombre || '').localeCompare(String(b.nombre || ''),'es',{sensitivity:'base'}));
+    return codigo.startsWith('LDS-EST-');
+  }).sort((a,b) => String(a.codigo || '').localeCompare(String(b.codigo || ''),undefined,{numeric:true}));
 
   if (!alumnos.length) {
     mostrarMensaje('NO HAY ALUMNOS PARA IMPRIMIR.','error');
@@ -2771,7 +2956,7 @@ async function imprimirReporteGrupal() {
     const saldo = Number(x.cuenta?.saldoActual ?? x.estudiante?.saldoActual ?? 0) || 0;
     const urls = obtenerURLsFoto(est.foto);
     const foto = urls[0]
-      ? `<img src="${escaparAtributoHTML(urls[0])}" data-fallbacks='${escaparAtributoHTML(JSON.stringify(urls))}' data-idx="0" alt="Foto">`
+      ? `<img src="${escaparAtributoHTML(urls[0])}" data-fallbacks='${escaparAtributoHTML(JSON.stringify(urls))}' data-idx="0" referrerpolicy="no-referrer" loading="eager" alt="Foto">`
       : `<div class="print-roster-placeholder">👤</div>`;
     return `<div class="print-roster-card">${foto}<div><div class="print-roster-name">${escaparHTML(est.nombre)}</div><div class="print-roster-meta">${escaparHTML(est.codigo)} · ${escaparHTML(est.grado)} · ${escaparHTML(est.seccion)} · SALDO S/ ${formatearLDS(saldo)}</div></div></div>`;
   }).join('');
@@ -2805,14 +2990,14 @@ async function imprimirReporteGrupal() {
     ${detalles}
   </section>`;
 
-  document.body.classList.add('imprimiendo-reporte');
+  document.body.classList.add('imprimiendo-reporte','imprimiendo-grupal');
   await prepararFotosImpresion(cont);
   hablarTextoVoz("Preparando estado de cuenta grupal.");
   setTimeout(() => window.print(), 120);
 }
 
 window.addEventListener('afterprint', function(){
-  document.body.classList.remove('imprimiendo-reporte');
+  document.body.classList.remove('imprimiendo-reporte','imprimiendo-individual','imprimiendo-grupal');
   const cont = document.getElementById('printReportContainer');
   if (cont) cont.innerHTML = '';
 });
@@ -3134,6 +3319,7 @@ document.getElementById("codigo").addEventListener(
 
 // Cargar exactamente los conceptos de CONFIG_OPCIONES para pagos a alumnos.
 cargarConceptosPagoAlumno();
+seleccionarCategoriaPago(document.getElementById("pagoCategoria")?.value || "PREMIOS_Y_BONIFICACIONES");
 </script>
 
 </body>
