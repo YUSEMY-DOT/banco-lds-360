@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1325,6 +1324,35 @@ footer {
 }
 </style>
 
+
+<style id="lds-v6-fixes">
+/* V6 — SALDOS, MOVIMIENTOS Y REPORTES */
+.pago-alumno-movimientos{width:100%;max-width:100%;overflow:hidden!important;}
+.pago-mov-scroll{width:100%;max-width:100%;max-height:180px;overflow-y:auto;overflow-x:hidden!important;}
+.pago-mov-table{width:100%!important;min-width:0!important;max-width:100%!important;table-layout:fixed!important;border-collapse:collapse;}
+.pago-mov-table th,.pago-mov-table td{font-size:.58rem!important;padding:5px 4px!important;line-height:1.12!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;}
+.pago-mov-table th:nth-child(1),.pago-mov-table td:nth-child(1){width:27%!important;}
+.pago-mov-table th:nth-child(2),.pago-mov-table td:nth-child(2){width:16%!important;}
+.pago-mov-table th:nth-child(3),.pago-mov-table td:nth-child(3){width:37%!important;}
+.pago-mov-table th:nth-child(4),.pago-mov-table td:nth-child(4){width:20%!important;text-align:right;font-variant-numeric:tabular-nums;}
+.pago-alumno-card{margin-bottom:7px!important;}
+.pago-alumno-foto{width:72px!important;height:72px!important;object-fit:cover!important;}
+.admin-stats-box .stat-pill strong{font-variant-numeric:tabular-nums;}
+@media print{
+  @page{size:A4 portrait;margin:9mm 10mm;}
+  body.imprimiendo-reporte .print-report{font-size:11pt!important;color:#000!important;line-height:1.06!important;}
+  body.imprimiendo-reporte .print-report table.print-report-table{width:100%!important;table-layout:fixed!important;}
+  body.imprimiendo-reporte .print-report-table th,body.imprimiendo-reporte .print-report-table td{font-size:11pt!important;padding:2px 4px!important;line-height:1.05!important;}
+  body.imprimiendo-reporte .print-report-header p{font-size:8.5pt!important;}
+  body.imprimiendo-reporte .print-student-box{padding:6px 8px!important;margin:6px 0 8px!important;}
+  body.imprimiendo-reporte .print-student-photo,body.imprimiendo-reporte .print-student-placeholder{width:64px!important;height:64px!important;flex:0 0 64px!important;}
+  body.imprimiendo-reporte .print-student-box h2{font-size:11pt!important;}
+  body.imprimiendo-reporte .print-student-box .meta{font-size:8pt!important;}
+  body.imprimiendo-reporte .print-roster-name{font-size:8.5pt!important;}
+  body.imprimiendo-reporte .print-roster-meta{font-size:7pt!important;}
+}
+</style>
+
 </head>
 <body>
 
@@ -1551,7 +1579,7 @@ footer {
           </div>
         </div>
         <div id="pagoAlumnoMovimientos" class="pago-alumno-movimientos" style="display:none;">
-          <div class="pago-mov-title"><span>📒 MOVIMIENTOS DEL ALUMNO</span><span>RECIENTES</span></div>
+          <div class="pago-mov-title"><span>📒 MOVIMIENTOS DEL ALUMNO</span><span id="pagoMovimientosCount">0</span></div>
           <div id="pagoAlumnoMovimientosBody"></div>
         </div>
 
@@ -1873,22 +1901,6 @@ function renderListaMisesDesdeCuentas(cuentas){
 function esMiseCode(codigo){
   return Object.values(CODIGOS_MISE_POR_NOMBRE).includes(String(codigo||'').trim().toUpperCase());
 }
-function calcularResumenMise(movimientos,codigo,saldoBackend){
-  const c=String(codigo||'').trim().toUpperCase();
-  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>
-    String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c &&
-    String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO'
-  );
-  let ingresos=0,egresos=0,abono=0;
-  lista.forEach(m=>{
-    const monto=parseMontoLDS(m.monto??m.montoLDS??0);
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
-    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
-    if(tipo==='EGRESO')egresos+=monto;
-  });
-  return {abono:Math.max(0,abono),ingresos:Math.max(0,ingresos),egresos:Math.max(0,egresos),saldo:Math.max(0,ingresos-egresos)};
-}
-
 
 function actualizarPanelAdmin(){
   reproducirSonido('clic');
@@ -2400,13 +2412,16 @@ function validarAccesoDocente() {
 }
 
 function cargarSaldoMiseAlIngresar(nombreMaestra){
-  const codigo=obtenerCodigoCajaMise(nombreMaestra); if(!codigo)return;
-  actualizarSaldosMise(0,0);
-  // La caja de la Mise se calcula con TODOS sus movimientos, no solo el año visual seleccionado.
-  llamarAPI({accion:'movimientos'},r=>{
-    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
-    const calc=calcularResumenMise(mov,codigo,null);
-    actualizarSaldosMise(calc.abono,calc.saldo);
+  const codigo = obtenerCodigoCajaMise(nombreMaestra);
+  if (!codigo) return;
+  actualizarSaldosMise(0, 0);
+
+  // El abono inicial y el saldo disponible de la Mise se calculan con TODOS los movimientos.
+  // No dependen del año visual ni del alumno seleccionado.
+  llamarAPI({accion:"movimientos"}, function(respuesta){
+    const movimientos = Array.isArray(respuesta?.movimientos) ? respuesta.movimientos : [];
+    const resumen = calcularResumenMise(movimientos, codigo, 0);
+    actualizarSaldosMise(resumen.abono, resumen.saldo);
   });
 }
 
@@ -2685,36 +2700,53 @@ function actualizarSaldosMise(abono, saldo){
 }
 
 function esIngresoDeAndrew(m, codigoDestino){
-  const tipo=String(m?.tipo||m?.tipoMovimiento||"").trim().toUpperCase();
-  if(tipo!=="INGRESO") return false;
-  const responsable=String(m?.responsable||"").trim().toUpperCase();
-  const obs=String(m?.observacion||"").trim().toUpperCase();
-  const destino=String(codigoDestino||m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-  return (responsable.includes("ANDREW") || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW")) && (!codigoDestino || obs.includes("CUENTA_DESTINO="+destino) || String(m?.codigo||m?.codigoQR||"").trim().toUpperCase()===destino);
-}
+  const tipo = String(m?.tipo || m?.tipoMovimiento || m?.movimiento || "").trim().toUpperCase();
+  if (tipo !== "INGRESO") return false;
+  const codigo = String(m?.codigo || m?.codigoQR || "").trim().toUpperCase();
+  const destino = String(codigoDestino || "").trim().toUpperCase();
+  if (destino && codigo !== destino) return false;
 
-function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
-  const c=String(codigo||'').trim().toUpperCase();
-  if(!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c)) return {abono:0,saldo:Number(saldoBackend)||0};
-  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>
-    String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c &&
-    String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO'
+  const responsable = String(m?.responsable || "").trim().toUpperCase();
+  const obs = String(m?.observacion || "").trim().toUpperCase();
+  const concepto = String(m?.concepto || "").trim().toUpperCase();
+  const categoria = String(m?.categoria || "").trim().toUpperCase();
+
+  return (
+    responsable.includes("ANDREW") ||
+    obs.includes("CUENTA_ORIGEN=CAJA-ANDREW") ||
+    /TRANSFERENCIA DE FONDO/.test(concepto) ||
+    (categoria === "GENERAL" && /FONDO|ABONO/.test(obs + " " + concepto))
   );
-  let ingresos=0,egresos=0,abono=0;
-  lista.forEach(m=>{
-    const monto=parseMontoLDS(m.monto??m.montoLDS??0);
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
-    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
-    if(tipo==='EGRESO')egresos+=monto;
-  });
-  return {abono:Math.max(0,abono),saldo:Math.max(0,ingresos-egresos)};
 }
 
+function calcularResumenMise(movimientos, codigo, saldoBackend){
+  const c = String(codigo || "").trim().toUpperCase();
+  if (!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c)) {
+    return {abono:0, ingresos:0, egresos:0, saldo:Number(saldoBackend)||0};
+  }
+  const lista = (Array.isArray(movimientos) ? movimientos : []).filter(m =>
+    String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === c &&
+    String(m?.estado || "ACTIVO").trim().toUpperCase() !== "ANULADO"
+  );
+  let ingresos=0, egresos=0, abono=0;
+  lista.forEach(m=>{
+    const monto=parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0);
+    const tipo=String(m?.tipo || m?.tipoMovimiento || m?.movimiento || "").trim().toUpperCase();
+    if(tipo === "INGRESO"){
+      ingresos += monto;
+      if(esIngresoDeAndrew(m,c)) abono += monto;
+    } else if(tipo === "EGRESO"){
+      egresos += monto;
+    }
+  });
+  return {abono:Math.max(0,abono), ingresos:Math.max(0,ingresos), egresos:Math.max(0,egresos), saldo:Math.max(0,ingresos-egresos)};
+}
 
 function actualizarBannerCuenta() {
   const rolBanner = document.querySelector(".admin-text-details p");
   if (rolBanner) rolBanner.textContent = "DOCENTE · TUTORA · CAJERA";
 }
+
 
 function obtenerSaldoInicialMise(movimientos, codigoCuenta) {
   const codigo = String(codigoCuenta || "").trim().toUpperCase();
@@ -2801,7 +2833,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         reproducirSonido('error');
 
         document.getElementById("tablaMovimientos").innerHTML =
-          '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
+          '<tr><td colspan="6" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
 
         document.getElementById("contadorMovimientos").textContent = "0";
         actualizarSaldosMise(0,0);
@@ -2927,12 +2959,11 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === codigoCuenta
       );
 
-      const movimientos = filtrarMovimientosPorAnioCliente(
-        movimientosCuenta.length ? movimientosCuenta : movimientosGenerales,
-        anioEscolar
-      );
+      const baseMovimientos = movimientosCuenta.length ? movimientosCuenta : movimientosGenerales;
+      const movimientos = filtrarMovimientosPorAnioCliente(baseMovimientos, anioEscolar);
+      const movimientosVisibles = movimientos.length ? movimientos : baseMovimientos.filter(m => String(m?.estado || 'ACTIVO').trim().toUpperCase() !== 'ANULADO');
 
-      movimientosActualesGlobal = movimientos.slice();
+      movimientosActualesGlobal = movimientosVisibles.slice();
 
       const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuenta);
       if (esCajaMise) {
@@ -2943,11 +2974,11 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       }
 
       renderMovimientos(
-        movimientos,
+        movimientosVisibles,
         e,
         anioEscolar
       );
-      renderResumenMovimientosAlumno(movimientos, anioEscolar);
+      renderResumenMovimientosAlumno(movimientosVisibles, anioEscolar);
 
       mostrarMensaje(
         "CONSULTA REALIZADA CORRECTAMENTE.",
@@ -2976,23 +3007,42 @@ function consultarEstudiante(esConsultaAutomatica = false) {
 }
 
 function renderResumenMovimientosAlumno(movimientos, anioEscolar){
-  const wrap=document.getElementById('pagoAlumnoMovimientos');
-  const body=document.getElementById('pagoAlumnoMovimientosBody');
-  if(!wrap||!body)return;
-  const lista=Array.isArray(movimientos)?movimientos:[];
-  wrap.style.display='block';
-  if(!lista.length){
-    body.innerHTML='<div class="pago-mov-empty">SIN MOVIMIENTOS REGISTRADOS EN EL AÑO '+escaparHTML(anioEscolar||'')+'.</div>';
+  const wrap = document.getElementById('pagoAlumnoMovimientos');
+  const body = document.getElementById('pagoAlumnoMovimientosBody');
+  if (!wrap || !body) return;
+
+  const lista = Array.isArray(movimientos) ? movimientos : [];
+  wrap.style.display = 'block';
+  const countEl=document.getElementById('pagoMovimientosCount'); if(countEl) countEl.textContent=String(lista.length);
+
+  if (!lista.length) {
+    body.innerHTML = '<div class="pago-mov-empty">SIN MOVIMIENTOS REGISTRADOS EN EL AÑO ' + escaparHTML(anioEscolar || '') + '.</div>';
     return;
   }
-  body.innerHTML=`<div style="max-height:210px;overflow:auto;"><table class="pago-mov-table"><thead><tr><th>FECHA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead><tbody>${lista.map(m=>{
-    const fecha=normalizarFechaVisibleImpresion(m.fecha??m.fechaTexto??m.timestamp??'')||'—';
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
-    const concepto=String(m.concepto||'').trim();
-    const monto=formatearLDS(parseMontoLDS(m.monto??m.montoLDS??0));
-    const cls=tipo.includes('EGRESO')?'pago-mov-egreso':'pago-mov-ingreso';
-    return `<tr><td>${escaparHTML(fecha)}</td><td class="${cls}">${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td><td style="text-align:right;white-space:nowrap;">S/ ${escaparHTML(monto)}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
+
+  const filas = lista.map(m => {
+    const fecha = normalizarFechaVisibleImpresion(
+      m?.fecha ?? m?.fechaTexto ?? m?.timestamp ?? m?.marcaTemporal ?? ''
+    ) || '—';
+    const tipo = String(m?.tipo || m?.tipoMovimiento || '').trim().toUpperCase() || '—';
+    const concepto = String(m?.concepto || '').trim() || '—';
+    const monto = formatearLDS(parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0));
+    const cls = tipo.includes('EGRESO') ? 'pago-mov-egreso' : 'pago-mov-ingreso';
+    return '<tr>' +
+      '<td>' + escaparHTML(fecha) + '</td>' +
+      '<td class="' + cls + '">' + escaparHTML(tipo) + '</td>' +
+      '<td title="' + escaparAtributoHTML(concepto) + '">' + escaparHTML(concepto) + '</td>' +
+      '<td>S/ ' + escaparHTML(monto) + '</td>' +
+      '</tr>';
+  }).join('');
+
+  body.innerHTML =
+    '<div class="pago-mov-scroll">' +
+      '<table class="pago-mov-table">' +
+        '<thead><tr><th>FECHA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead>' +
+        '<tbody>' + filas + '</tbody>' +
+      '</table>' +
+    '</div>';
 }
 
 function prepararAccionesPagoAlumno(){
@@ -3204,8 +3254,8 @@ function htmlMovimientosImpresion(movimientos, estudiante) {
     return `<div class="print-no-mov">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO SELECCIONADO.</div>`;
   }
   const rows = movimientos.map(m => {
-    const fecha = normalizarFechaVisibleImpresion(m.fecha ?? m.fechaTexto ?? m.timestamp ?? '') || '—';
-    const tipo = String(m.tipo || m.tipoMovimiento || '').trim();
+    const fecha = normalizarFechaVisibleImpresion(m?.fecha ?? m?.fechaTexto ?? m?.timestamp ?? m?.marcaTemporal ?? '') || '—';
+    const tipo = String(m?.tipo || m?.tipoMovimiento || m?.movimiento || '').trim().toUpperCase() || '—';
     const concepto = String(m.concepto || '').trim();
     const monto = m.monto ?? m.montoLDS ?? 0;
     const responsable = String(m.responsable || '').trim();
@@ -3302,7 +3352,8 @@ async function imprimirReporteGrupal() {
     const movimientosCuenta = todosMovimientos.filter(m =>
       String(m?.codigo || m?.codigoQR || '').trim().toUpperCase() === codigo
     );
-    const movimientos = filtrarMovimientosPorAnioCliente(movimientosCuenta, anio);
+    const filtrados = filtrarMovimientosPorAnioCliente(movimientosCuenta, anio);
+    const movimientos = filtrados.length ? filtrados : movimientosCuenta.filter(m => String(m?.estado || 'ACTIVO').trim().toUpperCase() !== 'ANULADO');
     return {cuenta:a, estudiante, movimientos};
   });
 
@@ -3383,9 +3434,9 @@ function renderMovimientos(
   movimientos.forEach(m => {
     const tr = document.createElement("tr");
     const fecha = normalizarFechaVisibleImpresion(
-      m.fecha ?? m.fechaTexto ?? m.timestamp ?? ""
+      m?.fecha ?? m?.fechaTexto ?? m?.timestamp ?? m?.marcaTemporal ?? ""
     ) || "—";
-    const tipo = String(m.tipo || m.tipoMovimiento || "").trim().toUpperCase();
+    const tipo = String(m?.tipo || m?.tipoMovimiento || m?.movimiento || "").trim().toUpperCase() || "—";
     const concepto = String(m.concepto || "").trim();
     const monto = m.monto ?? m.montoLDS ?? 0;
     const responsable = String(m.responsable || "").trim();
@@ -3596,4 +3647,3 @@ seleccionarCategoriaPago(document.getElementById("pagoCategoria")?.value || "PRE
 
 </body>
 </html>
-```
