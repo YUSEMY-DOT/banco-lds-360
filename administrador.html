@@ -1141,6 +1141,53 @@ footer {
 }
 </style>
 
+
+<style id="lds-admin-ajustes-finales">
+/* ===== BANCO LDS 360 · AJUSTES DE INTERFAZ Y FLUJO ===== */
+.header-actions-group{gap:12px;justify-content:flex-end;align-items:center;flex-wrap:nowrap}
+.anio-control-wrap{display:flex;align-items:center;gap:6px;margin-right:22px;padding-right:12px;border-right:1px solid #dbe3ee}
+.anio-control-wrap label{font-size:.62rem;font-weight:900;color:#64748b;letter-spacing:.05em}
+.anio-abierto{width:88px;height:38px!important;border:1.5px solid #8b5cf6!important;border-radius:10px!important;background:linear-gradient(135deg,#ede9fe,#ddd6fe)!important;color:#312e81!important;font-weight:900!important;text-align:center;font-size:.82rem!important}
+.icon-header-btn,.icon-query-btn{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid transparent;cursor:pointer;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;flex:0 0 auto}
+.icon-header-btn{width:42px;height:42px;border-radius:50%;padding:8px;box-shadow:0 5px 12px rgba(15,23,42,.16)}
+.icon-header-btn svg,.icon-query-btn svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.icon-header-btn.alumno{background:linear-gradient(135deg,#67e8f9,#0284c7);color:#fff;border-color:#0284c7}
+.icon-header-btn.mises{background:linear-gradient(135deg,#fda4af,#dc2626);color:#fff;border-color:#dc2626}
+.icon-header-btn:hover,.icon-query-btn:hover{transform:translateY(-2px);filter:brightness(1.04);box-shadow:0 8px 16px rgba(15,23,42,.18)}
+.search-row-ordered{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:nowrap!important}
+.icon-query-btn{width:54px;height:42px;border-radius:12px;padding:8px}
+.icon-query-btn.qr-shape{border-radius:10px;background:#0f2340;color:#fff;border-color:#eab308}
+.icon-query-btn.refresh{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#fff7cc,#f59e0b);color:#8a4b00;border-color:#f59e0b}
+.icon-query-btn.loan{background:linear-gradient(135deg,#ddd6fe,#7c3aed);color:#fff;border-color:#6d28d9}
+.icon-query-btn.print{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#7c4300;border-color:#f59e0b}
+.pago-acciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.btn-accion-pago{min-height:50px;border-radius:12px;border:1.5px solid;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;cursor:pointer;transition:.18s ease;font-size:.74rem}
+.btn-accion-pago svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.btn-accion-pago.pagar{background:linear-gradient(135deg,#fff7d6,#f59e0b);color:#7c4300;border-color:#f59e0b}
+.btn-accion-pago.cobrar{background:linear-gradient(135deg,#dcfce7,#22c55e);color:#166534;border-color:#16a34a}
+.btn-accion-pago:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.03)}
+.btn-accion-pago:disabled,.btn-accion-pago.disabled{opacity:.38;cursor:not-allowed;filter:grayscale(.4)}
+.pago-accion-nota{display:none;margin-top:8px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#475569;font-size:.66rem;font-weight:800;line-height:1.25}
+.pago-accion-nota.visible{display:block}
+.mises-header{background:linear-gradient(135deg,#0b1930,#1e3a8a 62%,#0f766e)!important;border:1px solid #f0b429;box-shadow:0 8px 18px rgba(15,23,42,.12)}
+.mises-table-head{background:linear-gradient(135deg,#fff7d6,#fef3c7)!important;border-color:#f5c451!important;color:#5b3a00!important}
+.mises-summary-row{background:#fff;border-bottom:1px solid #e7edf5;padding:12px!important}
+.mises-summary-row:nth-child(even){background:#f8fbff}
+.mises-summary-row:hover{background:#fff8df!important}
+.mises-summary-row .money{font-size:.75rem}
+.mises-summary-row .available{font-size:.86rem!important;background:#ecfdf5;border-radius:7px;padding:5px 7px;color:#047857!important}
+.header-dropdown-list.mises-dropdown{border-color:#f2b01e;background:#fffdf7}
+@media(max-width:760px){
+  .header-actions-group{gap:7px}
+  .anio-control-wrap{margin-right:6px;padding-right:6px}
+  .anio-abierto{width:76px}
+  .search-row-ordered{gap:8px!important}
+  .icon-query-btn{width:48px;height:42px}
+  .icon-query-btn.refresh,.icon-query-btn.print{width:42px}
+  .pago-acciones{grid-template-columns:1fr}
+}
+</style>
+<style id="lds-select-category-hidden">#pagoCategoria{position:absolute!important;opacity:0!important;pointer-events:none!important;width:1px!important;height:1px!important;overflow:hidden!important}</style>
 </head>
 <body>
 
@@ -1235,16 +1282,16 @@ footer {
       <div class="panel-head">
         <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
         <div class="header-actions-group">
-          <select id="selectAnioEscolar" class="select-anio-amarillo" onchange="cambiarAnioEscolar()">
-            <option value="2026" selected>AÑO 2026</option>
-            <option value="2027">AÑO 2027</option>
-            <option value="2028">AÑO 2028</option>
-            <option value="2029">AÑO 2029</option>
-            <option value="2030">AÑO 2030</option>
-          </select>
-          <button id="btnHeaderAlumnos" class="btn btn-header-alumnos" type="button" onclick="abrirListaCodigos()">👤 ALUMNOS</button>
-          <button id="btnHeaderMises" class="btn btn-header-mises" type="button" onclick="abrirListaMises()">👩‍🏫 MISES</button>
-          <button id="btnHeaderImpresiones" class="btn btn-gold" type="button" onclick="abrirImpresiones()">🖨️ IMPRESIONES</button>
+          <div class="anio-control-wrap" title="Año escolar">
+            <label for="selectAnioEscolar">AÑO</label>
+            <input id="selectAnioEscolar" class="anio-abierto" type="number" value="2026" min="2000" max="2100" step="1" onchange="cambiarAnioEscolar()" aria-label="Año escolar">
+          </div>
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos()" aria-label="Alumnos" title="Alumnos">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
+          </button>
+          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaMises()" aria-label="Mises" title="Mises">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="17" cy="16" r="6"/><circle cx="31" cy="16" r="6"/><path d="M5 39c1.4-7 5.6-11 12-11s10.6 4 12 11"/><path d="M19 39c1.5-7 5.5-11 12-11s10.6 4 12 11"/></svg>
+          </button>
         </div>
       </div>
 
@@ -1284,9 +1331,18 @@ footer {
           <div>
             <label class="small-label">CONSULTA DE ALUMNOS</label>
             <div class="search-row-ordered">
-              <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
-              <button class="btn btn-admin-action btn-actualizar" type="button" onclick="actualizarPanelAdmin()">🔄 ACTUALIZAR</button>
-              <button class="btn btn-admin-action btn-prestamo" type="button" onclick="abrirModalPrestamo()">🤝 PRÉSTAMO</button>
+              <button class="icon-query-btn qr-shape" type="button" onclick="abrirEscanerQR()" aria-label="Escanear QR" title="Escanear QR">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M5 19V5h14M29 5h14v14M43 29v14H29M19 43H5V29"/><rect x="10" y="10" width="7" height="7"/><rect x="31" y="10" width="7" height="7"/><rect x="10" y="31" width="7" height="7"/><path d="M29 29h4v4h-4zM36 36h7v7h-7zM29 36h4v7h-4z"/></svg>
+              </button>
+              <button class="icon-query-btn refresh" type="button" onclick="actualizarPanelAdmin()" aria-label="Actualizar" title="Actualizar">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M39 18a16 16 0 1 0 2 13"/><path d="M39 8v10H29"/></svg>
+              </button>
+              <button class="icon-query-btn loan" type="button" onclick="abrirModalPrestamo()" aria-label="Préstamo" title="Préstamo">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19"/><path d="M16 20h16a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4z"/><path d="M20 20v-4h8v4"/><path d="M20 27h8"/></svg>
+              </button>
+              <button id="btnHeaderImpresiones" class="icon-query-btn print" type="button" onclick="abrirImpresiones()" aria-label="Impresiones" title="Impresiones">
+                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 17V7h20v10"/><rect x="8" y="17" width="32" height="17" rx="3"/><path d="M14 29h20v12H14z"/><path d="M32 23h4"/></svg>
+              </button>
             </div>
             <input id="codigo" class="input-code-custom" type="hidden" value="" autocomplete="off" inputmode="text">
           </div>
@@ -1342,11 +1398,11 @@ footer {
     <!-- PANEL DE PAGO / TRANSACCIÓN -->
     <div id="panelPago" class="panel collapsed">
       <div class="panel-head clickable" onclick="togglePanel('panelPago')">
-        <h3>💰 PAGAR ALUMNO</h3>
+        <h3>💰 PAGOS Y COBROS AL ALUMNO</h3>
         <span class="toggle-icon">▼</span>
       </div>
       <div class="panel-body">
-        <div class="pago-target-title">💸 PAGO AL ALUMNO</div>
+        <div class="pago-target-title">💸 OPERACIÓN CON EL ALUMNO</div>
         <input type="hidden" id="pagoOperacionVal" value="EGRESO">
 
         <label class="small-label" for="pagoCodigo">ALUMNO A PAGAR</label>
@@ -1385,9 +1441,17 @@ footer {
         <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
         <textarea id="pagoObs" rows="3" placeholder="MOTIVO O DETALLE..."></textarea>
 
-        <button class="btn btn-gold" style="width:100%;margin-top:15px;padding:12px;" type="button" onclick="procesarPagoEstudiante()">
-          💸 PAGAR ALUMNO
-        </button>
+        <div class="pago-acciones">
+          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarMovimientoAlumno('EGRESO')">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
+            <span>PAGAR ALUMNO</span>
+          </button>
+          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
+            <span>COBRAR ALUMNO</span>
+          </button>
+        </div>
+        <div id="pagoAccionNota" class="pago-accion-nota"></div>
         <div id="pagoMensaje" class="message"></div>
       </div>
     </div>
@@ -1504,7 +1568,10 @@ function togglePanel(idPanel) {
 
 function cambiarAnioEscolar() {
   reproducirSonido('clic');
-  const anio = document.getElementById("selectAnioEscolar").value;
+  const campoAnio=document.getElementById("selectAnioEscolar");
+  let anio=Number(campoAnio?.value||2026);
+  if(!Number.isFinite(anio)||anio<2000||anio>2100){ anio=2026; if(campoAnio)campoAnio.value=String(anio); }
+  anio=String(Math.trunc(anio));
   document.getElementById("printAnioLabel").textContent = anio;
   hablarTextoVoz("Año escolar cambiado a " + anio);
   if (document.getElementById("codigo").value.trim()) {
@@ -1650,9 +1717,9 @@ function renderListaMisesDesdeCuentas(cuentas){
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   Promise.all(mises.map(async c=>{
     const codigo=String(c.codigo||'').trim().toUpperCase();
-    const r=await llamarAPIPromise({accion:'estudiante',codigo,anio},10000);
+    const r=await llamarAPIPromise({accion:'estudiante',codigo},10000);
     const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
-    const calculo=calcularResumenMise(mov,codigo,Number(c.saldoActual??0));
+    const calculo=calcularResumenMise(mov,codigo,null);
     return {codigo,nombre:c.nombre||nombres[codigo]||'MISE',...calculo};
   })).then(lista=>{
     const host=document.getElementById('misesResumenFilas'); if(!host)return;
@@ -1666,19 +1733,20 @@ function esMiseCode(codigo){
 }
 function calcularResumenMise(movimientos,codigo,saldoBackend){
   const c=String(codigo||'').trim().toUpperCase();
-  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c && String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO');
-  let ingresos=0, egresos=0, abono=0;
+  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>
+    String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c &&
+    String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO'
+  );
+  let ingresos=0,egresos=0,abono=0;
   lista.forEach(m=>{
     const monto=parseMontoLDS(m.monto??m.montoLDS??0);
     const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
-    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m))abono+=monto;}
+    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
     if(tipo==='EGRESO')egresos+=monto;
   });
-  let saldo=ingresos-egresos;
-  const backend=Number(saldoBackend);
-  if(Number.isFinite(backend)) saldo=backend;
-  return {abono:Math.max(0,abono),ingresos:Math.max(0,ingresos),egresos:Math.max(0,egresos),saldo:Math.max(0,saldo)};
+  return {abono:Math.max(0,abono),ingresos:Math.max(0,ingresos),egresos:Math.max(0,egresos),saldo:Math.max(0,ingresos-egresos)};
 }
+
 
 function actualizarPanelAdmin(){
   reproducirSonido('clic');
@@ -1695,6 +1763,7 @@ function seleccionarCategoriaPago(categoria){
   sel.value=categoria;
   document.querySelectorAll('#categoriasPagoBotones .categoria-btn').forEach(b=>b.classList.toggle('active',b.dataset.categoria===categoria));
   cargarConceptosPorTipo();
+  prepararAccionesPagoAlumno();
 }
 
 function poblarDestinosPrestamo(){
@@ -1836,6 +1905,7 @@ const CATEGORIAS_CAJA_ACTIVA = [
 ];
 
 const CATEGORIAS_ALUMNOS = [
+  "INGRESOS_Y_SUELDOS",
   "PREMIOS_Y_BONIFICACIONES",
   "AHORROS_E_INVERSIONES"
 ];
@@ -1866,19 +1936,13 @@ function cargarCategoriasPago(destinatarioRol = "ALUMNO") {
     const opt = document.createElement("option");
     opt.value = categoria;
     opt.textContent = etiquetaCategoriaCaja(categoria);
-    if (rol.includes("ALUMNO") && categoria === "INGRESOS_Y_SUELDOS") {
-      opt.disabled = true;
-      opt.textContent += " · SOLO PERSONAL";
-    }
     selectCategoria.appendChild(opt);
   });
 
-  if (actual && Array.from(selectCategoria.options).some(o => o.value === actual && !o.disabled)) {
+  if (actual && Array.from(selectCategoria.options).some(o => o.value === actual)) {
     selectCategoria.value = actual;
-  } else if (rol.includes("ALUMNO")) {
+  } else {
     selectCategoria.value = "PREMIOS_Y_BONIFICACIONES";
-  } else if (rol.includes("DOCENTE") || rol.includes("PROMOTOR") || rol.includes("COORDIN")) {
-    selectCategoria.value = "INGRESOS_Y_SUELDOS";
   }
   cargarConceptosPorTipo();
   seleccionarCategoriaPago(selectCategoria.value);
@@ -1902,7 +1966,11 @@ function cargarConceptosPorTipo() {
     selectConcepto.appendChild(opt);
   });
 
-  if (actual && conceptos.includes(actual)) selectConcepto.value = actual;
+  if (actual && conceptos.includes(actual)) {
+    selectConcepto.value = actual;
+  } else if (conceptos.length) {
+    selectConcepto.value = conceptos[0];
+  }
 
   if (nota) {
     if (categoria === "INGRESOS_Y_SUELDOS") {
@@ -1919,6 +1987,7 @@ function cargarConceptosPorTipo() {
       nota.classList.remove("visible");
     }
   }
+  prepararAccionesPagoAlumno();
 }
 
 function configurarCategoriasPago() {
@@ -2160,20 +2229,11 @@ function validarAccesoDocente() {
 function cargarSaldoMiseAlIngresar(nombreMaestra){
   const codigo=obtenerCodigoCajaMise(nombreMaestra); if(!codigo)return;
   actualizarSaldosMise(0,0);
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  llamarAPI({accion:'movimientos',anio},r=>{
+  // La caja de la Mise se calcula con TODOS sus movimientos, no solo el año visual seleccionado.
+  llamarAPI({accion:'movimientos'},r=>{
     const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
-    if(mov.length){
-      const calc=calcularResumenMise(mov,codigo,null);
-      actualizarSaldosMise(calc.abono,calc.saldo);
-      return;
-    }
-    llamarAPI({accion:'estudiante',codigo,anio},rr=>{
-      if(!rr||rr.ok===false)return;
-      const mov2=Array.isArray(rr.movimientos)?rr.movimientos:[];
-      const calc=calcularResumenMise(mov2,codigo,Number(rr?.cuenta?.saldoActual??0));
-      actualizarSaldosMise(calc.abono,calc.saldo);
-    });
+    const calc=calcularResumenMise(mov,codigo,null);
+    actualizarSaldosMise(calc.abono,calc.saldo);
   });
 }
 
@@ -2451,46 +2511,32 @@ function actualizarSaldosMise(abono, saldo){
   if (d) d.textContent = "S/ " + formatearLDS(Math.max(0, Number(saldo) || 0));
 }
 
-function esIngresoDeAndrew(m){
-  const tipo = String(m.tipo || m.tipoMovimiento || "").trim().toUpperCase();
-  if (tipo !== "INGRESO") return false;
-  const responsable = String(m.responsable || "").trim().toUpperCase();
-  const obs = String(m.observacion || "").trim().toUpperCase();
-  return responsable.includes("ANDREW") || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW");
+function esIngresoDeAndrew(m, codigoDestino){
+  const tipo=String(m?.tipo||m?.tipoMovimiento||"").trim().toUpperCase();
+  if(tipo!=="INGRESO") return false;
+  const responsable=String(m?.responsable||"").trim().toUpperCase();
+  const obs=String(m?.observacion||"").trim().toUpperCase();
+  const destino=String(codigoDestino||m?.codigo||m?.codigoQR||"").trim().toUpperCase();
+  return (responsable.includes("ANDREW") || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW")) && (!codigoDestino || obs.includes("CUENTA_DESTINO="+destino) || String(m?.codigo||m?.codigoQR||"").trim().toUpperCase()===destino);
 }
 
-function calcularSaldoMiseLocal(movimientos, codigo, saldoBackend){
-  const c = String(codigo || "").trim().toUpperCase();
-  if (!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c)) {
-    return {abono:0, saldo:Number(saldoBackend)||0};
-  }
-
-  const lista = (Array.isArray(movimientos) ? movimientos : []).filter(m =>
-    String(m.codigo || m.codigoQR || "").trim().toUpperCase() === c &&
-    String(m.estado || "ACTIVO").trim().toUpperCase() !== "ANULADO"
+function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
+  const c=String(codigo||'').trim().toUpperCase();
+  if(!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c)) return {abono:0,saldo:Number(saldoBackend)||0};
+  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>
+    String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c &&
+    String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO'
   );
-
-  /*
-     ABONO INICIAL = total de fondos que Andrew ha depositado en la caja de la Mise.
-     No tomamos "el primer movimiento" porque el Excel muestra varios abonos de S/15,000
-     que juntos forman, en este caso, los S/30,000 entregados.
-     SALDO DISPONIBLE = todos los ingresos de la caja menos todos sus egresos.
-  */
-  const abono = lista.reduce((total, m) =>
-    esIngresoDeAndrew(m) ? total + parseMontoLDS(m.monto ?? m.montoLDS ?? 0) : total, 0);
-
-  const saldoCalculado = lista.reduce((total, m) => {
-    const monto = parseMontoLDS(m.monto ?? m.montoLDS ?? 0);
-    const tipo = String(m.tipo || m.tipoMovimiento || "").trim().toUpperCase();
-    if (tipo === "INGRESO") return total + monto;
-    if (tipo === "EGRESO") return total - monto;
-    return total;
-  }, 0);
-
-  const backend = Number(saldoBackend);
-  const saldo = Number.isFinite(backend) ? backend : saldoCalculado;
-  return {abono:Math.max(0, abono), saldo:Math.max(0, saldo)};
+  let ingresos=0,egresos=0,abono=0;
+  lista.forEach(m=>{
+    const monto=parseMontoLDS(m.monto??m.montoLDS??0);
+    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
+    if(tipo==='EGRESO')egresos+=monto;
+  });
+  return {abono:Math.max(0,abono),saldo:Math.max(0,ingresos-egresos)};
 }
+
 
 function actualizarBannerCuenta() {
   const rolBanner = document.querySelector(".admin-text-details p");
@@ -2699,97 +2745,112 @@ function consultarEstudiante(esConsultaAutomatica = false) {
   );
 }
 
-function procesarPagoEstudiante() {
-  const codigo = String(document.getElementById("pagoCodigo")?.value || "").trim().toUpperCase();
-  const categoria = String(document.getElementById("pagoCategoria")?.value || "").trim();
-  const concepto = String(document.getElementById("pagoConcepto")?.value || "").trim();
-  const monto = parseMontoLDS(document.getElementById("pagoMonto")?.value);
-  const observacion = String(document.getElementById("pagoObs")?.value || "").trim();
-  const anioEscolar = document.getElementById("selectAnioEscolar").value;
-  const responsable = sessionStorage.getItem("maestraActiva") || "DOCENTE";
-  const responsableClave = sessionStorage.getItem("responsableClave") || "";
+function prepararAccionesPagoAlumno(){
+  const categoria=String(document.getElementById("pagoCategoria")?.value||"");
+  const concepto=String(document.getElementById("pagoConcepto")?.value||"");
+  const btnPagar=document.getElementById("btnPagarAlumno");
+  const btnCobrar=document.getElementById("btnCobrarAlumno");
+  const nota=document.getElementById("pagoAccionNota");
+  if(!btnPagar||!btnCobrar)return;
 
-  const esAlumno = codigo.startsWith("LDS-EST-");
-  if (!codigo || !esAlumno) {
+  let puedePagar=true, puedeCobrar=false, texto="";
+  if(categoria === "AHORROS_E_INVERSIONES"){
+    const retiro=/^Retiro de ahorros/i.test(concepto);
+    puedePagar=retiro;
+    puedeCobrar=!retiro;
+    texto=retiro
+      ? "RETIRO DE AHORROS: LA MISE PAGA AL ALUMNO."
+      : "DEPÓSITO / INVERSIÓN: SE COBRA AL ALUMNO Y SE DESCUENTA DE SU CUENTA. ";
+  }else if(categoria === "INGRESOS_Y_SUELDOS"){
+    puedePagar=true; puedeCobrar=false;
+    texto="INGRESOS Y SUELDOS: LA MISE PAGA AL ALUMNO SEGÚN EL CONCEPTO REGISTRADO.";
+  }else if(categoria === "PREMIOS_Y_BONIFICACIONES"){
+    puedePagar=true; puedeCobrar=false;
+    texto="PREMIOS Y BONIFICACIONES: LA MISE PAGA AL ALUMNO.";
+  }
+  btnPagar.disabled=!puedePagar;
+  btnCobrar.disabled=!puedeCobrar;
+  btnPagar.classList.toggle("disabled",!puedePagar);
+  btnCobrar.classList.toggle("disabled",!puedeCobrar);
+  if(nota){nota.textContent=texto;nota.classList.toggle("visible",!!texto);}
+}
+
+function procesarMovimientoAlumno(tipoOperacion){
+  const codigo=String(document.getElementById("pagoCodigo")?.value||"").trim().toUpperCase();
+  const categoria=String(document.getElementById("pagoCategoria")?.value||"").trim();
+  const concepto=String(document.getElementById("pagoConcepto")?.value||"").trim();
+  const monto=parseMontoLDS(document.getElementById("pagoMonto")?.value);
+  const observacion=String(document.getElementById("pagoObs")?.value||"").trim();
+  const anioEscolar=document.getElementById("selectAnioEscolar").value;
+  const responsable=sessionStorage.getItem("maestraActiva")||maestraActivaGlobal||"";
+  const responsableClave=sessionStorage.getItem("responsableClave")||"";
+
+  if(!codigo || !codigo.startsWith("LDS-EST-")){
     reproducirSonido('error');
-    mostrarMensajePago("PRIMERO SELECCIONA UN ALUMNO PARA PAGAR.", "error");
-    hablarTextoVoz("Primero selecciona un alumno para pagar.");
+    mostrarMensajePago("PRIMERO SELECCIONA UN ALUMNO.","error");
     return;
   }
-
-  if (!categoria || !CATEGORIAS_CAJA_ACTIVA.includes(categoria)) {
-    reproducirSonido('error');
-    mostrarMensajePago("SELECCIONA UNA CATEGORÍA VÁLIDA.", "error");
-    hablarTextoVoz("Selecciona una categoría válida.");
-    return;
+  if(!categoria || !CATEGORIAS_CAJA_ACTIVA.includes(categoria)){
+    reproducirSonido('error'); mostrarMensajePago("SELECCIONA UNA CATEGORÍA VÁLIDA.","error"); return;
   }
-
-  /* Ingresos y sueldos está reservado al personal. Este panel trabaja con alumnos. */
-  if (categoria === "INGRESOS_Y_SUELDOS") {
-    reproducirSonido('error');
-    mostrarMensajePago("INGRESOS Y SUELDOS CORRESPONDE AL PERSONAL DOCENTE, NO A ALUMNOS.", "error");
-    hablarTextoVoz("Ingresos y sueldos corresponde al personal docente.");
-    return;
+  const conceptosValidos=CATALOGO_EXCEL[categoria]||[];
+  if(!concepto || !conceptosValidos.includes(concepto)){
+    reproducirSonido('error'); mostrarMensajePago("SELECCIONA UN CONCEPTO VÁLIDO.","error"); return;
   }
+  if(!monto || monto<=0){reproducirSonido('error');mostrarMensajePago("INGRESA UN MONTO VÁLIDO.","error");return;}
 
-  const conceptosValidos = CATALOGO_EXCEL[categoria] || [];
-  if (!concepto || !conceptosValidos.includes(concepto)) {
+  // Reglas explícitas: cobrar = alumno -> Mise (INGRESO); pagar = Mise -> alumno (EGRESO).
+  if(categoria === "AHORROS_E_INVERSIONES"){
+    const retiro=/^Retiro de ahorros/i.test(concepto);
+    const esperado=retiro?"EGRESO":"INGRESO";
+    if(tipoOperacion!==esperado){
+      reproducirSonido('error');
+      mostrarMensajePago(retiro ? "PARA RETIRO DE AHORROS DEBES USAR PAGAR ALUMNO." : "PARA DEPÓSITO O INVERSIÓN DEBES USAR COBRAR ALUMNO.","error");
+      prepararAccionesPagoAlumno();
+      return;
+    }
+  }else if(tipoOperacion!=="EGRESO"){
     reproducirSonido('error');
-    mostrarMensajePago("SELECCIONA UN CONCEPTO VÁLIDO DE LA CATEGORÍA.", "error");
-    hablarTextoVoz("Selecciona un concepto válido.");
-    return;
-  }
-
-  if (!monto || monto <= 0) {
-    reproducirSonido('error');
-    mostrarMensajePago("INGRESA UN MONTO VÁLIDO.", "error");
-    hablarTextoVoz("Ingresa un monto válido.");
+    mostrarMensajePago("ESTA CATEGORÍA SE REGISTRA COMO PAGO A FAVOR DEL ALUMNO.","error");
+    prepararAccionesPagoAlumno();
     return;
   }
 
   reproducirSonido('clic');
-  mostrarMensajePago("PROCESANDO PAGO...", "ok");
+  mostrarMensajePago(tipoOperacion==='EGRESO'?"PROCESANDO PAGO...":"PROCESANDO COBRO...","ok");
 
   llamarAPI({
-    accion: "registrarMovimiento",
-    codigo: codigo,
-    anio: anioEscolar,
-    tipo: "EGRESO",
-    categoria: categoria,
-    concepto: concepto,
-    monto: monto,
-    responsable: responsable,
-    responsableClave: responsableClave,
-    observacion: observacion
-  }, function(respuesta) {
-    if (respuesta && respuesta.ok) {
+    accion:"registrarMovimiento",
+    codigo:codigo,
+    anio:anioEscolar,
+    tipo:tipoOperacion,
+    categoria:categoria,
+    concepto:concepto,
+    monto:monto,
+    responsable:responsable,
+    responsableClave:responsableClave,
+    observacion:observacion
+  }, function(respuesta){
+    if(respuesta&&respuesta.ok){
       reproducirSonido('exito');
-
-      if (window.NotificacionesLDS) {
-        NotificacionesLDS.movimiento({
-          tipo: "EGRESO", concepto: concepto, codigo: codigo, monto: monto, anio: anioEscolar
-        });
-      }
-
-      mostrarMensajePago("¡PAGO REGISTRADO EXITOSAMENTE!", "ok");
-      hablarTextoVoz("Pago registrado correctamente.");
-
-      document.getElementById("pagoMonto").value = "";
-      document.getElementById("pagoObs").value = "";
-
-      /* Actualizar la caja de la Mise y el estado del alumno con datos reales del backend. */
+      mostrarMensajePago(tipoOperacion==='EGRESO'?"¡PAGO REGISTRADO EXITOSAMENTE!":"¡COBRO REGISTRADO EXITOSAMENTE!","ok");
+      hablarTextoVoz(tipoOperacion==='EGRESO'?"Pago registrado correctamente.":"Cobro registrado correctamente.");
+      document.getElementById("pagoMonto").value="";
+      document.getElementById("pagoObs").value="";
       cargarSaldoMiseAlIngresar(responsable);
-      if (document.getElementById("codigo")) {
-        document.getElementById("codigo").value = codigo;
-      }
+      document.getElementById("codigo").value=codigo;
       consultarEstudiante(true);
-    } else {
+      prepararAccionesPagoAlumno();
+    }else{
       reproducirSonido('error');
-      mostrarMensajePago((respuesta && respuesta.mensaje) || "ERROR AL REGISTRAR.", "error");
+      mostrarMensajePago((respuesta&&respuesta.mensaje)||"ERROR AL REGISTRAR.","error");
       hablarTextoVoz("Error al registrar.");
     }
   });
 }
+
+// Compatibilidad con código existente.
+function procesarPagoEstudiante(){ procesarMovimientoAlumno("EGRESO"); }
 
 function escaparAtributoHTML(valor) {
   return escaparHTML(valor).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
