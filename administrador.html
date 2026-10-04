@@ -1140,6 +1140,51 @@ footer {
   .print-firma{margin-top:26px;display:flex;justify-content:space-between;font-size:7.5pt;font-weight:700;page-break-inside:avoid;}
 }
 </style>
+<style id="lds-admin-reporte-v4">
+@media print{
+  body.imprimiendo-reporte .print-report{font-size:11pt!important;}
+  body.imprimiendo-reporte .print-report *{box-sizing:border-box;}
+  body.imprimiendo-reporte .print-report-header{gap:10px;padding-bottom:6px;margin-bottom:8px;}
+  body.imprimiendo-reporte .print-report-header h1{font-size:13pt!important;margin:0 0 2px;}
+  body.imprimiendo-reporte .print-report-header p{font-size:10pt!important;margin:1px 0;}
+  body.imprimiendo-reporte .print-student-box{padding:7px 9px;margin:7px 0 9px;gap:10px;}
+  body.imprimiendo-reporte .print-student-photo,
+  body.imprimiendo-reporte .print-student-placeholder{width:72px!important;height:72px!important;flex:0 0 72px!important;}
+  body.imprimiendo-reporte .print-student-box h2{font-size:12pt!important;}
+  body.imprimiendo-reporte .print-student-box .meta{font-size:10pt!important;}
+  body.imprimiendo-reporte .print-report-table{table-layout:fixed!important;width:100%!important;margin-top:5px;}
+  body.imprimiendo-reporte .print-report-table th,
+  body.imprimiendo-reporte .print-report-table td{font-size:11pt!important;line-height:1.12!important;padding:3px 4px!important;vertical-align:top!important;word-break:normal!important;overflow-wrap:anywhere!important;text-transform:uppercase;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(1),
+  body.imprimiendo-reporte .print-report-table td:nth-child(1){width:18%;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(2),
+  body.imprimiendo-reporte .print-report-table td:nth-child(2){width:16%;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(3),
+  body.imprimiendo-reporte .print-report-table td:nth-child(3){width:15%;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(4),
+  body.imprimiendo-reporte .print-report-table td:nth-child(4){width:12%;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(5),
+  body.imprimiendo-reporte .print-report-table td:nth-child(5){width:25%;}
+  body.imprimiendo-reporte .print-report-table th:nth-child(6),
+  body.imprimiendo-reporte .print-report-table td:nth-child(6){width:14%;}
+  body.imprimiendo-reporte .print-kpi span{font-size:10pt!important;}
+  body.imprimiendo-reporte .print-kpi strong{font-size:11pt!important;}
+  body.imprimiendo-reporte .print-roster-name{font-size:10pt!important;}
+  body.imprimiendo-reporte .print-roster-meta{font-size:9pt!important;}
+  body.imprimiendo-reporte .print-detail-title{font-size:11pt!important;}
+  body.imprimiendo-grupal .print-detail + .print-detail{page-break-before:always;}
+}
+.pago-alumno-movimientos{margin-top:9px;border:1px solid #dbe4ef;border-radius:11px;background:#fff;overflow:hidden;}
+.pago-mov-title{padding:7px 10px;background:linear-gradient(135deg,#eff6ff,#e0f2fe);border-bottom:1px solid #cbd5e1;font-size:.68rem;font-weight:900;color:#0f2a43;}
+.pago-mov-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.pago-mov-table th,.pago-mov-table td{padding:6px 5px;border-bottom:1px solid #edf2f7;font-size:.62rem;line-height:1.15;text-transform:uppercase;vertical-align:top;}
+.pago-mov-table th{font-weight:900;background:#f8fafc;color:#475569;}
+.pago-mov-table tr:last-child td{border-bottom:0;}
+.pago-mov-empty{padding:10px;font-size:.66rem;font-weight:800;color:#64748b;text-align:center;}
+.pago-mov-ingreso{font-weight:900;color:#047857;}
+.pago-mov-egreso{font-weight:900;color:#b91c1c;}
+@media(max-width:760px){.pago-mov-table th:nth-child(4),.pago-mov-table td:nth-child(4){display:none;}}
+</style>
 
 
 <style id="lds-admin-ajustes-finales">
@@ -1415,6 +1460,10 @@ footer {
             <span id="pagoAlumnoMeta">—</span>
             <b id="pagoAlumnoSaldo">SALDO ACTUAL: S/ 0.00</b>
           </div>
+        </div>
+        <div id="pagoAlumnoMovimientos" class="pago-alumno-movimientos" style="display:none;">
+          <div class="pago-mov-title">📒 MOVIMIENTOS DEL ALUMNO</div>
+          <div id="pagoAlumnoMovimientosBody"></div>
         </div>
 
         <label class="small-label">CATEGORÍA DEL MOVIMIENTO</label>
@@ -2742,16 +2791,20 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       // FUENTE ROBUSTA DEL HISTORIAL: consultamos MOVIMIENTOS completo y no
       // dependemos del filtro de año del endpoint ESTUDIANTE. Esto corrige el
       // caso actual en el que el saldo se actualiza pero la cartilla aparece vacía.
-      const respuestaMovimientos = await llamarAPIPromise({accion:"movimientos"}, 15000);
-      const movimientosGenerales = Array.isArray(respuestaMovimientos?.movimientos)
-        ? respuestaMovimientos.movimientos
-        : movimientosRespuesta;
+      let movimientosGenerales = Array.isArray(movimientosRespuesta) ? movimientosRespuesta : [];
+      // La consulta ESTUDIANTE ya devuelve el historial completo de la cuenta.
+      // Solo usamos MOVIMIENTOS como respaldo cuando el historial viene vacío.
+      if (!movimientosGenerales.length) {
+        const respaldo = await llamarAPIPromise({accion:"movimientos"}, 8000);
+        movimientosGenerales = Array.isArray(respaldo?.movimientos) ? respaldo.movimientos : [];
+      }
 
-      const movimientosCuenta = (Array.isArray(movimientosGenerales) ? movimientosGenerales : [])
-        .filter(m => String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === codigoCuenta);
+      const movimientosCuenta = movimientosGenerales.filter(m =>
+        String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === codigoCuenta
+      );
 
       const movimientos = filtrarMovimientosPorAnioCliente(
-        movimientosCuenta.length ? movimientosCuenta : movimientosRespuesta,
+        movimientosCuenta.length ? movimientosCuenta : movimientosGenerales,
         anioEscolar
       );
 
@@ -2770,6 +2823,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         e,
         anioEscolar
       );
+      renderResumenMovimientosAlumno(movimientos, anioEscolar);
 
       mostrarMensaje(
         "CONSULTA REALIZADA CORRECTAMENTE.",
@@ -2795,6 +2849,26 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       }
     }
   );
+}
+
+function renderResumenMovimientosAlumno(movimientos, anioEscolar){
+  const wrap=document.getElementById('pagoAlumnoMovimientos');
+  const body=document.getElementById('pagoAlumnoMovimientosBody');
+  if(!wrap||!body)return;
+  const lista=Array.isArray(movimientos)?movimientos:[];
+  wrap.style.display='block';
+  if(!lista.length){
+    body.innerHTML='<div class="pago-mov-empty">SIN MOVIMIENTOS REGISTRADOS EN EL AÑO '+escaparHTML(anioEscolar||'')+'.</div>';
+    return;
+  }
+  body.innerHTML=`<div style="max-height:210px;overflow:auto;"><table class="pago-mov-table"><thead><tr><th>FECHA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead><tbody>${lista.map(m=>{
+    const fecha=normalizarFechaVisibleImpresion(m.fecha??m.fechaTexto??m.timestamp??'')||'—';
+    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    const concepto=String(m.concepto||'').trim();
+    const monto=formatearLDS(parseMontoLDS(m.monto??m.montoLDS??0));
+    const cls=tipo.includes('EGRESO')?'pago-mov-egreso':'pago-mov-ingreso';
+    return `<tr><td>${escaparHTML(fecha)}</td><td class="${cls}">${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td><td style="text-align:right;white-space:nowrap;">S/ ${escaparHTML(monto)}</td></tr>`;
+  }).join('')}</tbody></table></div>`;
 }
 
 function prepararAccionesPagoAlumno(){
@@ -2963,29 +3037,61 @@ function prepararFotosImpresion(container) {
   })));
 }
 
+function normalizarFechaVisibleImpresion(valor) {
+  if (valor instanceof Date && !Number.isNaN(valor.getTime())) {
+    const p=n=>String(n).padStart(2,'0');
+    return `${p(valor.getDate())}/${p(valor.getMonth()+1)}/${valor.getFullYear()} ${p(valor.getHours())}:${p(valor.getMinutes())}`;
+  }
+  const txt=String(valor??'').trim();
+  if(!txt)return '';
+  const native=new Date(txt);
+  if(!Number.isNaN(native.getTime()) && /\d{4}/.test(txt)){
+    const p=n=>String(n).padStart(2,'0');
+    return `${p(native.getDate())}/${p(native.getMonth()+1)}/${native.getFullYear()} ${p(native.getHours())}:${p(native.getMinutes())}`;
+  }
+  const m=txt.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:[, ]+|T)?(\d{1,2})?:?(\d{2})?/);
+  if(m){
+    return `${String(m[1]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[3]}${m[4]?` ${String(m[4]).padStart(2,'0')}:${String(m[5]||'00').padStart(2,'0')}`:''}`;
+  }
+  const y=txt.match(/20\d{2}/)?.[0]||'';
+  return y ? `FECHA ${y}` : txt;
+}
+
+function limpiarObservacionVisible(valor){
+  const txt=String(valor??'').trim();
+  if(!txt)return '';
+  return txt
+    .replace(/(^|\s*\|\s*)TX\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA_ORIGEN\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA_DESTINO\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA\s*=\s*[^|]*/gi,'')
+    .replace(/\s*\|\s*/g,' | ')
+    .replace(/^\s*\|\s*|\s*\|\s*$/g,'')
+    .trim();
+}
+
 function htmlMovimientosImpresion(movimientos, estudiante) {
   if (!Array.isArray(movimientos) || !movimientos.length) {
     return `<div class="print-no-mov">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO SELECCIONADO.</div>`;
   }
   const rows = movimientos.map(m => {
-    const anio = m.anio || m.anioEscolar || "";
-    const fecha = m.fechaTexto || m.fecha || m.timestamp || "";
-    const nombre = m.estudiante || m.nombre || estudiante?.nombreCompleto || estudiante?.nombre || "";
-    const grado = m.grado || estudiante?.grado || "";
-    const tipo = m.tipo || m.tipoMovimiento || "";
-    const concepto = m.concepto || "";
+    const fecha = normalizarFechaVisibleImpresion(m.fecha ?? m.fechaTexto ?? m.timestamp ?? '');
+    const tipo = String(m.tipo || m.tipoMovimiento || '').trim();
+    const concepto = String(m.concepto || '').trim();
     const monto = m.monto ?? m.montoLDS ?? 0;
-    const responsable = m.responsable || "";
-    const observacion = m.observacion || "";
+    const responsable = String(m.responsable || '').trim();
+    const observacion = limpiarObservacionVisible(m.observacion || '');
     return `<tr>
-      <td>${escaparHTML(anio)}</td><td>${escaparHTML(fecha)}</td><td>${escaparHTML(nombre)}</td>
-      <td>${escaparHTML(grado)}</td><td>${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td>
+      <td>${escaparHTML(fecha)}</td>
+      <td>${escaparHTML(tipo)}</td>
+      <td>${escaparHTML(concepto)}</td>
       <td style="text-align:right;">S/ ${formatearLDS(parseMontoLDS(monto))}</td>
-      <td>${escaparHTML(responsable)}</td><td>${escaparHTML(observacion)}</td>
+      <td>${escaparHTML(responsable)}</td>
+      <td>${escaparHTML(observacion)}</td>
     </tr>`;
-  }).join("");
+  }).join('');
   return `<table class="print-report-table"><thead><tr>
-    <th>AÑO</th><th>FECHA</th><th>ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
+    <th>FECHA Y HORA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
   </tr></thead><tbody>${rows}</tbody></table>`;
 }
 
@@ -3055,18 +3161,21 @@ async function imprimirReporteGrupal() {
   const respuestaMovimientos = await llamarAPIPromise({accion:'movimientos'}, 15000);
   const todosMovimientos = Array.isArray(respuestaMovimientos?.movimientos) ? respuestaMovimientos.movimientos : [];
 
-  const resultados = await Promise.all(alumnos.map(async a => {
+  const resultados = alumnos.map(a => {
     const codigo = String(a.codigo || '').trim().toUpperCase();
-    const r = await llamarAPIPromise({accion:'estudiante', codigo});
-    const estudiante = (r && r.ok !== false && r.estudiante)
-      ? r.estudiante
-      : {codigo, nombreCompleto:a.nombre || '', grado:a.grado || '', seccion:a.seccion || ''};
+    const estudiante = {
+      codigo,
+      nombreCompleto: a.nombre || '',
+      grado: a.grado || '',
+      seccion: a.seccion || '',
+      fotoUrl: a.fotoUrl || a.foto || ''
+    };
     const movimientosCuenta = todosMovimientos.filter(m =>
       String(m?.codigo || m?.codigoQR || '').trim().toUpperCase() === codigo
     );
     const movimientos = filtrarMovimientosPorAnioCliente(movimientosCuenta, anio);
     return {cuenta:a, estudiante, movimientos};
-  }));
+  });
 
   const totalMovimientos = resultados.reduce((n, x) => n + x.movimientos.length, 0);
   const conMovimientos = resultados.filter(x => x.movimientos.length > 0).length;
