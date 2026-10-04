@@ -438,21 +438,28 @@ main {
 .panel.collapsed .toggle-icon { transform: rotate(-90deg); }
 .panel.collapsed .panel-head { border-bottom: none; }
 
+/* RESUMEN FINANCIERO */
+.stat-abono{border-color:#fbbf24 !important;background:linear-gradient(135deg,#3b2f12,#111827) !important;}
+.stat-abono strong{color:#fde68a !important;font-size:1.45rem !important;}
+.stat-abono span{color:#fef3c7 !important;}
+.stat-disponible{border-color:#22c55e !important;background:linear-gradient(135deg,#052e16,#0f172a) !important;}
+.stat-disponible strong{color:#86efac !important;font-size:1.45rem !important;}
+.stat-disponible span{color:#bbf7d0 !important;}
 /* BOTONES SUPERIORES */
 .header-actions-group .select-anio-amarillo{
-  background:#a78bfa !important;
+  background:linear-gradient(135deg,#c4b5fd,#8b5cf6) !important;
   border:1.5px solid #8b5cf6 !important;
   color:#172554 !important;
   font-weight:900 !important;
 }
 .header-actions-group .btn-header-alumnos{
-  background:#38bdf8 !important;
+  background:linear-gradient(135deg,#67e8f9,#0ea5e9) !important;
   border:1.5px solid #0ea5e9 !important;
   color:#fff !important;
   font-weight:900 !important;
 }
 .header-actions-group .btn-header-mises{
-  background:#dc2626 !important;
+  background:linear-gradient(135deg,#ef4444,#b91c1c) !important;
   border:1.5px solid #b91c1c !important;
   color:#fff !important;
   font-weight:900 !important;
@@ -493,12 +500,12 @@ main {
 .impresiones-opciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
 .impresion-opcion{border:1.5px solid #f59e0b;background:#fff7ed;color:#9a3412;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;font-size:.75rem;}
 .impresion-opcion:hover{background:#ffedd5;}
-.pago-alumno-card{display:flex;align-items:center;gap:12px;margin:8px 0 12px;padding:10px;border:1.5px solid #bae6fd;border-radius:10px;background:#f0f9ff;}
-.pago-alumno-foto{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
+.pago-alumno-card{display:flex;align-items:center;gap:16px;margin:8px 0 12px;padding:10px;border:1.5px solid #bae6fd;border-radius:10px;background:#f0f9ff;}
+.pago-alumno-foto{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
 .pago-alumno-datos{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.pago-alumno-datos strong{font-size:.86rem;color:#0f172a;}
-.pago-alumno-datos span{font-size:.68rem;color:#475569;font-weight:700;}
-.pago-alumno-datos b{font-size:.72rem;color:#15803d;}
+.pago-alumno-datos strong{font-size:1rem;color:#0f172a;}
+.pago-alumno-datos span{font-size:.78rem;color:#475569;font-weight:700;}
+.pago-alumno-datos b{font-size:.82rem;color:#15803d;}
 @media(max-width:700px){.impresiones-opciones{grid-template-columns:1fr;}}
 .header-list-loading{padding:18px;text-align:center;color:#64748b;font-weight:800;font-size:.75rem;}
 @media(max-width:700px){
@@ -719,7 +726,7 @@ tr:last-child td { border-bottom: 0; }
 
 @media print {
   body { background: #ffffff; color: #000000; }
-  header, .admin-profile-banner, .search-container, .panel-head div, .panel:has(#panelPago), .panel:has(#panelIncidencias), .btn, footer, .qr-modal, .student-head { display: none !important; }
+  header, .admin-profile-banner, .search-container, .panel-head div, #panelPago, #panelIncidencias, .right-stack, .header-dropdown-list, .btn, footer, .qr-modal, .student-head { display: none !important; }
   main { display: block !important; padding: 0 !important; width: 100% !important; }
   .panel { border: none !important; box-shadow: none !important; margin: 0 !important; }
   .panel-body { padding: 0 !important; }
@@ -744,14 +751,17 @@ tr:last-child td { border-bottom: 0; }
   .print-entity-box {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 14px;
     border: 1.5px solid #000;
-    padding: 6px 10px;
-    border-radius: 6px;
-    background: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #fff;
     width: 100%;
   }
-  .print-entity-box img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1.5px solid #000; }
+  body.imprimiendo-grupal .print-entity-box { display:none !important; }
+  .print-entity-box img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #000; flex:0 0 72px; }
+  #printNombreEntidad { font-size: 1.05rem !important; font-weight:900 !important; color:#000 !important; }
+  #printMetaEntidad { font-size:.78rem !important; font-weight:700 !important; color:#333 !important; }
 
   .table-wrap { border: 1px solid #000 !important; box-shadow: none !important; margin-top: 8px !important; max-height: none !important; overflow: visible !important; width: 100% !important; }
   table { width: 100% !important; }
@@ -1044,7 +1054,7 @@ footer {
 @media (max-width: 900px) {
   .admin-profile-banner { flex-direction:column; align-items:stretch; }
   .admin-stats-box { width:100%; flex-wrap:wrap; }
-  .stat-pill, .stat-pill:first-child { flex:1 1 30%; min-width:0; }
+  .stat-pill, .stat-pill:first-child { flex:1 1 22%; min-width:0; }
   .admin-text-details h3 { font-size:1.25rem; }
 }
 </style>
@@ -1129,18 +1139,10 @@ footer {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill">
-        <span>SALDO INICIAL</span>
-        <strong id="saldoInicialMise">S/ 30,000.00</strong>
-      </div>
-      <div class="stat-pill">
-        <span>MOVIMIENTOS</span>
-        <strong id="contadorMovimientos">0</strong>
-      </div>
-      <div class="stat-pill">
-        <span>INCIDENCIAS</span>
-        <strong id="contadorIncidencias">0</strong>
-      </div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">S/ 30,000.00</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">S/ 30,000.00</strong></div>
+      <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
+      <div class="stat-pill"><span>INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
     </div>
   </div>
 
@@ -1408,47 +1410,37 @@ function abrirImpresiones() {
   panel.style.display = abrir ? 'block' : 'none';
 }
 
+let cacheCuentasEscolares = {};
+let cacheCuentasCargando = {};
+function precargarCuentasEscolares() {
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  if(cacheCuentasEscolares[anio]||cacheCuentasCargando[anio]) return;
+  cacheCuentasCargando[anio]=true;
+  llamarAPI({accion:'cuentas',anio},r=>{cacheCuentasCargando[anio]=false;if(r&&r.ok!==false&&Array.isArray(r.cuentas))cacheCuentasEscolares[anio]=r.cuentas;});
+}
+function obtenerCuentasCacheadas(){const anio=document.getElementById('selectAnioEscolar')?.value||'2026';return Array.isArray(cacheCuentasEscolares[anio])?cacheCuentasEscolares[anio]:null;}
+
 function abrirListaCodigos() {
   reproducirSonido('clic');
-  const panel = document.getElementById('listaAlumnosDropdown');
-  const items = document.getElementById('listaAlumnosItems');
-  const filtro = document.getElementById('filtroCodigosInline');
-  if (!panel || !items) return;
-
-  const abrir = panel.style.display === 'none' || !panel.style.display;
-  cerrarListasSuperiores('alumnos');
-  panel.style.display = abrir ? 'block' : 'none';
-  if (!abrir) return;
-
-  if (filtro) filtro.value = '';
-  items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
-
-  llamarAPI(
-    {
-      accion: 'cuentas',
-      anio: document.getElementById('selectAnioEscolar').value
-    },
-    function(respuesta) {
-      if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        items.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA.</div>';
-        reproducirSonido('error');
-        return;
-      }
-
-      window.listaCodigosAlumnos = respuesta.cuentas
-        .filter(c => String(c.codigo || '').trim().toUpperCase().startsWith('LDS-EST-'))
-        .sort((a,b) => {
-          const ca = String(a.codigo || '').trim().toUpperCase();
-          const cb = String(b.codigo || '').trim().toUpperCase();
-          const na = Number((ca.match(/(\d+)$/) || ["", "999999"])[1]);
-          const nb = Number((cb.match(/(\d+)$/) || ["", "999999"])[1]);
-          if (na !== nb) return na - nb;
-          return ca.localeCompare(cb, 'es', {sensitivity:'base'});
-        });
-
-      renderListaCodigosInline(window.listaCodigosAlumnos);
-    }
-  );
+  const panel=document.getElementById('listaAlumnosDropdown');
+  const items=document.getElementById('listaAlumnosItems');
+  const filtro=document.getElementById('filtroCodigosInline');
+  if(!panel||!items)return;
+  const abrir=panel.style.display==='none'||!panel.style.display;
+  cerrarListasSuperiores('alumnos'); panel.style.display=abrir?'block':'none'; if(!abrir)return;
+  if(filtro)filtro.value='';
+  const cache=obtenerCuentasCacheadas();
+  if(cache){renderListaAlumnosDesdeCuentas(cache);return;}
+  items.innerHTML='<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
+  llamarAPI({accion:'cuentas',anio:document.getElementById('selectAnioEscolar').value},r=>{
+    if(!r||r.ok===false||!Array.isArray(r.cuentas)){items.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA.</div>';return;}
+    cacheCuentasEscolares[document.getElementById('selectAnioEscolar').value]=r.cuentas;
+    renderListaAlumnosDesdeCuentas(r.cuentas);
+  });
+}
+function renderListaAlumnosDesdeCuentas(cuentas){
+  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>String(c.codigo||'').trim().toUpperCase().startsWith('LDS-EST-')).sort((a,b)=>String(a.nombre||a.nombreCompleto||'').localeCompare(String(b.nombre||b.nombreCompleto||''),'es',{sensitivity:'base'}));
+  renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
 function renderListaCodigosInline(lista) {
@@ -1505,6 +1497,7 @@ function seleccionarCodigoDeLista(index) {
   reproducirSonido('exito');
   hablarTextoVoz('Alumno seleccionado. Consultando código ' + codigo + '.');
   consultarEstudiante();
+  setTimeout(()=>{const p=document.getElementById('panelPago');if(p)p.classList.remove('collapsed');},300);
 }
 
 function cerrarListaCodigos() {
@@ -1512,58 +1505,18 @@ function cerrarListaCodigos() {
   if (panel) panel.style.display = 'none';
 }
 
-function abrirListaMises() {
-  reproducirSonido('clic');
-  const panel = document.getElementById('listaMisesDropdown');
-  const cont = document.getElementById('listaMisesItems');
-  if (!panel || !cont) return;
-
-  const abrir = panel.style.display === 'none' || !panel.style.display;
-  cerrarListasSuperiores('mises');
-  panel.style.display = abrir ? 'block' : 'none';
-  if (!abrir) return;
-
-  cont.innerHTML = '<div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>';
-
-  llamarAPI(
-    {
-      accion: 'cuentas',
-      anio: document.getElementById('selectAnioEscolar').value
-    },
-    function(respuesta) {
-      if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        cont.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>';
-        reproducirSonido('error');
-        return;
-      }
-
-      const permitidas = new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
-      const nombresPorCodigo = Object.fromEntries(
-        Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([nombre, codigo]) => [codigo, nombre])
-      );
-
-      const mises = respuesta.cuentas.filter(c => {
-        const codigo = String(c.codigo || '').trim().toUpperCase();
-        return permitidas.has(codigo);
-      }).sort((a,b) => String(a.codigo || '').localeCompare(String(b.codigo || '')));
-
-      if (!mises.length) {
-        cont.innerHTML = '<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';
-        return;
-      }
-
-      cont.innerHTML = mises.map(c => {
-        const codigo = String(c.codigo || '').trim().toUpperCase();
-        const nombre = c.nombre || c.nombreCompleto || nombresPorCodigo[codigo] || 'MISE';
-        const saldo = Number(c.saldoActual ?? c.saldo ?? c.fondoActual ?? 0) || 0;
-        return `<div class="header-list-row">
-          <span class="code">${escaparHTML(codigo)}</span>
-          <span class="name">${escaparHTML(nombre)}</span>
-          <span class="saldo">S/ ${formatearLDS(saldo)}</span>
-        </div>`;
-      }).join('');
-    }
-  );
+function abrirListaMises(){
+  reproducirSonido('clic'); const panel=document.getElementById('listaMisesDropdown'),cont=document.getElementById('listaMisesItems'); if(!panel||!cont)return;
+  const abrir=panel.style.display==='none'||!panel.style.display; cerrarListasSuperiores('mises'); panel.style.display=abrir?'block':'none'; if(!abrir)return;
+  const cache=obtenerCuentasCacheadas(); if(cache){renderListaMisesDesdeCuentas(cache);return;}
+  cont.innerHTML='<div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>';
+  llamarAPI({accion:'cuentas',anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!Array.isArray(r.cuentas)){cont.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>';return;} cacheCuentasEscolares[document.getElementById('selectAnioEscolar').value]=r.cuentas; renderListaMisesDesdeCuentas(r.cuentas);});
+}
+function renderListaMisesDesdeCuentas(cuentas){
+  const cont=document.getElementById('listaMisesItems'); if(!cont)return; const permitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE)); const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
+  const mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=>permitidas.has(String(c.codigo||'').trim().toUpperCase()));
+  if(!mises.length){cont.innerHTML='<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';return;}
+  cont.innerHTML=mises.map(c=>{const codigo=String(c.codigo||'').trim().toUpperCase();const nombre=c.nombre||c.nombreCompleto||nombres[codigo]||'MISE';const saldo=Number(c.saldoActual??c.saldo??c.fondoActual??0)||0;return `<div class="header-list-row"><span class="code">${escaparHTML(codigo)}</span><span class="name">${escaparHTML(nombre)}</span><span class="saldo">S/ ${formatearLDS(saldo)}</span></div>`;}).join('');
 }
 
 function cerrarListaMises() {
@@ -1871,48 +1824,7 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
-function cargarSaldoMiseAlIngresar(nombreMaestra) {
-  const codigoMise = obtenerCodigoCajaMise(nombreMaestra);
-  const saldoEl = document.getElementById("saldoInicialMise");
-  if (!codigoMise || !saldoEl) return;
-
-  // El fondo inicial oficial de cada Mise es S/ 30,000.00.
-  // Se muestra de inmediato y luego se reemplaza por el saldo real del servidor.
-  saldoEl.textContent = "S/ 30,000.00";
-
-  llamarAPI(
-    {
-      accion: "cuentas",
-      anio: document.getElementById("selectAnioEscolar").value
-    },
-    function(respuesta) {
-      if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
-        saldoEl.textContent = "S/ 30,000.00";
-        return;
-      }
-
-      const cuenta = respuesta.cuentas.find(c =>
-        String(c.codigo || "").trim().toUpperCase() === codigoMise
-      );
-
-      if (!cuenta) {
-        saldoEl.textContent = "S/ 30,000.00";
-        return;
-      }
-
-      const saldo = Number(
-        cuenta.saldoActual ??
-        cuenta.saldo ??
-        cuenta.fondoActual ??
-        0
-      );
-
-      saldoEl.textContent = Number.isFinite(saldo)
-        ? "S/ " + formatearLDS(saldo)
-        : "NO REGISTRADO";
-    }
-  );
-}
+function cargarSaldoMiseAlIngresar(nombreMaestra){const codigo=obtenerCodigoCajaMise(nombreMaestra);if(!codigo)return;actualizarSaldosMise(30000,30000);llamarAPI({accion:'estudiante',codigo,anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!r.estudiante)return;const cuenta=r.cuenta||{},mov=Array.isArray(r.movimientos)?r.movimientos:[],calc=calcularSaldoMiseLocal(mov,codigo,Number(cuenta.saldoActual));actualizarSaldosMise(calc.abono,calc.saldo);});}
 
 function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
@@ -1928,6 +1840,7 @@ function desbloquearPanel(nombreMaestra) {
   cargarConceptosPorTipo();
   renderIncidencias();
   cargarSaldoMiseAlIngresar(nombreMaestra);
+  precargarCuentasEscolares();
 
   /* IMPORTANTE:
      La Mise no debe esperar a buscar un alumno para conocer su fondo.
@@ -1952,8 +1865,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
 
-  const saldoInicialInicio = document.getElementById("saldoInicialMise");
-  if (saldoInicialInicio) saldoInicialInicio.textContent = "S/ 30,000.00";
+  actualizarSaldosMise(30000,30000);
 
   setTimeout(() => {
     hablarTextoVoz(
@@ -2164,6 +2076,17 @@ function obtenerURLsFoto(url) {
   ];
 }
 
+function actualizarSaldosMise(abono,saldo){const a=document.getElementById('saldoInicialMise'),d=document.getElementById('saldoDisponibleMise');if(a)a.textContent='S/ '+formatearLDS(Math.max(0,Number(abono)||0));if(d)d.textContent='S/ '+formatearLDS(Math.max(0,Number(saldo)||0));}
+function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
+  const c=String(codigo||'').trim().toUpperCase(); if(!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c))return{abono:0,saldo:Number(saldoBackend)||0};
+  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c&&String(m.estado||'ACTIVO').toUpperCase()!=='ANULADO');
+  const abono=obtenerSaldoInicialMise(lista,c)||30000; let total=0;
+  lista.forEach(m=>{const monto=parseMontoLDS(m.monto??m.montoLDS??0),tipo=String(m.tipo||m.tipoMovimiento||'').toUpperCase();if(tipo==='INGRESO')total+=monto;else if(tipo==='EGRESO')total-=monto;});
+  let saldo=Number(saldoBackend);
+  if(!Number.isFinite(saldo)||saldo===0){const tieneFondo=lista.some(m=>{const x=String(m.concepto||'').toUpperCase(),o=String(m.observacion||'').toUpperCase(),r=String(m.responsable||'').toUpperCase();return x.includes('FONDO')||x.includes('TRANSFERENCIA')||o.includes('FONDO')||o.includes('TRANSFERENCIA')||r.includes('ANDREW');});saldo=tieneFondo?total:abono+total;}
+  return{abono,saldo:Math.max(0,saldo)};
+}
+
 function actualizarBannerCuenta(saldo) {
   const rolBanner = document.querySelector(".admin-text-details p");
   if (rolBanner) rolBanner.textContent = "DOCENTE · TUTORA · CAJERA";
@@ -2259,8 +2182,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
 
         document.getElementById("contadorMovimientos").textContent = "0";
-        const saldoInicialError = document.getElementById("saldoInicialMise");
-        if (saldoInicialError) saldoInicialError.textContent = "S/ 0.00";
+        actualizarSaldosMise(0,0);
         datosEstudianteActualGlobal = null;
 
         mostrarMensaje(
@@ -2346,6 +2268,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           pagoMeta.textContent = [e.codigo || codigo, e.grado || "", e.seccion || "", "AÑO " + anioEscolar].filter(Boolean).join(" · ");
           pagoSaldo.textContent = "SALDO ACTUAL: S/ " + saldoFormateado;
           pagoCard.style.display = "flex";
+          const panelPagoAuto=document.getElementById("panelPago"); if(panelPagoAuto) panelPagoAuto.classList.remove("collapsed");
         } else {
           pagoCard.style.display = "none";
         }
@@ -2366,43 +2289,12 @@ function consultarEstudiante(esConsultaAutomatica = false) {
                 : [];
 
       const codigoCuentaMise = String(e.codigo || codigo).trim().toUpperCase();
-      const saldoInicialMise = obtenerSaldoInicialMise(
-        movimientos,
-        codigoCuentaMise
-      );
-
-      const saldoInicialBackend = parseMontoLDS(
-        cuenta.saldoInicial ??
-        cuenta.fondoInicial ??
-        cuenta.fondo ??
-        e.saldoInicial ??
-        e.fondo ??
-        0
-      );
-
-      const saldoInicialEl = document.getElementById("saldoInicialMise");
-      if (saldoInicialEl) {
-        const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuentaMise);
-
-        let saldoParaMostrar = saldoInicialMise;
-
-        if (saldoParaMostrar <= 0 && saldoInicialBackend > 0) {
-          saldoParaMostrar = saldoInicialBackend;
-        }
-
-        /*
-          Para una caja de Mise, si el backend todavía no expone un campo
-          separado de saldo inicial ni devuelve el movimiento de fondo,
-          mostramos el fondo actual disponible como respaldo visual.
-          No se altera ningún movimiento ni el saldo contable.
-        */
-        if (saldoParaMostrar <= 0 && esCajaMise && saldoActual > 0) {
-          saldoParaMostrar = saldoActual;
-        }
-
-        saldoInicialEl.textContent = saldoParaMostrar > 0
-          ? "S/ " + formatearLDS(saldoParaMostrar)
-          : (esCajaMise ? "S/ 30,000.00" : "S/ 0.00");
+      const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuentaMise);
+      if (esCajaMise) {
+        const calcMise = calcularSaldoMiseLocal(movimientos, codigoCuentaMise, saldoActual);
+        actualizarSaldosMise(calcMise.abono, calcMise.saldo);
+      } else if (esDocente) {
+        actualizarSaldosMise(0, saldoActual);
       }
 
       renderMovimientos(
@@ -2632,10 +2524,10 @@ function imprimirReportePersonal() {
   const urls =
     obtenerURLsFoto(originalFoto);
 
-  document.getElementById(
-    "printFotoEntidad"
-  ).src =
-    urls[0] || "";
+  const fotoPrint=document.getElementById("printFotoEntidad");
+  fotoPrint.style.display=urls[0]?"block":"none";
+  fotoPrint.src=urls[0]||"";
+  document.body.classList.remove("imprimiendo-grupal");
 
   hablarTextoVoz(
     "Imprimiendo estado de cuenta personal."
@@ -2646,51 +2538,24 @@ function imprimirReportePersonal() {
 
 function imprimirReporteGrupal() {
   reproducirSonido('clic');
-  const imp = document.getElementById('listaImpresionesDropdown');
-  if (imp) imp.style.display = 'none';
+  const imp=document.getElementById('listaImpresionesDropdown'); if(imp)imp.style.display='none';
+  const anio=document.getElementById('selectAnioEscolar').value;
+  document.getElementById('printTituloReporte').textContent='I.E.P. LA SALLE DEL SUR — ESTADO DE CUENTA GRUPAL ('+anio+')';
+  document.getElementById('printNombreEntidad').textContent=maestraActivaGlobal||'DOCENTE RESPONSABLE';
+  document.getElementById('printMetaEntidad').textContent='DOCENTE RESPONSABLE · BANCO LDS 360 · AÑO '+anio;
+  const foto=document.getElementById('printFotoEntidad'); foto.style.display='none'; foto.src=''; document.body.classList.add('imprimiendo-grupal');
 
-  const anio =
-    document.getElementById(
-      "selectAnioEscolar"
-    ).value;
-
-  document.getElementById(
-    "printTituloReporte"
-  ).textContent =
-    "I.E.P. LA SALLE DEL SUR — REPORTE GENERAL (" +
-    anio +
-    ")";
-
-  document.getElementById(
-    "printNombreEntidad"
-  ).textContent =
-    maestraActivaGlobal ||
-    "DOCENTE CAJERA";
-
-  document.getElementById(
-    "printMetaEntidad"
-  ).textContent =
-    "TUTORA CAJERA RESPONSABLE — BANCO LDS 360 (" +
-    anio +
-    ")";
-
-  const fotoResponsable =
-    obtenerURLsFoto(
-      FOTOS_DOCENTES[
-        maestraActivaGlobal
-      ] || ""
-    );
-
-  document.getElementById(
-    "printFotoEntidad"
-  ).src =
-    fotoResponsable[0] || "";
-
-  hablarTextoVoz(
-    "Imprimiendo reporte general y balance grupal."
-  );
-
-  window.print();
+  mostrarMensaje('PREPARANDO ESTADO DE CUENTA GRUPAL...','ok');
+  llamarAPI({accion:'movimientos',anio},function(respuesta){
+    if(!respuesta||respuesta.ok===false||!Array.isArray(respuesta.movimientos)){
+      mostrarMensaje('NO SE PUDO PREPARAR EL ESTADO DE CUENTA GRUPAL.','error');
+      return;
+    }
+    const soloAlumnos=respuesta.movimientos.filter(m=>String(m.codigo||m.codigoQR||'').toUpperCase().startsWith('LDS-EST-'));
+    renderMovimientos(soloAlumnos,null,anio);
+    hablarTextoVoz('Imprimiendo estado de cuenta grupal.');
+    setTimeout(()=>window.print(),120);
+  });
 }
 
 function renderMovimientos(
