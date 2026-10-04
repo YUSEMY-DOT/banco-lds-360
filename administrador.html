@@ -6,7 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BANCO LDS 360 — Administración</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript">
+
+document.getElementById('codigoModal')?.addEventListener('click', function(e){
+  if (e.target === this) cerrarListaCodigos();
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') cerrarListaCodigos();
+});
+
+</script>
 <script src="notificaciones.js"></script>
 <style>
 :root {
@@ -752,6 +761,140 @@ footer {
   .mise-foto-btn span{font-size:.62rem;}
 }
 
+
+/* ===== AJUSTES RESPONSIVE BANCO LDS 360 ===== */
+.login-wrapper{
+  min-height:calc(100vh - 72px);
+  padding:24px 16px;
+}
+.login-card{
+  width:min(540px, calc(100vw - 24px));
+  max-width:540px;
+  padding:32px 30px 30px;
+  border-radius:20px;
+}
+.card-insignia-container{width:76px;height:76px;margin-bottom:15px;}
+.login-card h2{font-size:1.45rem;margin-bottom:6px;}
+.login-card p{font-size:.82rem;margin-bottom:18px;}
+.form-group{margin-bottom:16px;}
+.form-group label{font-size:.8rem;margin-bottom:6px;}
+.input-field,input,textarea,select{height:46px;font-size:.9rem;}
+.primary-btn{height:48px;font-size:.9rem;margin-top:10px;}
+.mises-fotos-grid{gap:10px;margin:12px 0 14px;}
+.mise-foto-btn{padding:10px 6px;gap:6px;min-height:104px;}
+.mise-foto-btn img{width:60px;height:60px;}
+.mise-foto-btn span{font-size:.64rem;}
+
+.search-row-ordered{
+  display:grid;
+  grid-template-columns:82px minmax(130px,1fr) minmax(190px,1.4fr) 155px;
+  gap:8px;
+  width:100%;
+  align-items:center;
+}
+.search-row-ordered .btn-qr-custom{width:100%;}
+.search-row-ordered .btn-search-custom{width:100%;}
+.input-code-custom{width:100%;min-width:0;}
+.btn-lista-codigos{
+  height:42px;
+  border-radius:8px;
+  border:1.5px solid var(--dorado);
+  background:#fff;
+  color:var(--azul);
+  font-weight:800;
+  font-size:.75rem;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.btn-lista-codigos:hover{background:#fffaf0;}
+
+.codigo-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1100;
+  background:rgba(12,30,48,.86);
+  padding:14px;
+  align-items:center;
+  justify-content:center;
+}
+.codigo-modal-content{
+  background:#fff;
+  width:min(760px,100%);
+  max-height:88vh;
+  border-radius:16px;
+  border-top:5px solid var(--dorado);
+  box-shadow:0 18px 45px rgba(0,0,0,.35);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.codigo-modal-head{
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid #e2e8f0;
+  background:#f8fafc;
+}
+.codigo-modal-head h3{color:var(--azul);font-size:1rem;font-weight:900;margin:0;}
+.codigo-modal-body{padding:14px;overflow:auto;}
+.codigo-filtro{margin-bottom:12px;}
+.codigo-table{width:100%;min-width:0;border-collapse:collapse;}
+.codigo-table th,.codigo-table td{padding:8px 9px;border-bottom:1px solid #e5eaf0;font-size:.75rem;}
+.codigo-table th{position:sticky;top:0;background:#f1f5f9;z-index:2;}
+.codigo-row{cursor:pointer;}
+.codigo-row:hover{background:#fffaf0;}
+.codigo-cell{font-weight:900;color:var(--azul-claro);white-space:nowrap;}
+.codigo-empty{text-align:center;color:var(--muted);font-weight:700;padding:20px;}
+.codigo-close{border:0;background:var(--rojo);color:#fff;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer;}
+
+/* La consulta queda limpia: se conserva únicamente la tabla de movimientos. */
+#estudianteCard{display:none!important;}
+
+@media(max-width:900px){
+  .search-row-ordered{
+    grid-template-columns:76px minmax(120px,1fr) minmax(170px,1.2fr);
+  }
+  .btn-lista-codigos{grid-column:1 / -1;width:100%;}
+}
+
+@media(max-width:650px){
+  .login-wrapper{padding:14px 10px;align-items:center;}
+  .login-card{
+    width:calc(100vw - 20px);
+    max-width:520px;
+    padding:25px 17px 22px;
+    border-radius:18px;
+  }
+  .card-insignia-container{width:68px;height:68px;}
+  .login-card h2{font-size:1.2rem;}
+  .login-card p{font-size:.7rem;}
+  .mises-fotos-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .mise-foto-btn{min-height:100px;}
+  .search-row-ordered{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .btn-qr-custom{grid-column:1;grid-row:1;}
+  .btn-lista-codigos{grid-column:2;grid-row:1;width:100%;}
+  .input-code-custom{grid-column:1 / -1;grid-row:2;width:100%;}
+  .btn-search-custom{grid-column:1 / -1;grid-row:3;width:100%;}
+  .admin-profile-banner{padding:12px;}
+  .admin-stats-box{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+  .stat-pill{min-width:0;padding:7px 5px;}
+  .stat-pill strong{font-size:.78rem;}
+  .stat-pill span{font-size:.48rem;}
+}
+
+@media(max-width:400px){
+  .login-card{padding:21px 13px 19px;}
+  .mises-fotos-grid{gap:6px;}
+  .mise-foto-btn img{width:52px;height:52px;}
+  .mise-foto-btn span{font-size:.58rem;}
+}
+
 </style>
 </head>
 <body>
@@ -873,26 +1016,15 @@ footer {
             <label class="small-label" for="codigo">CÓDIGO QR / ESTUDIANTE</label>
             <div class="search-row-ordered">
               <button class="btn btn-qr-custom" type="button" onclick="abrirEscanerQR()">📷 QR</button>
-              <button class="btn btn-gold btn-search-custom" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
-              <input id="codigo" class="input-code-custom" placeholder="LDS-001" autocomplete="off">
+              <input id="codigo" class="input-code-custom" placeholder="LDS-001" autocomplete="off" inputmode="text">
+              <button id="btnBuscarEstudiante" class="btn btn-gold btn-search-custom" type="button" onclick="consultarEstudiante()">🔍 BUSCAR ESTUDIANTE</button>
+              <button class="btn-lista-codigos" type="button" onclick="abrirListaCodigos()">📋 LISTA DE CÓDIGOS</button>
             </div>
           </div>
         </div>
 
         <div id="mensaje" class="message"></div>
         
-        <div id="estudianteCard" class="student-head">
-          <div class="student-photo-wrap">
-            <img id="fotoEstudiante" class="student-photo" src="" alt="Foto">
-            <div id="fotoPlaceholder" class="student-photo-placeholder">👤</div>
-          </div>
-          <div class="student-info-box">
-            <div id="nombre" class="student-name">—</div>
-            <div id="meta" class="student-meta">—</div>
-            <div id="saldo" class="saldo">0.00 LDS</div>
-          </div>
-        </div>
-
         <div class="print-only-header">
           <div class="print-institution-top">
             <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
@@ -1008,6 +1140,24 @@ footer {
   </section>
 </main>
 
+<div id="codigoModal" class="codigo-modal">
+  <div class="codigo-modal-content">
+    <div class="codigo-modal-head">
+      <h3>📋 LISTA DE CÓDIGOS DE ALUMNOS</h3>
+      <button class="codigo-close" type="button" onclick="cerrarListaCodigos()">CERRAR</button>
+    </div>
+    <div class="codigo-modal-body">
+      <input id="filtroCodigos" class="codigo-filtro" type="search" placeholder="BUSCAR POR CÓDIGO O NOMBRE..." autocomplete="off" oninput="filtrarListaCodigos()">
+      <div class="table-wrap" style="margin-top:0;max-height:60vh;">
+        <table class="codigo-table">
+          <thead><tr><th>CÓDIGO</th><th>ALUMNO</th><th>GRADO</th><th>SECCIÓN</th></tr></thead>
+          <tbody id="tablaCodigosAlumnos"><tr><td colspan="4" class="codigo-empty">CARGANDO LISTA...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="qrModal" class="qr-modal">
   <div class="qr-modal-content">
     <h3>ESCANEAR CÓDIGO QR</h3>
@@ -1034,6 +1184,98 @@ function cambiarAnioEscolar() {
   if (document.getElementById("codigo").value.trim()) {
     consultarEstudiante();
   }
+}
+
+
+function abrirListaCodigos() {
+  reproducirSonido('clic');
+  const modal = document.getElementById('codigoModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  const filtro = document.getElementById('filtroCodigos');
+  if (filtro) filtro.value = '';
+  const tabla = document.getElementById('tablaCodigosAlumnos');
+  if (tabla) tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">CARGANDO LISTA DE ALUMNOS...</td></tr>';
+
+  llamarAPI(
+    {
+      accion: 'cuentas',
+      anio: document.getElementById('selectAnioEscolar').value
+    },
+    function(respuesta) {
+      if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.cuentas)) {
+        if (tabla) tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">NO SE PUDO CARGAR LA LISTA.</td></tr>';
+        reproducirSonido('error');
+        return;
+      }
+
+      window.listaCodigosAlumnos = respuesta.cuentas
+        .filter(c => {
+          const codigo = String(c.codigo || '').trim().toUpperCase();
+          const tipo = String(c.tipoCuenta || '').trim().toUpperCase();
+          const rol = String(c.rol || '').trim().toUpperCase();
+          return codigo && !codigo.startsWith('CAJA-') && tipo !== 'CAJA_GENERAL' && !rol.includes('DOCENTE');
+        })
+        .sort((a,b) => String(a.nombre || '').localeCompare(String(b.nombre || ''), 'es', {sensitivity:'base'}));
+
+      renderListaCodigos(window.listaCodigosAlumnos);
+    }
+  );
+}
+
+function renderListaCodigos(lista) {
+  const tabla = document.getElementById('tablaCodigosAlumnos');
+  if (!tabla) return;
+  const items = Array.isArray(lista) ? lista : [];
+  window.listaCodigosVisible = items;
+
+  if (!items.length) {
+    tabla.innerHTML = '<tr><td colspan="4" class="codigo-empty">NO HAY ALUMNOS PARA MOSTRAR.</td></tr>';
+    return;
+  }
+
+  tabla.innerHTML = items.map((c, i) => {
+    const codigo = escaparHTML(c.codigo || '');
+    const nombre = escaparHTML(c.nombre || c.nombreCompleto || '');
+    const grado = escaparHTML(c.grado || '');
+    const seccion = escaparHTML(c.seccion || '');
+    return `<tr class="codigo-row" data-index="${i}" onclick="seleccionarCodigoDeLista(${i})">\n      <td class="codigo-cell">${codigo}</td>\n      <td>${nombre}</td>\n      <td>${grado}</td>\n      <td>${seccion}</td>\n    </tr>`;
+  }).join('');
+}
+
+function filtrarListaCodigos() {
+  const texto = String(document.getElementById('filtroCodigos')?.value || '').trim().toUpperCase();
+  const base = Array.isArray(window.listaCodigosAlumnos) ? window.listaCodigosAlumnos : [];
+  if (!texto) {
+    renderListaCodigos(base);
+    return;
+  }
+  renderListaCodigos(base.filter(c => {
+    const codigo = String(c.codigo || '').toUpperCase();
+    const nombre = String(c.nombre || c.nombreCompleto || '').toUpperCase();
+    const grado = String(c.grado || '').toUpperCase();
+    return codigo.includes(texto) || nombre.includes(texto) || grado.includes(texto);
+  }));
+}
+
+function seleccionarCodigoDeLista(index) {
+  const lista = Array.isArray(window.listaCodigosVisible) ? window.listaCodigosVisible : [];
+  const item = lista[index];
+  if (!item) return;
+
+  const codigo = String(item.codigo || '').trim().toUpperCase();
+  const campo = document.getElementById('codigo');
+  if (campo) campo.value = codigo;
+
+  cerrarListaCodigos();
+  reproducirSonido('exito');
+  hablarTextoVoz('Alumno seleccionado. Consultando código ' + codigo + '.');
+  consultarEstudiante();
+}
+
+function cerrarListaCodigos() {
+  const modal = document.getElementById('codigoModal');
+  if (modal) modal.style.display = 'none';
 }
 
 function seleccionarTipoOperacion(tipo) {
@@ -1585,52 +1827,6 @@ function obtenerURLsFoto(url) {
   ];
 }
 
-function mostrarFotoEstudiante(e) {
-  const foto = document.getElementById("fotoEstudiante");
-  const placeholder = document.getElementById("fotoPlaceholder");
-
-  const original = String(
-    e.fotoUrl ||
-    e.fotoURL ||
-    e.foto_url ||
-    e.FOTO_URL ||
-    e.foto ||
-    e.FOTO ||
-    ""
-  ).trim();
-
-  const urls = obtenerURLsFoto(original);
-
-  foto.dataset.intento = "0";
-  placeholder.style.display = "flex";
-  foto.style.display = "none";
-  foto.removeAttribute("src");
-  foto.onerror = null;
-
-  if (!urls.length) return;
-
-  foto.onerror = function() {
-    const siguiente =
-      Number(foto.dataset.intento || "0") + 1;
-
-    foto.dataset.intento = String(siguiente);
-
-    if (siguiente < urls.length) {
-      foto.src = urls[siguiente];
-    } else {
-      foto.style.display = "none";
-      placeholder.style.display = "flex";
-    }
-  };
-
-  foto.onload = function() {
-    foto.style.display = "block";
-    placeholder.style.display = "none";
-  };
-
-  foto.src = urls[0];
-}
-
 function actualizarBannerCuenta(saldo) {
   const rolBanner =
     document.querySelector(".admin-text-details p");
@@ -1724,10 +1920,6 @@ function consultarEstudiante(esConsultaAutomatica = false) {
       ) {
         reproducirSonido('error');
 
-        document
-          .getElementById("estudianteCard")
-          .classList.remove("show");
-
         document.getElementById("tablaMovimientos").innerHTML =
           '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
 
@@ -1780,42 +1972,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         rolRespuesta.includes("MAESTRA");
 
       if (esDocente) {
-        document.getElementById("nombre").textContent =
-          "👩‍🏫 DOCENTE: " + nombreUsuario;
-      } else {
-        document.getElementById("nombre").textContent =
-          "👤 ALUMNO: " + nombreUsuario;
-      }
-
-      const rolMostrar =
-        e.rol ||
-        (esDocente ? "DOCENTE" : "ALUMNO");
-
-      document.getElementById("meta").textContent =
-        [
-          e.codigo || codigo,
-          "AÑO: " + anioEscolar,
-          rolMostrar,
-          e.grado || "",
-          e.seccion || ""
-        ]
-          .filter(Boolean)
-          .join(" · ");
-
-      document.getElementById("saldo").textContent =
-        (esDocente ? "FONDO DISPONIBLE: S/ " : "SALDO: ") +
-        saldoFormateado +
-        " LDS";
-
-      if (esDocente) {
         actualizarBannerCuenta(saldoActual);
       }
-
-      mostrarFotoEstudiante(e);
-
-      document.getElementById(
-        "estudianteCard"
-      ).classList.add("show");
 
       document.getElementById("pagoCodigo").value =
         e.codigo || codigo;
@@ -1836,8 +1994,10 @@ function consultarEstudiante(esConsultaAutomatica = false) {
 
       const saldoInicialEl = document.getElementById("saldoInicialMise");
       if (saldoInicialEl) {
-        saldoInicialEl.textContent = saldoInicialMise > 0
-          ? "S/ " + formatearLDS(saldoInicialMise)
+        const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuentaMise);
+        const saldoParaMostrar = saldoInicialMise > 0 ? saldoInicialMise : (esCajaMise ? saldoActual : 0);
+        saldoInicialEl.textContent = saldoParaMostrar > 0
+          ? "S/ " + formatearLDS(saldoParaMostrar)
           : "NO REGISTRADO";
       }
 
