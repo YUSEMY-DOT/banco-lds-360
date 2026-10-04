@@ -1276,13 +1276,15 @@ footer {
           </div>
         </div>
 
+        <input type="hidden" id="pagoCategoriaVal" value="PREMIOS_Y_BONIFICACIONES">
+
         <label class="small-label" for="pagoConcepto">CONCEPTO DEL PAGO</label>
         <select id="pagoConcepto">
-          <option value="BONO MENSUAL ALUMNO" selected>BONO MENSUAL ALUMNO</option>
+          <option value="">SELECCIONA EL CONCEPTO</option>
         </select>
 
         <label class="small-label" for="pagoMonto">MONTO LDS</label>
-        <input id="pagoMonto" type="number" step="0.5" min="0" value="1130" placeholder="1130.00">
+        <input id="pagoMonto" type="number" step="0.5" min="0" value="" placeholder="INGRESA EL MONTO">
 
         <label class="small-label" for="pagoObs">OBSERVACIÓN / NOTA (OPCIONAL)</label>
         <textarea id="pagoObs" rows="3" placeholder="MOTIVO O DETALLE..."></textarea>
@@ -1439,7 +1441,11 @@ function abrirListaCodigos() {
   });
 }
 function renderListaAlumnosDesdeCuentas(cuentas){
-  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>String(c.codigo||'').trim().toUpperCase().startsWith('LDS-EST-')).sort((a,b)=>String(a.nombre||a.nombreCompleto||'').localeCompare(String(b.nombre||b.nombreCompleto||''),'es',{sensitivity:'base'}));
+  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
+    const rol=String(c.rol||'').trim().toUpperCase();
+    const codigo=String(c.codigo||'').trim().toUpperCase();
+    return rol==='ALUMNO' || (!rol && codigo.startsWith('LDS-EST-'));
+  }).sort((a,b)=>String(a.nombre||a.nombreCompleto||'').localeCompare(String(b.nombre||b.nombreCompleto||''),'es',{sensitivity:'base'}));
   renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
@@ -1553,17 +1559,52 @@ const CATALOGO_EXCEL = {
     "Bono por llevar el uniforme impecable y reglamentario",
     "Bono Participación destacada en clase",
     "Bono Premio por primer lugar en concurso académico o deportivo",
-    "Bono Puntualidad y asistencia perfecta",
-    "Bono Apoyo destacado en limpieza, orden o ecología",
-    "Bono por ayuda solidaria y compañerismo",
-    "Bono Creatividad e innovación en proyectos",
-    "Bono Representar dignamente al colegio",
-    "Bono Lectura destacada y comprensión",
+    "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)",
+    "Bono Apoyo destacado en limpieza, orden o ecología del aula",
+    "Bono por ayuda solidaria / Compañerismo destacado",
+    "Bono Creatividad e innovación en proyectos escolares",
+    "Bono Representar dignamente al colegio en eventos externos",
+    "Bono Leer un libro de acuerdo a su edad y presentar evidencia   preguntas y respuestas  minimos (20)",
     "Bono Completar un reto educativo",
     "Bono Llegar antes de la hora",
-    "Bono Participación en Escuela para Padres",
-    "Bono Responsabilidad con materiales",
-    "Bono Mantener limpia el aula"
+    "Bono Participar en Escuela para Padres junto a su familia",
+    "Bono Ser responsable con sus materiales",
+    "Bono Ayudar a mantener limpia el aula"
+  ],
+  "AHORROS_E_INVERSIONES": [
+    "Depósito a cuenta de ahorros (Ahorro voluntario)",
+    "Inversión en fondo común del aula / cooperativa",
+    "Retiro de ahorros (Emergencia o meta cumplida)"
+  ],
+  "PAGOS_Y_GASTOS": [
+    "Pago Compra en la tienda escolar / cafetín",
+    "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo",
+    "Pago de servicios del aula: Agua",
+    "Pago de servicios del aula: Energía",
+    "pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)",
+    "Gasto médico imprevisto menor (Botiquín escolar / Curitas)",
+    "Alquiler de libros de la biblioteca o material didáctico",
+    "Pago por custodia de equipos tecnológicos",
+    "Pago por copias extras",
+    "Comprar stickers",
+    "Pagar para una actividad extra",
+    "Pagar por jugar 10 minutos más"
+  ],
+  "SANCIONES_Y_MULTAS": [
+    "Multa por llevar mal el uniforme o incompleto",
+    "Incumplimiento de tareas o asignaciones a tiempo",
+    "Llegada tarde al aula o formación",
+    "Uso no autorizado de dispositivos electrónicos en clase",
+    "Desorden o indisciplina leve durante las horas de clase",
+    "Falta de respeto o modales con compañeros o docentes",
+    "No traer el material escolar requerido para la sesión",
+    "Descuido o daño leve al mobiliario o infraestructura del aula",
+    "Basura fuera de su lugar / No respetar áreas verdes o comunes",
+    "Inasistencia injustificada a reuniones o actividades obligatorias del equipo",
+    "No ponerse al día en sus pendientes o cuadernos",
+    "Malograr los cuadernos u objetos personales del compañero",
+    "Faltar a la verdad",
+    "Llevarse objetos del compañero y/o institucion"
   ],
   "COSTOS_Y_OTROS": [
     "Impuesto escolar mensual por uso de instalaciones",
@@ -1572,26 +1613,28 @@ const CATALOGO_EXCEL = {
   ]
 };
 
-function cargarConceptosPorTipo() {
-  const tipo = document.getElementById("pagoTipo").value;
+/* Para PAGAR ALUMNO se utiliza únicamente la categoría de
+   PREMIOS_Y_BONIFICACIONES, tal como está definida en CONFIG_OPCIONES. */
+const CATALOGO_PAGOS_ALUMNOS = CATALOGO_EXCEL["PREMIOS_Y_BONIFICACIONES"];
+
+function cargarConceptosPagoAlumno() {
   const selectConcepto = document.getElementById("pagoConcepto");
-  selectConcepto.innerHTML = "";
-
-  if (tipo === "COSTOS_Y_OTROS") {
-    seleccionarTipoOperacion("EGRESO");
-  } else {
-    seleccionarTipoOperacion("INGRESO");
-  }
-
-  const lista = CATALOGO_EXCEL[tipo] || [];
-
-  lista.forEach(concepto => {
+  if (!selectConcepto) return;
+  const actual = selectConcepto.value;
+  selectConcepto.innerHTML = '<option value="">SELECCIONA EL CONCEPTO</option>';
+  CATALOGO_PAGOS_ALUMNOS.forEach(concepto => {
     const opt = document.createElement("option");
     opt.value = concepto;
     opt.textContent = concepto.toUpperCase();
     selectConcepto.appendChild(opt);
   });
+  if (actual && CATALOGO_PAGOS_ALUMNOS.includes(actual)) selectConcepto.value = actual;
 }
+
+function cargarConceptosPorTipo() {
+  cargarConceptosPagoAlumno();
+}
+
 
 function hablarTextoVoz(texto) {
   if ('speechSynthesis' in window) {
@@ -1824,7 +1867,7 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
-function cargarSaldoMiseAlIngresar(nombreMaestra){const codigo=obtenerCodigoCajaMise(nombreMaestra);if(!codigo)return;actualizarSaldosMise(30000,30000);llamarAPI({accion:'estudiante',codigo,anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!r.estudiante)return;const cuenta=r.cuenta||{},mov=Array.isArray(r.movimientos)?r.movimientos:[],calc=calcularSaldoMiseLocal(mov,codigo,Number(cuenta.saldoActual));actualizarSaldosMise(calc.abono,calc.saldo);});}
+function cargarSaldoMiseAlIngresar(nombreMaestra){const codigo=obtenerCodigoCajaMise(nombreMaestra);if(!codigo)return;actualizarSaldosMise(0,0);llamarAPI({accion:'estudiante',codigo,anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!r.estudiante)return;const cuenta=r.cuenta||{},mov=Array.isArray(r.movimientos)?r.movimientos:[],calc=calcularSaldoMiseLocal(mov,codigo,Number(cuenta.saldoActual));actualizarSaldosMise(calc.abono,calc.saldo);});}
 
 function desbloquearPanel(nombreMaestra) {
   document.getElementById("loginView").style.display = "none";
@@ -1865,7 +1908,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
 
-  actualizarSaldosMise(30000,30000);
+  actualizarSaldosMise(0,0);
 
   setTimeout(() => {
     hablarTextoVoz(
@@ -2078,23 +2121,28 @@ function obtenerURLsFoto(url) {
 
 function actualizarSaldosMise(abono,saldo){const a=document.getElementById('saldoInicialMise'),d=document.getElementById('saldoDisponibleMise');if(a)a.textContent='S/ '+formatearLDS(Math.max(0,Number(abono)||0));if(d)d.textContent='S/ '+formatearLDS(Math.max(0,Number(saldo)||0));}
 function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
-  const c=String(codigo||'').trim().toUpperCase(); if(!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c))return{abono:0,saldo:Number(saldoBackend)||0};
-  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c&&String(m.estado||'ACTIVO').toUpperCase()!=='ANULADO');
-  const abono=obtenerSaldoInicialMise(lista,c)||30000; let total=0;
-  lista.forEach(m=>{const monto=parseMontoLDS(m.monto??m.montoLDS??0),tipo=String(m.tipo||m.tipoMovimiento||'').toUpperCase();if(tipo==='INGRESO')total+=monto;else if(tipo==='EGRESO')total-=monto;});
-  let saldo=Number(saldoBackend);
-  if(!Number.isFinite(saldo)||saldo===0){const tieneFondo=lista.some(m=>{const x=String(m.concepto||'').toUpperCase(),o=String(m.observacion||'').toUpperCase(),r=String(m.responsable||'').toUpperCase();return x.includes('FONDO')||x.includes('TRANSFERENCIA')||o.includes('FONDO')||o.includes('TRANSFERENCIA')||r.includes('ANDREW');});saldo=tieneFondo?total:abono+total;}
-  return{abono,saldo:Math.max(0,saldo)};
+  const c=String(codigo||'').trim().toUpperCase();
+  if(!Object.values(CODIGOS_MISE_POR_NOMBRE).includes(c)) return {abono:0,saldo:Number(saldoBackend)||0};
+  const lista=(Array.isArray(movimientos)?movimientos:[]).filter(m=>
+    String(m.codigo||m.codigoQR||'').trim().toUpperCase()===c &&
+    String(m.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO'
+  );
+  const abono=obtenerSaldoInicialMise(lista,c);
+  const saldoCalculado=lista.reduce((total,m)=>{
+    const monto=parseMontoLDS(m.monto??m.montoLDS??0);
+    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    if(tipo==='INGRESO') return total+monto;
+    if(tipo==='EGRESO') return total-monto;
+    return total;
+  },0);
+  const backend=Number(saldoBackend);
+  const saldo=Number.isFinite(backend) ? backend : saldoCalculado;
+  return {abono:Math.max(0,abono),saldo:Math.max(0,saldo)};
 }
 
-function actualizarBannerCuenta(saldo) {
+function actualizarBannerCuenta() {
   const rolBanner = document.querySelector(".admin-text-details p");
   if (rolBanner) rolBanner.textContent = "DOCENTE · TUTORA · CAJERA";
-
-  const saldoEl = document.getElementById("saldoInicialMise");
-  if (saldoEl && Number.isFinite(Number(saldo))) {
-    saldoEl.textContent = "S/ " + formatearLDS(Number(saldo));
-  }
 }
 
 function obtenerSaldoInicialMise(movimientos, codigoCuenta) {
@@ -2229,7 +2277,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         rolRespuesta.includes("MAESTRA");
 
       if (esDocente) {
-        actualizarBannerCuenta(saldoActual);
+        actualizarBannerCuenta();
       }
 
       const codigoConsultado = String(e.codigo || codigo).trim().toUpperCase();
@@ -2336,10 +2384,11 @@ function procesarPagoEstudiante() {
 
   const tipoOperacion = "EGRESO";
 
-  const categoriaSeleccionada = "PAGOS A ALUMNOS";
+  const categoriaSeleccionada =
+    document.getElementById("pagoCategoriaVal")?.value || "PREMIOS_Y_BONIFICACIONES";
 
   const concepto =
-    document.getElementById("pagoConcepto").value || "BONO MENSUAL ALUMNO";
+    document.getElementById("pagoConcepto").value.trim();
 
   const monto =
     parseMontoLDS(
@@ -2380,6 +2429,16 @@ function procesarPagoEstudiante() {
      la Mise activa es la cuenta ORIGEN y el alumno es la cuenta DESTINO.
      En el backend esto se representa como EGRESO. */
   const tipoOperacionPago = "EGRESO";
+
+  if (!concepto || !CATALOGO_PAGOS_ALUMNOS.includes(concepto)) {
+    reproducirSonido('error');
+    mostrarMensajePago(
+      "SELECCIONA UN CONCEPTO VÁLIDO DE PREMIOS Y BONIFICACIONES.",
+      "error"
+    );
+    hablarTextoVoz("Selecciona el concepto del pago.");
+    return;
+  }
 
   if (!monto || monto <= 0) {
     reproducirSonido('error');
@@ -2872,6 +2931,9 @@ document.getElementById("codigo").addEventListener(
     }
   }
 );
+
+// Cargar exactamente los conceptos de CONFIG_OPCIONES para pagos a alumnos.
+cargarConceptosPagoAlumno();
 </script>
 
 </body>
