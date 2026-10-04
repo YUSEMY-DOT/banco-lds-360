@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -682,10 +683,10 @@ table {
 }
 
 th, td {
-  padding: 6px 7px;
+  padding: 8px 10px;
   border-bottom: 1px solid #e5eaf0;
   text-align: left;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   vertical-align: middle;
   font-weight: 600;
   word-break: break-word;
@@ -1120,15 +1121,7 @@ footer {
   .print-student-box{display:flex;align-items:center;gap:14px;background:#fff;}
   .print-detail{break-inside:avoid;}
   .print-report-table{width:100%;border-collapse:collapse;margin-top:7px;table-layout:fixed;}
-  .print-report-table{table-layout:fixed;}
-  .print-report-table th,.print-report-table td{border:1px solid #000;padding:3px 4px;font-size:11px;line-height:1.15;vertical-align:top;word-break:break-word;text-transform:uppercase;}
-  .print-report-table th{font-size:11px;}
-  .print-report-table th:nth-child(1){width:18%;}
-  .print-report-table th:nth-child(2){width:10%;}
-  .print-report-table th:nth-child(3){width:29%;}
-  .print-report-table th:nth-child(4){width:12%;}
-  .print-report-table th:nth-child(5){width:16%;}
-  .print-report-table th:nth-child(6){width:15%;}
+  .print-report-table th,.print-report-table td{border:1px solid #000;padding:4px 5px;font-size:7.6pt;vertical-align:top;word-break:break-word;text-transform:uppercase;}
   .print-report-table th{font-weight:900;background:#e5e7eb !important;-webkit-print-color-adjust:exact;}
   .print-report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 12px;page-break-inside:avoid;}
   .print-kpi{border:1.3px solid #000;border-radius:7px;padding:7px 9px;text-align:center;}
@@ -1610,38 +1603,6 @@ function abrirImpresiones() {
 
 let cacheCuentasEscolares = {};
 let cacheCuentasCargando = {};
-let movimientosGlobalesCache = null;
-let movimientosGlobalesCargando = false;
-
-function cargarMovimientosGlobales(callback, forzar = false) {
-  if (!forzar && Array.isArray(movimientosGlobalesCache)) {
-    callback(movimientosGlobalesCache);
-    return;
-  }
-  if (movimientosGlobalesCargando) {
-    const espera = setInterval(() => {
-      if (!movimientosGlobalesCargando) {
-        clearInterval(espera);
-        callback(Array.isArray(movimientosGlobalesCache) ? movimientosGlobalesCache : []);
-      }
-    }, 80);
-    setTimeout(() => {
-      clearInterval(espera);
-      if (movimientosGlobalesCargando) callback([]);
-    }, 5000);
-    return;
-  }
-  movimientosGlobalesCargando = true;
-  llamarAPI({accion:'movimientos'}, r => {
-    movimientosGlobalesCargando = false;
-    if (r && r.ok !== false && Array.isArray(r.movimientos)) {
-      movimientosGlobalesCache = r.movimientos;
-    } else {
-      movimientosGlobalesCache = [];
-    }
-    callback(movimientosGlobalesCache);
-  });
-}
 function precargarCuentasEscolares() {
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   if(cacheCuentasEscolares[anio]||cacheCuentasCargando[anio]) return;
@@ -1748,20 +1709,22 @@ function abrirListaMises(){
 }
 function renderListaMisesDesdeCuentas(cuentas){
   const cont=document.getElementById('listaMisesItems'); if(!cont)return;
+  cont.innerHTML='<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CALCULANDO SALDOS...</div></div>';
   const permitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
   const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
   const mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=>permitidas.has(String(c.codigo||'').trim().toUpperCase()));
   if(!mises.length){cont.innerHTML='<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';return;}
-  cont.innerHTML='<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CARGANDO MOVIMIENTOS...</div></div>';
-  cargarMovimientosGlobales(movGlobal => {
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
+  Promise.all(mises.map(async c=>{
+    const codigo=String(c.codigo||'').trim().toUpperCase();
+    const r=await llamarAPIPromise({accion:'estudiante',codigo},10000);
+    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
+    const calculo=calcularResumenMise(mov,codigo,null);
+    return {codigo,nombre:c.nombre||nombres[codigo]||'MISE',...calculo};
+  })).then(lista=>{
     const host=document.getElementById('misesResumenFilas'); if(!host)return;
-    host.innerHTML=mises.map((c,i)=>{
-      const codigo=String(c.codigo||'').trim().toUpperCase();
-      const calc=calcularResumenMise(movGlobal,codigo,Number(c.saldoActual||0));
-      const nombre=c.nombre||nombres[codigo]||'MISE';
-      return `<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(nombre)}</span><span class="money">S/ ${formatearLDS(calc.abono)}</span><span class="money in">S/ ${formatearLDS(calc.ingresos)}</span><span class="money out">S/ ${formatearLDS(calc.egresos)}</span><span class="money available">S/ ${formatearLDS(calc.saldo)}</span></div>`;
-    }).join('');
-  });
+    host.innerHTML=lista.map((m,i)=>`<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">S/ ${formatearLDS(m.abono)}</span><span class="money in">S/ ${formatearLDS(m.ingresos)}</span><span class="money out">S/ ${formatearLDS(m.egresos)}</span><span class="money available">S/ ${formatearLDS(m.saldo)}</span></div>`).join('');
+  }).catch(()=>{const host=document.getElementById('misesResumenFilas');if(host)host.innerHTML='<div class="header-list-loading">NO SE PUDIERON CALCULAR LOS SALDOS.</div>';});
 }
 
 
@@ -1788,15 +1751,11 @@ function calcularResumenMise(movimientos,codigo,saldoBackend){
 function actualizarPanelAdmin(){
   reproducirSonido('clic');
   cacheCuentasEscolares={}; cacheCuentasCargando={};
-  movimientosGlobalesCache=null; movimientosGlobalesCargando=false;
   const codigo=String(document.getElementById('codigo')?.value||'').trim().toUpperCase();
   const maestra=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
-  cargarMovimientosGlobales(mov => {
-    if(maestra) cargarSaldoMiseAlIngresar(maestra);
-    precargarCuentasEscolares();
-    if(codigo) consultarEstudiante(true);
-    else { mostrarMensaje('DATOS ACTUALIZADOS.','ok'); hablarTextoVoz('Datos actualizados.'); }
-  }, true);
+  if(maestra) cargarSaldoMiseAlIngresar(maestra);
+  precargarCuentasEscolares();
+  if(codigo) consultarEstudiante(true); else { mostrarMensaje('DATOS ACTUALIZADOS.','ok'); hablarTextoVoz('Datos actualizados.'); }
 }
 
 function seleccionarCategoriaPago(categoria){
@@ -2268,18 +2227,13 @@ function validarAccesoDocente() {
 }
 
 function cargarSaldoMiseAlIngresar(nombreMaestra){
-  const codigo=obtenerCodigoCajaMise(nombreMaestra);
-  if(!codigo) return;
+  const codigo=obtenerCodigoCajaMise(nombreMaestra); if(!codigo)return;
   actualizarSaldosMise(0,0);
-  cargarMovimientosGlobales(mov => {
-    const calc = calcularResumenMise(mov, codigo, 0);
-    actualizarSaldosMise(calc.abono, calc.saldo);
-    movimientosActualesGlobal = filtrarMovimientosPorCuentaYAnio(mov, codigo, null);
-    renderMovimientos(
-      movimientosActualesGlobal,
-      {codigo:codigo,nombreCompleto:nombreMaestra,rol:'DOCENTE TUTORA CAJERA',esDocente:true},
-      document.getElementById('selectAnioEscolar')?.value || '2026'
-    );
+  // La caja de la Mise se calcula con TODOS sus movimientos, no solo el año visual seleccionado.
+  llamarAPI({accion:'movimientos'},r=>{
+    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
+    const calc=calcularResumenMise(mov,codigo,null);
+    actualizarSaldosMise(calc.abono,calc.saldo);
   });
 }
 
@@ -2599,122 +2553,248 @@ function obtenerSaldoInicialMise(movimientos, codigoCuenta) {
   );
 }
 
-function filtrarMovimientosPorCuentaYAnio(movimientos, codigo, anio) {
-  const c = String(codigo || '').trim().toUpperCase();
-  return (Array.isArray(movimientos) ? movimientos : []).filter(m => {
-    const mc = String(m.codigo || m.codigoQR || '').trim().toUpperCase();
-    if (mc !== c) return false;
-    if (String(m.estado || 'ACTIVO').trim().toUpperCase() === 'ANULADO') return false;
-    if (anio == null || anio === '') return true;
-    const ma = String(m.anio || m.anioEscolar || '').trim();
-    return !ma || ma === String(anio);
-  });
+function obtenerAnioMovimientoCliente(m, anioPorDefecto) {
+  const candidatos = [
+    m?.anio,
+    m?.anioEscolar,
+    m?.year
+  ];
+
+  for (const v of candidatos) {
+    const n = Number(String(v ?? "").trim());
+    if (Number.isFinite(n) && n >= 1900 && n <= 2100) return String(Math.trunc(n));
+  }
+
+  const fechas = [m?.fecha, m?.fechaTexto, m?.timestamp];
+  for (const valor of fechas) {
+    const txt = String(valor ?? "").trim();
+    const match = txt.match(/(?:^|[^0-9])(20\d{2})(?:[^0-9]|$)/);
+    if (match) return match[1];
+    const d = new Date(txt);
+    if (!Number.isNaN(d.getTime())) return String(d.getFullYear());
+  }
+
+  // Algunos movimientos antiguos de MOVIMIENTOS fueron grabados sin fecha/año.
+  // Si la consulta se está haciendo sobre el año operativo seleccionado, se consideran del año activo.
+  return String(anioPorDefecto || "2026");
 }
 
-function actualizarResumenAlumnoEnPago(e, cuenta, anioEscolar) {
-  const codigo = String(e?.codigo || '').trim().toUpperCase();
-  const esAlumno = codigo.startsWith('LDS-EST-');
-  const card = document.getElementById('pagoAlumnoCard');
-  if (!card) return;
-  if (!esAlumno) {
-    card.style.display = 'none';
-    return;
-  }
-  const foto = document.getElementById('pagoAlumnoFoto');
-  const nombre = document.getElementById('pagoAlumnoNombre');
-  const meta = document.getElementById('pagoAlumnoMeta');
-  const saldo = document.getElementById('pagoAlumnoSaldo');
-  const urls = obtenerURLsFoto(String(e?.fotoUrl || e?.foto || '').trim());
-  if (foto) {
-    foto.dataset.intento = '0';
-    foto.style.display = urls.length ? 'block' : 'none';
-    foto.src = urls[0] || '';
-    foto.onerror = function(){
-      const i = Number(foto.dataset.intento || '0') + 1;
-      foto.dataset.intento = String(i);
-      if (urls[i]) foto.src = urls[i]; else foto.style.display = 'none';
-    };
-  }
-  if (nombre) nombre.textContent = String(e?.nombreCompleto || e?.nombre || 'ALUMNO').toUpperCase();
-  if (meta) meta.textContent = [e?.codigo || codigo, e?.grado || '', e?.seccion || '', 'AÑO ' + anioEscolar].filter(Boolean).join(' · ');
-  if (saldo) saldo.textContent = 'SALDO ACTUAL: S/ ' + formatearLDS(Number(cuenta?.saldoActual || 0));
-  card.style.display = 'flex';
+function filtrarMovimientosPorAnioCliente(movimientos, anioEscolar) {
+  const lista = Array.isArray(movimientos) ? movimientos : [];
+  const anio = String(anioEscolar || "2026");
+  return lista
+    .filter(m => String(m?.estado || "ACTIVO").trim().toUpperCase() !== "ANULADO")
+    .filter(m => obtenerAnioMovimientoCliente(m, anio) === anio);
 }
 
 function consultarEstudiante(esConsultaAutomatica = false) {
-  if (!esConsultaAutomatica) reproducirSonido('clic');
+  if (!esConsultaAutomatica) {
+    reproducirSonido('clic');
+  }
 
-  const codigo = String(document.getElementById("codigo")?.value || '').trim().toUpperCase();
-  const anioEscolar = String(document.getElementById("selectAnioEscolar")?.value || '2026');
+  const codigo =
+    document.getElementById("codigo").value.trim().toUpperCase();
+
+  const anioEscolar =
+    document.getElementById("selectAnioEscolar").value;
 
   if (!codigo) {
     reproducirSonido('error');
     mostrarMensaje("INGRESA UN CÓDIGO LDS.", "error");
+    hablarTextoVoz("Por favor ingresa un código.");
     return;
   }
 
   mostrarMensaje("CONSULTANDO...", "ok");
 
-  llamarAPI({accion:"estudiante", codigo, anio:anioEscolar}, function(respuesta) {
-    if (!respuesta || respuesta.ok === false || !respuesta.estudiante) {
-      reproducirSonido('error');
-      const tabla = document.getElementById('tablaMovimientos');
-      if (tabla) tabla.innerHTML = '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
-      datosEstudianteActualGlobal = null;
-      movimientosActualesGlobal = [];
-      return;
-    }
+  if (!esConsultaAutomatica) {
+    hablarTextoVoz("Consultando información.");
+  }
 
-    reproducirSonido('exito');
-    const e = respuesta.estudiante;
-    const cuenta = respuesta.cuenta || {};
-    datosEstudianteActualGlobal = e;
+  // Pedimos TODOS los movimientos de la cuenta y filtramos el año en el navegador.
+  // Esto evita que movimientos válidos queden ocultos cuando la fila histórica de MOVIMIENTOS
+  // no tiene la columna AÑO/fecha correctamente poblada.
+  llamarAPI(
+    {
+      accion: "estudiante",
+      codigo: codigo
+    },
+    async function(respuesta) {
+      if (
+        !respuesta ||
+        respuesta.ok === false ||
+        !respuesta.estudiante
+      ) {
+        reproducirSonido('error');
 
-    const nombreUsuario = e.nombreCompleto || e.nombre || 'USUARIO';
-    const saldoActual = Number(cuenta.saldoActual || 0);
-    const esMise = esMiseCode(e.codigo || codigo);
-    const esDocente = !!e.esDocente || String(e.rol || '').toUpperCase().includes('DOCENTE') || String(e.rol || '').toUpperCase().includes('MAESTRA');
-    const codigoActual = String(e.codigo || codigo).trim().toUpperCase();
+        document.getElementById("tablaMovimientos").innerHTML =
+          '<tr><td colspan="9" class="empty">NO SE ENCONTRÓ EL REGISTRO.</td></tr>';
 
-    if (esMise) {
-      // El saldo de la caja se calcula con TODO el historial, independientemente del año visible.
-      cargarMovimientosGlobales(movGlobal => {
-        const movMise = filtrarMovimientosPorCuentaYAnio(movGlobal, codigoActual, null);
-        const calc = calcularResumenMise(movGlobal, codigoActual, saldoActual);
-        actualizarSaldosMise(calc.abono, calc.saldo);
-        movimientosActualesGlobal = filtrarMovimientosPorCuentaYAnio(movGlobal, codigoActual, anioEscolar);
-        renderMovimientos(movimientosActualesGlobal, e, anioEscolar);
-        mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
-      });
-      const pago = document.getElementById('pagoCodigo');
-      if (pago) pago.value = '';
-      const card = document.getElementById('pagoAlumnoCard');
-      if (card) card.style.display = 'none';
-    } else {
-      // Alumno: conservar el resultado del backend, pero usar el historial global si el endpoint viene sin movimientos.
-      const movRespuesta = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
-      if (movRespuesta.length) {
-        movimientosActualesGlobal = filtrarMovimientosPorCuentaYAnio(movRespuesta, codigoActual, anioEscolar);
-        renderMovimientos(movimientosActualesGlobal, e, anioEscolar);
-        actualizarResumenAlumnoEnPago(e, cuenta, anioEscolar);
-        mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
-      } else {
-        cargarMovimientosGlobales(movGlobal => {
-          movimientosActualesGlobal = filtrarMovimientosPorCuentaYAnio(movGlobal, codigoActual, anioEscolar);
-          renderMovimientos(movimientosActualesGlobal, e, anioEscolar);
-          actualizarResumenAlumnoEnPago(e, cuenta, anioEscolar);
-          mostrarMensaje("CONSULTA REALIZADA CORRECTAMENTE.", "ok");
-        });
+        document.getElementById("contadorMovimientos").textContent = "0";
+        actualizarSaldosMise(0,0);
+        datosEstudianteActualGlobal = null;
+
+        mostrarMensaje(
+          (respuesta && respuesta.mensaje) ||
+          "REGISTRO NO ENCONTRADO.",
+          "error"
+        );
+
+        hablarTextoVoz("Registro no encontrado.");
+        return;
       }
-      const pagoCodigoEl = document.getElementById('pagoCodigo');
-      if (pagoCodigoEl && codigoActual.startsWith('LDS-EST-')) pagoCodigoEl.value = codigoActual;
-      const incCodigoEl = document.getElementById('incCodigo');
-      if (incCodigoEl) incCodigoEl.value = codigoActual;
-      prepararAccionesPagoAlumno();
-    }
 
-    if (esDocente && !esMise) actualizarSaldosMise(0, saldoActual);
-  });
+      reproducirSonido('exito');
+
+      const e = respuesta.estudiante;
+      datosEstudianteActualGlobal = e;
+
+      const cuenta = respuesta.cuenta || {};
+
+      const nombreUsuario =
+        e.nombreCompleto ||
+        e.nombre ||
+        "USUARIO";
+
+      const saldoActual =
+        Number(cuenta.saldoActual || 0);
+
+      const saldoFormateado =
+        formatearLDS(saldoActual);
+
+      const codigoRespuesta =
+        String(e.codigo || codigo).toUpperCase();
+
+      const rolRespuesta =
+        String(e.rol || "").toUpperCase();
+
+      const esDocente =
+        (e.codigo &&
+          String(e.codigo)
+            .toUpperCase()
+            .includes("LDS-DOC")) ||
+        e.esDocente ||
+        rolRespuesta.includes("DOCENTE") ||
+        rolRespuesta.includes("MAESTRA");
+
+      if (esDocente) {
+        actualizarBannerCuenta();
+      }
+
+      const codigoConsultado = String(e.codigo || codigo).trim().toUpperCase();
+      const esCuentaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoConsultado);
+
+      /* La consulta automática de la propia caja de la Mise NO puede
+         convertirse en destinatario de un pago. Solo un alumno consultado
+         llena el campo ALUMNO A PAGAR. */
+      const pagoCodigoEl = document.getElementById("pagoCodigo");
+      if (pagoCodigoEl) {
+        if (!esCuentaMise && !esDocente && String(e.codigo || codigo).toUpperCase().startsWith("LDS-EST-")) {
+          pagoCodigoEl.value = e.codigo || codigo;
+        } else {
+          pagoCodigoEl.value = "";
+        }
+      }
+
+      const pagoCard = document.getElementById("pagoAlumnoCard");
+      const pagoFoto = document.getElementById("pagoAlumnoFoto");
+      const pagoNombre = document.getElementById("pagoAlumnoNombre");
+      const pagoMeta = document.getElementById("pagoAlumnoMeta");
+      const pagoSaldo = document.getElementById("pagoAlumnoSaldo");
+      if (pagoCard && pagoFoto && pagoNombre && pagoMeta && pagoSaldo) {
+        if (!esCuentaMise && !esDocente && String(e.codigo || codigo).toUpperCase().startsWith("LDS-EST-")) {
+          const fotoAlumno = obtenerURLsFoto(String(e.fotoUrl || e.foto || "").trim());
+          pagoFoto.dataset.intento = "0";
+          pagoFoto.style.display = "block";
+          pagoFoto.src = fotoAlumno[0] || "";
+          pagoFoto.onerror = function() {
+            const i = Number(pagoFoto.dataset.intento || "0") + 1;
+            pagoFoto.dataset.intento = String(i);
+            if (fotoAlumno[i]) pagoFoto.src = fotoAlumno[i];
+            else pagoFoto.style.display = "none";
+          };
+          pagoNombre.textContent = String(e.nombreCompleto || e.nombre || "ALUMNO").toUpperCase();
+          pagoMeta.textContent = [e.codigo || codigo, e.grado || "", e.seccion || "", "AÑO " + anioEscolar].filter(Boolean).join(" · ");
+          pagoSaldo.textContent = "SALDO ACTUAL: S/ " + saldoFormateado;
+          cargarCategoriasPago("ALUMNO");
+          pagoCard.style.display = "flex";
+          const panelPagoAuto=document.getElementById("panelPago"); if(panelPagoAuto) panelPagoAuto.classList.remove("collapsed");
+        } else {
+          pagoCard.style.display = "none";
+        }
+      }
+
+      const incCodigoEl = document.getElementById("incCodigo");
+      if (incCodigoEl) incCodigoEl.value = e.codigo || codigo;
+
+      const codigoCuenta = String(e.codigo || codigo).trim().toUpperCase();
+      const movimientosRespuesta =
+        Array.isArray(respuesta.movimientos)
+          ? respuesta.movimientos
+          : Array.isArray(respuesta.transacciones)
+            ? respuesta.transacciones
+            : Array.isArray(cuenta.movimientos)
+              ? cuenta.movimientos
+              : Array.isArray(cuenta.transacciones)
+                ? cuenta.transacciones
+                : [];
+
+      // FUENTE ROBUSTA DEL HISTORIAL: consultamos MOVIMIENTOS completo y no
+      // dependemos del filtro de año del endpoint ESTUDIANTE. Esto corrige el
+      // caso actual en el que el saldo se actualiza pero la cartilla aparece vacía.
+      const respuestaMovimientos = await llamarAPIPromise({accion:"movimientos"}, 15000);
+      const movimientosGenerales = Array.isArray(respuestaMovimientos?.movimientos)
+        ? respuestaMovimientos.movimientos
+        : movimientosRespuesta;
+
+      const movimientosCuenta = (Array.isArray(movimientosGenerales) ? movimientosGenerales : [])
+        .filter(m => String(m?.codigo || m?.codigoQR || "").trim().toUpperCase() === codigoCuenta);
+
+      const movimientos = filtrarMovimientosPorAnioCliente(
+        movimientosCuenta.length ? movimientosCuenta : movimientosRespuesta,
+        anioEscolar
+      );
+
+      movimientosActualesGlobal = movimientos.slice();
+
+      const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuenta);
+      if (esCajaMise) {
+        const calcMise = calcularSaldoMiseLocal(movimientosGenerales, codigoCuenta, saldoActual);
+        actualizarSaldosMise(calcMise.abono, calcMise.saldo);
+      } else if (esDocente) {
+        actualizarSaldosMise(0, saldoActual);
+      }
+
+      renderMovimientos(
+        movimientos,
+        e,
+        anioEscolar
+      );
+
+      mostrarMensaje(
+        "CONSULTA REALIZADA CORRECTAMENTE.",
+        "ok"
+      );
+
+      if (esDocente) {
+        hablarTextoVoz(
+          "Maestra " +
+          nombreUsuario +
+          ". Fondo disponible: " +
+          saldoFormateado +
+          " soles."
+        );
+      } else {
+        hablarTextoVoz(
+          "Estudiante " +
+          nombreUsuario +
+          ". Saldo actual: " +
+          saldoFormateado +
+          " LDS."
+        );
+      }
+    }
+  );
 }
 
 function prepararAccionesPagoAlumno(){
@@ -2809,13 +2889,11 @@ function procesarMovimientoAlumno(tipoOperacion){
       hablarTextoVoz(tipoOperacion==='EGRESO'?"Pago registrado correctamente.":"Cobro registrado correctamente.");
       document.getElementById("pagoMonto").value="";
       document.getElementById("pagoObs").value="";
-      movimientosGlobalesCache=null;
+      cargarSaldoMiseAlIngresar(responsable);
       document.getElementById("codigo").value=codigo;
-      cargarMovimientosGlobales(() => {
-        cargarSaldoMiseAlIngresar(responsable);
-        consultarEstudiante(true);
-        prepararAccionesPagoAlumno();
-      }, true);
+      // Refresca saldo + estado de cuenta + movimientos recién registrados.
+      consultarEstudiante(true);
+      prepararAccionesPagoAlumno();
     }else{
       reproducirSonido('error');
       mostrarMensajePago((respuesta&&respuesta.mensaje)||"ERROR AL REGISTRAR.","error");
@@ -2886,33 +2964,30 @@ function prepararFotosImpresion(container) {
 }
 
 function htmlMovimientosImpresion(movimientos, estudiante) {
-  const lista = Array.isArray(movimientos) ? movimientos : [];
-  if (!lista.length) return `<div class="print-no-mov">NO HAY MOVIMIENTOS REGISTRADOS.</div>`;
-  const rows = lista.map(m => {
-    const fecha = m.fechaTexto || m.fecha || m.timestamp || '';
-    const tipo = m.tipo || m.tipoMovimiento || '';
-    const concepto = m.concepto || '';
-    const monto = parseMontoLDS(m.monto ?? m.montoLDS ?? 0);
-    const responsable = m.responsable || '';
-    const observacion = String(m.observacion || '')
-      .replace(/(?:^|\s*\|\s*)TX=[^|]*/gi,'')
-      .replace(/(?:^|\s*\|\s*)CUENTA_ORIGEN=[^|]*/gi,'')
-      .replace(/(?:^|\s*\|\s*)CUENTA_DESTINO=[^|]*/gi,'')
-      .replace(/\s*\|\s*$/,'').trim();
+  if (!Array.isArray(movimientos) || !movimientos.length) {
+    return `<div class="print-no-mov">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO SELECCIONADO.</div>`;
+  }
+  const rows = movimientos.map(m => {
+    const anio = m.anio || m.anioEscolar || "";
+    const fecha = m.fechaTexto || m.fecha || m.timestamp || "";
+    const nombre = m.estudiante || m.nombre || estudiante?.nombreCompleto || estudiante?.nombre || "";
+    const grado = m.grado || estudiante?.grado || "";
+    const tipo = m.tipo || m.tipoMovimiento || "";
+    const concepto = m.concepto || "";
+    const monto = m.monto ?? m.montoLDS ?? 0;
+    const responsable = m.responsable || "";
+    const observacion = m.observacion || "";
     return `<tr>
-      <td>${escaparHTML(fecha)}</td>
-      <td>${escaparHTML(tipo)}</td>
-      <td>${escaparHTML(concepto)}</td>
-      <td style="text-align:right;font-weight:900;">S/ ${formatearLDS(monto)}</td>
-      <td>${escaparHTML(responsable)}</td>
-      <td>${escaparHTML(observacion)}</td>
+      <td>${escaparHTML(anio)}</td><td>${escaparHTML(fecha)}</td><td>${escaparHTML(nombre)}</td>
+      <td>${escaparHTML(grado)}</td><td>${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td>
+      <td style="text-align:right;">S/ ${formatearLDS(parseMontoLDS(monto))}</td>
+      <td>${escaparHTML(responsable)}</td><td>${escaparHTML(observacion)}</td>
     </tr>`;
-  }).join('');
+  }).join("");
   return `<table class="print-report-table"><thead><tr>
-    <th>FECHA Y HORA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
+    <th>AÑO</th><th>FECHA</th><th>ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
   </tr></thead><tbody>${rows}</tbody></table>`;
 }
-
 
 async function imprimirReportePersonal() {
   reproducirSonido('clic');
@@ -2977,13 +3052,20 @@ async function imprimirReporteGrupal() {
     return;
   }
 
+  const respuestaMovimientos = await llamarAPIPromise({accion:'movimientos'}, 15000);
+  const todosMovimientos = Array.isArray(respuestaMovimientos?.movimientos) ? respuestaMovimientos.movimientos : [];
+
   const resultados = await Promise.all(alumnos.map(async a => {
     const codigo = String(a.codigo || '').trim().toUpperCase();
-    const r = await llamarAPIPromise({accion:'estudiante', codigo, anio});
-    if (r && r.ok !== false && r.estudiante) {
-      return {cuenta:a, estudiante:r.estudiante, movimientos:Array.isArray(r.movimientos)?r.movimientos:[]};
-    }
-    return {cuenta:a, estudiante:{codigo, nombreCompleto:a.nombre || '', grado:a.grado || '', seccion:a.seccion || ''}, movimientos:[]};
+    const r = await llamarAPIPromise({accion:'estudiante', codigo});
+    const estudiante = (r && r.ok !== false && r.estudiante)
+      ? r.estudiante
+      : {codigo, nombreCompleto:a.nombre || '', grado:a.grado || '', seccion:a.seccion || ''};
+    const movimientosCuenta = todosMovimientos.filter(m =>
+      String(m?.codigo || m?.codigoQR || '').trim().toUpperCase() === codigo
+    );
+    const movimientos = filtrarMovimientosPorAnioCliente(movimientosCuenta, anio);
+    return {cuenta:a, estudiante, movimientos};
   }));
 
   const totalMovimientos = resultados.reduce((n, x) => n + x.movimientos.length, 0);
@@ -3363,3 +3445,4 @@ seleccionarCategoriaPago(document.getElementById("pagoCategoria")?.value || "PRE
 
 </body>
 </html>
+```
