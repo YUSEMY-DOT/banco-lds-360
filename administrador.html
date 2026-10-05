@@ -1,4 +1,3 @@
-````
 ```
 <!DOCTYPE html>
 <html lang="es">
@@ -1790,7 +1789,7 @@ function calcularResumenMise(movimientos,codigo,saldoBackend){
   let ingresos=0,egresos=0,abono=0;
   lista.forEach(m=>{
     const monto=parseMontoLDS(m.monto??m.montoLDS??0);
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    const tipo=obtenerTipoMovimientoVisible(m);
     if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
     if(tipo==='EGRESO')egresos+=monto;
   });
@@ -2554,6 +2553,32 @@ function obtenerURLsFoto(url) {
   ];
 }
 
+function obtenerTipoMovimientoVisible(m){
+  if(!m || typeof m!=='object') return '';
+  const directo=String(m.tipo ?? m.tipoMovimiento ?? m.movimiento ?? m.tipoDeMovimiento ?? '').trim().toUpperCase();
+  if(directo==='INGRESO' || directo==='EGRESO') return directo;
+  const obs=String(m.observacion ?? m.observaciones ?? m.detalle ?? '').toUpperCase();
+  const codigo=String(m.codigo ?? m.codigoQR ?? m.cuenta ?? '').trim().toUpperCase();
+  if(codigo && obs.includes('CUENTA_ORIGEN='+codigo)) return 'EGRESO';
+  if(codigo && obs.includes('CUENTA_DESTINO='+codigo)) return 'INGRESO';
+  if(obs.includes('CUENTA_ORIGEN=')) return 'EGRESO';
+  if(obs.includes('CUENTA_DESTINO=')) return 'INGRESO';
+  return '';
+}
+
+function limpiarObservacionVisibleAdmin(valor){
+  const txt=String(valor??'').trim();
+  if(!txt)return '';
+  return txt
+    .replace(/(^|\s*\|\s*)TX\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA_ORIGEN\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA_DESTINO\s*=\s*[^|]*/gi,'')
+    .replace(/(^|\s*\|\s*)CUENTA\s*=\s*[^|]*/gi,'')
+    .replace(/\s*\|\s*/g,' | ')
+    .replace(/^\s*\|\s*|\s*\|\s*$/g,'')
+    .trim();
+}
+
 function actualizarSaldosMise(abono, saldo){
   const a = document.getElementById("saldoInicialMise");
   const d = document.getElementById("saldoDisponibleMise");
@@ -2562,12 +2587,13 @@ function actualizarSaldosMise(abono, saldo){
 }
 
 function esIngresoDeAndrew(m, codigoDestino){
-  const tipo=String(m?.tipo||m?.tipoMovimiento||"").trim().toUpperCase();
-  if(tipo!=="INGRESO") return false;
-  const responsable=String(m?.responsable||"").trim().toUpperCase();
-  const obs=String(m?.observacion||"").trim().toUpperCase();
-  const destino=String(codigoDestino||m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-  return (responsable.includes("ANDREW") || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW")) && (!codigoDestino || obs.includes("CUENTA_DESTINO="+destino) || String(m?.codigo||m?.codigoQR||"").trim().toUpperCase()===destino);
+  const tipo=obtenerTipoMovimientoVisible(m);
+  if(tipo!=='INGRESO') return false;
+  const responsable=String(m?.responsable||'').trim().toUpperCase();
+  const obs=String(m?.observacion||'').trim().toUpperCase();
+  const destino=String(codigoDestino||m?.codigo||m?.codigoQR||'').trim().toUpperCase();
+  return (responsable.includes('ANDREW') || obs.includes('CUENTA_ORIGEN=CAJA-ANDREW')) &&
+         (!codigoDestino || obs.includes('CUENTA_DESTINO='+destino) || String(m?.codigo||m?.codigoQR||'').trim().toUpperCase()===destino);
 }
 
 function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
@@ -2580,7 +2606,7 @@ function calcularSaldoMiseLocal(movimientos,codigo,saldoBackend){
   let ingresos=0,egresos=0,abono=0;
   lista.forEach(m=>{
     const monto=parseMontoLDS(m.monto??m.montoLDS??0);
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    const tipo=obtenerTipoMovimientoVisible(m);
     if(tipo==='INGRESO'){ingresos+=monto;if(esIngresoDeAndrew(m,c))abono+=monto;}
     if(tipo==='EGRESO')egresos+=monto;
   });
@@ -2635,6 +2661,18 @@ function filtrarMovimientosPorAnioCliente(movimientos, anioEscolar) {
   return lista
     .filter(m => String(m?.estado || "ACTIVO").trim().toUpperCase() !== "ANULADO")
     .filter(m => obtenerAnioMovimientoCliente(m, anio) === anio);
+}
+
+function listaCalculoSaldoAlumno(movimientos,codigo){
+  const c=String(codigo||'').trim().toUpperCase();
+  return Math.max(0,(Array.isArray(movimientos)?movimientos:[])
+    .filter(m=>String(m?.codigo||m?.codigoQR||'').trim().toUpperCase()===c)
+    .filter(m=>String(m?.estado||'ACTIVO').trim().toUpperCase()!=='ANULADO')
+    .reduce((total,m)=>{
+      const monto=parseMontoLDS(m.monto??m.montoLDS??0);
+      const tipo=obtenerTipoMovimientoVisible(m);
+      return tipo==='INGRESO'?total+monto:(tipo==='EGRESO'?total-monto:total);
+    },0));
 }
 
 function consultarEstudiante(esConsultaAutomatica = false) {
@@ -2809,6 +2847,15 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         anioEscolar
       );
 
+      // Solo para la cartilla del alumno: el saldo visible se recalcula con sus movimientos reales.
+      // No modifica el saldo de la Mise activa.
+      if (!esCuentaMise && !esDocente && datosEstudianteActualGlobal) {
+        const saldoAlumnoVisible = listaCalculoSaldoAlumno(movimientosGenerales, codigoCuenta);
+        datosEstudianteActualGlobal.saldoActual = saldoAlumnoVisible;
+        const pagoSaldoVisible = document.getElementById('pagoAlumnoSaldo');
+        if (pagoSaldoVisible) pagoSaldoVisible.textContent = 'SALDO ACTUAL: S/ ' + formatearLDS(saldoAlumnoVisible);
+      }
+
       movimientosActualesGlobal = movimientos.slice();
 
       const esCajaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuenta);
@@ -2864,7 +2911,7 @@ function renderResumenMovimientosAlumno(movimientos, anioEscolar){
   }
   body.innerHTML=`<div style="max-height:210px;overflow:auto;"><table class="pago-mov-table"><thead><tr><th>FECHA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead><tbody>${lista.map(m=>{
     const fecha=obtenerTimestampMovimientoVisible(m)||'—';
-    const tipo=String(m.tipo||m.tipoMovimiento||'').trim().toUpperCase();
+    const tipo=obtenerTipoMovimientoVisible(m);
     const concepto=String(m.concepto||'').trim();
     const monto=formatearLDS(parseMontoLDS(m.monto??m.montoLDS??0));
     const cls=tipo.includes('EGRESO')?'pago-mov-egreso':'pago-mov-ingreso';
@@ -3341,10 +3388,7 @@ function renderMovimientos(
           : ""
       );
 
-    const tipo =
-      m.tipo ||
-      m.tipoMovimiento ||
-      "";
+    const tipo = obtenerTipoMovimientoVisible(m);
 
     const concepto =
       m.concepto ||
@@ -3359,9 +3403,7 @@ function renderMovimientos(
       m.responsable ||
       "";
 
-    const observacion =
-      m.observacion ||
-      "";
+    const observacion = limpiarObservacionVisibleAdmin(m.observacion || '');
 
     const badgeClase =
       String(tipo)
@@ -3606,4 +3648,3 @@ seleccionarCategoriaPago(document.getElementById("pagoCategoria")?.value || "PRE
 </body>
 </html>
 ```
-````
