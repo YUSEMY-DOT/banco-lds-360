@@ -1420,7 +1420,7 @@ footer {
             <thead>
               <tr>
                 <th>AÑO</th>
-                <th>TIMESTAMP</th>
+                <th>FECHA Y HORA</th>
                 <th>ESTUDIANTE</th>
                 <th>GRADO</th>
                 <th>TIPO</th>
@@ -2909,7 +2909,7 @@ function renderResumenMovimientosAlumno(movimientos, anioEscolar){
     body.innerHTML='<div class="pago-mov-empty">SIN MOVIMIENTOS REGISTRADOS EN EL AÑO '+escaparHTML(anioEscolar||'')+'.</div>';
     return;
   }
-  body.innerHTML=`<div style="max-height:210px;overflow:auto;"><table class="pago-mov-table"><thead><tr><th>FECHA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead><tbody>${lista.map(m=>{
+  body.innerHTML=`<div style="max-height:210px;overflow:auto;"><table class="pago-mov-table"><thead><tr><th>FECHA Y HORA</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO</th></tr></thead><tbody>${lista.map(m=>{
     const fecha=obtenerTimestampMovimientoVisible(m)||'—';
     const tipo=obtenerTipoMovimientoVisible(m);
     const concepto=String(m.concepto||'').trim();
