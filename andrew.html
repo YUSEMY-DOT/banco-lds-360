@@ -454,18 +454,56 @@ function montoVisibleAndrew(m){
 }
 
 function calcularSaldoCuentaAndrew(movimientos, codigoCuenta){
-  const codigo=String(codigoCuenta||'').trim().toUpperCase();
+  const codigo=String(codigoCuenta||"").trim().toUpperCase();
   let saldo=0;
+
   (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
-    if(String(m?.estado||'ACTIVO').trim().toUpperCase()==='ANULADO') return;
-    const mcodigo=String(m?.codigo||m?.codigoQR||'').trim().toUpperCase();
-    if(mcodigo!==codigo) return;
-    const tipo=normalizarTipoAndrew(m,codigo);
+    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==='ANULADO') return;
+
+    const mcodigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
+    const categoria=String(m?.categoria||"").trim().toUpperCase();
+    const concepto=String(m?.concepto||"").trim().toUpperCase();
     const monto=montoVisibleAndrew(m);
+
+    const esTransferencia =
+      categoria==="TRANSFERENCIA_CAJA_MISE" ||
+      concepto.includes("TRANSFERENCIA") ||
+      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
+
+    const esDevolucion =
+      categoria==="DEVOLUCION_CAJA_GENERAL" ||
+      concepto.includes("DEVOLUCIÓN") ||
+      concepto.includes("DEVOLUCION");
+
+    if(codigo===CODIGO_ANDREW){
+      if(esTransferencia) saldo-=monto;
+      else if(esDevolucion) saldo+=monto;
+      else if(mcodigo===codigo){
+        const tipo=normalizarTipoAndrew(m,codigo);
+        if(tipo==='INGRESO') saldo+=monto;
+        else if(tipo==='EGRESO') saldo-=monto;
+      }
+      return;
+    }
+
+    if(mcodigo!==codigo) return;
+
+    if(esTransferencia){
+      saldo+=monto;
+      return;
+    }
+
+    if(esDevolucion){
+      saldo-=monto;
+      return;
+    }
+
+    const tipo=normalizarTipoAndrew(m,codigo);
     if(tipo==='INGRESO') saldo+=monto;
     else if(tipo==='EGRESO') saldo-=monto;
   });
-  return Math.max(0,Math.round((saldo+Number.EPSILON)*100)/100);
+
+  return Math.round((saldo+Number.EPSILON)*100)/100;
 }
 
 function mapaSaldosMisesAndrew(movimientos){
@@ -483,7 +521,6 @@ function cargarTodo(){
     let movimientos = (rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
     
     let saldoAndrewUnificado = calcularSaldoCuentaAndrew(movimientos, CODIGO_ANDREW);
-    if(saldoAndrewUnificado <= 0) saldoAndrewUnificado = 200000;
     document.getElementById("saldoCuenta").textContent = formato(saldoAndrewUnificado);
 
     let saldosMisesUnificados = mapaSaldosMisesAndrew(movimientos);
@@ -492,7 +529,7 @@ function cargarTodo(){
       let listaCuentas = (rCuentas && rCuentas.ok && Array.isArray(rCuentas.cuentas)) ? rCuentas.cuentas : [];
       
       const andrew = listaCuentas.find(c => String(c.codigo||"").trim().toUpperCase() === CODIGO_ANDREW);
-      if(andrew && Number.isFinite(Number(andrew.saldoActual)) && Number(andrew.saldoActual) > 0){
+      if(andrew && Number.isFinite(Number(andrew.saldoActual))){
         document.getElementById("saldoCuenta").textContent = formato(andrew.saldoActual);
       }
 
@@ -537,10 +574,18 @@ function cargarTodo(){
 }
 
 function esMovimientoAndrew(m){
-  const codigo=String(m.codigo||"").trim().toUpperCase();
-  const obs=String(m.observacion||"").toUpperCase();
-  const estudiante=String(m.estudiante||"").trim().toUpperCase();
-  return codigo===CODIGO_ANDREW || obs.includes("CUENTA="+CODIGO_ANDREW) || estudiante===NOMBRE_ANDREW;
+  const codigo=String(m?.codigo||"").trim().toUpperCase();
+  const obs=String(m?.observacion||"").toUpperCase();
+  const estudiante=String(m?.estudiante||"").trim().toUpperCase();
+  const concepto=String(m?.concepto||"").trim().toUpperCase();
+
+  return codigo===CODIGO_ANDREW
+    || obs.includes("CUENTA="+CODIGO_ANDREW)
+    || estudiante===NOMBRE_ANDREW
+    || concepto.includes("FONDO PARA PAGOS A ALUMNOS")
+    || concepto.includes("TRANSFERENCIA")
+    || concepto.includes("DEVOLUCIÓN")
+    || concepto.includes("DEVOLUCION");
 }
 
 function renderTablaAndrew(mov){
@@ -549,54 +594,61 @@ function renderTablaAndrew(mov){
     tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS DE CAJA GENERAL PARA EL AÑO SELECCIONADO.</td></tr>';
     return;
   }
-  tbody.innerHTML=mov.map(m=>`
+
+  const anioSeleccionado=String(document.getElementById("anio")?.value||"");
+
+  tbody.innerHTML=mov.map(m=>{
+    const fecha=String(m?.fechaTexto||"");
+    const matchAnio=fecha.match(/20\d{2}/);
+    const anioVisible=m?.anio || (matchAnio ? matchAnio[0] : anioSeleccionado);
+
+    let tipoVisible=normalizarTipoAndrew(m,m?.codigo);
+    const concepto=String(m?.concepto||"").toUpperCase();
+
+    if(!tipoVisible){
+      if(concepto.includes("DEVOLUCIÓN") || concepto.includes("DEVOLUCION")){
+        tipoVisible="INGRESO";
+      }else if(concepto.includes("TRANSFERENCIA") || concepto.includes("FONDO PARA PAGOS")){
+        tipoVisible="EGRESO";
+      }
+    }
+
+    const esTransferencia =
+      concepto.includes("TRANSFERENCIA") ||
+      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
+
+    const esDevolucion =
+      concepto.includes("DEVOLUCIÓN") ||
+      concepto.includes("DEVOLUCION");
+
+    const cuentaVisible=(esTransferencia || esDevolucion)
+      ? NOMBRE_ANDREW
+      : (m?.estudiante || NOMBRE_ANDREW);
+
+    const gradoVisible=(esTransferencia || esDevolucion)
+      ? "CAJA GENERAL"
+      : (m?.grado || "CAJA GENERAL");
+
+    return `
     <tr>
-      <td>${escapar(m.anio)}</td>
-      <td>${escapar(m.fechaTexto||"")}</td>
-      <td>${escapar(m.estudiante||NOMBRE_ANDREW)}</td>
-      <td>${escapar(m.grado||"CAJA GENERAL")}</td>
-      <td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td>
-      <td>${escapar(m.concepto)}</td>
+      <td>${escapar(anioVisible)}</td>
+      <td>${escapar(fecha)}</td>
+      <td>${escapar(cuentaVisible)}</td>
+      <td>${escapar(gradoVisible)}</td>
+      <td>${escapar(tipoVisible)}</td>
+      <td>${escapar(m?.concepto||"")}</td>
       <td>${formato(montoVisibleAndrew(m))}</td>
-      <td>${escapar(m.responsable||"")}</td>
-      <td>${escapar(m.observacion||"")}</td>
-    </tr>`).join("");
+      <td>${escapar(m?.responsable||"")}</td>
+      <td>${escapar(m?.observacion||"")}</td>
+    </tr>`;
+  }).join("");
 }
 
 function parseMontoLDS(valor){
   let texto=String(valor==null?"":valor).trim();
   if(!texto) return 0;
-
   texto=texto.replace(/[^\d,.\-]/g,"");
-
-  // Formato peruano: 15.000 = 15,000; 1.500 = 1,500.
-  // Si hay puntos y el último grupo tiene exactamente 3 dígitos,
-  // los puntos se consideran separadores de miles.
-  if(texto.indexOf(".") !== -1 && texto.indexOf(",") !== -1){
-    // Ej.: 15.000,50 -> 15000.50
-    texto=texto.replace(/\./g,"").replace(",",".");
-  }else if(texto.indexOf(".") !== -1){
-    const partes=texto.split(".");
-    const ultimo=partes[partes.length-1];
-
-    if(partes.length>1 && /^\d{3}$/.test(ultimo)){
-      // Ej.: 15.000 -> 15000
-      texto=partes.join("");
-    }
-  }else if(texto.indexOf(",") !== -1){
-    const partes=texto.split(",");
-    const ultimo=partes[partes.length-1];
-
-    if(partes.length>1 && /^\d{3}$/.test(ultimo)){
-      // Ej.: 15,000 -> 15000
-      texto=partes.join("");
-    }else{
-      // Ej.: 15,50 -> 15.50
-      texto=texto.replace(",",".");
-    }
-  }
-
-  const n=Number(texto);
+  const n=Number(texto.replace(",","."));
   return Number.isFinite(n) ? n : 0;
 }
 
