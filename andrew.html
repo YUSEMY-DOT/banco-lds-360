@@ -11,9 +11,6 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvet
 body{background:#061b3f;color:var(--texto);overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 
-/* ==========================================================
-   PORTADA ANDREW — FONDO REAL + FOTO TRANSPARENTE
-   ========================================================== */
 #loginAndrew{
   position:fixed!important;
   inset:0!important;
@@ -36,141 +33,21 @@ button,input,select,textarea{font:inherit}
   background-size:100% 100%!important;
 }
 
-#loginAndrew::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:transparent!important;
-  pointer-events:none!important;
-  z-index:0!important;
-}
-
-#loginAndrew .login-bg-image{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-  display:block!important;
-  z-index:0!important;
-  pointer-events:none!important;
-  user-select:none!important;
-}
-
-#loginAndrew .andrew-login-photo{
-  position:relative!important;
-  z-index:2!important;
-  width:min(39vw,540px)!important;
-  height:min(76vh,700px)!important;
-  flex:0 1 540px!important;
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  margin:clamp(25px,5vh,55px) 0 0!important;
-  pointer-events:none!important;
-}
-
-#loginAndrew .andrew-login-photo img{
-  display:block!important;
-  color:transparent!important;
-  font-size:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-  background:transparent!important;
-  mix-blend-mode:normal!important;
-  border:0!important;
-  outline:0!important;
-  box-shadow:none!important;
-  filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));
-}
-
-#loginAndrew > .panel{
-  position:relative!important;
-  z-index:5!important;
-  width:min(430px,39vw)!important;
-  max-width:430px!important;
-  flex:0 1 430px!important;
-  margin:clamp(10px,4vh,40px) 0 0!important;
-  border:2px solid #f5b400!important;
-  border-radius:22px!important;
-  overflow:hidden!important;
-  background:#fff!important;
-  box-shadow:0 22px 55px rgba(0,0,0,.48)!important;
-  pointer-events:auto!important;
-}
-
-#loginAndrew .panel-head{
-  padding:20px 24px!important;
-  background:linear-gradient(135deg,#061b3f,#12366f)!important;
-  border-bottom:2px solid #f5b400!important;
-}
-#loginAndrew .panel-head h3{
-  margin:0!important;
-  color:#fff!important;
-  font-size:clamp(1rem,1.45vw,1.25rem)!important;
-  line-height:1.35!important;
-  font-weight:900!important;
-}
+#loginAndrew::before{content:"";position:absolute;inset:0;background:transparent!important;pointer-events:none!important;z-index:0!important;}
+#loginAndrew .login-bg-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;z-index:0!important;pointer-events:none!important;user-select:none!important;}
+#loginAndrew .andrew-login-photo{position:relative!important;z-index:2!important;width:min(39vw,540px)!important;height:min(76vh,700px)!important;flex:0 1 540px!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:clamp(25px,5vh,55px) 0 0!important;pointer-events:none!important;}
+#loginAndrew .andrew-login-photo img{display:block!important;color:transparent!important;font-size:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;mix-blend-mode:normal!important;border:0!important;outline:0!important;box-shadow:none!important;filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));}
+#loginAndrew > .panel{position:relative!important;z-index:5!important;width:min(430px,39vw)!important;max-width:430px!important;flex:0 1 430px!important;margin:clamp(10px,4vh,40px) 0 0!important;border:2px solid #f5b400!important;border-radius:22px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 22px 55px rgba(0,0,0,.48)!important;pointer-events:auto!important;}
+#loginAndrew .panel-head{padding:20px 24px!important;background:linear-gradient(135deg,#061b3f,#12366f)!important;border-bottom:2px solid #f5b400!important;}
+#loginAndrew .panel-head h3{margin:0!important;color:#fff!important;font-size:clamp(1rem,1.45vw,1.25rem)!important;line-height:1.35!important;font-weight:900!important;}
 #loginAndrew .panel-body{padding:24px!important}
-#loginAndrew .panel-body>p{
-  margin:0 0 18px!important;
-  color:#334155!important;
-  font-size:.92rem!important;
-  line-height:1.5!important;
-  font-weight:800!important;
-}
-#loginAndrew .small-label{
-  display:block!important;
-  margin:0 0 7px!important;
-  color:#0b2f67!important;
-  font-size:.76rem!important;
-  font-weight:900!important;
-}
-#loginAndrew #claveAndrew{
-  width:100%!important;
-  height:56px!important;
-  padding:0 15px!important;
-  border:1.5px solid #b9c7d8!important;
-  border-radius:12px!important;
-  background:#f8fafc!important;
-  color:#14213d!important;
-  font-size:1rem!important;
-  font-weight:700!important;
-  outline:none!important;
-  pointer-events:auto!important;
-}
+#loginAndrew .panel-body>p{margin:0 0 18px!important;color:#334155!important;font-size:.92rem!important;line-height:1.5!important;font-weight:800!important;}
+#loginAndrew .small-label{display:block!important;margin:0 0 7px!important;color:#0b2f67!important;font-size:.76rem!important;font-weight:900!important;}
+#loginAndrew #claveAndrew{width:100%!important;height:56px!important;padding:0 15px!important;border:1.5px solid #b9c7d8!important;border-radius:12px!important;background:#f8fafc!important;color:#14213d!important;font-size:1rem!important;font-weight:700!important;outline:none!important;pointer-events:auto!important;}
 #loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
-#loginAndrew .login-action,
-#loginAndrew .login-home{
-  position:relative!important;
-  z-index:20!important;
-  pointer-events:auto!important;
-  cursor:pointer!important;
-  display:flex!important;
-  width:100%!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-weight:900!important;
-}
-#loginAndrew .login-action{
-  min-height:54px!important;
-  margin-top:15px!important;
-  border:1px solid #fcd34d!important;
-  border-radius:12px!important;
-  background:linear-gradient(135deg,#ffd23f,#f2a900)!important;
-  color:#08214a!important;
-}
-#loginAndrew .login-home{
-  min-height:48px!important;
-  margin-top:10px!important;
-  background:#fff!important;
-  color:#0b2f67!important;
-  border:1.5px solid #0b2f67!important;
-  border-radius:12px!important;
-}
+#loginAndrew .login-action,#loginAndrew .login-home{position:relative!important;z-index:20!important;pointer-events:auto!important;cursor:pointer!important;display:flex!important;width:100%!important;align-items:center!important;justify-content:center!important;font-weight:900!important;}
+#loginAndrew .login-action{min-height:54px!important;margin-top:15px!important;border:1px solid #fcd34d!important;border-radius:12px!important;background:linear-gradient(135deg,#ffd23f,#f2a900)!important;color:#08214a!important;}
+#loginAndrew .login-home{min-height:48px!important;margin-top:10px!important;background:#fff!important;color:#0b2f67!important;border:1.5px solid #0b2f67!important;border-radius:12px!important;}
 #loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
 
@@ -180,7 +57,6 @@ body.login-screen > #appFooter{display:none!important}
 body.login-screen #loginAndrew{display:flex!important}
 body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
 
-/* PANEL INTERNO */
 header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
 .topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
@@ -195,9 +71,6 @@ button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
 #loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
 
-/* ==========================================================
-   PANEL ANDREW — ESTILO ORIGINAL COMPLETO
-   ========================================================== */
 #appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
 #appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
 #appHeader .brand{flex:1 1 auto;min-width:0;min-height:52px;display:flex;align-items:center;gap:10px;}
@@ -417,4 +290,133 @@ button{cursor:pointer;}
           <select id="miseOrigen">
             <option value="">SELECCIONA UNA MISS</option>
             <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="
+            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
+            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
+            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
+          </select>
+
+          <label class="small-label">MONTO LDS</label>
+          <input id="montoDevolucion" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 2000.00">
+
+          <label class="small-label">CONCEPTO</label>
+          <select id="conceptoDevolucion">
+            <option>DEVOLUCIÓN DE FONDO A CAJA GENERAL</option>
+            <option>REINTEGRO DE FONDO</option>
+            <option>DEVOLUCIÓN DE EXCEDENTE</option>
+          </select>
+
+          <label class="small-label">OBSERVACIÓN</label>
+          <textarea id="obsDevolucion" rows="3" placeholder="DETALLE DE LA DEVOLUCIÓN..."></textarea>
+
+          <button class="btn btn-outline" style="width:100%;margin-top:15px;" onclick="recibirDevolucion()">
+            ↩️ REGISTRAR DEVOLUCIÓN
+          </button>
+          <div id="mensajeDevolucion" class="message"></div>
+        </div>
+      </div>
+
+      <div class="panel accordion-panel">
+        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
+          <div class="accordion-title-wrap"><h3>🔎 CONSULTAR CUENTA</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
+          <span class="accordion-arrow">⌄</span>
+        </div>
+        <div class="panel-body accordion-body" hidden>
+          <label class="small-label">CÓDIGO DE CUENTA / ALUMNO</label>
+          <input id="codigoConsulta" placeholder="LDS-001 / CAJA-LILY">
+          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">
+            🔍 CONSULTAR
+          </button>
+          <div id="resultadoConsulta" class="message"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="reportesModal" class="reportes-modal" aria-hidden="true">
+  <div class="reportes-card">
+    <div class="reportes-head">
+      <div>
+        <h3>📄 REPORTES LDS 360</h3>
+        <p>Selecciona el reporte que deseas imprimir.</p>
+      </div>
+      <button class="btn btn-close-report" onclick="cerrarReportes()">✕</button>
+    </div>
+    <div class="reportes-options">
+      <button class="report-option" onclick="imprimirReporteIndividual()">
+        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew · año seleccionado</small>
+      </button>
+      <button class="report-option" onclick="imprimirReporteColectivo()">
+        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Todos los movimientos del Banco LDS 360 · año seleccionado</small>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="loginAndrew">
+  <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
+  <div class="andrew-login-photo">
+    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
+    <div class="panel-body">
+      <p style="font-weight:800;color:#334155;margin-bottom:18px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
+      <label class="small-label">CLAVE DE ACCESO</label>
+      <input id="claveAndrew" type="password" placeholder="INGRESE LA CLAVE" autocomplete="off">
+      <button type="button" class="btn btn-gold login-action" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
+      <button type="button" class="btn btn-outline login-home" onclick="window.location.href='index.html'">← DEVOLVER AL INICIO</button>
+      <div id="errorLogin" class="message"></div>
+    </div>
+  </div>
+</div>
+
+<footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;color:#fff;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
+const CLAVE_ANDREW = "360LDS@@@";
+const CODIGO_ANDREW = "CAJA-ANDREW";
+const NOMBRE_ANDREW = "MISTER ANDREW";
+
+const MISES = {
+  "CAJA-LILY": "MISS LILY MELO AZAÑERO",
+  "CAJA-KIARA": "MISS KIARA MORALES ELGUERA",
+  "CAJA-ANGHY": "MISS ANGHY REYES MELO",
+  "CAJA-KARIN": "MISS KARIN MOLERO ROMANI"
+};
+
+function formato(n){ return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escapar(v){ return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function mostrarMensaje(id,texto,tipo="ok"){ const el=document.getElementById(id); if(!el)return; el.textContent=texto; el.className="message "+tipo; }
+
+function llamarAPI(params,callback){
+  const cb="ldsAndrew_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  window[cb]=function(data){ try{ callback(data); } finally { delete window[cb]; document.getElementById("jsonp_"+cb)?.remove(); } };
+  const q=new URLSearchParams({...params,callback:cb});
+  const s=document.createElement("script"); s.id="jsonp_"+cb; s.src=APP_SCRIPT_URL+"?"+q.toString();
+  s.onerror=function(){ callback({ok:false,mensaje:"NO SE PUDO CONECTAR CON BANCO LDS 360."}); delete window[cb]; s.remove(); };
+  document.body.appendChild(s);
+}
+
+function entrarAndrew(){
+  const inputClave = document.getElementById("claveAndrew");
+  if(!inputClave) return;
+  const clave = inputClave.value.trim();
+  if(clave !== CLAVE_ANDREW){
+    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error");
+    return;
+  }
+  sessionStorage.setItem("andrew360", "1");
+  document.body.classList.remove("login-screen");
+  document.getElementById("loginAndrew").style.display = "none";
+  document.getElementById("appHeader").style.display = "flex";
+  document.getElementById("andrewApp").style.display = "block";
+  document.getElementById("appFooter").style.display = "block";
+  cargarTodo();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inputClave = document.getElementById("claveAndrew");
+  if(inputClave){
+    inputClave.addEventListener("keydown", function(e){
