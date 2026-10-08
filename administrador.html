@@ -1313,8 +1313,8 @@ footer {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">LDS 0.00</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">LDS 0.00</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
       <div class="stat-pill"><span>INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
     </div>
@@ -1457,7 +1457,7 @@ footer {
           <div class="pago-alumno-datos">
             <strong id="pagoAlumnoNombre">ALUMNO</strong>
             <span id="pagoAlumnoMeta">—</span>
-            <b id="pagoAlumnoSaldo">SALDO ACTUAL: LDS 0.00</b>
+            <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
           </div>
         </div>
         <div id="pagoAlumnoMovimientos" class="pago-alumno-movimientos" style="display:none;">
@@ -1654,17 +1654,83 @@ let cacheCuentasCargando = {};
 let cacheListaEstudiantesEscolares = {};
 let cacheListaEstudiantesCargando = {};
 
-function precargarListaEstudiantes() {
+function normalizarListaAlumno(a){
+  if(!a || typeof a !== 'object') return null;
+  const codigo=String(a.codigo||'').trim().toUpperCase();
+  if(!codigo || !codigo.startsWith('LDS-EST-')) return null;
+  return {
+    codigo,
+    nombre:String(a.nombre||a.nombreCompleto||'').trim(),
+    nombreCompleto:String(a.nombreCompleto||a.nombre||'').trim(),
+    grado:String(a.grado||'').trim(),
+    seccion:String(a.seccion||'').trim(),
+    rol:String(a.rol||'ALUMNO').trim(),
+    foto:String(a.foto||'').trim(),
+    fotoUrl:String(a.fotoUrl||a.foto||'').trim(),
+    saldoActual:Number(a.saldoActual)||0
+  };
+}
+
+async function obtenerListaEstudiantesRobusta(anio){
+  // 1) Endpoint ligero dedicado.
+  const directa=await llamarAPIPromise({accion:'LISTAESTUDIANTES',anio},9000);
+  if(directa && directa.ok!==false && Array.isArray(directa.estudiantes)){
+    const lista=directa.estudiantes.map(normalizarListaAlumno).filter(Boolean);
+    if(lista.length) return lista;
+  }
+
+  // 2) Respaldo para despliegues que todavía no tengan LISTAESTUDIANTES:
+  // consulta códigos secuenciales LDS-EST-001... hasta encontrar varios vacíos seguidos.
+  const encontrados=[];
+  let vaciosSeguidos=0;
+  const maxCodigo=50;
+  const loteTam=5;
+
+  for(let inicio=1; inicio<=maxCodigo && vaciosSeguidos<5; inicio+=loteTam){
+    const lote=[];
+    for(let n=inicio; n<inicio+loteTam && n<=maxCodigo; n++) lote.push(n);
+    const respuestas=await Promise.all(lote.map(n=>new Promise(resolve=>{
+      llamarAPI({accion:'ESTUDIANTE',codigo:'LDS-EST-'+String(n).padStart(3,'0'),anio},r=>resolve(r));
+    })));
+
+    for(let i=0;i<respuestas.length;i++){
+      const r=respuestas[i];
+      const est=r&&r.ok!==false ? normalizarListaAlumno(r.estudiante||r.usuario||r) : null;
+      if(est){
+        encontrados.push(est);
+        vaciosSeguidos=0;
+      }else{
+        vaciosSeguidos++;
+      }
+    }
+  }
+
+  const unicos=[];
+  const vistos=new Set();
+  encontrados.sort((a,b)=>a.codigo.localeCompare(b.codigo,undefined,{numeric:true}));
+  encontrados.forEach(a=>{if(!vistos.has(a.codigo)){vistos.add(a.codigo);unicos.push(a);}});
+  return unicos;
+}
+
+function guardarYMostrarListaEstudiantes(lista,anio){
+  const normalizada=(Array.isArray(lista)?lista:[]).map(normalizarListaAlumno).filter(Boolean);
+  cacheListaEstudiantesEscolares[anio]=normalizada;
+  renderListaAlumnosDesdeCuentas(normalizada);
+  return normalizada;
+}
+
+function precargarListaEstudiantes(){
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   if(cacheListaEstudiantesEscolares[anio]||cacheListaEstudiantesCargando[anio]) return;
   cacheListaEstudiantesCargando[anio]=true;
-  llamarAPI({accion:'LISTAESTUDIANTES',anio},r=>{
+  obtenerListaEstudiantesRobusta(anio).then(lista=>{
     cacheListaEstudiantesCargando[anio]=false;
-    if(r&&r.ok!==false&&Array.isArray(r.estudiantes)){
-      cacheListaEstudiantesEscolares[anio]=r.estudiantes;
-      const panel=document.getElementById('listaAlumnosDropdown');
-      if(panel && panel.style.display!=='none') renderListaAlumnosDesdeCuentas(r.estudiantes);
-    }
+    guardarYMostrarListaEstudiantes(lista,anio);
+  }).catch(()=>{
+    cacheListaEstudiantesCargando[anio]=false;
+    const panel=document.getElementById('listaAlumnosDropdown');
+    const items=document.getElementById('listaAlumnosItems');
+    if(panel && panel.style.display!=='none' && items) items.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
   });
 }
 function obtenerListaEstudiantesCacheada(){
@@ -1687,24 +1753,32 @@ function abrirListaCodigos() {
   const filtro=document.getElementById('filtroCodigosInline');
   if(!panel||!items)return;
   const abrir=panel.style.display==='none'||!panel.style.display;
-  cerrarListasSuperiores('alumnos'); panel.style.display=abrir?'block':'none'; if(!abrir)return;
+  cerrarListasSuperiores('alumnos');
+  panel.style.display=abrir?'block':'none';
+  if(!abrir)return;
   if(filtro)filtro.value='';
+
+  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   const cache=obtenerListaEstudiantesCacheada();
   if(cache){renderListaAlumnosDesdeCuentas(cache);return;}
+
   items.innerHTML='<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
-  const anio=document.getElementById('selectAnioEscolar').value;
-  llamarAPI({accion:'LISTAESTUDIANTES',anio},r=>{
-    if(!r||r.ok===false||!Array.isArray(r.estudiantes)){items.innerHTML='<div class="header-list-loading">'+escaparHTML((r&&r.mensaje)||'NO SE PUDO CARGAR LA LISTA.')+'</div>';return;}
-    cacheListaEstudiantesEscolares[anio]=r.estudiantes;
-    renderListaAlumnosDesdeCuentas(r.estudiantes);
+  cacheListaEstudiantesCargando[anio]=true;
+  obtenerListaEstudiantesRobusta(anio).then(lista=>{
+    cacheListaEstudiantesCargando[anio]=false;
+    if(!lista.length){
+      items.innerHTML='<div class="header-list-loading">NO HAY ALUMNOS PARA MOSTRAR.</div>';
+      return;
+    }
+    guardarYMostrarListaEstudiantes(lista,anio);
+  }).catch(()=>{
+    cacheListaEstudiantesCargando[anio]=false;
+    items.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
   });
 }
 function renderListaAlumnosDesdeCuentas(cuentas){
-  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
-    const codigo=String(c.codigo||'').trim().toUpperCase();
-    const rol=String(c.rol||'ALUMNO').trim().toUpperCase();
-    return rol.indexOf('ALUMNO')!==-1 || codigo.startsWith('LDS-EST-');
-  }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
+  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).map(normalizarListaAlumno).filter(Boolean)
+    .sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
   renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
@@ -1794,7 +1868,7 @@ function renderListaMisesDesdeCuentas(cuentas){
     return {codigo,nombre:c.nombre||nombres[codigo]||'MISE',...calculo};
   })).then(lista=>{
     const host=document.getElementById('misesResumenFilas'); if(!host)return;
-    host.innerHTML=lista.map((m,i)=>`<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">LDS ${formatearLDS(m.abono)}</span><span class="money in">LDS ${formatearLDS(m.ingresos)}</span><span class="money out">LDS ${formatearLDS(m.egresos)}</span><span class="money available">LDS ${formatearLDS(m.saldo)}</span></div>`).join('');
+    host.innerHTML=lista.map((m,i)=>`<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">${formatearLDS(m.abono)}</span><span class="money in">${formatearLDS(m.ingresos)}</span><span class="money out">${formatearLDS(m.egresos)}</span><span class="money available">${formatearLDS(m.saldo)}</span></div>`).join('');
   }).catch(()=>{const host=document.getElementById('misesResumenFilas');if(host)host.innerHTML='<div class="header-list-loading">NO SE PUDIERON CALCULAR LOS SALDOS.</div>';});
 }
 
@@ -2460,9 +2534,14 @@ function cerrarEscanerQR() {
 
 function formatearLDS(valor) {
   const n = Number(valor);
-  return Number.isFinite(n)
-    ? n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2})
-    : "0.00";
+  if (!Number.isFinite(n)) return "0 LDS";
+  const abs = Math.abs(n);
+  const rounded = Math.round((abs + Number.EPSILON) * 100) / 100;
+  const partes = rounded.toFixed(2).split(".");
+  const entero = Number(partes[0]).toLocaleString("de-DE", {maximumFractionDigits:0});
+  const decimales = partes[1];
+  const cuerpo = decimales === "00" ? entero : entero + "," + decimales;
+  return (n < 0 ? "-" : "") + cuerpo + " LDS";
 }
 
 /* Lectura de montos LDS: acepta 15000, 15.000, 15,000 y 15000.00. */
@@ -2644,8 +2723,8 @@ function limpiarObservacionVisibleAdmin(valor){
 function actualizarSaldosMise(abono, saldo){
   const a = document.getElementById("saldoInicialMise");
   const d = document.getElementById("saldoDisponibleMise");
-  if (a) a.textContent = "LDS " + formatearLDS(Math.max(0, Number(abono) || 0));
-  if (d) d.textContent = "LDS " + formatearLDS(Math.max(0, Number(saldo) || 0));
+  if (a) a.textContent = formatearLDS(Math.max(0, Number(abono) || 0));
+  if (d) d.textContent = formatearLDS(Math.max(0, Number(saldo) || 0));
 }
 
 function esIngresoDeAndrew(m, codigoDestino){
@@ -2865,7 +2944,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           };
           pagoNombre.textContent = String(e.nombreCompleto || e.nombre || "ALUMNO").toUpperCase();
           pagoMeta.textContent = [e.codigo || codigo, e.grado || "", e.seccion || "", "AÑO " + anioEscolar].filter(Boolean).join(" · ");
-          pagoSaldo.textContent = "SALDO ACTUAL: LDS " + saldoFormateado;
+          pagoSaldo.textContent = "SALDO ACTUAL: " + saldoFormateado;
           cargarCategoriasPago("ALUMNO");
           pagoCard.style.display = "flex";
           const panelPagoAuto=document.getElementById("panelPago"); if(panelPagoAuto) panelPagoAuto.classList.remove("collapsed");
@@ -2915,7 +2994,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
         const saldoAlumnoVisible = listaCalculoSaldoAlumno(movimientosGenerales, codigoCuenta);
         datosEstudianteActualGlobal.saldoActual = saldoAlumnoVisible;
         const pagoSaldoVisible = document.getElementById('pagoAlumnoSaldo');
-        if (pagoSaldoVisible) pagoSaldoVisible.textContent = 'SALDO ACTUAL: LDS ' + formatearLDS(saldoAlumnoVisible);
+        if (pagoSaldoVisible) pagoSaldoVisible.textContent = 'SALDO ACTUAL: ' + formatearLDS(saldoAlumnoVisible);
       }
 
       movimientosActualesGlobal = movimientos.slice();
@@ -3010,7 +3089,7 @@ function renderResumenMovimientosAlumno(movimientos, anioEscolar){
     const concepto=String(m.concepto||'').trim();
     const monto=formatearLDS(parseMontoLDS(m.monto??m.montoLDS??0));
     const cls=tipo.includes('EGRESO')?'pago-mov-egreso':'pago-mov-ingreso';
-    return `<tr><td>${escaparHTML(fecha)}</td><td class="${cls}">${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td><td style="text-align:right;white-space:nowrap;">LDS ${escaparHTML(monto)}</td></tr>`;
+    return `<tr><td>${escaparHTML(fecha)}</td><td class="${cls}">${escaparHTML(tipo)}</td><td>${escaparHTML(concepto)}</td><td style="text-align:right;white-space:nowrap;">${escaparHTML(monto)}</td></tr>`;
   }).join('')}</tbody></table></div>`;
 }
 
@@ -3282,7 +3361,7 @@ function htmlMovimientosImpresion(movimientos, estudiante) {
       <td>${escaparHTML(fecha)}</td>
       <td>${escaparHTML(tipo)}</td>
       <td>${escaparHTML(concepto)}</td>
-      <td style="text-align:right;">LDS ${formatearLDS(parseMontoLDS(monto))}</td>
+      <td style="text-align:right;">${formatearLDS(parseMontoLDS(monto))}</td>
       <td>${escaparHTML(responsable)}</td>
       <td>${escaparHTML(observacion)}</td>
     </tr>`;
@@ -3385,7 +3464,7 @@ async function imprimirReporteGrupal() {
     const foto = urls[0]
       ? `<img src="${escaparAtributoHTML(urls[0])}" data-fallbacks='${escaparAtributoHTML(JSON.stringify(urls))}' data-idx="0" referrerpolicy="no-referrer" loading="eager" alt="Foto">`
       : `<div class="print-roster-placeholder">👤</div>`;
-    return `<div class="print-roster-card">${foto}<div><div class="print-roster-name">${escaparHTML(est.nombre)}</div><div class="print-roster-meta">${escaparHTML(est.codigo)} · ${escaparHTML(est.grado)} · ${escaparHTML(est.seccion)} · SALDO LDS ${formatearLDS(saldo)}</div></div></div>`;
+    return `<div class="print-roster-card">${foto}<div><div class="print-roster-name">${escaparHTML(est.nombre)}</div><div class="print-roster-meta">${escaparHTML(est.codigo)} · ${escaparHTML(est.grado)} · ${escaparHTML(est.seccion)} · SALDO ${formatearLDS(saldo)}</div></div></div>`;
   }).join('');
 
   const detalles = resultados.map((x, idx) => {
