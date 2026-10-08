@@ -51,6 +51,84 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .login-home{min-height:48px!important;margin-top:10px!important;background:#fff!important;color:#0b2f67!important;border:1.5px solid #0b2f67!important;border-radius:12px!important;}
 #loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
+
+/* NOTIFICACIONES DE CADA MOVIMIENTO — PANEL ANDREW */
+.andrew-notification-toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:200000;
+  width:min(430px,calc(100vw - 36px));
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:13px 14px;
+  border:2px solid #f5b400;
+  border-radius:14px;
+  background:linear-gradient(135deg,#061b3f,#12366f);
+  color:#fff;
+  box-shadow:0 18px 45px rgba(0,0,0,.30);
+  opacity:0;
+  transform:translateY(18px) scale(.98);
+  pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease;
+}
+.andrew-notification-toast.visible{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.andrew-notification-icon{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#fff3c4;
+  color:#0b2f67;
+  font-size:18px;
+}
+.andrew-notification-content{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.andrew-notification-content strong{
+  color:#ffd23f;
+  font-size:.78rem;
+  line-height:1.15;
+  font-weight:900;
+}
+.andrew-notification-content span{
+  color:#fff;
+  font-size:.72rem;
+  line-height:1.35;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.andrew-notification-close{
+  margin-left:auto;
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  border:0;
+  border-radius:8px;
+  background:rgba(255,255,255,.13);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.andrew-notification-close:hover{background:rgba(255,255,255,.22);}
+@media (max-width:560px){
+  .andrew-notification-toast{
+    right:10px;
+    bottom:10px;
+    width:calc(100vw - 20px);
+    padding:11px 12px;
+  }
+}
+
 #loginAndrew .login-or{
   position:relative;
   display:flex;
@@ -266,6 +344,23 @@ button{cursor:pointer;}
   </div>
   <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
 </header>
+
+
+<div id="andrewNotificationToast"
+     class="andrew-notification-toast"
+     role="status"
+     aria-live="polite"
+     aria-atomic="true">
+  <div class="andrew-notification-icon">🔔</div>
+  <div class="andrew-notification-content">
+    <strong id="andrewNotificationTitle">BANCO LDS 360</strong>
+    <span id="andrewNotificationText"></span>
+  </div>
+  <button type="button"
+          class="andrew-notification-close"
+          onclick="cerrarNotificacionAndrew()"
+          aria-label="Cerrar notificación">✕</button>
+</div>
 
 <main id="andrewApp" style="display:none;">
   <section class="layout">
@@ -551,6 +646,8 @@ button{cursor:pointer;}
 
 <footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;color:#fff;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
 
+<script src="notificaciones.js"></script>
+
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
 const CLAVE_ANDREW = "360LDS@@@";
@@ -753,6 +850,7 @@ function extraerCredencialQRAndrew(texto){
 
 async function abrirEscanerQRAndrew(){
   sonidoAndrew("click");
+  prepararNotificacionesAndrew();
   hablarAndrew("Abriendo cámara para escanear el código QR de acceso.");
 
   const modal=document.getElementById("qrLoginAndrewModal");
@@ -842,7 +940,131 @@ async function cerrarEscanerQRAndrew(){
   if(modal) modal.setAttribute("aria-hidden","true");
 }
 
+
+let andrewNotificationTimer=null;
+let andrewNotificationSWRegistration=null;
+
+async function prepararNotificacionesAndrew(){
+  try{
+    if(typeof NotificacionesLDS !== "undefined"){
+      if(typeof NotificacionesLDS.registrarServiceWorker === "function"){
+        andrewNotificationSWRegistration =
+          await NotificacionesLDS.registrarServiceWorker();
+      }
+      if(typeof NotificacionesLDS.solicitarPermiso === "function"){
+        await NotificacionesLDS.solicitarPermiso();
+      }
+    }else if("serviceWorker" in navigator){
+      try{
+        andrewNotificationSWRegistration =
+          await navigator.serviceWorker.register("sw.js");
+      }catch(_){}
+      if("Notification" in window && Notification.permission === "default"){
+        try{ await Notification.requestPermission(); }catch(_){}
+      }
+    }
+  }catch(_){}
+}
+
+function cerrarNotificacionAndrew(){
+  const toast=document.getElementById("andrewNotificationToast");
+  if(!toast) return;
+  toast.classList.remove("visible");
+  if(andrewNotificationTimer){
+    clearTimeout(andrewNotificationTimer);
+    andrewNotificationTimer=null;
+  }
+}
+
+function mostrarNotificacionAndrew(titulo,texto){
+  const toast=document.getElementById("andrewNotificationToast");
+  const title=document.getElementById("andrewNotificationTitle");
+  const body=document.getElementById("andrewNotificationText");
+
+  if(!toast || !title || !body) return;
+
+  title.textContent=String(titulo||"BANCO LDS 360");
+  body.textContent=String(texto||"Movimiento registrado correctamente.");
+
+  toast.classList.add("visible");
+
+  if(andrewNotificationTimer) clearTimeout(andrewNotificationTimer);
+  andrewNotificationTimer=setTimeout(
+    ()=>toast.classList.remove("visible"),
+    7000
+  );
+}
+
+async function enviarNotificacionNavegadorAndrew(titulo,opciones){
+  try{
+    if(!("Notification" in window)) return;
+
+    if(Notification.permission!=="granted") return;
+
+    if(!andrewNotificationSWRegistration && "serviceWorker" in navigator){
+      try{
+        andrewNotificationSWRegistration=await navigator.serviceWorker.ready;
+      }catch(_){}
+    }
+
+    if(andrewNotificationSWRegistration &&
+       typeof andrewNotificationSWRegistration.showNotification === "function"){
+      await andrewNotificationSWRegistration.showNotification(
+        titulo,
+        Object.assign({
+          icon:"assets/insignia.png?v=20261003-2",
+          badge:"assets/insignia.png?v=20261003-2",
+          tag:"banco-lds-360-andrew-movimiento",
+          renotify:true
+        },opciones||{})
+      );
+      return;
+    }
+
+    new Notification(titulo,opciones||{});
+  }catch(_){}
+}
+
+function notificarMovimientoAndrew(datos){
+  const tipo=String(datos?.tipo||"MOVIMIENTO").toUpperCase();
+  const operacion=String(datos?.operacion||datos?.concepto||"MOVIMIENTO").trim();
+  const monto=formato(Number(datos?.monto||0));
+  const destino=String(datos?.destino||"").trim();
+  const observacion=String(datos?.observacion||"").trim();
+
+  const texto=tipo==="EGRESO"
+    ? `${operacion}. ${monto}.${destino ? " DESTINO: "+destino+"." : ""}`
+    : `${operacion}. ${monto}.${destino ? " ORIGEN: "+destino+"." : ""}`;
+
+  mostrarNotificacionAndrew(
+    "🔔 MOVIMIENTO REGISTRADO",
+    `${texto}${observacion ? " "+observacion : ""}`
+  );
+
+  sonidoAndrew("ok");
+  hablarAndrew(
+    tipo==="EGRESO"
+      ? `Movimiento registrado. Egreso de ${monto}.`
+      : `Movimiento registrado. Ingreso de ${monto}.`
+  );
+
+  enviarNotificacionNavegadorAndrew(
+    "BANCO LDS 360 · MOVIMIENTO REGISTRADO",
+    {
+      body:`${operacion} · ${monto}${destino ? " · "+destino : ""}`,
+      data:{
+        codigo:CODIGO_ANDREW,
+        tipo,
+        monto:Number(datos?.monto||0),
+        fecha:new Date().toISOString()
+      }
+    }
+  );
+}
+
 function entrarAndrew(desdeQR=false){
+  if(!desdeQR) prepararNotificacionesAndrew();
+
   const inputClave = document.getElementById("claveAndrew");
   if(!inputClave) return;
 
@@ -1894,8 +2116,13 @@ function transferirAMise(){
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
     if(r&&r.ok){
       mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok");
-      sonidoAndrew("ok");
-      hablarAndrew("Transferencia registrada correctamente.");
+      notificarMovimientoAndrew({
+        tipo:"EGRESO",
+        operacion:document.getElementById("conceptoTransferencia").value,
+        monto:monto,
+        destino:MISES[codigo] || codigo,
+        observacion:document.getElementById("obsTransferencia").value
+      });
       const movimientoLocal={
         anio:document.getElementById("anio").value,
         fechaTexto:new Date().toLocaleString("es-PE"),
@@ -1930,8 +2157,13 @@ function recibirDevolucion(){
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
     if(r&&r.ok){
       mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok");
-      sonidoAndrew("ok");
-      hablarAndrew("Devolución registrada correctamente.");
+      notificarMovimientoAndrew({
+        tipo:"INGRESO",
+        operacion:document.getElementById("conceptoDevolucion").value,
+        monto:monto,
+        destino:MISES[codigo] || codigo,
+        observacion:document.getElementById("obsDevolucion").value
+      });
       const movimientoLocal={
         anio:document.getElementById("anio").value,
         fechaTexto:new Date().toLocaleString("es-PE"),
