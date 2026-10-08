@@ -645,10 +645,41 @@ function renderTablaAndrew(mov){
 }
 
 function parseMontoLDS(valor){
-  let texto=String(valor==null?"":valor).trim();
+  if(valor===null || valor===undefined || valor==="") return 0;
+  if(typeof valor==="number") return Number.isFinite(valor) ? valor : 0;
+
+  let texto=String(valor).trim();
   if(!texto) return 0;
-  texto=texto.replace(/[^\d,.\-]/g,"");
-  const n=Number(texto.replace(",","."));
+
+  texto=texto.replace(/[^\d,\.\-]/g,"");
+
+  const tienePunto=texto.indexOf(".")!==-1;
+  const tieneComa=texto.indexOf(",")!==-1;
+
+  // Formato peruano: 15.000 = quince mil.
+  if(tienePunto && !tieneComa){
+    const partes=texto.split(".");
+    if(partes.length===2 && partes[1].length===3){
+      texto=partes[0]+partes[1];
+    }
+  }
+
+  // 15,000 = quince mil; 15,50 = quince con cincuenta.
+  if(tieneComa && !tienePunto){
+    const partes=texto.split(",");
+    if(partes.length===2 && partes[1].length===3){
+      texto=partes[0]+partes[1];
+    }else{
+      texto=partes.join(".");
+    }
+  }
+
+  // 15.000,50 = quince mil con cincuenta.
+  if(tienePunto && tieneComa){
+    texto=texto.replace(/\./g,"").replace(",",".");
+  }
+
+  const n=Number(texto);
   return Number.isFinite(n) ? n : 0;
 }
 
