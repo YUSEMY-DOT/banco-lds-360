@@ -67,6 +67,8 @@ main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout
 .table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
 select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}
 .message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
+.consulta-rapida{margin-top:14px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;overflow:hidden}.consulta-rapida-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:linear-gradient(135deg,#eef5ff,#f8fafc);color:#0b2f67}.consulta-rapida-head strong{font-size:.78rem}.consulta-rapida-head span{font-size:.58rem;color:#64748b;font-weight:900}.consulta-busqueda{width:100%;margin:0;padding:10px 12px;border:0;border-top:1px solid #d9e2ec;border-bottom:1px solid #d9e2ec;background:#fff;color:#14213d;font-weight:800;outline:none}.consulta-tabla-wrap{max-height:280px;overflow:auto;background:#fff}.consulta-tabla{min-width:680px;width:100%;border-collapse:collapse;font-size:.66rem}.consulta-tabla th{position:sticky;top:0;z-index:2;background:#0b2f67;color:#fff;padding:7px;text-align:left}.consulta-tabla td{padding:7px;border-bottom:1px solid #e2e8f0;color:#14213d;font-weight:700}.consulta-tabla tr:hover td{background:#fffdf1}.consulta-saldo{font-weight:900;color:#008f68;white-space:nowrap}.consulta-ver{border:0;border-radius:9px;padding:6px 10px;background:linear-gradient(135deg,#1e3a8a,#0b2f67);color:#fff;font-weight:900;cursor:pointer;font-size:.62rem}.consulta-vacia{text-align:center!important;color:#64748b!important;padding:14px!important}.consulta-busqueda:focus{box-shadow:inset 0 0 0 2px #f59e0b}
+
 
 button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
@@ -145,18 +147,32 @@ button{cursor:pointer;}
 @media (max-width:560px){#andrewApp .resumen-identidad-andrew{gap:14px!important;padding:12px 14px!important;}#andrewApp .andrew-mini-photo{width:96px;height:96px;flex-basis:96px;}#andrewApp .andrew-identidad-text strong{font-size:1rem;}#andrewApp .andrew-identidad-text span{font-size:.64rem;}}
 
 .print-area-andrew{display:none;}
+/* REPORTES LDS 360 — PRESENTACIÓN RESPONSIVA E IMPRESIÓN A4 */
 @media print{
-  body > *{display:none !important;}
-  #printAreaAndrew{display:block !important;position:static !important;width:100% !important;background:#fff !important;color:#14213d !important;padding:20px !important;}
-  #printAreaAndrew *{display:revert !important;}
-  #printAreaAndrew .print-head{border-bottom:3px solid #e5a000;padding-bottom:12px;margin-bottom:18px;}
-  #printAreaAndrew .print-brand{font-weight:900;color:#e5a000;font-size:12px;text-transform:uppercase;}
-  #printAreaAndrew h1{color:#0b2f67;font-size:22px;margin:4px 0;}
-  #printAreaAndrew p{color:#64748b;font-weight:700;margin:4px 0 16px;}
-  #printAreaAndrew table{border-collapse:collapse;width:100%;font-size:10px;}
-  #printAreaAndrew th,#printAreaAndrew td{border:1px solid #cbd5e1;padding:6px;text-align:left;}
-  #printAreaAndrew th{background:#eef2f7;color:#0b2f67;}
+  @page{size:A4 landscape;margin:8mm;}
 }
+@media print and (orientation:portrait){
+  @page{size:A4 portrait;margin:8mm;}
+}
+@media print and (orientation:landscape){
+  @page{size:A4 landscape;margin:8mm;}
+}
+.report-window{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#14213d;min-height:100vh;padding:18px;}
+.report-sheet{max-width:1400px;margin:0 auto;background:#fff;}
+.report-school-head{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-bottom:4px solid #e5a000;padding:0 0 14px;margin-bottom:14px;}
+.report-logo{width:72px;height:72px;object-fit:contain;border-radius:50%;background:#fff;border:2px solid #e5a000;padding:3px;}
+.report-school-name{margin:0;color:#0b2f67;font-size:20px;font-weight:900;}
+.report-school-sub{margin:3px 0 0;color:#64748b;font-size:12px;font-weight:800;}
+.report-meta{text-align:right;}.report-meta strong{display:block;color:#0b2f67;font-size:15px;}.report-meta span{display:block;color:#64748b;font-weight:800;font-size:11px;margin-top:3px;}
+.report-title{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin:8px 0 14px;}.report-title h1{margin:0;color:#0b2f67;font-size:22px;}.report-title p{margin:3px 0 0;color:#64748b;font-size:11px;font-weight:800;}
+.report-badge{padding:8px 12px;border-radius:12px;background:#eef8f3;color:#008f68;font-weight:900;white-space:nowrap;}
+.report-person{display:grid;grid-template-columns:98px 1fr;gap:16px;align-items:center;border:1px solid #dbe3ec;border-radius:14px;background:#f8fafc;padding:12px;margin-bottom:14px;}.report-person-photo{width:86px;height:86px;object-fit:cover;border-radius:50%;border:3px solid #e5a000;background:#fff;}.report-person-name{margin:0;color:#0b2f67;font-size:18px;font-weight:900;}.report-person-detail{margin-top:4px;color:#64748b;font-size:11px;font-weight:800;}
+.report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px;}.report-summary-card{border:1px solid #dbe3ec;border-radius:12px;padding:10px;background:#f8fafc;}.report-summary-card span{display:block;color:#64748b;font-size:9px;font-weight:900;}.report-summary-card strong{display:block;margin-top:3px;color:#0b2f67;font-size:15px;}
+.report-table-wrap{width:100%;overflow-x:auto;}.report-table{width:100%;border-collapse:collapse;font-size:9px;}.report-table th,.report-table td{border:1px solid #cbd5e1;padding:5px 6px;text-align:left;vertical-align:top;}.report-table th{background:#eef2f7;color:#0b2f67;font-weight:900;}.report-table td.amount{font-weight:900;white-space:nowrap;}
+.report-student-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;}.report-footer{border-top:2px solid #e5a000;margin-top:16px;padding-top:8px;display:flex;justify-content:space-between;gap:10px;color:#64748b;font-size:9px;font-weight:800;}.report-loading{padding:30px;text-align:center;color:#64748b;font-weight:900;}
+@media (max-width:900px){.report-window{padding:12px;}.report-school-head{grid-template-columns:64px 1fr;gap:10px;}.report-meta{grid-column:1/-1;text-align:left;}.report-logo{width:58px;height:58px;}.report-school-name{font-size:16px;}.report-title{display:block;}.report-badge{display:inline-block;margin-top:8px;}.report-summary{grid-template-columns:1fr;}}
+@media (max-width:560px){.report-window{padding:8px;}.report-person{grid-template-columns:72px 1fr;gap:10px;}.report-person-photo{width:64px;height:64px;}.report-person-name{font-size:15px;}.report-table{font-size:8px;}.report-table th,.report-table td{padding:4px;}.report-footer{display:block;}}
+
 </style>
 </head>
 <body class="login-screen">
@@ -357,6 +373,31 @@ button{cursor:pointer;}
             🔍 CONSULTAR
           </button>
           <div id="resultadoConsulta" class="message"></div>
+
+          <div class="consulta-rapida">
+            <div class="consulta-rapida-head">
+              <strong>📋 LISTA RÁPIDA DE ALUMNOS</strong>
+              <span>SELECCIONA PARA CONSULTAR</span>
+            </div>
+            <input id="buscarAlumnoRapido" class="consulta-busqueda" type="search" placeholder="🔎 BUSCAR POR CÓDIGO O NOMBRE..." autocomplete="off">
+            <div class="consulta-tabla-wrap">
+              <table class="consulta-tabla">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>CÓDIGO</th>
+                    <th>ALUMNO</th>
+                    <th>GRADO</th>
+                    <th>SALDO</th>
+                    <th>ACCIÓN</th>
+                  </tr>
+                </thead>
+                <tbody id="listaAlumnosRapida">
+                  <tr><td colspan="6" class="consulta-vacia">CARGANDO LISTA...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -668,6 +709,7 @@ function actualizarVistaTrasMovimientoAndrew(movimiento){
   document.getElementById("saldoCuenta").textContent=formato(saldoAndrewActual);
   document.getElementById("contadorMovimientos").textContent=movimientosAndrewActuales.length;
   actualizarVistaMisesAndrew();
+  renderListaAlumnosRapida(movimientosBancoAndrewActuales);
   renderTablaAndrew(movimientosAndrewActuales);
 }
 
@@ -694,6 +736,7 @@ function cargarTodo(silencioso=false){
     const saldosMises=mapaSaldosMisesAndrew(movimientos);
     saldosMisesAndrewActuales=Object.assign({},saldosMises);
     movimientosBancoAndrewActuales=movimientos.slice();
+    renderListaAlumnosRapida(movimientos);
 
     const fotosMises={
       "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
@@ -871,59 +914,70 @@ function cerrarReportes(){
   }
 }
 
-function imprimirEnPaginaAndrew(titulo,subtitulo,contenido){
-  const area=document.getElementById("printAreaAndrew");
-  if(!area)return;
-  area.innerHTML=`
-    <div class="print-head">
-      <div class="print-brand">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</div>
-      <h1>${escapar(titulo)}</h1>
-      <p>${escapar(subtitulo)}</p>
-    </div>
-    ${contenido}
-  `;
-  area.setAttribute("aria-hidden","false");
-  area.style.display="block";
-
-  const limpiar=()=>{
-    area.style.display="none";
-    area.setAttribute("aria-hidden","true");
-    area.innerHTML="";
-    window.removeEventListener("afterprint",limpiar);
-  };
-  window.addEventListener("afterprint",limpiar);
-
-  // La impresión se abre en la misma pestaña; así no depende del permiso
-  // de ventanas emergentes del navegador.
-  window.print();
+function urlAbsolutaAndrew(ruta){
+  const s=String(ruta||"").trim();
+  if(!s) return "";
+  if(/^https?:\/\//i.test(s)||/^data:/i.test(s)) return s;
+  try{return new URL(s,window.location.href).href;}catch(e){return s;}
 }
-
-function imprimirReporteIndividual(){
+function fotoReporteURL(valor){
+  const s=String(valor||"").trim();
+  if(!s) return "";
+  const m=s.match(/(?:\/d\/|[?&]id=)([A-Za-z0-9_-]{10,})/);
+  if(m) return "https://drive.google.com/thumbnail?id="+m[1]+"&sz=w220";
+  return urlAbsolutaAndrew(s);
+}
+function escribirVentanaReporte(w,html,orientation){
+  if(!w) return;
+  w.document.open();
+  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BANCO LDS 360 — REPORTE</title><style>@page{size:A4 ${orientation};margin:8mm;}html,body{margin:0;padding:0;background:#fff;color:#14213d;font-family:Arial,Helvetica,sans-serif;}</style></head><body class="report-window"><main class="report-sheet">${html}</main></body></html>`);
+  w.document.close();
+}
+function abrirReporteAndrew(titulo,subtitulo,contenido,orientation){
+  const w=window.open("","_blank","width=1200,height=850");
+  if(!w){mostrarMensaje("mensaje","EL NAVEGADOR BLOQUEÓ EL REPORTE. PERMITE LAS VENTANAS EMERGENTES PARA ESTE SITIO.","error");return null;}
+  const logo=urlAbsolutaAndrew("assets/insignia.png?v=20261003-2");
+  const encabezado=`<section class="report-school-head"><img class="report-logo" src="${escapar(logo)}" alt="Insignia I.E.P. La Salle del Sur"><div><h2 class="report-school-name">I.E.P. LA SALLE DEL SUR</h2><p class="report-school-sub">BANCO LDS 360 · SISTEMA FINANCIERO ESCOLAR</p></div><div class="report-meta"><strong>${escapar(titulo)}</strong><span>${escapar(subtitulo)}</span></div></section>`;
+  escribirVentanaReporte(w,encabezado+contenido,orientation||"landscape");
+  return w;
+}
+function consultarAlumnoParaReporte(codigo,anio){
+  return new Promise(resolve=>llamarAPI({accion:"estudiante",codigo,anio},r=>resolve(r&&r.ok?r:null)));
+}
+async function esperarImagenesReporte(w){
+  if(!w||!w.document) return;
+  const imgs=[...w.document.images];
+  await Promise.all(imgs.map(img=>new Promise(resolve=>{if(img.complete){resolve();return;}img.onload=resolve;img.onerror=resolve;})));
+}
+async function imprimirReporteIndividual(){
   cerrarReportes();
   const anio=document.getElementById("anio").value;
   const saldo=document.getElementById("saldoCuenta").textContent;
-  const filas=document.querySelectorAll("#tablaAndrew tr");
+  const filas=[...document.querySelectorAll("#tablaAndrew tr")].filter(tr=>!tr.classList.contains("empty"));
   let rows="";
-  filas.forEach(tr=>{
-    if(tr.classList.contains("empty")) return;
-    const cells=[...tr.querySelectorAll("td")];
-    if(cells.length<9) return;
-    rows += "<tr>" + cells.map(c=>"<td>"+c.innerHTML+"</td>").join("") + "</tr>";
-  });
+  filas.forEach(tr=>{const cells=[...tr.querySelectorAll("td")];if(cells.length<9)return;rows+=`<tr>${cells.map(c=>`<td>${c.innerHTML}</td>`).join("")}</tr>`;});
   if(!rows) rows='<tr><td colspan="9">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>';
-  const contenido=`<p>Año: ${escapar(anio)} · Saldo actual: <strong>${escapar(saldo)}</strong></p><table><thead><tr><th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table>`;
-  imprimirEnPaginaAndrew("Reporte individual — Caja General",`MISTER ANDREW · CAJA-ANDREW · AÑO ${anio}`,contenido);
+  const foto=urlAbsolutaAndrew("assets/ANDREW.png?v=20261003-2");
+  const contenido=`<div class="report-title"><div><h1>REPORTE INDIVIDUAL — CAJA GENERAL</h1><p>MISTER ANDREW · CAJA-ANDREW · CAJERO GENERAL</p></div><div class="report-badge">AÑO ${escapar(anio)}</div></div><section class="report-person"><img class="report-person-photo" src="${escapar(foto)}" alt="Mister Andrew"><div><h3 class="report-person-name">MISTER ANDREW</h3><div class="report-person-detail">CAJA-ANDREW · CAJA GENERAL</div></div></section><div class="report-summary"><div class="report-summary-card"><span>SALDO INICIAL</span><strong>S/ 200,000.00</strong></div><div class="report-summary-card"><span>SALDO ACTUAL</span><strong>${escapar(saldo)}</strong></div><div class="report-summary-card"><span>MOVIMIENTOS</span><strong>${filas.length}</strong></div></div><div class="report-table-wrap"><table class="report-table"><thead><tr><th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table></div><div class="report-footer"><span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span><span>REPORTE INDIVIDUAL OFICIAL</span></div>`;
+  const w=abrirReporteAndrew("REPORTE INDIVIDUAL",`MISTER ANDREW · AÑO ${anio}`,contenido,"portrait");
+  if(!w)return;
+  await esperarImagenesReporte(w); w.focus(); setTimeout(()=>w.print(),350);
 }
-
-function imprimirReporteColectivo(){
+async function imprimirReporteColectivo(){
   cerrarReportes();
   const anio=document.getElementById("anio").value;
   const movimientos=Array.isArray(movimientosBancoAndrewActuales)?movimientosBancoAndrewActuales:[];
-  const rows=movimientos.length
-    ? movimientos.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("")
-    : '<tr><td colspan="10">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>';
-  const contenido=`<p>Año: ${escapar(anio)} · Reporte colectivo de todos los movimientos registrados.</p><table><thead><tr><th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table>`;
-  imprimirEnPaginaAndrew("Reporte colectivo — Banco LDS 360",`MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,contenido);
+  const w=abrirReporteAndrew("REPORTE COLECTIVO",`MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,`<div class="report-loading">PREPARANDO DATOS Y FOTOGRAFÍAS DE LOS ALUMNOS...</div>`,"landscape");
+  if(!w)return;
+  const codigos=[...new Set(movimientos.map(m=>String(m?.codigo||"").trim().toUpperCase()).filter(c=>c.startsWith("LDS-EST-")))];
+  const respuestas=await Promise.all(codigos.map(c=>consultarAlumnoParaReporte(c,anio)));
+  const datos={};respuestas.forEach((r,i)=>{if(r)datos[codigos[i]]=r.estudiante||{};});
+  const alumnos=codigos.map(codigo=>({codigo,est:datos[codigo]||{}}));
+  const alumnosRows=alumnos.map((a,i)=>{const est=a.est;const nombre=est.nombreCompleto||est.nombre||a.codigo;const grado=est.grado||"";const foto=fotoReporteURL(est.fotoUrl||est.foto||"");const saldo=calcularSaldoCuentaAndrew(movimientos,a.codigo);return `<tr><td>${i+1}</td><td>${foto?`<img class="report-student-photo" src="${escapar(foto)}" alt="${escapar(nombre)}">`:"—"}</td><td>${escapar(a.codigo)}</td><td>${escapar(nombre)}</td><td>${escapar(grado)}</td><td class="amount">${formato(saldo)}</td></tr>`;}).join("")||'<tr><td colspan="6">NO HAY ALUMNOS EN LOS MOVIMIENTOS DEL AÑO SELECCIONADO.</td></tr>';
+  const rows=movimientos.length?movimientos.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td class="amount">${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join(""):'<tr><td colspan="10">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>';
+  const contenido=`<div class="report-title"><div><h1>REPORTE COLECTIVO — BANCO LDS 360</h1><p>ALUMNOS, SALDOS Y MOVIMIENTOS DEL AÑO SELECCIONADO</p></div><div class="report-badge">AÑO ${escapar(anio)}</div></div><div class="report-summary"><div class="report-summary-card"><span>ALUMNOS</span><strong>${alumnos.length}</strong></div><div class="report-summary-card"><span>MOVIMIENTOS</span><strong>${movimientos.length}</strong></div><div class="report-summary-card"><span>CAJA GENERAL</span><strong>MISTER ANDREW</strong></div></div><div class="report-table-wrap"><table class="report-table"><thead><tr><th>#</th><th>FOTO</th><th>CÓDIGO</th><th>ALUMNO</th><th>GRADO</th><th>SALDO</th></tr></thead><tbody>${alumnosRows}</tbody></table></div><h3 style="margin:18px 0 8px;color:#0b2f67;font-size:14px;">MOVIMIENTOS DEL BANCO</h3><div class="report-table-wrap"><table class="report-table"><thead><tr><th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table></div><div class="report-footer"><span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span><span>REPORTE COLECTIVO OFICIAL</span></div>`;
+  w.document.querySelector(".report-sheet").innerHTML=w.document.querySelector(".report-sheet").innerHTML.replace(/<div class="report-loading">.*?<\/div>/,"")+contenido;
+  await esperarImagenesReporte(w);w.focus();setTimeout(()=>w.print(),350);
 }
 
 function toggleAndrewPanel(head){
@@ -1037,6 +1091,71 @@ function consultarCuenta(){
     sonidoAndrew("ok");
     hablarAndrew((e.nombreCompleto||e.nombre||codigo)+". Saldo actual: "+formato(c.saldoActual)+".");
   });
+}
+
+function renderListaAlumnosRapida(movimientos){
+  const tbody=document.getElementById("listaAlumnosRapida");
+  if(!tbody) return;
+
+  const mapa={};
+  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
+    const codigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
+    if(!codigo.startsWith("LDS-EST-")) return;
+    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==="ANULADO") return;
+
+    const nombre=String(m?.estudiante||m?.nombreCompleto||"").trim();
+    const grado=String(m?.grado||"").trim();
+    if(!mapa[codigo]){
+      mapa[codigo]={codigo,nombre,grado};
+    }else{
+      if(!mapa[codigo].nombre && nombre) mapa[codigo].nombre=nombre;
+      if(!mapa[codigo].grado && grado) mapa[codigo].grado=grado;
+    }
+  });
+
+  const alumnos=Object.values(mapa).sort((a,b)=>
+    a.codigo.localeCompare(b.codigo,undefined,{numeric:true})
+  );
+
+  if(!alumnos.length){
+    tbody.innerHTML='<tr><td colspan="6" class="consulta-vacia">NO HAY ALUMNOS CON MOVIMIENTOS EN EL AÑO SELECCIONADO.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML=alumnos.map((a,i)=>{
+    const saldo=calcularSaldoCuentaAndrew(movimientos,a.codigo);
+    const busqueda=escapar((a.codigo+" "+a.nombre+" "+a.grado).toUpperCase());
+    return `<tr data-consulta-search="${busqueda}">
+      <td>${i+1}</td>
+      <td>${escapar(a.codigo)}</td>
+      <td>${escapar(a.nombre||"SIN NOMBRE")}</td>
+      <td>${escapar(a.grado||"-")}</td>
+      <td class="consulta-saldo">${formato(saldo)}</td>
+      <td><button type="button" class="consulta-ver" data-codigo-consulta="${escapar(a.codigo)}" onclick="seleccionarAlumnoRapido(this.dataset.codigoConsulta)">VER</button></td>
+    </tr>`;
+  }).join("");
+
+  const buscador=document.getElementById("buscarAlumnoRapido");
+  if(buscador && !buscador.dataset.listo){
+    buscador.dataset.listo="1";
+    buscador.addEventListener("input",function(){
+      const termino=String(this.value||"").trim().toUpperCase();
+      document.querySelectorAll("#listaAlumnosRapida tr[data-consulta-search]").forEach(tr=>{
+        tr.style.display=tr.getAttribute("data-consulta-search").includes(termino)?"":"none";
+      });
+    });
+  }
+}
+
+function seleccionarAlumnoRapido(codigo){
+  const input=document.getElementById("codigoConsulta");
+  if(input){
+    input.value=String(codigo||"").trim().toUpperCase();
+    input.focus();
+  }
+  sonidoAndrew("click");
+  hablarAndrew("Consultando estudiante.");
+  consultarCuenta();
 }
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
