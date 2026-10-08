@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -565,8 +566,37 @@ function renderTablaAndrew(mov){
 function parseMontoLDS(valor){
   let texto=String(valor==null?"":valor).trim();
   if(!texto) return 0;
+
   texto=texto.replace(/[^\d,.\-]/g,"");
-  const n=Number(texto.replace(",","."));
+
+  // Formato peruano: 15.000 = 15,000; 1.500 = 1,500.
+  // Si hay puntos y el último grupo tiene exactamente 3 dígitos,
+  // los puntos se consideran separadores de miles.
+  if(texto.indexOf(".") !== -1 && texto.indexOf(",") !== -1){
+    // Ej.: 15.000,50 -> 15000.50
+    texto=texto.replace(/\./g,"").replace(",",".");
+  }else if(texto.indexOf(".") !== -1){
+    const partes=texto.split(".");
+    const ultimo=partes[partes.length-1];
+
+    if(partes.length>1 && /^\d{3}$/.test(ultimo)){
+      // Ej.: 15.000 -> 15000
+      texto=partes.join("");
+    }
+  }else if(texto.indexOf(",") !== -1){
+    const partes=texto.split(",");
+    const ultimo=partes[partes.length-1];
+
+    if(partes.length>1 && /^\d{3}$/.test(ultimo)){
+      // Ej.: 15,000 -> 15000
+      texto=partes.join("");
+    }else{
+      // Ej.: 15,50 -> 15.50
+      texto=texto.replace(",",".");
+    }
+  }
+
+  const n=Number(texto);
   return Number.isFinite(n) ? n : 0;
 }
 
@@ -633,3 +663,4 @@ document.getElementById("anio").addEventListener("change",cargarTodo);
 </script>
 </body>
 </html>
+```
