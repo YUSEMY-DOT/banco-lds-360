@@ -91,12 +91,12 @@ button{cursor:pointer;}
 #andrewApp .header-actions-group select{width:150px;min-height:40px;}
 #andrewApp .header-actions-group .btn{min-height:40px;}
 #andrewApp .dashboard-body{padding:clamp(12px,1.5vw,22px);}
-#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(260px,1.55fr) repeat(3,minmax(145px,.72fr));gap:12px;align-items:stretch;margin-bottom:14px;}
-#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:14px;background:#f8fafc;min-height:92px;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:16px!important;background:linear-gradient(135deg,#f8fafc 0%,#eef4fb 100%)!important;border:2px solid #0b2f67!important;box-shadow:0 5px 16px rgba(11,47,103,.12);}
-#andrewApp .andrew-mini-photo{width:92px;height:92px;flex:0 0 92px;border-radius:50%;overflow:hidden;border:3px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.22);}
+#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(300px,1.55fr) repeat(3,minmax(145px,.72fr));gap:12px;align-items:stretch;margin-bottom:14px;}
+#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:14px;background:#f8fafc;min-height:132px;padding:12px 18px;display:flex;flex-direction:column;justify-content:center;}
+#andrewApp .resumen-identidad-andrew{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:20px!important;background:linear-gradient(135deg,#f8fafc 0%,#eef4fb 100%)!important;border:2px solid #0b2f67!important;box-shadow:0 5px 16px rgba(11,47,103,.12);}
+#andrewApp .andrew-mini-photo{width:118px;height:118px;flex:0 0 118px;border-radius:50%;overflow:hidden;border:3px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.22);}
 #andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
-#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
+#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;text-align:left;}
 #andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:clamp(1rem,1.35vw,1.18rem);font-weight:900;}
 #andrewApp .andrew-identidad-text span{color:#64748b;font-size:.7rem;font-weight:900;margin-top:5px;}
 #andrewApp .resumen-metrica{border:2px solid #dbe3ee;border-radius:14px;min-height:92px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.08);position:relative;overflow:hidden;}
@@ -142,6 +142,7 @@ button{cursor:pointer;}
 .btn-close-report{width:38px;height:38px;padding:0;background:#fff;color:#0b2f67;border-radius:10px;}
 .reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
 .report-option{min-height:150px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;text-align:left;padding:18px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#14213d;}
+@media (max-width:560px){#andrewApp .resumen-identidad-andrew{gap:14px!important;padding:12px 14px!important;}#andrewApp .andrew-mini-photo{width:96px;height:96px;flex-basis:96px;}#andrewApp .andrew-identidad-text strong{font-size:1rem;}#andrewApp .andrew-identidad-text span{font-size:.64rem;}}
 </style>
 </head>
 <body class="login-screen">
@@ -181,7 +182,7 @@ button{cursor:pointer;}
           <div class="caja-resumen">
             <div class="resumen-cuenta resumen-identidad-andrew">
               <div class="andrew-mini-photo">
-                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew" onerror="this.style.display='none';">
+                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew" loading="eager" decoding="async" fetchpriority="high" onerror="this.style.display='none';">
               </div>
               <div class="andrew-identidad-text">
                 <strong>MISTER ANDREW</strong>
@@ -618,10 +619,52 @@ function mapaSaldosMisesAndrew(movimientos){
   return mapa;
 }
 
-function cargarTodo(){
+let movimientosBancoAndrewActuales=[];
+let movimientosAndrewActuales=[];
+let saldoAndrewActual=200000;
+let saldosMisesAndrewActuales={};
+
+function actualizarVistaMisesAndrew(){
+  document.querySelectorAll(".mise-saldo-andrew").forEach(el=>{
+    const codigo=String(el.getAttribute("data-caja-mise")||"").toUpperCase();
+    if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)){
+      el.textContent=formato(saldosMisesAndrewActuales[codigo]);
+    }
+  });
+}
+
+function actualizarVistaTrasMovimientoAndrew(movimiento){
+  if(!movimiento) return;
+  movimientosBancoAndrewActuales.push(movimiento);
+  movimientosAndrewActuales.push(movimiento);
+
+  const categoria=String(movimiento.categoria||"").trim().toUpperCase();
+  const codigo=String(movimiento.codigo||"").trim().toUpperCase();
+  const monto=Number(movimiento.monto||0);
+
+  if(categoria==="TRANSFERENCIA_CAJA_MISE"){
+    saldoAndrewActual-=monto;
+    if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)) saldosMisesAndrewActuales[codigo]+=monto;
+  }else if(categoria==="DEVOLUCION_CAJA_GENERAL"){
+    saldoAndrewActual+=monto;
+    if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)) saldosMisesAndrewActuales[codigo]-=monto;
+  }
+
+  saldoAndrewActual=Math.round((saldoAndrewActual+Number.EPSILON)*100)/100;
+  document.getElementById("saldoCuenta").textContent=formato(saldoAndrewActual);
+  document.getElementById("contadorMovimientos").textContent=movimientosAndrewActuales.length;
+  actualizarVistaMisesAndrew();
+  renderTablaAndrew(movimientosAndrewActuales);
+}
+
+function sincronizarAndrewEnSegundoPlano(){
+  window.setTimeout(()=>cargarTodo(true),1200);
+}
+
+function cargarTodo(silencioso=false){
   const anio=document.getElementById("anio").value;
   document.getElementById("metaAnio").textContent=anio;
-  mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
+  if(!silencioso) mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
 
   // Una sola consulta al servidor. Los saldos de Andrew y las Mises
   // se calculan localmente con los mismos movimientos ya descargados.
@@ -631,15 +674,18 @@ function cargarTodo(){
       : [];
 
     const saldoAndrew=calcularSaldoCuentaAndrew(movimientos,CODIGO_ANDREW);
+    saldoAndrewActual=saldoAndrew;
     document.getElementById("saldoCuenta").textContent=formato(saldoAndrew);
 
     const saldosMises=mapaSaldosMisesAndrew(movimientos);
+    saldosMisesAndrewActuales=Object.assign({},saldosMises);
+    movimientosBancoAndrewActuales=movimientos.slice();
 
     const fotosMises={
-      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300",
-      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300",
-      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300",
-      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
+      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
     };
 
     const mises=Object.keys(MISES).map(codigo=>({
@@ -653,7 +699,7 @@ function cargarTodo(){
       return `
         <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
           <div class="mise-card-top">
-            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" onerror="this.style.display='none';">
+            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" loading="lazy" decoding="async" onerror="this.style.display='none';">
             <div style="min-width:0;">
               <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
               <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
@@ -664,10 +710,11 @@ function cargarTodo(){
     }).join("");
 
     const movAndrew=movimientos.filter(esMovimientoAndrew);
+    movimientosAndrewActuales=movAndrew.slice();
     document.getElementById("contadorMovimientos").textContent=movAndrew.length;
     renderTablaAndrew(movAndrew);
 
-    mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
+    if(!silencioso) mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
   });
 }
 function esMovimientoAndrew(m){
@@ -782,11 +829,8 @@ function parseMontoLDS(valor){
 
 function mostrarTodos(){
   document.getElementById("panelTodo").style.display="block";
-  llamarAPI({accion:"movimientos",anio:document.getElementById("anio").value},function(r){
-    if(!r || !r.ok) return;
-    const mov=r.movimientos||[];
-    document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10">SIN MOVIMIENTOS.</td></tr>';
-  });
+  const mov=movimientosBancoAndrewActuales||[];
+  document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10">SIN MOVIMIENTOS.</td></tr>';
 }
 function cerrarTodo(){ document.getElementById("panelTodo").style.display="none"; }
 function abrirReportes(){ document.getElementById("reportesModal").classList.add("open"); }
@@ -815,7 +859,24 @@ function transferirAMise(){
       mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok");
       sonidoAndrew("ok");
       hablarAndrew("Transferencia registrada correctamente.");
-      cargarTodo();
+      const movimientoLocal={
+        anio:document.getElementById("anio").value,
+        fechaTexto:new Date().toLocaleString("es-PE"),
+        codigo:codigo,
+        estudiante:NOMBRE_ANDREW,
+        grado:"CAJA GENERAL",
+        tipo:"EGRESO",
+        concepto:document.getElementById("conceptoTransferencia").value,
+        monto:monto,
+        responsable:NOMBRE_ANDREW,
+        observacion:document.getElementById("obsTransferencia").value,
+        categoria:"TRANSFERENCIA_CAJA_MISE",
+        estado:"ACTIVO"
+      };
+      actualizarVistaTrasMovimientoAndrew(movimientoLocal);
+      document.getElementById("montoTransferencia").value="";
+      document.getElementById("obsTransferencia").value="";
+      sincronizarAndrewEnSegundoPlano();
     }
     else {
       mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error");
@@ -834,7 +895,24 @@ function recibirDevolucion(){
       mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok");
       sonidoAndrew("ok");
       hablarAndrew("Devolución registrada correctamente.");
-      cargarTodo();
+      const movimientoLocal={
+        anio:document.getElementById("anio").value,
+        fechaTexto:new Date().toLocaleString("es-PE"),
+        codigo:codigo,
+        estudiante:NOMBRE_ANDREW,
+        grado:"CAJA GENERAL",
+        tipo:"INGRESO",
+        concepto:document.getElementById("conceptoDevolucion").value,
+        monto:monto,
+        responsable:NOMBRE_ANDREW,
+        observacion:document.getElementById("obsDevolucion").value,
+        categoria:"DEVOLUCION_CAJA_GENERAL",
+        estado:"ACTIVO"
+      };
+      actualizarVistaTrasMovimientoAndrew(movimientoLocal);
+      document.getElementById("montoDevolucion").value="";
+      document.getElementById("obsDevolucion").value="";
+      sincronizarAndrewEnSegundoPlano();
     }
     else {
       mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error");
