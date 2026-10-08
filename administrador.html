@@ -1330,7 +1330,7 @@ footer {
             <label for="selectAnioEscolar">AÑO</label>
             <input id="selectAnioEscolar" class="anio-abierto" type="number" value="2026" min="2000" max="2100" step="1" onchange="cambiarAnioEscolar()" aria-label="Año escolar">
           </div>
-          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos()" aria-label="Alumnos" title="Alumnos">
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaAlumnosDirecta()" aria-label="Alumnos" title="Alumnos">
             <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
           </button>
           <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaMises()" aria-label="Mises" title="Mises">
@@ -1745,6 +1745,66 @@ function precargarCuentasEscolares() {
   llamarAPI({accion:'cuentas',anio},r=>{cacheCuentasCargando[anio]=false;if(r&&r.ok!==false&&Array.isArray(r.cuentas))cacheCuentasEscolares[anio]=r.cuentas;});
 }
 function obtenerCuentasCacheadas(){const anio=document.getElementById('selectAnioEscolar')?.value||'2026';return Array.isArray(cacheCuentasEscolares[anio])?cacheCuentasEscolares[anio]:null;}
+
+function abrirListaAlumnosDirecta() {
+  try { reproducirSonido('clic'); } catch (e) {}
+
+  const panel = document.getElementById('listaAlumnosDropdown');
+  const items = document.getElementById('listaAlumnosItems');
+  const filtro = document.getElementById('filtroCodigosInline');
+
+  if (!panel || !items) return;
+
+  const estabaAbierto = panel.style.display === 'block';
+  cerrarListasSuperiores('alumnos');
+
+  if (estabaAbierto) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  if (filtro) filtro.value = '';
+  items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
+
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  const cache = obtenerListaEstudiantesCacheada();
+
+  if (Array.isArray(cache) && cache.length) {
+    renderListaAlumnosDesdeCuentas(cache);
+    return;
+  }
+
+  /* Llamada directa y única al endpoint de alumnos. No espera a CUENTAS
+     ni mezcla las cajas de Andrew/Mises con la lista. */
+  llamarAPIPromise({accion:'LISTA_ALUMNOS',anio},10000).then(r => {
+    if (r && r.ok !== false && Array.isArray(r.estudiantes) && r.estudiantes.length) {
+      const lista = r.estudiantes.map(normalizarListaAlumno).filter(Boolean);
+      if (lista.length) {
+        guardarYMostrarListaEstudiantes(lista,anio);
+        return;
+      }
+    }
+
+    /* Compatibilidad con despliegues que reconocen LISTAESTUDIANTES. */
+    return llamarAPIPromise({accion:'LISTAESTUDIANTES',anio},10000).then(r2 => {
+      if (r2 && r2.ok !== false && Array.isArray(r2.estudiantes) && r2.estudiantes.length) {
+        const lista2 = r2.estudiantes.map(normalizarListaAlumno).filter(Boolean);
+        if (lista2.length) {
+          guardarYMostrarListaEstudiantes(lista2,anio);
+          return;
+        }
+      }
+
+      const mensaje = String((r2 && r2.mensaje) || (r && r.mensaje) || '').trim();
+      items.innerHTML = '<div class="header-list-loading">' +
+        (mensaje ? escaparHTML(mensaje) : 'NO HAY ALUMNOS PARA MOSTRAR.') +
+        '</div>';
+    });
+  }).catch(err => {
+    items.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
+  });
+}
 
 function abrirListaCodigos() {
   reproducirSonido('clic');
@@ -2434,7 +2494,9 @@ function desbloquearPanel(nombreMaestra) {
   renderIncidencias();
   cargarSaldoMiseAlIngresar(nombreMaestra);
   precargarCuentasEscolares();
-  precargarListaEstudiantes();
+
+  /* La lista de alumnos se carga únicamente al pulsar el botón CELESTE.
+     Así no bloquea el ingreso ni ralentiza la pantalla. */
 
   /* IMPORTANTE:
      La Mise no debe esperar a buscar un alumno para conocer su fondo.
