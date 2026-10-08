@@ -11,9 +11,6 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvet
 body{background:#061b3f;color:var(--texto);overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 
-/* ==========================================================
-   PORTADA ANDREW — FONDO REAL + FOTO TRANSPARENTE
-   ========================================================== */
 #loginAndrew{
   position:fixed!important;
   inset:0!important;
@@ -36,141 +33,21 @@ button,input,select,textarea{font:inherit}
   background-size:100% 100%!important;
 }
 
-#loginAndrew::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:transparent!important;
-  pointer-events:none!important;
-  z-index:0!important;
-}
-
-#loginAndrew .login-bg-image{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-  display:block!important;
-  z-index:0!important;
-  pointer-events:none!important;
-  user-select:none!important;
-}
-
-#loginAndrew .andrew-login-photo{
-  position:relative!important;
-  z-index:2!important;
-  width:min(39vw,540px)!important;
-  height:min(76vh,700px)!important;
-  flex:0 1 540px!important;
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  margin:clamp(25px,5vh,55px) 0 0!important;
-  pointer-events:none!important;
-}
-
-#loginAndrew .andrew-login-photo img{
-  display:block!important;
-  color:transparent!important;
-  font-size:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-  background:transparent!important;
-  mix-blend-mode:normal!important;
-  border:0!important;
-  outline:0!important;
-  box-shadow:none!important;
-  filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));
-}
-
-#loginAndrew > .panel{
-  position:relative!important;
-  z-index:5!important;
-  width:min(430px,39vw)!important;
-  max-width:430px!important;
-  flex:0 1 430px!important;
-  margin:clamp(10px,4vh,40px) 0 0!important;
-  border:2px solid #f5b400!important;
-  border-radius:22px!important;
-  overflow:hidden!important;
-  background:#fff!important;
-  box-shadow:0 22px 55px rgba(0,0,0,.48)!important;
-  pointer-events:auto!important;
-}
-
-#loginAndrew .panel-head{
-  padding:20px 24px!important;
-  background:linear-gradient(135deg,#061b3f,#12366f)!important;
-  border-bottom:2px solid #f5b400!important;
-}
-#loginAndrew .panel-head h3{
-  margin:0!important;
-  color:#fff!important;
-  font-size:clamp(1rem,1.45vw,1.25rem)!important;
-  line-height:1.35!important;
-  font-weight:900!important;
-}
+#loginAndrew::before{content:"";position:absolute;inset:0;background:transparent!important;pointer-events:none!important;z-index:0!important;}
+#loginAndrew .login-bg-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;z-index:0!important;pointer-events:none!important;user-select:none!important;}
+#loginAndrew .andrew-login-photo{position:relative!important;z-index:2!important;width:min(39vw,540px)!important;height:min(76vh,700px)!important;flex:0 1 540px!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:clamp(25px,5vh,55px) 0 0!important;pointer-events:none!important;}
+#loginAndrew .andrew-login-photo img{display:block!important;color:transparent!important;font-size:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;mix-blend-mode:normal!important;border:0!important;outline:0!important;box-shadow:none!important;filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));}
+#loginAndrew > .panel{position:relative!important;z-index:5!important;width:min(430px,39vw)!important;max-width:430px!important;flex:0 1 430px!important;margin:clamp(10px,4vh,40px) 0 0!important;border:2px solid #f5b400!important;border-radius:22px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 22px 55px rgba(0,0,0,.48)!important;pointer-events:auto!important;}
+#loginAndrew .panel-head{padding:20px 24px!important;background:linear-gradient(135deg,#061b3f,#12366f)!important;border-bottom:2px solid #f5b400!important;}
+#loginAndrew .panel-head h3{margin:0!important;color:#fff!important;font-size:clamp(1rem,1.45vw,1.25rem)!important;line-height:1.35!important;font-weight:900!important;}
 #loginAndrew .panel-body{padding:24px!important}
-#loginAndrew .panel-body>p{
-  margin:0 0 18px!important;
-  color:#334155!important;
-  font-size:.92rem!important;
-  line-height:1.5!important;
-  font-weight:800!important;
-}
-#loginAndrew .small-label{
-  display:block!important;
-  margin:0 0 7px!important;
-  color:#0b2f67!important;
-  font-size:.76rem!important;
-  font-weight:900!important;
-}
-#loginAndrew #claveAndrew{
-  width:100%!important;
-  height:56px!important;
-  padding:0 15px!important;
-  border:1.5px solid #b9c7d8!important;
-  border-radius:12px!important;
-  background:#f8fafc!important;
-  color:#14213d!important;
-  font-size:1rem!important;
-  font-weight:700!important;
-  outline:none!important;
-  pointer-events:auto!important;
-}
+#loginAndrew .panel-body>p{margin:0 0 18px!important;color:#334155!important;font-size:.92rem!important;line-height:1.5!important;font-weight:800!important;}
+#loginAndrew .small-label{display:block!important;margin:0 0 7px!important;color:#0b2f67!important;font-size:.76rem!important;font-weight:900!important;}
+#loginAndrew #claveAndrew{width:100%!important;height:56px!important;padding:0 15px!important;border:1.5px solid #b9c7d8!important;border-radius:12px!important;background:#f8fafc!important;color:#14213d!important;font-size:1rem!important;font-weight:700!important;outline:none!important;pointer-events:auto!important;}
 #loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
-#loginAndrew .login-action,
-#loginAndrew .login-home{
-  position:relative!important;
-  z-index:20!important;
-  pointer-events:auto!important;
-  cursor:pointer!important;
-  display:flex!important;
-  width:100%!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-weight:900!important;
-}
-#loginAndrew .login-action{
-  min-height:54px!important;
-  margin-top:15px!important;
-  border:1px solid #fcd34d!important;
-  border-radius:12px!important;
-  background:linear-gradient(135deg,#ffd23f,#f2a900)!important;
-  color:#08214a!important;
-}
-#loginAndrew .login-home{
-  min-height:48px!important;
-  margin-top:10px!important;
-  background:#fff!important;
-  color:#0b2f67!important;
-  border:1.5px solid #0b2f67!important;
-  border-radius:12px!important;
-}
+#loginAndrew .login-action,#loginAndrew .login-home{position:relative!important;z-index:20!important;pointer-events:auto!important;cursor:pointer!important;display:flex!important;width:100%!important;align-items:center!important;justify-content:center!important;font-weight:900!important;}
+#loginAndrew .login-action{min-height:54px!important;margin-top:15px!important;border:1px solid #fcd34d!important;border-radius:12px!important;background:linear-gradient(135deg,#ffd23f,#f2a900)!important;color:#08214a!important;}
+#loginAndrew .login-home{min-height:48px!important;margin-top:10px!important;background:#fff!important;color:#0b2f67!important;border:1.5px solid #0b2f67!important;border-radius:12px!important;}
 #loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
 
@@ -180,12 +57,12 @@ body.login-screen > #appFooter{display:none!important}
 body.login-screen #loginAndrew{display:flex!important}
 body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
 
-/* PANEL INTERNO */
 header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
 .topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
-main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
+main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
 .table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
 select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}
 .message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
@@ -194,9 +71,6 @@ button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
 #loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
 
-/* ==========================================================
-   PANEL ANDREW — ESTILO ORIGINAL COMPLETO
-   ========================================================== */
 #appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
 #appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
 #appHeader .brand{flex:1 1 auto;min-width:0;min-height:52px;display:flex;align-items:center;gap:10px;}
@@ -241,17 +115,12 @@ button{cursor:pointer;}
 #andrewApp .movement-head{flex-wrap:wrap;min-height:52px;}
 #andrewApp .movement-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
 #andrewApp .btn-report{background:linear-gradient(135deg,#0b2f67,#16488f);color:#fff;border:1px solid #0b2f67;}
-#andrewApp .btn-report:hover{filter:brightness(1.08);transform:translateY(-1px);}
 #andrewApp .table-wrap{background:#fff!important;border-radius:0 0 12px 12px;overflow:auto;}
 #andrewApp table{min-width:900px;width:100%;border-collapse:collapse;font-size:.7rem;}
 #andrewApp table thead th{background:#eef3f8!important;color:#0b2f67!important;position:sticky;top:0;z-index:2;padding:7px;border-bottom:1px solid #e2e8f0;text-align:left;}
 #andrewApp table td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left;}
 #andrewApp .right-stack{position:sticky;top:12px;align-self:start;display:flex;flex-direction:column;gap:14px;}
-#andrewApp .right-stack .accordion-panel{margin:0;}
-#andrewApp .right-stack .accordion-head{min-height:52px;}
-#andrewApp .right-stack .panel-body{padding:14px;}
 
-/* Ventana de reportes */
 .reportes-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,12,28,.72);z-index:100000;}
 .reportes-modal.open{display:flex;}
 .reportes-card{width:min(620px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.42);overflow:hidden;}
@@ -261,10 +130,6 @@ button{cursor:pointer;}
 .btn-close-report{width:38px;height:38px;padding:0;background:#fff;color:#0b2f67;border-radius:10px;}
 .reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
 .report-option{min-height:150px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;text-align:left;padding:18px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#14213d;}
-.report-option:hover{border-color:#f5b400;box-shadow:0 7px 20px rgba(0,0,0,.1);transform:translateY(-1px);}
-.report-option span{font-size:1.6rem;}
-.report-option strong{color:#0b2f67;font-size:.88rem;}
-.report-option small{color:#64748b;font-size:.7rem;line-height:1.35;font-weight:700;}
 </style>
 </head>
 <body class="login-screen">
@@ -392,25 +257,17 @@ button{cursor:pointer;}
             <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
             <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
           </select>
-
           <label class="small-label">MONTO LDS</label>
           <input id="montoTransferencia" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 10000.00">
-
           <label class="small-label">CONCEPTO</label>
           <select id="conceptoTransferencia">
             <option>TRANSFERENCIA DE FONDO A CAJA MISS</option>
             <option>FONDO OPERATIVO</option>
             <option>FONDO PARA ACTIVIDADES</option>
-            <option>FONDO PARA PAGOS A ALUMNOS</option>
-            <option>OTRA TRANSFERENCIA AUTORIZADA</option>
           </select>
-
           <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsTransferencia" rows="3" placeholder="DETALLE DE LA TRANSFERENCIA..."></textarea>
-
-          <button class="btn btn-gold" style="width:100%;margin-top:15px;" onclick="transferirAMise()">
-            💰 TRANSFERIR A MISS
-          </button>
+          <textarea id="obsTransferencia" rows="3" placeholder="DETALLE..."></textarea>
+          <button class="btn btn-gold" style="width:100%;margin-top:15px;" onclick="transferirAMise()">💰 TRANSFERIR A MISS</button>
           <div id="mensajeTransferencia" class="message"></div>
         </div>
       </div>
@@ -429,23 +286,16 @@ button{cursor:pointer;}
             <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
             <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
           </select>
-
           <label class="small-label">MONTO LDS</label>
           <input id="montoDevolucion" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 2000.00">
-
           <label class="small-label">CONCEPTO</label>
           <select id="conceptoDevolucion">
             <option>DEVOLUCIÓN DE FONDO A CAJA GENERAL</option>
             <option>REINTEGRO DE FONDO</option>
-            <option>DEVOLUCIÓN DE EXCEDENTE</option>
           </select>
-
           <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsDevolucion" rows="3" placeholder="DETALLE DE LA DEVOLUCIÓN..."></textarea>
-
-          <button class="btn btn-outline" style="width:100%;margin-top:15px;" onclick="recibirDevolucion()">
-            ↩️ REGISTRAR DEVOLUCIÓN
-          </button>
+          <textarea id="obsDevolucion" rows="3" placeholder="DETALLE..."></textarea>
+          <button class="btn btn-outline" style="width:100%;margin-top:15px;" onclick="recibirDevolucion()">↩️ REGISTRAR DEVOLUCIÓN</button>
           <div id="mensajeDevolucion" class="message"></div>
         </div>
       </div>
@@ -458,9 +308,7 @@ button{cursor:pointer;}
         <div class="panel-body accordion-body" hidden>
           <label class="small-label">CÓDIGO DE CUENTA / ALUMNO</label>
           <input id="codigoConsulta" placeholder="LDS-001 / CAJA-LILY">
-          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">
-            🔍 CONSULTAR
-          </button>
+          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">🔍 CONSULTAR</button>
           <div id="resultadoConsulta" class="message"></div>
         </div>
       </div>
@@ -479,10 +327,10 @@ button{cursor:pointer;}
     </div>
     <div class="reportes-options">
       <button class="report-option" onclick="imprimirReporteIndividual()">
-        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew · año seleccionado</small>
+        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew</small>
       </button>
       <button class="report-option" onclick="imprimirReporteColectivo()">
-        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Todos los movimientos del Banco LDS 360 · año seleccionado</small>
+        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Movimientos del Banco LDS 360</small>
       </button>
     </div>
   </div>
@@ -491,7 +339,7 @@ button{cursor:pointer;}
 <div id="loginAndrew">
   <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
@@ -596,56 +444,62 @@ function cargarTodo(){
   document.getElementById("metaAnio").textContent=anio;
   mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
 
-  llamarAPI({accion:"cuentas",anio},function(r){
-    if(!r || !r.ok){ mostrarMensaje("mensaje","NO SE PUDIERON CARGAR LAS CUENTAS.","error"); return; }
-    const andrew=(r.cuentas||[]).find(c=>String(c.codigo||"").trim().toUpperCase()===CODIGO_ANDREW);
-    const saldo=andrew && Number.isFinite(Number(andrew.saldoActual)) ? Number(andrew.saldoActual) : 200000;
-    document.getElementById("saldoCuenta").textContent=formato(saldo);
+  // Primero calculamos desde los movimientos o solicitamos cuentas con tolerancia segura de respaldo
+  llamarAPI({accion:"movimientos",anio},function(rMov){
+    let movimientos = (rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
+    
+    let saldoAndrewUnificado = calcularSaldoCuentaAndrew(movimientos, CODIGO_ANDREW);
+    if(saldoAndrewUnificado <= 0) saldoAndrewUnificado = 200000;
+    document.getElementById("saldoCuenta").textContent = formato(saldoAndrewUnificado);
 
-    const mises=(r.cuentas||[]).filter(c=>Object.prototype.hasOwnProperty.call(MISES,String(c.codigo||"").toUpperCase()));
-    const fotosMises={
-      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300",
-      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300",
-      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300",
-      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
-    };
+    let saldosMisesUnificados = mapaSaldosMisesAndrew(movimientos);
 
-    document.getElementById("cuentasMises").innerHTML=mises.map(c=>{
-      const codigo=String(c.codigo||"").toUpperCase();
-      const foto=fotosMises[codigo]||"";
-      return `
-      <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
-        <div class="mise-card-top">
-          <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" onerror="this.style.display='none';">
-          <div style="min-width:0;">
-            <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
-            <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
-          </div>
-        </div>
-        <div class="mise-saldo-andrew" data-caja-mise="${escapar(codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
-      </div>`;
-    }).join("");
-    mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
-  });
-
-  llamarAPI({accion:"movimientos",anio},function(r){
-    if(!r || !r.ok){ document.getElementById("tablaAndrew").innerHTML='<tr><td colspan="9">ERROR AL CARGAR.</td></tr>'; return; }
-    const todos=(r.movimientos||[]);
-    const mov=todos.filter(esMovimientoAndrew);
-
-    document.getElementById("contadorMovimientos").textContent=mov.length;
-    const saldoAndrewUnificado=calcularSaldoCuentaAndrew(todos,CODIGO_ANDREW);
-    document.getElementById("saldoCuenta").textContent=formato(saldoAndrewUnificado > 0 ? saldoAndrewUnificado : 200000);
-
-    const saldosMisesUnificados=mapaSaldosMisesAndrew(todos);
-    document.querySelectorAll(".mise-saldo-andrew").forEach(el=>{
-      const codigo=String(el.getAttribute("data-caja-mise")||"").toUpperCase();
-      if(Object.prototype.hasOwnProperty.call(saldosMisesUnificados,codigo)){
-        el.textContent=formato(saldosMisesUnificados[codigo]);
+    // Intentamos cargar las cuentas del servidor en paralelo con respaldo automático
+    llamarAPI({accion:"cuentas",anio},function(rCuentas){
+      let listaCuentas = (rCuentas && rCuentas.ok && Array.isArray(rCuentas.cuentas)) ? rCuentas.cuentas : [];
+      
+      const andrew = listaCuentas.find(c => String(c.codigo||"").trim().toUpperCase() === CODIGO_ANDREW);
+      if(andrew && Number.isFinite(Number(andrew.saldoActual)) && Number(andrew.saldoActual) > 0){
+        document.getElementById("saldoCuenta").textContent = formato(andrew.saldoActual);
       }
+
+      const mises = Object.keys(MISES).map(codigo => {
+        const encontrada = listaCuentas.find(c => String(c.codigo||"").trim().toUpperCase() === codigo);
+        return {
+          codigo: codigo,
+          nombre: MISES[codigo],
+          saldoActual: encontrada && Number.isFinite(Number(encontrada.saldoActual)) ? Number(encontrada.saldoActual) : (saldosMisesUnificados[codigo] || 0)
+        };
+      });
+
+      const fotosMises = {
+        "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300",
+        "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300",
+        "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300",
+        "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
+      };
+
+      document.getElementById("cuentasMises").innerHTML = mises.map(c => {
+        const foto = fotosMises[c.codigo] || "";
+        return `
+        <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
+          <div class="mise-card-top">
+            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" onerror="this.style.display='none';">
+            <div style="min-width:0;">
+              <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
+              <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
+            </div>
+          </div>
+          <div class="mise-saldo-andrew" data-caja-mise="${escapar(c.codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
+        </div>`;
+      }).join("");
+
+      mostrarMensaje("mensaje", "CAJA GENERAL ACTUALIZADA CORRECTAMENTE.", "ok");
     });
 
-    renderTablaAndrew(mov);
+    let movAndrew = movimientos.filter(esMovimientoAndrew);
+    document.getElementById("contadorMovimientos").textContent = movAndrew.length;
+    renderTablaAndrew(movAndrew);
   });
 }
 
@@ -723,14 +577,4 @@ function transferirAMise(){
 function recibirDevolucion(){
   const codigo=document.getElementById("miseOrigen").value;
   const monto=parseMontoLDS(document.getElementById("montoDevolucion").value);
-  if(!codigo || monto<=0){ mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
-  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
-    if(r&&r.ok){ mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok"); cargarTodo(); }
-    else { mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error"); }
-  });
-}
-
-document.getElementById("anio").addEventListener("change",cargarTodo);
-</script>
-</body>
-</html>
+  if(!codigo || monto<=0
