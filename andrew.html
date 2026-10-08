@@ -11,96 +11,29 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvet
 body{background:#061b3f;color:var(--texto);overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 
-/* ==========================================================
-   PORTADA ANDREW — FONDO REAL + FOTO TRANSPARENTE
-   ========================================================== */
+/* PORTADA DE ACCESO LIMPIA Y SEGURA */
 #loginAndrew{
   position:fixed!important;
   inset:0!important;
   width:100vw!important;
   height:100vh!important;
-  min-height:100vh!important;
-  margin:0!important;
-  padding:clamp(92px,11vh,125px) clamp(24px,5vw,80px) clamp(20px,3vh,32px)!important;
   display:flex!important;
-  flex-direction:row!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:clamp(24px,5vw,78px)!important;
-  overflow:hidden!important;
+  padding:20px!important;
   z-index:99999!important;
-  background-color:#061b3f!important;
-  background-image:none!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  background-size:100% 100%!important;
-}
-
-#loginAndrew{background-color:#061b3f!important;}
-#loginAndrew::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:transparent!important;
-  pointer-events:none!important;
-  z-index:0!important;
-}
-
-#loginAndrew .login-bg-image{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-  display:block!important;
-  z-index:0!important;
-  pointer-events:none!important;
-  user-select:none!important;
-}
-
-#loginAndrew .andrew-login-photo{
-  position:relative!important;
-  z-index:2!important;
-  width:min(39vw,540px)!important;
-  height:min(76vh,700px)!important;
-  flex:0 1 540px!important;
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  margin:clamp(25px,5vh,55px) 0 0!important;
-  pointer-events:none!important;
-}
-
-#loginAndrew .andrew-login-photo img{
-  display:block!important;
-  color:transparent!important;
-  font-size:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-  background:transparent!important;
-  mix-blend-mode:normal!important;
-  border:0!important;
-  outline:0!important;
-  box-shadow:none!important;
-  filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));
+  background:linear-gradient(135deg,#061b3f,#0b2f67,#12366f)!important;
 }
 
 #loginAndrew > .panel{
   position:relative!important;
   z-index:5!important;
-  width:min(430px,39vw)!important;
-  max-width:430px!important;
-  flex:0 1 430px!important;
-  margin:clamp(10px,4vh,40px) 0 0!important;
+  width:min(440px,92vw)!important;
   border:2px solid #f5b400!important;
   border-radius:22px!important;
   overflow:hidden!important;
   background:#fff!important;
   box-shadow:0 22px 55px rgba(0,0,0,.48)!important;
-  pointer-events:auto!important;
 }
 
 #loginAndrew .panel-head{
@@ -111,9 +44,9 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .panel-head h3{
   margin:0!important;
   color:#fff!important;
-  font-size:clamp(1rem,1.45vw,1.25rem)!important;
-  line-height:1.35!important;
+  font-size:1.15rem!important;
   font-weight:900!important;
+  text-align:center;
 }
 #loginAndrew .panel-body{padding:24px!important}
 #loginAndrew .panel-body>p{
@@ -122,6 +55,7 @@ button,input,select,textarea{font:inherit}
   font-size:.92rem!important;
   line-height:1.5!important;
   font-weight:800!important;
+  text-align:center;
 }
 #loginAndrew .small-label{
   display:block!important;
@@ -141,20 +75,16 @@ button,input,select,textarea{font:inherit}
   font-size:1rem!important;
   font-weight:700!important;
   outline:none!important;
-  pointer-events:auto!important;
 }
 #loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
 #loginAndrew .login-action,
 #loginAndrew .login-home{
-  position:relative!important;
-  z-index:20!important;
-  pointer-events:auto!important;
-  cursor:pointer!important;
   display:flex!important;
   width:100%!important;
   align-items:center!important;
   justify-content:center!important;
   font-weight:900!important;
+  cursor:pointer!important;
 }
 #loginAndrew .login-action{
   min-height:54px!important;
@@ -175,119 +105,306 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
 
-/* Mientras se solicita la clave, NADA del panel interno puede interferir. */
 body.login-screen > #appHeader,
 body.login-screen > #andrewApp,
 body.login-screen > #appFooter{display:none!important}
 body.login-screen #loginAndrew{display:flex!important}
-body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
-
-/* El resto de la aplicación queda oculto mientras se solicita la clave */
-body.login-screen > #appHeader,
-body.login-screen > #andrewApp,
-body.login-screen > #appFooter{display:none!important}
-body:not(.login-screen) > #loginAndrew{display:none!important}
+body:not(.login-screen) #loginAndrew{display:none!important}
 
 /* PANEL INTERNO */
 header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
 .topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
-main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head.accordion-head:focus-visible{outline:3px solid rgba(245,180,0,.35);outline-offset:-3px}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}.admin-profile-banner{background:#091628;border:2px solid var(--dorado);border-radius:12px;padding:12px 18px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;gap:12px}.admin-profile-info{display:flex;align-items:center;gap:12px}.admin-avatar-wrap{width:48px;height:48px;border-radius:50%;border:2px solid var(--dorado);overflow:hidden;background:#fff}.admin-avatar-img{width:100%;height:100%;object-fit:cover}.admin-text-details h3{font-size:.95rem;color:#fff;margin:0}.admin-text-details p{color:#fde68a;font-size:.65rem;font-weight:700;margin:0}.admin-stats-box{display:flex;gap:8px}.stat-pill{background:#03080f;border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:6px 12px;text-align:center}.stat-pill span{display:block;font-size:.55rem;color:#cbd5e1;font-weight:700}.stat-pill strong{font-size:.9rem;color:#fff}.student-head{display:flex;align-items:center;gap:12px}.student-photo-wrap{width:65px;height:65px;border-radius:12px;overflow:hidden;border:2px solid var(--dorado);background:#fff}.student-photo{width:100%;height:100%;object-fit:cover}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}.small-label{display:block;font-size:.75rem;color:#0b2f67;margin:8px 0 4px;font-weight:900}select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}.message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
-
-@media(max-width:900px){
- #loginAndrew{gap:18px;padding:55px 18px 20px!important}
- #loginAndrew .andrew-login-photo{width:43vw!important;height:70vh!important}
- #loginAndrew>.panel{width:45vw!important;flex-basis:45vw!important;margin-bottom:4vh!important}
- .layout{grid-template-columns:1fr}
-}
-@media(max-width:700px){
- #loginAndrew{position:fixed!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;gap:0!important;padding:25px 12px 14px!important;background-position:center!important}
- #loginAndrew .andrew-login-photo{width:min(82vw,390px)!important;height:min(48vh,390px)!important;flex:0 0 auto!important;margin-bottom:-2px!important}
- #loginAndrew>.panel{width:min(100%,440px)!important;max-width:440px!important;flex:0 0 auto!important;margin:0!important}
- #loginAndrew .panel-head{padding:14px 17px!important}
- #loginAndrew .panel-body{padding:18px!important}
- #loginAndrew .panel-body>p{font-size:.82rem!important}
-}
-@media(max-width:430px){
- #loginAndrew .andrew-login-photo{height:39vh!important;width:82vw!important}
- #loginAndrew>.panel{max-height:52vh;overflow:auto}
-}
-
-button, a, input, select, textarea{pointer-events:auto;}
-button{cursor:pointer;}
-#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
-
-/* ==========================================================
-   PANEL ANDREW — RESPONSIVO, LEGIBLE Y A PANTALLA COMPLETA
-   ========================================================== */
-#appHeader{width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
-#appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
-#appHeader .brand{flex:1 1 auto;min-width:0;}
-#appHeader .btn-outline{min-width:125px;min-height:44px;padding:10px 18px;font-size:.9rem;box-shadow:0 5px 14px rgba(0,0,0,.22);}
-#appHeader .brand-title{font-size:clamp(1.05rem,1.8vw,1.45rem);}
-#appHeader .brand-subtitle{font-size:clamp(.6rem,.8vw,.75rem);}
-#andrewApp{max-width:none!important;width:100%!important;margin:0!important;padding:clamp(12px,1.5vw,24px)!important;}
-#andrewApp .layout{width:100%;max-width:1800px;margin:0 auto;grid-template-columns:minmax(0,1.65fr) minmax(360px,.75fr);gap:clamp(14px,1.5vw,24px);}
-#andrewApp .main-dashboard-panel{min-width:0;}
-#andrewApp .main-panel-head{padding:14px 18px;min-height:66px;align-items:center;}
-#andrewApp .main-title-wrap{display:flex;align-items:baseline;gap:12px;min-width:0;}
-#andrewApp .main-panel-head h3{font-size:clamp(.95rem,1.15vw,1.15rem);}
-#andrewApp .year-caption{font-size:.7rem;color:#64748b;font-weight:900;white-space:nowrap;}
-#andrewApp .header-actions-group{display:flex;gap:8px;align-items:center;min-width:250px;}
-#andrewApp .header-actions-group select{width:150px;min-height:40px;}
-#andrewApp .header-actions-group .btn{min-height:40px;}
-#andrewApp .dashboard-body{padding:clamp(12px,1.5vw,22px);}
-#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(240px,1.5fr) minmax(150px,.7fr) minmax(150px,.7fr);gap:12px;align-items:stretch;margin-bottom:14px;}
-#andrewApp .resumen-identidad,#andrewApp .resumen-metrica{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;}
-#andrewApp .resumen-identidad{display:flex;align-items:center;gap:11px;}
-#andrewApp .resumen-avatar{width:45px;height:45px;border-radius:50%;display:grid;place-items:center;background:#061b3f;border:2px solid #f5b400;font-size:1.25rem;flex:0 0 auto;}
-#andrewApp .resumen-identidad strong{display:block;color:#0b2f67;font-size:.9rem;font-weight:900;}
-#andrewApp .resumen-identidad small{display:block;color:#64748b;font-size:.66rem;font-weight:800;margin-top:3px;}
-#andrewApp .resumen-metrica{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
-#andrewApp .resumen-metrica span{font-size:.62rem;color:#64748b;font-weight:900;letter-spacing:.03em;}
-#andrewApp .resumen-metrica strong{font-size:clamp(1rem,1.5vw,1.35rem);color:#0b2f67;margin-top:3px;}
-#andrewApp .inner-panel{margin-top:14px;border-color:#e5a000;box-shadow:none;}
-#andrewApp .inner-panel .panel-head{padding:11px 14px;}
-#andrewApp .inner-panel .panel-body{padding:13px;}
-#andrewApp .mises-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-#andrewApp .mises-grid>div{border:1.5px solid #e5a000!important;border-radius:12px!important;padding:13px!important;background:#f8fafc!important;min-width:0;}
-#andrewApp .mises-grid>div div:first-child{font-size:.82rem!important;line-height:1.25;}
-#andrewApp .mise-card-top{display:flex;align-items:center;gap:9px;min-width:0;}
-#andrewApp .mise-card-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;flex:0 0 44px;}
-#andrewApp .mise-card-name{font-weight:900;color:#14213d;font-size:.78rem;line-height:1.18;}
-#andrewApp .mise-card-code{font-size:.72rem;color:#64748b;font-weight:800;margin-top:2px;}
-@media(max-width:600px){#andrewApp .mise-card-photo{width:40px;height:40px;flex-basis:40px;}#andrewApp .mise-card-name{font-size:.72rem;}}
-
-#andrewApp .movement-head{flex-wrap:wrap;}
-#andrewApp .movement-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
-#andrewApp .btn-report{background:linear-gradient(135deg,#0b2f67,#16488f);color:#fff;border:1px solid #0b2f67;}
-#andrewApp .btn-report:hover{filter:brightness(1.08);transform:translateY(-1px);}
-#andrewApp .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-#andrewApp table{min-width:900px;}
-#andrewApp .right-stack{gap:14px;}
-#andrewApp .right-stack .panel-head h3{font-size:.88rem;}
-#andrewApp .right-stack .panel-body{padding:14px;}
-#andrewApp .right-stack .btn{min-height:42px;}
-#andrewApp .small-label{font-size:.7rem;margin-top:8px;}
-#andrewApp select,#andrewApp input,#andrewApp textarea{min-height:40px;font-size:.82rem;}
+main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-weight:900;transition:transform .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}
+.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
+.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
+select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}
+.message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
 
 #appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;}
-#appHeader .brand{min-height:52px;}
-#appHeader .brand img{display:block!important;width:54px!important;height:54px!important;object-fit:contain!important;flex:0 0 54px;}
-#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:12px!important;}
-#andrewApp .andrew-mini-photo{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;border:2px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.18);}
-#andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
-#andrewApp .andrew-mini-photo span{display:none;font-size:1.5rem;}
-#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:1rem;font-weight:900;}
-#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.68rem;font-weight:900;margin-top:4px;}
-#andrewApp .resumen-metrica:first-of-type{background:linear-gradient(135deg,#fffdf0,#fff)!important;border:2px solid #f5b400!important;}
-#andrewApp .resumen-metrica:first-of-type strong{font-size:clamp(1.2rem,2vw,1.75rem)!important;color:#008f68!important;}
-#andrewApp .table-wrap{background:#fff!important;border-radius:0 0 12px 12px;}
-#andrewApp table,#andrewApp table tbody,#andrewApp table tr,#andrewApp table td{background:#fff!important;}
-#andrewApp table thead th{background:#eef3f8!important;color:#0b2f67!important;position:sticky;top:0;z-index:2;}
-#andrewApp #panelTodo{background:#fff!important;}
-@media(max-width:600px){
-  #appHeader .brand img{width:46px!important;height:46px!important;flex-basis:46px;}
-  #andrewApp .andrew-mini-photo{width
+#andrewApp{min-height:calc(100vh - 72px); width:min(100%,1680px); margin:0 auto; padding:20px;}
+#andrewApp .layout{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(350px,.72fr);gap:20px;align-items:start;}
+#andrewApp .caja-resumen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px;}
+#andrewApp .resumen-cuenta,#andrewApp .resumen-metrica{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;padding:12px 14px;}
+#andrewApp .resumen-metrica{text-align:center;}
+#andrewApp .resumen-metrica span{font-size:.65rem;color:#64748b;font-weight:900;}
+#andrewApp .resumen-metrica strong{font-size:1.35rem;color:#008f68;display:block;margin-top:4px;}
+.reportes-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,12,28,.72);z-index:100000;}
+.reportes-modal.open{display:flex;}
+.reportes-card{width:min(620px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;overflow:hidden;}
+.reportes-head{display:flex;justify-content:space-between;padding:18px 20px;background:#061b3f;color:#fff;}
+.reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
+.report-option{min-height:130px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;padding:18px;cursor:pointer;text-align:left;}
+</style>
+</head>
+<body class="login-screen">
+
+<header class="topbar" id="appHeader" style="display:none;">
+  <div class="brand">
+    <img id="logoAndrew" src="assets/insignia.png" alt="Insignia La Salle del Sur">
+    <div>
+      <div class="brand-title">BANCO LDS 360</div>
+      <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
+    </div>
+  </div>
+  <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
+</header>
+
+<main id="andrewApp" style="display:none;">
+  <section class="layout">
+    <div>
+      <div class="panel main-dashboard-panel">
+        <div class="panel-head main-panel-head">
+          <div class="main-title-wrap">
+            <h3>🏦 CAJA ANDREW</h3>
+            <span class="year-caption">BANCO LDS 360 · <span id="metaAnio">2026</span></span>
+          </div>
+          <div class="header-actions-group">
+            <select id="anio">
+              <option value="2026" selected>AÑO 2026</option>
+              <option value="2027">AÑO 2027</option>
+            </select>
+            <button class="btn btn-gold" onclick="cargarTodo()">↻ ACTUALIZAR</button>
+          </div>
+        </div>
+        <div class="panel-body dashboard-body">
+          <div class="caja-resumen">
+            <div class="resumen-cuenta">
+              <strong>MISTER ANDREW</strong>
+              <small style="color:#64748b;font-weight:800;">CAJA-ANDREW · CAJA GENERAL</small>
+            </div>
+            <div class="resumen-metrica">
+              <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 200,000.00</strong>
+            </div>
+            <div class="resumen-metrica">
+              <span>MOVIMIENTOS</span><strong id="contadorMovimientos" style="color:#0b2f67;">0</strong>
+            </div>
+          </div>
+
+          <div id="mensaje" class="message"></div>
+
+          <div class="panel inner-panel" style="margin-top:14px;">
+            <div class="panel-head"><h3>👩‍🏫 SALDOS DE LAS MISS</h3></div>
+            <div class="panel-body"><div id="cuentasMises" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"></div></div>
+          </div>
+
+          <div class="panel inner-panel" style="margin-top:14px;">
+            <div class="panel-head">
+              <h3>📋 MOVIMIENTOS DE CAJA</h3>
+              <div>
+                <button class="btn btn-gold" onclick="abrirReportes()">🖨️ REPORTES</button>
+                <button class="btn btn-outline" onclick="mostrarTodos()">🌐 VER TODO</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr>
+                </thead>
+                <tbody id="tablaAndrew"><tr><td colspan="9" class="empty">CARGANDO...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel inner-panel" style="display:none;margin-top:14px;" id="panelTodo">
+            <div class="panel-head">
+              <h3>🌐 MOVIMIENTOS GENERALES DEL BANCO</h3>
+              <button class="btn btn-outline" onclick="cerrarTodo()">✕ CERRAR</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr>
+                </thead>
+                <tbody id="tablaTodo"><tr><td colspan="10" class="empty">CARGANDO...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-stack" id="accionesAndrew">
+      <div class="panel accordion-panel">
+        <div class="panel-head accordion-head" role="button" tabindex="0" onclick="toggleAndrewPanel(this)">
+          <h3>💸 TRANSFERIR FONDO A UNA MISS</h3><span>⌄</span>
+        </div>
+        <div class="panel-body accordion-body" hidden>
+          <label class="small-label">MISS DESTINO</label>
+          <select id="miseDestino">
+            <option value="">SELECCIONA UNA MISS</option>
+            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
+            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
+            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
+            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
+          </select>
+          <label class="small-label">MONTO LDS</label>
+          <input id="montoTransferencia" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 10000.00">
+          <label class="small-label">CONCEPTO</label>
+          <select id="conceptoTransferencia"><option>TRANSFERENCIA DE FONDO A CAJA MISS</option></select>
+          <label class="small-label">OBSERVACIÓN</label>
+          <textarea id="obsTransferencia" rows="2" placeholder="DETALLE..."></textarea>
+          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="transferirAMise()">TRANSFERIR</button>
+          <div id="mensajeTransferencia" class="message"></div>
+        </div>
+      </div>
+
+      <div class="panel accordion-panel">
+        <div class="panel-head accordion-head" role="button" tabindex="0" onclick="toggleAndrewPanel(this)">
+          <h3>↩️ RECIBIR DEVOLUCIÓN DE UNA MISS</h3><span>⌄</span>
+        </div>
+        <div class="panel-body accordion-body" hidden>
+          <label class="small-label">MISS QUE DEVUELVE</label>
+          <select id="miseOrigen">
+            <option value="">SELECCIONA</option>
+            <option value="CAJA-LILY">MISS LILY</option>
+            <option value="CAJA-KIARA">MISS KIARA</option>
+            <option value="CAJA-ANGHY">MISS ANGHY</option>
+            <option value="CAJA-KARIN">MISS KARIN</option>
+          </select>
+          <label class="small-label">MONTO LDS</label>
+          <input id="montoDevolucion" type="number" min="0.01" step="0.01">
+          <label class="small-label">CONCEPTO</label>
+          <select id="conceptoDevolucion"><option>DEVOLUCIÓN DE FONDO A CAJA GENERAL</option></select>
+          <label class="small-label">OBSERVACIÓN</label>
+          <textarea id="obsDevolucion" rows="2"></textarea>
+          <button class="btn btn-outline" style="width:100%;margin-top:12px;" onclick="recibirDevolucion()">REGISTRAR</button>
+          <div id="mensajeDevolucion" class="message"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="loginAndrew">
+  <div class="panel">
+    <div class="panel-head"><h3>🔐 ACCESO DE MISTER ANDREW</h3></div>
+    <div class="panel-body">
+      <p>INGRESE LA CLAVE DE ACCESO PARA ABRIR LA CAJA GENERAL.</p>
+      <label class="small-label">CLAVE</label>
+      <input id="claveAndrew" type="password" placeholder="CLAVE" autocomplete="off">
+      <button type="button" class="btn btn-gold login-action" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
+      <button type="button" class="btn btn-outline login-home" onclick="window.location.href='index.html'">← VOLVER AL INICIO</button>
+      <div id="errorLogin" class="message"></div>
+    </div>
+  </div>
+</div>
+
+<footer id="appFooter" style="text-align:center;padding:20px;font-weight:900;color:#fff;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</footer>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
+const CLAVE_ANDREW = "360LDS@@@";
+const CODIGO_ANDREW = "CAJA-ANDREW";
+const NOMBRE_ANDREW = "MISTER ANDREW";
+const MISES = {"CAJA-LILY":"MISS LILY","CAJA-KIARA":"MISS KIARA","CAJA-ANGHY":"MISS ANGHY","CAJA-KARIN":"MISS KARIN"};
+
+function formato(n){ return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function escapar(v){ return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function mostrarMensaje(id,texto,tipo="ok"){ const el=document.getElementById(id); if(el){el.textContent=texto; el.className="message "+tipo;} }
+
+function llamarAPI(params,callback){
+  const cb="ldsAndrew_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  window[cb]=function(data){ try{ callback(data); } finally { delete window[cb]; document.getElementById("jsonp_"+cb)?.remove(); } };
+  const q=new URLSearchParams({...params,callback:cb});
+  const s=document.createElement("script"); s.id="jsonp_"+cb; s.src=APP_SCRIPT_URL+"?"+q.toString();
+  s.onerror=function(){ callback({ok:false,mensaje:"ERROR DE CONEXIÓN."}); delete window[cb]; s.remove(); };
+  document.body.appendChild(s);
+}
+
+function entrarAndrew(){
+  const clave=document.getElementById("claveAndrew").value.trim();
+  if(clave!==CLAVE_ANDREW){ mostrarMensaje("errorLogin","CLAVE INCORRECTA.","error"); return; }
+  sessionStorage.setItem("andrew360","1");
+  document.body.classList.remove("login-screen");
+  document.getElementById("loginAndrew").style.display="none";
+  document.getElementById("appHeader").style.display="flex";
+  document.getElementById("andrewApp").style.display="block";
+  document.getElementById("appFooter").style.display="block";
+  cargarTodo();
+}
+
+function calcularSaldoCuentaAndrew(movimientos, codigoCuenta){
+  const codigo=String(codigoCuenta||'').trim().toUpperCase();
+  let saldo=0;
+  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
+    if(String(m?.estado||'ACTIVO').trim().toUpperCase()==='ANULADO') return;
+    if(String(m?.codigo||'').trim().toUpperCase()!==codigo) return;
+    const tipo=String(m?.tipo||'').toUpperCase();
+    const monto=parseFloat(m?.monto)||0;
+    if(tipo==='INGRESO') saldo+=monto;
+    else if(tipo==='EGRESO') saldo-=monto;
+  });
+  return Math.max(0,Math.round((saldo+Number.EPSILON)*100)/100);
+}
+
+function cargarTodo(){
+  const anio=document.getElementById("anio").value;
+  document.getElementById("metaAnio").textContent=anio;
+  mostrarMensaje("mensaje","ACTUALIZANDO...","ok");
+
+  llamarAPI({accion:"cuentas",anio},function(r){
+    if(!r || !r.ok) return;
+    const andrew=(r.cuentas||[]).find(c=>String(c.codigo||"").trim().toUpperCase()===CODIGO_ANDREW);
+    const saldo=andrew ? Number(andrew.saldoActual)||200000 : 200000;
+    document.getElementById("saldoCuenta").textContent=formato(saldo);
+    
+    const mises=(r.cuentas||[]).filter(c=>Object.prototype.hasOwnProperty.call(MISES,String(c.codigo||"").toUpperCase()));
+    document.getElementById("cuentasMises").innerHTML=mises.map(c=>`
+      <div style="border:1.5px solid #e5a000;border-radius:10px;padding:10px;background:#fff;">
+        <strong style="font-size:.75rem;color:#0b2f67;">${escapar(c.nombre)}</strong>
+        <div style="font-size:1rem;color:#008f68;font-weight:900;margin-top:4px;">${formato(c.saldoActual)}</div>
+      </div>`).join("");
+    mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
+  });
+
+  llamarAPI({accion:"movimientos",anio},function(r){
+    if(!r || !r.ok) return;
+    const todos=(r.movimientos||[]);
+    const mov=todos.filter(m=>String(m.codigo||"").trim().toUpperCase()===CODIGO_ANDREW);
+    document.getElementById("contadorMovimientos").textContent=mov.length;
+    
+    const tbody=document.getElementById("tablaAndrew");
+    if(!mov.length){ tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS.</td></tr>'; return; }
+    tbody.innerHTML=mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(m.tipo)}</td><td>${escapar(m.concepto)}</td><td>${formato(m.monto)}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("");
+  });
+}
+
+function mostrarTodos(){
+  document.getElementById("panelTodo").style.display="block";
+  llamarAPI({accion:"movimientos",anio:document.getElementById("anio").value},function(r){
+    if(!r || !r.ok) return;
+    const mov=r.movimientos||[];
+    document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(m.tipo)}</td><td>${escapar(m.concepto)}</td><td>${formato(m.monto)}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10">SIN MOVIMIENTOS.</td></tr>';
+  });
+}
+function cerrarTodo(){ document.getElementById("panelTodo").style.display="none"; }
+function abrirReportes(){ document.getElementById("reportesModal").classList.add("open"); }
+function cerrarReportes(){ document.getElementById("reportesModal").classList.remove("open"); }
+function toggleAndrewPanel(head){
+  const body=head.nextElementSibling;
+  body.hidden=!body.hidden;
+  head.closest(".accordion-panel").classList.toggle("is-open", !body.hidden);
+}
+function transferirAMise(){
+  const codigo=document.getElementById("miseDestino").value;
+  const monto=parseFloat(document.getElementById("montoTransferencia").value)||0;
+  if(!codigo || monto<=0){ mostrarMensaje("mensajeTransferencia","DATOS INVÁLIDOS.","error"); return; }
+  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
+    if(r&&r.ok){ mostrarMensaje("mensajeTransferencia","TRANSFERENCIA EXITOSA.","ok"); cargarTodo(); }
+    else { mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error"); }
+  });
+}
+function recibirDevolucion(){
+  const codigo=document.getElementById("miseOrigen").value;
+  const monto=parseFloat(document.getElementById("montoDevolucion").value)||0;
+  if(!codigo || monto<=0){ mostrarMensaje("mensajeDevolucion","DATOS INVÁLIDOS.","error"); return; }
+  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
+    if(r&&r.ok){ mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN EXITOSA.","ok"); cargarTodo(); }
+    else { mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error"); }
+  });
+}
+</script>
+</body>
+</html>
