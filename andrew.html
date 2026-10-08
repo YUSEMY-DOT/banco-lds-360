@@ -927,12 +927,390 @@ function fotoReporteURL(valor){
   if(m) return "https://drive.google.com/thumbnail?id="+m[1]+"&sz=w220";
   return urlAbsolutaAndrew(s);
 }
+
 function escribirVentanaReporte(w,html,orientation){
   if(!w) return;
+
+  const orient = orientation === "portrait" ? "portrait" : "landscape";
+
+  const css = `
+    @page{size:A4 ${orient};margin:8mm;}
+
+    *{box-sizing:border-box;}
+    html,body{
+      margin:0!important;
+      padding:0!important;
+      width:100%!important;
+      min-height:100%!important;
+      background:#fff!important;
+      color:#14213d!important;
+      font-family:Arial,Helvetica,sans-serif!important;
+    }
+    body{
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .report-window{
+      width:100%;
+      min-height:100vh;
+      margin:0;
+      padding:8px;
+      background:#fff!important;
+      color:#14213d!important;
+    }
+    .report-sheet{
+      width:100%;
+      max-width:none;
+      margin:0 auto;
+      background:#fff!important;
+    }
+
+    .report-school-head{
+      display:grid;
+      grid-template-columns:64px minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      border-bottom:3px solid #e5a000;
+      padding:0 0 8px;
+      margin:0 0 10px;
+    }
+    .report-logo{
+      width:58px;
+      height:58px;
+      object-fit:contain;
+      border-radius:12px;
+      background:#fff;
+      border:2px solid #e5a000;
+      padding:3px;
+      display:block;
+    }
+    .report-school-name{
+      margin:0;
+      color:#0b2f67;
+      font-size:18px;
+      line-height:1.15;
+      font-weight:900;
+    }
+    .report-school-sub{
+      margin:3px 0 0;
+      color:#64748b;
+      font-size:10px;
+      line-height:1.2;
+      font-weight:800;
+    }
+    .report-meta{
+      text-align:right;
+      min-width:150px;
+    }
+    .report-meta strong{
+      display:block;
+      color:#0b2f67;
+      font-size:12px;
+      line-height:1.2;
+      font-weight:900;
+    }
+    .report-meta span{
+      display:block;
+      color:#64748b;
+      font-size:9px;
+      line-height:1.2;
+      margin-top:3px;
+      font-weight:800;
+    }
+
+    .report-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      margin:4px 0 9px;
+    }
+    .report-title h1{
+      margin:0;
+      color:#0b2f67;
+      font-size:17px;
+      line-height:1.15;
+      font-weight:900;
+    }
+    .report-title p{
+      margin:3px 0 0;
+      color:#64748b;
+      font-size:9px;
+      line-height:1.2;
+      font-weight:800;
+    }
+    .report-badge{
+      padding:6px 9px;
+      border-radius:9px;
+      background:#eef8f3;
+      color:#008f68;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .report-person{
+      display:grid;
+      grid-template-columns:78px minmax(0,1fr);
+      gap:12px;
+      align-items:center;
+      border:1px solid #dbe3ec;
+      border-radius:10px;
+      background:#f8fafc;
+      padding:8px;
+      margin-bottom:9px;
+      break-inside:avoid;
+    }
+    .report-person-photo{
+      width:70px;
+      height:70px;
+      object-fit:cover;
+      border-radius:50%;
+      border:2px solid #e5a000;
+      background:#fff;
+      display:block;
+    }
+    .report-person-name{
+      margin:0;
+      color:#0b2f67;
+      font-size:15px;
+      line-height:1.15;
+      font-weight:900;
+    }
+    .report-person-detail{
+      margin-top:4px;
+      color:#64748b;
+      font-size:9px;
+      line-height:1.2;
+      font-weight:800;
+    }
+
+    .report-summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      margin:7px 0 10px;
+      break-inside:avoid;
+    }
+    .report-summary-card{
+      border:1px solid #dbe3ec;
+      border-radius:8px;
+      padding:7px 9px;
+      background:#f8fafc;
+    }
+    .report-summary-card span{
+      display:block;
+      color:#64748b;
+      font-size:8px;
+      line-height:1.1;
+      font-weight:900;
+    }
+    .report-summary-card strong{
+      display:block;
+      margin-top:3px;
+      color:#0b2f67;
+      font-size:12px;
+      line-height:1.15;
+      font-weight:900;
+    }
+
+    .report-cashier-title{
+      margin:7px 0 6px;
+      color:#0b2f67;
+      font-size:11px;
+      font-weight:900;
+      break-after:avoid;
+    }
+    .report-cashier-grid{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:6px;
+      margin:0 0 10px;
+      break-inside:avoid;
+    }
+    .report-cashier-card{
+      border:1px solid #dbe3ec;
+      border-radius:8px;
+      background:#f8fafc;
+      padding:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      min-width:0;
+    }
+    .report-cashier-photo{
+      width:34px;
+      height:34px;
+      flex:0 0 34px;
+      object-fit:cover;
+      object-position:center;
+      border-radius:50%;
+      border:2px solid #e5a000;
+      background:#fff;
+      display:block;
+    }
+    .report-cashier-name{
+      color:#14213d;
+      font-size:8px;
+      line-height:1.15;
+      font-weight:900;
+      overflow-wrap:anywhere;
+    }
+    .report-cashier-meta{
+      margin-top:2px;
+      color:#64748b;
+      font-size:7px;
+      line-height:1.15;
+      font-weight:800;
+    }
+    .report-cashier-balance{
+      margin-top:2px;
+      color:#008f68;
+      font-size:8px;
+      line-height:1.15;
+      font-weight:900;
+    }
+
+    .report-section-title{
+      margin:8px 0 5px;
+      color:#0b2f67;
+      font-size:11px;
+      line-height:1.15;
+      font-weight:900;
+      break-after:avoid;
+    }
+
+    .report-table-wrap{
+      width:100%;
+      overflow:visible;
+      margin-bottom:8px;
+    }
+    .report-table{
+      width:100%;
+      border-collapse:collapse;
+      table-layout:auto;
+      font-size:7.6px;
+      color:#14213d;
+    }
+    .report-table th,
+    .report-table td{
+      border:1px solid #cbd5e1;
+      padding:3px 4px;
+      text-align:left;
+      vertical-align:middle;
+      line-height:1.15;
+    }
+    .report-table th{
+      background:#eef2f7;
+      color:#0b2f67;
+      font-weight:900;
+    }
+    .report-table td.amount{
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .report-student-photo{
+      width:31px;
+      height:31px;
+      border-radius:50%;
+      object-fit:cover;
+      object-position:center;
+      border:2px solid #e5a000;
+      background:#fff;
+      display:block;
+    }
+    .report-empty-photo{
+      width:31px;
+      height:31px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#eef2f7;
+      color:#94a3b8;
+      border:1px solid #cbd5e1;
+      font-size:12px;
+      font-weight:900;
+    }
+    .report-footer{
+      border-top:2px solid #e5a000;
+      margin-top:10px;
+      padding-top:6px;
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      color:#64748b;
+      font-size:7.5px;
+      line-height:1.2;
+      font-weight:800;
+      break-inside:avoid;
+    }
+    .report-loading{
+      padding:30px;
+      text-align:center;
+      color:#64748b;
+      font-weight:900;
+      border:1px solid #dbe3ec;
+      border-radius:10px;
+    }
+
+    @media screen and (max-width:900px){
+      .report-window{padding:8px;}
+      .report-school-head{grid-template-columns:52px minmax(0,1fr);}
+      .report-logo{width:48px;height:48px;}
+      .report-meta{grid-column:1/-1;text-align:left;min-width:0;}
+      .report-school-name{font-size:15px;}
+      .report-school-sub{font-size:9px;}
+      .report-title{display:block;}
+      .report-badge{display:inline-block;margin-top:6px;}
+      .report-cashier-grid{grid-template-columns:1fr 1fr;}
+      .report-summary{grid-template-columns:1fr;}
+    }
+
+    @media print{
+      html,body{
+        background:#fff!important;
+        color:#14213d!important;
+      }
+      .report-window{
+        padding:0!important;
+        min-height:0!important;
+      }
+      .report-school-head,
+      .report-person,
+      .report-summary,
+      .report-cashier-grid,
+      .report-footer,
+      tr{
+        break-inside:avoid;
+      }
+      thead{
+        display:table-header-group;
+      }
+      img{
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+    }
+  `;
+
   w.document.open();
-  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BANCO LDS 360 — REPORTE</title><style>@page{size:A4 ${orientation};margin:8mm;}html,body{margin:0;padding:0;background:#fff;color:#14213d;font-family:Arial,Helvetica,sans-serif;}</style></head><body class="report-window"><main class="report-sheet">${html}</main></body></html>`);
+  w.document.write(
+    `<!doctype html>
+     <html lang="es">
+     <head>
+       <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width,initial-scale=1">
+       <title>BANCO LDS 360 — REPORTE</title>
+       <style>${css}</style>
+     </head>
+     <body class="report-window">
+       <main class="report-sheet">${html}</main>
+     </body>
+     </html>`
+  );
   w.document.close();
 }
+
 function abrirReporteAndrew(titulo,subtitulo,contenido,orientation){
   const w=window.open("","_blank","width=1200,height=850");
   if(!w){mostrarMensaje("mensaje","EL NAVEGADOR BLOQUEÓ EL REPORTE. PERMITE LAS VENTANAS EMERGENTES PARA ESTE SITIO.","error");return null;}
@@ -943,6 +1321,14 @@ function abrirReporteAndrew(titulo,subtitulo,contenido,orientation){
 }
 function consultarAlumnoParaReporte(codigo,anio){
   return new Promise(resolve=>llamarAPI({accion:"estudiante",codigo,anio},r=>resolve(r&&r.ok?r:null)));
+}
+
+function consultarCuentasParaReporte(anio){
+  return new Promise(resolve=>{
+    llamarAPI({accion:"cuentas",anio},r=>{
+      resolve(r&&r.ok&&Array.isArray(r.cuentas)?r.cuentas:[]);
+    });
+  });
 }
 async function esperarImagenesReporte(w){
   if(!w||!w.document) return;
@@ -963,22 +1349,231 @@ async function imprimirReporteIndividual(){
   if(!w)return;
   await esperarImagenesReporte(w); w.focus(); setTimeout(()=>w.print(),350);
 }
+
 async function imprimirReporteColectivo(){
   cerrarReportes();
   const anio=document.getElementById("anio").value;
   const movimientos=Array.isArray(movimientosBancoAndrewActuales)?movimientosBancoAndrewActuales:[];
-  const w=abrirReporteAndrew("REPORTE COLECTIVO",`MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,`<div class="report-loading">PREPARANDO DATOS Y FOTOGRAFÍAS DE LOS ALUMNOS...</div>`,"landscape");
-  if(!w)return;
-  const codigos=[...new Set(movimientos.map(m=>String(m?.codigo||"").trim().toUpperCase()).filter(c=>c.startsWith("LDS-EST-")))];
-  const respuestas=await Promise.all(codigos.map(c=>consultarAlumnoParaReporte(c,anio)));
-  const datos={};respuestas.forEach((r,i)=>{if(r)datos[codigos[i]]=r.estudiante||{};});
-  const alumnos=codigos.map(codigo=>({codigo,est:datos[codigo]||{}}));
-  const alumnosRows=alumnos.map((a,i)=>{const est=a.est;const nombre=est.nombreCompleto||est.nombre||a.codigo;const grado=est.grado||"";const foto=fotoReporteURL(est.fotoUrl||est.foto||"");const saldo=calcularSaldoCuentaAndrew(movimientos,a.codigo);return `<tr><td>${i+1}</td><td>${foto?`<img class="report-student-photo" src="${escapar(foto)}" alt="${escapar(nombre)}">`:"—"}</td><td>${escapar(a.codigo)}</td><td>${escapar(nombre)}</td><td>${escapar(grado)}</td><td class="amount">${formato(saldo)}</td></tr>`;}).join("")||'<tr><td colspan="6">NO HAY ALUMNOS EN LOS MOVIMIENTOS DEL AÑO SELECCIONADO.</td></tr>';
-  const rows=movimientos.length?movimientos.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td class="amount">${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join(""):'<tr><td colspan="10">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>';
-  const contenido=`<div class="report-title"><div><h1>REPORTE COLECTIVO — BANCO LDS 360</h1><p>ALUMNOS, SALDOS Y MOVIMIENTOS DEL AÑO SELECCIONADO</p></div><div class="report-badge">AÑO ${escapar(anio)}</div></div><div class="report-summary"><div class="report-summary-card"><span>ALUMNOS</span><strong>${alumnos.length}</strong></div><div class="report-summary-card"><span>MOVIMIENTOS</span><strong>${movimientos.length}</strong></div><div class="report-summary-card"><span>CAJA GENERAL</span><strong>MISTER ANDREW</strong></div></div><div class="report-table-wrap"><table class="report-table"><thead><tr><th>#</th><th>FOTO</th><th>CÓDIGO</th><th>ALUMNO</th><th>GRADO</th><th>SALDO</th></tr></thead><tbody>${alumnosRows}</tbody></table></div><h3 style="margin:18px 0 8px;color:#0b2f67;font-size:14px;">MOVIMIENTOS DEL BANCO</h3><div class="report-table-wrap"><table class="report-table"><thead><tr><th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table></div><div class="report-footer"><span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span><span>REPORTE COLECTIVO OFICIAL</span></div>`;
-  w.document.querySelector(".report-sheet").innerHTML=w.document.querySelector(".report-sheet").innerHTML.replace(/<div class="report-loading">.*?<\/div>/,"")+contenido;
-  await esperarImagenesReporte(w);w.focus();setTimeout(()=>w.print(),350);
+
+  const w=abrirReporteAndrew(
+    "REPORTE COLECTIVO",
+    `MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,
+    `<div class="report-loading">PREPARANDO REPORTE COLECTIVO, ALUMNOS, MISES Y FOTOGRAFÍAS...</div>`,
+    "landscape"
+  );
+  if(!w) return;
+
+  /* PERSONAL DE CAJA: Andrew + las 4 Mises */
+  const fotosMisesReporte={
+    "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+    "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+    "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+    "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
+  };
+
+  const saldoMises=mapaSaldosMisesAndrew(movimientos);
+
+  const personalCaja=[
+    {
+      codigo:CODIGO_ANDREW,
+      nombre:NOMBRE_ANDREW,
+      foto:urlAbsolutaAndrew("assets/ANDREW.png?v=20261003-2"),
+      saldo:saldoAndrewActual
+    },
+    ...Object.keys(MISES).map(codigo=>({
+      codigo,
+      nombre:MISES[codigo],
+      foto:fotosMisesReporte[codigo]||"",
+      saldo:Number(saldoMises[codigo])||0
+    }))
+  ];
+
+  const personalHtml=personalCaja.map(p=>`
+    <div class="report-cashier-card">
+      ${p.foto
+        ? `<img class="report-cashier-photo" src="${escapar(p.foto)}" alt="${escapar(p.nombre)}" referrerpolicy="no-referrer">`
+        : `<div class="report-empty-photo">👤</div>`}
+      <div style="min-width:0;">
+        <div class="report-cashier-name">${escapar(p.nombre)}</div>
+        <div class="report-cashier-meta">${escapar(p.codigo)}</div>
+        <div class="report-cashier-balance">SALDO ${formato(p.saldo)}</div>
+      </div>
+    </div>
+  `).join("");
+
+  /* LISTA COMPLETA DE ALUMNOS:
+     primero usamos la fuente de CUENTAS, que trae ESTUDIANTES,
+     y usamos movimientos solo como respaldo. */
+  let cuentas=await consultarCuentasParaReporte(anio);
+  let alumnos=(Array.isArray(cuentas)?cuentas:[])
+    .filter(c=>String(c?.codigo||"").trim().toUpperCase().startsWith("LDS-EST-"))
+    .sort((a,b)=>String(a.codigo||"").localeCompare(String(b.codigo||""),undefined,{numeric:true}));
+
+  /* Respaldo si el backend de cuentas no devuelve estudiantes. */
+  if(!alumnos.length){
+    const codigosRespaldo=[...new Set(
+      movimientos
+        .map(m=>String(m?.codigo||"").trim().toUpperCase())
+        .filter(c=>c.startsWith("LDS-EST-"))
+    )];
+    alumnos=codigosRespaldo.map(codigo=>({codigo}));
+  }
+
+  /* Complementar cada alumno con su ficha y fotografía. */
+  const detalleAlumnos=[];
+  const bloque=5;
+  for(let i=0;i<alumnos.length;i+=bloque){
+    const lote=alumnos.slice(i,i+bloque);
+    const respuestas=await Promise.all(
+      lote.map(a=>consultarAlumnoParaReporte(String(a.codigo||"").trim().toUpperCase(),anio))
+    );
+
+    respuestas.forEach((r,j)=>{
+      const base=lote[j]||{};
+      const est=(r&&r.estudiante)||{};
+      const codigo=String(base.codigo||est.codigo||"").trim().toUpperCase();
+      if(!codigo) return;
+
+      const nombre=est.nombreCompleto||est.nombre||base.nombre||codigo;
+      const grado=est.grado||base.grado||"";
+      const seccion=est.seccion||base.seccion||"";
+      const foto=fotoReporteURL(est.fotoUrl||est.foto||base.fotoUrl||base.foto||"");
+      const saldo=Number(
+        base.saldoActual ??
+        (r&&r.cuenta&&r.cuenta.saldoActual) ??
+        (r&&r.estudiante&&r.estudiante.saldoActual) ??
+        calcularSaldoCuentaAndrew(movimientos,codigo)
+      )||0;
+
+      detalleAlumnos.push({codigo,nombre,grado,seccion,foto,saldo});
+    });
+  }
+
+  /* Evitar duplicados y conservar orden por código. */
+  const alumnosUnicos=[];
+  const vistos=new Set();
+  detalleAlumnos.sort((a,b)=>a.codigo.localeCompare(b.codigo,undefined,{numeric:true}));
+  detalleAlumnos.forEach(a=>{
+    if(vistos.has(a.codigo)) return;
+    vistos.add(a.codigo);
+    alumnosUnicos.push(a);
+  });
+
+  const alumnosRows=alumnosUnicos.map((a,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>
+        ${a.foto
+          ? `<img class="report-student-photo" src="${escapar(a.foto)}" alt="${escapar(a.nombre)}" referrerpolicy="no-referrer">`
+          : `<div class="report-empty-photo">👤</div>`}
+      </td>
+      <td>${escapar(a.codigo)}</td>
+      <td>${escapar(a.nombre)}</td>
+      <td>${escapar(a.grado)}</td>
+      <td>${escapar(a.seccion)}</td>
+      <td class="amount">${formato(a.saldo)}</td>
+    </tr>
+  `).join("") || `
+    <tr>
+      <td colspan="7">NO HAY ALUMNOS DISPONIBLES PARA EL AÑO SELECCIONADO.</td>
+    </tr>
+  `;
+
+  const rows=movimientos.length
+    ? movimientos.map(m=>`
+      <tr>
+        <td>${escapar(m.anio)}</td>
+        <td>${escapar(m.fechaTexto)}</td>
+        <td>${escapar(m.codigo)}</td>
+        <td>${escapar(m.estudiante)}</td>
+        <td>${escapar(m.grado)}</td>
+        <td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td>
+        <td>${escapar(m.concepto)}</td>
+        <td class="amount">${formato(montoVisibleAndrew(m))}</td>
+        <td>${escapar(m.responsable)}</td>
+        <td>${escapar(m.observacion)}</td>
+      </tr>
+    `).join("")
+    : `<tr><td colspan="10">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>`;
+
+  const contenido=`
+    <div class="report-title">
+      <div>
+        <h1>REPORTE COLECTIVO — BANCO LDS 360</h1>
+        <p>ALUMNOS, SALDOS, MISES Y MOVIMIENTOS DEL AÑO SELECCIONADO</p>
+      </div>
+      <div class="report-badge">AÑO ${escapar(anio)}</div>
+    </div>
+
+    <div class="report-summary">
+      <div class="report-summary-card">
+        <span>ALUMNOS</span>
+        <strong>${alumnosUnicos.length}</strong>
+      </div>
+      <div class="report-summary-card">
+        <span>MOVIMIENTOS</span>
+        <strong>${movimientos.length}</strong>
+      </div>
+      <div class="report-summary-card">
+        <span>CAJA GENERAL</span>
+        <strong>SALDO ${formato(saldoAndrewActual)}</strong>
+      </div>
+    </div>
+
+    <div class="report-cashier-title">👥 PERSONAL DE CAJA — ANDREW Y MISES</div>
+    <div class="report-cashier-grid">${personalHtml}</div>
+
+    <div class="report-section-title">🎓 ALUMNOS Y SALDOS</div>
+    <div class="report-table-wrap">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>FOTO</th>
+            <th>CÓDIGO</th>
+            <th>ALUMNO</th>
+            <th>GRADO</th>
+            <th>SECCIÓN</th>
+            <th>SALDO</th>
+          </tr>
+        </thead>
+        <tbody>${alumnosRows}</tbody>
+      </table>
+    </div>
+
+    <div class="report-section-title">📋 MOVIMIENTOS DEL BANCO</div>
+    <div class="report-table-wrap">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>AÑO</th>
+            <th>FECHA</th>
+            <th>CÓDIGO</th>
+            <th>CUENTA / ESTUDIANTE</th>
+            <th>GRADO</th>
+            <th>TIPO</th>
+            <th>CONCEPTO</th>
+            <th>MONTO LDS</th>
+            <th>CAJERO(A)</th>
+            <th>OBSERVACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+
+    <div class="report-footer">
+      <span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span>
+      <span>REPORTE COLECTIVO OFICIAL · ${escapar(anio)}</span>
+    </div>
+  `;
+
+  w.document.querySelector(".report-sheet").innerHTML=contenido;
+  await esperarImagenesReporte(w);
+  w.focus();
+  setTimeout(()=>w.print(),350);
 }
+
 
 function toggleAndrewPanel(head){
   const panel=head.closest(".accordion-panel");
