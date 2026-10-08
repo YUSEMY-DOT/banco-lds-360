@@ -403,14 +403,106 @@ function llamarAPI(params,callback){
   document.body.appendChild(s);
 }
 
+/* ==========================================================
+   AUDIO DE BIENVENIDA, VOZ Y SONIDOS DE OPERACIÓN
+   Se agrega sin modificar la estructura visual del panel.
+   ========================================================== */
+let audioAndrew=null;
+
+function activarAudioAndrew(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return null;
+    if(!audioAndrew) audioAndrew=new AC();
+    if(audioAndrew.state==="suspended") audioAndrew.resume();
+    return audioAndrew;
+  }catch(e){
+    return null;
+  }
+}
+
+function sonidoAndrew(tipo="ok"){
+  const ac=activarAudioAndrew();
+  if(!ac) return;
+  const ahora=ac.currentTime;
+  const notas=tipo==="error"?[220,165]
+    :tipo==="click"?[520]
+    :[523,659,784];
+
+  notas.forEach((f,i)=>{
+    const o=ac.createOscillator();
+    const g=ac.createGain();
+    const inicio=ahora+i*0.09;
+    o.type="sine";
+    o.frequency.value=f;
+    g.gain.setValueAtTime(0,inicio);
+    g.gain.linearRampToValueAtTime(0.055,inicio+0.015);
+    g.gain.exponentialRampToValueAtTime(0.001,inicio+0.18);
+    o.connect(g);
+    g.connect(ac.destination);
+    o.start(inicio);
+    o.stop(inicio+0.2);
+  });
+}
+
+function hablarAndrew(texto){
+  if(!texto || !("speechSynthesis" in window)) return false;
+  try{
+    const ss=window.speechSynthesis;
+    ss.cancel();
+
+    const emitir=()=>{
+      try{
+        const u=new SpeechSynthesisUtterance(String(texto));
+        u.lang="es-PE";
+        u.rate=.92;
+        u.pitch=1;
+        u.volume=1;
+
+        const voces=ss.getVoices ? ss.getVoices() : [];
+        const voz=voces.find(v=>/^es(-|_)/i.test(String(v.lang||"")))
+          || voces.find(v=>/spanish|español/i.test(String(v.name||"")))
+          || voces.find(v=>String(v.lang||"").toLowerCase().includes("es"));
+        if(voz) u.voice=voz;
+        u.onerror=()=>{};
+        ss.speak(u);
+      }catch(e){}
+    };
+
+    if(ss.getVoices && ss.getVoices().length){
+      emitir();
+    }else{
+      ss.onvoiceschanged=()=>{
+        ss.onvoiceschanged=null;
+        emitir();
+      };
+      setTimeout(()=>{
+        if(!ss.speaking) emitir();
+      },120);
+    }
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+function bienvenidaAndrew(){
+  activarAudioAndrew();
+  sonidoAndrew("ok");
+  hablarAndrew("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
+}
+
 function entrarAndrew(){
   const inputClave = document.getElementById("claveAndrew");
   if(!inputClave) return;
   const clave = inputClave.value.trim();
   if(clave !== CLAVE_ANDREW){
     mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error");
+    sonidoAndrew("error");
+    hablarAndrew("La clave es incorrecta. Por favor, inténtalo nuevamente.");
     return;
   }
+  bienvenidaAndrew();
   sessionStorage.setItem("andrew360", "1");
   document.body.classList.remove("login-screen");
   document.getElementById("loginAndrew").style.display = "none";
@@ -708,8 +800,17 @@ function transferirAMise(){
   const monto=parseMontoLDS(document.getElementById("montoTransferencia").value);
   if(!codigo || monto<=0){ mostrarMensaje("mensajeTransferencia","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
-    if(r&&r.ok){ mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok"); cargarTodo(); }
-    else { mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error"); }
+    if(r&&r.ok){
+      mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok");
+      sonidoAndrew("ok");
+      hablarAndrew("Transferencia registrada correctamente.");
+      cargarTodo();
+    }
+    else {
+      mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error");
+      sonidoAndrew("error");
+      hablarAndrew((r&&r.mensaje)||"No se pudo registrar la transferencia.");
+    }
   });
 }
 
@@ -718,25 +819,84 @@ function recibirDevolucion(){
   const monto=parseMontoLDS(document.getElementById("montoDevolucion").value);
   if(!codigo || monto<=0){ mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
-    if(r&&r.ok){ mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok"); cargarTodo(); }
-    else { mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error"); }
+    if(r&&r.ok){
+      mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok");
+      sonidoAndrew("ok");
+      hablarAndrew("Devolución registrada correctamente.");
+      cargarTodo();
+    }
+    else {
+      mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error");
+      sonidoAndrew("error");
+      hablarAndrew((r&&r.mensaje)||"No se pudo registrar la devolución.");
+    }
   });
 }
 
 function consultarCuenta(){
   const codigo=document.getElementById("codigoConsulta").value.trim().toUpperCase();
   const anio=document.getElementById("anio").value;
-  if(!codigo){ mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error"); return; }
+  if(!codigo){
+    mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error");
+    sonidoAndrew("error");
+    hablarAndrew("Ingresa un código de cuenta.");
+    return;
+  }
   mostrarMensaje("resultadoConsulta","CONSULTANDO...","ok");
+  sonidoAndrew("click");
+  hablarAndrew("Consultando la cuenta seleccionada.");
   llamarAPI({accion:"estudiante",codigo,anio},function(r){
-    if(!r||!r.ok){ mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error"); return; }
+    if(!r||!r.ok){
+      mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error");
+      sonidoAndrew("error");
+      hablarAndrew((r&&r.mensaje)||"Cuenta no encontrada.");
+      return;
+    }
     const c=r.cuenta||{};
     const e=r.estudiante||{};
     mostrarMensaje("resultadoConsulta",(e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+Number(c.movimientos||0),"ok");
+    sonidoAndrew("ok");
+    hablarAndrew((e.nombreCompleto||e.nombre||codigo)+". Saldo actual: "+formato(c.saldoActual)+".");
   });
 }
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
+
+/* Efectos de operación para botones y paneles de Andrew. */
+document.addEventListener("click",function(ev){
+  const b=ev.target.closest("#andrewApp button, #andrewApp .accordion-head");
+  if(!b) return;
+
+  sonidoAndrew("click");
+
+  let texto="";
+  if(b.matches(".accordion-head")){
+    const titulo=b.querySelector("h3")?.textContent?.trim() || "";
+    if(/TRANSFERIR FONDO/i.test(titulo)){
+      texto="Transferir fondo a una Miss. Presiona para abrir las opciones de transferencia.";
+    }else if(/DEVOLUCIÓN/i.test(titulo)){
+      texto="Recibir devolución de una Miss. Presiona para abrir las opciones de devolución.";
+    }else if(/CONSULTAR CUENTA/i.test(titulo)){
+      texto="Consultar cuenta. Presiona para abrir la consulta.";
+    }
+  }else if(/ACTUALIZAR/i.test(b.textContent)){
+    texto="Actualizando la Caja General y los saldos del Banco LDS 360.";
+  }else if(/REPORTES/i.test(b.textContent)){
+    texto="Reportes. Selecciona el reporte que deseas imprimir.";
+  }else if(/VER TODO EL BANCO/i.test(b.textContent)){
+    texto="Mostrando todos los movimientos del Banco LDS 360.";
+  }else if(/TRANSFERIR A MISS/i.test(b.textContent)){
+    texto="Procesando la transferencia a la Miss.";
+  }else if(/REGISTRAR DEVOLUCIÓN/i.test(b.textContent)){
+    texto="Procesando la devolución a la Caja General.";
+  }else if(/CONSULTAR/i.test(b.textContent)){
+    texto="Consultando la cuenta seleccionada.";
+  }else if(/CERRAR/i.test(b.textContent)){
+    texto="Cerrando la vista de movimientos generales.";
+  }
+
+  if(texto) hablarAndrew(texto);
+});
 </script>
 </body>
 </html>
