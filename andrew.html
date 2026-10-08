@@ -1,749 +1,949 @@
-```
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANCO LDS 360 — Caja General</title>
-<style>
-:root{--azul:#061b3f;--azul2:#0b2f67;--dorado:#f5b400;--texto:#14213d;--borde:#cbd5e1;--verde:#059669;--rojo:#dc2626}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif}
-body{background:#061b3f;color:var(--texto);overflow-x:hidden}
-button,input,select,textarea{font:inherit}
+/**
+ * BANCO LDS 360 — I.E.P. LA SALLE DEL SUR
+ * CÓDIGO.GS — BACKEND PRINCIPAL
+ *
+ * IMPORTANTE:
+ * Este archivo es SOLO Apps Script.
+ * NO contiene HTML, CSS ni código de andrew.html.
+ */
 
-#loginAndrew{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100vh!important;
-  min-height:100vh!important;
-  margin:0!important;
-  padding:clamp(92px,11vh,125px) clamp(24px,5vw,80px) clamp(20px,3vh,32px)!important;
-  display:flex!important;
-  flex-direction:row!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:clamp(24px,5vw,78px)!important;
-  overflow:hidden!important;
-  z-index:99999!important;
-  background-color:#061b3f!important;
-  background-image:none!important;
-  background-position:center center!important;
-  background-repeat:no-repeat!important;
-  background-size:100% 100%!important;
-}
+var CONFIG = {
+  SPREADSHEET_ID: "1SDY3u6OqtJTv1xe4a_56Y9n2gQji9JYdbKPDJRX65QU",
 
-#loginAndrew::before{content:"";position:absolute;inset:0;background:transparent!important;pointer-events:none!important;z-index:0!important;}
-#loginAndrew .login-bg-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;z-index:0!important;pointer-events:none!important;user-select:none!important;}
-#loginAndrew .andrew-login-photo{position:relative!important;z-index:2!important;width:min(39vw,540px)!important;height:min(76vh,700px)!important;flex:0 1 540px!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:clamp(25px,5vh,55px) 0 0!important;pointer-events:none!important;}
-#loginAndrew .andrew-login-photo img{display:block!important;color:transparent!important;font-size:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;mix-blend-mode:normal!important;border:0!important;outline:0!important;box-shadow:none!important;filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));}
-#loginAndrew > .panel{position:relative!important;z-index:5!important;width:min(430px,39vw)!important;max-width:430px!important;flex:0 1 430px!important;margin:clamp(10px,4vh,40px) 0 0!important;border:2px solid #f5b400!important;border-radius:22px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 22px 55px rgba(0,0,0,.48)!important;pointer-events:auto!important;}
-#loginAndrew .panel-head{padding:20px 24px!important;background:linear-gradient(135deg,#061b3f,#12366f)!important;border-bottom:2px solid #f5b400!important;}
-#loginAndrew .panel-head h3{margin:0!important;color:#fff!important;font-size:clamp(1rem,1.45vw,1.25rem)!important;line-height:1.35!important;font-weight:900!important;}
-#loginAndrew .panel-body{padding:24px!important}
-#loginAndrew .panel-body>p{margin:0 0 18px!important;color:#334155!important;font-size:.92rem!important;line-height:1.5!important;font-weight:800!important;}
-#loginAndrew .small-label{display:block!important;margin:0 0 7px!important;color:#0b2f67!important;font-size:.76rem!important;font-weight:900!important;}
-#loginAndrew #claveAndrew{width:100%!important;height:56px!important;padding:0 15px!important;border:1.5px solid #b9c7d8!important;border-radius:12px!important;background:#f8fafc!important;color:#14213d!important;font-size:1rem!important;font-weight:700!important;outline:none!important;pointer-events:auto!important;}
-#loginAndrew #claveAndrew:focus{border-color:#e3a900!important;background:#fff!important}
-#loginAndrew .login-action,#loginAndrew .login-home{position:relative!important;z-index:999999!important;pointer-events:auto!important;cursor:pointer!important;display:flex!important;width:100%!important;align-items:center!important;justify-content:center!important;font-weight:900!important;}
-#loginAndrew .login-action{min-height:54px!important;margin-top:15px!important;border:1px solid #fcd34d!important;border-radius:12px!important;background:linear-gradient(135deg,#ffd23f,#f2a900)!important;color:#08214a!important;}
-#loginAndrew .login-home{min-height:48px!important;margin-top:10px!important;background:#fff!important;color:#0b2f67!important;border:1.5px solid #0b2f67!important;border-radius:12px!important;}
-#loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
-#loginAndrew .login-home:hover{background:#f1f5f9!important}
+  HOJA_ESTUDIANTES: "ESTUDIANTES",
+  HOJA_MOVIMIENTOS: "MOVIMIENTOS",
 
-body.login-screen > #appHeader,
-body.login-screen > #andrewApp,
-body.login-screen > #appFooter{display:none!important}
-body.login-screen #loginAndrew{display:flex!important}
-body:not(.login-screen) #loginAndrew{display:none!important;pointer-events:none!important}
+  CODIGO_ANDREW: "CAJA-ANDREW",
+  NOMBRE_ANDREW: "MISTER ANDREW",
+  ROL_ANDREW: "CAJERO GENERAL",
+  TIPO_CUENTA_ANDREW: "CAJA_GENERAL",
 
-header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid var(--dorado)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
-.topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
-.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
-main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
-.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
-select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}
-.message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
+  // Se conserva el fondo inicial actual del proyecto.
+  // Para dejarlo en cero permanentemente, cambiar SOLO este valor a 0.
+  FONDO_INICIAL_ANDREW: 200000,
 
-button, a, input, select, textarea{pointer-events:auto;}
-button{cursor:pointer;}
-#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
+  BONO_MENSUAL_ALUMNO: 1130,
 
-#appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
-#appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
-#appHeader .brand{flex:1 1 auto;min-width:0;min-height:52px;display:flex;align-items:center;gap:10px;}
-#appHeader .brand img{display:block!important;width:54px!important;height:54px!important;object-fit:contain!important;flex:0 0 54px;}
-#appHeader .btn-outline{min-width:125px;min-height:44px;padding:10px 18px;font-size:.9rem;box-shadow:0 5px 14px rgba(0,0,0,.22);}
-#appHeader .brand-title{font-size:clamp(1.05rem,1.8vw,1.45rem);font-weight:900;color:#fff;}
-#appHeader .brand-subtitle{font-size:clamp(.6rem,.8vw,.75rem);color:#ffd23f;font-weight:900;}
-
-#andrewApp{max-width:none!important;width:100%!important;margin:0!important;padding:clamp(12px,1.5vw,24px)!important;min-height:calc(100vh - 72px);}
-#andrewApp .layout{width:min(100%,1680px);margin:0 auto;grid-template-columns:minmax(0,1.72fr) minmax(350px,.72fr);align-items:start;display:grid;gap:clamp(14px,1.5vw,24px);}
-#andrewApp .main-dashboard-panel{min-width:0;}
-#andrewApp .main-panel-head{padding:14px 18px;min-height:66px;align-items:center;background:#f8fafc;}
-#andrewApp .main-title-wrap{display:flex;align-items:baseline;gap:12px;min-width:0;}
-#andrewApp .main-panel-head h3{font-size:clamp(.95rem,1.15vw,1.15rem);color:#0b2f67;margin:0;font-weight:900;}
-#andrewApp .year-caption{font-size:.7rem;color:#64748b;font-weight:900;white-space:nowrap;}
-#andrewApp .header-actions-group{display:flex;gap:8px;align-items:center;min-width:250px;}
-#andrewApp .header-actions-group select{width:150px;min-height:40px;}
-#andrewApp .header-actions-group .btn{min-height:40px;}
-#andrewApp .dashboard-body{padding:clamp(12px,1.5vw,22px);}
-#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(240px,1.5fr) minmax(150px,.7fr) minmax(150px,.7fr);gap:12px;align-items:stretch;margin-bottom:14px;}
-#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:12px!important;}
-#andrewApp .andrew-mini-photo{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;border:2px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.18);}
-#andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
-#andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:1rem;font-weight:900;}
-#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.68rem;font-weight:900;margin-top:4px;}
-#andrewApp .resumen-metrica{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
-#andrewApp .resumen-metrica span{font-size:.62rem;color:#64748b;font-weight:900;letter-spacing:.03em;}
-#andrewApp .resumen-metrica strong{font-size:clamp(1rem,1.5vw,1.35rem);color:#0b2f67;margin-top:3px;}
-#andrewApp .resumen-metrica:first-of-type{background:linear-gradient(135deg,#fffdf0,#fff)!important;border:2px solid #f5b400!important;}
-#andrewApp .resumen-metrica:first-of-type strong{font-size:clamp(1.2rem,2vw,1.75rem)!important;color:#008f68!important;}
-#andrewApp .inner-panel{margin-top:14px;border:2px solid #e5a000;border-radius:14px;background:#fff;box-shadow:none;}
-#andrewApp .inner-panel .panel-head{padding:11px 14px;}
-#andrewApp .inner-panel .panel-body{padding:13px;}
-#andrewApp .mises-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-#andrewApp .mises-grid>div{border:1.5px solid #e5a000!important;border-radius:12px!important;padding:13px!important;background:#f8fafc!important;min-width:0;}
-#andrewApp .mise-card-top{display:flex;align-items:center;gap:9px;min-width:0;}
-#andrewApp .mise-card-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;flex:0 0 44px;}
-#andrewApp .mise-card-name{font-weight:900;color:#14213d;font-size:.78rem;line-height:1.18;}
-#andrewApp .mise-card-code{font-size:.72rem;color:#64748b;font-weight:800;margin-top:2px;}
-#andrewApp .movement-head{flex-wrap:wrap;min-height:52px;}
-#andrewApp .movement-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
-#andrewApp .btn-report{background:linear-gradient(135deg,#0b2f67,#16488f);color:#fff;border:1px solid #0b2f67;}
-#andrewApp .table-wrap{background:#fff!important;border-radius:0 0 12px 12px;overflow:auto;}
-#andrewApp table{min-width:900px;width:100%;border-collapse:collapse;font-size:.7rem;}
-#andrewApp table thead th{background:#eef3f8!important;color:#0b2f67!important;position:sticky;top:0;z-index:2;padding:7px;border-bottom:1px solid #e2e8f0;text-align:left;}
-#andrewApp table td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left;}
-#andrewApp .right-stack{position:sticky;top:12px;align-self:start;display:flex;flex-direction:column;gap:14px;}
-
-.reportes-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,12,28,.72);z-index:100000;}
-.reportes-modal.open{display:flex;}
-.reportes-card{width:min(620px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.42);overflow:hidden;}
-.reportes-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;padding:18px 20px;background:linear-gradient(135deg,#061b3f,#12366f);color:#fff;}
-.reportes-head h3{margin:0;font-size:1.05rem;}
-.reportes-head p{margin:5px 0 0;color:#dbeafe;font-size:.76rem;font-weight:700;}
-.btn-close-report{width:38px;height:38px;padding:0;background:#fff;color:#0b2f67;border-radius:10px;}
-.reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
-.report-option{min-height:150px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;text-align:left;padding:18px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#14213d;}
-</style>
-</head>
-<body class="login-screen">
-
-<header class="topbar" id="appHeader" style="display:none;">
-  <div class="brand">
-    <img id="logoAndrew" src="assets/insignia.png?v=20261003-2" alt="Insignia La Salle del Sur">
-    <div>
-      <div class="brand-title">BANCO LDS 360</div>
-      <div class="brand-subtitle">I.E.P. LA SALLE DEL SUR</div>
-    </div>
-  </div>
-  <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
-</header>
-
-<main id="andrewApp" style="display:none;">
-  <section class="layout">
-    <div>
-      <div class="panel main-dashboard-panel">
-        <div class="panel-head main-panel-head">
-          <div class="main-title-wrap">
-            <h3>🏦 CAJA ANDREW</h3>
-            <span class="year-caption">BANCO LDS 360 · <span id="metaAnio">2026</span></span>
-          </div>
-          <div class="header-actions-group">
-            <select id="anio" aria-label="Año de consulta">
-              <option value="2026" selected>AÑO 2026</option>
-              <option value="2027">AÑO 2027</option>
-              <option value="2028">AÑO 2028</option>
-              <option value="2029">AÑO 2029</option>
-              <option value="2030">AÑO 2030</option>
-            </select>
-            <button class="btn btn-gold" onclick="cargarTodo()">↻ ACTUALIZAR</button>
-          </div>
-        </div>
-        <div class="panel-body dashboard-body">
-          <div class="caja-resumen">
-            <div class="resumen-cuenta resumen-identidad-andrew">
-              <div class="andrew-mini-photo">
-                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew" onerror="this.style.display='none';">
-              </div>
-              <div class="andrew-identidad-text">
-                <strong>MISTER ANDREW</strong>
-                <span>CAJA-ANDREW · CAJA GENERAL</span>
-              </div>
-            </div>
-            <div class="resumen-metrica">
-              <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 200,000.00</strong>
-            </div>
-            <div class="resumen-metrica">
-              <span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong>
-            </div>
-          </div>
-
-          <div id="mensaje" class="message"></div>
-
-          <div class="panel inner-panel">
-            <div class="panel-head"><h3>👩‍🏫 SALDOS DE LAS MISS</h3></div>
-            <div class="panel-body">
-              <div id="cuentasMises" class="mises-grid"></div>
-            </div>
-          </div>
-
-          <div class="panel inner-panel">
-            <div class="panel-head movement-head">
-              <h3>📋 MOVIMIENTOS DE CAJA</h3>
-              <div class="movement-actions">
-                <button class="btn btn-report" onclick="abrirReportes()">🖨️ REPORTES</button>
-                <button class="btn btn-outline" onclick="mostrarTodos()">🌐 VER TODO EL BANCO</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>AÑO</th><th>FECHA</th><th>CUENTA</th><th>GRADO</th>
-                    <th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaAndrew">
-                  <tr><td colspan="9" class="empty">CARGANDO...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="panel inner-panel" style="display:none;" id="panelTodo">
-            <div class="panel-head movement-head">
-              <h3>🌐 MOVIMIENTOS GENERALES DEL BANCO</h3>
-              <div class="movement-actions">
-                <button class="btn btn-report" onclick="imprimirReporteColectivo()">🖨️ IMPRIMIR REPORTE</button>
-                <button class="btn btn-outline" onclick="cerrarTodo()">✕ CERRAR</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th>
-                    <th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th>
-                  </tr>
-                </thead>
-                <tbody id="tablaTodo">
-                  <tr><td colspan="10" class="empty">CARGANDO...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="right-stack" id="accionesAndrew">
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>💸 TRANSFERIR FONDO A UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">MISS DESTINO</label>
-          <select id="miseDestino">
-            <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
-          </select>
-
-          <label class="small-label">MONTO LDS</label>
-          <input id="montoTransferencia" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 10000.00">
-
-          <label class="small-label">CONCEPTO</label>
-          <select id="conceptoTransferencia">
-            <option>TRANSFERENCIA DE FONDO A CAJA MISS</option>
-            <option>FONDO OPERATIVO</option>
-            <option>FONDO PARA ACTIVIDADES</option>
-            <option>FONDO PARA PAGOS A ALUMNOS</option>
-            <option>OTRA TRANSFERENCIA AUTORIZADA</option>
-          </select>
-
-          <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsTransferencia" rows="3" placeholder="DETALLE DE LA TRANSFERENCIA..."></textarea>
-
-          <button class="btn btn-gold" style="width:100%;margin-top:15px;" onclick="transferirAMise()">
-            💰 TRANSFERIR A MISS
-          </button>
-          <div id="mensajeTransferencia" class="message"></div>
-        </div>
-      </div>
-
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>↩️ RECIBIR DEVOLUCIÓN DE UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">MISS QUE DEVUELVE</label>
-          <select id="miseOrigen">
-            <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
-          </select>
-
-          <label class="small-label">MONTO LDS</label>
-          <input id="montoDevolucion" type="number" min="0.01" step="0.01" placeholder="EJEMPLO: 2000.00">
-
-          <label class="small-label">CONCEPTO</label>
-          <select id="conceptoDevolucion">
-            <option>DEVOLUCIÓN DE FONDO A CAJA GENERAL</option>
-            <option>REINTEGRO DE FONDO</option>
-            <option>DEVOLUCIÓN DE EXCEDENTE</option>
-          </select>
-
-          <label class="small-label">OBSERVACIÓN</label>
-          <textarea id="obsDevolucion" rows="3" placeholder="DETALLE DE LA DEVOLUCIÓN..."></textarea>
-
-          <button class="btn btn-outline" style="width:100%;margin-top:15px;" onclick="recibirDevolucion()">
-            ↩️ REGISTRAR DEVOLUCIÓN
-          </button>
-          <div id="mensajeDevolucion" class="message"></div>
-        </div>
-      </div>
-
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>🔎 CONSULTAR CUENTA</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <label class="small-label">CÓDIGO DE CUENTA / ALUMNO</label>
-          <input id="codigoConsulta" placeholder="LDS-001 / CAJA-LILY">
-          <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">
-            🔍 CONSULTAR
-          </button>
-          <div id="resultadoConsulta" class="message"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<div id="reportesModal" class="reportes-modal" aria-hidden="true">
-  <div class="reportes-card">
-    <div class="reportes-head">
-      <div>
-        <h3>📄 REPORTES LDS 360</h3>
-        <p>Selecciona el reporte que deseas imprimir.</p>
-      </div>
-      <button class="btn btn-close-report" onclick="cerrarReportes()">✕</button>
-    </div>
-    <div class="reportes-options">
-      <button class="report-option" onclick="imprimirReporteIndividual()">
-        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew · año seleccionado</small>
-      </button>
-      <button class="report-option" onclick="imprimirReporteColectivo()">
-        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Todos los movimientos del Banco LDS 360 · año seleccionado</small>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="loginAndrew">
-  <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
-  <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
-  </div>
-  <div class="panel">
-    <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
-    <div class="panel-body">
-      <p style="font-weight:800;color:#334155;margin-bottom:18px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
-      <label class="small-label">CLAVE DE ACCESO</label>
-      <input id="claveAndrew" type="password" placeholder="INGRESE LA CLAVE" autocomplete="off">
-      <button type="button" class="btn btn-gold login-action" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
-      <button type="button" class="btn btn-outline login-home" onclick="window.location.href='index.html'">← DEVOLVER AL INICIO</button>
-      <div id="errorLogin" class="message"></div>
-    </div>
-  </div>
-</div>
-
-<footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;color:#fff;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
-
-<script>
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
-const CLAVE_ANDREW = "360LDS@@@";
-const CODIGO_ANDREW = "CAJA-ANDREW";
-const NOMBRE_ANDREW = "MISTER ANDREW";
-
-const MISES = {
-  "CAJA-LILY": "MISS LILY MELO AZAÑERO",
-  "CAJA-KIARA": "MISS KIARA MORALES ELGUERA",
-  "CAJA-ANGHY": "MISS ANGHY REYES MELO",
-  "CAJA-KARIN": "MISS KARIN MOLERO ROMANI"
+  CUENTAS_MISES_LDS360: {
+    "MISS LILY MELO AZAÑERO": {
+      codigo: "CAJA-LILY",
+      nombre: "MISS LILY MELO AZAÑERO",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS KIARA MORALES ELGUERA": {
+      codigo: "CAJA-KIARA",
+      nombre: "MISS KIARA MORALES ELGUERA",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS ANGHY REYES MELO": {
+      codigo: "CAJA-ANGHY",
+      nombre: "MISS ANGHY REYES MELO",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    },
+    "MISS KARIN MOLERO ROMANI": {
+      codigo: "CAJA-KARIN",
+      nombre: "MISS KARIN MOLERO ROMANI",
+      rol: "DOCENTE TUTORA CAJERA",
+      tipo: "CAJA_MISE"
+    }
+  }
 };
 
-function formato(n){ return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2}); }
-function escapar(v){ return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-function mostrarMensaje(id,texto,tipo="ok"){ const el=document.getElementById(id); if(!el)return; el.textContent=texto; el.className="message "+tipo; }
 
-function llamarAPI(params,callback){
-  const cb="ldsAndrew_"+Date.now()+"_"+Math.floor(Math.random()*10000);
-  window[cb]=function(data){ try{ callback(data); } finally { delete window[cb]; document.getElementById("jsonp_"+cb)?.remove(); } };
-  const q=new URLSearchParams({...params,callback:cb});
-  const s=document.createElement("script"); s.id="jsonp_"+cb; s.src=APP_SCRIPT_URL+"?"+q.toString();
-  s.onerror=function(){ callback({ok:false,mensaje:"NO SE PUDO CONECTAR CON BANCO LDS 360."}); delete window[cb]; s.remove(); };
-  document.body.appendChild(s);
-}
+/* =========================================================
+   ENTRADA WEB
+   ========================================================= */
 
-function entrarAndrew(){
-  const inputClave = document.getElementById("claveAndrew");
-  if(!inputClave) return;
-  const clave = inputClave.value.trim();
-  if(clave !== CLAVE_ANDREW){
-    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error");
-    return;
-  }
-  sessionStorage.setItem("andrew360", "1");
-  document.body.classList.remove("login-screen");
-  document.getElementById("loginAndrew").style.display = "none";
-  document.getElementById("appHeader").style.display = "flex";
-  document.getElementById("andrewApp").style.display = "block";
-  document.getElementById("appFooter").style.display = "block";
-  cargarTodo();
-}
+function doGet(e) {
+  var params = (e && e.parameter) ? e.parameter : {};
+  var callback = params.callback;
+  var accion = normalizarTexto(params.accion).toUpperCase();
+  var resultado;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const inputClave = document.getElementById("claveAndrew");
-  if(inputClave){
-    inputClave.addEventListener("keydown", function(e){
-      if(e.key === "Enter"){
-        e.preventDefault();
-        entrarAndrew();
-      }
-    });
-  }
-});
+  try {
+    var ss = obtenerSpreadsheet();
 
-function normalizarTipoAndrew(m, codigoCuenta){
-  const tipoDirecto=String(m?.tipo ?? m?.tipoMovimiento ?? '').trim().toUpperCase();
-  if(tipoDirecto==='INGRESO' || tipoDirecto==='EGRESO') return tipoDirecto;
-  const obs=String(m?.observacion||'').toUpperCase();
-  const cuenta=String(codigoCuenta||'').trim().toUpperCase();
-  const origen=(obs.match(/CUENTA_ORIGEN=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  const destino=(obs.match(/CUENTA_DESTINO=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  if(origen && destino){
-    if(origen===cuenta) return 'EGRESO';
-    if(destino===cuenta) return 'INGRESO';
-  }
-  const concepto=String(m?.concepto||'').trim().toUpperCase();
-  if(cuenta===CODIGO_ANDREW && concepto.includes('FONDO GENERAL')) return 'INGRESO';
-  return '';
-}
+    switch (accion) {
+      case "ESTUDIANTE":
+      case "CONSULTAR":
+        resultado = obtenerEstudianteOUsuario(ss, params.codigo, params.anio);
+        break;
 
-function montoVisibleAndrew(m){
-  const codigo=String(m?.codigo||m?.codigoQR||'').trim().toUpperCase();
-  const concepto=String(m?.concepto||'').trim().toUpperCase();
-  const monto=parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0);
-  if(codigo===CODIGO_ANDREW && concepto.includes('FONDO GENERAL') && (monto===200 || monto===200.00)) return 200000;
-  return monto;
-}
+      case "LOGINALUMNO":
+        resultado = validarLogin(ss, params.codigo, params.clave);
+        break;
 
-function calcularSaldoCuentaAndrew(movimientos, codigoCuenta){
-  const codigo=String(codigoCuenta||"").trim().toUpperCase();
-  let saldo=0;
+      case "REGISTRARMOVIMIENTO":
+      case "REGISTRAR_TRANSACCION":
+        resultado = registrarMovimiento(ss, params);
+        break;
 
-  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
-    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==='ANULADO') return;
+      case "MOVIMIENTOS":
+        resultado = consultarMovimientosGenerales(ss, params.anio);
+        break;
 
-    const mcodigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-    const categoria=String(m?.categoria||"").trim().toUpperCase();
-    const concepto=String(m?.concepto||"").trim().toUpperCase();
-    const monto=montoVisibleAndrew(m);
+      case "CUENTAS":
+        resultado = consultarCuentas(ss, params.anio);
+        break;
 
-    const esTransferencia =
-      categoria==="TRANSFERENCIA_CAJA_MISE" ||
-      concepto.includes("TRANSFERENCIA") ||
-      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
-
-    const esDevolucion =
-      categoria==="DEVOLUCION_CAJA_GENERAL" ||
-      concepto.includes("DEVOLUCIÓN") ||
-      concepto.includes("DEVOLUCION");
-
-    if(codigo===CODIGO_ANDREW){
-      if(esTransferencia) saldo-=monto;
-      else if(esDevolucion) saldo+=monto;
-      else if(mcodigo===codigo){
-        const tipo=normalizarTipoAndrew(m,codigo);
-        if(tipo==='INGRESO') saldo+=monto;
-        else if(tipo==='EGRESO') saldo-=monto;
-      }
-      return;
-    }
-
-    if(mcodigo!==codigo) return;
-
-    if(esTransferencia){
-      saldo+=monto;
-      return;
-    }
-
-    if(esDevolucion){
-      saldo-=monto;
-      return;
-    }
-
-    const tipo=normalizarTipoAndrew(m,codigo);
-    if(tipo==='INGRESO') saldo+=monto;
-    else if(tipo==='EGRESO') saldo-=monto;
-  });
-
-  return Math.round((saldo+Number.EPSILON)*100)/100;
-}
-
-function mapaSaldosMisesAndrew(movimientos){
-  const mapa={};
-  Object.keys(MISES).forEach(codigo=>{ mapa[codigo]=calcularSaldoCuentaAndrew(movimientos,codigo); });
-  return mapa;
-}
-
-function cargarTodo(){
-  const anio=document.getElementById("anio").value;
-  document.getElementById("metaAnio").textContent=anio;
-  mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
-
-  llamarAPI({accion:"movimientos",anio},function(rMov){
-    let movimientos = (rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
-    
-    let saldoAndrewUnificado = calcularSaldoCuentaAndrew(movimientos, CODIGO_ANDREW);
-    document.getElementById("saldoCuenta").textContent = formato(saldoAndrewUnificado);
-
-    let saldosMisesUnificados = mapaSaldosMisesAndrew(movimientos);
-
-    llamarAPI({accion:"cuentas",anio},function(rCuentas){
-      let listaCuentas = (rCuentas && rCuentas.ok && Array.isArray(rCuentas.cuentas)) ? rCuentas.cuentas : [];
-      
-      const andrew = listaCuentas.find(c => String(c.codigo||"").trim().toUpperCase() === CODIGO_ANDREW);
-      if(andrew && Number.isFinite(Number(andrew.saldoActual))){
-        document.getElementById("saldoCuenta").textContent = formato(andrew.saldoActual);
-      }
-
-      const mises = Object.keys(MISES).map(codigo => {
-        const encontrada = listaCuentas.find(c => String(c.codigo||"").trim().toUpperCase() === codigo);
-        return {
-          codigo: codigo,
-          nombre: MISES[codigo],
-          saldoActual: encontrada && Number.isFinite(Number(encontrada.saldoActual)) ? Number(encontrada.saldoActual) : (saldosMisesUnificados[codigo] || 0)
+      default:
+        resultado = {
+          ok: false,
+          success: false,
+          mensaje: "Acción no reconocida: " + accion
         };
-      });
+    }
 
-      const fotosMises = {
-        "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300",
-        "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300",
-        "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300",
-        "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300"
-      };
-
-      document.getElementById("cuentasMises").innerHTML = mises.map(c => {
-        const foto = fotosMises[c.codigo] || "";
-        return `
-        <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
-          <div class="mise-card-top">
-            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" onerror="this.style.display='none';">
-            <div style="min-width:0;">
-              <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
-              <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
-            </div>
-          </div>
-          <div class="mise-saldo-andrew" data-caja-mise="${escapar(c.codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
-        </div>`;
-      }).join("");
-
-      mostrarMensaje("mensaje", "CAJA GENERAL ACTUALIZADA CORRECTAMENTE.", "ok");
-    });
-
-    let movAndrew = movimientos.filter(esMovimientoAndrew);
-    document.getElementById("contadorMovimientos").textContent = movAndrew.length;
-    renderTablaAndrew(movAndrew);
-  });
-}
-
-function esMovimientoAndrew(m){
-  const codigo=String(m?.codigo||"").trim().toUpperCase();
-  const obs=String(m?.observacion||"").toUpperCase();
-  const estudiante=String(m?.estudiante||"").trim().toUpperCase();
-  const concepto=String(m?.concepto||"").trim().toUpperCase();
-
-  return codigo===CODIGO_ANDREW
-    || obs.includes("CUENTA="+CODIGO_ANDREW)
-    || estudiante===NOMBRE_ANDREW
-    || concepto.includes("FONDO PARA PAGOS A ALUMNOS")
-    || concepto.includes("TRANSFERENCIA")
-    || concepto.includes("DEVOLUCIÓN")
-    || concepto.includes("DEVOLUCION");
-}
-
-function renderTablaAndrew(mov){
-  const tbody=document.getElementById("tablaAndrew");
-  if(!mov.length){
-    tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS DE CAJA GENERAL PARA EL AÑO SELECCIONADO.</td></tr>';
-    return;
+  } catch (error) {
+    resultado = {
+      ok: false,
+      success: false,
+      mensaje: "Error en el servidor: " + error.toString()
+    };
   }
 
-  const anioSeleccionado=String(document.getElementById("anio")?.value||"");
+  return responderJSON(resultado, callback);
+}
 
-  tbody.innerHTML=mov.map(m=>{
-    const fecha=String(m?.fechaTexto||"");
-    const matchAnio=fecha.match(/20\d{2}/);
-    const anioVisible=m?.anio || (matchAnio ? matchAnio[0] : anioSeleccionado);
 
-    let tipoVisible=normalizarTipoAndrew(m,m?.codigo);
-    const concepto=String(m?.concepto||"").toUpperCase();
+function doPost(e) {
+  return doGet(e);
+}
 
-    if(!tipoVisible){
-      if(concepto.includes("DEVOLUCIÓN") || concepto.includes("DEVOLUCION")){
-        tipoVisible="INGRESO";
-      }else if(concepto.includes("TRANSFERENCIA") || concepto.includes("FONDO PARA PAGOS")){
-        tipoVisible="EGRESO";
+
+/* =========================================================
+   UTILIDADES
+   ========================================================= */
+
+function obtenerSpreadsheet() {
+  var ss = null;
+
+  try {
+    ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  } catch (error1) {
+    try {
+      ss = SpreadsheetApp.getActiveSpreadsheet();
+    } catch (error2) {
+      ss = null;
+    }
+  }
+
+  if (!ss) {
+    throw new Error(
+      "No se pudo acceder a la hoja de cálculo. Verifica el ID y los permisos."
+    );
+  }
+
+  return ss;
+}
+
+
+function responderJSON(obj, callback) {
+  var texto = JSON.stringify(obj || {});
+
+  if (callback) {
+    return ContentService
+      .createTextOutput(callback + "(" + texto + ")")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+
+  return ContentService
+    .createTextOutput(texto)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+
+function normalizarTexto(valor) {
+  return String(valor === null || valor === undefined ? "" : valor).trim();
+}
+
+
+function normalizarCodigo(valor) {
+  return normalizarTexto(valor).toUpperCase();
+}
+
+
+/*
+ * Convierte correctamente formatos usados en el proyecto:
+ * 15.000      -> 15000
+ * 15,000      -> 15000
+ * 15.000,50   -> 15000.50
+ * 15,50       -> 15.50
+ * 15000       -> 15000
+ */
+function parseMontoLDS(valor) {
+  if (valor === null || valor === undefined || valor === "") {
+    return 0;
+  }
+
+  if (typeof valor === "number") {
+    return isFinite(valor) ? valor : 0;
+  }
+
+  var texto = normalizarTexto(valor);
+  if (!texto) return 0;
+
+  texto = texto.replace(/[^\d,.\-]/g, "");
+
+  var tienePunto = texto.indexOf(".") !== -1;
+  var tieneComa = texto.indexOf(",") !== -1;
+
+  // 15.000,50
+  if (tienePunto && tieneComa) {
+    texto = texto.replace(/\./g, "").replace(",", ".");
+  }
+
+  // 15.000
+  else if (tienePunto) {
+    var partesPunto = texto.split(".");
+    if (partesPunto.length === 2 && partesPunto[1].length === 3) {
+      texto = partesPunto[0] + partesPunto[1];
+    }
+  }
+
+  // 15,000 o 15,50
+  else if (tieneComa) {
+    var partesComa = texto.split(",");
+    if (partesComa.length === 2 && partesComa[1].length === 3) {
+      texto = partesComa[0] + partesComa[1];
+    } else {
+      texto = partesComa.join(".");
+    }
+  }
+
+  var numero = Number(texto);
+  return isFinite(numero) ? numero : 0;
+}
+
+
+function redondear2(numero) {
+  return Math.round((Number(numero) || 0) * 100) / 100;
+}
+
+
+function esFondoInicial(concepto) {
+  return normalizarTexto(concepto)
+    .toUpperCase()
+    .indexOf("FONDO GENERAL INICIAL") !== -1;
+}
+
+
+function esFilaAnioValido(fila, anioFiltro) {
+  if (!anioFiltro) return true;
+
+  var anioBuscado = String(anioFiltro);
+  var fecha = fila[0];
+
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+    return String(fecha.getFullYear()) === anioBuscado;
+  }
+
+  var textoFecha = normalizarTexto(fecha);
+  var encontrado = textoFecha.match(/20\d{2}/);
+
+  return !!encontrado && encontrado[0] === anioBuscado;
+}
+
+
+function obtenerAnioFila(fila) {
+  var fecha = fila[0];
+
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+    return String(fecha.getFullYear());
+  }
+
+  var texto = normalizarTexto(fecha);
+  var match = texto.match(/20\d{2}/);
+
+  return match ? match[0] : "";
+}
+
+
+function formatearFecha(fecha) {
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+    return Utilities.formatDate(
+      fecha,
+      Session.getScriptTimeZone() || "America/Lima",
+      "dd/MM/yyyy HH:mm:ss"
+    );
+  }
+
+  return normalizarTexto(fecha);
+}
+
+
+/* =========================================================
+   CUENTAS MISES
+   ========================================================= */
+
+function obtenerMisePorCodigo(codigo) {
+  var buscado = normalizarCodigo(codigo);
+  var claves = Object.keys(CONFIG.CUENTAS_MISES_LDS360);
+
+  for (var i = 0; i < claves.length; i++) {
+    var mise = CONFIG.CUENTAS_MISES_LDS360[claves[i]];
+
+    if (normalizarCodigo(mise.codigo) === buscado) {
+      return mise;
+    }
+  }
+
+  return null;
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+function validarLogin(ss, codigo, clave) {
+  var buscado = normalizarCodigo(codigo);
+
+  if (!buscado) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Código no proporcionado"
+    };
+  }
+
+  // El HTML actual valida la clave de Andrew/Mises localmente.
+  // Se conserva esta compatibilidad para el sistema.
+  if (
+    buscado === CONFIG.CODIGO_ANDREW ||
+    obtenerMisePorCodigo(buscado)
+  ) {
+    return {
+      ok: true,
+      success: true,
+      mensaje: "Acceso correcto"
+    };
+  }
+
+  var hoja = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+  if (!hoja) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "No existe la hoja ESTUDIANTES."
+    };
+  }
+
+  var datos = hoja.getDataRange().getValues();
+
+  for (var i = 1; i < datos.length; i++) {
+    var fila = datos[i];
+
+    if (normalizarCodigo(fila[0]) === buscado) {
+      return {
+        ok: true,
+        success: true,
+        mensaje: "Acceso correcto"
+      };
+    }
+  }
+
+  return {
+    ok: false,
+    success: false,
+    mensaje: "Código no encontrado"
+  };
+}
+
+
+/* =========================================================
+   CONSULTA DE ESTUDIANTE / USUARIO / CAJA
+   ========================================================= */
+
+function obtenerEstudianteOUsuario(ss, codigo, anioFiltro) {
+  var buscado = normalizarCodigo(codigo);
+
+  if (!buscado) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Código no proporcionado"
+    };
+  }
+
+  var usuario = null;
+  var esAndrew = buscado === CONFIG.CODIGO_ANDREW;
+  var mise = obtenerMisePorCodigo(buscado);
+
+  if (esAndrew) {
+    usuario = {
+      codigo: CONFIG.CODIGO_ANDREW,
+      nombre: CONFIG.NOMBRE_ANDREW,
+      apellido: "",
+      nombreCompleto: CONFIG.NOMBRE_ANDREW,
+      rol: CONFIG.ROL_ANDREW,
+      grado: "CAJA GENERAL",
+      seccion: "",
+      telefono: "",
+      foto: "",
+      fotoUrl: "",
+      esDocente: true,
+      esAndrew: true
+    };
+
+  } else if (mise) {
+    usuario = {
+      codigo: mise.codigo,
+      nombre: mise.nombre,
+      apellido: "",
+      nombreCompleto: mise.nombre,
+      rol: mise.rol,
+      grado: "",
+      seccion: "",
+      telefono: "",
+      foto: "",
+      fotoUrl: "",
+      esDocente: true,
+      esAndrew: false
+    };
+
+  } else {
+    var hojaEst = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+
+    if (!hojaEst) {
+      return {
+        ok: false,
+        success: false,
+        mensaje: "No existe la hoja ESTUDIANTES."
+      };
+    }
+
+    var datosEst = hojaEst.getDataRange().getValues();
+
+    for (var i = 1; i < datosEst.length; i++) {
+      var filaEst = datosEst[i];
+
+      if (normalizarCodigo(filaEst[0]) === buscado) {
+        var rol = normalizarTexto(filaEst[3]);
+        var rolUpper = rol.toUpperCase();
+
+        usuario = {
+          codigo: normalizarTexto(filaEst[0]),
+          nombre: filaEst[1] || "",
+          apellido: filaEst[2] || "",
+          rol: rol || "ALUMNO",
+          grado: filaEst[4] || "",
+          seccion: filaEst[5] || "",
+          telefono: filaEst[6] || "",
+          nombreCompleto:
+            filaEst[7] ||
+            ((filaEst[1] || "") + " " + (filaEst[2] || "")).trim(),
+          foto: filaEst[8] || "",
+          fotoUrl: filaEst[9] || filaEst[8] || "",
+          esDocente:
+            rolUpper.indexOf("DOCENTE") !== -1 ||
+            rolUpper.indexOf("PROMOTORA") !== -1
+        };
+
+        break;
       }
     }
+  }
 
-    const esTransferencia =
-      concepto.includes("TRANSFERENCIA") ||
-      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
+  if (!usuario) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Código no encontrado: " + buscado
+    };
+  }
 
-    const esDevolucion =
-      concepto.includes("DEVOLUCIÓN") ||
-      concepto.includes("DEVOLUCION");
+  var hojaMov = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
 
-    const cuentaVisible=(esTransferencia || esDevolucion)
-      ? NOMBRE_ANDREW
-      : (m?.estudiante || NOMBRE_ANDREW);
+  if (!hojaMov) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "No existe la hoja MOVIMIENTOS."
+    };
+  }
 
-    const gradoVisible=(esTransferencia || esDevolucion)
-      ? "CAJA GENERAL"
-      : (m?.grado || "CAJA GENERAL");
+  var datosMov = hojaMov.getDataRange().getValues();
 
-    return `
-    <tr>
-      <td>${escapar(anioVisible)}</td>
-      <td>${escapar(fecha)}</td>
-      <td>${escapar(cuentaVisible)}</td>
-      <td>${escapar(gradoVisible)}</td>
-      <td>${escapar(tipoVisible)}</td>
-      <td>${escapar(m?.concepto||"")}</td>
-      <td>${formato(montoVisibleAndrew(m))}</td>
-      <td>${escapar(m?.responsable||"")}</td>
-      <td>${escapar(m?.observacion||"")}</td>
-    </tr>`;
-  }).join("");
+  var ingresos = 0;
+  var egresos = 0;
+  var movimientos = [];
+
+  for (var j = 1; j < datosMov.length; j++) {
+    var fila = datosMov[j];
+
+    if (!fila || fila.every(function(v) {
+      return normalizarTexto(v) === "";
+    })) {
+      continue;
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+    if (estado === "ANULADO") continue;
+
+    var codigoFila = normalizarCodigo(fila[1]);
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+    var monto = parseMontoLDS(fila[6]);
+
+    var pertenece = false;
+
+    if (esAndrew) {
+      // Movimiento normal de Andrew.
+      if (codigoFila === buscado) {
+        pertenece = true;
+      }
+
+      // Transferencia Andrew -> Miss guardada con código de la Miss.
+      if (categoria === "TRANSFERENCIA_CAJA_MISE") {
+        pertenece = true;
+      }
+
+      // Devolución Miss -> Andrew guardada con código de la Miss.
+      if (categoria === "DEVOLUCION_CAJA_GENERAL") {
+        pertenece = true;
+      }
+
+    } else {
+      pertenece = codigoFila === buscado;
+    }
+
+    if (!pertenece) continue;
+
+    var tipoEfectivo = obtenerTipoEfectivo(
+      tipoBase,
+      categoria,
+      esAndrew
+    );
+
+    if (tipoEfectivo === "INGRESO") {
+      ingresos += monto;
+    } else if (tipoEfectivo === "EGRESO") {
+      egresos += monto;
+    }
+
+    movimientos.push({
+      anio: obtenerAnioFila(fila),
+      fechaTexto: formatearFecha(fila[0]),
+      codigo: codigoFila,
+      estudiante: normalizarTexto(fila[2]),
+      grado: normalizarTexto(fila[3]),
+      tipo: tipoEfectivo,
+      concepto: normalizarTexto(fila[5]),
+      monto: redondear2(monto),
+      responsable: normalizarTexto(fila[7]),
+      observacion: normalizarTexto(fila[8]),
+      categoria: categoria,
+      estado: estado
+    });
+  }
+
+  var saldoActual;
+
+  if (esAndrew) {
+    saldoActual =
+      CONFIG.FONDO_INICIAL_ANDREW + ingresos - egresos;
+  } else {
+    saldoActual = ingresos - egresos;
+  }
+
+  return {
+    ok: true,
+    success: true,
+
+    estudiante: usuario,
+
+    cuenta: {
+      totalIngresos: redondear2(ingresos),
+      totalEgresos: redondear2(egresos),
+      saldoActual: redondear2(saldoActual),
+      saldo: redondear2(saldoActual),
+      movimientos: movimientos.length
+    },
+
+    movimientos: movimientos
+  };
 }
 
-function parseMontoLDS(valor){
-  if(valor===null || valor===undefined || valor==="") return 0;
-  if(typeof valor==="number") return Number.isFinite(valor) ? valor : 0;
 
-  let texto=String(valor).trim();
-  if(!texto) return 0;
+/* =========================================================
+   TIPO ECONÓMICO REAL DE UN MOVIMIENTO
+   ========================================================= */
 
-  texto=texto.replace(/[^\d,\.\-]/g,"");
+function obtenerTipoEfectivo(tipoBase, categoria, esAndrew) {
+  var tipo = normalizarTexto(tipoBase).toUpperCase();
+  var cat = normalizarTexto(categoria).toUpperCase();
 
-  const tienePunto=texto.indexOf(".")!==-1;
-  const tieneComa=texto.indexOf(",")!==-1;
+  if (cat === "TRANSFERENCIA_CAJA_MISE") {
+    return esAndrew ? "EGRESO" : "INGRESO";
+  }
 
-  // Formato peruano: 15.000 = quince mil.
-  if(tienePunto && !tieneComa){
-    const partes=texto.split(".");
-    if(partes.length===2 && partes[1].length===3){
-      texto=partes[0]+partes[1];
+  if (cat === "DEVOLUCION_CAJA_GENERAL") {
+    return esAndrew ? "INGRESO" : "EGRESO";
+  }
+
+  if (tipo.indexOf("INGRESO") !== -1) {
+    return "INGRESO";
+  }
+
+  if (tipo.indexOf("EGRESO") !== -1) {
+    return "EGRESO";
+  }
+
+  return tipo;
+}
+
+
+/* =========================================================
+   MOVIMIENTOS GENERALES
+   ========================================================= */
+
+function consultarMovimientosGenerales(ss, anioFiltro) {
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hoja) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "No existe la hoja MOVIMIENTOS.",
+      movimientos: []
+    };
+  }
+
+  var datos = hoja.getDataRange().getValues();
+  var movimientos = [];
+
+  for (var i = 1; i < datos.length; i++) {
+    var fila = datos[i];
+
+    if (!fila || fila.every(function(v) {
+      return normalizarTexto(v) === "";
+    })) {
+      continue;
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+    if (estado === "ANULADO") continue;
+
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+    var codigo = normalizarCodigo(fila[1]);
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+
+    // En la hoja, una transferencia se guarda en la cuenta Miss.
+    // El tipo de esa fila debe leerse como INGRESO para la Miss.
+    var tipoEfectivo = obtenerTipoEfectivo(tipoBase, categoria, false);
+
+    movimientos.push({
+      anio: obtenerAnioFila(fila),
+      fechaTexto: formatearFecha(fila[0]),
+      codigo: codigo,
+      estudiante: normalizarTexto(fila[2]),
+      grado: normalizarTexto(fila[3]),
+      tipo: tipoEfectivo,
+      tipoRegistrado: tipoBase,
+      concepto: normalizarTexto(fila[5]),
+      monto: redondear2(parseMontoLDS(fila[6])),
+      responsable: normalizarTexto(fila[7]),
+      observacion: normalizarTexto(fila[8]),
+      categoria: categoria,
+      estado: estado
+    });
+  }
+
+  return {
+    ok: true,
+    success: true,
+    movimientos: movimientos
+  };
+}
+
+
+/* =========================================================
+   SALDOS DE CUENTAS
+   ========================================================= */
+
+function calcularSaldoCuentaDesdeMovimientos(
+  datosMov,
+  codigoCuenta,
+  anioFiltro
+) {
+  var codigo = normalizarCodigo(codigoCuenta);
+  var saldo = 0;
+  var ingresos = 0;
+  var egresos = 0;
+
+  var esAndrew = codigo === CONFIG.CODIGO_ANDREW;
+
+  for (var i = 1; i < datosMov.length; i++) {
+    var fila = datosMov[i];
+
+    if (!fila || fila.every(function(v) {
+      return normalizarTexto(v) === "";
+    })) {
+      continue;
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+    if (estado === "ANULADO") continue;
+
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var codigoFila = normalizarCodigo(fila[1]);
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+    var monto = parseMontoLDS(fila[6]);
+
+    var pertenece = false;
+
+    if (esAndrew) {
+      pertenece =
+        codigoFila === codigo ||
+        categoria === "TRANSFERENCIA_CAJA_MISE" ||
+        categoria === "DEVOLUCION_CAJA_GENERAL";
+    } else {
+      pertenece = codigoFila === codigo;
+    }
+
+    if (!pertenece) continue;
+
+    var tipoEfectivo = obtenerTipoEfectivo(
+      tipoBase,
+      categoria,
+      esAndrew
+    );
+
+    if (tipoEfectivo === "INGRESO") {
+      saldo += monto;
+      ingresos += monto;
+    } else if (tipoEfectivo === "EGRESO") {
+      saldo -= monto;
+      egresos += monto;
     }
   }
 
-  // 15,000 = quince mil; 15,50 = quince con cincuenta.
-  if(tieneComa && !tienePunto){
-    const partes=texto.split(",");
-    if(partes.length===2 && partes[1].length===3){
-      texto=partes[0]+partes[1];
-    }else{
-      texto=partes.join(".");
+  return {
+    saldo: redondear2(saldo),
+    ingresos: redondear2(ingresos),
+    egresos: redondear2(egresos)
+  };
+}
+
+
+function consultarCuentas(ss, anioFiltro) {
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hoja) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "No existe la hoja MOVIMIENTOS.",
+      cuentas: []
+    };
+  }
+
+  var datosMov = hoja.getDataRange().getValues();
+  var cuentas = [];
+
+  var saldoAndrew = calcularSaldoCuentaDesdeMovimientos(
+    datosMov,
+    CONFIG.CODIGO_ANDREW,
+    anioFiltro
+  );
+
+  cuentas.push({
+    codigo: CONFIG.CODIGO_ANDREW,
+    nombre: CONFIG.NOMBRE_ANDREW,
+    rol: CONFIG.ROL_ANDREW,
+    tipoCuenta: CONFIG.TIPO_CUENTA_ANDREW,
+    saldoActual: redondear2(
+      CONFIG.FONDO_INICIAL_ANDREW + saldoAndrew.saldo
+    )
+  });
+
+  var claves = Object.keys(CONFIG.CUENTAS_MISES_LDS360);
+
+  for (var i = 0; i < claves.length; i++) {
+    var mise = CONFIG.CUENTAS_MISES_LDS360[claves[i]];
+
+    var saldoMise = calcularSaldoCuentaDesdeMovimientos(
+      datosMov,
+      mise.codigo,
+      anioFiltro
+    );
+
+    cuentas.push({
+      codigo: mise.codigo,
+      nombre: mise.nombre,
+      rol: mise.rol,
+      tipoCuenta: mise.tipo,
+      saldoActual: redondear2(saldoMise.saldo)
+    });
+  }
+
+  return {
+    ok: true,
+    success: true,
+    cuentas: cuentas
+  };
+}
+
+
+/* =========================================================
+   REGISTRO DE MOVIMIENTOS
+   ========================================================= */
+
+function registrarMovimiento(ss, params) {
+  var codigo = normalizarCodigo(params.codigo);
+  var tipo = normalizarTexto(params.tipo).toUpperCase() || "INGRESO";
+  var categoria = normalizarTexto(params.categoria).toUpperCase();
+  var concepto = normalizarTexto(params.concepto);
+  var monto = parseMontoLDS(params.monto);
+  var responsable = normalizarTexto(params.responsable) || "ADMIN";
+  var responsableClave = normalizarTexto(params.responsableClave);
+  var observacion = normalizarTexto(params.observacion);
+
+  if (!codigo) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Código requerido"
+    };
+  }
+
+  if (monto <= 0) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Monto inválido"
+    };
+  }
+
+  var nombreCompleto = "";
+  var grado = "";
+
+  if (codigo === CONFIG.CODIGO_ANDREW) {
+    nombreCompleto = CONFIG.NOMBRE_ANDREW;
+    grado = "CAJA GENERAL";
+
+  } else {
+    var mise = obtenerMisePorCodigo(codigo);
+
+    if (mise) {
+      nombreCompleto = mise.nombre;
+      grado = "";
+
+    } else {
+      var hojaEst = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+
+      if (!hojaEst) {
+        return {
+          ok: false,
+          success: false,
+          mensaje: "No existe la hoja ESTUDIANTES."
+        };
+      }
+
+      var datosEst = hojaEst.getDataRange().getValues();
+
+      for (var i = 1; i < datosEst.length; i++) {
+        var fila = datosEst[i];
+
+        if (normalizarCodigo(fila[0]) === codigo) {
+          nombreCompleto =
+            fila[7] ||
+            ((fila[1] || "") + " " + (fila[2] || "")).trim();
+
+          grado = fila[4] || "";
+          break;
+        }
+      }
     }
   }
 
-  // 15.000,50 = quince mil con cincuenta.
-  if(tienePunto && tieneComa){
-    texto=texto.replace(/\./g,"").replace(",",".");
+  if (!nombreCompleto) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "Código no encontrado: " + codigo
+    };
   }
 
-  const n=Number(texto);
-  return Number.isFinite(n) ? n : 0;
-}
+  var hojaMov = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
 
-function mostrarTodos(){
-  document.getElementById("panelTodo").style.display="block";
-  llamarAPI({accion:"movimientos",anio:document.getElementById("anio").value},function(r){
-    if(!r || !r.ok) return;
-    const mov=r.movimientos||[];
-    document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10">SIN MOVIMIENTOS.</td></tr>';
-  });
-}
-function cerrarTodo(){ document.getElementById("panelTodo").style.display="none"; }
-function abrirReportes(){ document.getElementById("reportesModal").classList.add("open"); }
-function cerrarReportes(){ document.getElementById("reportesModal").classList.remove("open"); }
-
-function toggleAndrewPanel(head){
-  const panel=head.closest(".accordion-panel");
-  const body=panel.querySelector(".accordion-body");
-  const abrir=!panel.classList.contains("is-open");
-  document.querySelectorAll(".accordion-panel").forEach(p=>{
-    p.classList.remove("is-open");
-    p.querySelector(".accordion-body").hidden=true;
-  });
-  if(abrir){
-    panel.classList.add("is-open");
-    body.hidden=false;
+  if (!hojaMov) {
+    return {
+      ok: false,
+      success: false,
+      mensaje: "No existe la hoja MOVIMIENTOS."
+    };
   }
+
+  var timestamp = new Date();
+
+  hojaMov.appendRow([
+    timestamp,            // 1 FECHA
+    codigo,               // 2 CÓDIGO
+    nombreCompleto,       // 3 CUENTA / ESTUDIANTE
+    grado,                // 4 GRADO
+    tipo,                 // 5 TIPO
+    concepto,             // 6 CONCEPTO
+    redondear2(monto),    // 7 MONTO LDS
+    responsable,          // 8 RESPONSABLE
+    observacion,          // 9 OBSERVACIÓN
+    categoria,            // 10 CATEGORÍA
+    responsableClave,     // 11 CLAVE RESPONSABLE
+    "ACTIVO"              // 12 ESTADO
+  ]);
+
+  SpreadsheetApp.flush();
+
+  return {
+    ok: true,
+    success: true,
+    mensaje: "Transacción registrada exitosamente"
+  };
 }
 
-function transferirAMise(){
-  const codigo=document.getElementById("miseDestino").value;
-  const monto=parseMontoLDS(document.getElementById("montoTransferencia").value);
-  if(!codigo || monto<=0){ mostrarMensaje("mensajeTransferencia","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
-  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
-    if(r&&r.ok){ mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok"); cargarTodo(); }
-    else { mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error"); }
-  });
-}
 
-function recibirDevolucion(){
-  const codigo=document.getElementById("miseOrigen").value;
-  const monto=parseMontoLDS(document.getElementById("montoDevolucion").value);
-  if(!codigo || monto<=0){ mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
-  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
-    if(r&&r.ok){ mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok"); cargarTodo(); }
-    else { mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error"); }
-  });
-}
+/* =========================================================
+   LIMPIEZA OPCIONAL — BORRA SOLO MOVIMIENTOS
+   NO BORRA ESTUDIANTES NI CAMBIA ENCABEZADOS.
+   EJECUTAR MANUALMENTE SOLO SI SE QUIERE EMPEZAR DE CERO.
+   ========================================================= */
 
-function consultarCuenta(){
-  const codigo=document.getElementById("codigoConsulta").value.trim().toUpperCase();
-  const anio=document.getElementById("anio").value;
-  if(!codigo){ mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error"); return; }
-  mostrarMensaje("resultadoConsulta","CONSULTANDO...","ok");
-  llamarAPI({accion:"estudiante",codigo,anio},function(r){
-    if(!r||!r.ok){ mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error"); return; }
-    const c=r.cuenta||{};
-    const e=r.estudiante||{};
-    mostrarMensaje("resultadoConsulta",(e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+Number(c.movimientos||0),"ok");
-  });
-}
+function REINICIAR_BANCO_LDS360() {
+  var ss = obtenerSpreadsheet();
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
 
-document.getElementById("anio").addEventListener("change",cargarTodo);
-</script>
-</body>
-</html>
-```
+  if (!hoja) {
+    throw new Error("No existe la hoja MOVIMIENTOS.");
+  }
+
+  var ultimaFila = hoja.getLastRow();
+  var ultimaColumna = Math.max(hoja.getLastColumn(), 12);
+
+  if (ultimaFila > 1) {
+    hoja.getRange(
+      2,
+      1,
+      ultimaFila - 1,
+      ultimaColumna
+    ).clearContent();
+  }
+
+  SpreadsheetApp.flush();
+
+  return "MOVIMIENTOS LIMPIOS.";
+}
