@@ -91,19 +91,30 @@ button{cursor:pointer;}
 #andrewApp .header-actions-group select{width:150px;min-height:40px;}
 #andrewApp .header-actions-group .btn{min-height:40px;}
 #andrewApp .dashboard-body{padding:clamp(12px,1.5vw,22px);}
-#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(230px,1.5fr) repeat(3,minmax(140px,.7fr));gap:12px;align-items:stretch;margin-bottom:14px;}
-#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:12px!important;}
-#andrewApp .andrew-mini-photo{width:64px;height:64px;flex:0 0 64px;border-radius:50%;overflow:hidden;border:2px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.18);}
+#andrewApp .caja-resumen{display:grid;grid-template-columns:minmax(260px,1.55fr) repeat(3,minmax(145px,.72fr));gap:12px;align-items:stretch;margin-bottom:14px;}
+#andrewApp .resumen-cuenta{border:1.5px solid #dbe3ee;border-radius:14px;background:#f8fafc;min-height:92px;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;}
+#andrewApp .resumen-identidad-andrew{display:flex!important;align-items:center!important;gap:16px!important;background:linear-gradient(135deg,#f8fafc 0%,#eef4fb 100%)!important;border:2px solid #0b2f67!important;box-shadow:0 5px 16px rgba(11,47,103,.12);}
+#andrewApp .andrew-mini-photo{width:92px;height:92px;flex:0 0 92px;border-radius:50%;overflow:hidden;border:3px solid #f5b400;background:#061b3f;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.22);}
 #andrewApp .andrew-mini-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;}
 #andrewApp .andrew-identidad-text{min-width:0;display:flex;flex-direction:column;justify-content:center;}
-#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:1rem;font-weight:900;}
-#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.68rem;font-weight:900;margin-top:4px;}
-#andrewApp .resumen-metrica{border:1.5px solid #dbe3ee;border-radius:12px;background:#f8fafc;min-height:72px;padding:11px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
-#andrewApp .resumen-metrica span{font-size:.62rem;color:#64748b;font-weight:900;letter-spacing:.03em;}
-#andrewApp .resumen-metrica strong{font-size:clamp(1rem,1.5vw,1.35rem);color:#0b2f67;margin-top:3px;}
-#andrewApp .resumen-metrica:first-of-type{background:linear-gradient(135deg,#fffdf0,#fff)!important;border:2px solid #f5b400!important;}
-#andrewApp .resumen-metrica:first-of-type strong{font-size:clamp(1.2rem,2vw,1.75rem)!important;color:#008f68!important;}
+#andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:clamp(1rem,1.35vw,1.18rem);font-weight:900;}
+#andrewApp .andrew-identidad-text span{color:#64748b;font-size:.7rem;font-weight:900;margin-top:5px;}
+#andrewApp .resumen-metrica{border:2px solid #dbe3ee;border-radius:14px;min-height:92px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.08);position:relative;overflow:hidden;}
+#andrewApp .resumen-metrica::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:#0b2f67;}
+#andrewApp .resumen-metrica span{font-size:.64rem;color:#475569;font-weight:900;letter-spacing:.04em;}
+#andrewApp .resumen-metrica strong{font-size:clamp(1.08rem,1.65vw,1.45rem);margin-top:5px;font-weight:900;}
+#andrewApp .resumen-metrica:nth-child(2){background:linear-gradient(135deg,#edf4ff 0%,#ffffff 100%)!important;border-color:#2563eb!important;}
+#andrewApp .resumen-metrica:nth-child(2)::before{background:#2563eb;}
+#andrewApp .resumen-metrica:nth-child(2) strong{color:#0b2f67!important;font-size:clamp(1.2rem,1.9vw,1.7rem)!important;}
+#andrewApp .resumen-metrica:nth-child(3){background:linear-gradient(135deg,#ecfdf5 0%,#ffffff 100%)!important;border-color:#059669!important;}
+#andrewApp .resumen-metrica:nth-child(3)::before{background:#059669;}
+#andrewApp .resumen-metrica:nth-child(3) strong{color:#047857!important;font-size:clamp(1.2rem,1.9vw,1.7rem)!important;}
+#andrewApp .resumen-metrica:nth-child(4){background:linear-gradient(135deg,#fff7ed 0%,#ffffff 100%)!important;border-color:#f59e0b!important;}
+#andrewApp .resumen-metrica:nth-child(4)::before{background:#f59e0b;}
+#andrewApp .resumen-metrica:nth-child(4) strong{color:#b45309!important;font-size:clamp(1.25rem,2vw,1.8rem)!important;}
+#andrewApp .movement-actions .btn-report{background:linear-gradient(135deg,#0b2f67,#1d4ed8)!important;color:#fff!important;border:1px solid #1d4ed8!important;box-shadow:0 3px 8px rgba(29,78,216,.22);}
+#andrewApp .movement-actions .btn-outline{background:linear-gradient(135deg,#ecfeff,#ffffff)!important;color:#0f766e!important;border:1px solid #14b8a6!important;box-shadow:0 3px 8px rgba(20,184,166,.16);}
+#andrewApp .movement-actions .btn:hover{transform:translateY(-1px);}
 #andrewApp .inner-panel{margin-top:14px;border:2px solid #e5a000;border-radius:14px;background:#fff;box-shadow:none;}
 #andrewApp .inner-panel .panel-head{padding:11px 14px;}
 #andrewApp .inner-panel .panel-body{padding:13px;}
