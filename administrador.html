@@ -1330,7 +1330,7 @@ footer {
             <label for="selectAnioEscolar">AÑO</label>
             <input id="selectAnioEscolar" class="anio-abierto" type="number" value="2026" min="2000" max="2100" step="1" onchange="cambiarAnioEscolar()" aria-label="Año escolar">
           </div>
-          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaAlumnosDirecta()" aria-label="Alumnos" title="Alumnos">
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos()" aria-label="Alumnos" title="Alumnos">
             <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
           </button>
           <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaMises()" aria-label="Mises" title="Mises">
@@ -1651,141 +1651,9 @@ function abrirImpresiones() {
 
 let cacheCuentasEscolares = {};
 let cacheCuentasCargando = {};
+// Caché exclusiva del listado. No participa en cálculos financieros.
 let cacheListaEstudiantesEscolares = {};
 let cacheListaEstudiantesCargando = {};
-
-function normalizarListaAlumno(a){
-  if(!a || typeof a !== 'object') return null;
-  const codigo=String(a.codigo||'').trim().toUpperCase();
-  if(!codigo || !codigo.startsWith('LDS-EST-')) return null;
-  return {
-    codigo,
-    nombre:String(a.nombre||a.nombreCompleto||'').trim(),
-    nombreCompleto:String(a.nombreCompleto||a.nombre||'').trim(),
-    grado:String(a.grado||'').trim(),
-    seccion:String(a.seccion||'').trim(),
-    rol:String(a.rol||'ALUMNO').trim(),
-    foto:String(a.foto||'').trim(),
-    fotoUrl:String(a.fotoUrl||a.foto||'').trim(),
-    saldoActual:Number(a.saldoActual)||0
-  };
-}
-
-function llamarAPIListaEstudiantes(parametros, callback) {
-  const nombreCallback =
-    "callbackListaLDS_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-
-  const query = Object.keys(parametros)
-    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k]))
-    .join("&");
-
-  const script = document.createElement("script");
-  script.src =
-    APP_SCRIPT_LIST_URL +
-    "?" +
-    query +
-    "&callback=" +
-    encodeURIComponent(nombreCallback);
-
-  let terminado = false;
-  const terminar = (respuesta) => {
-    if (terminado) return;
-    terminado = true;
-    delete window[nombreCallback];
-    script.remove();
-    callback(respuesta || { ok:false, mensaje:"SIN RESPUESTA." });
-  };
-
-  window[nombreCallback] = respuesta => terminar(respuesta);
-  script.onerror = () => terminar({ok:false, mensaje:"ERROR DE CONEXIÓN CON LISTA DE ALUMNOS."});
-  document.body.appendChild(script);
-
-  setTimeout(() => {
-    terminar({ok:false, mensaje:"TIEMPO DE ESPERA AGOTADO AL CARGAR ALUMNOS."});
-  }, 12000);
-}
-
-function llamarAPIListaPromise(parametros, timeoutMs = 12000) {
-  return new Promise(resolve => {
-    let terminado = false;
-    const finalizar = respuesta => {
-      if (terminado) return;
-      terminado = true;
-      resolve(respuesta || {ok:false, mensaje:"SIN RESPUESTA."});
-    };
-    llamarAPIListaEstudiantes(parametros, finalizar);
-    setTimeout(() => finalizar({ok:false, mensaje:"TIEMPO DE ESPERA AGOTADO."}), timeoutMs + 500);
-  });
-}
-
-async function obtenerListaEstudiantesRobusta(anio){
-  /*
-   * IMPORTANTE:
-   * La lista de alumnos se consulta en el backend actualizado de Andrew,
-   * pero SOLO para este listado. El resto del administrador sigue separado.
-   */
-  const directa = await llamarAPIListaPromise({accion:'LISTAESTUDIANTES', anio}, 12000);
-
-  if (directa && directa.ok !== false && Array.isArray(directa.estudiantes)) {
-    return directa.estudiantes
-      .map(normalizarListaAlumno)
-      .filter(Boolean)
-      .sort((a,b) => String(a.codigo||'').localeCompare(String(b.codigo||''), undefined, {numeric:true}));
-  }
-
-  /* Respaldo corto: consultar solo los códigos existentes más habituales.
-     No mantenemos una cadena larga de 50 consultas que deje la pantalla en CARGANDO. */
-  const encontrados = [];
-  const codigosRespaldo = Array.from({length:20}, (_,i) => 'LDS-EST-' + String(i+1).padStart(3,'0'));
-
-  const respuestas = await Promise.all(
-    codigosRespaldo.map(codigo => llamarAPIListaPromise({accion:'ESTUDIANTE', codigo, anio}, 2500))
-  );
-
-  respuestas.forEach(r => {
-    const est = r && r.ok !== false ? normalizarListaAlumno(r.estudiante || r.usuario || r) : null;
-    if (est) encontrados.push(est);
-  });
-
-  const unicos = [];
-  const vistos = new Set();
-  encontrados
-    .sort((a,b) => String(a.codigo||'').localeCompare(String(b.codigo||''), undefined, {numeric:true}))
-    .forEach(a => {
-      if (vistos.has(a.codigo)) return;
-      vistos.add(a.codigo);
-      unicos.push(a);
-    });
-
-  return unicos;
-}
-
-function guardarYMostrarListaEstudiantes(lista,anio){
-  const normalizada=(Array.isArray(lista)?lista:[]).map(normalizarListaAlumno).filter(Boolean);
-  cacheListaEstudiantesEscolares[anio]=normalizada;
-  renderListaAlumnosDesdeCuentas(normalizada);
-  return normalizada;
-}
-
-function precargarListaEstudiantes(){
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  if(cacheListaEstudiantesEscolares[anio]||cacheListaEstudiantesCargando[anio]) return;
-  cacheListaEstudiantesCargando[anio]=true;
-  obtenerListaEstudiantesRobusta(anio).then(lista=>{
-    cacheListaEstudiantesCargando[anio]=false;
-    guardarYMostrarListaEstudiantes(lista,anio);
-  }).catch(()=>{
-    cacheListaEstudiantesCargando[anio]=false;
-    const panel=document.getElementById('listaAlumnosDropdown');
-    const items=document.getElementById('listaAlumnosItems');
-    if(panel && panel.style.display!=='none' && items) items.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
-  });
-}
-function obtenerListaEstudiantesCacheada(){
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  return Array.isArray(cacheListaEstudiantesEscolares[anio]) ? cacheListaEstudiantesEscolares[anio] : null;
-}
-
 function precargarCuentasEscolares() {
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   if(cacheCuentasEscolares[anio]||cacheCuentasCargando[anio]) return;
@@ -1794,88 +1662,103 @@ function precargarCuentasEscolares() {
 }
 function obtenerCuentasCacheadas(){const anio=document.getElementById('selectAnioEscolar')?.value||'2026';return Array.isArray(cacheCuentasEscolares[anio])?cacheCuentasEscolares[anio]:null;}
 
-function abrirListaAlumnosDirecta() {
-  try { reproducirSonido('clic'); } catch (e) {}
+function normalizarListaAlumno(a) {
+  if (!a || typeof a !== 'object') return null;
+  const codigo = String(a.codigo || '').trim().toUpperCase();
+  if (!codigo.startsWith('LDS-EST-')) return null;
+  const nombre = String(a.nombre || a.nombreCompleto || '').trim();
+  return {
+    codigo,
+    nombre,
+    nombreCompleto: String(a.nombreCompleto || a.nombre || '').trim(),
+    grado: String(a.grado || '').trim(),
+    seccion: String(a.seccion || '').trim(),
+    rol: String(a.rol || 'ALUMNO').trim(),
+    foto: String(a.foto || '').trim(),
+    fotoUrl: String(a.fotoUrl || a.foto || '').trim(),
+    saldoActual: Number(a.saldoActual) || 0
+  };
+}
 
+/*
+ * Consulta de la lista por una acción ligera, usando la MISMA URL del
+ * administrador que ya consulta movimientos y saldos. No usar la URL de
+ * Andrew aquí: esa sustitución fue la que cambió los datos financieros.
+ */
+function llamarAPIListaEstudiantes(parametros, callback) {
+  const nombreCallback = 'callbackListaAdminLDS_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+  const query = Object.keys(parametros)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(parametros[k]))
+    .join('&');
+  const script = document.createElement('script');
+  let terminado = false;
+  let temporizador = null;
+
+  const finalizar = respuesta => {
+    if (terminado) return;
+    terminado = true;
+    if (temporizador) clearTimeout(temporizador);
+    try { delete window[nombreCallback]; } catch (e) { window[nombreCallback] = undefined; }
+    if (script.parentNode) script.parentNode.removeChild(script);
+    callback(respuesta || {ok:false, mensaje:'EL SERVIDOR NO DEVOLVIÓ DATOS.'});
+  };
+
+  window[nombreCallback] = finalizar;
+  script.onerror = () => finalizar({ok:false, mensaje:'NO SE PUDO CONECTAR CON EL SERVIDOR DEL ADMINISTRADOR.'});
+  script.src = APP_SCRIPT_URL + '?' + query + '&callback=' + encodeURIComponent(nombreCallback);
+  temporizador = setTimeout(() => finalizar({ok:false, mensaje:'TIEMPO DE ESPERA AGOTADO AL CARGAR ALUMNOS.'}), 15000);
+  document.body.appendChild(script);
+}
+
+function abrirListaCodigos() {
+  try { reproducirSonido('clic'); } catch (e) {}
   const panel = document.getElementById('listaAlumnosDropdown');
   const items = document.getElementById('listaAlumnosItems');
   const filtro = document.getElementById('filtroCodigosInline');
-
   if (!panel || !items) return;
 
-  const estabaAbierto = panel.style.display === 'block';
+  const abrir = panel.style.display === 'none' || !panel.style.display;
   cerrarListasSuperiores('alumnos');
-
-  if (estabaAbierto) {
-    panel.style.display = 'none';
-    return;
-  }
-
-  panel.style.display = 'block';
+  panel.style.display = abrir ? 'block' : 'none';
+  if (!abrir) return;
   if (filtro) filtro.value = '';
 
   const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
-  const cache = obtenerListaEstudiantesCacheada();
-
-  if (Array.isArray(cache) && cache.length) {
+  const cache = cacheListaEstudiantesEscolares[anio];
+  if (Array.isArray(cache)) {
     renderListaAlumnosDesdeCuentas(cache);
+    return;
+  }
+  if (cacheListaEstudiantesCargando[anio]) {
+    items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
     return;
   }
 
   items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
-
-  /* El botón CELESTE usa una sola rutina robusta.
-     Primero intenta el endpoint ligero y, si ese despliegue todavía no lo tiene,
-     consulta directamente ESTUDIANTE por código sin depender de CUENTAS. */
   cacheListaEstudiantesCargando[anio] = true;
-  obtenerListaEstudiantesRobusta(anio).then(lista => {
-    cacheListaEstudiantesCargando[anio] = false;
 
-    if (Array.isArray(lista) && lista.length) {
-      guardarYMostrarListaEstudiantes(lista, anio);
+  llamarAPIListaEstudiantes({accion:'LISTAESTUDIANTES', anio}, respuesta => {
+    cacheListaEstudiantesCargando[anio] = false;
+    if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.estudiantes)) {
+      const detalle = respuesta && respuesta.mensaje ? ' ' + escaparHTML(respuesta.mensaje) : '';
+      if (panel.style.display !== 'none') {
+        items.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.' + detalle + '</div>';
+      }
       return;
     }
 
-    items.innerHTML = '<div class="header-list-loading">NO HAY ALUMNOS PARA MOSTRAR.</div>';
-  }).catch(() => {
-    cacheListaEstudiantesCargando[anio] = false;
-    items.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
+    const lista = respuesta.estudiantes.map(normalizarListaAlumno).filter(Boolean)
+      .sort((a,b) => String(a.codigo).localeCompare(String(b.codigo), undefined, {numeric:true}));
+    cacheListaEstudiantesEscolares[anio] = lista;
+    renderListaAlumnosDesdeCuentas(lista);
   });
 }
 
-function abrirListaCodigos() {
-  reproducirSonido('clic');
-  const panel=document.getElementById('listaAlumnosDropdown');
-  const items=document.getElementById('listaAlumnosItems');
-  const filtro=document.getElementById('filtroCodigosInline');
-  if(!panel||!items)return;
-  const abrir=panel.style.display==='none'||!panel.style.display;
-  cerrarListasSuperiores('alumnos');
-  panel.style.display=abrir?'block':'none';
-  if(!abrir)return;
-  if(filtro)filtro.value='';
-
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  const cache=obtenerListaEstudiantesCacheada();
-  if(cache){renderListaAlumnosDesdeCuentas(cache);return;}
-
-  items.innerHTML='<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
-  cacheListaEstudiantesCargando[anio]=true;
-  obtenerListaEstudiantesRobusta(anio).then(lista=>{
-    cacheListaEstudiantesCargando[anio]=false;
-    if(!lista.length){
-      items.innerHTML='<div class="header-list-loading">NO HAY ALUMNOS PARA MOSTRAR.</div>';
-      return;
-    }
-    guardarYMostrarListaEstudiantes(lista,anio);
-  }).catch(()=>{
-    cacheListaEstudiantesCargando[anio]=false;
-    items.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE ALUMNOS.</div>';
-  });
-}
 function renderListaAlumnosDesdeCuentas(cuentas){
-  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).map(normalizarListaAlumno).filter(Boolean)
-    .sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
+  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
+    const codigo=String(c.codigo||'').trim().toUpperCase();
+    return codigo.startsWith('LDS-EST-');
+  }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
   renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
@@ -2399,10 +2282,6 @@ function obtenerCodigoCajaMise(nombre) {
 
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
 
-// El listado de alumnos usa exclusivamente el backend actualizado que ya funciona con Andrew.
-// El resto de administrador.html conserva su backend propio y separado.
-const APP_SCRIPT_LIST_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
-
 function mostrarFotoMaestra(nombre) {
   maestraActivaGlobal = nombre;
 
@@ -2536,9 +2415,6 @@ function desbloquearPanel(nombreMaestra) {
   cargarSaldoMiseAlIngresar(nombreMaestra);
   precargarCuentasEscolares();
 
-  /* La lista de alumnos se carga únicamente al pulsar el botón CELESTE.
-     Así no bloquea el ingreso ni ralentiza la pantalla. */
-
   /* IMPORTANTE:
      La Mise no debe esperar a buscar un alumno para conocer su fondo.
      Al entrar, consultamos automáticamente SU PROPIA CAJA.
@@ -2638,12 +2514,10 @@ function cerrarEscanerQR() {
 function formatearLDS(valor) {
   const n = Number(valor);
   if (!Number.isFinite(n)) return "0 LDS";
-  const abs = Math.abs(n);
-  const rounded = Math.round((abs + Number.EPSILON) * 100) / 100;
-  const partes = rounded.toFixed(2).split(".");
-  const entero = Number(partes[0]).toLocaleString("de-DE", {maximumFractionDigits:0});
-  const decimales = partes[1];
-  const cuerpo = decimales === "00" ? entero : entero + "," + decimales;
+  const redondeado = Math.round((Math.abs(n) + Number.EPSILON) * 100) / 100;
+  const partes = redondeado.toFixed(2).split(".");
+  const entero = Number(partes[0]).toLocaleString("de-DE", { maximumFractionDigits: 0 });
+  const cuerpo = partes[1] === "00" ? entero : entero + "," + partes[1];
   return (n < 0 ? "-" : "") + cuerpo + " LDS";
 }
 
@@ -3161,7 +3035,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
           nombreUsuario +
           ". Fondo disponible: " +
           saldoFormateado +
-          " LDS."
+          " soles."
         );
       } else {
         hablarTextoVoz(
