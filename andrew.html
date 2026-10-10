@@ -529,7 +529,7 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL CON INSIGNIA A LA DERECHA */
+/* MEMBRETE INSTITUCIONAL CON UNICAMENTE UNA INSIGNIA A LA DERECHA */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
@@ -712,7 +712,7 @@ textarea { height: auto; padding: 8px 10px; }
         </div>
         <div class="stat-pill pill-actual">
           <span>SALDO ACTUAL</span>
-          <strong id="saldoActualAndrew">200.000,00 LDS</strong>
+          <strong id="saldoActualAndrew">80.000,00 LDS</strong>
         </div>
         <div class="stat-pill pill-mov">
           <span>MOVIMIENTOS</span>
@@ -733,8 +733,8 @@ textarea { height: auto; padding: 8px 10px; }
           <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" referrerpolicy="no-referrer" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS LILY MELO AZAÑERO</strong>
-            <span>CAJA-LILY</span>
-            <p id="saldoLily">0,00 LDS</p>
+            <span>CAJA-LILY (LDS-DOC-001)</span>
+            <p id="saldoLily">30.000,00 LDS</p>
           </div>
         </div>
 
@@ -742,8 +742,8 @@ textarea { height: auto; padding: 8px 10px; }
           <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" referrerpolicy="no-referrer" alt="Miss Kiara" onerror="this.src='https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS KIARA MORALES ELGUERA</strong>
-            <span>CAJA-KIARA</span>
-            <p id="saldoKiara">0,00 LDS</p>
+            <span>CAJA-KIARA (LDS-DOC-002)</span>
+            <p id="saldoKiara">30.000,00 LDS</p>
           </div>
         </div>
 
@@ -751,8 +751,8 @@ textarea { height: auto; padding: 8px 10px; }
           <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" referrerpolicy="no-referrer" alt="Miss Anghy" onerror="this.src='https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS ANGHY REYES MELO</strong>
-            <span>CAJA-ANGHY</span>
-            <p id="saldoAnghy">0,00 LDS</p>
+            <span>CAJA-ANGHY (LDS-DOC-003)</span>
+            <p id="saldoAnghy">30.000,00 LDS</p>
           </div>
         </div>
 
@@ -760,8 +760,8 @@ textarea { height: auto; padding: 8px 10px; }
           <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" referrerpolicy="no-referrer" alt="Miss Karin" onerror="this.src='https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS KARIN MOLERO ROMANI</strong>
-            <span>CAJA-KARIN</span>
-            <p id="saldoKarin">0,00 LDS</p>
+            <span>CAJA-KARIN (LDS-DOC-004)</span>
+            <p id="saldoKarin">30.000,00 LDS</p>
           </div>
         </div>
       </div>
@@ -783,7 +783,7 @@ textarea { height: auto; padding: 8px 10px; }
             <tr>
               <th>AÑO</th>
               <th>FECHA Y HORA</th>
-              <th>CUENTA</th>
+              <th>CUENTA / ESTUDIANTE</th>
               <th>GRADO</th>
               <th>TIPO</th>
               <th>CONCEPTO</th>
@@ -813,10 +813,10 @@ textarea { height: auto; padding: 8px 10px; }
           <label for="transfMiss">SELECCIONAR MISS DESTINO</label>
           <select id="transfMiss" class="input-field">
             <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
           </select>
         </div>
 
@@ -855,10 +855,10 @@ textarea { height: auto; padding: 8px 10px; }
           <label for="devolMiss">SELECCIONAR MISS ORIGEN</label>
           <select id="devolMiss" class="input-field">
             <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
           </select>
         </div>
 
@@ -886,7 +886,7 @@ textarea { height: auto; padding: 8px 10px; }
       <div class="accordion-body">
         <div class="form-group">
           <label for="consultaCodigo">CÓDIGO DE ALUMNO O CAJA</label>
-          <input id="consultaCodigo" type="text" class="input-field" placeholder="LDS-EST-001 O CAJA-LILY">
+          <input id="consultaCodigo" type="text" class="input-field" placeholder="LDS-EST-001 O LDS-DOC-001">
         </div>
 
         <button class="btn btn-blue btn-full" type="button" onclick="consultarCuentaEspecifica()">🔎 CONSULTAR CUENTA</button>
@@ -950,18 +950,19 @@ let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
 
+// BASE DE DATOS MAPPING OFICIAL DEL EXCEL / GOOGLE SHEETS
 const MAPA_USUARIOS_OFICIALES = {
-  "CAJA-ANDREW": { nombre: "MISTER ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
-  "CAJA-LILY": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "DOCENTE / PROMOTORA", esDocente: true },
-  "CAJA-KIARA": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "CAJA-ANGHY": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "CAJA-KARIN": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
-  
-  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "DOCENTE / PROMOTORA", esDocente: true },
-  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
-  "LDS-DOC-005": { nombre: "MISTER ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
+  "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
+  "LDS-DOC-002": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "CAJA-KIARA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
+  "LDS-DOC-003": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "CAJA-ANGHY", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "LDS-DOC-004": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "CAJA-KARIN", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "CAJA-ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
+
+  "CAJA-LILY": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "LDS-DOC-001", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
+  "CAJA-KIARA": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "LDS-DOC-002", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "LDS-DOC-003", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "CAJA-KARIN": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "LDS-DOC-004", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  "CAJA-ANDREW": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "LDS-DOC-005", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
 
   "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl", rol: "ESTUDIANTE", esDocente: false },
   "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd", rol: "ESTUDIANTE", esDocente: false },
@@ -973,7 +974,7 @@ const MAPA_USUARIOS_OFICIALES = {
 function parsearMonto(val) {
   if (typeof val === 'number') return isNaN(val) ? 0 : val;
   if (!val) return 0;
-  let str = String(val).replace(/LDS/gi, '').trim();
+  let str = String(val).replace(/LDS/gi, '').replace(/S\/\.?/gi, '').trim();
   if (str.includes(',') && str.includes('.')) {
     str = str.replace(/\./g, '').replace(',', '.');
   } else if (str.includes(',')) {
@@ -1023,30 +1024,27 @@ function formatearLDS(valor) {
 function normalizarCodigo(str) {
   if (!str) return "";
   const s = String(str).trim().toUpperCase();
-  if (s === "LDS-DOC-001" || s.includes("LILY")) return "CAJA-LILY";
-  if (s === "LDS-DOC-002" || s.includes("KIARA")) return "CAJA-KIARA";
-  if (s === "LDS-DOC-003" || s.includes("ANGHY")) return "CAJA-ANGHY";
-  if (s === "LDS-DOC-004" || s.includes("KARIN")) return "CAJA-KARIN";
-  if (s === "LDS-DOC-005" || s.includes("ANDREW")) return "CAJA-ANDREW";
+  if (s === "LDS-DOC-001" || s.includes("LILY") || s === "CAJA-LILY") return "LDS-DOC-001";
+  if (s === "LDS-DOC-002" || s.includes("KIARA") || s === "CAJA-KIARA") return "LDS-DOC-002";
+  if (s === "LDS-DOC-003" || s.includes("ANGHY") || s === "CAJA-ANGHY") return "LDS-DOC-003";
+  if (s === "LDS-DOC-004" || s.includes("KARIN") || s === "CAJA-KARIN") return "LDS-DOC-004";
+  if (s === "LDS-DOC-005" || s.includes("ANDREW") || s === "CAJA-ANDREW") return "LDS-DOC-005";
   return s;
 }
 
 function obtenerDatosCompletosUsuario(codigoRaw, nombreRaw) {
-  const cod = String(codigoRaw || "").trim().toUpperCase();
-  const nom = String(nombreRaw || cod).trim().toUpperCase();
-  const infoOficial = MAPA_USUARIOS_OFICIALES[cod] || {};
+  const codNorm = normalizarCodigo(codigoRaw);
+  const infoOficial = MAPA_USUARIOS_OFICIALES[codNorm] || MAPA_USUARIOS_OFICIALES[codigoRaw] || {};
 
-  const esDocente = infoOficial.esDocente || cod.startsWith("CAJA-") || cod.startsWith("LDS-DOC") || nom.includes("MISS") || nom.includes("MISTER") || nom.includes("DOCENTE") || nom.includes("PROMOTORA");
-  
-  const nombreFinal = infoOficial.nombre || nom;
+  const esDocente = infoOficial.esDocente || codNorm.startsWith("LDS-DOC") || codNorm.startsWith("CAJA-");
+  const nombreFinal = infoOficial.nombre || String(nombreRaw || codigoRaw).toUpperCase();
   const rolTexto = esDocente ? (infoOficial.rol || "DOCENTE / MAESTRO(A)") : "ESTUDIANTE";
   const tituloReporte = esDocente ? "ESTADO DE CUENTA — CAJA DOCENTE / GENERAL" : "ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE";
   const etiquetaUsuario = esDocente ? "DOCENTE / CAJA:" : "ESTUDIANTE / ALUMNO:";
-  
   const fotoUrl = infoOficial.foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nombreFinal) + "&background=0c1e30&color=fff";
 
   return {
-    codigo: cod,
+    codigo: codNorm || codigoRaw,
     nombre: nombreFinal,
     esDocente,
     rolTexto,
@@ -1086,18 +1084,19 @@ function actualizarCajaAndrew() {
 function extraerListaCuentasUnicas(movimientos) {
   const mapa = new Map();
 
-  ["CAJA-ANDREW", "CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
+  ["LDS-DOC-005", "LDS-DOC-001", "LDS-DOC-002", "LDS-DOC-003", "LDS-DOC-004"].forEach(caja => {
     mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
   });
 
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
       if (!m) return;
-      const cod = String(m.codigo || m.codigoQR || "").trim().toUpperCase();
-      const nom = String(m.estudiante || m.nombreCompleto || cod).trim().toUpperCase();
+      const codRaw = String(m.codigo || m.CÓDIGO || m.codigoQR || "").trim().toUpperCase();
+      const cod = normalizarCodigo(codRaw);
+      const nom = String(m.estudiante || m["CUENTA/ESTUDIANTE"] || m.nombreCompleto || cod).trim().toUpperCase();
       if (cod && !mapa.has(cod)) {
         const datos = obtenerDatosCompletosUsuario(cod, nom);
-        datos.grado = m.grado || "";
+        datos.grado = m.grado || m.GRADO || "";
         mapa.set(cod, datos);
       }
     });
@@ -1106,62 +1105,66 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
+// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS DEL EXCEL
 function calcularYSincronizarSaldos(movimientos) {
   const CAPITAL_INICIAL_ANDREW = 200000;
   let egresosAndrew = 0;
   let ingresosAndrew = 0;
 
   const saldosMises = {
-    "CAJA-LILY": 0,
-    "CAJA-KIARA": 0,
-    "CAJA-ANGHY": 0,
-    "CAJA-KARIN": 0
+    "LDS-DOC-001": 0,
+    "LDS-DOC-002": 0,
+    "LDS-DOC-003": 0,
+    "LDS-DOC-004": 0
   };
 
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
       if (!m) return;
-      if (String(m.estado || "").toUpperCase() === "ANULADO") return;
+      if (String(m.estado || m.ESTADO || "").toUpperCase() === "ANULADO") return;
 
-      const cod = normalizarCodigo(m.codigo || m.codigoQR || "");
-      const resp = normalizarCodigo(m.responsable || m.cajero || "");
-      const monto = parsearMonto(m.monto || m.montoLDS || 0);
-      const tipo = String(m.tipo || "").toUpperCase();
-      const obs = String(m.observacion || "").toUpperCase();
-      const conc = String(m.concepto || "").toUpperCase();
+      const cod = normalizarCodigo(m.codigo || m.CÓDIGO || "");
+      const resp = normalizarCodigo(m.responsable || m.RESPONSABLE || "");
+      const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
+      const tipo = String(m.tipo || m.TIPO || "").toUpperCase();
+      const conc = String(m.concepto || m.CONCEPTO || "").toUpperCase();
+      const obs = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
 
-      ["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
-        if (cod === caja || obs.includes("CUENTA_DESTINO=" + caja) || conc.includes(caja)) {
+      // Mises
+      Object.keys(saldosMises).forEach(docKey => {
+        if (cod === docKey) {
           if (tipo.includes("EGRESO")) {
-            saldosMises[caja] -= monto;
+            saldosMises[docKey] -= monto;
           } else {
-            saldosMises[caja] += monto;
+            saldosMises[docKey] += monto;
           }
-        } else if (obs.includes("CUENTA_ORIGEN=" + caja) && (obs.includes("DEVOLUCION") || obs.includes("DEVOLUCIÓN"))) {
-          saldosMises[caja] -= monto;
         }
       });
 
-      const esDeAndrew = (cod === "CAJA-ANDREW") || (resp === "CAJA-ANDREW") || obs.includes("CAJA-ANDREW");
-      if (esDeAndrew) {
-        if (tipo.includes("EGRESO") || obs.includes("CUENTA_DESTINO=") || conc.includes("FONDO")) {
+      // Andrew
+      if (cod === "LDS-DOC-005" || resp === "LDS-DOC-005") {
+        if (conc.includes("FONDO BASE GERENTE GENERAL") || conc.includes("CAPITAL INICIAL")) {
+          // Capital inicial cargado
+        } else if (tipo.includes("EGRESO") || conc.includes("FONDO") || obs.includes("PAGO")) {
           egresosAndrew += monto;
-        } else if (tipo.includes("INGRESO")) {
+        } else if (tipo.includes("INGRESO") && obs.includes("DEVOLUCION")) {
           ingresosAndrew += monto;
         }
       }
     });
   }
 
-  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW + ingresosAndrew - egresosAndrew);
+  // Descontar las transferencias a Misses si están registradas a nombre de Andrew
+  const totalFondosTransferidos = saldosMises["LDS-DOC-001"] + saldosMises["LDS-DOC-002"] + saldosMises["LDS-DOC-003"] + saldosMises["LDS-DOC-004"];
+  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW + ingresosAndrew - totalFondosTransferidos - egresosAndrew);
 
   document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
   document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
 
-  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-LILY"]));
-  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KIARA"]));
-  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-ANGHY"]));
-  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KARIN"]));
+  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-001"]));
+  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-002"]));
+  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-003"]));
+  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
 function filtrarYRenderizarTabla() {
@@ -1170,11 +1173,11 @@ function filtrarYRenderizarTabla() {
   } else {
     const movsAndrew = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
-      const cod = normalizarCodigo(m.codigo || m.codigoQR || "");
-      const resp = normalizarCodigo(m.responsable || m.cajero || "");
-      const obs = String(m.observacion || "").toUpperCase();
-      const est = String(m.estudiante || m.nombreCompleto || "").toUpperCase();
-      return cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("ANDREW") || est.includes("ANDREW");
+      const cod = normalizarCodigo(m.codigo || m.CÓDIGO || "");
+      const resp = normalizarCodigo(m.responsable || m.RESPONSABLE || "");
+      const obs = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
+      const est = String(m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+      return cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("ANDREW") || est.includes("ANDREW");
     });
     renderTabla(movsAndrew.length > 0 ? movsAndrew : todosLosMovimientosGlobales);
   }
@@ -1209,23 +1212,25 @@ function renderTabla(lista) {
   lista.forEach(m => {
     if (!m) return;
     const tr = document.createElement("tr");
-    const tipoStr = String(m.tipo || "").toUpperCase();
-    const concStr = String(m.concepto || "").toUpperCase();
-    const obsStr = String(m.observacion || "").toUpperCase();
+    const fechaVal = m.fecha || m.FECHA || m.timestamp || '';
+    const tipoStr = String(m.tipo || m.TIPO || "").toUpperCase();
+    const concStr = String(m.concepto || m.CONCEPTO || "").toUpperCase();
+    const obsStr = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
+    const estudianteVal = m.estudiante || m["CUENTA/ESTUDIANTE"] || m.codigo || m.CÓDIGO || 'MISTER ANDREW';
 
-    const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO") || concStr.includes("PAGO") || obsStr.includes("TRANSFERENCIA");
-    const monto = parsearMonto(m.monto || m.montoLDS || 0);
+    const esEgreso = tipoStr.includes("EGRESO");
+    const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
 
     tr.innerHTML = `
       <td><strong>${m.anio || '2026'}</strong></td>
-      <td>${m.fecha || m.timestamp || ''}</td>
-      <td><strong>${m.estudiante || m.nombreCompleto || m.codigo || 'MISTER ANDREW'}</strong></td>
-      <td>${m.grado || 'CAJA GENERAL'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${esEgreso ? 'EGRESO' : 'INGRESO'}</span></td>
-      <td>${m.concepto || ''}</td>
+      <td><strong>${fechaVal}</strong></td>
+      <td><strong>${estudianteVal}</strong></td>
+      <td>${m.grado || m.GRADO || 'CAJA GENERAL'}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoStr || 'INGRESO'}</span></td>
+      <td>${concStr}</td>
       <td><strong>${formatearLDS(monto)}</strong></td>
-      <td>${m.responsable || m.cajero || 'SISTEMA'}</td>
-      <td>${m.observacion || ''}</td>
+      <td>${m.responsable || m.RESPONSABLE || 'SISTEMA'}</td>
+      <td>${obsStr}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -1281,8 +1286,9 @@ function generarEImprimirReporteUnitario(codigo, nombre) {
   const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
   const movs = todosLosMovimientosGlobales.filter(m => {
     if (!m) return false;
-    const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
-    return c.includes(codigo.toUpperCase()) || String(usuario.nombre).toUpperCase().includes(c);
+    const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+    const codNorm = normalizarCodigo(c);
+    return codNorm === usuario.codigo || c.includes(codigo.toUpperCase()) || String(usuario.nombre).toUpperCase().includes(c);
   });
 
   const cont = document.getElementById("contenedorImpresion");
@@ -1308,8 +1314,9 @@ function generarEImprimirReporteGrupal() {
   listaCuentasYAlumnosGlobal.forEach(usr => {
     const movsUsr = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
-      const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
-      return c.includes(usr.codigo.toUpperCase()) || String(usr.nombre).toUpperCase().includes(c);
+      const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+      const codNorm = normalizarCodigo(c);
+      return codNorm === usr.codigo || c.includes(usr.codigo.toUpperCase()) || String(usr.nombre).toUpperCase().includes(c);
     });
 
     htmlAcumulado += construirHTMLPaginaUsuario(usr, movsUsr);
@@ -1329,24 +1336,25 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
   } else {
     movimientos.forEach(m => {
       if (!m) return;
-      const monto = parsearMonto(m.monto || m.montoLDS || 0);
-      const tipoStr = String(m.tipo || "").toUpperCase();
-      const concStr = String(m.concepto || "").toUpperCase();
-      const obsStr = String(m.observacion || "").toUpperCase();
+      const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
+      const fechaVal = m.fecha || m.FECHA || m.timestamp || '';
+      const tipoStr = String(m.tipo || m.TIPO || "").toUpperCase();
+      const concStr = String(m.concepto || m.CONCEPTO || "").toUpperCase();
+      const obsStr = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
 
-      const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO") || concStr.includes("PAGO") || obsStr.includes("TRANSFERENCIA");
+      const esEgreso = tipoStr.includes("EGRESO");
       
       if (esEgreso) totalEgresos += monto;
       else totalIngresos += monto;
 
       filas += `
         <tr>
-          <td>${m.fecha || m.timestamp || ''}</td>
-          <td><strong>${esEgreso ? 'EGRESO' : 'INGRESO'}</strong></td>
-          <td>${m.concepto || ''}</td>
+          <td>${fechaVal}</td>
+          <td><strong>${tipoStr || 'INGRESO'}</strong></td>
+          <td>${concStr}</td>
           <td style="text-align:right;"><strong>${formatearLDS(monto)}</strong></td>
-          <td>${m.responsable || m.cajero || ''}</td>
-          <td>${m.observacion || ''}</td>
+          <td>${m.responsable || m.RESPONSABLE || ''}</td>
+          <td>${obsStr}</td>
         </tr>
       `;
     });
@@ -1404,71 +1412,71 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
 }
 
 function ejecutarTransferenciaFondo() {
-  const miss = document.getElementById("transfMiss").value;
+  const missDocCode = document.getElementById("transfMiss").value;
   const concepto = document.getElementById("transfConcepto").value;
   const monto = Number(document.getElementById("transfMonto").value) || 0;
   const obs = document.getElementById("transfObs").value.trim();
   const anio = document.getElementById("selectAnioEscolar").value;
   const msg = document.getElementById("msgTransferencia");
 
-  if (!miss) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
+  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
 
   msg.textContent = "PROCESANDO TRANSFERENCIA...";
   msg.className = "msg-box ok";
 
-  const detalleObs = "TRANSFERENCIA DE FONDO A " + miss + " | CUENTA_ORIGEN=CAJA-ANDREW | CUENTA_DESTINO=" + miss + (obs ? " | " + obs : "");
+  const detalleObs = "TRANSFERENCIA DE FONDO A " + missDocCode + (obs ? " | " + obs : "");
 
   llamarAPI({
     accion: "registrarMovimiento",
-    codigo: "CAJA-ANDREW",
+    codigo: missDocCode,
     anio: anio,
-    tipo: "EGRESO",
+    tipo: "INGRESO",
     categoria: "FONDO_DOCENTE",
-    concepto: concepto + " (" + miss + ")",
+    concepto: concepto,
     monto: monto,
-    responsable: "MISTER ANDREW",
-    responsableClave: "360LDS@",
+    responsable: "Mister Andrew",
+    responsableClave: "360LDS@@@",
     observacion: detalleObs
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡EGRESO DE FONDO REGISTRADO CORRECTAMENTE!";
+      msg.textContent = "¡FONDO TRANSFERIDO Y REGISTRADO CORRECTAMENTE!";
       msg.className = "msg-box ok";
       document.getElementById("transfMonto").value = "";
       document.getElementById("transfObs").value = "";
       actualizarCajaAndrew();
     } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EGRESO.";
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSFERENCIA.";
       msg.className = "msg-box error";
     }
   });
 }
 
 function ejecutarDevolucion() {
-  const miss = document.getElementById("devolMiss").value;
+  const missDocCode = document.getElementById("devolMiss").value;
   const monto = Number(document.getElementById("devolMonto").value) || 0;
   const obs = document.getElementById("devolObs").value.trim();
   const anio = document.getElementById("selectAnioEscolar").value;
   const msg = document.getElementById("msgDevolucion");
 
-  if (!miss) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
+  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
 
   msg.textContent = "PROCESANDO DEVOLUCIÓN...";
   msg.className = "msg-box ok";
 
-  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + miss + " | CUENTA_ORIGEN=" + miss + " | CUENTA_DESTINO=CAJA-ANDREW" + (obs ? " | " + obs : "");
+  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + missDocCode + (obs ? " | " + obs : "");
 
   llamarAPI({
     accion: "registrarMovimiento",
-    codigo: "CAJA-ANDREW",
+    codigo: "LDS-DOC-005",
     anio: anio,
     tipo: "INGRESO",
     categoria: "DEVOLUCION_FONDO",
-    concepto: "DEVOLUCIÓN DE FONDO (" + miss + ")",
+    concepto: "DEVOLUCIÓN DE FONDO",
     monto: monto,
-    responsable: "MISTER ANDREW",
-    responsableClave: "360LDS@",
+    responsable: "Mister Andrew",
+    responsableClave: "360LDS@@@",
     observacion: detalleObs
   }, function(res) {
     if (res && res.ok) {
@@ -1492,8 +1500,8 @@ function consultarCuentaEspecifica() {
 
   const filtrados = todosLosMovimientosGlobales.filter(m => {
     if (!m) return false;
-    const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
-    return c.includes(cod);
+    const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+    return c.includes(cod) || normalizarCodigo(c) === normalizarCodigo(cod);
   });
 
   if (!filtrados.length) {
