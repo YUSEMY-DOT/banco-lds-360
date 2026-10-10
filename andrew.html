@@ -315,4 +315,784 @@ header {
 .table-panel {
   background: #ffffff;
   border: 2px solid var(--dorado);
-  border-
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.table-head h3 {
+  color: var(--azul);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.table-wrap {
+  width: 100%;
+  max-height: 480px;
+  overflow: auto;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+th, td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+th {
+  background: #f1f5f9;
+  color: var(--azul);
+  font-weight: 800;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #fecaca; }
+
+/* ACORDEÓN / PANELES LATERALES DERECHOS */
+.accordion-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.accordion-head {
+  padding: 12px 16px;
+  background: #f8fafc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #e2e8f0;
+  user-select: none;
+}
+
+.accordion-head:hover { background: #f1f5f9; }
+
+.accordion-head h3 {
+  font-size: 0.82rem;
+  color: var(--azul);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.accordion-head span {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.toggle-arrow {
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+
+.accordion-panel.collapsed .accordion-body { display: none; }
+.accordion-panel.collapsed .toggle-arrow { transform: rotate(-90deg); }
+.accordion-panel.collapsed .accordion-head { border-bottom: none; }
+
+.accordion-body {
+  padding: 16px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--azul);
+  margin-bottom: 4px;
+}
+
+.input-field, select, textarea {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: none;
+  background: #f8fafc;
+}
+
+textarea { height: auto; padding: 8px 10px; }
+
+.input-field:focus, select:focus, textarea:focus {
+  border-color: #0284c7;
+  background: #ffffff;
+}
+
+.btn-full {
+  width: 100%;
+  height: 44px;
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.msg-box {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: none;
+}
+.msg-box.ok { display: block; background: #ecfdf3; color: #047857; border: 1px solid #a7f3d0; }
+.msg-box.error { display: block; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+/* MODAL DE REPORTES */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 30, 48, 0.88);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 22px;
+  border-top: 5px solid var(--dorado);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+}
+
+.modal-box h3 {
+  font-size: 1.05rem;
+  color: var(--azul);
+  font-weight: 900;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.opcion-reporte-btn {
+  width: 100%;
+  border: 2px solid var(--dorado);
+  background: #fffdf7;
+  color: #7c4300;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  transition: all 0.2s;
+}
+
+.opcion-reporte-btn:hover {
+  background: #fff7d6;
+  transform: translateY(-1px);
+}
+
+@media print {
+  header, .accordion-panel, .modal-overlay, .btn, .table-actions, .alert-status { display: none !important; }
+  body { background: #ffffff; color: #000; padding: 0; }
+  .layout-main { grid-template-columns: 1fr; }
+  .table-panel { border: none; padding: 0; }
+  .table-wrap { max-height: none; overflow: visible; border: 1px solid #000; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+      </div>
+      <div>
+        <h1>CAJA ANDREW</h1>
+        <p>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <select id="selectAnioEscolar" class="input-field" style="width: 110px; height: 36px;" onchange="actualizarCajaAndrew()">
+        <option value="2026" selected>AÑO 2026</option>
+        <option value="2027">AÑO 2027</option>
+        <option value="2028">AÑO 2028</option>
+      </select>
+      <button class="btn btn-gold" type="button" onclick="actualizarCajaAndrew()">🔄 ACTUALIZAR</button>
+      <a class="btn btn-light" href="./">← INICIO</a>
+    </div>
+  </div>
+</header>
+
+<main class="layout-main">
+  <!-- COLUMNA IZQUIERDA -->
+  <div class="left-stack">
+    <!-- BANNER PROFILE -->
+    <div class="profile-banner">
+      <div class="profile-info">
+        <div class="avatar-wrap">
+          <img src="https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w800" alt="Mister Andrew">
+        </div>
+        <div class="profile-text">
+          <h3>MISTER ANDREW</h3>
+          <p>CAJA-ANDREW · CAJA GENERAL</p>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-pill pill-inicial">
+          <span>SALDO INICIAL</span>
+          <strong id="saldoInicialAndrew">200.000,00 LDS</strong>
+        </div>
+        <div class="stat-pill pill-actual">
+          <span>SALDO ACTUAL</span>
+          <strong id="saldoActualAndrew">80.000,00 LDS</strong>
+        </div>
+        <div class="stat-pill pill-mov">
+          <span>MOVIMIENTOS</span>
+          <strong id="cantMovimientos">0</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADO / ALERT -->
+    <div id="alertBanner" class="alert-status">
+      CAJA GENERAL ACTUALIZADA CORRECTAMENTE.
+    </div>
+
+    <!-- SALDOS DE LAS MISS -->
+    <div class="mises-panel">
+      <h3>📊 SALDOS DE LAS MISS</h3>
+      <div class="mises-grid">
+        <div class="mise-card">
+          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
+          <div class="mise-card-info">
+            <strong>MISS LILY MELO AZAÑERO</strong>
+            <span>CAJA-LILY</span>
+            <p id="saldoLily">30.000,00 LDS</p>
+          </div>
+        </div>
+
+        <div class="mise-card">
+          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300" alt="Miss Kiara">
+          <div class="mise-card-info">
+            <strong>MISS KIARA MORALES ELGUERA</strong>
+            <span>CAJA-KIARA</span>
+            <p id="saldoKiara">30.000,00 LDS</p>
+          </div>
+        </div>
+
+        <div class="mise-card">
+          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300" alt="Miss Anghy">
+          <div class="mise-card-info">
+            <strong>MISS ANGHY REYES MELO</strong>
+            <span>CAJA-ANGHY</span>
+            <p id="saldoAnghy">30.000,00 LDS</p>
+          </div>
+        </div>
+
+        <div class="mise-card">
+          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300" alt="Miss Karin">
+          <div class="mise-card-info">
+            <strong>MISS KARIN MOLERO ROMANI</strong>
+            <span>CAJA-KARIN</span>
+            <p id="saldoKarin">30.000,00 LDS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE MOVIMIENTOS -->
+    <div class="table-panel">
+      <div class="table-head">
+        <h3>📋 MOVIMIENTOS DE CAJA</h3>
+        <div class="table-actions">
+          <button class="btn btn-blue" type="button" onclick="abrirModalReportes()">🖨️ REPORTES</button>
+          <button id="btnVerTodo" class="btn btn-gold" type="button" onclick="toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>AÑO</th>
+              <th>FECHA Y HORA</th>
+              <th>CUENTA</th>
+              <th>GRADO</th>
+              <th>TIPO</th>
+              <th>CONCEPTO</th>
+              <th>MONTO LDS</th>
+              <th>CAJERO(A)</th>
+              <th>OBSERVACIÓN</th>
+            </tr>
+          </thead>
+          <tbody id="tablaMovimientos">
+            <tr><td colspan="9" style="text-align:center; padding: 20px; font-weight: 700;">CARGANDO MOVIMIENTOS...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMNA DERECHA (PANELES LATERALES) -->
+  <div class="right-stack">
+    <!-- PANEL 1: TRANSFERIR FONDO -->
+    <div id="panelTransferir" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelTransferir')">
+        <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="transfMiss">SELECCIONAR MISS DESTINO</label>
+          <select id="transfMiss" class="input-field">
+            <option value="">SELECCIONE UNA MISS</option>
+            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="transfConcepto">CONCEPTO / MES</label>
+          <select id="transfConcepto" class="input-field">
+            <option value="FONDO PARA PAGOS A ALUMNOS">FONDO PARA PAGOS A ALUMNOS</option>
+            <option value="FONDO BASE DOCENTE">FONDO BASE DOCENTE</option>
+            <option value="ASIGNACIÓN ESPECIAL">ASIGNACIÓN ESPECIAL</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="transfMonto">MONTO LDS</label>
+          <input id="transfMonto" type="number" step="0.5" min="0" class="input-field" placeholder="15000">
+        </div>
+
+        <div class="form-group">
+          <label for="transfObs">OBSERVACIÓN / MES (EJ: PAGO MES DE AGOSTO)</label>
+          <input id="transfObs" type="text" class="input-field" placeholder="PAGO MES DE AGOSTO">
+        </div>
+
+        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarTransferenciaFondo()">💸 TRANSFERIR FONDO</button>
+        <div id="msgTransferencia" class="msg-box"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: RECIBIR DEVOLUCIÓN -->
+    <div id="panelDevolucion" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelDevolucion')">
+        <h3>↩ RECIBIR DEVOLUCIÓN DE UNA MISS</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="devolMiss">SELECCIONAR MISS ORIGEN</label>
+          <select id="devolMiss" class="input-field">
+            <option value="">SELECCIONE UNA MISS</option>
+            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="devolMonto">MONTO LDS</label>
+          <input id="devolMonto" type="number" step="0.5" min="0" class="input-field" placeholder="0">
+        </div>
+
+        <div class="form-group">
+          <label for="devolObs">MOTIVO / NOTA</label>
+          <textarea id="devolObs" rows="2" class="input-field" placeholder="DEVOLUCIÓN DE SALDO NO UTILIZADO..."></textarea>
+        </div>
+
+        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarDevolucion()">↩ REGISTRAR DEVOLUCIÓN</button>
+        <div id="msgDevolucion" class="msg-box"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: CONSULTAR CUENTA -->
+    <div id="panelConsulta" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelConsulta')">
+        <h3>🔎 CONSULTAR CUENTA</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="consultaCodigo">CÓDIGO DE ALUMNO O CAJA</label>
+          <input id="consultaCodigo" type="text" class="input-field" placeholder="LDS-EST-001 O CAJA-LILY">
+        </div>
+
+        <button class="btn btn-blue btn-full" type="button" onclick="consultarCuentaEspecifica()">🔎 CONSULTAR CUENTA</button>
+        <div id="msgConsulta" class="msg-box"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL DE SELECCIÓN DE REPORTES (UNITARIO Y GRUPAL) -->
+<div id="modalReportes" class="modal-overlay">
+  <div class="modal-box">
+    <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
+    
+    <button class="opcion-reporte-btn" type="button" onclick="imprimirReporteUnitario()">
+      <span>👤 ESTADO DE CUENTA UNITARIO (INDIVIDUAL)</span>
+      <span>➔</span>
+    </button>
+    
+    <button class="opcion-reporte-btn" type="button" onclick="imprimirReporteGrupal()">
+      <span>👥 REPORTE GRUPAL COMPLETO DE TODO EL BANCO</span>
+      <span>➔</span>
+    </button>
+
+    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModalReportes()">CANCELAR</button>
+  </div>
+</div>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
+
+let mostrandoTodoElBanco = false;
+let todosLosMovimientosGlobales = [];
+
+function togglePanel(id) {
+  const p = document.getElementById(id);
+  if (p) p.classList.toggle("collapsed");
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback = "callbackAndrew_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
+  const script = document.createElement("script");
+
+  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
+  window[nombreCallback] = function(respuesta) {
+    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
+  };
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+    callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
+  };
+  document.body.appendChild(script);
+}
+
+function formatearLDS(valor) {
+  const n = Number(valor) || 0;
+  return n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " LDS";
+}
+
+function normalizarCodigo(str) {
+  if (!str) return "";
+  const s = String(str).trim().toUpperCase();
+  if (s === "LDS-DOC-001" || s === "MISS LILY MELO AZAÑERO") return "CAJA-LILY";
+  if (s === "LDS-DOC-002" || s === "MISS KIARA MORALES ELGUERA") return "CAJA-KIARA";
+  if (s === "LDS-DOC-003" || s === "MISS ANGHY REYES MELO") return "CAJA-ANGHY";
+  if (s === "LDS-DOC-004" || s === "MISS KARIN MOLERO ROMANI") return "CAJA-KARIN";
+  if (s === "LDS-DOC-005" || s === "MISTER ANDREW" || s === "ANDREW") return "CAJA-ANDREW";
+  return s;
+}
+
+function actualizarCajaAndrew() {
+  const anio = document.getElementById("selectAnioEscolar").value;
+  mostrandoTodoElBanco = false;
+  document.getElementById("btnVerTodo").textContent = "🌐 VER TODO EL BANCO";
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
+      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS.</td></tr>';
+      return;
+    }
+
+    todosLosMovimientosGlobales = res.movimientos;
+    calcularYSincronizarSaldos(res.movimientos);
+    filtrarYRenderizarTabla();
+  });
+}
+
+function calcularYSincronizarSaldos(movimientos) {
+  const CAPITAL_INICIAL_ANDREW = 200000;
+  let egresosAndrew = 0;
+
+  const saldosMises = {
+    "CAJA-LILY": 0,
+    "CAJA-KIARA": 0,
+    "CAJA-ANGHY": 0,
+    "CAJA-KARIN": 0
+  };
+
+  movimientos.forEach(m => {
+    if (String(m.estado || "ACTIVO").toUpperCase() === "ANULADO") return;
+
+    const cod = normalizarCodigo(m.codigo);
+    const monto = Number(m.monto || m.montoLDS || 0) || 0;
+    const tipo = String(m.tipo || "").toUpperCase();
+    const resp = normalizarCodigo(m.responsable || m.cajero);
+    const obs = String(m.observacion || "").toUpperCase();
+
+    // Sumar transferencias recibidas por las Misses de Mister Andrew
+    Object.keys(saldosMises).forEach(caja => {
+      if (cod === caja || obs.includes("CUENTA_DESTINO=" + caja)) {
+        if (tipo === "INGRESO") saldosMises[caja] += monto;
+        else if (tipo === "EGRESO") saldosMises[caja] -= monto;
+      }
+    });
+
+    // Sumar egresos de Caja Andrew (transferencias enviadas a Misses)
+    if (cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW")) {
+      if (tipo === "EGRESO" || obs.includes("CUENTA_DESTINO=")) {
+        egresosAndrew += monto;
+      }
+    }
+  });
+
+  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW - egresosAndrew);
+
+  // Actualizar interfaz visual de Andrew
+  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
+  document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
+
+  // Actualizar tarjetas de las Misses
+  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-LILY"]));
+  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KIARA"]));
+  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-ANGHY"]));
+  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KARIN"]));
+}
+
+function filtrarYRenderizarTabla() {
+  if (mostrandoTodoElBanco) {
+    renderTabla(todosLosMovimientosGlobales);
+  } else {
+    const movsAndrew = todosLosMovimientosGlobales.filter(m => {
+      const cod = normalizarCodigo(m.codigo);
+      const resp = normalizarCodigo(m.responsable || m.cajero);
+      const obs = String(m.observacion || "").toUpperCase();
+      return cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("CAJA-ANDREW");
+    });
+    renderTabla(movsAndrew.length ? movsAndrew : todosLosMovimientosGlobales);
+  }
+}
+
+function toggleVerTodoElBanco() {
+  mostrandoTodoElBanco = !mostrandoTodoElBanco;
+  const btn = document.getElementById("btnVerTodo");
+
+  if (mostrandoTodoElBanco) {
+    btn.textContent = "💼 VER SOLO CAJA ANDREW";
+  } else {
+    btn.textContent = "🌐 VER TODO EL BANCO";
+  }
+  filtrarYRenderizarTabla();
+}
+
+function renderTabla(lista) {
+  const tbody = document.getElementById("tablaMovimientos");
+  tbody.innerHTML = "";
+  document.getElementById("cantMovimientos").textContent = String(lista.length);
+
+  if (!lista.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px;">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
+    return;
+  }
+
+  lista.forEach(m => {
+    const tr = document.createElement("tr");
+    const esEgreso = String(m.tipo || "").toUpperCase().includes("EGRESO");
+
+    tr.innerHTML = `
+      <td><strong>${m.anio || '2026'}</strong></td>
+      <td>${m.fecha || m.timestamp || ''}</td>
+      <td><strong>${m.estudiante || m.codigo || 'MISTER ANDREW'}</strong></td>
+      <td>${m.grado || 'CAJA GENERAL'}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${m.tipo || 'INGRESO'}</span></td>
+      <td>${m.concepto || ''}</td>
+      <td><strong>${formatearLDS(m.monto || m.montoLDS || 0)}</strong></td>
+      <td>${m.responsable || m.cajero || 'SISTEMA'}</td>
+      <td>${m.observacion || ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// FUNCIONES DE OPERACIONES EN PANELES LATERALES
+function ejecutarTransferenciaFondo() {
+  const miss = document.getElementById("transfMiss").value;
+  const concepto = document.getElementById("transfConcepto").value;
+  const monto = Number(document.getElementById("transfMonto").value) || 0;
+  const obs = document.getElementById("transfObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgTransferencia");
+
+  if (!miss) { msg.textContent = "SELECCIONE UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESE UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  msg.textContent = "PROCESANDO TRANSFERENCIA...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "CUENTA_ORIGEN=CAJA-ANDREW | CUENTA_DESTINO=" + miss + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: miss,
+    anio: anio,
+    tipo: "INGRESO",
+    categoria: "FONDO_DOCENTE",
+    concepto: concepto,
+    monto: monto,
+    responsable: "MISTER ANDREW",
+    responsableClave: "360LDS@",
+    observacion: detalleObs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡TRANSFERENCIA REGISTRADA CORRECTAMENTE!";
+      msg.className = "msg-box ok";
+      document.getElementById("transfMonto").value = "";
+      document.getElementById("transfObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSFERENCIA.";
+      msg.className = "msg-box error";
+    }
+  });
+}
+
+function ejecutarDevolucion() {
+  const miss = document.getElementById("devolMiss").value;
+  const monto = Number(document.getElementById("devolMonto").value) || 0;
+  const obs = document.getElementById("devolObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgDevolucion");
+
+  if (!miss) { msg.textContent = "SELECCIONE UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESE UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  msg.textContent = "PROCESANDO DEVOLUCIÓN...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + miss + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: "CAJA-ANDREW",
+    anio: anio,
+    tipo: "INGRESO",
+    categoria: "DEVOLUCION_FONDO",
+    concepto: "DEVOLUCIÓN DE FONDO",
+    monto: monto,
+    responsable: "MISTER ANDREW",
+    responsableClave: "360LDS@",
+    observacion: detalleObs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡DEVOLUCIÓN REGISTRADA CORRECTAMENTE!";
+      msg.className = "msg-box ok";
+      document.getElementById("devolMonto").value = "";
+      document.getElementById("devolObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR DEVOLUCIÓN.";
+      msg.className = "msg-box error";
+    }
+  });
+}
+
+function consultarCuentaEspecifica() {
+  const cod = document.getElementById("consultaCodigo").value.trim().toUpperCase();
+  const msg = document.getElementById("msgConsulta");
+
+  if (!cod) { msg.textContent = "INGRESE UN CÓDIGO."; msg.className = "msg-box error"; return; }
+
+  const filtrados = todosLosMovimientosGlobales.filter(m => {
+    const c = String(m.codigo || m.estudiante || "").toUpperCase();
+    return c.includes(cod);
+  });
+
+  if (!filtrados.length) {
+    msg.textContent = "NO SE ENCONTRARON REGISTROS.";
+    msg.className = "msg-box error";
+    return;
+  }
+
+  msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
+  msg.className = "msg-box ok";
+  renderTabla(filtrados);
+}
+
+// MODAL Y REPORTES
+function abrirModalReportes() {
+  document.getElementById("modalReportes").style.display = "flex";
+}
+
+function cerrarModalReportes() {
+  document.getElementById("modalReportes").style.display = "none";
+}
+
+function imprimirReporteUnitario() {
+  cerrarModalReportes();
+  const cod = prompt("INGRESE EL CÓDIGO DE LA CUENTA O ALUMNO PARA EL REPORTE INDIVIDUAL:");
+  if (!cod) return;
+
+  const filtrados = todosLosMovimientosGlobales.filter(m => {
+    const c = String(m.codigo || m.estudiante || "").toUpperCase();
+    return c.includes(cod.trim().toUpperCase());
+  });
+
+  if (!filtrados.length) {
+    alert("NO SE ENCONTRARON MOVIMIENTOS PARA EL CÓDIGO INGRESADO.");
+    return;
+  }
+
+  renderTabla(filtrados);
+  setTimeout(() => { window.print(); }, 300);
+}
+
+function imprimirReporteGrupal() {
+  cerrarModalReportes();
+  renderTabla(todosLosMovimientosGlobales);
+  setTimeout(() => { window.print(); }, 300);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  actualizarCajaAndrew();
+});
+</script>
+
+</body>
+</html>
