@@ -529,7 +529,7 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL CON UNICAMENTE UNA INSIGNIA A LA DERECHA */
+/* MEMBRETE INSTITUCIONAL CON ÚNICAMENTE UNA INSIGNIA A LA DERECHA */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
@@ -1105,11 +1105,9 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS DEL EXCEL
+// CÁLCULO DE SALDOS UNIFICADO
 function calcularYSincronizarSaldos(movimientos) {
   const CAPITAL_INICIAL_ANDREW = 200000;
-  let egresosAndrew = 0;
-  let ingresosAndrew = 0;
 
   const saldosMises = {
     "LDS-DOC-001": 0,
@@ -1124,39 +1122,25 @@ function calcularYSincronizarSaldos(movimientos) {
       if (String(m.estado || m.ESTADO || "").toUpperCase() === "ANULADO") return;
 
       const cod = normalizarCodigo(m.codigo || m.CÓDIGO || "");
-      const resp = normalizarCodigo(m.responsable || m.RESPONSABLE || "");
       const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
       const tipo = String(m.tipo || m.TIPO || "").toUpperCase();
-      const conc = String(m.concepto || m.CONCEPTO || "").toUpperCase();
-      const obs = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
 
-      // Mises
-      Object.keys(saldosMises).forEach(docKey => {
-        if (cod === docKey) {
-          if (tipo.includes("EGRESO")) {
-            saldosMises[docKey] -= monto;
-          } else {
-            saldosMises[docKey] += monto;
-          }
-        }
-      });
-
-      // Andrew
-      if (cod === "LDS-DOC-005" || resp === "LDS-DOC-005") {
-        if (conc.includes("FONDO BASE GERENTE GENERAL") || conc.includes("CAPITAL INICIAL")) {
-          // Capital inicial cargado
-        } else if (tipo.includes("EGRESO") || conc.includes("FONDO") || obs.includes("PAGO")) {
-          egresosAndrew += monto;
-        } else if (tipo.includes("INGRESO") && obs.includes("DEVOLUCION")) {
-          ingresosAndrew += monto;
+      // Calcular el saldo individual de cada Miss
+      if (saldosMises.hasOwnProperty(cod)) {
+        if (tipo.includes("EGRESO")) {
+          saldosMises[cod] -= monto;
+        } else {
+          saldosMises[cod] += monto;
         }
       }
     });
   }
 
-  // Descontar las transferencias a Misses si están registradas a nombre de Andrew
-  const totalFondosTransferidos = saldosMises["LDS-DOC-001"] + saldosMises["LDS-DOC-002"] + saldosMises["LDS-DOC-003"] + saldosMises["LDS-DOC-004"];
-  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW + ingresosAndrew - totalFondosTransferidos - egresosAndrew);
+  // Total de fondos transferidos a las Misses
+  const totalFondosEnMises = saldosMises["LDS-DOC-001"] + saldosMises["LDS-DOC-002"] + saldosMises["LDS-DOC-003"] + saldosMises["LDS-DOC-004"];
+  
+  // Saldo Actual de Mister Andrew = Capital Inicial (200.000) menos Fondos Transferidos a las Misses (120.000)
+  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW - totalFondosEnMises);
 
   document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
   document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
