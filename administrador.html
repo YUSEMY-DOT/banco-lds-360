@@ -1151,6 +1151,41 @@ const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w800"
 };
 
+const CODIGOS_MISE_POR_NOMBRE = {
+  "MISS LILY MELO AZAÑERO": "CAJA-LILY",
+  "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
+  "MISS ANGHY REYES MELO": "CAJA-ANGHY",
+  "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
+};
+
+const MAPA_EQUIVALENCIAS_DOCENTES = {
+  "LDS-DOC-001": "CAJA-LILY",
+  "CAJA-LILY": "CAJA-LILY",
+  "MISS LILY": "CAJA-LILY",
+  "MISS LILY MELO AZAÑERO": "CAJA-LILY",
+
+  "LDS-DOC-002": "CAJA-KIARA",
+  "CAJA-KIARA": "CAJA-KIARA",
+  "MISS KIARA": "CAJA-KIARA",
+  "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
+
+  "LDS-DOC-003": "CAJA-ANGHY",
+  "CAJA-ANGHY": "CAJA-ANGHY",
+  "MISS ANGHY": "CAJA-ANGHY",
+  "MISS ANGHY REYES MELO": "CAJA-ANGHY",
+
+  "LDS-DOC-004": "CAJA-KARIN",
+  "CAJA-KARIN": "CAJA-KARIN",
+  "MISS KARIN": "CAJA-KARIN",
+  "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
+};
+
+function normalizarCodigoDocente(str) {
+  if (!str) return "";
+  const s = String(str).trim().toUpperCase();
+  return MAPA_EQUIVALENCIAS_DOCENTES[s] || s;
+}
+
 function togglePanel(idPanel) {
   reproducirSonido('clic');
   const panel = document.getElementById(idPanel);
@@ -1367,13 +1402,20 @@ function abrirListaMises(){
 function renderListaMisesDesdeCuentas(cuentas){
   const cont=document.getElementById('listaMisesItems'); if(!cont)return;
   cont.innerHTML='<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CALCULANDO SALDOS...</div></div>';
-  const permitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
+  const permitidas=new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
   const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
-  const mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=>permitidas.has(String(c.codigo||'').trim().toUpperCase()));
-  if(!mises.length){cont.innerHTML='<div class="header-list-loading">NO HAY CUENTAS DE MISES REGISTRADAS.</div>';return;}
+  let mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=> permitidas.has(normalizarCodigoDocente(c.codigo)));
+  if(!mises.length){
+    mises = [
+      { codigo: "CAJA-LILY", nombre: "MISS LILY MELO AZAÑERO" },
+      { codigo: "CAJA-KIARA", nombre: "MISS KIARA MORALES ELGUERA" },
+      { codigo: "CAJA-ANGHY", nombre: "MISS ANGHY REYES MELO" },
+      { codigo: "CAJA-KARIN", nombre: "MISS KARIN MOLERO ROMANI" }
+    ];
+  }
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   Promise.all(mises.map(async c=>{
-    const codigo=String(c.codigo||'').trim().toUpperCase();
+    const codigo=normalizarCodigoDocente(c.codigo);
     const r=await llamarAPIPromise({accion:'estudiante',codigo},10000);
     const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
     const calculo=calcularResumenMise(mov,codigo,null);
@@ -1396,7 +1438,7 @@ function actualizarPanelAdmin(){
   const maestra=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
   if(maestra) cargarSaldoMiseAlIngresar(maestra);
   precargarCuentasEscolares();
-  if(codigo) consultarEstudiante(true); else { mostrarMensaje('DATOS ACTUALIZADOS.','ok'); hablarTextoVoz('Datos actualizados.'); }
+  if(codigo) consultarEstudiante(true); else { mostrarMensaje("DATOS ACTUALIZADOS.","ok"); hablarTextoVoz("Datos actualizados."); }
 }
 
 function seleccionarCategoriaPago(categoria){
@@ -1412,10 +1454,10 @@ function poblarDestinosPrestamo(){
   const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
   const cache=obtenerCuentasCacheadas();
   const usar=(cuentas)=>{
-    const misesPermitidas=new Set(Object.values(CODIGOS_MISE_POR_NOMBRE));
+    const misesPermitidas=new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
     const lista=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
       const codigo=String(c.codigo||'').trim().toUpperCase();
-      return codigo.startsWith('LDS-EST-') || (misesPermitidas.has(codigo));
+      return codigo.startsWith('LDS-EST-') || (misesPermitidas.has(normalizarCodigoDocente(codigo)));
     }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
     sel.innerHTML='<option value="">SELECCIONA EL USUARIO</option>'+lista.map(c=>`<option value="${escaparAtributoHTML(c.codigo)}">${escaparHTML(c.nombre||c.nombreCompleto||c.codigo)} · ${escaparHTML(c.codigo)}</option>`).join('');
   };
@@ -1587,13 +1629,6 @@ function seleccionarMiseVisual(valor) {
 let datosEstudianteActualGlobal = null;
 let movimientosActualesGlobal = [];
 let maestraActivaGlobal = "";
-
-const CODIGOS_MISE_POR_NOMBRE = {
-  "MISS LILY MELO AZAÑERO": "CAJA-LILY",
-  "MISS KIARA MORALES ELGUERA": "CAJA-KIARA",
-  "MISS ANGHY REYES MELO": "CAJA-ANGHY",
-  "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
-};
 
 function obtenerCodigoCajaMise(nombre) {
   return CODIGOS_MISE_POR_NOMBRE[String(nombre || "").trim().toUpperCase()] || "";
@@ -1823,31 +1858,35 @@ function actualizarSaldosMise(abono, saldo){
   if (d) d.textContent = formatearLDS(Math.max(0, Number(saldo) || 0));
 }
 
-function esIngresoDeAndrew(m, codigoDestino){
-  const tipo = obtenerTipoMovimientoVisible(m);
-  if(tipo !== 'INGRESO') return false;
-  const responsable = String(m?.responsable || '').trim().toUpperCase();
-  const obs = String(m?.observacion || '').trim().toUpperCase();
-  const destino = String(codigoDestino || m?.codigo || '').trim().toUpperCase();
-  return (responsable.includes('ANDREW') || obs.includes('CUENTA_ORIGEN=CAJA-ANDREW') || responsable.includes('ANDREW TECSUO')) &&
-         (!codigoDestino || obs.includes('CUENTA_DESTINO=' + destino) || String(m?.codigo || '').trim().toUpperCase() === destino);
-}
-
 function calcularResumenMise(movimientos, codigo, saldoBackend){
-  const c = String(codigo || '').trim().toUpperCase();
-  const lista = (Array.isArray(movimientos) ? movimientos : []).filter(m =>
-    String(m?.codigo || m?.codigoQR || '').trim().toUpperCase() === c &&
-    String(m?.estado || 'ACTIVO').trim().toUpperCase() !== 'ANULADO'
-  );
+  const targetNorm = normalizarCodigoDocente(codigo);
+  const lista = Array.isArray(movimientos) ? movimientos : [];
 
-  let ingresos = 0, egresos = 0, abono = 0;
+  let abono = 0;
+  let ingresos = 0;
+  let egresos = 0;
+
   lista.forEach(m => {
+    if (String(m?.estado || 'ACTIVO').trim().toUpperCase() === 'ANULADO') return;
+
+    const codMovNorm = normalizarCodigoDocente(m?.codigo || m?.codigoQR);
+    const responsableNorm = normalizarCodigoDocente(m?.responsable || m?.cajero);
     const monto = parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0);
     const tipo = obtenerTipoMovimientoVisible(m);
-    if(tipo === 'INGRESO'){
-      ingresos += monto;
-      if(esIngresoDeAndrew(m, c)) abono += monto;
-    }else if(tipo === 'EGRESO'){
+    const obs = String(m?.observacion || '').toUpperCase();
+
+    const esDeEstaCaja = (codMovNorm === targetNorm) || 
+                         (obs.includes('CUENTA_DESTINO=' + targetNorm)) || 
+                         (obs.includes('CUENTA_ORIGEN=' + targetNorm));
+
+    if (esDeEstaCaja) {
+      if (tipo === 'INGRESO') {
+        ingresos += monto;
+        abono += monto;
+      } else if (tipo === 'EGRESO') {
+        egresos += monto;
+      }
+    } else if (responsableNorm === targetNorm && tipo === 'EGRESO') {
       egresos += monto;
     }
   });
@@ -1911,7 +1950,8 @@ function consultarEstudiante(esConsultaAutomatica = false) {
     const cuenta = respuesta.cuenta || {};
     const saldoActual = Number(cuenta.saldoActual || 0);
     const codigoCuenta = String(e.codigo || codigo).trim().toUpperCase();
-    const esCuentaMise = Object.values(CODIGOS_MISE_POR_NOMBRE).includes(codigoCuenta);
+    const codigoNorm = normalizarCodigoDocente(codigoCuenta);
+    const esCuentaMise = ["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].includes(codigoNorm);
 
     const pagoCodigoEl = document.getElementById("pagoCodigo");
     if (pagoCodigoEl) {
