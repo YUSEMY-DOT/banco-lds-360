@@ -529,8 +529,63 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* SECCIÓN EXCLUSIVA DE IMPRESIÓN CON FOTO Y ROL */
+/* MEMBRETE INSTITUCIONAL E IMPRESIÓN */
 #contenedorImpresion { display: none; }
+
+.membrete-colegio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px double var(--azul);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.membrete-logo img {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+}
+
+.membrete-texto {
+  text-align: center;
+  flex: 1;
+  padding: 0 10px;
+}
+
+.membrete-texto h1 {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--azul);
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.membrete-texto h2 {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--dorado);
+  margin-top: 2px;
+}
+
+.membrete-texto p {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.tag-rol {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  margin-left: 6px;
+}
+
+.tag-rol-docente { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+.tag-rol-estudiante { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
 
 .foto-reporte {
   width: 70px;
@@ -548,18 +603,6 @@ textarea { height: auto; padding: 8px 10px; }
   object-fit: cover;
 }
 
-.tag-rol {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 0.65rem;
-  font-weight: 900;
-  margin-left: 6px;
-}
-
-.tag-rol-docente { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
-.tag-rol-estudiante { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
-
 @media print {
   body * { visibility: hidden !important; }
   #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
@@ -575,7 +618,7 @@ textarea { height: auto; padding: 8px 10px; }
   .reporte-pagina-alumno {
     page-break-after: always;
     break-after: page;
-    padding: 20px 0;
+    padding: 20px 10px;
     border-bottom: 2px dashed #000;
   }
   .reporte-pagina-alumno:last-child {
@@ -583,6 +626,11 @@ textarea { height: auto; padding: 8px 10px; }
     break-after: auto;
     border-bottom: none;
   }
+  .membrete-colegio {
+    border-bottom: 3px solid #000 !important;
+  }
+  .membrete-texto h1 { color: #000 !important; font-size: 1.3rem !important; }
+  .membrete-texto h2 { color: #333 !important; }
   .encabezado-alumno {
     border: 2px solid #000;
     padding: 12px 16px;
@@ -888,7 +936,7 @@ textarea { height: auto; padding: 8px 10px; }
   </div>
 </div>
 
-<!-- CONTENEDOR Oculto que procesa el HTML exclusivo para IMPRESIÓN -->
+<!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
 <div id="contenedorImpresion"></div>
 
 <script>
@@ -898,7 +946,6 @@ let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
 
-// MAPA DE FOTOS Y ROLES OFICIALES
 const MAPA_USUARIOS_OFICIALES = {
   "CAJA-ANDREW": { nombre: "MISTER ANDREW", foto: "https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
   "CAJA-LILY": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300", rol: "DOCENTE / PROMOTORA", esDocente: true },
@@ -1011,7 +1058,6 @@ function actualizarCajaAndrew() {
 function extraerListaCuentasUnicas(movimientos) {
   const mapa = new Map();
 
-  // Agregar Docentes / Cajas Clave
   ["CAJA-ANDREW", "CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
     mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
   });
@@ -1129,7 +1175,7 @@ function renderTabla(lista) {
   });
 }
 
-// SELECCIÓN Y REPORTES CON FOTO Y DIFERENCIACIÓN DE ROL
+// SELECCIÓN Y REPORTES CON MEMBRETE INSTITUCIONAL COMPLETO
 function abrirModalMenuReportes() {
   abrirModal('modalMenuReportes');
 }
@@ -1212,6 +1258,7 @@ function generarEImprimirReporteGrupal() {
   setTimeout(() => { window.print(); }, 300);
 }
 
+// FUNCIÓN CON MEMBRETE DEL COLEGIO COMPLETO + INSIGNIA + FICHA
 function construirHTMLPaginaUsuario(usuario, movimientos) {
   let filas = "";
   let totalIngresos = 0;
@@ -1243,14 +1290,29 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
 
   return `
     <div class="reporte-pagina-alumno">
+      <!-- MEMBRETE OFICIAL INSTITUCIONAL -->
+      <div class="membrete-colegio">
+        <div class="membrete-logo">
+          <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+        </div>
+        <div class="membrete-texto">
+          <h1>I.E.P. LA SALLE DEL SUR</h1>
+          <h2>BANCO LASALLISTA 360 · SISTEMA EDUCATIVO FINANCIERO Y DE CONVIVENCIA</h2>
+          <p>EDUCANDO EN VALORES Y EMPOWERMENT FINANCIERO · AÑO ESCOLAR 2026</p>
+        </div>
+        <div class="membrete-logo">
+          <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+        </div>
+      </div>
+
+      <!-- DATOS DE LA CUENTA Y FOTO -->
       <div class="encabezado-alumno">
         <div style="display: flex; align-items: center; gap: 14px;">
           <div class="foto-reporte">
             <img src="${usuario.fotoUrl}" alt="Foto ${usuario.nombre}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=0c1e30&color=fff';">
           </div>
           <div>
-            <h2>I.E.P. LA SALLE DEL SUR — BANCO LDS 360</h2>
-            <p><strong>${usuario.tituloReporte}</strong></p>
+            <h2>${usuario.tituloReporte}</h2>
             <p style="margin-top: 3px;"><strong>ROL:</strong> ${usuario.rolTexto}</p>
             <p style="margin-top: 2px;"><strong>${usuario.etiquetaUsuario}</strong> ${usuario.nombre} (${usuario.codigo})</p>
           </div>
@@ -1261,6 +1323,7 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
         </div>
       </div>
 
+      <!-- TABLA DE MOVIMIENTOS DETALLADA -->
       <table class="tabla-print">
         <thead>
           <tr>
