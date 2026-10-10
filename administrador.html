@@ -1681,9 +1681,9 @@ function normalizarListaAlumno(a) {
 }
 
 /*
- * Consulta de la lista por una acción ligera, usando la MISMA URL del
- * administrador que ya consulta movimientos y saldos. No usar la URL de
- * Andrew aquí: esa sustitución fue la que cambió los datos financieros.
+ * Backend único compartido basado en la caja general de Andrew.
+ * Las pantallas Andrew, Administrador y Alumno siguen separadas; esta URL
+ * centraliza sus consultas de movimientos, saldos y lista de alumnos.
  */
 function llamarAPIListaEstudiantes(parametros, callback) {
   const nombreCallback = 'callbackListaAdminLDS_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
@@ -2280,7 +2280,7 @@ function obtenerCodigoCajaMise(nombre) {
   return CODIGOS_MISE_POR_NOMBRE[n] || "";
 }
 
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyamVp1MG28FxVVTIBPKl_quYFVEkky45T-UCZgc-wTr_ZdNe1nzi0KLiJ43_CfsTCj/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
 
 function mostrarFotoMaestra(nombre) {
   maestraActivaGlobal = nombre;
