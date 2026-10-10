@@ -521,9 +521,7 @@ textarea { height: auto; padding: 8px 10px; }
   border-bottom: 1px solid #e2e8f0;
 }
 
-.lista-alumnos-tabla tr:hover {
-  background: #eff6ff;
-}
+.lista-alumnos-tabla tr:hover { background: #eff6ff; }
 
 .lista-alumnos-tabla td {
   padding: 10px;
@@ -531,8 +529,36 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* SECCIÓN EXCLUSIVA DE IMPRESIÓN */
+/* SECCIÓN EXCLUSIVA DE IMPRESIÓN CON FOTO Y ROL */
 #contenedorImpresion { display: none; }
+
+.foto-reporte {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid var(--dorado);
+  overflow: hidden;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.foto-reporte img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tag-rol {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  margin-left: 6px;
+}
+
+.tag-rol-docente { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+.tag-rol-estudiante { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
 
 @media print {
   body * { visibility: hidden !important; }
@@ -566,8 +592,13 @@ textarea { height: auto; padding: 8px 10px; }
     justify-content: space-between;
     align-items: center;
   }
-  .encabezado-alumno h2 { font-size: 1.1rem; font-weight: 900; margin: 0; }
-  .encabezado-alumno p { font-size: 0.8rem; font-weight: 700; margin: 2px 0 0; }
+  .encabezado-alumno h2 { font-size: 1.05rem; font-weight: 900; margin: 0; }
+  .encabezado-alumno p { font-size: 0.78rem; font-weight: 700; margin: 2px 0 0; }
+  .foto-reporte {
+    width: 65px !important;
+    height: 65px !important;
+    border: 2px solid #000 !important;
+  }
   .tabla-print {
     width: 100%;
     border-collapse: collapse;
@@ -819,12 +850,12 @@ textarea { height: auto; padding: 8px 10px; }
     <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
     
     <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
-      <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR ALUMNO)</span>
+      <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
       <span>➔</span>
     </button>
     
     <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
-      <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR ALUMNO)</span>
+      <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
       <span>➔</span>
     </button>
 
@@ -832,23 +863,23 @@ textarea { height: auto; padding: 8px 10px; }
   </div>
 </div>
 
-<!-- MODAL 2: SELECCIÓN DE ALUMNO PARA REPORTE UNITARIO -->
+<!-- MODAL 2: SELECCIÓN DE ALUMNO O MAESTRO PARA REPORTE UNITARIO -->
 <div id="modalSeleccionAlumno" class="modal-overlay">
   <div class="modal-box">
-    <h3>📋 SELECCIONAR ALUMNO O CAJA</h3>
-    <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
+    <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
+    <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
     
     <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
       <table class="lista-alumnos-tabla">
         <thead>
           <tr style="background: #f1f5f9; position: sticky; top: 0;">
             <th style="padding: 8px 10px;">CÓDIGO</th>
-            <th style="padding: 8px 10px;">NOMBRE / CUENTA</th>
+            <th style="padding: 8px 10px;">NOMBRE / ROL</th>
             <th style="padding: 8px 10px; text-align: right;">ACCIÓN</th>
           </tr>
         </thead>
         <tbody id="bodyListaSeleccionAlumno">
-          <tr><td colspan="3" style="text-align: center; padding: 15px;">CARGANDO CUENTAS...</td></tr>
+          <tr><td colspan="3" style="text-align: center; padding: 15px;">CARGANDO USUARIOS...</td></tr>
         </tbody>
       </table>
     </div>
@@ -866,6 +897,27 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCR
 let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
+
+// MAPA DE FOTOS Y ROLES OFICIALES
+const MAPA_USUARIOS_OFICIALES = {
+  "CAJA-ANDREW": { nombre: "MISTER ANDREW", foto: "https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
+  "CAJA-LILY": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300", rol: "DOCENTE / PROMOTORA", esDocente: true },
+  "CAJA-KIARA": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY REYES MELO", foto: "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "CAJA-KARIN": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300", rol: "DOCENTE", esDocente: true },
+  
+  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300", rol: "DOCENTE / PROMOTORA", esDocente: true },
+  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300", rol: "DOCENTE", esDocente: true },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW", foto: "https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
+
+  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://drive.google.com/thumbnail?id=1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl&sz=w300", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://drive.google.com/thumbnail?id=1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd&sz=w300", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", foto: "https://drive.google.com/thumbnail?id=1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg&sz=w300", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", foto: "https://drive.google.com/thumbnail?id=19KV30WDkKReEo5vBbx9ia4bebrPpyWPw&sz=w300", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://drive.google.com/thumbnail?id=1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU&sz=w300", rol: "ESTUDIANTE", esDocente: false }
+};
 
 function togglePanel(id) {
   const p = document.getElementById(id);
@@ -913,6 +965,31 @@ function normalizarCodigo(str) {
   return s;
 }
 
+function obtenerDatosCompletosUsuario(codigoRaw, nombreRaw) {
+  const cod = String(codigoRaw || "").trim().toUpperCase();
+  const nom = String(nombreRaw || cod).trim().toUpperCase();
+  const infoOficial = MAPA_USUARIOS_OFICIALES[cod] || {};
+
+  const esDocente = infoOficial.esDocente || cod.startsWith("CAJA-") || cod.startsWith("LDS-DOC") || nom.includes("MISS") || nom.includes("MISTER") || nom.includes("DOCENTE") || nom.includes("PROMOTORA");
+  
+  const nombreFinal = infoOficial.nombre || nom;
+  const rolTexto = esDocente ? (infoOficial.rol || "DOCENTE / MAESTRO(A)") : "ESTUDIANTE";
+  const tituloReporte = esDocente ? "ESTADO DE CUENTA — CAJA DOCENTE / GENERAL" : "ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE";
+  const etiquetaUsuario = esDocente ? "DOCENTE / CAJA:" : "ESTUDIANTE / ALUMNO:";
+  
+  const fotoUrl = infoOficial.foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nombreFinal) + "&background=0c1e30&color=fff";
+
+  return {
+    codigo: cod,
+    nombre: nombreFinal,
+    esDocente,
+    rolTexto,
+    tituloReporte,
+    etiquetaUsuario,
+    fotoUrl
+  };
+}
+
 function actualizarCajaAndrew() {
   const anio = document.getElementById("selectAnioEscolar").value;
   mostrandoTodoElBanco = false;
@@ -933,19 +1010,19 @@ function actualizarCajaAndrew() {
 
 function extraerListaCuentasUnicas(movimientos) {
   const mapa = new Map();
-  
-  // Agregar Cajas Oficiales
-  mapa.set("CAJA-ANDREW", { codigo: "CAJA-ANDREW", nombre: "MISTER ANDREW (CAJA GENERAL)" });
-  mapa.set("CAJA-LILY", { codigo: "CAJA-LILY", nombre: "MISS LILY MELO AZAÑERO" });
-  mapa.set("CAJA-KIARA", { codigo: "CAJA-KIARA", nombre: "MISS KIARA MORALES ELGUERA" });
-  mapa.set("CAJA-ANGHY", { codigo: "CAJA-ANGHY", nombre: "MISS ANGHY REYES MELO" });
-  mapa.set("CAJA-KARIN", { codigo: "CAJA-KARIN", nombre: "MISS KARIN MOLERO ROMANI" });
+
+  // Agregar Docentes / Cajas Clave
+  ["CAJA-ANDREW", "CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
+    mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
+  });
 
   movimientos.forEach(m => {
     const cod = String(m.codigo || m.codigoQR || "").trim().toUpperCase();
     const nom = String(m.estudiante || m.nombreCompleto || cod).trim().toUpperCase();
     if (cod && !mapa.has(cod)) {
-      mapa.set(cod, { codigo: cod, nombre: nom, grado: m.grado || "" });
+      const datos = obtenerDatosCompletosUsuario(cod, nom);
+      datos.grado = m.grado || "";
+      mapa.set(cod, datos);
     }
   });
 
@@ -1052,7 +1129,7 @@ function renderTabla(lista) {
   });
 }
 
-// LOGICA DE SELECCIÓN Y GENERACIÓN DE REPORTES SEPARADOS
+// SELECCIÓN Y REPORTES CON FOTO Y DIFERENCIACIÓN DE ROL
 function abrirModalMenuReportes() {
   abrirModal('modalMenuReportes');
 }
@@ -1068,7 +1145,7 @@ function renderTablaSeleccionAlumno(lista) {
   tbody.innerHTML = "";
 
   if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px;">NO HAY CUENTAS DISPONIBLES.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px;">NO HAY USUARIOS DISPONIBLES.</td></tr>';
     return;
   }
 
@@ -1077,7 +1154,10 @@ function renderTablaSeleccionAlumno(lista) {
     tr.onclick = () => generarEImprimirReporteUnitario(item.codigo, item.nombre);
     tr.innerHTML = `
       <td><strong style="color:var(--azul-claro);">${item.codigo}</strong></td>
-      <td><strong>${item.nombre}</strong></td>
+      <td>
+        <strong>${item.nombre}</strong>
+        <span class="tag-rol ${item.esDocente ? 'tag-rol-docente' : 'tag-rol-estudiante'}">${item.rolTexto}</span>
+      </td>
       <td style="text-align:right;"><button class="btn btn-gold" style="padding:2px 8px; font-size:0.65rem;">IMPRIMIR</button></td>
     `;
     tbody.appendChild(tr);
@@ -1087,27 +1167,26 @@ function renderTablaSeleccionAlumno(lista) {
 function filtrarTablaSeleccionAlumno() {
   const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
   const filtrados = listaCuentasYAlumnosGlobal.filter(a => 
-    a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt)
+    a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
   );
   renderTablaSeleccionAlumno(filtrados);
 }
 
-// IMPRESIÓN UNITARIA DE UN SOLO ALUMNO/CUENTA
 function generarEImprimirReporteUnitario(codigo, nombre) {
   cerrarModal('modalSeleccionAlumno');
 
+  const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
   const movs = todosLosMovimientosGlobales.filter(m => {
     const c = String(m.codigo || m.estudiante || "").toUpperCase();
     return c.includes(codigo.toUpperCase());
   });
 
   const cont = document.getElementById("contenedorImpresion");
-  cont.innerHTML = construirHTMLPaginaAlumno({ codigo, nombre }, movs);
+  cont.innerHTML = construirHTMLPaginaUsuario(usuario, movs);
   
   setTimeout(() => { window.print(); }, 250);
 }
 
-// IMPRESIÓN GRUPAL: UNA HOJA Y TABLA INDEPENDIENTE POR ALUMNO
 function generarEImprimirReporteGrupal() {
   cerrarModal('modalMenuReportes');
 
@@ -1115,27 +1194,25 @@ function generarEImprimirReporteGrupal() {
   cont.innerHTML = "";
 
   if (!listaCuentasYAlumnosGlobal.length) {
-    alert("NO HAY DATOS DE ALUMNOS PARA GENERAR EL REPORTE GRUPAL.");
+    alert("NO HAY DATOS REGISTRADOS PARA GENERAR EL REPORTE GRUPAL.");
     return;
   }
 
   let htmlAcumulado = "";
-  listaCuentasYAlumnosGlobal.forEach(alumno => {
-    const movsAlumno = todosLosMovimientosGlobales.filter(m => {
+  listaCuentasYAlumnosGlobal.forEach(usr => {
+    const movsUsr = todosLosMovimientosGlobales.filter(m => {
       const c = String(m.codigo || m.estudiante || "").toUpperCase();
-      return c.includes(alumno.codigo.toUpperCase());
+      return c.includes(usr.codigo.toUpperCase());
     });
 
-    // Crear la hoja separada para el alumno aunque tenga o no movimientos
-    htmlAcumulado += construirHTMLPaginaAlumno(alumno, movsAlumno);
+    htmlAcumulado += construirHTMLPaginaUsuario(usr, movsUsr);
   });
 
   cont.innerHTML = htmlAcumulado;
   setTimeout(() => { window.print(); }, 300);
 }
 
-// FUNCIÓN AUXILIAR PARA ARMAR LA ESTRUCTURA DE CADA HOJA DE ALUMNO
-function construirHTMLPaginaAlumno(alumno, movimientos) {
+function construirHTMLPaginaUsuario(usuario, movimientos) {
   let filas = "";
   let totalIngresos = 0;
   let totalEgresos = 0;
@@ -1167,10 +1244,16 @@ function construirHTMLPaginaAlumno(alumno, movimientos) {
   return `
     <div class="reporte-pagina-alumno">
       <div class="encabezado-alumno">
-        <div>
-          <h2>I.E.P. LA SALLE DEL SUR — BANCO LDS 360</h2>
-          <p>ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE</p>
-          <p style="margin-top: 4px;"><strong>ALUMNO / CUENTA:</strong> ${alumno.nombre} (${alumno.codigo})</p>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="foto-reporte">
+            <img src="${usuario.fotoUrl}" alt="Foto ${usuario.nombre}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=0c1e30&color=fff';">
+          </div>
+          <div>
+            <h2>I.E.P. LA SALLE DEL SUR — BANCO LDS 360</h2>
+            <p><strong>${usuario.tituloReporte}</strong></p>
+            <p style="margin-top: 3px;"><strong>ROL:</strong> ${usuario.rolTexto}</p>
+            <p style="margin-top: 2px;"><strong>${usuario.etiquetaUsuario}</strong> ${usuario.nombre} (${usuario.codigo})</p>
+          </div>
         </div>
         <div style="text-align: right;">
           <p><strong>SALDO DISPONIBLE:</strong></p>
@@ -1197,7 +1280,7 @@ function construirHTMLPaginaAlumno(alumno, movimientos) {
   `;
 }
 
-// OPERACIONES
+// OPERACIONES LATERALES
 function ejecutarTransferenciaFondo() {
   const miss = document.getElementById("transfMiss").value;
   const concepto = document.getElementById("transfConcepto").value;
