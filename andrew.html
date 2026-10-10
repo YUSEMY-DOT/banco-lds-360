@@ -27,16 +27,15 @@ button,input,select,textarea{font:inherit}
   overflow:hidden!important;
   z-index:99999!important;
   background-color:#061b3f!important;
-  background-image:none!important;
+  background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2")!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
   background-size:100% 100%!important;
 }
 
-#loginAndrew::before{content:"";position:absolute;inset:0;background:transparent!important;pointer-events:none!important;z-index:0!important;}
 #loginAndrew .login-bg-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;display:block!important;z-index:0!important;pointer-events:none!important;user-select:none!important;}
 #loginAndrew .andrew-login-photo{position:relative!important;z-index:2!important;width:min(39vw,540px)!important;height:min(76vh,700px)!important;flex:0 1 540px!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:clamp(25px,5vh,55px) 0 0!important;pointer-events:none!important;}
-#loginAndrew .andrew-login-photo img{display:block!important;color:transparent!important;font-size:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;mix-blend-mode:normal!important;border:0!important;outline:0!important;box-shadow:none!important;filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));}
+#loginAndrew .andrew-login-photo img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;filter:drop-shadow(0 20px 26px rgba(0,0,0,.42));}
 #loginAndrew > .panel{position:relative!important;z-index:5!important;width:min(430px,39vw)!important;max-width:430px!important;flex:0 1 430px!important;margin:clamp(10px,4vh,40px) 0 0!important;border:2px solid #f5b400!important;border-radius:22px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 22px 55px rgba(0,0,0,.48)!important;pointer-events:auto!important;}
 #loginAndrew .panel-head{padding:20px 24px!important;background:linear-gradient(135deg,#061b3f,#12366f)!important;border-bottom:2px solid #f5b400!important;}
 #loginAndrew .panel-head h3{margin:0!important;color:#fff!important;font-size:clamp(1rem,1.45vw,1.25rem)!important;line-height:1.35!important;font-weight:900!important;}
@@ -52,159 +51,36 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
 
 .andrew-notification-toast{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:200000;
-  width:min(430px,calc(100vw - 36px));
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  padding:13px 14px;
-  border:2px solid #f5b400;
-  border-radius:14px;
-  background:linear-gradient(135deg,#061b3f,#12366f);
-  color:#fff;
-  box-shadow:0 18px 45px rgba(0,0,0,.30);
-  opacity:0;
-  transform:translateY(18px) scale(.98);
-  pointer-events:none;
-  transition:opacity .22s ease,transform .22s ease;
+  position:fixed;right:18px;bottom:18px;z-index:200000;
+  width:min(430px,calc(100vw - 36px));display:flex;align-items:flex-start;gap:10px;padding:13px 14px;
+  border:2px solid #f5b400;border-radius:14px;background:linear-gradient(135deg,#061b3f,#12366f);
+  color:#fff;box-shadow:0 18px 45px rgba(0,0,0,.30);opacity:0;transform:translateY(18px) scale(.98);
+  pointer-events:none;transition:opacity .22s ease,transform .22s ease;
 }
-.andrew-notification-toast.visible{
-  opacity:1;
-  transform:translateY(0) scale(1);
-}
-.andrew-notification-icon{
-  width:34px;
-  height:34px;
-  flex:0 0 34px;
-  display:grid;
-  place-items:center;
-  border-radius:10px;
-  background:#fff3c4;
-  color:#0b2f67;
-  font-size:18px;
-}
-.andrew-notification-content{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.andrew-notification-content strong{
-  color:#ffd23f;
-  font-size:.78rem;
-  line-height:1.15;
-  font-weight:900;
-}
-.andrew-notification-content span{
-  color:#fff;
-  font-size:.72rem;
-  line-height:1.35;
-  font-weight:800;
-  overflow-wrap:anywhere;
-}
-.andrew-notification-close{
-  margin-left:auto;
-  width:28px;
-  height:28px;
-  flex:0 0 28px;
-  border:0;
-  border-radius:8px;
-  background:rgba(255,255,255,.13);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
+.andrew-notification-toast.visible{opacity:1;transform:translateY(0) scale(1);}
+.andrew-notification-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:#fff3c4;color:#0b2f67;font-size:18px;}
+.andrew-notification-content{min-width:0;display:flex;flex-direction:column;gap:3px;}
+.andrew-notification-content strong{color:#ffd23f;font-size:.78rem;line-height:1.15;font-weight:900;}
+.andrew-notification-content span{color:#fff;font-size:.72rem;line-height:1.35;font-weight:800;overflow-wrap:anywhere;}
+.andrew-notification-close{margin-left:auto;width:28px;height:28px;flex:0 0 28px;border:0;border-radius:8px;background:rgba(255,255,255,.13);color:#fff;font-weight:900;cursor:pointer;}
 .andrew-notification-close:hover{background:rgba(255,255,255,.22);}
-@media (max-width:560px){
-  .andrew-notification-toast{
-    right:10px;
-    bottom:10px;
-    width:calc(100vw - 20px);
-    padding:11px 12px;
-  }
-}
 
-#loginAndrew .login-or{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:10px 0 8px;
-  color:#64748b;
-  font-size:.72rem;
-  font-weight:900;
-}
-#loginAndrew .login-or::before,
-#loginAndrew .login-or::after{
-  content:"";
-  height:1px;
-  flex:1;
-  background:#dbe3ec;
-}
+#loginAndrew .login-or{position:relative;display:flex;align-items:center;justify-content:center;margin:10px 0 8px;color:#64748b;font-size:.72rem;font-weight:900;}
+#loginAndrew .login-or::before,#loginAndrew .login-or::after{content:"";height:1px;flex:1;background:#dbe3ec;}
 #loginAndrew .login-or span{padding:0 10px;}
-#loginAndrew .login-qr{
-  min-height:48px!important;
-  margin-top:0!important;
-  border:1.5px solid #0f766e!important;
-  color:#0f766e!important;
-  background:#ecfeff!important;
-}
+#loginAndrew .login-qr{min-height:48px!important;margin-top:0!important;border:1.5px solid #0f766e!important;color:#0f766e!important;background:#ecfeff!important;}
 #loginAndrew .login-qr:hover{background:#dffcfb!important;}
 
-.qr-login-modal{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:rgba(3,12,28,.78);
-  z-index:100001;
-}
+.qr-login-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,12,28,.78);z-index:100001;}
 .qr-login-modal.open{display:flex;}
-.qr-login-card{
-  width:min(480px,94vw);
-  background:#fff;
-  border:2px solid #f5b400;
-  border-radius:18px;
-  box-shadow:0 25px 70px rgba(0,0,0,.45);
-  overflow:hidden;
-}
-.qr-login-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:16px 18px;
-  background:linear-gradient(135deg,#061b3f,#12366f);
-  color:#fff;
-}
+.qr-login-card{width:min(480px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.45);overflow:hidden;}
+.qr-login-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;background:linear-gradient(135deg,#061b3f,#12366f);color:#fff;}
 .qr-login-head h3{margin:0;font-size:1rem;}
 .qr-login-head p{margin:4px 0 0;font-size:.72rem;color:#dbeafe;font-weight:700;}
-.btn-close-qr{
-  width:38px;height:38px;padding:0;border:0;border-radius:10px;
-  background:#fff;color:#0b2f67;font-size:1.1rem;font-weight:900;cursor:pointer;
-}
+.btn-close-qr{width:38px;height:38px;padding:0;border:0;border-radius:10px;background:#fff;color:#0b2f67;font-size:1.1rem;font-weight:900;cursor:pointer;}
 .qr-login-body{padding:16px;}
-#readerAndrew{
-  width:100%;
-  max-width:360px;
-  margin:0 auto;
-  border:1px solid #dbe3ec;
-  border-radius:12px;
-  overflow:hidden;
-  background:#f8fafc;
-}
-.qr-login-help{
-  margin:10px 0 0;
-  text-align:center;
-  color:#64748b;
-  font-size:.68rem;
-  font-weight:700;
-}
+#readerAndrew{width:100%;max-width:360px;margin:0 auto;border:1px solid #dbe3ec;border-radius:12px;overflow:hidden;background:#f8fafc;}
+.qr-login-help{margin:10px 0 0;text-align:center;color:#64748b;font-size:.68rem;font-weight:700;}
 
 body.login-screen > #appHeader,
 body.login-screen > #andrewApp,
@@ -225,7 +101,6 @@ select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;pa
 
 button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
-#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
 
 #appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
 #appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
@@ -267,10 +142,7 @@ button{cursor:pointer;}
 #andrewApp .resumen-metrica:nth-child(4){background:linear-gradient(135deg,#fff7ed 0%,#ffffff 100%)!important;border-color:#f59e0b!important;}
 #andrewApp .resumen-metrica:nth-child(4)::before{background:#f59e0b;}
 #andrewApp .resumen-metrica:nth-child(4) strong{color:#b45309!important;font-size:clamp(1.25rem,2vw,1.8rem)!important;}
-#andrewApp .movement-actions .btn-report{background:linear-gradient(135deg,#0b2f67,#1d4ed8)!important;color:#fff!important;border:1px solid #1d4ed8!important;box-shadow:0 3px 8px rgba(29,78,216,.22);}
-#andrewApp .movement-actions .btn-outline{background:linear-gradient(135deg,#ecfeff,#ffffff)!important;color:#0f766e!important;border:1px solid #14b8a6!important;box-shadow:0 3px 8px rgba(20,184,166,.16);}
-#andrewApp .movement-actions .btn:hover{transform:translateY(-1px);}
-#andrewApp .inner-panel{margin-top:14px;border:2px solid #e5a000;border-radius:14px;background:#fff;box-shadow:none;}
+#andrewApp .inner-panel{margin-top:14px;border:2px solid #e5a000;border-radius:14px;background:#fff;}
 #andrewApp .inner-panel .panel-head{padding:11px 14px;}
 #andrewApp .inner-panel .panel-body{padding:13px;}
 #andrewApp .mises-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
@@ -297,33 +169,6 @@ button{cursor:pointer;}
 .btn-close-report{width:38px;height:38px;padding:0;background:#fff;color:#0b2f67;border-radius:10px;}
 .reportes-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px;}
 .report-option{min-height:150px;border:1.5px solid #cbd5e1;border-radius:14px;background:#f8fafc;text-align:left;padding:18px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;color:#14213d;}
-@media (max-width:560px){#andrewApp .resumen-identidad-andrew{gap:14px!important;padding:12px 14px!important;}#andrewApp .andrew-mini-photo{width:96px;height:96px;flex-basis:96px;}#andrewApp .andrew-identidad-text strong{font-size:1rem;}#andrewApp .andrew-identidad-text span{font-size:.64rem;}}
-
-.print-area-andrew{display:none;}
-@media print{
-  @page{size:A4 landscape;margin:8mm;}
-}
-@media print and (orientation:portrait){
-  @page{size:A4 portrait;margin:8mm;}
-}
-@media print and (orientation:landscape){
-  @page{size:A4 landscape;margin:8mm;}
-}
-.report-window{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#14213d;min-height:100vh;padding:18px;}
-.report-sheet{max-width:1400px;margin:0 auto;background:#fff;}
-.report-school-head{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-bottom:4px solid #e5a000;padding:0 0 14px;margin-bottom:14px;}
-.report-logo{width:72px;height:72px;object-fit:contain;border-radius:50%;background:#fff;border:2px solid #e5a000;padding:3px;}
-.report-school-name{margin:0;color:#0b2f67;font-size:20px;font-weight:900;}
-.report-school-sub{margin:3px 0 0;color:#64748b;font-size:12px;font-weight:800;}
-.report-meta{text-align:right;}.report-meta strong{display:block;color:#0b2f67;font-size:15px;}.report-meta span{display:block;color:#64748b;font-weight:800;font-size:11px;margin-top:3px;}
-.report-title{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin:8px 0 14px;}.report-title h1{margin:0;color:#0b2f67;font-size:22px;}.report-title p{margin:3px 0 0;color:#64748b;font-size:11px;font-weight:800;}
-.report-badge{padding:8px 12px;border-radius:12px;background:#eef8f3;color:#008f68;font-weight:900;white-space:nowrap;}
-.report-person{display:grid;grid-template-columns:98px 1fr;gap:16px;align-items:center;border:1px solid #dbe3ec;border-radius:14px;background:#f8fafc;padding:12px;margin-bottom:14px;}.report-person-photo{width:86px;height:86px;object-fit:cover;border-radius:50%;border:3px solid #e5a000;background:#fff;}.report-person-name{margin:0;color:#0b2f67;font-size:18px;font-weight:900;}.report-person-detail{margin-top:4px;color:#64748b;font-size:11px;font-weight:800;}
-.report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px;}.report-summary-card{border:1px solid #dbe3ec;border-radius:12px;padding:10px;background:#f8fafc;}.report-summary-card span{display:block;color:#64748b;font-size:9px;font-weight:900;}.report-summary-card strong{display:block;margin-top:3px;color:#0b2f67;font-size:15px;}
-.report-table-wrap{width:100%;overflow-x:auto;}.report-table{width:100%;border-collapse:collapse;font-size:9px;}.report-table th,.report-table td{border:1px solid #cbd5e1;padding:5px 6px;text-align:left;vertical-align:top;}.report-table th{background:#eef2f7;color:#0b2f67;font-weight:900;}.report-table td.amount{font-weight:900;white-space:nowrap;}
-.report-student-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;}.report-footer{border-top:2px solid #e5a000;margin-top:16px;padding-top:8px;display:flex;justify-content:space-between;gap:10px;color:#64748b;font-size:9px;font-weight:800;}.report-loading{padding:30px;text-align:center;color:#64748b;font-weight:900;}
-@media (max-width:900px){.report-window{padding:12px;}.report-school-head{grid-template-columns:64px 1fr;gap:10px;}.report-meta{grid-column:1/-1;text-align:left;}.report-logo{width:58px;height:58px;}.report-school-name{font-size:16px;}.report-title{display:block;}.report-badge{display:inline-block;margin-top:8px;}.report-summary{grid-template-columns:1fr;}}
-@media (max-width:560px){.report-window{padding:8px;}.report-person{grid-template-columns:72px 1fr;gap:10px;}.report-person-photo{width:64px;height:64px;}.report-person-name{font-size:15px;}.report-table{font-size:8px;}.report-table th,.report-table td{padding:4px;}.report-footer{display:block;}}
 </style>
 </head>
 <body class="login-screen">
@@ -339,13 +184,13 @@ button{cursor:pointer;}
   <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
 </header>
 
-<div id="andrewNotificationToast" class="andrew-notification-toast" role="status" aria-live="polite" aria-atomic="true">
+<div id="andrewNotificationToast" class="andrew-notification-toast" role="status" aria-live="polite">
   <div class="andrew-notification-icon">🔔</div>
   <div class="andrew-notification-content">
     <strong id="andrewNotificationTitle">BANCO LDS 360</strong>
     <span id="andrewNotificationText"></span>
   </div>
-  <button type="button" class="andrew-notification-close" onclick="cerrarNotificacionAndrew()" aria-label="Cerrar notificación">✕</button>
+  <button type="button" class="andrew-notification-close" onclick="cerrarNotificacionAndrew()">✕</button>
 </div>
 
 <main id="andrewApp" style="display:none;">
@@ -358,7 +203,7 @@ button{cursor:pointer;}
             <span class="year-caption">BANCO LDS 360 · <span id="metaAnio">2026</span></span>
           </div>
           <div class="header-actions-group">
-            <select id="anio" aria-label="Año de consulta">
+            <select id="anio">
               <option value="2026" selected>AÑO 2026</option>
               <option value="2027">AÑO 2027</option>
               <option value="2028">AÑO 2028</option>
@@ -372,7 +217,7 @@ button{cursor:pointer;}
           <div class="caja-resumen">
             <div class="resumen-cuenta resumen-identidad-andrew">
               <div class="andrew-mini-photo">
-                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew" loading="eager" decoding="async" fetchpriority="high" onerror="this.style.display='none';">
+                <img id="andrewFoto" src="assets/ANDREW.png?v=20261003-2" alt="Mister Andrew" onerror="this.style.display='none';">
               </div>
               <div class="andrew-identidad-text">
                 <strong>MISTER ANDREW</strong>
@@ -383,7 +228,7 @@ button{cursor:pointer;}
               <span>SALDO INICIAL</span><strong id="saldoInicial">S/ 200,000.00</strong>
             </div>
             <div class="resumen-metrica">
-              <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 200,000.00</strong>
+              <span>SALDO ACTUAL</span><strong id="saldoCuenta">S/ 80,000.00</strong>
             </div>
             <div class="resumen-metrica">
               <span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong>
@@ -426,7 +271,6 @@ button{cursor:pointer;}
             <div class="panel-head movement-head">
               <h3>🌐 MOVIMIENTOS GENERALES DEL BANCO</h3>
               <div class="movement-actions">
-                <button type="button" class="btn btn-report" data-andrew-action="imprimir-colectivo">🖨️ IMPRIMIR REPORTE</button>
                 <button type="button" class="btn btn-outline" data-andrew-action="cerrar-todo">✕ CERRAR</button>
               </div>
             </div>
@@ -450,7 +294,7 @@ button{cursor:pointer;}
 
     <div class="right-stack" id="accionesAndrew">
       <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
+        <div class="panel-head accordion-head" onclick="toggleAndrewPanel(this)">
           <div class="accordion-title-wrap"><h3>💸 TRANSFERIR FONDO A UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
           <span class="accordion-arrow">⌄</span>
         </div>
@@ -487,7 +331,7 @@ button{cursor:pointer;}
       </div>
 
       <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
+        <div class="panel-head accordion-head" onclick="toggleAndrewPanel(this)">
           <div class="accordion-title-wrap"><h3>↩️ RECIBIR DEVOLUCIÓN DE UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
           <span class="accordion-arrow">⌄</span>
         </div>
@@ -522,118 +366,47 @@ button{cursor:pointer;}
       </div>
 
       <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
+        <div class="panel-head accordion-head" onclick="toggleAndrewPanel(this)">
           <div class="accordion-title-wrap"><h3>🔎 CONSULTAR CUENTA</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
           <span class="accordion-arrow">⌄</span>
         </div>
         <div class="panel-body accordion-body" hidden>
           <label class="small-label">CÓDIGO DE CUENTA / ALUMNO</label>
-          <input id="codigoConsulta" placeholder="LDS-001 / CAJA-LILY">
+          <input id="codigoConsulta" placeholder="LDS-EST-001 / CAJA-LILY">
           <button class="btn btn-gold" style="width:100%;margin-top:12px;" onclick="consultarCuenta()">
             🔍 CONSULTAR
           </button>
           <div id="resultadoConsulta" class="message"></div>
-
-          <div class="consulta-rapida">
-            <div class="consulta-rapida-head">
-              <strong>📋 LISTA RÁPIDA DE ALUMNOS</strong>
-              <span>SELECCIONA PARA CONSULTAR</span>
-            </div>
-            <input id="buscarAlumnoRapido" class="consulta-busqueda" type="search" placeholder="🔎 BUSCAR POR CÓDIGO O NOMBRE..." autocomplete="off">
-            <div class="consulta-tabla-wrap">
-              <table class="consulta-tabla">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>CÓDIGO</th>
-                    <th>ALUMNO</th>
-                    <th>GRADO</th>
-                    <th>SALDO</th>
-                    <th>ACCIÓN</th>
-                  </tr>
-                </thead>
-                <tbody id="listaAlumnosRapida">
-                  <tr><td colspan="6" class="consulta-vacia">CARGANDO LISTA...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<div id="reportesModal" class="reportes-modal" aria-hidden="true">
-  <div class="reportes-card">
-    <div class="reportes-head">
-      <div>
-        <h3>📄 REPORTES LDS 360</h3>
-        <p>Selecciona el reporte que deseas imprimir.</p>
-      </div>
-      <button type="button" class="btn btn-close-report" data-andrew-action="cerrar-reportes">✕</button>
-    </div>
-    <div class="reportes-options">
-      <button type="button" class="report-option" data-andrew-action="imprimir-individual">
-        <span>👤</span><strong>REPORTE INDIVIDUAL</strong><small>Caja General · Mister Andrew · año seleccionado</small>
-      </button>
-      <button type="button" class="report-option" data-andrew-action="imprimir-colectivo">
-        <span>🌐</span><strong>REPORTE COLECTIVO</strong><small>Todos los movimientos del Banco LDS 360 · año seleccionado</small>
-      </button>
-    </div>
-  </div>
-</div>
-
 <div id="loginAndrew">
   <img id="fondoAndrewLogin" class="login-bg-image" src="assets/FONDO%20ANDREW%20.png?v=20261003-1" alt="">
   <div class="andrew-login-photo">
-    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew" aria-label="Foto de Mister Andrew">
+    <img id="andrewLoginFoto" src="assets/ANDREW.png?v=20261003-1" alt="Mister Andrew">
   </div>
   <div class="panel">
     <div class="panel-head"><h3>🔐 CAJA GENERAL — ACCESO DE MISTER ANDREW</h3></div>
     <div class="panel-body">
       <p style="font-weight:800;color:#334155;margin-bottom:18px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
       <label class="small-label">CLAVE DE ACCESO</label>
-      <input id="claveAndrew"
-        name="andrew-access-credential"
-        type="password"
-        placeholder="INGRESE LA CLAVE"
-        autocomplete="new-password"
-        autocapitalize="off"
-        spellcheck="false"
-        readonly
-        onfocus="prepararCampoClaveAndrew(this)">
+      <input id="claveAndrew" type="password" placeholder="INGRESE LA CLAVE" autocomplete="new-password">
       <button type="button" class="btn btn-gold login-action" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
-      <div class="login-or"><span>O</span></div>
-      <button type="button" class="btn btn-outline login-qr" onclick="abrirEscanerQRAndrew()">📷 INGRESAR CON QR</button>
       <button type="button" class="btn btn-outline login-home" onclick="window.location.href='index.html'">← DEVOLVER AL INICIO</button>
       <div id="errorLogin" class="message"></div>
     </div>
   </div>
 </div>
 
-<div id="qrLoginAndrewModal" class="qr-login-modal" aria-hidden="true">
-  <div class="qr-login-card">
-    <div class="qr-login-head">
-      <div>
-        <h3>📷 ACCESO CON QR</h3>
-        <p>Escanea el QR de acceso de Mister Andrew.</p>
-      </div>
-      <button type="button" class="btn-close-qr" onclick="cerrarEscanerQRAndrew()">✕</button>
-    </div>
-    <div class="qr-login-body">
-      <div id="readerAndrew"></div>
-      <div id="qrLoginAndrewMensaje" class="message"></div>
-      <p class="qr-login-help">Autoriza la cámara cuando el navegador lo solicite.</p>
-    </div>
-  </div>
-</div>
-
 <footer id="appFooter" style="text-align:center;padding:28px;font-weight:900;color:#fff;">BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
 
-<script src="notificaciones.js"></script>
-
 <script>
+// --------------------------------------------------------
+// CONFIGURACIÓN Y URL OFICIAL CONECTADA A GOOGLE SHEETS
+// --------------------------------------------------------
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 const CLAVE_ANDREW = "360LDS@@@";
 const CODIGO_ANDREW = "CAJA-ANDREW";
@@ -645,6 +418,25 @@ const MISES = {
   "CAJA-ANGHY": "MISS ANGHY REYES MELO",
   "CAJA-KARIN": "MISS KARIN MOLERO ROMANI"
 };
+
+const MAPA_EQUIVALENCIAS_ANDREW = {
+  "LDS-DOC-001": "CAJA-LILY",
+  "CAJA-LILY":   "CAJA-LILY",
+  "LDS-DOC-002": "CAJA-KIARA",
+  "CAJA-KIARA":  "CAJA-KIARA",
+  "LDS-DOC-003": "CAJA-ANGHY",
+  "CAJA-ANGHY":  "CAJA-ANGHY",
+  "LDS-DOC-004": "CAJA-KARIN",
+  "CAJA-KARIN":  "CAJA-KARIN",
+  "LDS-DOC-005": "CAJA-ANDREW",
+  "CAJA-ANDREW": "CAJA-ANDREW"
+};
+
+function normalizarCodigoAndrew(codigo) {
+  if (!codigo) return "";
+  const limpio = String(codigo).trim().toUpperCase();
+  return MAPA_EQUIVALENCIAS_ANDREW[limpio] || limpio;
+}
 
 function formato(n){ return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function escapar(v){ return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -659,182 +451,16 @@ function llamarAPI(params,callback){
   document.body.appendChild(s);
 }
 
-let audioAndrew=null;
-
-function activarAudioAndrew(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC) return null;
-    if(!audioAndrew) audioAndrew=new AC();
-    return audioAndrew;
-  }catch(e){ return null; }
-}
-
-function programarSonidoAndrew(ac,tipo){
-  if(!ac) return;
-  const ahora=ac.currentTime;
-  const notas=tipo==="error"?[220,165]:tipo==="click"?[520]:[523,659,784];
-
-  notas.forEach((f,i)=>{
-    const o=ac.createOscillator();
-    const g=ac.createGain();
-    const inicio=ahora+i*0.09;
-    o.type="sine";
-    o.frequency.setValueAtTime(f,inicio);
-    g.gain.setValueAtTime(0,inicio);
-    g.gain.linearRampToValueAtTime(0.065,inicio+0.015);
-    g.gain.exponentialRampToValueAtTime(0.001,inicio+0.20);
-    o.connect(g);
-    g.connect(ac.destination);
-    o.start(inicio);
-    o.stop(inicio+0.21);
-  });
-}
-
-function sonidoAndrew(tipo="ok"){
-  const ac=activarAudioAndrew();
-  if(!ac) return;
-  try{
-    if(ac.state==="suspended"){
-      ac.resume().then(()=>programarSonidoAndrew(ac,tipo)).catch(()=>{});
-      return;
-    }
-    programarSonidoAndrew(ac,tipo);
-  }catch(e){}
-}
-
-function hablarAndrew(texto){
-  if(!texto || !("speechSynthesis" in window)) return false;
-  try{
-    const ss=window.speechSynthesis;
-    ss.cancel();
-    const emitir=()=>{
-      try{
-        const u=new SpeechSynthesisUtterance(String(texto));
-        u.lang="es-PE";
-        u.rate=.92; u.pitch=1; u.volume=1;
-        const voces=ss.getVoices ? ss.getVoices() : [];
-        const voz=voces.find(v=>/^es(-|_)/i.test(String(v.lang||""))) || voces.find(v=>/spanish|español/i.test(String(v.name||"")));
-        if(voz) u.voice=voz;
-        ss.speak(u);
-      }catch(e){}
-    };
-    if(ss.getVoices && ss.getVoices().length){ emitir(); }
-    else{ ss.onvoiceschanged=()=>{ ss.onvoiceschanged=null; emitir(); }; setTimeout(()=>{ if(!ss.speaking) emitir(); },120); }
-    return true;
-  }catch(e){ return false; }
-}
-
-function bienvenidaAndrew(){
-  sonidoAndrew("ok");
-  hablarAndrew("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
-}
-
-function limpiarCampoClaveAndrew(){
-  const input=document.getElementById("claveAndrew");
-  if(input){ input.value=""; input.setAttribute("readonly",""); input.dataset.liberado="0"; }
-}
-
-function prepararCampoClaveAndrew(input){
-  if(!input) return;
-  if(input.dataset.liberado!=="1"){ input.value=""; input.removeAttribute("readonly"); input.dataset.liberado="1"; }
-}
-
-window.addEventListener("pageshow",()=>limpiarCampoClaveAndrew());
-
-let qrAndrewScanner=null;
-let qrAndrewLibraryPromise=null;
-
-function cargarLibreriaQRAndrew(){
-  if(window.Html5Qrcode) return Promise.resolve();
-  if(qrAndrewLibraryPromise) return qrAndrewLibraryPromise;
-
-  qrAndrewLibraryPromise=new Promise((resolve,reject)=>{
-    const existente=document.querySelector('script[data-qr-andrew="1"]');
-    if(existente){
-      existente.addEventListener("load",()=>resolve(),{once:true});
-      existente.addEventListener("error",()=>reject(new Error("No se pudo cargar el lector QR.")),{once:true});
-      return;
-    }
-    const script=document.createElement("script");
-    script.src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js";
-    script.async=true; script.dataset.qrAndrew="1";
-    script.onload=()=>resolve();
-    script.onerror=()=>reject(new Error("No se pudo cargar el lector QR."));
-    document.head.appendChild(script);
-  });
-  return qrAndrewLibraryPromise;
-}
-
-function extraerCredencialQRAndrew(texto){
-  const raw=String(texto||"").trim();
-  if(!raw) return "";
-  const limpio=raw.toUpperCase();
-  if(limpio===CLAVE_ANDREW || limpio===CODIGO_ANDREW) return CLAVE_ANDREW;
-  return "";
-}
-
-async function abrirEscanerQRAndrew(){
-  sonidoAndrew("click");
-  hablarAndrew("Abriendo cámara para escanear el código QR de acceso.");
-  const modal=document.getElementById("qrLoginAndrewModal");
-  const mensaje=document.getElementById("qrLoginAndrewMensaje");
-  if(modal) modal.classList.add("open");
-  if(mensaje) mostrarMensaje("qrLoginAndrewMensaje","PREPARANDO CÁMARA...","ok");
-
-  try{
-    await cargarLibreriaQRAndrew();
-    if(!window.Html5Qrcode) throw new Error("Lector QR no disponible.");
-    if(qrAndrewScanner){ try{ await qrAndrewScanner.stop(); }catch(e){} qrAndrewScanner=null; }
-
-    qrAndrewScanner=new Html5Qrcode("readerAndrew");
-    const exito=(decodedText)=>{
-      const credencial=extraerCredencialQRAndrew(decodedText);
-      if(!credencial){
-        sonidoAndrew("error");
-        mostrarMensaje("qrLoginAndrewMensaje","QR NO VÁLIDO PARA MISTER ANDREW.","error");
-        return;
-      }
-      try{ qrAndrewScanner.stop(); }catch(e){} qrAndrewScanner=null;
-      if(modal) modal.classList.remove("open");
-      const input=document.getElementById("claveAndrew");
-      if(input){ input.removeAttribute("readonly"); input.value=credencial; }
-      entrarAndrew(true);
-    };
-    await qrAndrewScanner.start({facingMode:"environment"},{fps:10,qrbox:{width:230,height:230}},exito);
-    mostrarMensaje("qrLoginAndrewMensaje","APUNTA LA CÁMARA AL CÓDIGO QR.","ok");
-  }catch(error){
-    sonidoAndrew("error");
-    mostrarMensaje("qrLoginAndrewMensaje","NO SE PUDO ACCEDER A LA CÁMARA.","error");
-  }
-}
-
-async function cerrarEscanerQRAndrew(){
-  const modal=document.getElementById("qrLoginAndrewModal");
-  if(qrAndrewScanner){ try{ await qrAndrewScanner.stop(); }catch(e){} qrAndrewScanner=null; }
-  if(modal) modal.classList.remove("open");
-}
-
-function entrarAndrew(desdeQR=false){
+function entrarAndrew(){
   const inputClave = document.getElementById("claveAndrew");
   if(!inputClave) return;
   const clave = inputClave.value.trim();
 
-  if(!clave){
-    mostrarMensaje("errorLogin", "INGRESE SU CLAVE O UTILICE SU QR.", "error");
-    sonidoAndrew("error");
-    return;
+  if(!clave){ mostrarMensaje("errorLogin", "INGRESE SU CLAVE DE ACCESO.", "error"); return; }
+  if(clave !== CLAVE_ANDREW && clave !== "360LDS@" && clave !== "360LDS@@@"){
+    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error"); inputClave.value=""; return;
   }
 
-  if(clave !== CLAVE_ANDREW && clave !== "360@@" && clave !== "360LDS@"){
-    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error");
-    sonidoAndrew("error");
-    inputClave.value="";
-    return;
-  }
-
-  bienvenidaAndrew();
-  sessionStorage.setItem("andrew360", "1");
   document.body.classList.remove("login-screen");
   document.getElementById("loginAndrew").style.display = "none";
   document.getElementById("appHeader").style.display = "flex";
@@ -844,388 +470,251 @@ function entrarAndrew(desdeQR=false){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  limpiarCampoClaveAndrew();
   const inputClave = document.getElementById("claveAndrew");
   if(inputClave){
     inputClave.addEventListener("keydown", function(e){
-      if(e.key === "Enter"){ e.preventDefault(); entrarAndrew(false); }
+      if(e.key === "Enter"){ e.preventDefault(); entrarAndrew(); }
     });
   }
 });
 
 function normalizarTipoAndrew(m, codigoCuenta){
-  const tipoDirecto=String(m?.tipo ?? m?.tipoMovimiento ?? '').trim().toUpperCase();
+  const tipoDirecto=String(m?.tipo ?? '').trim().toUpperCase();
   if(tipoDirecto==='INGRESO' || tipoDirecto==='EGRESO') return tipoDirecto;
-  const obs=String(m?.observacion||'').toUpperCase();
-  const cuenta=String(codigoCuenta||'').trim().toUpperCase();
-  const origen=(obs.match(/CUENTA_ORIGEN=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  const destino=(obs.match(/CUENTA_DESTINO=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  if(origen && destino){
-    if(origen===cuenta) return 'EGRESO';
-    if(destino===cuenta) return 'INGRESO';
-  }
   const concepto=String(m?.concepto||'').trim().toUpperCase();
-  if((cuenta===CODIGO_ANDREW || cuenta==="LDS-DOC-005") && (concepto.includes('FONDO GENERAL') || concepto.includes('CAPITAL'))) return 'INGRESO';
+  if(concepto.includes('FONDO BASE') || concepto.includes('CAPITAL') || concepto.includes('TRANSFERENCIA')) return 'INGRESO';
   return '';
 }
 
 function montoVisibleAndrew(m){
-  const codigo=String(m?.codigo||m?.codigoQR||'').trim().toUpperCase();
-  const concepto=String(m?.concepto||'').trim().toUpperCase();
-  const monto=parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0);
-  if((codigo===CODIGO_ANDREW || codigo==="LDS-DOC-005") && (concepto.includes('FONDO GENERAL') || concepto.includes('CAPITAL')) && (monto===200 || monto===200.00)) return 200000;
+  const monto=Number(String(m?.montoLDS ?? m?.monto ?? 0).replace(/[^\d.-]/g, '')) || 0;
   return monto;
 }
 
 function calcularSaldoCuentaAndrew(movimientos, codigoCuenta){
-  const codigo=String(codigoCuenta||"").trim().toUpperCase();
-  let saldo = (codigo === CODIGO_ANDREW || codigo === "LDS-DOC-005") ? 200000 : 0;
+  const codigoNorm = normalizarCodigoAndrew(codigoCuenta);
+  let saldo = (codigoNorm === "CAJA-ANDREW") ? 200000 : 0;
 
-  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
-    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==='ANULADO') return;
+  (Array.isArray(movimientos) ? movimientos : []).forEach(m => {
+    if (String(m?.estado || "ACTIVO").trim().toUpperCase() === 'ANULADO') return;
 
-    const mcodigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-    const categoria=String(m?.categoria||"").trim().toUpperCase();
-    const concepto=String(m?.concepto||"").trim().toUpperCase();
-    const monto=montoVisibleAndrew(m);
+    const mcodigo = normalizarCodigoAndrew(m?.codigo || "");
+    const categoria = String(m?.categoria || "").trim().toUpperCase();
+    const concepto = String(m?.concepto || "").trim().toUpperCase();
+    const monto = montoVisibleAndrew(m);
+
+    // Evita duplicar el Capital Inicial de 200,000 en el saldo
+    if (categoria === "CAPITAL_INICIAL" || concepto.includes("FONDO BASE GERENTE GENERAL")) {
+      return;
+    }
 
     const esTransferencia =
-      categoria==="TRANSFERENCIA_CAJA_MISE" ||
+      categoria === "TRANSFERENCIA_CAJA_MISE" ||
       concepto.includes("TRANSFERENCIA") ||
       concepto.includes("FONDO PARA PAGOS A ALUMNOS");
 
     const esDevolucion =
-      categoria==="DEVOLUCION_CAJA_GENERAL" ||
+      categoria === "DEVOLUCION_CAJA_GENERAL" ||
       concepto.includes("DEVOLUCIÓN") ||
       concepto.includes("DEVOLUCION");
 
-    if(codigo===CODIGO_ANDREW || codigo==="LDS-DOC-005"){
-      if(esTransferencia) saldo-=monto;
-      else if(esDevolucion) saldo+=monto;
-      else if(mcodigo===codigo || mcodigo===CODIGO_ANDREW || mcodigo==="LDS-DOC-005"){
-        const tipo=normalizarTipoAndrew(m,codigo);
-        if(tipo==='INGRESO') saldo+=monto;
-        else if(tipo==='EGRESO') saldo-=monto;
+    if (codigoNorm === "CAJA-ANDREW") {
+      if (esTransferencia) {
+        saldo -= monto;
+      } else if (esDevolucion) {
+        saldo += monto;
+      } else if (mcodigo === "CAJA-ANDREW") {
+        const tipo = normalizarTipoAndrew(m, m?.codigo);
+        if (tipo === 'INGRESO') saldo += monto;
+        else if (tipo === 'EGRESO') saldo -= monto;
       }
       return;
     }
 
-    if(mcodigo!==codigo) return;
-
-    if(esTransferencia){ saldo+=monto; return; }
-    if(esDevolucion){ saldo-=monto; return; }
-
-    const tipo=normalizarTipoAndrew(m,codigo);
-    if(tipo==='INGRESO') saldo+=monto;
-    else if(tipo==='EGRESO') saldo-=monto;
+    // Lógica para las Misses (Lily, Kiara, Anghy, Karin)
+    if (mcodigo === codigoNorm) {
+      if (esTransferencia) {
+        saldo += monto;
+      } else if (esDevolucion) {
+        saldo -= monto;
+      } else {
+        const tipo = normalizarTipoAndrew(m, m?.codigo);
+        if (tipo === 'INGRESO') saldo += monto;
+        else if (tipo === 'EGRESO') saldo -= monto;
+      }
+    }
   });
 
-  return Math.round((saldo+Number.EPSILON)*100)/100;
+  return Math.round((saldo + Number.EPSILON) * 100) / 100;
 }
 
 function mapaSaldosMisesAndrew(movimientos){
-  const mapa={};
-  Object.keys(MISES).forEach(codigo=>{ mapa[codigo]=calcularSaldoCuentaAndrew(movimientos,codigo); });
+  const mapa = {};
+  Object.keys(MISES).forEach(codigo => { 
+    mapa[codigo] = calcularSaldoCuentaAndrew(movimientos, codigo); 
+  });
   return mapa;
 }
 
-let movimientosBancoAndrewActuales=[];
-let movimientosAndrewActuales=[];
-let saldoAndrewActual=200000;
-let saldosMisesAndrewActuales={};
+let movimientosBancoAndrewActuales = [];
 
-function actualizarVistaMisesAndrew(){
-  document.querySelectorAll(".mise-saldo-andrew").forEach(el=>{
-    const codigo=String(el.getAttribute("data-caja-mise")||"").toUpperCase();
-    if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)){
-      el.textContent=formato(saldosMisesAndrewActuales[codigo]);
-    }
-  });
-}
+function cargarTodo(){
+  const anio = document.getElementById("anio").value;
+  document.getElementById("metaAnio").textContent = anio;
+  mostrarMensaje("mensaje", "CARGANDO DATOS EN TIEMPO REAL...", "ok");
 
-function cargarTodo(silencioso=false){
-  const anio=document.getElementById("anio").value;
-  document.getElementById("metaAnio").textContent=anio;
-  if(!silencioso) mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
+  llamarAPI({accion: "movimientos", anio}, function(rMov){
+    const movimientos = (rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
+    movimientosBancoAndrewActuales = movimientos;
 
-  llamarAPI({accion:"movimientos",anio},function(rMov){
-    const movimientos=(rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
+    const saldoAndrew = calcularSaldoCuentaAndrew(movimientos, CODIGO_ANDREW);
+    document.getElementById("saldoCuenta").textContent = formato(saldoAndrew);
 
-    const saldoAndrew=calcularSaldoCuentaAndrew(movimientos,CODIGO_ANDREW);
-    saldoAndrewActual=saldoAndrew;
-    document.getElementById("saldoCuenta").textContent=formato(saldoAndrew);
+    const saldosMises = mapaSaldosMisesAndrew(movimientos);
 
-    const saldosMises=mapaSaldosMisesAndrew(movimientos);
-    saldosMisesAndrewActuales=Object.assign({},saldosMises);
-    movimientosBancoAndrewActuales=movimientos.slice();
-    renderListaAlumnosRapida(movimientos);
-
-    const fotosMises={
-      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
-      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
-      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
-      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
+    const fotosMises = {
+      "CAJA-LILY": "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+      "CAJA-KIARA": "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+      "CAJA-ANGHY": "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+      "CAJA-KARIN": "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
     };
 
-    const mises=Object.keys(MISES).map(codigo=>({
+    const mises = Object.keys(MISES).map(codigo => ({
       codigo,
-      nombre:MISES[codigo],
-      saldoActual:Number(saldosMises[codigo])||0
+      nombre: MISES[codigo],
+      saldoActual: Number(saldosMises[codigo]) || 0
     }));
 
-    document.getElementById("cuentasMises").innerHTML=mises.map(c=>{
-      const foto=fotosMises[c.codigo]||"";
-      return `
-        <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
-          <div class="mise-card-top">
-            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" loading="lazy" decoding="async" onerror="this.style.display='none';">
-            <div style="min-width:0;">
-              <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
-              <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
-            </div>
+    document.getElementById("cuentasMises").innerHTML = mises.map(c => `
+      <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
+        <div class="mise-card-top">
+          <img class="mise-card-photo" src="${fotosMises[c.codigo]||''}" alt="${escapar(c.nombre)}" onerror="this.style.display='none';">
+          <div style="min-width:0;">
+            <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
+            <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
           </div>
-          <div class="mise-saldo-andrew" data-caja-mise="${escapar(c.codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
-        </div>`;
-    }).join("");
+        </div>
+        <div style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
+      </div>
+    `).join("");
 
-    const movAndrew=movimientos.filter(esMovimientoAndrew);
-    movimientosAndrewActuales=movAndrew.slice();
-    document.getElementById("contadorMovimientos").textContent=movAndrew.length;
+    const movAndrew = movimientos.filter(esMovimientoAndrew);
+    document.getElementById("contadorMovimientos").textContent = movAndrew.length;
     renderTablaAndrew(movAndrew);
 
-    if(!silencioso) mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
+    mostrarMensaje("mensaje", "CAJA GENERAL ACTUALIZADA CORRECTAMENTE.", "ok");
   });
 }
 
 function esMovimientoAndrew(m){
-  const codigo=String(m?.codigo||"").trim().toUpperCase();
-  const obs=String(m?.observacion||"").toUpperCase();
-  const estudiante=String(m?.estudiante||"").trim().toUpperCase();
-  const concepto=String(m?.concepto||"").trim().toUpperCase();
-
-  return codigo===CODIGO_ANDREW
-    || codigo==="LDS-DOC-005"
-    || obs.includes("CUENTA="+CODIGO_ANDREW)
-    || obs.includes("LDS-DOC-005")
-    || estudiante===NOMBRE_ANDREW
-    || concepto.includes("FONDO PARA PAGOS A ALUMNOS")
-    || concepto.includes("FONDO BASE")
-    || concepto.includes("CAPITAL")
-    || concepto.includes("TRANSFERENCIA")
-    || concepto.includes("DEVOLUCIÓN")
-    || concepto.includes("DEVOLUCION");
+  const codigoNorm = normalizarCodigoAndrew(m?.codigo);
+  const concepto = String(m?.concepto || "").trim().toUpperCase();
+  return codigoNorm === "CAJA-ANDREW" || concepto.includes("FONDO PARA PAGOS A ALUMNOS") || concepto.includes("FONDO BASE");
 }
 
 function renderTablaAndrew(mov){
-  const tbody=document.getElementById("tablaAndrew");
+  const tbody = document.getElementById("tablaAndrew");
   if(!mov.length){
-    tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS DE CAJA GENERAL PARA EL AÑO SELECCIONADO.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS PARA MOSTRAR.</td></tr>';
     return;
   }
 
-  const anioSeleccionado=String(document.getElementById("anio")?.value||"");
-
-  tbody.innerHTML=mov.map(m=>{
-    // Lee directamente el texto tal cual viene del servidor
-    let fecha = String(m?.fechaTexto || m?.fechaHora || m?.fecha || "");
-
-    const matchAnio=fecha.match(/20\d{2}/);
-    const anioVisible=m?.anio || (matchAnio ? matchAnio[0] : anioSeleccionado);
-
-    let tipoVisible=normalizarTipoAndrew(m,m?.codigo);
-    const concepto=String(m?.concepto||"").toUpperCase();
-
-    if(!tipoVisible){
-      if(concepto.includes("DEVOLUCIÓN") || concepto.includes("DEVOLUCION")){
-        tipoVisible="INGRESO";
-      }else if(concepto.includes("TRANSFERENCIA") || concepto.includes("FONDO PARA PAGOS") || concepto.includes("FONDO BASE") || concepto.includes("CAPITAL")){
-        tipoVisible="INGRESO";
-      }
-    }
-
-    const esTransferencia =
-      concepto.includes("TRANSFERENCIA") ||
-      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
-
-    const esDevolucion =
-      concepto.includes("DEVOLUCIÓN") ||
-      concepto.includes("DEVOLUCION");
-
-    const cuentaVisible=(esTransferencia || esDevolucion)
-      ? NOMBRE_ANDREW
-      : (m?.estudiante || NOMBRE_ANDREW);
-
-    const gradoVisible=(esTransferencia || esDevolucion)
-      ? "CAJA GENERAL"
-      : (m?.grado || "CAJA GENERAL");
-
+  tbody.innerHTML = mov.map(m => {
+    const fecha = String(m?.fechaTexto || m?.fechaHora || "");
+    const tipo = normalizarTipoAndrew(m, m?.codigo);
     return `
     <tr>
-      <td>${escapar(anioVisible)}</td>
+      <td>${escapar(m?.anio || "2026")}</td>
       <td>${escapar(fecha)}</td>
-      <td>${escapar(cuentaVisible)}</td>
-      <td>${escapar(gradoVisible)}</td>
-      <td>${escapar(tipoVisible)}</td>
-      <td>${escapar(m?.concepto||"")}</td>
+      <td>${escapar(NOMBRE_ANDREW)}</td>
+      <td>CAJA GENERAL</td>
+      <td>${escapar(tipo)}</td>
+      <td>${escapar(m?.concepto || "")}</td>
       <td>${formato(montoVisibleAndrew(m))}</td>
-      <td>${escapar(m?.responsable||"")}</td>
-      <td>${escapar(m?.observacion||"")}</td>
+      <td>${escapar(m?.responsable || "")}</td>
+      <td>${escapar(m?.observacion || "")}</td>
     </tr>`;
   }).join("");
 }
 
-function parseMontoLDS(valor){
-  if(valor===null || valor===undefined || valor==="") return 0;
-  if(typeof valor==="number") return Number.isFinite(valor) ? valor : 0;
-  let texto=String(valor).trim().replace(/[^\d,\.\-]/g,"");
-  if(!texto) return 0;
-  if(texto.indexOf(".")!==-1 && texto.indexOf(",")!==-1){
-    texto=texto.replace(/\./g,"").replace(",",".");
-  }else if(texto.indexOf(",")!==-1){
-    texto=texto.replace(",",".");
-  }
-  const n=Number(texto);
-  return Number.isFinite(n) ? n : 0;
-}
-
-function mostrarTodos(){
-  const panel=document.getElementById("panelTodo");
-  if(!panel) return;
-  panel.style.display="block";
-  const mov=movimientosBancoAndrewActuales||[];
-  document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto||m.fechaHora)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10" class="empty">SIN MOVIMIENTOS.</td></tr>';
-  setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);
-}
-
-function cerrarTodo(){
-  const panel=document.getElementById("panelTodo");
-  if(panel) panel.style.display="none";
-}
-
-function abrirReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){ modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); }
-}
-
-function cerrarReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){ modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); }
-}
-
 function toggleAndrewPanel(head){
-  const panel=head.closest(".accordion-panel");
-  const body=panel.querySelector(".accordion-body");
-  const abrir=!panel.classList.contains("is-open");
-  document.querySelectorAll(".accordion-panel").forEach(p=>{
+  const panel = head.closest(".accordion-panel");
+  const body = panel.querySelector(".accordion-body");
+  const abrir = !panel.classList.contains("is-open");
+  document.querySelectorAll(".accordion-panel").forEach(p => {
     p.classList.remove("is-open");
-    p.querySelector(".accordion-body").hidden=true;
+    p.querySelector(".accordion-body").hidden = true;
   });
-  if(abrir){ panel.classList.add("is-open"); body.hidden=false; }
+  if(abrir){ panel.classList.add("is-open"); body.hidden = false; }
 }
 
 function transferirAMise(){
-  const codigo=document.getElementById("miseDestino").value;
-  const monto=parseMontoLDS(document.getElementById("montoTransferencia").value);
-  if(!codigo || monto<=0){ mostrarMensaje("mensajeTransferencia","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
-  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
-    if(r&&r.ok){
-      mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok");
-      document.getElementById("montoTransferencia").value="";
-      document.getElementById("obsTransferencia").value="";
+  const codigo = document.getElementById("miseDestino").value;
+  const monto = parseFloat(document.getElementById("montoTransferencia").value);
+  if(!codigo || isNaN(monto) || monto <= 0){
+    mostrarMensaje("mensajeTransferencia", "SELECCIONA UNA MISS Y MONTO VÁLIDO.", "error"); return;
+  }
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo,
+    anio: document.getElementById("anio").value,
+    tipo: "EGRESO",
+    categoria: "TRANSFERENCIA_CAJA_MISE",
+    concepto: document.getElementById("conceptoTransferencia").value,
+    monto,
+    responsable: NOMBRE_ANDREW,
+    observacion: document.getElementById("obsTransferencia").value
+  }, function(r){
+    if(r && r.ok){
+      mostrarMensaje("mensajeTransferencia", "TRANSFERENCIA REGISTRADA.", "ok");
+      document.getElementById("montoTransferencia").value = "";
+      document.getElementById("obsTransferencia").value = "";
       cargarTodo();
     } else {
-      mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error");
-      sonidoAndrew("error");
+      mostrarMensaje("mensajeTransferencia", r?.mensaje || "ERROR AL REGISTRAR.", "error");
     }
   });
 }
 
 function recibirDevolucion(){
-  const codigo=document.getElementById("miseOrigen").value;
-  const monto=parseMontoLDS(document.getElementById("montoDevolucion").value);
-  if(!codigo || monto<=0){ mostrarMensaje("mensajeDevolucion","SELECCIONA UNA MISS Y MONTO VÁLIDO.","error"); return; }
-  llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
-    if(r&&r.ok){
-      mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok");
-      document.getElementById("montoDevolucion").value="";
-      document.getElementById("obsDevolucion").value="";
+  const codigo = document.getElementById("miseOrigen").value;
+  const monto = parseFloat(document.getElementById("montoDevolucion").value);
+  if(!codigo || isNaN(monto) || monto <= 0){
+    mostrarMensaje("mensajeDevolucion", "SELECCIONA UNA MISS Y MONTO VÁLIDO.", "error"); return;
+  }
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo,
+    anio: document.getElementById("anio").value,
+    tipo: "INGRESO",
+    categoria: "DEVOLUCION_CAJA_GENERAL",
+    concepto: document.getElementById("conceptoDevolucion").value,
+    monto,
+    responsable: NOMBRE_ANDREW,
+    observacion: document.getElementById("obsDevolucion").value
+  }, function(r){
+    if(r && r.ok){
+      mostrarMensaje("mensajeDevolucion", "DEVOLUCIÓN REGISTRADA.", "ok");
+      document.getElementById("montoDevolucion").value = "";
+      document.getElementById("obsDevolucion").value = "";
       cargarTodo();
     } else {
-      mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error");
-      sonidoAndrew("error");
+      mostrarMensaje("mensajeDevolucion", r?.mensaje || "ERROR AL REGISTRAR.", "error");
     }
   });
 }
 
 function consultarCuenta(){
-  const codigo=document.getElementById("codigoConsulta").value.trim().toUpperCase();
-  const anio=document.getElementById("anio").value;
-  if(!codigo){ mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error"); return; }
-  mostrarMensaje("resultadoConsulta","CONSULTANDO...","ok");
-  llamarAPI({accion:"estudiante",codigo,anio},function(r){
-    if(!r||!r.ok){ mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error"); return; }
-    const c=r.cuenta||{}; const e=r.estudiante||{};
-    mostrarMensaje("resultadoConsulta",(e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual),"ok");
+  const codigo = document.getElementById("codigoConsulta").value.trim().toUpperCase();
+  if(!codigo){ mostrarMensaje("resultadoConsulta", "INGRESA UN CÓDIGO.", "error"); return; }
+  llamarAPI({accion: "estudiante", codigo, anio: document.getElementById("anio").value}, function(r){
+    if(!r || !r.ok){ mostrarMensaje("resultadoConsulta", (r && r.mensaje) || "NO ENCONTRADO.", "error"); return; }
+    const c = r.cuenta || {}; const e = r.estudiante || {};
+    mostrarMensaje("resultadoConsulta", (e.nombreCompleto || e.nombre || codigo) + " · SALDO: " + formato(c.saldoActual), "ok");
   });
 }
 
-function renderListaAlumnosRapida(movimientos){
-  const tbody=document.getElementById("listaAlumnosRapida");
-  if(!tbody) return;
-
-  const mapa={};
-  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
-    const codigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-    if(!codigo.startsWith("LDS-EST-")) return;
-    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==="ANULADO") return;
-
-    const nombre=String(m?.estudiante||m?.nombreCompleto||"").trim();
-    const grado=String(m?.grado||"").trim();
-    if(!mapa[codigo]){
-      mapa[codigo]={codigo,nombre,grado};
-    }else{
-      if(!mapa[codigo].nombre && nombre) mapa[codigo].nombre=nombre;
-      if(!mapa[codigo].grado && grado) mapa[codigo].grado=grado;
-    }
-  });
-
-  const alumnos=Object.values(mapa).sort((a,b)=>a.codigo.localeCompare(b.codigo,undefined,{numeric:true}));
-  if(!alumnos.length){
-    tbody.innerHTML='<tr><td colspan="6" class="consulta-vacia">NO HAY ALUMNOS REGISTRADOS CON MOVIMIENTOS.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML=alumnos.map((a,i)=>{
-    const saldo=calcularSaldoCuentaAndrew(movimientos,a.codigo);
-    const busqueda=escapar((a.codigo+" "+a.nombre+" "+a.grado).toUpperCase());
-    return `<tr data-consulta-search="${busqueda}">
-      <td>${i+1}</td>
-      <td>${escapar(a.codigo)}</td>
-      <td>${escapar(a.nombre||"SIN NOMBRE")}</td>
-      <td>${escapar(a.grado||"-")}</td>
-      <td class="consulta-saldo">${formato(saldo)}</td>
-      <td><button type="button" class="consulta-ver" onclick="seleccionarAlumnoRapido('${escapar(a.codigo)}')">VER</button></td>
-    </tr>`;
-  }).join("");
-}
-
-function seleccionarAlumnoRapido(codigo){
-  const input=document.getElementById("codigoConsulta");
-  if(input){ input.value=String(codigo||"").trim().toUpperCase(); }
-  consultarCuenta();
-}
-
-document.getElementById("anio").addEventListener("change",cargarTodo);
-
-document.addEventListener("click",function(ev){
-  const b=ev.target.closest("[data-andrew-action]");
-  if(!b) return;
-  const accion=b.getAttribute("data-andrew-action");
-  if(accion==="abrir-reportes") abrirReportes();
-  else if(accion==="mostrar-todos") mostrarTodos();
-  else if(accion==="cerrar-todo") cerrarTodo();
-  else if(accion==="cerrar-reportes") cerrarReportes();
-});
+document.getElementById("anio").addEventListener("change", cargarTodo);
 </script>
 </body>
 </html>
