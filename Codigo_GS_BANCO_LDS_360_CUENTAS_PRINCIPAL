@@ -1,0 +1,1674 @@
+/**
+
+ * BANCO LDS 360 — I.E.P. LA SALLE DEL SUR
+
+ * CÓDIGO.GS — BACKEND PRINCIPAL
+
+ *
+
+ * IMPORTANTE:
+
+ * Este archivo es SOLO Apps Script.
+
+ * NO contiene HTML, CSS ni código de andrew.html.
+
+ */
+
+var CONFIG = {
+
+  SPREADSHEET_ID: "1SDY3u6OqtJTv1xe4a_56Y9n2gQji9JYdbKPDJRX65QU",
+
+  HOJA_ESTUDIANTES: "ESTUDIANTES",
+
+  HOJA_MOVIMIENTOS: "MOVIMIENTOS",
+
+  CODIGO_ANDREW: "CAJA-ANDREW",
+
+  NOMBRE_ANDREW: "MISTER ANDREW",
+
+  ROL_ANDREW: "CAJERO GENERAL",
+
+  TIPO_CUENTA_ANDREW: "CAJA_GENERAL",
+
+  // Se conserva el fondo inicial actual del proyecto.
+
+  // Para dejarlo en cero permanentemente, cambiar SOLO este valor a 0.
+
+  FONDO_INICIAL_ANDREW: 200000,
+
+  BONO_MENSUAL_ALUMNO: 1130,
+
+  CUENTAS_MISES_LDS360: {
+
+    "MISS LILY MELO AZAÑERO": {
+
+      codigo: "CAJA-LILY",
+
+      nombre: "MISS LILY MELO AZAÑERO",
+
+      rol: "DOCENTE TUTORA CAJERA",
+
+      tipo: "CAJA_MISE"
+
+    },
+
+    "MISS KIARA MORALES ELGUERA": {
+
+      codigo: "CAJA-KIARA",
+
+      nombre: "MISS KIARA MORALES ELGUERA",
+
+      rol: "DOCENTE TUTORA CAJERA",
+
+      tipo: "CAJA_MISE"
+
+    },
+
+    "MISS ANGHY REYES MELO": {
+
+      codigo: "CAJA-ANGHY",
+
+      nombre: "MISS ANGHY REYES MELO",
+
+      rol: "DOCENTE TUTORA CAJERA",
+
+      tipo: "CAJA_MISE"
+
+    },
+
+    "MISS KARIN MOLERO ROMANI": {
+
+      codigo: "CAJA-KARIN",
+
+      nombre: "MISS KARIN MOLERO ROMANI",
+
+      rol: "DOCENTE TUTORA CAJERA",
+
+      tipo: "CAJA_MISE"
+
+    }
+
+  }
+
+};
+
+/* =========================================================
+
+   ENTRADA WEB
+
+   ========================================================= */
+
+function doGet(e) {
+
+  var params = (e && e.parameter) ? e.parameter : {};
+
+  var callback = params.callback;
+
+  var accion = normalizarTexto(params.accion).toUpperCase();
+
+  var resultado;
+
+  try {
+
+    var ss = obtenerSpreadsheet();
+
+    switch (accion) {
+
+      case "ESTUDIANTE":
+
+      case "CONSULTAR":
+
+        resultado = obtenerEstudianteOUsuario(ss, params.codigo, params.anio);
+
+        break;
+
+      case "LOGINALUMNO":
+
+        resultado = validarLogin(ss, params.codigo, params.clave);
+
+        break;
+
+      case "REGISTRARMOVIMIENTO":
+
+      case "REGISTRAR_TRANSACCION":
+
+        resultado = registrarMovimiento(ss, params);
+
+        break;
+
+      case "MOVIMIENTOS":
+
+        resultado = consultarMovimientosGenerales(ss, params.anio);
+
+        break;
+
+      case "CUENTAS":
+
+        resultado = consultarCuentas(ss, params.anio);
+
+        break;
+
+      case "LISTAESTUDIANTES":
+
+      case "ESTUDIANTES":
+
+      case "LISTA_ALUMNOS":
+
+        resultado = consultarListaEstudiantes(ss, params.anio);
+
+        break;
+
+      default:
+
+        resultado = {
+
+          ok: false,
+
+          success: false,
+
+          mensaje: "Acción no reconocida: " + accion
+
+        };
+
+    }
+
+  } catch (error) {
+
+    resultado = {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Error en el servidor: " + error.toString()
+
+    };
+
+  }
+
+  return responderJSON(resultado, callback);
+
+}
+
+function doPost(e) {
+
+  return doGet(e);
+
+}
+
+/* =========================================================
+
+   UTILIDADES
+
+   ========================================================= */
+
+function obtenerSpreadsheet() {
+
+  var ss = null;
+
+  try {
+
+    ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+
+  } catch (error1) {
+
+    try {
+
+      ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    } catch (error2) {
+
+      ss = null;
+
+    }
+
+  }
+
+  if (!ss) {
+
+    throw new Error(
+
+      "No se pudo acceder a la hoja de cálculo. Verifica el ID y los permisos."
+
+    );
+
+  }
+
+  return ss;
+
+}
+
+function responderJSON(obj, callback) {
+
+  var texto = JSON.stringify(obj || {});
+
+  if (callback) {
+
+    return ContentService
+
+      .createTextOutput(callback + "(" + texto + ")")
+
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+
+  }
+
+  return ContentService
+
+    .createTextOutput(texto)
+
+    .setMimeType(ContentService.MimeType.JSON);
+
+}
+
+function normalizarTexto(valor) {
+
+  return String(valor === null || valor === undefined ? "" : valor).trim();
+
+}
+
+function normalizarCodigo(valor) {
+
+  return normalizarTexto(valor).toUpperCase();
+
+}
+
+/*
+
+ * Convierte correctamente formatos usados en el proyecto:
+
+ * 15.000      -> 15000
+
+ * 15,000      -> 15000
+
+ * 15.000,50   -> 15000.50
+
+ * 15,50       -> 15.50
+
+ * 15000       -> 15000
+
+ */
+
+function parseMontoLDS(valor) {
+
+  if (valor === null || valor === undefined || valor === "") {
+
+    return 0;
+
+  }
+
+  if (typeof valor === "number") {
+
+    return isFinite(valor) ? valor : 0;
+
+  }
+
+  var texto = normalizarTexto(valor);
+
+  if (!texto) return 0;
+
+  texto = texto.replace(/[^\d,.-]/g, "");
+
+  var tienePunto = texto.indexOf(".") !== -1;
+
+  var tieneComa = texto.indexOf(",") !== -1;
+
+  // 15.000,50
+
+  if (tienePunto && tieneComa) {
+
+    texto = texto.replace(/\./g, "").replace(",", ".");
+
+  }
+
+  // 15.000
+
+  else if (tienePunto) {
+
+    var partesPunto = texto.split(".");
+
+    if (partesPunto.length === 2 && partesPunto[1].length === 3) {
+
+      texto = partesPunto[0] + partesPunto[1];
+
+    }
+
+  }
+
+  // 15,000 o 15,50
+
+  else if (tieneComa) {
+
+    var partesComa = texto.split(",");
+
+    if (partesComa.length === 2 && partesComa[1].length === 3) {
+
+      texto = partesComa[0] + partesComa[1];
+
+    } else {
+
+      texto = partesComa.join(".");
+
+    }
+
+  }
+
+  var numero = Number(texto);
+
+  return isFinite(numero) ? numero : 0;
+
+}
+
+function redondear2(numero) {
+
+  return Math.round((Number(numero) || 0) * 100) / 100;
+
+}
+
+function esFondoInicial(concepto) {
+
+  return normalizarTexto(concepto)
+
+    .toUpperCase()
+
+    .indexOf("FONDO GENERAL INICIAL") !== -1;
+
+}
+
+function esFilaAnioValido(fila, anioFiltro) {
+
+  if (!anioFiltro) return true;
+
+  var anioBuscado = String(anioFiltro);
+
+  var fecha = fila[0];
+
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+
+    return String(fecha.getFullYear()) === anioBuscado;
+
+  }
+
+  var textoFecha = normalizarTexto(fecha);
+
+  var encontrado = textoFecha.match(/20\d{2}/);
+
+  return !!encontrado && encontrado[0] === anioBuscado;
+
+}
+
+function obtenerAnioFila(fila) {
+
+  var fecha = fila[0];
+
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+
+    return String(fecha.getFullYear());
+
+  }
+
+  var texto = normalizarTexto(fecha);
+
+  var match = texto.match(/20\d{2}/);
+
+  return match ? match[0] : "";
+
+}
+
+function formatearFecha(fecha) {
+
+  if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+
+    return Utilities.formatDate(
+
+      fecha,
+
+      Session.getScriptTimeZone() || "America/Lima",
+
+      "dd/MM/yyyy HH:mm:ss"
+
+    );
+
+  }
+
+  return normalizarTexto(fecha);
+
+}
+
+/* =========================================================
+
+   CUENTAS MISES
+
+   ========================================================= */
+
+function obtenerMisePorCodigo(codigo) {
+
+  var buscado = normalizarCodigo(codigo);
+
+  var claves = Object.keys(CONFIG.CUENTAS_MISES_LDS360);
+
+  for (var i = 0; i < claves.length; i++) {
+
+    var mise = CONFIG.CUENTAS_MISES_LDS360[claves[i]];
+
+    if (normalizarCodigo(mise.codigo) === buscado) {
+
+      return mise;
+
+    }
+
+  }
+
+  return null;
+
+}
+
+/* =========================================================
+
+   LOGIN
+
+   ========================================================= */
+
+function validarLogin(ss, codigo, clave) {
+  var buscado = normalizarCodigo(codigo);
+  var claveIngresada = normalizarTexto(clave);
+
+  if (!buscado) return { ok: false, success: false, mensaje: "Código no proporcionado" };
+  if (!claveIngresada) return { ok: false, success: false, mensaje: "Ingrese su clave" };
+
+  // CUENTAS es la fuente principal de códigos, usuarios y claves.
+  var hojaCuentas = ss.getSheetByName("CUENTAS");
+  if (hojaCuentas) {
+    var rango = hojaCuentas.getDataRange().getDisplayValues();
+    if (rango.length > 1) {
+      var encabezados = rango[0].map(function(v) {
+        return normalizarTexto(v).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      });
+      var colCodigo = encabezados.indexOf("CODIGO");
+      var colUsuario = encabezados.indexOf("USUARIO");
+      var colClave = encabezados.indexOf("CLAVE");
+      var colActivo = encabezados.indexOf("ACTIVO");
+
+      if (colCodigo !== -1 && colClave !== -1) {
+        for (var i = 1; i < rango.length; i++) {
+          var fila = rango[i];
+          if (normalizarCodigo(fila[colCodigo]) !== buscado) continue;
+          if (colActivo !== -1 && normalizarTexto(fila[colActivo]).toUpperCase() === "NO") {
+            return { ok: false, success: false, mensaje: "Acceso desactivado. Consulte con administración." };
+          }
+          var claveCorrecta = normalizarTexto(fila[colClave]);
+          if (claveCorrecta && claveIngresada === claveCorrecta) {
+            return { ok: true, success: true, mensaje: "Acceso correcto", codigo: buscado,
+              usuario: colUsuario !== -1 ? normalizarTexto(fila[colUsuario]) : "" };
+          }
+          return { ok: false, success: false, mensaje: "Clave incorrecta" };
+        }
+      }
+    }
+  }
+
+  // Compatibilidad con los códigos internos de caja del portal.
+  if (buscado === CONFIG.CODIGO_ANDREW && claveIngresada === "360@@") {
+    return { ok: true, success: true, mensaje: "Acceso correcto" };
+  }
+  var mise = obtenerMisePorCodigo(buscado);
+  if (mise && claveIngresada === "360@") {
+    return { ok: true, success: true, mensaje: "Acceso correcto" };
+  }
+
+  return { ok: false, success: false, mensaje: "Código no encontrado en CUENTAS o clave incorrecta" };
+}
+
+
+/* =========================================================
+
+   CONSULTA DE ESTUDIANTE / USUARIO / CAJA
+
+   ========================================================= */
+
+function obtenerEstudianteOUsuario(ss, codigo, anioFiltro) {
+
+  var buscado = normalizarCodigo(codigo);
+
+  if (!buscado) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Código no proporcionado"
+
+    };
+
+  }
+
+  var usuario = null;
+
+  var esAndrew = buscado === CONFIG.CODIGO_ANDREW;
+
+  var mise = obtenerMisePorCodigo(buscado);
+
+  if (esAndrew) {
+
+    usuario = {
+
+      codigo: CONFIG.CODIGO_ANDREW,
+
+      nombre: CONFIG.NOMBRE_ANDREW,
+
+      apellido: "",
+
+      nombreCompleto: CONFIG.NOMBRE_ANDREW,
+
+      rol: CONFIG.ROL_ANDREW,
+
+      grado: "CAJA GENERAL",
+
+      seccion: "",
+
+      telefono: "",
+
+      foto: "",
+
+      fotoUrl: "",
+
+      esDocente: true,
+
+      esAndrew: true
+
+    };
+
+  } else if (mise) {
+
+    usuario = {
+
+      codigo: mise.codigo,
+
+      nombre: mise.nombre,
+
+      apellido: "",
+
+      nombreCompleto: mise.nombre,
+
+      rol: mise.rol,
+
+      grado: "",
+
+      seccion: "",
+
+      telefono: "",
+
+      foto: "",
+
+      fotoUrl: "",
+
+      esDocente: true,
+
+      esAndrew: false
+
+    };
+
+  } else {
+
+    var hojaEst = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+
+    if (!hojaEst) {
+
+      return {
+
+        ok: false,
+
+        success: false,
+
+        mensaje: "No existe la hoja ESTUDIANTES."
+
+      };
+
+    }
+
+    var datosEst = hojaEst.getDataRange().getValues();
+
+    for (var i = 1; i < datosEst.length; i++) {
+
+      var filaEst = datosEst[i];
+
+      if (normalizarCodigo(filaEst[0]) === buscado) {
+
+        var rol = normalizarTexto(filaEst[3]);
+
+        var rolUpper = rol.toUpperCase();
+
+        usuario = {
+
+          codigo: normalizarTexto(filaEst[0]),
+
+          nombre: filaEst[1] || "",
+
+          apellido: filaEst[2] || "",
+
+          rol: rol || "ALUMNO",
+
+          grado: filaEst[4] || "",
+
+          seccion: filaEst[5] || "",
+
+          telefono: filaEst[6] || "",
+
+          nombreCompleto:
+
+            filaEst[7] ||
+
+            ((filaEst[1] || "") + " " + (filaEst[2] || "")).trim(),
+
+          foto: filaEst[8] || "",
+
+          fotoUrl: filaEst[9] || filaEst[8] || "",
+
+          esDocente:
+
+            rolUpper.indexOf("DOCENTE") !== -1 ||
+
+            rolUpper.indexOf("PROMOTORA") !== -1
+
+        };
+
+        break;
+
+      }
+
+    }
+
+  }
+
+  if (!usuario) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Código no encontrado: " + buscado
+
+    };
+
+  }
+
+  var hojaMov = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hojaMov) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "No existe la hoja MOVIMIENTOS."
+
+    };
+
+  }
+
+  var datosMov = hojaMov.getDataRange().getValues();
+
+  var ingresos = 0;
+
+  var egresos = 0;
+
+  var movimientos = [];
+
+  for (var j = 1; j < datosMov.length; j++) {
+
+    var fila = datosMov[j];
+
+    if (!fila || fila.every(function(v) {
+
+      return normalizarTexto(v) === "";
+
+    })) {
+
+      continue;
+
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+
+    if (estado === "ANULADO") continue;
+
+    var codigoFila = normalizarCodigo(fila[1]);
+
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+
+    var monto = parseMontoLDS(fila[6]);
+
+    var pertenece = false;
+
+    if (esAndrew) {
+
+      // Movimiento normal de Andrew.
+
+      if (codigoFila === buscado) {
+
+        pertenece = true;
+
+      }
+
+      // Transferencia Andrew -> Miss guardada con código de la Miss.
+
+      if (categoria === "TRANSFERENCIA_CAJA_MISE") {
+
+        pertenece = true;
+
+      }
+
+      // Devolución Miss -> Andrew guardada con código de la Miss.
+
+      if (categoria === "DEVOLUCION_CAJA_GENERAL") {
+
+        pertenece = true;
+
+      }
+
+    } else {
+
+      pertenece = codigoFila === buscado;
+
+    }
+
+    if (!pertenece) continue;
+
+    var tipoEfectivo = obtenerTipoEfectivo(
+
+      tipoBase,
+
+      categoria,
+
+      esAndrew
+
+    );
+
+    if (tipoEfectivo === "INGRESO") {
+
+      ingresos += monto;
+
+    } else if (tipoEfectivo === "EGRESO") {
+
+      egresos += monto;
+
+    }
+
+    movimientos.push({
+
+      anio: obtenerAnioFila(fila),
+
+      fechaTexto: formatearFecha(fila[0]),
+
+      codigo: codigoFila,
+
+      estudiante: normalizarTexto(fila[2]),
+
+      grado: normalizarTexto(fila[3]),
+
+      tipo: tipoEfectivo,
+
+      concepto: normalizarTexto(fila[5]),
+
+      monto: redondear2(monto),
+
+      responsable: normalizarTexto(fila[7]),
+
+      observacion: normalizarTexto(fila[8]),
+
+      categoria: categoria,
+
+      estado: estado
+
+    });
+
+  }
+
+  var saldoActual;
+
+  if (esAndrew) {
+
+    saldoActual =
+
+      CONFIG.FONDO_INICIAL_ANDREW + ingresos - egresos;
+
+  } else {
+
+    saldoActual = ingresos - egresos;
+
+  }
+
+  return {
+
+    ok: true,
+
+    success: true,
+
+    estudiante: usuario,
+
+    cuenta: {
+
+      totalIngresos: redondear2(ingresos),
+
+      totalEgresos: redondear2(egresos),
+
+      saldoActual: redondear2(saldoActual),
+
+      saldo: redondear2(saldoActual),
+
+      movimientos: movimientos.length
+
+    },
+
+    movimientos: movimientos
+
+  };
+
+}
+
+/* =========================================================
+
+   TIPO ECONÓMICO REAL DE UN MOVIMIENTO
+
+   ========================================================= */
+
+function obtenerTipoEfectivo(tipoBase, categoria, esAndrew) {
+
+  var tipo = normalizarTexto(tipoBase).toUpperCase();
+
+  var cat = normalizarTexto(categoria).toUpperCase();
+
+  if (cat === "TRANSFERENCIA_CAJA_MISE") {
+
+    return esAndrew ? "EGRESO" : "INGRESO";
+
+  }
+
+  if (cat === "DEVOLUCION_CAJA_GENERAL") {
+
+    return esAndrew ? "INGRESO" : "EGRESO";
+
+  }
+
+  if (tipo.indexOf("INGRESO") !== -1) {
+
+    return "INGRESO";
+
+  }
+
+  if (tipo.indexOf("EGRESO") !== -1) {
+
+    return "EGRESO";
+
+  }
+
+  return tipo;
+
+}
+
+/* =========================================================
+
+   MOVIMIENTOS GENERALES
+
+   ========================================================= */
+
+function consultarMovimientosGenerales(ss, anioFiltro) {
+
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hoja) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "No existe la hoja MOVIMIENTOS.",
+
+      movimientos: []
+
+    };
+
+  }
+
+  var datos = hoja.getDataRange().getValues();
+
+  var movimientos = [];
+
+  for (var i = 1; i < datos.length; i++) {
+
+    var fila = datos[i];
+
+    if (!fila || fila.every(function(v) {
+
+      return normalizarTexto(v) === "";
+
+    })) {
+
+      continue;
+
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+
+    if (estado === "ANULADO") continue;
+
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+
+    var codigo = normalizarCodigo(fila[1]);
+
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+
+    // En la hoja, una transferencia se guarda en la cuenta Miss.
+
+    // El tipo de esa fila debe leerse como INGRESO para la Miss.
+
+    var tipoEfectivo = obtenerTipoEfectivo(tipoBase, categoria, false);
+
+    movimientos.push({
+
+      anio: obtenerAnioFila(fila),
+
+      fechaTexto: formatearFecha(fila[0]),
+
+      codigo: codigo,
+
+      estudiante: normalizarTexto(fila[2]),
+
+      grado: normalizarTexto(fila[3]),
+
+      tipo: tipoEfectivo,
+
+      tipoRegistrado: tipoBase,
+
+      concepto: normalizarTexto(fila[5]),
+
+      monto: redondear2(parseMontoLDS(fila[6])),
+
+      responsable: normalizarTexto(fila[7]),
+
+      observacion: normalizarTexto(fila[8]),
+
+      categoria: categoria,
+
+      estado: estado
+
+    });
+
+  }
+
+  return {
+
+    ok: true,
+
+    success: true,
+
+    movimientos: movimientos
+
+  };
+
+}
+
+/* =========================================================
+
+   SALDOS DE CUENTAS
+
+   ========================================================= */
+
+function calcularSaldoCuentaDesdeMovimientos(
+
+  datosMov,
+
+  codigoCuenta,
+
+  anioFiltro
+
+) {
+
+  var codigo = normalizarCodigo(codigoCuenta);
+
+  var saldo = 0;
+
+  var ingresos = 0;
+
+  var egresos = 0;
+
+  var esAndrew = codigo === CONFIG.CODIGO_ANDREW;
+
+  for (var i = 1; i < datosMov.length; i++) {
+
+    var fila = datosMov[i];
+
+    if (!fila || fila.every(function(v) {
+
+      return normalizarTexto(v) === "";
+
+    })) {
+
+      continue;
+
+    }
+
+    if (esFondoInicial(fila[5])) continue;
+
+    var estado = normalizarTexto(fila[11]).toUpperCase() || "ACTIVO";
+
+    if (estado === "ANULADO") continue;
+
+    if (!esFilaAnioValido(fila, anioFiltro)) continue;
+
+    var codigoFila = normalizarCodigo(fila[1]);
+
+    var tipoBase = normalizarTexto(fila[4]).toUpperCase();
+
+    var categoria = normalizarTexto(fila[9]).toUpperCase();
+
+    var monto = parseMontoLDS(fila[6]);
+
+    var pertenece = false;
+
+    if (esAndrew) {
+
+      pertenece =
+
+        codigoFila === codigo ||
+
+        categoria === "TRANSFERENCIA_CAJA_MISE" ||
+
+        categoria === "DEVOLUCION_CAJA_GENERAL";
+
+    } else {
+
+      pertenece = codigoFila === codigo;
+
+    }
+
+    if (!pertenece) continue;
+
+    var tipoEfectivo = obtenerTipoEfectivo(
+
+      tipoBase,
+
+      categoria,
+
+      esAndrew
+
+    );
+
+    if (tipoEfectivo === "INGRESO") {
+
+      saldo += monto;
+
+      ingresos += monto;
+
+    } else if (tipoEfectivo === "EGRESO") {
+
+      saldo -= monto;
+
+      egresos += monto;
+
+    }
+
+  }
+
+  return {
+
+    saldo: redondear2(saldo),
+
+    ingresos: redondear2(ingresos),
+
+    egresos: redondear2(egresos)
+
+  };
+
+}
+
+function consultarCuentas(ss, anioFiltro) {
+
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hoja) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "No existe la hoja MOVIMIENTOS.",
+
+      cuentas: []
+
+    };
+
+  }
+
+  var datosMov = hoja.getDataRange().getValues();
+
+  var cuentas = [];
+
+  var saldoAndrew = calcularSaldoCuentaDesdeMovimientos(
+
+    datosMov,
+
+    CONFIG.CODIGO_ANDREW,
+
+    anioFiltro
+
+  );
+
+  cuentas.push({
+
+    codigo: CONFIG.CODIGO_ANDREW,
+
+    nombre: CONFIG.NOMBRE_ANDREW,
+
+    rol: CONFIG.ROL_ANDREW,
+
+    tipoCuenta: CONFIG.TIPO_CUENTA_ANDREW,
+
+    saldoActual: redondear2(
+
+      CONFIG.FONDO_INICIAL_ANDREW + saldoAndrew.saldo
+
+    )
+
+  });
+
+  var claves = Object.keys(CONFIG.CUENTAS_MISES_LDS360);
+
+  for (var i = 0; i < claves.length; i++) {
+
+    var mise = CONFIG.CUENTAS_MISES_LDS360[claves[i]];
+
+    var saldoMise = calcularSaldoCuentaDesdeMovimientos(
+
+      datosMov,
+
+      mise.codigo,
+
+      anioFiltro
+
+    );
+
+    cuentas.push({
+
+      codigo: mise.codigo,
+
+      nombre: mise.nombre,
+
+      rol: mise.rol,
+
+      tipoCuenta: mise.tipo,
+
+      saldoActual: redondear2(saldoMise.saldo)
+
+    });
+
+  }
+
+  return {
+
+    ok: true,
+
+    success: true,
+
+    cuentas: cuentas
+
+  };
+
+}
+
+/* =========================================================
+
+   LISTA LIGERA DE ALUMNOS
+
+   =========================================================
+
+   Se mantiene separada de CUENTAS para no cargar a Andrew/Mises
+
+   con toda la lista de alumnos cuando solo se necesita el selector.
+
+*/
+
+function consultarListaEstudiantes(ss, anioFiltro) {
+
+  /*
+
+   * ENDPOINT EXCLUSIVO PARA LA LISTA DE ALUMNOS.
+
+   * NO depende de CUENTAS y NO carga las cajas de Andrew/Mises.
+
+   * Lee ESTUDIANTES directamente y usa MOVIMIENTOS solo para calcular saldos.
+
+   */
+
+  var hojaEst = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+
+  var hojaMov = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hojaEst) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "No existe la hoja ESTUDIANTES.",
+
+      estudiantes: []
+
+    };
+
+  }
+
+  var dataEst = hojaEst.getDataRange().getValues();
+
+  var dataMov = hojaMov ? hojaMov.getDataRange().getValues() : [];
+
+  var estudiantes = [];
+
+  var porCodigo = {};
+
+  var saldos = {};
+
+  /*
+
+   * La estructura real usada por obtenerEstudianteOUsuario es:
+
+   * A=CÓDIGO, B=NOMBRE, C=APELLIDO, D=ROL, E=GRADO,
+
+   * F=SECCIÓN, G=TELÉFONO, H=NOMBRE COMPLETO, I=FOTO, J=FOTO URL.
+
+   * Se mantiene ese orden para no alterar ESTUDIANTES.
+
+   */
+
+  for (var i = 1; i < dataEst.length; i++) {
+
+    var fila = dataEst[i];
+
+    if (!fila || fila.every(function(v) { return normalizarTexto(v) === ""; })) continue;
+
+    var codigo = normalizarCodigo(fila[0]);
+
+    if (!codigo) continue;
+
+    var rol = normalizarTexto(fila[3]) || "ALUMNO";
+
+    var rolUpper = rol.toUpperCase();
+
+    /* Solo alumnos. Aceptamos explícitamente LDS-EST-* para evitar que
+
+       una variación del texto de ROL elimine accidentalmente a los alumnos. */
+
+    var esDocente =
+
+      rolUpper.indexOf("DOCENTE") !== -1 ||
+
+      rolUpper.indexOf("PROMOTORA") !== -1 ||
+
+      rolUpper.indexOf("MAESTRA") !== -1;
+
+    if (esDocente && codigo.indexOf("LDS-EST-") !== 0) continue;
+
+    if (codigo.indexOf("LDS-EST-") !== 0) continue;
+
+    var alumno = {
+
+      codigo: codigo,
+
+      nombre: normalizarTexto(fila[7]) ||
+
+              ((normalizarTexto(fila[1]) + " " + normalizarTexto(fila[2])).trim()),
+
+      nombreCompleto: normalizarTexto(fila[7]) ||
+
+              ((normalizarTexto(fila[1]) + " " + normalizarTexto(fila[2])).trim()),
+
+      grado: normalizarTexto(fila[4]),
+
+      seccion: normalizarTexto(fila[5]),
+
+      rol: rol,
+
+      tipoCuenta: "ALUMNO",
+
+      foto: normalizarTexto(fila[8]),
+
+      fotoUrl: normalizarTexto(fila[9]) || normalizarTexto(fila[8]),
+
+      saldoActual: 0
+
+    };
+
+    porCodigo[codigo] = estudiantes.length;
+
+    saldos[codigo] = 0;
+
+    estudiantes.push(alumno);
+
+  }
+
+  /* MOVIMIENTOS es opcional para que la lista nunca desaparezca por un fallo
+
+     del cálculo de saldos. */
+
+  for (var j = 1; j < dataMov.length; j++) {
+
+    var mov = dataMov[j];
+
+    if (!mov || mov.every(function(v) { return normalizarTexto(v) === ""; })) continue;
+
+    var estado = normalizarTexto(mov[11]).toUpperCase() || "ACTIVO";
+
+    if (estado === "ANULADO") continue;
+
+    if (!esFilaAnioValido(mov, anioFiltro)) continue;
+
+    if (esFondoInicial(mov[5])) continue;
+
+    var codigoMov = normalizarCodigo(mov[1]);
+
+    if (!Object.prototype.hasOwnProperty.call(porCodigo, codigoMov)) continue;
+
+    var tipo = normalizarTexto(mov[4]).toUpperCase();
+
+    var monto = parseMontoLDS(mov[6]);
+
+    if (tipo === "INGRESO") saldos[codigoMov] += monto;
+
+    else if (tipo === "EGRESO") saldos[codigoMov] -= monto;
+
+  }
+
+  estudiantes.forEach(function(alumno) {
+
+    alumno.saldoActual = redondear2(Math.max(0, saldos[alumno.codigo] || 0));
+
+  });
+
+  estudiantes.sort(function(a, b) {
+
+    return String(a.codigo || "").localeCompare(
+
+      String(b.codigo || ""),
+
+      undefined,
+
+      { numeric: true }
+
+    );
+
+  });
+
+  return {
+
+    ok: true,
+
+    success: true,
+
+    cantidad: estudiantes.length,
+
+    estudiantes: estudiantes
+
+  };
+
+}
+
+/* =========================================================
+
+   REGISTRO DE MOVIMIENTOS
+
+   ========================================================= */
+
+function registrarMovimiento(ss, params) {
+
+  var codigo = normalizarCodigo(params.codigo);
+
+  var tipo = normalizarTexto(params.tipo).toUpperCase() || "INGRESO";
+
+  var categoria = normalizarTexto(params.categoria).toUpperCase();
+
+  var concepto = normalizarTexto(params.concepto);
+
+  var monto = parseMontoLDS(params.monto);
+
+  var responsable = normalizarTexto(params.responsable) || "ADMIN";
+
+  var responsableClave = normalizarTexto(params.responsableClave);
+
+  var observacion = normalizarTexto(params.observacion);
+
+  if (!codigo) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Código requerido"
+
+    };
+
+  }
+
+  if (monto <= 0) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Monto inválido"
+
+    };
+
+  }
+
+  var nombreCompleto = "";
+
+  var grado = "";
+
+  if (codigo === CONFIG.CODIGO_ANDREW) {
+
+    nombreCompleto = CONFIG.NOMBRE_ANDREW;
+
+    grado = "CAJA GENERAL";
+
+  } else {
+
+    var mise = obtenerMisePorCodigo(codigo);
+
+    if (mise) {
+
+      nombreCompleto = mise.nombre;
+
+      grado = "";
+
+    } else {
+
+      var hojaEst = ss.getSheetByName(CONFIG.HOJA_ESTUDIANTES);
+
+      if (!hojaEst) {
+
+        return {
+
+          ok: false,
+
+          success: false,
+
+          mensaje: "No existe la hoja ESTUDIANTES."
+
+        };
+
+      }
+
+      var datosEst = hojaEst.getDataRange().getValues();
+
+      for (var i = 1; i < datosEst.length; i++) {
+
+        var fila = datosEst[i];
+
+        if (normalizarCodigo(fila[0]) === codigo) {
+
+          nombreCompleto =
+
+            fila[7] ||
+
+            ((fila[1] || "") + " " + (fila[2] || "")).trim();
+
+          grado = fila[4] || "";
+
+          break;
+
+        }
+
+      }
+
+    }
+
+  }
+
+  if (!nombreCompleto) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "Código no encontrado: " + codigo
+
+    };
+
+  }
+
+  var hojaMov = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hojaMov) {
+
+    return {
+
+      ok: false,
+
+      success: false,
+
+      mensaje: "No existe la hoja MOVIMIENTOS."
+
+    };
+
+  }
+
+  var timestamp = new Date();
+
+  hojaMov.appendRow([
+
+    timestamp,            // 1 FECHA
+
+    codigo,               // 2 CÓDIGO
+
+    nombreCompleto,       // 3 CUENTA / ESTUDIANTE
+
+    grado,                // 4 GRADO
+
+    tipo,                 // 5 TIPO
+
+    concepto,             // 6 CONCEPTO
+
+    redondear2(monto),    // 7 MONTO LDS
+
+    responsable,          // 8 RESPONSABLE
+
+    observacion,          // 9 OBSERVACIÓN
+
+    categoria,            // 10 CATEGORÍA
+
+    responsableClave,     // 11 CLAVE RESPONSABLE
+
+    "ACTIVO"              // 12 ESTADO
+
+  ]);
+
+  SpreadsheetApp.flush();
+
+  return {
+
+    ok: true,
+
+    success: true,
+
+    mensaje: "Transacción registrada exitosamente"
+
+  };
+
+}
+
+/* =========================================================
+
+   LIMPIEZA OPCIONAL — BORRA SOLO MOVIMIENTOS
+
+   NO BORRA ESTUDIANTES NI CAMBIA ENCABEZADOS.
+
+   EJECUTAR MANUALMENTE SOLO SI SE QUIERE EMPEZAR DE CERO.
+
+   ========================================================= */
+
+function REINICIAR_BANCO_LDS360() {
+
+  var ss = obtenerSpreadsheet();
+
+  var hoja = ss.getSheetByName(CONFIG.HOJA_MOVIMIENTOS);
+
+  if (!hoja) {
+
+    throw new Error("No existe la hoja MOVIMIENTOS.");
+
+  }
+
+  var ultimaFila = hoja.getLastRow();
+
+  var ultimaColumna = Math.max(hoja.getLastColumn(), 12);
+
+  if (ultimaFila > 1) {
+
+    hoja.getRange(
+
+      2,
+
+      1,
+
+      ultimaFila - 1,
+
+      ultimaColumna
+
+    ).clearContent();
+
+  }
+
+  SpreadsheetApp.flush();
+
+  return "MOVIMIENTOS LIMPIOS.";
+
+}
+
+
