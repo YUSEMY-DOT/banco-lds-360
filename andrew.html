@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BANCO LDS 360 — Caja Mister Andrew</title>
+<title>BANCO LDS 360 — Caja Andrew / Gerencia</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -19,290 +19,300 @@
   --rojo: #e11d48;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
-body { background: var(--fondo); color: var(--texto); min-height: 100vh; font-size: 13px; padding: 15px; }
-
-header { background: #08121e; color: #fff; padding: 10px 15px; border-bottom: 4px solid var(--dorado); margin-bottom: 15px; border-radius: 10px; }
-.header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-.brand h1 { font-size: 1.1rem; color: #fff; font-weight: 800; }
-.brand p { color: var(--dorado); font-size: 0.65rem; font-weight: 700; }
-
-.btn { border: 0; border-radius: 20px; padding: 6px 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; transition: all 0.2s; }
-.btn-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; }
-.btn-blue { background: linear-gradient(135deg, #1e3a8a 0%, #0c1e30 100%); color: #fff; border: 1px solid var(--dorado); }
-.btn-outline { background: #fff; border: 1.5px solid var(--borde); color: var(--azul); }
-
-.banner-gerente { background: #fff; border: 2px solid var(--dorado); border-radius: 12px; padding: 15px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.card-stat { background: #f8fafc; border: 1.5px solid var(--borde); border-radius: 10px; padding: 12px; text-align: center; }
-.card-stat span { font-size: 0.72rem; color: var(--muted); font-weight: 800; display: block; }
-.card-stat strong { font-size: 1.6rem; color: var(--azul); font-weight: 900; }
-
-.panel-mises { background: #fff; border: 2px solid var(--dorado); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-.panel-mises h3 { font-size: 0.9rem; color: var(--azul); font-weight: 800; margin-bottom: 10px; }
-.grid-mises { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-.box-mise { border: 1.5px solid var(--borde); border-radius: 10px; padding: 10px; text-align: center; background: #fafcff; }
-.box-mise h4 { font-size: 0.75rem; color: var(--azul); font-weight: 800; }
-.box-mise p { font-size: 1.1rem; color: var(--verde); font-weight: 900; }
-
-.panel-tabla { background: #fff; border: 2px solid var(--dorado); border-radius: 12px; padding: 15px; }
-.panel-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-.panel-head h3 { font-size: 0.9rem; color: var(--azul); font-weight: 800; }
-
-.table-wrap { width: 100%; max-height: 480px; overflow-y: auto; border: 1.5px solid var(--borde); border-radius: 10px; }
-table { width: 100%; border-collapse: collapse; min-width: 700px; }
-th, td { padding: 9px 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-size: 0.78rem; font-weight: 600; }
-th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky; top: 0; }
-
-.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
-.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
-
-/* MODAL / DROPDOWN DE REPORTES */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(12, 30, 48, 0.85); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
-.modal-box { background: #fff; border-radius: 14px; max-width: 450px; width: 100%; padding: 20px; border-top: 5px solid var(--dorado); text-align: center; }
-.modal-box h3 { font-size: 1.1rem; color: var(--azul); margin-bottom: 15px; font-weight: 800; }
-.opcion-reporte { border: 2px solid var(--dorado); background: #fff7ed; color: #9a3412; border-radius: 10px; padding: 14px; margin-bottom: 10px; font-weight: 900; cursor: pointer; width: 100%; text-align: left; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; }
-.opcion-reporte:hover { background: #ffedd5; }
-
-@media print {
-  header, .banner-gerente, .panel-mises, .panel-head, .modal-overlay, .btn { display: none !important; }
-  body { background: #fff; padding: 0; }
-  .panel-tabla { border: none; }
-  .table-wrap { max-height: none; overflow: visible; border: 1px solid #000; }
-}
-</style>
-</head>
-<body>
-
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <h1>BANCO LDS 360 · CAJA ANDREW</h1>
-      <p>I.E.P. LA SALLE DEL SUR — GERENCIA GENERAL</p>
-    </div>
-    <div style="display: flex; gap: 10px; align-items: center;">
-      <select id="selectAnioEscolar" onchange="actualizarCajaAndrew()" style="height: 34px; padding: 0 10px; border-radius: 8px; font-weight: 800;">
-        <option value="2026">AÑO 2026</option>
-        <option value="2027">AÑO 2027</option>
-      </select>
-      <button class="btn btn-gold" onclick="actualizarCajaAndrew()">🔄 ACTUALIZAR</button>
-      <a class="btn btn-outline" href="./">← INICIO</a>
-    </div>
-  </div>
-</header>
-
-<div class="banner-gerente">
-  <div class="card-stat">
-    <span>GERENTE GENERAL</span>
-    <strong style="font-size: 1.1rem;">MISTER ANDREW</strong>
-  </div>
-  <div class="card-stat">
-    <span>SALDO INICIAL</span>
-    <strong id="saldoInicialAndrew">S/ 200,000.00</strong>
-  </div>
-  <div class="card-stat">
-    <span>SALDO ACTUAL</span>
-    <strong id="saldoActualAndrew" style="color: var(--verde);">S/ 80,000.00</strong>
-  </div>
-  <div class="card-stat">
-    <span>MOVIMIENTOS</span>
-    <strong id="cantMovimientos">0</strong>
-  </div>
-</div>
-
-<div class="panel-mises">
-  <h3>📊 SALDOS DE LAS MISSES</h3>
-  <div class="grid-mises" id="gridSaldosMises">
-    <div class="box-mise"><h4>MISS LILY</h4><p id="saldoLily">S/ 30,000.00</p></div>
-    <div class="box-mise"><h4>MISS KIARA</h4><p id="saldoKiara">S/ 30,000.00</p></div>
-    <div class="box-mise"><h4>MISS ANGHY</h4><p id="saldoAnghy">S/ 30,000.00</p></div>
-    <div class="box-mise"><h4>MISS KARIN</h4><p id="saldoKarin">S/ 30,000.00</p></div>
-  </div>
-</div>
-
-<div class="panel-tabla">
-  <div class="panel-head">
-    <h3>📑 MOVIMIENTOS DE CAJA</h3>
-    <div style="display: flex; gap: 10px;">
-      <button class="btn btn-blue" id="btnReportes" onclick="abrirModalReportes()">🖨️ REPORTES</button>
-      <button class="btn btn-gold" id="btnVerTodo" onclick="toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
-    </div>
-  </div>
-
-  <div id="mensajeEstado" style="margin-bottom: 10px; font-weight: 800; color: var(--verde); display: none;"></div>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>AÑO</th>
-          <th>FECHA</th>
-          <th>CUENTA</th>
-          <th>GRADO</th>
-          <th>TIPO</th>
-          <th>CONCEPTO</th>
-          <th>MONTO LDS</th>
-          <th>CAJERO(A)</th>
-          <th>OBSERVACIÓN</th>
-        </tr>
-      </thead>
-      <tbody id="tablaMovimientos">
-        <tr><td colspan="9" style="text-align:center; padding: 20px;">CARGANDO MOVIMIENTOS...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- MODAL DE SELECCIÓN DE REPORTES (UNITARIO Y GRUPAL) -->
-<div class="modal-overlay" id="modalReportes">
-  <div class="modal-box">
-    <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
-    
-    <button class="opcion-reporte" onclick="imprimirReporteUnitario()">
-      <span>👤 ESTADO DE CUENTA UNITARIO (ALUMNO / CAJA)</span>
-      <span>➔</span>
-    </button>
-    
-    <button class="opcion-reporte" onclick="imprimirReporteGrupal()">
-      <span>👥 REPORTE GRUPAL DE TODO EL BANCO</span>
-      <span>➔</span>
-    </button>
-
-    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" onclick="cerrarModalReportes()">CANCELAR</button>
-  </div>
-</div>
-
-<script>
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
-
-let mostrandoTodoElBanco = false;
-let todosLosMovimientosGlobales = [];
-
-function llamarAPI(parametros, callback) {
-  const nombreCallback = "callbackGerente_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
-  const script = document.createElement("script");
-
-  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
-  window[nombreCallback] = function(respuesta) {
-    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
-  };
-  script.onerror = function() {
-    delete window[nombreCallback];
-    script.remove();
-    callback({ok:false, mensaje:"ERROR DE CONEXIÓN."});
-  };
-  document.body.appendChild(script);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
 }
 
-function formatearLDS(valor) {
-  const n = Number(valor) || 0;
-  return "S/ " + n.toLocaleString("es-PE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-function actualizarCajaAndrew() {
-  const anio = document.getElementById("selectAnioEscolar").value;
-  mostrandoTodoElBanco = false;
-  document.getElementById("btnVerTodo").textContent = "🌐 VER TODO EL BANCO";
-
-  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
-    if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
-      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS.</td></tr>';
-      return;
-    }
-
-    todosLosMovimientosGlobales = res.movimientos;
-    
-    // Filtrar movimientos específicos de Caja Andrew
-    const movsAndrew = res.movimientos.filter(m => {
-      const cod = String(m.codigo || m.codigoQR || "").toUpperCase();
-      const resp = String(m.responsable || m.cajero || "").toUpperCase();
-      return cod.includes("ANDREW") || resp.includes("ANDREW");
-    });
-
-    renderTabla(movsAndrew.length ? movsAndrew : res.movimientos);
-  });
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 15px;
 }
 
-function toggleVerTodoElBanco() {
-  mostrandoTodoElBanco = !mostrandoTodoElBanco;
-  const btn = document.getElementById("btnVerTodo");
+header {
+  background: #08121e;
+  color: #fff;
+  padding: 10px 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-bottom: 4px solid var(--dorado);
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
 
-  if (mostrandoTodoElBanco) {
-    btn.textContent = "💼 VER SOLO CAJA ANDREW";
-    renderTabla(todosLosMovimientosGlobales);
-  } else {
-    btn.textContent = "🌐 VER TODO EL BANCO";
-    actualizarCajaAndrew();
+.header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.brand p {
+  margin: 0;
+  color: var(--dorado);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.btn {
+  border: 0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  min-height: 34px;
+}
+
+.btn-light {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--dorado);
+  color: #ffffff;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  border: 1px solid #fcd34d;
+}
+
+.btn-blue {
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #ffffff;
+  border: 1px solid var(--dorado);
+}
+
+.btn-outline {
+  background: #ffffff;
+  border: 1.5px solid var(--borde);
+  color: var(--azul);
+}
+
+.layout-main {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 1100px) {
+  .layout-main {
+    grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.75fr);
   }
 }
 
-function renderTabla(lista) {
-  const tbody = document.getElementById("tablaMovimientos");
-  tbody.innerHTML = "";
-  document.getElementById("cantMovimientos").textContent = String(lista.length);
-
-  if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
-    return;
-  }
-
-  lista.forEach(m => {
-    const tr = document.createElement("tr");
-    const esEgreso = String(m.tipo).toUpperCase().includes("EGRESO");
-    
-    tr.innerHTML = `
-      <td><strong>${m.anio || '2026'}</strong></td>
-      <td>${m.fecha || m.timestamp || ''}</td>
-      <td><strong>${m.estudiante || m.codigo || 'MISTER ANDREW'}</strong></td>
-      <td>${m.grado || 'CAJA GENERAL'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${m.tipo || 'INGRESO'}</span></td>
-      <td>${m.concepto || ''}</td>
-      <td><strong>${formatearLDS(m.monto || m.montoLDS || 0)}</strong></td>
-      <td>${m.responsable || m.cajero || 'SISTEMA'}</td>
-      <td>${m.observacion || ''}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+.left-stack, .right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
 }
 
-// FUNCIONES DE MODAL Y REPORTES
-function abrirModalReportes() {
-  document.getElementById("modalReportes").style.display = "flex";
+.profile-banner {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  padding: 15px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-function cerrarModalReportes() {
-  document.getElementById("modalReportes").style.display = "none";
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-function imprimirReporteUnitario() {
-  cerrarModalReportes();
-  const codigo = prompt("INGRESE EL CÓDIGO DEL ALUMNO O CAJA PARA EL REPORTE UNITARIO:");
-  if (!codigo) return;
-
-  const filtrados = todosLosMovimientosGlobales.filter(m => {
-    const c = String(m.codigo || m.estudiante || "").toUpperCase();
-    return c.includes(codigo.trim().toUpperCase());
-  });
-
-  if (!filtrados.length) {
-    alert("NO SE ENCONTRARON MOVIMIENTOS PARA EL CÓDIGO INGRESADO.");
-    return;
-  }
-
-  renderTabla(filtrados);
-  setTimeout(() => { window.print(); }, 300);
+.avatar-wrap {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--dorado);
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
 }
 
-function imprimirReporteGrupal() {
-  cerrarModalReportes();
-  renderTabla(todosLosMovimientosGlobales);
-  setTimeout(() => { window.print(); }, 300);
+.avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  actualizarCajaAndrew();
-});
-</script>
+.profile-text h3 {
+  font-size: 1.4rem;
+  color: var(--azul);
+  font-weight: 900;
+  margin: 0;
+}
 
-</body>
-</html>
+.profile-text p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  border-radius: 12px;
+  padding: 10px 16px;
+  text-align: center;
+  min-width: 130px;
+}
+
+.stat-pill span {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.stat-pill strong {
+  font-size: 1.5rem;
+  font-weight: 900;
+  display: block;
+}
+
+.pill-inicial {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #3b82f6;
+  color: #1e40af;
+}
+
+.pill-actual {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 2px solid #10b981;
+  color: #065f46;
+}
+
+.pill-actual strong { color: #047857; }
+
+.pill-mov {
+  background: #f8fafc;
+  border: 1.5px solid var(--borde);
+  color: var(--azul);
+}
+
+.alert-status {
+  background: #ecfdf5;
+  border: 1.5px solid #a7f3d0;
+  color: #047857;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.mises-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.mises-panel h3 {
+  color: var(--azul);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.mises-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.mise-card {
+  border: 1.5px solid var(--dorado);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fffdf7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mise-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--dorado);
+  object-fit: cover;
+}
+
+.mise-card-info strong {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--azul);
+  font-weight: 900;
+}
+
+.mise-card-info span {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.mise-card-info p {
+  font-size: 1rem;
+  color: #047857;
+  font-weight: 900;
+  margin-top: 2px;
+}
+
+.table-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-
