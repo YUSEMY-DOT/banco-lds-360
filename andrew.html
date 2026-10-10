@@ -529,7 +529,7 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL UNICAMENTE CON INSIGNIA A LA DERECHA */
+/* MEMBRETE INSTITUCIONAL CON INSIGNIA A LA DERECHA */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
@@ -899,4 +899,618 @@ textarea { height: auto; padding: 8px 10px; }
 <!-- MODAL 1: MENÚ OPCIONES DE REPORTES -->
 <div id="modalMenuReportes" class="modal-overlay">
   <div class="modal-box">
-    <h3>🖨️ OPCIONES DE IMPRESIÓN Y
+    <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
+    
+    <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
+      <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
+      <span>➔</span>
+    </button>
+    
+    <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
+      <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
+      <span>➔</span>
+    </button>
+
+    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModal('modalMenuReportes')">CANCELAR</button>
+  </div>
+</div>
+
+<!-- MODAL 2: SELECCIÓN DE ALUMNO O MAESTRO PARA REPORTE UNITARIO -->
+<div id="modalSeleccionAlumno" class="modal-overlay">
+  <div class="modal-box">
+    <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
+    <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
+    
+    <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
+      <table class="lista-alumnos-tabla">
+        <thead>
+          <tr style="background: #f1f5f9; position: sticky; top: 0;">
+            <th style="padding: 8px 10px;">CÓDIGO</th>
+            <th style="padding: 8px 10px;">NOMBRE / ROL</th>
+            <th style="padding: 8px 10px; text-align: right;">ACCIÓN</th>
+          </tr>
+        </thead>
+        <tbody id="bodyListaSeleccionAlumno">
+          <tr><td colspan="3" style="text-align: center; padding: 15px;">CARGANDO USUARIOS...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" type="button" onclick="cerrarModal('modalSeleccionAlumno')">VOLVER</button>
+  </div>
+</div>
+
+<!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
+<div id="contenedorImpresion"></div>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
+
+let mostrandoTodoElBanco = false;
+let todosLosMovimientosGlobales = [];
+let listaCuentasYAlumnosGlobal = [];
+
+const MAPA_USUARIOS_OFICIALES = {
+  "CAJA-ANDREW": { nombre: "MISTER ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
+  "CAJA-LILY": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "DOCENTE / PROMOTORA", esDocente: true },
+  "CAJA-KIARA": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "CAJA-KARIN": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  
+  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "DOCENTE / PROMOTORA", esDocente: true },
+  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "DOCENTE / COORDINADORA", esDocente: true },
+  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
+
+  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", foto: "https://lh3.googleusercontent.com/d/1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", foto: "https://lh3.googleusercontent.com/d/19KV30WDkKReEo5vBbx9ia4bebrPpyWPw", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
+};
+
+function parsearMonto(val) {
+  if (typeof val === 'number') return isNaN(val) ? 0 : val;
+  if (!val) return 0;
+  let str = String(val).replace(/LDS/gi, '').trim();
+  if (str.includes(',') && str.includes('.')) {
+    str = str.replace(/\./g, '').replace(',', '.');
+  } else if (str.includes(',')) {
+    str = str.replace(',', '.');
+  }
+  const n = parseFloat(str);
+  return isNaN(n) ? 0 : n;
+}
+
+function togglePanel(id) {
+  const p = document.getElementById(id);
+  if (p) p.classList.toggle("collapsed");
+}
+
+function abrirModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.style.display = "flex";
+}
+
+function cerrarModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.style.display = "none";
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback = "callbackAndrew_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
+  const script = document.createElement("script");
+
+  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
+  window[nombreCallback] = function(respuesta) {
+    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
+  };
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+    callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
+  };
+  document.body.appendChild(script);
+}
+
+function formatearLDS(valor) {
+  const n = parsearMonto(valor);
+  return n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " LDS";
+}
+
+function normalizarCodigo(str) {
+  if (!str) return "";
+  const s = String(str).trim().toUpperCase();
+  if (s === "LDS-DOC-001" || s.includes("LILY")) return "CAJA-LILY";
+  if (s === "LDS-DOC-002" || s.includes("KIARA")) return "CAJA-KIARA";
+  if (s === "LDS-DOC-003" || s.includes("ANGHY")) return "CAJA-ANGHY";
+  if (s === "LDS-DOC-004" || s.includes("KARIN")) return "CAJA-KARIN";
+  if (s === "LDS-DOC-005" || s.includes("ANDREW")) return "CAJA-ANDREW";
+  return s;
+}
+
+function obtenerDatosCompletosUsuario(codigoRaw, nombreRaw) {
+  const cod = String(codigoRaw || "").trim().toUpperCase();
+  const nom = String(nombreRaw || cod).trim().toUpperCase();
+  const infoOficial = MAPA_USUARIOS_OFICIALES[cod] || {};
+
+  const esDocente = infoOficial.esDocente || cod.startsWith("CAJA-") || cod.startsWith("LDS-DOC") || nom.includes("MISS") || nom.includes("MISTER") || nom.includes("DOCENTE") || nom.includes("PROMOTORA");
+  
+  const nombreFinal = infoOficial.nombre || nom;
+  const rolTexto = esDocente ? (infoOficial.rol || "DOCENTE / MAESTRO(A)") : "ESTUDIANTE";
+  const tituloReporte = esDocente ? "ESTADO DE CUENTA — CAJA DOCENTE / GENERAL" : "ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE";
+  const etiquetaUsuario = esDocente ? "DOCENTE / CAJA:" : "ESTUDIANTE / ALUMNO:";
+  
+  const fotoUrl = infoOficial.foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nombreFinal) + "&background=0c1e30&color=fff";
+
+  return {
+    codigo: cod,
+    nombre: nombreFinal,
+    esDocente,
+    rolTexto,
+    tituloReporte,
+    etiquetaUsuario,
+    fotoUrl
+  };
+}
+
+function actualizarCajaAndrew() {
+  const anio = document.getElementById("selectAnioEscolar").value;
+  mostrandoTodoElBanco = false;
+  const btnVer = document.getElementById("btnVerTodo");
+  if (btnVer) btnVer.textContent = "🌐 VER TODO EL BANCO";
+
+  const tbody = document.getElementById("tablaMovimientos");
+  if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; font-weight:700;">CARGANDO MOVIMIENTOS...</td></tr>';
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    try {
+      if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS O NO HAY MOVIMIENTOS.</td></tr>';
+        return;
+      }
+
+      todosLosMovimientosGlobales = res.movimientos;
+      calcularYSincronizarSaldos(res.movimientos);
+      filtrarYRenderizarTabla();
+      extraerListaCuentasUnicas(res.movimientos);
+    } catch (e) {
+      console.error(e);
+      if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">ERROR AL PROCESAR MOVIMIENTOS.</td></tr>';
+    }
+  });
+}
+
+function extraerListaCuentasUnicas(movimientos) {
+  const mapa = new Map();
+
+  ["CAJA-ANDREW", "CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
+    mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
+  });
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m) return;
+      const cod = String(m.codigo || m.codigoQR || "").trim().toUpperCase();
+      const nom = String(m.estudiante || m.nombreCompleto || cod).trim().toUpperCase();
+      if (cod && !mapa.has(cod)) {
+        const datos = obtenerDatosCompletosUsuario(cod, nom);
+        datos.grado = m.grado || "";
+        mapa.set(cod, datos);
+      }
+    });
+  }
+
+  listaCuentasYAlumnosGlobal = Array.from(mapa.values());
+}
+
+function calcularYSincronizarSaldos(movimientos) {
+  const CAPITAL_INICIAL_ANDREW = 200000;
+  let egresosAndrew = 0;
+  let ingresosAndrew = 0;
+
+  const saldosMises = {
+    "CAJA-LILY": 0,
+    "CAJA-KIARA": 0,
+    "CAJA-ANGHY": 0,
+    "CAJA-KARIN": 0
+  };
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m) return;
+      if (String(m.estado || "").toUpperCase() === "ANULADO") return;
+
+      const cod = normalizarCodigo(m.codigo || m.codigoQR || "");
+      const resp = normalizarCodigo(m.responsable || m.cajero || "");
+      const monto = parsearMonto(m.monto || m.montoLDS || 0);
+      const tipo = String(m.tipo || "").toUpperCase();
+      const obs = String(m.observacion || "").toUpperCase();
+      const conc = String(m.concepto || "").toUpperCase();
+
+      ["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
+        if (cod === caja || obs.includes("CUENTA_DESTINO=" + caja) || conc.includes(caja)) {
+          if (tipo.includes("EGRESO")) {
+            saldosMises[caja] -= monto;
+          } else {
+            saldosMises[caja] += monto;
+          }
+        } else if (obs.includes("CUENTA_ORIGEN=" + caja) && (obs.includes("DEVOLUCION") || obs.includes("DEVOLUCIÓN"))) {
+          saldosMises[caja] -= monto;
+        }
+      });
+
+      const esDeAndrew = (cod === "CAJA-ANDREW") || (resp === "CAJA-ANDREW") || obs.includes("CAJA-ANDREW");
+      if (esDeAndrew) {
+        if (tipo.includes("EGRESO") || obs.includes("CUENTA_DESTINO=") || conc.includes("FONDO")) {
+          egresosAndrew += monto;
+        } else if (tipo.includes("INGRESO")) {
+          ingresosAndrew += monto;
+        }
+      }
+    });
+  }
+
+  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW + ingresosAndrew - egresosAndrew);
+
+  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
+  document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
+
+  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-LILY"]));
+  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KIARA"]));
+  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-ANGHY"]));
+  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KARIN"]));
+}
+
+function filtrarYRenderizarTabla() {
+  if (mostrandoTodoElBanco) {
+    renderTabla(todosLosMovimientosGlobales);
+  } else {
+    const movsAndrew = todosLosMovimientosGlobales.filter(m => {
+      if (!m) return false;
+      const cod = normalizarCodigo(m.codigo || m.codigoQR || "");
+      const resp = normalizarCodigo(m.responsable || m.cajero || "");
+      const obs = String(m.observacion || "").toUpperCase();
+      const est = String(m.estudiante || m.nombreCompleto || "").toUpperCase();
+      return cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("ANDREW") || est.includes("ANDREW");
+    });
+    renderTabla(movsAndrew.length > 0 ? movsAndrew : todosLosMovimientosGlobales);
+  }
+}
+
+function toggleVerTodoElBanco() {
+  mostrandoTodoElBanco = !mostrandoTodoElBanco;
+  const btn = document.getElementById("btnVerTodo");
+
+  if (mostrandoTodoElBanco) {
+    if (btn) btn.textContent = "💼 VER SOLO CAJA ANDREW";
+  } else {
+    if (btn) btn.textContent = "🌐 VER TODO EL BANCO";
+  }
+  filtrarYRenderizarTabla();
+}
+
+function renderTabla(lista) {
+  const tbody = document.getElementById("tablaMovimientos");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+  
+  const totalCount = Array.isArray(lista) ? lista.length : 0;
+  const elCant = document.getElementById("cantMovimientos");
+  if (elCant) elCant.textContent = String(totalCount);
+
+  if (!lista || !lista.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; font-weight:700;">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
+    return;
+  }
+
+  lista.forEach(m => {
+    if (!m) return;
+    const tr = document.createElement("tr");
+    const tipoStr = String(m.tipo || "").toUpperCase();
+    const concStr = String(m.concepto || "").toUpperCase();
+    const obsStr = String(m.observacion || "").toUpperCase();
+
+    const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO") || concStr.includes("PAGO") || obsStr.includes("TRANSFERENCIA");
+    const monto = parsearMonto(m.monto || m.montoLDS || 0);
+
+    tr.innerHTML = `
+      <td><strong>${m.anio || '2026'}</strong></td>
+      <td>${m.fecha || m.timestamp || ''}</td>
+      <td><strong>${m.estudiante || m.nombreCompleto || m.codigo || 'MISTER ANDREW'}</strong></td>
+      <td>${m.grado || 'CAJA GENERAL'}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${esEgreso ? 'EGRESO' : 'INGRESO'}</span></td>
+      <td>${m.concepto || ''}</td>
+      <td><strong>${formatearLDS(monto)}</strong></td>
+      <td>${m.responsable || m.cajero || 'SISTEMA'}</td>
+      <td>${m.observacion || ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// SELECCIÓN Y REPORTES
+function abrirModalMenuReportes() {
+  abrirModal('modalMenuReportes');
+}
+
+function abrirListaSeleccionUnitario() {
+  cerrarModal('modalMenuReportes');
+  renderTablaSeleccionAlumno(listaCuentasYAlumnosGlobal);
+  abrirModal('modalSeleccionAlumno');
+}
+
+function renderTablaSeleccionAlumno(lista) {
+  const tbody = document.getElementById("bodyListaSeleccionAlumno");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (!lista || !lista.length) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px;">NO HAY USUARIOS DISPONIBLES.</td></tr>';
+    return;
+  }
+
+  lista.forEach(item => {
+    const tr = document.createElement("tr");
+    tr.onclick = () => generarEImprimirReporteUnitario(item.codigo, item.nombre);
+    tr.innerHTML = `
+      <td><strong style="color:var(--azul-claro);">${item.codigo}</strong></td>
+      <td>
+        <strong>${item.nombre}</strong>
+        <span class="tag-rol ${item.esDocente ? 'tag-rol-docente' : 'tag-rol-estudiante'}">${item.rolTexto}</span>
+      </td>
+      <td style="text-align:right;"><button class="btn btn-gold" style="padding:2px 8px; font-size:0.65rem;">IMPRIMIR</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filtrarTablaSeleccionAlumno() {
+  const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
+  const filtrados = listaCuentasYAlumnosGlobal.filter(a => 
+    a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
+  );
+  renderTablaSeleccionAlumno(filtrados);
+}
+
+function generarEImprimirReporteUnitario(codigo, nombre) {
+  cerrarModal('modalSeleccionAlumno');
+
+  const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
+  const movs = todosLosMovimientosGlobales.filter(m => {
+    if (!m) return false;
+    const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
+    return c.includes(codigo.toUpperCase()) || String(usuario.nombre).toUpperCase().includes(c);
+  });
+
+  const cont = document.getElementById("contenedorImpresion");
+  if (cont) {
+    cont.innerHTML = construirHTMLPaginaUsuario(usuario, movs);
+    setTimeout(() => { window.print(); }, 250);
+  }
+}
+
+function generarEImprimirReporteGrupal() {
+  cerrarModal('modalMenuReportes');
+
+  const cont = document.getElementById("contenedorImpresion");
+  if (!cont) return;
+  cont.innerHTML = "";
+
+  if (!listaCuentasYAlumnosGlobal.length) {
+    alert("NO HAY DATOS REGISTRADOS PARA GENERAR EL REPORTE GRUPAL.");
+    return;
+  }
+
+  let htmlAcumulado = "";
+  listaCuentasYAlumnosGlobal.forEach(usr => {
+    const movsUsr = todosLosMovimientosGlobales.filter(m => {
+      if (!m) return false;
+      const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
+      return c.includes(usr.codigo.toUpperCase()) || String(usr.nombre).toUpperCase().includes(c);
+    });
+
+    htmlAcumulado += construirHTMLPaginaUsuario(usr, movsUsr);
+  });
+
+  cont.innerHTML = htmlAcumulado;
+  setTimeout(() => { window.print(); }, 300);
+}
+
+function construirHTMLPaginaUsuario(usuario, movimientos) {
+  let filas = "";
+  let totalIngresos = 0;
+  let totalEgresos = 0;
+
+  if (!movimientos || !movimientos.length) {
+    filas = `<tr><td colspan="6" style="text-align:center; padding: 12px; font-style:italic;">SIN MOVIMIENTOS REGISTRADOS EN EL PERÍODO.</td></tr>`;
+  } else {
+    movimientos.forEach(m => {
+      if (!m) return;
+      const monto = parsearMonto(m.monto || m.montoLDS || 0);
+      const tipoStr = String(m.tipo || "").toUpperCase();
+      const concStr = String(m.concepto || "").toUpperCase();
+      const obsStr = String(m.observacion || "").toUpperCase();
+
+      const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO") || concStr.includes("PAGO") || obsStr.includes("TRANSFERENCIA");
+      
+      if (esEgreso) totalEgresos += monto;
+      else totalIngresos += monto;
+
+      filas += `
+        <tr>
+          <td>${m.fecha || m.timestamp || ''}</td>
+          <td><strong>${esEgreso ? 'EGRESO' : 'INGRESO'}</strong></td>
+          <td>${m.concepto || ''}</td>
+          <td style="text-align:right;"><strong>${formatearLDS(monto)}</strong></td>
+          <td>${m.responsable || m.cajero || ''}</td>
+          <td>${m.observacion || ''}</td>
+        </tr>
+      `;
+    });
+  }
+
+  const saldoDisponible = Math.max(0, totalIngresos - totalEgresos);
+
+  return `
+    <div class="reporte-pagina-alumno">
+      <div class="membrete-colegio">
+        <div class="membrete-texto">
+          <h1>I.E.P. LA SALLE DEL SUR</h1>
+          <h2>BANCO LASALLISTA 360 · SISTEMA EDUCATIVO FINANCIERO Y DE CONVIVENCIA</h2>
+          <p>EDUCANDO EN VALORES Y EMPOWERMENT FINANCIERO · AÑO ESCOLAR 2026</p>
+        </div>
+        <div class="membrete-logo">
+          <img src="assets/insignia.png" referrerpolicy="no-referrer" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+        </div>
+      </div>
+
+      <div class="encabezado-alumno">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="foto-reporte">
+            <img src="${usuario.fotoUrl}" referrerpolicy="no-referrer" alt="Foto ${usuario.nombre}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=0c1e30&color=fff';">
+          </div>
+          <div>
+            <h2>${usuario.tituloReporte}</h2>
+            <p style="margin-top: 3px;"><strong>ROL:</strong> ${usuario.rolTexto}</p>
+            <p style="margin-top: 2px;"><strong>${usuario.etiquetaUsuario}</strong> ${usuario.nombre} (${usuario.codigo})</p>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <p><strong>SALDO DISPONIBLE:</strong></p>
+          <h2 style="color: #047857; font-size: 1.3rem;">${formatearLDS(saldoDisponible)}</h2>
+        </div>
+      </div>
+
+      <table class="tabla-print">
+        <thead>
+          <tr>
+            <th>FECHA Y HORA</th>
+            <th>TIPO</th>
+            <th>CONCEPTO</th>
+            <th style="text-align:right;">MONTO LDS</th>
+            <th>RESPONSABLE</th>
+            <th>OBSERVACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function ejecutarTransferenciaFondo() {
+  const miss = document.getElementById("transfMiss").value;
+  const concepto = document.getElementById("transfConcepto").value;
+  const monto = Number(document.getElementById("transfMonto").value) || 0;
+  const obs = document.getElementById("transfObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgTransferencia");
+
+  if (!miss) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  msg.textContent = "PROCESANDO TRANSFERENCIA...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "TRANSFERENCIA DE FONDO A " + miss + " | CUENTA_ORIGEN=CAJA-ANDREW | CUENTA_DESTINO=" + miss + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: "CAJA-ANDREW",
+    anio: anio,
+    tipo: "EGRESO",
+    categoria: "FONDO_DOCENTE",
+    concepto: concepto + " (" + miss + ")",
+    monto: monto,
+    responsable: "MISTER ANDREW",
+    responsableClave: "360LDS@",
+    observacion: detalleObs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡EGRESO DE FONDO REGISTRADO CORRECTAMENTE!";
+      msg.className = "msg-box ok";
+      document.getElementById("transfMonto").value = "";
+      document.getElementById("transfObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EGRESO.";
+      msg.className = "msg-box error";
+    }
+  });
+}
+
+function ejecutarDevolucion() {
+  const miss = document.getElementById("devolMiss").value;
+  const monto = Number(document.getElementById("devolMonto").value) || 0;
+  const obs = document.getElementById("devolObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgDevolucion");
+
+  if (!miss) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  msg.textContent = "PROCESANDO DEVOLUCIÓN...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + miss + " | CUENTA_ORIGEN=" + miss + " | CUENTA_DESTINO=CAJA-ANDREW" + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: "CAJA-ANDREW",
+    anio: anio,
+    tipo: "INGRESO",
+    categoria: "DEVOLUCION_FONDO",
+    concepto: "DEVOLUCIÓN DE FONDO (" + miss + ")",
+    monto: monto,
+    responsable: "MISTER ANDREW",
+    responsableClave: "360LDS@",
+    observacion: detalleObs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡DEVOLUCIÓN REGISTRADA CORRECTAMENTE!";
+      msg.className = "msg-box ok";
+      document.getElementById("devolMonto").value = "";
+      document.getElementById("devolObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR DEVOLUCIÓN.";
+      msg.className = "msg-box error";
+    }
+  });
+}
+
+function consultarCuentaEspecifica() {
+  const cod = document.getElementById("consultaCodigo").value.trim().toUpperCase();
+  const msg = document.getElementById("msgConsulta");
+
+  if (!cod) { msg.textContent = "INGRESE UN CÓDIGO."; msg.className = "msg-box error"; return; }
+
+  const filtrados = todosLosMovimientosGlobales.filter(m => {
+    if (!m) return false;
+    const c = String(m.codigo || m.estudiante || m.nombreCompleto || "").toUpperCase();
+    return c.includes(cod);
+  });
+
+  if (!filtrados.length) {
+    msg.textContent = "NO SE ENCONTRARON REGISTROS.";
+    msg.className = "msg-box error";
+    return;
+  }
+
+  msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
+  msg.className = "msg-box ok";
+  renderTabla(filtrados);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  actualizarCajaAndrew();
+});
+</script>
+
+</body>
+</html>
