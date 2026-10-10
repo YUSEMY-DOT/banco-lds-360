@@ -1681,9 +1681,9 @@ function normalizarListaAlumno(a) {
 }
 
 /*
- * Backend único compartido basado en la caja general de Andrew.
- * Las pantallas Andrew, Administrador y Alumno siguen separadas; esta URL
- * centraliza sus consultas de movimientos, saldos y lista de alumnos.
+ * Consulta de la lista por una acción ligera, usando la MISMA URL del
+ * administrador que ya consulta movimientos y saldos. No usar la URL de
+ * Andrew aquí: esa sustitución fue la que cambió los datos financieros.
  */
 function llamarAPIListaEstudiantes(parametros, callback) {
   const nombreCallback = 'callbackListaAdminLDS_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
