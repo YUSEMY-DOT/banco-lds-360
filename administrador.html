@@ -1628,7 +1628,13 @@ function validarAccesoDocente() {
   if (clave !== "360LDS@") { reproducirSonido('error'); error.textContent = "CLAVE INCORRECTA."; return; }
 
   reproducirSonido('exito');
-  const nombreMaestra = docenteElement.options[docenteElement.selectedIndex].text;
+  const nombresCompletos = {
+    "LILY": "MISS LILY MELO AZAÑERO",
+    "KIARA": "MISS KIARA MORALES ELGUERA",
+    "ANGHY": "MISS ANGHY REYES MELO",
+    "KARIN": "MISS KARIN MOLERO ROMANI"
+  };
+  const nombreMaestra = nombresCompletos[docente] || docenteElement.options[docenteElement.selectedIndex].text;
   sessionStorage.setItem("maestraActiva", nombreMaestra);
   sessionStorage.setItem("responsableClave", clave);
   desbloquearPanel(nombreMaestra);
