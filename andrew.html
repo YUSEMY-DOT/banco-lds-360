@@ -529,32 +529,36 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL E IMPRESIÓN */
+/* MEMBRETE INSTITUCIONAL UNICAMENTE CON INSIGNIA A LA DERECHA */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 3px double var(--azul);
+  border-bottom: 3px solid var(--azul);
   padding-bottom: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.membrete-logo {
+  flex-shrink: 0;
 }
 
 .membrete-logo img {
-  width: 65px;
-  height: 65px;
+  width: 75px;
+  height: 75px;
   object-fit: contain;
 }
 
 .membrete-texto {
-  text-align: center;
+  text-align: left;
   flex: 1;
-  padding: 0 10px;
+  padding-right: 15px;
 }
 
 .membrete-texto h1 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 900;
   color: var(--azul);
   letter-spacing: 0.5px;
@@ -562,14 +566,14 @@ textarea { height: auto; padding: 8px 10px; }
 }
 
 .membrete-texto h2 {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--dorado);
   margin-top: 2px;
 }
 
 .membrete-texto p {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--muted);
   margin-top: 2px;
@@ -588,8 +592,8 @@ textarea { height: auto; padding: 8px 10px; }
 .tag-rol-estudiante { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
 
 .foto-reporte {
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   border: 3px solid var(--dorado);
   overflow: hidden;
@@ -629,7 +633,7 @@ textarea { height: auto; padding: 8px 10px; }
   .membrete-colegio {
     border-bottom: 3px solid #000 !important;
   }
-  .membrete-texto h1 { color: #000 !important; font-size: 1.3rem !important; }
+  .membrete-texto h1 { color: #000 !important; font-size: 1.35rem !important; }
   .membrete-texto h2 { color: #333 !important; }
   .encabezado-alumno {
     border: 2px solid #000;
@@ -643,8 +647,8 @@ textarea { height: auto; padding: 8px 10px; }
   .encabezado-alumno h2 { font-size: 1.05rem; font-weight: 900; margin: 0; }
   .encabezado-alumno p { font-size: 0.78rem; font-weight: 700; margin: 2px 0 0; }
   .foto-reporte {
-    width: 65px !important;
-    height: 65px !important;
+    width: 70px !important;
+    height: 70px !important;
     border: 2px solid #000 !important;
   }
   .tabla-print {
@@ -668,7 +672,7 @@ textarea { height: auto; padding: 8px 10px; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-mark">
-        <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+        <img src="assets/insignia.png" referrerpolicy="no-referrer" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
       </div>
       <div>
         <h1>CAJA ANDREW</h1>
@@ -694,7 +698,7 @@ textarea { height: auto; padding: 8px 10px; }
     <div class="profile-banner">
       <div class="profile-info">
         <div class="avatar-wrap">
-          <img src="https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w800" alt="Mister Andrew">
+          <img src="https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" referrerpolicy="no-referrer" alt="Mister Andrew" onerror="this.src='https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w800';">
         </div>
         <div class="profile-text">
           <h3>MISTER ANDREW</h3>
@@ -708,7 +712,7 @@ textarea { height: auto; padding: 8px 10px; }
         </div>
         <div class="stat-pill pill-actual">
           <span>SALDO ACTUAL</span>
-          <strong id="saldoActualAndrew">80.000,00 LDS</strong>
+          <strong id="saldoActualAndrew">200.000,00 LDS</strong>
         </div>
         <div class="stat-pill pill-mov">
           <span>MOVIMIENTOS</span>
@@ -726,38 +730,38 @@ textarea { height: auto; padding: 8px 10px; }
       <h3>📊 SALDOS DE LAS MISS</h3>
       <div class="mises-grid">
         <div class="mise-card">
-          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
+          <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" referrerpolicy="no-referrer" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS LILY MELO AZAÑERO</strong>
             <span>CAJA-LILY</span>
-            <p id="saldoLily">30.000,00 LDS</p>
+            <p id="saldoLily">0,00 LDS</p>
           </div>
         </div>
 
         <div class="mise-card">
-          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300" alt="Miss Kiara">
+          <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" referrerpolicy="no-referrer" alt="Miss Kiara" onerror="this.src='https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS KIARA MORALES ELGUERA</strong>
             <span>CAJA-KIARA</span>
-            <p id="saldoKiara">30.000,00 LDS</p>
+            <p id="saldoKiara">0,00 LDS</p>
           </div>
         </div>
 
         <div class="mise-card">
-          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300" alt="Miss Anghy">
+          <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" referrerpolicy="no-referrer" alt="Miss Anghy" onerror="this.src='https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS ANGHY REYES MELO</strong>
             <span>CAJA-ANGHY</span>
-            <p id="saldoAnghy">30.000,00 LDS</p>
+            <p id="saldoAnghy">0,00 LDS</p>
           </div>
         </div>
 
         <div class="mise-card">
-          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300" alt="Miss Karin">
+          <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" referrerpolicy="no-referrer" alt="Miss Karin" onerror="this.src='https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS KARIN MOLERO ROMANI</strong>
             <span>CAJA-KARIN</span>
-            <p id="saldoKarin">30.000,00 LDS</p>
+            <p id="saldoKarin">0,00 LDS</p>
           </div>
         </div>
       </div>
@@ -895,562 +899,4 @@ textarea { height: auto; padding: 8px 10px; }
 <!-- MODAL 1: MENÚ OPCIONES DE REPORTES -->
 <div id="modalMenuReportes" class="modal-overlay">
   <div class="modal-box">
-    <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
-    
-    <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
-      <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
-      <span>➔</span>
-    </button>
-    
-    <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
-      <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
-      <span>➔</span>
-    </button>
-
-    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModal('modalMenuReportes')">CANCELAR</button>
-  </div>
-</div>
-
-<!-- MODAL 2: SELECCIÓN DE ALUMNO O MAESTRO PARA REPORTE UNITARIO -->
-<div id="modalSeleccionAlumno" class="modal-overlay">
-  <div class="modal-box">
-    <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
-    <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
-    
-    <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
-      <table class="lista-alumnos-tabla">
-        <thead>
-          <tr style="background: #f1f5f9; position: sticky; top: 0;">
-            <th style="padding: 8px 10px;">CÓDIGO</th>
-            <th style="padding: 8px 10px;">NOMBRE / ROL</th>
-            <th style="padding: 8px 10px; text-align: right;">ACCIÓN</th>
-          </tr>
-        </thead>
-        <tbody id="bodyListaSeleccionAlumno">
-          <tr><td colspan="3" style="text-align: center; padding: 15px;">CARGANDO USUARIOS...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" type="button" onclick="cerrarModal('modalSeleccionAlumno')">VOLVER</button>
-  </div>
-</div>
-
-<!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
-<div id="contenedorImpresion"></div>
-
-<script>
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
-
-let mostrandoTodoElBanco = false;
-let todosLosMovimientosGlobales = [];
-let listaCuentasYAlumnosGlobal = [];
-
-const MAPA_USUARIOS_OFICIALES = {
-  "CAJA-ANDREW": { nombre: "MISTER ANDREW", foto: "https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
-  "CAJA-LILY": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300", rol: "DOCENTE / PROMOTORA", esDocente: true },
-  "CAJA-KIARA": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "CAJA-ANGHY": { nombre: "MISS ANGHY REYES MELO", foto: "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "CAJA-KARIN": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300", rol: "DOCENTE", esDocente: true },
-  
-  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300", rol: "DOCENTE / PROMOTORA", esDocente: true },
-  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300", rol: "DOCENTE / COORDINADORA", esDocente: true },
-  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300", rol: "DOCENTE", esDocente: true },
-  "LDS-DOC-005": { nombre: "MISTER ANDREW", foto: "https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300", rol: "GERENTE GENERAL / CAJA GENERAL", esDocente: true },
-
-  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://drive.google.com/thumbnail?id=1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl&sz=w300", rol: "ESTUDIANTE", esDocente: false },
-  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://drive.google.com/thumbnail?id=1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd&sz=w300", rol: "ESTUDIANTE", esDocente: false },
-  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", foto: "https://drive.google.com/thumbnail?id=1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg&sz=w300", rol: "ESTUDIANTE", esDocente: false },
-  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", foto: "https://drive.google.com/thumbnail?id=19KV30WDkKReEo5vBbx9ia4bebrPpyWPw&sz=w300", rol: "ESTUDIANTE", esDocente: false },
-  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://drive.google.com/thumbnail?id=1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU&sz=w300", rol: "ESTUDIANTE", esDocente: false }
-};
-
-function togglePanel(id) {
-  const p = document.getElementById(id);
-  if (p) p.classList.toggle("collapsed");
-}
-
-function abrirModal(id) {
-  document.getElementById(id).style.display = "flex";
-}
-
-function cerrarModal(id) {
-  document.getElementById(id).style.display = "none";
-}
-
-function llamarAPI(parametros, callback) {
-  const nombreCallback = "callbackAndrew_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
-  const script = document.createElement("script");
-
-  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
-  window[nombreCallback] = function(respuesta) {
-    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
-  };
-  script.onerror = function() {
-    delete window[nombreCallback];
-    script.remove();
-    callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
-  };
-  document.body.appendChild(script);
-}
-
-function formatearLDS(valor) {
-  const n = Number(valor) || 0;
-  return n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " LDS";
-}
-
-function normalizarCodigo(str) {
-  if (!str) return "";
-  const s = String(str).trim().toUpperCase();
-  if (s === "LDS-DOC-001" || s === "MISS LILY MELO AZAÑERO") return "CAJA-LILY";
-  if (s === "LDS-DOC-002" || s === "MISS KIARA MORALES ELGUERA") return "CAJA-KIARA";
-  if (s === "LDS-DOC-003" || s === "MISS ANGHY REYES MELO") return "CAJA-ANGHY";
-  if (s === "LDS-DOC-004" || s === "MISS KARIN MOLERO ROMANI") return "CAJA-KARIN";
-  if (s === "LDS-DOC-005" || s === "MISTER ANDREW" || s === "ANDREW") return "CAJA-ANDREW";
-  return s;
-}
-
-function obtenerDatosCompletosUsuario(codigoRaw, nombreRaw) {
-  const cod = String(codigoRaw || "").trim().toUpperCase();
-  const nom = String(nombreRaw || cod).trim().toUpperCase();
-  const infoOficial = MAPA_USUARIOS_OFICIALES[cod] || {};
-
-  const esDocente = infoOficial.esDocente || cod.startsWith("CAJA-") || cod.startsWith("LDS-DOC") || nom.includes("MISS") || nom.includes("MISTER") || nom.includes("DOCENTE") || nom.includes("PROMOTORA");
-  
-  const nombreFinal = infoOficial.nombre || nom;
-  const rolTexto = esDocente ? (infoOficial.rol || "DOCENTE / MAESTRO(A)") : "ESTUDIANTE";
-  const tituloReporte = esDocente ? "ESTADO DE CUENTA — CAJA DOCENTE / GENERAL" : "ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE";
-  const etiquetaUsuario = esDocente ? "DOCENTE / CAJA:" : "ESTUDIANTE / ALUMNO:";
-  
-  const fotoUrl = infoOficial.foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nombreFinal) + "&background=0c1e30&color=fff";
-
-  return {
-    codigo: cod,
-    nombre: nombreFinal,
-    esDocente,
-    rolTexto,
-    tituloReporte,
-    etiquetaUsuario,
-    fotoUrl
-  };
-}
-
-function actualizarCajaAndrew() {
-  const anio = document.getElementById("selectAnioEscolar").value;
-  mostrandoTodoElBanco = false;
-  document.getElementById("btnVerTodo").textContent = "🌐 VER TODO EL BANCO";
-
-  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
-    if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
-      document.getElementById("tablaMovimientos").innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS.</td></tr>';
-      return;
-    }
-
-    todosLosMovimientosGlobales = res.movimientos;
-    calcularYSincronizarSaldos(res.movimientos);
-    filtrarYRenderizarTabla();
-    extraerListaCuentasUnicas(res.movimientos);
-  });
-}
-
-function extraerListaCuentasUnicas(movimientos) {
-  const mapa = new Map();
-
-  ["CAJA-ANDREW", "CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"].forEach(caja => {
-    mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
-  });
-
-  movimientos.forEach(m => {
-    const cod = String(m.codigo || m.codigoQR || "").trim().toUpperCase();
-    const nom = String(m.estudiante || m.nombreCompleto || cod).trim().toUpperCase();
-    if (cod && !mapa.has(cod)) {
-      const datos = obtenerDatosCompletosUsuario(cod, nom);
-      datos.grado = m.grado || "";
-      mapa.set(cod, datos);
-    }
-  });
-
-  listaCuentasYAlumnosGlobal = Array.from(mapa.values());
-}
-
-function calcularYSincronizarSaldos(movimientos) {
-  const CAPITAL_INICIAL_ANDREW = 200000;
-  let egresosAndrew = 0;
-
-  const saldosMises = {
-    "CAJA-LILY": 0,
-    "CAJA-KIARA": 0,
-    "CAJA-ANGHY": 0,
-    "CAJA-KARIN": 0
-  };
-
-  movimientos.forEach(m => {
-    if (String(m.estado || "ACTIVO").toUpperCase() === "ANULADO") return;
-
-    const cod = normalizarCodigo(m.codigo);
-    const monto = Number(m.monto || m.montoLDS || 0) || 0;
-    const tipo = String(m.tipo || "").toUpperCase();
-    const resp = normalizarCodigo(m.responsable || m.cajero);
-    const obs = String(m.observacion || "").toUpperCase();
-
-    Object.keys(saldosMises).forEach(caja => {
-      if (cod === caja || obs.includes("CUENTA_DESTINO=" + caja)) {
-        if (tipo === "INGRESO") saldosMises[caja] += monto;
-        else if (tipo === "EGRESO") saldosMises[caja] -= monto;
-      }
-    });
-
-    if (cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("CUENTA_ORIGEN=CAJA-ANDREW")) {
-      if (tipo === "EGRESO" || obs.includes("CUENTA_DESTINO=")) {
-        egresosAndrew += monto;
-      }
-    }
-  });
-
-  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW - egresosAndrew);
-
-  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
-  document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
-
-  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-LILY"]));
-  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KIARA"]));
-  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-ANGHY"]));
-  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["CAJA-KARIN"]));
-}
-
-function filtrarYRenderizarTabla() {
-  if (mostrandoTodoElBanco) {
-    renderTabla(todosLosMovimientosGlobales);
-  } else {
-    const movsAndrew = todosLosMovimientosGlobales.filter(m => {
-      const cod = normalizarCodigo(m.codigo);
-      const resp = normalizarCodigo(m.responsable || m.cajero);
-      const obs = String(m.observacion || "").toUpperCase();
-      return cod === "CAJA-ANDREW" || resp === "CAJA-ANDREW" || obs.includes("CAJA-ANDREW");
-    });
-    renderTabla(movsAndrew.length ? movsAndrew : todosLosMovimientosGlobales);
-  }
-}
-
-function toggleVerTodoElBanco() {
-  mostrandoTodoElBanco = !mostrandoTodoElBanco;
-  const btn = document.getElementById("btnVerTodo");
-
-  if (mostrandoTodoElBanco) {
-    btn.textContent = "💼 VER SOLO CAJA ANDREW";
-  } else {
-    btn.textContent = "🌐 VER TODO EL BANCO";
-  }
-  filtrarYRenderizarTabla();
-}
-
-function renderTabla(lista) {
-  const tbody = document.getElementById("tablaMovimientos");
-  tbody.innerHTML = "";
-  document.getElementById("cantMovimientos").textContent = String(lista.length);
-
-  if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px;">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
-    return;
-  }
-
-  lista.forEach(m => {
-    const tr = document.createElement("tr");
-    const esEgreso = String(m.tipo || "").toUpperCase().includes("EGRESO");
-
-    tr.innerHTML = `
-      <td><strong>${m.anio || '2026'}</strong></td>
-      <td>${m.fecha || m.timestamp || ''}</td>
-      <td><strong>${m.estudiante || m.codigo || 'MISTER ANDREW'}</strong></td>
-      <td>${m.grado || 'CAJA GENERAL'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${m.tipo || 'INGRESO'}</span></td>
-      <td>${m.concepto || ''}</td>
-      <td><strong>${formatearLDS(m.monto || m.montoLDS || 0)}</strong></td>
-      <td>${m.responsable || m.cajero || 'SISTEMA'}</td>
-      <td>${m.observacion || ''}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-// SELECCIÓN Y REPORTES CON MEMBRETE INSTITUCIONAL COMPLETO
-function abrirModalMenuReportes() {
-  abrirModal('modalMenuReportes');
-}
-
-function abrirListaSeleccionUnitario() {
-  cerrarModal('modalMenuReportes');
-  renderTablaSeleccionAlumno(listaCuentasYAlumnosGlobal);
-  abrirModal('modalSeleccionAlumno');
-}
-
-function renderTablaSeleccionAlumno(lista) {
-  const tbody = document.getElementById("bodyListaSeleccionAlumno");
-  tbody.innerHTML = "";
-
-  if (!lista.length) {
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px;">NO HAY USUARIOS DISPONIBLES.</td></tr>';
-    return;
-  }
-
-  lista.forEach(item => {
-    const tr = document.createElement("tr");
-    tr.onclick = () => generarEImprimirReporteUnitario(item.codigo, item.nombre);
-    tr.innerHTML = `
-      <td><strong style="color:var(--azul-claro);">${item.codigo}</strong></td>
-      <td>
-        <strong>${item.nombre}</strong>
-        <span class="tag-rol ${item.esDocente ? 'tag-rol-docente' : 'tag-rol-estudiante'}">${item.rolTexto}</span>
-      </td>
-      <td style="text-align:right;"><button class="btn btn-gold" style="padding:2px 8px; font-size:0.65rem;">IMPRIMIR</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function filtrarTablaSeleccionAlumno() {
-  const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
-  const filtrados = listaCuentasYAlumnosGlobal.filter(a => 
-    a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
-  );
-  renderTablaSeleccionAlumno(filtrados);
-}
-
-function generarEImprimirReporteUnitario(codigo, nombre) {
-  cerrarModal('modalSeleccionAlumno');
-
-  const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
-  const movs = todosLosMovimientosGlobales.filter(m => {
-    const c = String(m.codigo || m.estudiante || "").toUpperCase();
-    return c.includes(codigo.toUpperCase());
-  });
-
-  const cont = document.getElementById("contenedorImpresion");
-  cont.innerHTML = construirHTMLPaginaUsuario(usuario, movs);
-  
-  setTimeout(() => { window.print(); }, 250);
-}
-
-function generarEImprimirReporteGrupal() {
-  cerrarModal('modalMenuReportes');
-
-  const cont = document.getElementById("contenedorImpresion");
-  cont.innerHTML = "";
-
-  if (!listaCuentasYAlumnosGlobal.length) {
-    alert("NO HAY DATOS REGISTRADOS PARA GENERAR EL REPORTE GRUPAL.");
-    return;
-  }
-
-  let htmlAcumulado = "";
-  listaCuentasYAlumnosGlobal.forEach(usr => {
-    const movsUsr = todosLosMovimientosGlobales.filter(m => {
-      const c = String(m.codigo || m.estudiante || "").toUpperCase();
-      return c.includes(usr.codigo.toUpperCase());
-    });
-
-    htmlAcumulado += construirHTMLPaginaUsuario(usr, movsUsr);
-  });
-
-  cont.innerHTML = htmlAcumulado;
-  setTimeout(() => { window.print(); }, 300);
-}
-
-// FUNCIÓN CON MEMBRETE DEL COLEGIO COMPLETO + INSIGNIA + FICHA
-function construirHTMLPaginaUsuario(usuario, movimientos) {
-  let filas = "";
-  let totalIngresos = 0;
-  let totalEgresos = 0;
-
-  if (!movimientos.length) {
-    filas = `<tr><td colspan="6" style="text-align:center; padding: 12px; font-style:italic;">SIN MOVIMIENTOS REGISTRADOS EN EL PERÍODO.</td></tr>`;
-  } else {
-    movimientos.forEach(m => {
-      const monto = Number(m.monto || m.montoLDS || 0);
-      const esEgreso = String(m.tipo || "").toUpperCase().includes("EGRESO");
-      if (esEgreso) totalEgresos += monto;
-      else totalIngresos += monto;
-
-      filas += `
-        <tr>
-          <td>${m.fecha || m.timestamp || ''}</td>
-          <td><strong>${m.tipo || 'INGRESO'}</strong></td>
-          <td>${m.concepto || ''}</td>
-          <td style="text-align:right;"><strong>${formatearLDS(monto)}</strong></td>
-          <td>${m.responsable || m.cajero || ''}</td>
-          <td>${m.observacion || ''}</td>
-        </tr>
-      `;
-    });
-  }
-
-  const saldoDisponible = Math.max(0, totalIngresos - totalEgresos);
-
-  return `
-    <div class="reporte-pagina-alumno">
-      <!-- MEMBRETE OFICIAL INSTITUCIONAL -->
-      <div class="membrete-colegio">
-        <div class="membrete-logo">
-          <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
-        </div>
-        <div class="membrete-texto">
-          <h1>I.E.P. LA SALLE DEL SUR</h1>
-          <h2>BANCO LASALLISTA 360 · SISTEMA EDUCATIVO FINANCIERO Y DE CONVIVENCIA</h2>
-          <p>EDUCANDO EN VALORES Y EMPOWERMENT FINANCIERO · AÑO ESCOLAR 2026</p>
-        </div>
-        <div class="membrete-logo">
-          <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
-        </div>
-      </div>
-
-      <!-- DATOS DE LA CUENTA Y FOTO -->
-      <div class="encabezado-alumno">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <div class="foto-reporte">
-            <img src="${usuario.fotoUrl}" alt="Foto ${usuario.nombre}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=0c1e30&color=fff';">
-          </div>
-          <div>
-            <h2>${usuario.tituloReporte}</h2>
-            <p style="margin-top: 3px;"><strong>ROL:</strong> ${usuario.rolTexto}</p>
-            <p style="margin-top: 2px;"><strong>${usuario.etiquetaUsuario}</strong> ${usuario.nombre} (${usuario.codigo})</p>
-          </div>
-        </div>
-        <div style="text-align: right;">
-          <p><strong>SALDO DISPONIBLE:</strong></p>
-          <h2 style="color: #047857; font-size: 1.3rem;">${formatearLDS(saldoDisponible)}</h2>
-        </div>
-      </div>
-
-      <!-- TABLA DE MOVIMIENTOS DETALLADA -->
-      <table class="tabla-print">
-        <thead>
-          <tr>
-            <th>FECHA Y HORA</th>
-            <th>TIPO</th>
-            <th>CONCEPTO</th>
-            <th style="text-align:right;">MONTO LDS</th>
-            <th>RESPONSABLE</th>
-            <th>OBSERVACIÓN</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${filas}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// OPERACIONES LATERALES
-function ejecutarTransferenciaFondo() {
-  const miss = document.getElementById("transfMiss").value;
-  const concepto = document.getElementById("transfConcepto").value;
-  const monto = Number(document.getElementById("transfMonto").value) || 0;
-  const obs = document.getElementById("transfObs").value.trim();
-  const anio = document.getElementById("selectAnioEscolar").value;
-  const msg = document.getElementById("msgTransferencia");
-
-  if (!miss) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
-
-  msg.textContent = "PROCESANDO TRANSFERENCIA...";
-  msg.className = "msg-box ok";
-
-  const detalleObs = "CUENTA_ORIGEN=CAJA-ANDREW | CUENTA_DESTINO=" + miss + (obs ? " | " + obs : "");
-
-  llamarAPI({
-    accion: "registrarMovimiento",
-    codigo: miss,
-    anio: anio,
-    tipo: "INGRESO",
-    categoria: "FONDO_DOCENTE",
-    concepto: concepto,
-    monto: monto,
-    responsable: "MISTER ANDREW",
-    responsableClave: "360LDS@",
-    observacion: detalleObs
-  }, function(res) {
-    if (res && res.ok) {
-      msg.textContent = "¡TRANSFERENCIA REGISTRADA CORRECTAMENTE!";
-      msg.className = "msg-box ok";
-      document.getElementById("transfMonto").value = "";
-      document.getElementById("transfObs").value = "";
-      actualizarCajaAndrew();
-    } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSFERENCIA.";
-      msg.className = "msg-box error";
-    }
-  });
-}
-
-function ejecutarDevolucion() {
-  const miss = document.getElementById("devolMiss").value;
-  const monto = Number(document.getElementById("devolMonto").value) || 0;
-  const obs = document.getElementById("devolObs").value.trim();
-  const anio = document.getElementById("selectAnioEscolar").value;
-  const msg = document.getElementById("msgDevolucion");
-
-  if (!miss) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
-
-  msg.textContent = "PROCESANDO DEVOLUCIÓN...";
-  msg.className = "msg-box ok";
-
-  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + miss + (obs ? " | " + obs : "");
-
-  llamarAPI({
-    accion: "registrarMovimiento",
-    codigo: "CAJA-ANDREW",
-    anio: anio,
-    tipo: "INGRESO",
-    categoria: "DEVOLUCION_FONDO",
-    concepto: "DEVOLUCIÓN DE FONDO",
-    monto: monto,
-    responsable: "MISTER ANDREW",
-    responsableClave: "360LDS@",
-    observacion: detalleObs
-  }, function(res) {
-    if (res && res.ok) {
-      msg.textContent = "¡DEVOLUCIÓN REGISTRADA CORRECTAMENTE!";
-      msg.className = "msg-box ok";
-      document.getElementById("devolMonto").value = "";
-      document.getElementById("devolObs").value = "";
-      actualizarCajaAndrew();
-    } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR DEVOLUCIÓN.";
-      msg.className = "msg-box error";
-    }
-  });
-}
-
-function consultarCuentaEspecifica() {
-  const cod = document.getElementById("consultaCodigo").value.trim().toUpperCase();
-  const msg = document.getElementById("msgConsulta");
-
-  if (!cod) { msg.textContent = "INGRESE UN CÓDIGO."; msg.className = "msg-box error"; return; }
-
-  const filtrados = todosLosMovimientosGlobales.filter(m => {
-    const c = String(m.codigo || m.estudiante || "").toUpperCase();
-    return c.includes(cod);
-  });
-
-  if (!filtrados.length) {
-    msg.textContent = "NO SE ENCONTRARON REGISTROS.";
-    msg.className = "msg-box error";
-    return;
-  }
-
-  msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
-  msg.className = "msg-box ok";
-  renderTabla(filtrados);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  actualizarCajaAndrew();
-});
-</script>
-
-</body>
-</html>
+    <h3>🖨️ OPCIONES DE IMPRESIÓN Y
