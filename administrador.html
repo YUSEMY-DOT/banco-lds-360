@@ -102,7 +102,7 @@ header {
   color: var(--azul-oscuro);
 }
 
-/* ACCESO LOGIN */
+/* PANTALLA DE ACCESO */
 .login-wrapper {
   display: flex;
   align-items: center;
@@ -223,7 +223,7 @@ main {
   display: none;
 }
 
-/* BANNER DOCENTE Y ESTADÍSTICAS */
+/* BANNER DE CAJA Y TARJETAS DE SALDO */
 .profile-banner {
   background: linear-gradient(145deg, #091628 0%, #030812 100%);
   border: 2.5px solid var(--dorado);
@@ -332,7 +332,7 @@ main {
 
 .panel-body { padding: 18px; }
 
-/* BOTONERA PRINCIPAL EN ORDEN EXACTO */
+/* BARRA DE 6 BOTONES PRINCIPALES */
 .action-buttons-bar {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -707,7 +707,7 @@ th {
 
 <!-- PANEL DE CONTROL PRINCIPAL -->
 <main id="panelView">
-  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS -->
+  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS DE LA BASE DE DATOS -->
   <div class="profile-banner">
     <div class="profile-info">
       <div class="avatar-wrap">
@@ -740,7 +740,7 @@ th {
   </div>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA: ESTADO DE CUENTA EN EXCEL -->
+    <!-- COLUMNA IZQUIERDA: ESTADO DE CUENTA Y BOTONES -->
     <div class="panel">
       <div class="panel-head">
         <h3>📋 CONSULTA Y ESTADO DE CUENTA EN EXCEL</h3>
@@ -799,7 +799,7 @@ th {
 
         <div id="mensaje" class="message"></div>
 
-        <!-- TABLA DE MOVIMIENTOS -->
+        <!-- TABLA DE MOVIMIENTOS EN EXCEL -->
         <div class="table-wrap">
           <table>
             <thead>
@@ -938,6 +938,7 @@ th {
 </div>
 
 <script>
+// DIRECCIÓN OFICIAL DEL EJECUTABLE DE MISTER ANDREW EN GOOGLE APPS SCRIPT
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 
 const FOTOS_DOCENTES = {
@@ -947,7 +948,7 @@ const FOTOS_DOCENTES = {
   "MISS KARIN": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv"
 };
 
-/* CÓDIGOS OFICIALES DE EXCEL */
+/* CÓDIGOS OFICIALES DE DOCENTES EN LA BASE DE DATOS DE MISTER ANDREW */
 const CODIGOS_MISES = { 
   "LILY": "LDS-DOC-001", 
   "KIARA": "LDS-DOC-002", 
@@ -993,7 +994,7 @@ function validarAccesoDocente() {
   cargarConceptos();
   renderIncidencias();
 
-  // Asignar código oficial LDS-DOC-001
+  // Asignar el código oficial LDS-DOC-001 de Miss Lily
   const codigoCaja = CODIGOS_MISES[miseSeleccionadaClave];
   document.getElementById("codigo").value = codigoCaja;
   consultarEstudiante(true);
@@ -1014,40 +1015,45 @@ function formatearLDS(v) {
 }
 
 function consultarEstudiante(silencioso = false) {
-  const codigo = document.getElementById("codigo").value.trim().toUpperCase();
+  const codigoDocente = document.getElementById("codigo").value.trim().toUpperCase(); // ej. LDS-DOC-001
   const anio = document.getElementById("selectAnioEscolar").value;
-  if (!codigo) return;
+  if (!codigoDocente) return;
 
   const msg = document.getElementById("mensaje");
-  if (!silencioso) { msg.textContent = "CONSULTANDO MOVIMIENTOS EN EXCEL..."; msg.className = "message ok"; }
+  if (!silencioso) { msg.textContent = "CONSULTANDO BASE DE DATOS DE MISTER ANDREW..."; msg.className = "message ok"; }
 
-  llamarAPI({ accion: "estudiante", codigo }, r => {
-    if (!r || (!r.estudiante && !r.cuenta)) {
-      msg.textContent = "REGISTRO NO ENCONTRADO EN EXCEL."; msg.className = "message error"; return;
+  llamarAPI({ accion: "ESTUDIANTE", codigo: codigoDocente }, r => {
+    if (!r || (!r.estudiante && !r.cuenta && !r.movimientos)) {
+      msg.textContent = "REGISTRO NO ENCONTRADO EN LA BASE DE DATOS."; msg.className = "message error"; return;
     }
     msg.style.display = "none";
-    
-    // CORRECCIÓN CRÍTICA: FILTRAR ESTRICTAMENTE SOLO LOS MOVIMIENTOS DE ESTE CÓDIGO (Ej: LDS-DOC-001)
-    const todosLosMovimientos = r.movimientos || [];
-    const movs = todosLosMovimientos.filter(m => {
-      const codMov = String(m.codigo || m.CÓDIGO || m.CODIGO || '').toUpperCase().trim();
-      return codMov === codigo || codMov === "LDS-DOC-001";
+
+    const todosMovs = r.movimientos || [];
+
+    // FILTRADO ESTRICTO EN CLIENTE WEB:
+    // Muestra únicamente las filas que pertenecen al código docente de la Miss seleccionada (LDS-DOC-001)
+    const movsMise = todosMovs.filter(m => {
+      const c = String(m.codigo || m["CÓDIGO"] || m["CODIGO"] || '').toUpperCase().trim();
+      return c === codigoDocente;
     });
 
-    // CÁLCULO DE ABONO INICIAL EXCLUSIVO DE LA MISS (30,000 LDS)
+    // CÁLCULO DE ABONOS RECIBIDOS DE GERENCIA DE MISTER ANDREW (30,000 LDS)
     let abonoInicialSuma = 0;
-    movs.forEach(m => {
-      const tipo = String(m.tipo || '').toUpperCase();
-      if (tipo === "INGRESO" || tipo === "ABONO") {
-        abonoInicialSuma += (Number(m.monto || m.montoLDS) || 0);
+    movsMise.forEach(m => {
+      const tipo = String(m.tipo || m["TIPO"] || '').toUpperCase();
+      const monto = Number(m.monto || m["MONTO LDS"] || m["MONTO"] || 0);
+      if (tipo.includes("INGRESO") || tipo.includes("ABONO")) {
+        abonoInicialSuma += monto;
       }
     });
 
-    document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicialSuma || 30000);
-    document.getElementById("saldoDisponibleMise").textContent = formatearLDS(r.cuenta?.saldoActual || 28900);
+    // MOSTRAR TARJETAS DE SALDOS
+    const abonoFinal = abonoInicialSuma > 0 ? abonoInicialSuma : 30000;
+    document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoFinal);
+    document.getElementById("saldoDisponibleMise").textContent = formatearLDS(r.cuenta?.saldoActual ?? 28900);
 
     const e = r.estudiante || {};
-    if (String(e.codigo).startsWith("LDS-EST-")) {
+    if (String(e.codigo || '').startsWith("LDS-EST-")) {
       document.getElementById("pagoCodigo").value = e.codigo;
       document.getElementById("pagoAlumnoNombre").textContent = e.nombreCompleto || e.nombre;
       document.getElementById("pagoAlumnoMeta").textContent = `${e.grado || ''} ${e.seccion || ''}`;
@@ -1059,7 +1065,7 @@ function consultarEstudiante(silencioso = false) {
       document.getElementById("pagoAlumnoCard").style.display = "none";
     }
 
-    renderTablaMovimientos(movs, anio, e, codigo);
+    renderTablaMovimientos(movsMise, anio, e, codigoDocente);
   });
 }
 
@@ -1075,38 +1081,37 @@ function renderTablaMovimientos(movs, anio, estudiante, codigoActual) {
 
   movs.forEach((m, idx) => {
     const tr = document.createElement("tr");
-    
-    let tipoMov = String(m.tipo || 'INGRESO').toUpperCase();
-    const respUpper = String(m.responsable || '').toUpperCase();
-    const obsUpper = String(m.observacion || '').toUpperCase();
-    const conceptoUpper = String(m.concepto || '').toUpperCase();
 
-    // INTERPRETAR TRANSFERENCIAS DESDE MISTER ANDREW COMO INGRESO
-    const esTransferenciaAndrew = respUpper.includes('ANDREW') || obsUpper.includes('TRANSFERENCIA') || conceptoUpper.includes('FONDO') || obsUpper.includes('PAGO MES');
+    // LECTURA DE CAMPOS DE RESPUESTA DE APPS SCRIPT
+    const fecha = m.fechaTexto || m["FECHA Y HORA"] || m["FECHA"] || m.fecha || '-';
+    let persona = m.estudiante || m["CUENTA/ESTUDIANTE"] || m["ESTUDIANTE"] || estudiante?.nombreCompleto || 'ABONO MISTER ANDREW (GERENCIA)';
+    const grado = m.grado || m["GRADO"] || 'PROMOTORA';
+    let tipo = String(m.tipo || m["TIPO"] || 'INGRESO').toUpperCase();
+    const concepto = m.concepto || m["CONCEPTO"] || '-';
+    const monto = Number(m.monto || m["MONTO LDS"] || m["MONTO"] || 0);
+    const cajero = m.responsable || m["CAJERO(A)"] || m["RESPONSABLE"] || 'MISTER ANDREW';
+    const obs = m.observacion || m["OBSERVACIÓN"] || m["OBSERVACION"] || '';
+    const correlativo = "TX-" + (idx + 1);
 
-    if (codigoActual.startsWith("LDS-DOC-") && codigoActual !== "LDS-DOC-005" && esTransferenciaAndrew) {
-      tipoMov = "INGRESO";
+    // INTERPRETAR ABONOS DE MISTER ANDREW COMO INGRESO
+    if (cajero.toUpperCase().includes("ANDREW") || obs.toUpperCase().includes("PAGO MES") || concepto.toUpperCase().includes("FONDO") || obs.toUpperCase().includes("TRANSFERENCIA")) {
+      tipo = "INGRESO";
+      persona = "ABONO MISTER ANDREW (GERENCIA)";
     }
 
-    const esEgreso = tipoMov.includes("EGRESO");
-    const correlativo = m.correlativo || m.id || ("TX-" + (idx + 1));
-
-    let cuentaMostrar = m.estudiante || estudiante?.nombreCompleto || '';
-    if (esTransferenciaAndrew) {
-      cuentaMostrar = "ABONO MISTER ANDREW (GERENCIA)";
-    }
+    const esEgreso = tipo.includes("EGRESO");
 
     tr.innerHTML = `
       <td class="col-correlativo">${correlativo}</td>
       <td><strong>${m.anio || anio}</strong></td>
-      <td style="white-space:nowrap;">${m.fecha || m.timestamp || '-'}</td>
-      <td><strong>${cuentaMostrar}</strong></td>
-      <td>${m.grado || estudiante?.grado || 'ADMINISTRACION'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMov}</span></td>
-      <td>${m.concepto || ''}</td>
-      <td><strong>${formatearLDS(m.monto || m.montoLDS || 0)}</strong></td>
-      <td>${m.responsable || 'MISTER ANDREW'}</td>
-      <td>${m.observacion || ''}</td>`;
+      <td style="white-space:nowrap;">${fecha}</td>
+      <td><strong>${persona}</strong></td>
+      <td>${grado}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipo}</span></td>
+      <td>${concepto}</td>
+      <td><strong>${formatearLDS(monto)}</strong></td>
+      <td>${cajero}</td>
+      <td>${obs}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1136,16 +1141,16 @@ function procesarMovimientoAlumno(tipo) {
 
   if (!codigo || !monto || monto <= 0) { msg.textContent = "SELECCIONE UN ALUMNO E INGRESE EL MONTO"; msg.className = "message error"; return; }
 
-  msg.textContent = "REGISTRANDO EN EXCEL..."; msg.className = "message ok";
+  msg.textContent = "REGISTRANDO OPERACIÓN EN LA BASE DE DATOS..."; msg.className = "message ok";
 
   llamarAPI({
-    accion: "registrarMovimiento",
+    accion: "REGISTRARMOVIMIENTO",
     codigo, anio, tipo, categoria, concepto, monto,
     responsable: maestraActivaNombre,
     responsableClave: sessionStorage.getItem("responsableClave"),
     observacion: obs
   }, r => {
-    if (r && r.ok) {
+    if (r && (r.ok || r.success)) {
       msg.textContent = "TRANSACCIÓN REGISTRADA CORRECTAMENTE"; msg.className = "message ok";
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
@@ -1243,7 +1248,7 @@ function seleccionarAlumno(codigo) {
 function cargarListaMises() {
   const cont = document.getElementById("listaMisesItems");
   cont.innerHTML = "<div style='padding:10px;text-align:center;font-weight:800;'>CONSULTANDO CAJAS...</div>";
-  llamarAPI({ accion: "cuentas", anio: document.getElementById("selectAnioEscolar").value }, r => {
+  llamarAPI({ accion: "CUENTAS", anio: document.getElementById("selectAnioEscolar").value }, r => {
     if (r && r.cuentas) {
       const mises = r.cuentas.filter(c => String(c.codigo).startsWith("LDS-DOC-"));
       cont.innerHTML = mises.map((c, i) => `
@@ -1261,7 +1266,7 @@ function abrirModalPrestamo() {
   document.getElementById("prestamoModal").style.display = "flex";
   const sel = document.getElementById("prestamoDestino");
   sel.innerHTML = "<option value=''>CARGANDO USUARIOS...</option>";
-  llamarAPI({ accion: "cuentas", anio: document.getElementById("selectAnioEscolar").value }, r => {
+  llamarAPI({ accion: "CUENTAS", anio: document.getElementById("selectAnioEscolar").value }, r => {
     if (r && r.cuentas) {
       sel.innerHTML = r.cuentas.map(c => `<option value="${c.codigo}">${c.nombre || c.codigo} (${c.codigo})</option>`).join('');
     }
@@ -1277,13 +1282,13 @@ function registrarPrestamo() {
   if (!destino || !monto) return;
 
   llamarAPI({
-    accion: "registrarMovimiento",
+    accion: "REGISTRARMOVIMIENTO",
     codigo: destino, anio, tipo: "EGRESO", categoria: "PRESTAMO", concepto: "PRÉSTAMO", monto,
     responsable: maestraActivaNombre,
     responsableClave: sessionStorage.getItem("responsableClave"),
     observacion: motivo || "PRÉSTAMO REGISTRADO"
   }, r => {
-    if (r && r.ok) {
+    if (r && (r.ok || r.success)) {
       cerrarModal('prestamoModal');
       consultarEstudiante(true);
     }
