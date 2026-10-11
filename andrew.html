@@ -339,9 +339,11 @@ header {
   gap: 8px;
 }
 
+/* TAMAÑO Y DESPLAZAMIENTO FIJO DE TABLA PRINCIPAL */
 .table-wrap {
   width: 100%;
-  max-height: 480px;
+  height: 380px;
+  max-height: 380px;
   overflow: auto;
   border: 1.5px solid var(--borde);
   border-radius: 10px;
@@ -351,15 +353,16 @@ header {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 750px;
+  min-width: 850px;
 }
 
 th, td {
-  padding: 9px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid #e2e8f0;
   text-align: left;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
+  vertical-align: middle;
 }
 
 th {
@@ -369,6 +372,16 @@ th {
   position: sticky;
   top: 0;
   z-index: 5;
+  white-space: nowrap;
+}
+
+.col-nowrap {
+  white-space: nowrap;
+}
+
+.col-monto {
+  white-space: nowrap;
+  font-weight: 800;
 }
 
 .badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; }
@@ -652,7 +665,7 @@ textarea { height: auto; padding: 8px 10px; }
 
 <main class="layout-main">
   <div class="left-stack">
-    <!-- BANNER PROFILE MISTER ANDREW -->
+    <!-- PROFILE ANDREW -->
     <div class="profile-banner">
       <div class="profile-info">
         <div class="avatar-wrap">
@@ -683,7 +696,7 @@ textarea { height: auto; padding: 8px 10px; }
       CAJA GENERAL ACTUALIZADA CORRECTAMENTE.
     </div>
 
-    <!-- TARJETAS DE SALDO POR CADA MISS -->
+    <!-- TARJETAS DE SALDOS EN CAJA DE LAS MISSES -->
     <div class="mises-panel">
       <h3>📊 SALDOS EN CAJA DE LAS MISSES</h3>
       <div class="mises-grid">
@@ -725,7 +738,7 @@ textarea { height: auto; padding: 8px 10px; }
       </div>
     </div>
 
-    <!-- TABLA DE MOVIMIENTOS -->
+    <!-- TABLA DE MOVIMIENTOS EXCLUSIVA DE CAJA GENERAL -->
     <div class="table-panel">
       <div class="table-head">
         <h3>📋 MOVIMIENTOS DE CAJA GENERAL</h3>
@@ -758,7 +771,7 @@ textarea { height: auto; padding: 8px 10px; }
     </div>
   </div>
 
-  <!-- COLUMNA DERECHA - PANELES DE OPERACIONES -->
+  <!-- OPERACIONES -->
   <div class="right-stack">
     <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
     <div id="panelTransferir" class="accordion-panel">
@@ -1085,7 +1098,6 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO ESTRICTO DE SALDOS DE LA CAJA GENERAL Y LAS MAESTRAS
 function calcularYSincronizarSaldos(movimientos) {
   let capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1118,12 +1130,10 @@ function calcularYSincronizarSaldos(movimientos) {
 
       // 2. Transacciones con las Misses
       if (saldosMises.hasOwnProperty(targetCod)) {
-        // Toda transferencia de Andrew a la Miss = INGRESO para la Miss, EGRESO para Andrew
         if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO") || obs.includes("TRANSFERENCIA")) {
           saldosMises[targetCod] += monto;
           egresosAndrew += monto;
         } else if (tipoOrig.includes("EGRESO")) {
-          // Desembolsos de la Miss a sus alumnos
           saldosMises[targetCod] -= monto;
         }
       } 
@@ -1148,20 +1158,23 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
+// FILTRADO ESTRICTO DE LA TABLA INFERIOR (SOLO MISTER ANDREW / CAJA GENERAL)
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
   } else {
-    // Mostrar solo movimientos vinculados a Mister Andrew
     const movsAndrew = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
       const cod = normalizarCodigo(getCodigo(m));
       const resp = normalizarCodigo(getResponsable(m));
       const obs = String(getObservacion(m)).toUpperCase();
       const est = String(getEstudiante(m)).toUpperCase();
+      
       return cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("ANDREW") || est.includes("ANDREW");
     });
-    renderTabla(movsAndrew.length > 0 ? movsAndrew : todosLosMovimientosGlobales);
+    
+    // MUESTRA SOLAMENTE LA LISTA FILTRADA DE ANDREW (SIN FALLBACK A TODO EL BANCO)
+    renderTabla(movsAndrew);
   }
 }
 
@@ -1187,7 +1200,7 @@ function renderTabla(lista) {
   if (elCant) elCant.textContent = String(totalCount);
 
   if (!lista || !lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; font-weight:700;">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 25px; font-weight:700; color: var(--muted);">NO HAY MOVIMIENTOS REGISTRADOS EN CAJA GENERAL.</td></tr>';
     return;
   }
 
@@ -1222,14 +1235,14 @@ function renderTabla(lista) {
     }
 
     tr.innerHTML = `
-      <td><strong>${getAnio(m) || '2026'}</strong></td>
-      <td><strong>${fechaVal}</strong></td>
+      <td class="col-nowrap"><strong>${getAnio(m) || '2026'}</strong></td>
+      <td class="col-nowrap"><strong>${fechaVal}</strong></td>
       <td><strong>${cuentaNombre}</strong></td>
-      <td>${gradoVal}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
+      <td class="col-nowrap">${gradoVal}</td>
+      <td class="col-nowrap"><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
       <td>${concStr}</td>
-      <td><strong>${formatearLDS(monto)}</strong></td>
-      <td>${getResponsable(m) || 'SISTEMA'}</td>
+      <td class="col-monto">${formatearLDS(monto)}</td>
+      <td class="col-nowrap">${getResponsable(m) || 'SISTEMA'}</td>
       <td>${obsStr}</td>
     `;
     tbody.appendChild(tr);
@@ -1309,7 +1322,7 @@ function generarEImprimirReporteGrupal() {
   setTimeout(() => { window.print(); }, 300);
 }
 
-// MATRIZ CONTABLE DE PARTIDA DOBLE EXACTA PARA REPORTES E IMPRESIÓN
+// REPORTES CON ACCESO Y DESGLOSE COMPLETO POR ROL
 function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   let filas = "";
   let totalIngresos = 0;
@@ -1333,9 +1346,7 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
       const fechaVal = getFecha(m);
       const estNombre = getEstudiante(m);
 
-      // -------------------------------------------------------------
-      // 1. REPORTE MISTER ANDREW (CAJA GENERAL - LDS-DOC-005)
-      // -------------------------------------------------------------
+      // 1. REPORTE CAJA GENERAL ANDREW
       if (codUsr === "LDS-DOC-005") {
         if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && conc.includes("BASE"))) {
           movsProcesados.push({
@@ -1371,11 +1382,8 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
         }
       }
 
-      // -------------------------------------------------------------
-      // 2. REPORTE DE MAESTRA (MISS: LDS-DOC-001 A LDS-DOC-004)
-      // -------------------------------------------------------------
+      // 2. REPORTE DE CADA MISS
       else if (codUsr.startsWith("LDS-DOC-")) {
-        // A) FONDO RECIBIDO DE ANDREW -> INGRESO PARA LA MISS
         if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"))) {
           movsProcesados.push({
             fecha: fechaVal,
@@ -1387,7 +1395,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
             esEgreso: false
           });
         }
-        // B) PAGO HECHO POR LA MISS AL ALUMNO -> EGRESO PARA LA MISS
         else if (respCod === codUsr && (tipoOrig.includes("EGRESO") || conc.includes("PAGO") || conc.includes("PREMIO"))) {
           let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
           movsProcesados.push({
@@ -1400,7 +1407,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
             esEgreso: true
           });
         }
-        // C) COBRO / PAGO QUE EL ALUMNO LE HACE A LA MISS -> INGRESO PARA LA MISS
         else if ((codDestino === codUsr || respCod === codUsr) && (tipoOrig.includes("INGRESO") || conc.includes("COBRO") || conc.includes("DEVOLUCION"))) {
           let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
           movsProcesados.push({
@@ -1415,12 +1421,9 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
         }
       }
 
-      // -------------------------------------------------------------
-      // 3. REPORTE DE ALUMNO (ESTUDIANTE: LDS-EST-xxx)
-      // -------------------------------------------------------------
+      // 3. REPORTE DE CADA ALUMNO
       else if (codUsr.startsWith("LDS-EST-")) {
         if (codDestino === codUsr || normalizarCodigo(estNombre) === codUsr) {
-          // A) SI LA MISS LE PAGA AL ALUMNO -> INGRESO PARA EL ALUMNO
           if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO") || respCod.startsWith("LDS-DOC-")) {
             movsProcesados.push({
               fecha: fechaVal,
@@ -1432,7 +1435,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
               esEgreso: false
             });
           }
-          // B) SI EL ALUMNO LE PAGA / RINDE A LA MISS -> EGRESO PARA EL ALUMNO
           else if (tipoOrig.includes("EGRESO") || conc.includes("COBRO") || conc.includes("CONSUMO")) {
             movsProcesados.push({
               fecha: fechaVal,
@@ -1520,7 +1522,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   `;
 }
 
-// EJECUCIÓN DE TRANSFERENCIA DE FONDO DESDE ANDREW
 function ejecutarTransferenciaFondo() {
   const missDocCode = document.getElementById("transfMiss").value;
   const concepto = document.getElementById("transfConcepto").value;
