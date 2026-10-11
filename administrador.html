@@ -148,7 +148,7 @@ header {
   color: var(--azul);
 }
 
-.input-field {
+.input-field, select, textarea {
   width: 100%;
   height: 38px;
   border: 1.5px solid #cbd5e1;
@@ -158,6 +158,8 @@ header {
   background: #f8fafc;
   font-weight: 700;
 }
+
+textarea { height: auto; padding: 8px; }
 
 .primary-btn {
   width: 100%;
@@ -210,7 +212,8 @@ main {
 .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
 .stats-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
 
@@ -249,9 +252,13 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .panel-head h3 { color: var(--azul); font-size: 0.82rem; font-weight: 800; }
+.panel.collapsed .panel-body { display: none; }
+.toggle-icon { font-size: 0.75rem; color: var(--muted); }
+
 .panel-body { padding: 12px 14px; }
 
 .icon-btn {
@@ -266,7 +273,6 @@ main {
   padding: 6px;
 }
 
-.icon-btn svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 3; }
 .icon-btn.alumno { background: linear-gradient(135deg, #67e8f9, #0284c7); color: #fff; border-color: #0284c7; }
 .icon-btn.mises { background: linear-gradient(135deg, #fda4af, #dc2626); color: #fff; border-color: #dc2626; }
 .icon-btn.qr { border-radius: 8px; background: #0f2340; color: #fff; border-color: #f59e0b; width: 44px; }
@@ -274,7 +280,7 @@ main {
 .icon-btn.loan { background: linear-gradient(135deg, #ddd6fe, #7c3aed); color: #fff; border-color: #6d28d9; border-radius: 8px; width: 44px; }
 .icon-btn.print { background: linear-gradient(135deg, #fde68a, #f59e0b); color: #7c4300; border-color: #f59e0b; }
 
-/* DROPDOWNS INLINE */
+/* DROPDOWNS */
 .dropdown-inline {
   margin: 0 12px 10px;
   border: 1.5px solid var(--dorado);
@@ -335,7 +341,13 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
 .btn-pago.pagar { background: linear-gradient(135deg, #fff7d6, #f59e0b); color: #7c4300; border-color: #f59e0b; }
 .btn-pago.cobrar { background: linear-gradient(135deg, #dcfce7, #22c55e); color: #166534; border-color: #16a34a; }
 
-/* MODALES Y MENSAJES */
+/* INCIDENCIAS */
+.incident-list { display: grid; gap: 6px; margin-top: 8px; }
+.incident { border: 1px solid var(--borde); border-radius: 6px; padding: 8px; background: #f8fafc; font-size: 0.70rem; }
+.incident-top { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 4px; }
+.badge { padding: 2px 6px; border-radius: 4px; background: #fef3c7; color: #92400e; font-size: 0.60rem; font-weight: 800; }
+
+/* MODALES */
 .message { padding: 6px 10px; border-radius: 6px; margin-top: 6px; display: none; font-weight: 700; font-size: 0.72rem; }
 .message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
 .message.error { display: block; background: #fef2f2; color: var(--rojo); border: 1px solid #fecaca; }
@@ -362,7 +374,7 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a class="btn btn-light" href="./" onclick="reproducirSonido('clic')">← INICIO</a>
+    <a class="btn btn-light" href="./">← INICIO</a>
   </div>
 </header>
 
@@ -414,11 +426,12 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
       <div class="stat-pill"><span>ABONO INICIAL</span><strong id="saldoInicialMise" style="color:#fde68a;">0 LDS</strong></div>
       <div class="stat-pill"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise" style="color:#86efac;">0 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
+      <div class="stat-pill"><span>INCIDENCIAS</span><strong id="contadorIncidencias" style="color:#fca5a5;">0</strong></div>
     </div>
   </div>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA: CONSULTA -->
+    <!-- COLUMNA IZQUIERDA -->
     <div class="panel">
       <div class="panel-head">
         <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
@@ -430,7 +443,6 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
         </div>
       </div>
 
-      <!-- DROPDOWN ALUMNOS -->
       <div id="listaAlumnosDropdown" class="dropdown-inline" style="display:none;">
         <div class="dropdown-head">
           <strong>📋 LISTA DE ALUMNOS</strong>
@@ -439,7 +451,6 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
         <div id="listaAlumnosItems" class="dropdown-list"></div>
       </div>
 
-      <!-- DROPDOWN MISES -->
       <div id="listaMisesDropdown" class="dropdown-inline" style="display:none;">
         <div class="dropdown-head"><strong>👩‍🏫 SALDOS DE CAJA MISES</strong></div>
         <div id="listaMisesItems" class="dropdown-list"></div>
@@ -480,11 +491,13 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: OPERACIONES -->
+    <!-- COLUMNA DERECHA -->
     <div class="right-stack">
-      <div class="panel">
-        <div class="panel-head">
+      <!-- PANEL OPERACIONES -->
+      <div id="panelPago" class="panel">
+        <div class="panel-head" onclick="togglePanel('panelPago')">
           <h3>💰 PAGOS Y COBROS AL ALUMNO</h3>
+          <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
           <input id="pagoCodigo" placeholder="ALUMNO SELECCIONADO" readonly style="width:100%;height:32px;border:1px solid #cbd5e1;border-radius:6px;padding:0 8px;background:#f1f5f9;font-weight:800;margin-bottom:8px;">
@@ -520,6 +533,38 @@ th { background: #f1f5f9; color: var(--azul); font-weight: 800; position: sticky
             <button class="btn-pago cobrar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">⬆ COBRAR</button>
           </div>
           <div id="pagoMensaje" class="message"></div>
+        </div>
+      </div>
+
+      <!-- PANEL INCIDENCIAS -->
+      <div id="panelIncidencias" class="panel collapsed">
+        <div class="panel-head" onclick="togglePanel('panelIncidencias')">
+          <h3>🛠 ATENCIÓN DE INCIDENCIAS</h3>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="panel-body">
+          <label style="font-size:0.65rem;font-weight:800;color:var(--azul);">CÓDIGO ALUMNO</label>
+          <input id="incCodigo" class="input-field" style="height:32px;margin-bottom:6px;" placeholder="LDS-EST-001">
+
+          <label style="font-size:0.65rem;font-weight:800;color:var(--azul);">PROBLEMA REPORTADO</label>
+          <textarea id="incProblema" class="input-field" rows="2" style="margin-bottom:6px;" placeholder="DESCRIBA LA INCIDENCIA..."></textarea>
+
+          <label style="font-size:0.65rem;font-weight:800;color:var(--azul);">SOLUCIÓN REALIZADA</label>
+          <textarea id="incSolucion" class="input-field" rows="2" style="margin-bottom:6px;" placeholder="ACCIONAL TOMADA..."></textarea>
+
+          <label style="font-size:0.65rem;font-weight:800;color:var(--azul);">ESTADO</label>
+          <select id="incEstado" class="input-field" style="height:32px;margin-bottom:8px;">
+            <option value="PENDIENTE">PENDIENTE</option>
+            <option value="EN ATENCIÓN">EN ATENCIÓN</option>
+            <option value="RESUELTO">RESUELTO</option>
+          </select>
+
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-gold" style="flex:1;" type="button" onclick="guardarIncidencia()">GUARDAR</button>
+            <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">LIMPIAR</button>
+          </div>
+
+          <div id="listaIncidencias" class="incident-list"></div>
         </div>
       </div>
     </div>
@@ -578,6 +623,11 @@ function seleccionarMise(clave) {
   event.currentTarget.classList.add('activa');
 }
 
+function togglePanel(idPanel) {
+  const p = document.getElementById(idPanel);
+  if (p) p.classList.toggle('collapsed');
+}
+
 function validarAccesoDocente() {
   const clave = document.getElementById("claveDocente").value.trim();
   const err = document.getElementById("adminError");
@@ -595,6 +645,7 @@ function validarAccesoDocente() {
 
   cargarConceptos();
   consultarSaldoMise();
+  renderIncidencias();
 }
 
 function llamarAPI(params, cb) {
@@ -635,7 +686,6 @@ function consultarEstudiante(silencioso = false) {
     }
     msg.style.display = "none";
     
-    // Rellenar ficha alumno para cobro
     const e = r.estudiante;
     if (String(e.codigo).startsWith("LDS-EST-")) {
       document.getElementById("pagoCodigo").value = e.codigo;
@@ -644,6 +694,7 @@ function consultarEstudiante(silencioso = false) {
       document.getElementById("pagoAlumnoSaldo").textContent = "SALDO: " + formatearLDS(r.cuenta?.saldoActual || 0);
       document.getElementById("pagoAlumnoFoto").src = e.fotoUrl || e.foto || "";
       document.getElementById("pagoAlumnoCard").style.display = "flex";
+      document.getElementById("panelPago").classList.remove("collapsed");
     }
 
     renderTablaMovimientos(r.movimientos || [], anio, e);
@@ -724,6 +775,46 @@ function procesarMovimientoAlumno(tipo) {
       msg.textContent = r?.mensaje || "ERROR AL REGISTRAR"; msg.className = "message error";
     }
   });
+}
+
+/* GESTIÓN DE INCIDENCIAS */
+function obtenerIncidencias() {
+  try { return JSON.parse(localStorage.getItem("BANCO_LDS_INCIDENCIAS") || "[]"); } catch (e) { return []; }
+}
+
+function guardarIncidencia() {
+  const codigo = document.getElementById("incCodigo").value.trim().toUpperCase();
+  const problema = document.getElementById("incProblema").value.trim();
+  const solucion = document.getElementById("incSolucion").value.trim();
+  const estado = document.getElementById("incEstado").value;
+  const anio = document.getElementById("selectAnioEscolar").value;
+
+  if (!codigo || !problema) return;
+  const list = obtenerIncidencias();
+  list.unshift({ id: Date.now(), fecha: new Date().toLocaleDateString("es-PE"), anio, codigo, problema, solucion, estado });
+  localStorage.setItem("BANCO_LDS_INCIDENCIAS", JSON.stringify(list));
+  limpiarIncidencia();
+  renderIncidencias();
+}
+
+function limpiarIncidencia() {
+  document.getElementById("incCodigo").value = "";
+  document.getElementById("incProblema").value = "";
+  document.getElementById("incSolucion").value = "";
+  document.getElementById("incEstado").value = "PENDIENTE";
+}
+
+function renderIncidencias() {
+  const list = obtenerIncidencias();
+  document.getElementById("contadorIncidencias").textContent = list.length;
+  const box = document.getElementById("listaIncidencias");
+  if (!list.length) { box.innerHTML = "<div style='padding:10px;text-align:center;color:#64748b;'>SIN INCIDENCIAS REGISTRADAS.</div>"; return; }
+  box.innerHTML = list.map(i => `
+    <div class="incident">
+      <div class="incident-top"><strong>[${i.anio}] ${i.codigo}</strong><span class="badge">${i.estado}</span></div>
+      <div>${i.problema}</div>
+      ${i.solucion ? `<small style="color:#059669;display:block;margin-top:2px;"><b>SOLUCIÓN:</b> ${i.solucion}</small>` : ''}
+    </div>`).join('');
 }
 
 function toggleDropdown(id) {
@@ -813,7 +904,6 @@ function cerrarEscanerQR() {
   else document.getElementById("qrModal").style.display = "none";
 }
 
-function reproducirSonido() {}
 function cambiarAnioEscolar() { consultarSaldoMise(); }
 </script>
 </body>
