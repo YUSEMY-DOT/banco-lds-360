@@ -236,17 +236,18 @@ main {
   display: none;
 }
 
+/* PROFILE BANNER EN UNA SOLA LÍNEA PARA DESKTOP / RESPONSIVO */
 .admin-profile-banner {
   background: linear-gradient(145deg, #091628 0%, #050d18 100%);
   border: 2px solid var(--dorado);
   border-radius: 12px;
-  padding: 12px 18px;
+  padding: 10px 16px;
   margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
 }
 
@@ -255,12 +256,12 @@ main {
   align-items: center;
   gap: 12px;
   min-width: 0;
-  flex: 1;
+  flex-shrink: 0;
 }
 
 .admin-avatar-wrap {
-  width: 92px;
-  height: 92px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   border: 2.5px solid var(--dorado);
   overflow: hidden;
@@ -271,50 +272,55 @@ main {
 }
 
 .admin-avatar-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-.admin-avatar-placeholder { font-size: 26px; color: var(--azul); }
+.admin-avatar-placeholder { font-size: 24px; color: var(--azul); }
 
-.admin-text-details { min-width: 0; flex: 1; }
-.admin-text-details h3 { font-size: 1.65rem; color: #ffffff; font-weight: 900; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.05; }
-.admin-text-details p { color: #fde68a; font-size: 0.92rem; font-weight: 900; margin: 0 0 5px; letter-spacing: .04em; }
+.admin-text-details { min-width: 0; }
+.admin-text-details h3 { font-size: 1.25rem; color: #ffffff; font-weight: 900; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+.admin-text-details p { color: #fde68a; font-size: 0.72rem; font-weight: 900; margin: 0 0 2px; letter-spacing: .04em; white-space: nowrap; }
 
 .admin-stats-box {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  flex-shrink: 0;
+  justify-content: flex-end;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .stat-pill {
   background: rgba(3, 8, 15, 0.85);
   border: 1px solid rgba(245, 158, 11, 0.4);
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 8px 10px;
   text-align: center;
-  min-width: 120px;
+  flex: 1;
+  min-width: 0;
 }
 
 .stat-pill:first-child {
-  min-width: 220px;
-  padding: 10px 18px;
+  flex: 1.2;
+  padding: 8px 10px;
   background: linear-gradient(135deg, rgba(245,158,11,.24), rgba(3,8,15,.92));
   border: 2px solid #f59e0b;
   box-shadow: 0 0 0 2px rgba(245,158,11,.10), 0 5px 16px rgba(0,0,0,.20);
 }
 
 .stat-pill:first-child span {
-  font-size: .72rem;
+  font-size: .62rem;
   color: #fde68a;
   letter-spacing: .04em;
+  white-space: nowrap;
 }
 
 .stat-pill:first-child strong {
-  font-size: 2.15rem;
+  font-size: 1.25rem;
   color: #fff7cc;
-  line-height: 1.05;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-.stat-pill span { display: block; font-size: 0.78rem; color: #cbd5e1; font-weight: 700; }
-.stat-pill strong { font-size: 1.5rem; color: #ffffff; font-weight: 800; }
+.stat-pill span { display: block; font-size: 0.62rem; color: #cbd5e1; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-pill strong { font-size: 1.15rem; color: #ffffff; font-weight: 800; white-space: nowrap; }
 
 .layout {
   display: grid;
@@ -341,7 +347,7 @@ main {
 
 @media(min-width: 1100px) {
   .layout {
-    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.75fr);
   }
 }
 
@@ -393,10 +399,10 @@ main {
 .panel.collapsed .panel-head { border-bottom: none; }
 
 .stat-abono{border-color:#fbbf24 !important;background:linear-gradient(135deg,#3b2f12,#111827) !important;}
-.stat-abono strong{color:#fde68a !important;font-size:2.15rem !important;}
+.stat-abono strong{color:#fde68a !important;}
 .stat-abono span{color:#fef3c7 !important;}
 .stat-disponible{border-color:#22c55e !important;background:linear-gradient(135deg,#052e16,#0f172a) !important;}
-.stat-disponible strong{color:#86efac !important;font-size:2.15rem !important;}
+.stat-disponible strong{color:#86efac !important;}
 .stat-disponible span{color:#bbf7d0 !important;}
 
 .header-dropdown-list{
@@ -435,10 +441,10 @@ main {
 .impresion-opcion{border:1.5px solid #f59e0b;background:#fff7ed;color:#9a3412;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;font-size:.75rem;}
 .impresion-opcion:hover{background:#ffedd5;}
 .pago-alumno-card{display:flex;align-items:center;gap:16px;margin:8px 0 12px;padding:10px;border:1.5px solid #bae6fd;border-radius:10px;background:#f0f9ff;}
-.pago-alumno-foto{width:104px;height:104px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
+.pago-alumno-foto{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
 .pago-alumno-datos{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.pago-alumno-datos strong{font-size:1rem;color:#0f172a;}
-.pago-alumno-datos span{font-size:.78rem;color:#475569;font-weight:700;}
+.pago-alumno-datos strong{font-size:0.95rem;color:#0f172a;}
+.pago-alumno-datos span{font-size:.75rem;color:#475569;font-weight:700;}
 .pago-alumno-datos b{font-size:.82rem;color:#15803d;}
 @media(max-width:700px){.impresiones-opciones{grid-template-columns:1fr;}}
 .header-list-loading{padding:18px;text-align:center;color:#64748b;font-weight:800;font-size:.75rem;}
@@ -452,7 +458,7 @@ main {
 }
 
 .panel-body { 
-  padding: 18px;
+  padding: 16px;
   width: 100%;
 }
 
@@ -485,7 +491,8 @@ main {
 
 .table-wrap {
   width: 100%;
-  max-height: 480px;
+  height: 380px;
+  max-height: 380px;
   overflow-y: auto;
   overflow-x: auto;
   margin-top: 12px;
@@ -498,15 +505,14 @@ main {
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto;
-  min-width: 700px;
+  min-width: 850px;
 }
 
 th, td {
   padding: 8px 10px;
   border-bottom: 1px solid #e5eaf0;
   text-align: left;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   vertical-align: middle;
   font-weight: 600;
   word-break: break-word;
@@ -534,7 +540,6 @@ tr:last-child td { border-bottom: 0; }
 .incident-top { display: flex; justify-content: space-between; gap: 6px; font-size: 0.78rem; margin-bottom: 3px; font-weight: 800; }
 .badge { padding: 1px 6px; border-radius: 999px; background: #fff7df; color: #7a5d00; border: 1px solid #ead28a; font-size: 0.6rem; font-weight: 800; }
 .incident small { color: var(--muted); display: block; margin-top: 2px; font-weight: 600; font-size: 0.7rem; }
-.danger { color: var(--rojo); font-weight: 800; }
 
 .qr-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(12, 30, 48, 0.88); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
 .qr-modal-content { background: #ffffff; padding: 20px 15px; border-radius: 14px; max-width: 360px; width: 100%; text-align: center; border-top: 5px solid var(--dorado); }
@@ -693,7 +698,7 @@ footer {
   margin: 0 0 14px; padding: 10px 12px;
   border-radius: 9px;
   background: linear-gradient(135deg, #0f172a, #1e293b);
-  color:#fff; font-weight:900; font-size:1rem; letter-spacing:.03em;
+  color:#fff; font-weight:900; font-size:0.92rem; letter-spacing:.03em;
   border:1px solid rgba(245,158,11,.45);
 }
 .mises-modal-content { max-width: 760px; }
@@ -703,11 +708,21 @@ footer {
 }
 .mises-table .mises-saldo { font-size:1.08rem; font-weight:900; color:#0f766e; white-space:nowrap; }
 .mises-table tr.mise-row { cursor:default; }
-@media (max-width: 900px) {
-  .admin-profile-banner { flex-direction:column; align-items:stretch; }
-  .admin-stats-box { width:100%; flex-wrap:wrap; }
-  .stat-pill, .stat-pill:first-child { flex:1 1 22%; min-width:0; }
-  .admin-text-details h3 { font-size:1.25rem; }
+
+/* RESPONSIVO DE BANNER PARA TABLET Y MÓVIL */
+@media (max-width: 992px) {
+  .admin-profile-banner { flex-wrap: wrap; }
+  .admin-stats-box { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .stat-pill, .stat-pill:first-child { flex: none; width: 100%; min-width: 0; }
+  .admin-text-details h3 { font-size: 1.1rem; }
+}
+
+@media (max-width: 600px) {
+  .admin-profile-banner { padding: 10px; gap: 8px; }
+  .admin-avatar-wrap { width: 50px; height: 50px; }
+  .admin-stats-box { grid-template-columns: repeat(2, 1fr); }
+  .stat-pill span, .stat-pill:first-child span { font-size: 0.55rem; }
+  .stat-pill strong, .stat-pill:first-child strong { font-size: 0.95rem; }
 }
 </style>
 
@@ -805,19 +820,19 @@ footer {
     <div class="form-group">
       <div class="mises-fotos-grid">
         <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
-          <img src="https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300" alt="Miss Lily">
+          <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
           <span>MISS LILY</span>
         </button>
         <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="seleccionarMiseVisual('KIARA')">
-          <img src="https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300" alt="Miss Kiara">
+          <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" alt="Miss Kiara" onerror="this.src='https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300';">
           <span>MISS KIARA</span>
         </button>
         <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="seleccionarMiseVisual('ANGHY')">
-          <img src="https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300" alt="Miss Anghy">
+          <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" alt="Miss Anghy" onerror="this.src='https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300';">
           <span>MISS ANGHY</span>
         </button>
         <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="seleccionarMiseVisual('KARIN')">
-          <img src="https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300" alt="Miss Karin">
+          <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" alt="Miss Karin" onerror="this.src='https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300';">
           <span>MISS KARIN</span>
         </button>
       </div>
@@ -959,7 +974,7 @@ footer {
               <tr>
                 <th>AÑO</th>
                 <th>FECHA Y HORA</th>
-                <th>ESTUDIANTE</th>
+                <th>ESTUDIANTE / CUENTA</th>
                 <th>GRADO</th>
                 <th>TIPO</th>
                 <th>CONCEPTO</th>
@@ -969,7 +984,7 @@ footer {
               </tr>
             </thead>
             <tbody id="tablaMovimientos">
-              <tr><td colspan="9" class="empty">INGRESA UN CÓDIGO PARA CONSULTAR.</td></tr>
+              <tr><td colspan="9" class="empty">INGRESA UN CÓDIGO O SELECCIONA UN ALUMNO PARA CONSULTAR.</td></tr>
             </tbody>
           </table>
         </div>
@@ -986,7 +1001,7 @@ footer {
           <div class="pago-target-title">💸 OPERACIÓN CON EL ALUMNO</div>
           <input type="hidden" id="pagoOperacionVal" value="EGRESO">
 
-          <label class="small-label" for="pagoCodigo">ALUMNO A PAGAR</label>
+          <label class="small-label" for="pagoCodigo">ALUMNO A PAGAR / COBRAR</label>
           <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA O QR" readonly style="background:#f1f5f9;">
 
           <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
@@ -996,10 +1011,6 @@ footer {
               <span id="pagoAlumnoMeta">—</span>
               <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
             </div>
-          </div>
-          <div id="pagoAlumnoMovimientos" class="pago-alumno-movimientos" style="display:none;">
-            <div class="pago-mov-title">📒 MOVIMIENTOS DEL ALUMNO</div>
-            <div id="pagoAlumnoMovimientosBody"></div>
           </div>
 
           <label class="small-label">CATEGORÍA DEL MOVIMIENTO</label>
@@ -1125,7 +1136,7 @@ footer {
       <div id="prestamoMensaje" class="message"></div>
       <div class="loan-actions">
         <button type="button" class="btn btn-outline" onclick="cerrarModalPrestamo()">CANCELAR</button>
-        <button type="button" class="btn btn-gold" onclick="registrarPrestamo()">🤝 REGISTRAR PRÉSTAMO</button>
+        <button id="btnRegistrarPrestamo" type="button" class="btn btn-gold" onclick="registrarPrestamo()">🤝 REGISTRAR PRÉSTAMO</button>
       </div>
     </div>
   </div>
@@ -1145,10 +1156,10 @@ footer {
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 
 const FOTOS_DOCENTES = {
-  "MISS ANGHY REYES MELO": "https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w800",
-  "MISS KARIN MOLERO ROMANI": "https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w800",
-  "MISS KIARA MORALES ELGUERA": "https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w800",
-  "MISS LILY MELO AZAÑERO": "https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w800"
+  "MISS ANGHY REYES MELO": "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U",
+  "MISS KARIN MOLERO ROMANI": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv",
+  "MISS KIARA MORALES ELGUERA": "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O",
+  "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE"
 };
 
 const CODIGOS_MISE_POR_NOMBRE = {
@@ -1180,6 +1191,36 @@ const MAPA_EQUIVALENCIAS_DOCENTES = {
   "MISS KARIN MOLERO ROMANI": "CAJA-KARIN"
 };
 
+function getProp(obj, ...possibleKeys) {
+  if (!obj || typeof obj !== 'object') return "";
+  const objKeys = Object.keys(obj);
+  for (let key of possibleKeys) {
+    if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== "") {
+      return String(obj[key]).trim();
+    }
+    const lowerKey = key.toLowerCase();
+    const foundKey = objKeys.find(k => k.toLowerCase() === lowerKey);
+    if (foundKey && obj[foundKey] !== undefined && obj[foundKey] !== null && String(obj[foundKey]).trim() !== "") {
+      return String(obj[foundKey]).trim();
+    }
+  }
+  return "";
+}
+
+// DETECTOR INTELIGENTE DE FECHA (GARANTIZA QUE NUNCA SALGA EN BLANCO)
+function getFecha(m) {
+  if (!m || typeof m !== 'object') return "-";
+  let val = getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "FECHA_Y_HORA", "fechayhora", "timestamp", "Fecha", "Fecha y Hora", "DATE", "TIME", "fechaTexto", "fechaOperacion");
+  if (!val) {
+    for (let k in m) {
+      if (k.toLowerCase().includes("fech") || k.toLowerCase().includes("time")) {
+        if (m[k]) return String(m[k]).trim();
+      }
+    }
+  }
+  return val || "-";
+}
+
 function normalizarCodigoDocente(str) {
   if (!str) return "";
   const s = String(str).trim().toUpperCase();
@@ -1194,10 +1235,10 @@ function togglePanel(idPanel) {
 
 function cambiarAnioEscolar() {
   reproducirSonido('clic');
-  const campoAnio=document.getElementById("selectAnioEscolar");
-  let anio=Number(campoAnio?.value||2026);
-  if(!Number.isFinite(anio)||anio<2000||anio>2100){ anio=2026; if(campoAnio)campoAnio.value=String(anio); }
-  anio=String(Math.trunc(anio));
+  const campoAnio = document.getElementById("selectAnioEscolar");
+  let anio = Number(campoAnio?.value || 2026);
+  if (!Number.isFinite(anio) || anio < 2000 || anio > 2100) { anio = 2026; if (campoAnio) campoAnio.value = String(anio); }
+  anio = String(Math.trunc(anio));
   document.getElementById("printAnioLabel").textContent = anio;
   hablarTextoVoz("Año escolar cambiado a " + anio);
   if (document.getElementById("codigo").value.trim()) {
@@ -1231,12 +1272,19 @@ let cacheListaEstudiantesEscolares = {};
 let cacheListaEstudiantesCargando = {};
 
 function precargarCuentasEscolares() {
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  if(cacheCuentasEscolares[anio]||cacheCuentasCargando[anio]) return;
-  cacheCuentasCargando[anio]=true;
-  llamarAPI({accion:'cuentas',anio},r=>{cacheCuentasCargando[anio]=false;if(r&&r.ok!==false&&Array.isArray(r.cuentas))cacheCuentasEscolares[anio]=r.cuentas;});
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  if (cacheCuentasEscolares[anio] || cacheCuentasCargando[anio]) return;
+  cacheCuentasCargando[anio] = true;
+  llamarAPI({accion: 'cuentas', anio}, r => {
+    cacheCuentasCargando[anio] = false;
+    if (r && r.ok !== false && Array.isArray(r.cuentas)) cacheCuentasEscolares[anio] = r.cuentas;
+  });
 }
-function obtenerCuentasCacheadas(){const anio=document.getElementById('selectAnioEscolar')?.value||'2026';return Array.isArray(cacheCuentasEscolares[anio])?cacheCuentasEscolares[anio]:null;}
+
+function obtenerCuentasCacheadas(){
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  return Array.isArray(cacheCuentasEscolares[anio]) ? cacheCuentasEscolares[anio] : null;
+}
 
 function normalizarListaAlumno(a) {
   if (!a || typeof a !== 'object') return null;
@@ -1271,13 +1319,13 @@ function llamarAPIListaEstudiantes(parametros, callback) {
     if (temporizador) clearTimeout(temporizador);
     try { delete window[nombreCallback]; } catch (e) { window[nombreCallback] = undefined; }
     if (script.parentNode) script.parentNode.removeChild(script);
-    callback(respuesta || {ok:false, mensaje:'EL SERVIDOR NO DEVOLVIÓ DATOS.'});
+    callback(respuesta || {ok: false, mensaje: 'EL SERVIDOR NO DEVOLVIÓ DATOS.'});
   };
 
   window[nombreCallback] = finalizar;
-  script.onerror = () => finalizar({ok:false, mensaje:'NO SE PUDO CONECTAR CON EL SERVIDOR.'});
+  script.onerror = () => finalizar({ok: false, mensaje: 'NO SE PUDO CONECTAR CON EL SERVIDOR.'});
   script.src = APP_SCRIPT_URL + '?' + query + '&callback=' + encodeURIComponent(nombreCallback);
-  temporizador = setTimeout(() => finalizar({ok:false, mensaje:'TIEMPO DE ESPERA AGOTADO.'}), 15000);
+  temporizador = setTimeout(() => finalizar({ok: false, mensaje: 'TIEMPO DE ESPERA AGOTADO.'}), 15000);
   document.body.appendChild(script);
 }
 
@@ -1308,7 +1356,7 @@ function abrirListaCodigos() {
   items.innerHTML = '<div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>';
   cacheListaEstudiantesCargando[anio] = true;
 
-  llamarAPIListaEstudiantes({accion:'LISTAESTUDIANTES', anio}, respuesta => {
+  llamarAPIListaEstudiantes({accion: 'LISTAESTUDIANTES', anio}, respuesta => {
     cacheListaEstudiantesCargando[anio] = false;
     if (!respuesta || respuesta.ok === false || !Array.isArray(respuesta.estudiantes)) {
       if (panel.style.display !== 'none') {
@@ -1318,17 +1366,17 @@ function abrirListaCodigos() {
     }
 
     const lista = respuesta.estudiantes.map(normalizarListaAlumno).filter(Boolean)
-      .sort((a,b) => String(a.codigo).localeCompare(String(b.codigo), undefined, {numeric:true}));
+      .sort((a,b) => String(a.codigo).localeCompare(String(b.codigo), undefined, {numeric: true}));
     cacheListaEstudiantesEscolares[anio] = lista;
     renderListaAlumnosDesdeCuentas(lista);
   });
 }
 
 function renderListaAlumnosDesdeCuentas(cuentas){
-  window.listaCodigosAlumnos=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
-    const codigo=String(c.codigo||'').trim().toUpperCase();
+  window.listaCodigosAlumnos = (Array.isArray(cuentas) ? cuentas : []).filter(c => {
+    const codigo = String(c.codigo || '').trim().toUpperCase();
     return codigo.startsWith('LDS-EST-');
-  }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
+  }).sort((a,b) => String(a.codigo || '').localeCompare(String(b.codigo || ''), undefined, {numeric: true}));
   renderListaCodigosInline(window.listaCodigosAlumnos);
 }
 
@@ -1383,7 +1431,7 @@ function seleccionarCodigoDeLista(index) {
   reproducirSonido('exito');
   hablarTextoVoz('Alumno seleccionado. Consultando código ' + codigo + '.');
   consultarEstudiante();
-  setTimeout(()=>{const p=document.getElementById('panelPago');if(p)p.classList.remove('collapsed');},300);
+  setTimeout(() => { const p = document.getElementById('panelPago'); if (p) p.classList.remove('collapsed'); }, 300);
 }
 
 function cerrarListaCodigos() {
@@ -1392,20 +1440,23 @@ function cerrarListaCodigos() {
 }
 
 function abrirListaMises(){
-  reproducirSonido('clic'); const panel=document.getElementById('listaMisesDropdown'),cont=document.getElementById('listaMisesItems'); if(!panel||!cont)return;
-  const abrir=panel.style.display==='none'||!panel.style.display; cerrarListasSuperiores('mises'); panel.style.display=abrir?'block':'none'; if(!abrir)return;
-  const cache=obtenerCuentasCacheadas(); if(cache){renderListaMisesDesdeCuentas(cache);return;}
-  cont.innerHTML='<div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>';
-  llamarAPI({accion:'cuentas',anio:document.getElementById('selectAnioEscolar').value},r=>{if(!r||r.ok===false||!Array.isArray(r.cuentas)){cont.innerHTML='<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>';return;} cacheCuentasEscolares[document.getElementById('selectAnioEscolar').value]=r.cuentas; renderListaMisesDesdeCuentas(r.cuentas);});
+  reproducirSonido('clic'); const panel = document.getElementById('listaMisesDropdown'), cont = document.getElementById('listaMisesItems'); if (!panel || !cont) return;
+  const abrir = panel.style.display === 'none' || !panel.style.display; cerrarListasSuperiores('mises'); panel.style.display = abrir ? 'block' : 'none'; if (!abrir) return;
+  const cache = obtenerCuentasCacheadas(); if (cache) { renderListaMisesDesdeCuentas(cache); return; }
+  cont.innerHTML = '<div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>';
+  llamarAPI({accion: 'cuentas', anio: document.getElementById('selectAnioEscolar').value}, r => {
+    if (!r || r.ok === false || !Array.isArray(r.cuentas)) { cont.innerHTML = '<div class="header-list-loading">NO SE PUDO CARGAR LA LISTA DE MISES.</div>'; return; }
+    cacheCuentasEscolares[document.getElementById('selectAnioEscolar').value] = r.cuentas; renderListaMisesDesdeCuentas(r.cuentas);
+  });
 }
 
 function renderListaMisesDesdeCuentas(cuentas){
-  const cont=document.getElementById('listaMisesItems'); if(!cont)return;
-  cont.innerHTML='<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CALCULANDO SALDOS...</div></div>';
-  const permitidas=new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
-  const nombres=Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c])=>[c,n]));
-  let mises=(Array.isArray(cuentas)?cuentas:[]).filter(c=> permitidas.has(normalizarCodigoDocente(c.codigo)));
-  if(!mises.length){
+  const cont = document.getElementById('listaMisesItems'); if (!cont) return;
+  cont.innerHTML = '<div class="mises-header"><div class="mises-header-title">👩‍🏫 RESUMEN DE CAJAS MISES</div><div class="mises-header-sub">ABONO INICIAL · INGRESOS · EGRESOS · SALDO DISPONIBLE</div></div><div class="mises-table-head"><span>#</span><span>MISE</span><span>ABONO INICIAL</span><span>INGRESOS</span><span>EGRESOS</span><span>SALDO DISPONIBLE</span></div><div id="misesResumenFilas"><div class="header-list-loading">CALCULANDO SALDOS...</div></div>';
+  const permitidas = new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
+  const nombres = Object.fromEntries(Object.entries(CODIGOS_MISE_POR_NOMBRE).map(([n,c]) => [c,n]));
+  let mises = (Array.isArray(cuentas) ? cuentas : []).filter(c => permitidas.has(normalizarCodigoDocente(c.codigo)));
+  if (!mises.length) {
     mises = [
       { codigo: "CAJA-LILY", nombre: "MISS LILY MELO AZAÑERO" },
       { codigo: "CAJA-KIARA", nombre: "MISS KIARA MORALES ELGUERA" },
@@ -1413,17 +1464,17 @@ function renderListaMisesDesdeCuentas(cuentas){
       { codigo: "CAJA-KARIN", nombre: "MISS KARIN MOLERO ROMANI" }
     ];
   }
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  Promise.all(mises.map(async c=>{
-    const codigo=normalizarCodigoDocente(c.codigo);
-    const r=await llamarAPIPromise({accion:'estudiante',codigo},10000);
-    const mov=Array.isArray(r?.movimientos)?r.movimientos:[];
-    const calculo=calcularResumenMise(mov,codigo,null);
-    return {codigo,nombre:c.nombre||nombres[codigo]||'MISE',...calculo};
-  })).then(lista=>{
-    const host=document.getElementById('misesResumenFilas'); if(!host)return;
-    host.innerHTML=lista.map((m,i)=>`<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">${formatearLDS(m.abono)}</span><span class="money in">${formatearLDS(m.ingresos)}</span><span class="money out">${formatearLDS(m.egresos)}</span><span class="money available">${formatearLDS(m.saldo)}</span></div>`).join('');
-  }).catch(()=>{const host=document.getElementById('misesResumenFilas');if(host)host.innerHTML='<div class="header-list-loading">NO SE PUDIERON CALCULAR LOS SALDOS.</div>';});
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  Promise.all(mises.map(async c => {
+    const codigo = normalizarCodigoDocente(c.codigo);
+    const r = await llamarAPIPromise({accion: 'estudiante', codigo}, 10000);
+    const mov = Array.isArray(r?.movimientos) ? r.movimientos : [];
+    const calculo = calcularResumenMise(mov, codigo, null);
+    return {codigo, nombre: c.nombre || nombres[codigo] || 'MISE', ...calculo};
+  })).then(lista => {
+    const host = document.getElementById('misesResumenFilas'); if (!host) return;
+    host.innerHTML = lista.map((m,i) => `<div class="mises-summary-row"><span class="num">${i+1}</span><span class="name">${escaparHTML(m.nombre)}</span><span class="money">${formatearLDS(m.abono)}</span><span class="money in">${formatearLDS(m.ingresos)}</span><span class="money out">${formatearLDS(m.egresos)}</span><span class="money available">${formatearLDS(m.saldo)}</span></div>`).join('');
+  }).catch(() => { const host = document.getElementById('misesResumenFilas'); if (host) host.innerHTML = '<div class="header-list-loading">NO SE PUDIERON CALCULAR LOS SALDOS.</div>'; });
 }
 
 function cerrarListaMises() {
@@ -1433,64 +1484,96 @@ function cerrarListaMises() {
 
 function actualizarPanelAdmin(){
   reproducirSonido('clic');
-  cacheCuentasEscolares={}; cacheCuentasCargando={}; cacheListaEstudiantesEscolares={}; cacheListaEstudiantesCargando={};
-  const codigo=String(document.getElementById('codigo')?.value||'').trim().toUpperCase();
-  const maestra=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
-  if(maestra) cargarSaldoMiseAlIngresar(maestra);
+  cacheCuentasEscolares = {}; cacheCuentasCargando = {}; cacheListaEstudiantesEscolares = {}; cacheListaEstudiantesCargando = {};
+  const codigo = String(document.getElementById('codigo')?.value || '').trim().toUpperCase();
+  const maestra = sessionStorage.getItem('maestraActiva') || maestraActivaGlobal || '';
+  if (maestra) cargarSaldoMiseAlIngresar(maestra);
   precargarCuentasEscolares();
-  if(codigo) consultarEstudiante(true); else { mostrarMensaje("DATOS ACTUALIZADOS.","ok"); hablarTextoVoz("Datos actualizados."); }
+  if (codigo) consultarEstudiante(true); else { mostrarMensaje("DATOS ACTUALIZADOS.", "ok"); hablarTextoVoz("Datos actualizados."); }
 }
 
 function seleccionarCategoriaPago(categoria){
-  const sel=document.getElementById('pagoCategoria'); if(!sel)return;
-  sel.value=categoria;
-  document.querySelectorAll('#categoriasPagoBotones .categoria-btn').forEach(b=>b.classList.toggle('active',b.dataset.categoria===categoria));
+  const sel = document.getElementById('pagoCategoria'); if (!sel) return;
+  sel.value = categoria;
+  document.querySelectorAll('#categoriasPagoBotones .categoria-btn').forEach(b => b.classList.toggle('active', b.dataset.categoria === categoria));
   cargarConceptosPorTipo();
   prepararAccionesPagoAlumno();
 }
 
 function poblarDestinosPrestamo(){
-  const sel=document.getElementById('prestamoDestino'); if(!sel)return;
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  const cache=obtenerCuentasCacheadas();
-  const usar=(cuentas)=>{
-    const misesPermitidas=new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
-    const lista=(Array.isArray(cuentas)?cuentas:[]).filter(c=>{
-      const codigo=String(c.codigo||'').trim().toUpperCase();
+  const sel = document.getElementById('prestamoDestino'); if (!sel) return;
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  const cache = obtenerCuentasCacheadas();
+  const usar = (cuentas) => {
+    const misesPermitidas = new Set(["CAJA-LILY", "CAJA-KIARA", "CAJA-ANGHY", "CAJA-KARIN"]);
+    const lista = (Array.isArray(cuentas) ? cuentas : []).filter(c => {
+      const codigo = String(c.codigo || '').trim().toUpperCase();
       return codigo.startsWith('LDS-EST-') || (misesPermitidas.has(normalizarCodigoDocente(codigo)));
-    }).sort((a,b)=>String(a.codigo||'').localeCompare(String(b.codigo||''),undefined,{numeric:true}));
-    sel.innerHTML='<option value="">SELECCIONA EL USUARIO</option>'+lista.map(c=>`<option value="${escaparAtributoHTML(c.codigo)}">${escaparHTML(c.nombre||c.nombreCompleto||c.codigo)} · ${escaparHTML(c.codigo)}</option>`).join('');
+    }).sort((a,b) => String(a.codigo || '').localeCompare(String(b.codigo || ''), undefined, {numeric: true}));
+    sel.innerHTML = '<option value="">SELECCIONA EL USUARIO</option>' + lista.map(c => `<option value="${escaparAtributoHTML(c.codigo)}">${escaparHTML(c.nombre || c.nombreCompleto || c.codigo)} · ${escaparHTML(c.codigo)}</option>`).join('');
   };
-  if(cache){usar(cache);return;}
-  sel.innerHTML='<option value="">CARGANDO USUARIOS...</option>';
-  llamarAPI({accion:'cuentas',anio},r=>{if(r&&r.ok!==false){cacheCuentasEscolares[anio]=r.cuentas||[];usar(r.cuentas||[]);}else sel.innerHTML='<option value="">NO SE PUDO CARGAR</option>';});
+  if (cache) { usar(cache); return; }
+  sel.innerHTML = '<option value="">CARGANDO USUARIOS...</option>';
+  llamarAPI({accion: 'cuentas', anio}, r => { if (r && r.ok !== false) { cacheCuentasEscolares[anio] = r.cuentas || []; usar(r.cuentas || []); } else sel.innerHTML = '<option value="">NO SE PUDO CARGAR</option>'; });
 }
 
 function abrirModalPrestamo(){
   reproducirSonido('clic');
-  const m=document.getElementById('prestamoModal'); if(!m)return;
-  m.style.display='flex';
-  document.getElementById('prestamoMonto').value='';
-  document.getElementById('prestamoMotivo').value='';
-  document.getElementById('prestamoMensaje').innerHTML='';
+  const m = document.getElementById('prestamoModal'); if (!m) return;
+  m.style.display = 'flex';
+  document.getElementById('prestamoMonto').value = '';
+  document.getElementById('prestamoMotivo').value = '';
+  document.getElementById('prestamoMensaje').innerHTML = '';
   poblarDestinosPrestamo();
 }
 
-function cerrarModalPrestamo(){const m=document.getElementById('prestamoModal');if(m)m.style.display='none';}
+function cerrarModalPrestamo(){ const m = document.getElementById('prestamoModal'); if (m) m.style.display = 'none'; }
 
+// REGISTRO DE PRÉSTAMO CON PROTECCIÓN ANTI-DOBLE CLIC
 function registrarPrestamo(){
-  const destino=String(document.getElementById('prestamoDestino')?.value||'').trim().toUpperCase();
-  const monto=parseMontoLDS(document.getElementById('prestamoMonto')?.value);
-  const motivo=String(document.getElementById('prestamoMotivo')?.value||'').trim();
-  const anio=document.getElementById('selectAnioEscolar')?.value||'2026';
-  const responsable=sessionStorage.getItem('maestraActiva')||maestraActivaGlobal||'';
-  const clave=sessionStorage.getItem('responsableClave')||'';
-  const msg=document.getElementById('prestamoMensaje');
-  if(!destino){msg.textContent='SELECCIONA EL USUARIO DEL PRÉSTAMO.';msg.className='message error';return;}
-  if(!monto||monto<=0){msg.textContent='INGRESA UNA CANTIDAD VÁLIDA.';msg.className='message error';return;}
-  msg.textContent='PROCESANDO PRÉSTAMO...';msg.className='message ok';
-  llamarAPI({accion:'registrarMovimiento',codigo:destino,anio,tipo:'EGRESO',categoria:'PRESTAMO',concepto:'PRÉSTAMO',monto,responsable,responsableClave:clave,observacion:motivo||'PRÉSTAMO REGISTRADO'},r=>{
-    if(r&&r.ok){msg.textContent='PRÉSTAMO REGISTRADO CORRECTAMENTE.';msg.className='message ok';reproducirSonido('exito');cargarSaldoMiseAlIngresar(responsable);cacheCuentasEscolares={};precargarCuentasEscolares();setTimeout(cerrarModalPrestamo,700);}else{msg.textContent=(r&&r.mensaje)||'ERROR AL REGISTRAR EL PRÉSTAMO.';msg.className='message error';reproducirSonido('error');}
+  const btn = document.getElementById('btnRegistrarPrestamo');
+  const destino = String(document.getElementById('prestamoDestino')?.value || '').trim().toUpperCase();
+  const monto = parseMontoLDS(document.getElementById('prestamoMonto')?.value);
+  const motivo = String(document.getElementById('prestamoMotivo')?.value || '').trim();
+  const anio = document.getElementById('selectAnioEscolar')?.value || '2026';
+  const responsable = sessionStorage.getItem('maestraActiva') || maestraActivaGlobal || '';
+  const clave = sessionStorage.getItem('responsableClave') || '';
+  const msg = document.getElementById('prestamoMensaje');
+
+  if (!destino) { msg.textContent = 'SELECCIONA EL USUARIO DEL PRÉSTAMO.'; msg.className = 'message error'; return; }
+  if (!monto || monto <= 0) { msg.textContent = 'INGRESA UNA CANTIDAD VÁLIDA.'; msg.className = 'message error'; return; }
+
+  if (btn) btn.disabled = true;
+
+  msg.textContent = 'PROCESANDO PRÉSTAMO...';
+  msg.className = 'message ok';
+
+  llamarAPI({
+    accion: 'registrarMovimiento',
+    codigo: destino,
+    anio: anio,
+    tipo: 'EGRESO',
+    categoria: 'PRESTAMO',
+    concepto: 'PRÉSTAMO',
+    monto: monto,
+    responsable: responsable,
+    responsableClave: clave,
+    observacion: motivo || 'PRÉSTAMO REGISTRADO'
+  }, r => {
+    if (btn) btn.disabled = false;
+    if (r && r.ok) {
+      msg.textContent = 'PRÉSTAMO REGISTRADO CORRECTAMENTE.';
+      msg.className = 'message ok';
+      reproducirSonido('exito');
+      cargarSaldoMiseAlIngresar(responsable);
+      cacheCuentasEscolares = {};
+      precargarCuentasEscolares();
+      setTimeout(cerrarModalPrestamo, 700);
+    } else {
+      msg.textContent = (r && r.mensaje) || 'ERROR AL REGISTRAR EL PRÉSTAMO.';
+      msg.className = 'message error';
+      reproducirSonido('error');
+    }
   });
 }
 
@@ -1554,7 +1637,6 @@ function cargarCategoriasPago(destinatarioRol = "ALUMNO") {
 function cargarConceptosPorTipo() {
   const selectCategoria = document.getElementById("pagoCategoria");
   const selectConcepto = document.getElementById("pagoConcepto");
-  const nota = document.getElementById("pagoCategoriaNota");
   if (!selectCategoria || !selectConcepto) return;
 
   const categoria = selectCategoria.value;
@@ -1680,7 +1762,7 @@ function cargarSaldoMiseAlIngresar(nombreMaestra){
   if (!codigo) return;
   actualizarSaldosMise(0,0);
 
-  llamarAPI({accion:'movimientos'}, r => {
+  llamarAPI({accion: 'movimientos'}, r => {
     const mov = Array.isArray(r?.movimientos) ? r.movimientos : [];
     const calc = calcularResumenMise(mov, codigo, null);
     window.resumenCajaMiseActiva = {
@@ -1803,7 +1885,7 @@ function llamarAPI(parametros, callback) {
     delete window[nombreCallback];
     script.remove();
     reproducirSonido('error');
-    mostrarMensaje("ERROR DE CONEXIÓN.", "error");
+    mostrarMensaje("ERROR DE CONEXIÓN CON EL SERVIDOR.", "error");
     callback({ok:false, mensaje:"ERROR DE CONEXIÓN."});
   };
   document.body.appendChild(script);
@@ -1844,7 +1926,7 @@ function obtenerTipoMovimientoVisible(m){
   const codigo = String(m.codigo ?? m.codigoQR ?? '').trim().toUpperCase();
   if(codigo && obs.includes('CUENTA_ORIGEN='+codigo)) return 'EGRESO';
   if(codigo && obs.includes('CUENTA_DESTINO='+codigo)) return 'INGRESO';
-  return '';
+  return 'INGRESO';
 }
 
 function limpiarObservacionVisibleAdmin(valor){
@@ -1987,7 +2069,7 @@ function consultarEstudiante(esConsultaAutomatica = false) {
     const movimientosRespuesta = Array.isArray(respuesta.movimientos) ? respuesta.movimientos : [];
     let movimientosGenerales = movimientosRespuesta.length ? movimientosRespuesta : [];
     if (!movimientosGenerales.length) {
-      const respaldo = await llamarAPIPromise({accion:"movimientos"}, 8000);
+      const respaldo = await llamarAPIPromise({accion: "movimientos"}, 8000);
       movimientosGenerales = Array.isArray(respaldo?.movimientos) ? respaldo.movimientos : [];
     }
 
@@ -2007,7 +2089,10 @@ function consultarEstudiante(esConsultaAutomatica = false) {
 
 function prepararAccionesPagoAlumno() {}
 
+// PROCESAMIENTO DE OPERACIONES CON EL ALUMNO CON PROTECCIÓN ANTI-DOBLE CLIC
 function procesarMovimientoAlumno(tipoOperacion){
+  const btnPagar = document.getElementById("btnPagarAlumno");
+  const btnCobrar = document.getElementById("btnCobrarAlumno");
   const codigo = String(document.getElementById("pagoCodigo")?.value || "").trim().toUpperCase();
   const categoria = String(document.getElementById("pagoCategoria")?.value || "").trim();
   const concepto = String(document.getElementById("pagoConcepto")?.value || "").trim();
@@ -2019,6 +2104,10 @@ function procesarMovimientoAlumno(tipoOperacion){
 
   if(!codigo || !codigo.startsWith("LDS-EST-")){ mostrarMensajePago("SELECCIONA UN ALUMNO.","error"); return; }
   if(!monto || monto<=0){ mostrarMensajePago("INGRESA UN MONTO VÁLIDO.","error"); return; }
+
+  // Bloquear botones durante el proceso para prevenir envíos duplicados
+  if (btnPagar) btnPagar.disabled = true;
+  if (btnCobrar) btnCobrar.disabled = true;
 
   reproducirSonido('clic');
   mostrarMensajePago("PROCESANDO TRANSACCIÓN...","ok");
@@ -2035,6 +2124,10 @@ function procesarMovimientoAlumno(tipoOperacion){
     responsableClave: responsableClave,
     observacion: observacion
   }, function(respuesta){
+    // Reactivar botones
+    if (btnPagar) btnPagar.disabled = false;
+    if (btnCobrar) btnCobrar.disabled = false;
+
     if(respuesta && respuesta.ok){
       reproducirSonido('exito');
       mostrarMensajePago("¡TRANSACCIÓN REGISTRADA EXITOSAMENTE!","ok");
@@ -2045,18 +2138,9 @@ function procesarMovimientoAlumno(tipoOperacion){
       consultarEstudiante(true);
     }else{
       reproducirSonido('error');
-      mostrarMensajePago((respuesta && respuesta.mensaje) || "ERROR AL REGISTRAR.","error");
+      mostrarMensajePago((respuesta && respuesta.mensaje) || "ERROR AL REGISTRAR TRANSACCIÓN.","error");
     }
   });
-}
-
-function obtenerTimestampMovimientoVisible(m) {
-  if (!m || typeof m !== 'object') return '';
-  const campos = [m.timestamp, m.fechaTexto, m.fecha, m.fechaHora, m.fechaOperacion];
-  for (const valor of campos) {
-    if (valor) return String(valor);
-  }
-  return '';
 }
 
 function htmlMovimientosImpresion(movimientos) {
@@ -2065,7 +2149,7 @@ function htmlMovimientosImpresion(movimientos) {
   }
   const rows = movimientos.map(m => {
     return `<tr>
-      <td>${escaparHTML(obtenerTimestampMovimientoVisible(m))}</td>
+      <td>${escaparHTML(getFecha(m))}</td>
       <td>${escaparHTML(m.tipo || '')}</td>
       <td>${escaparHTML(m.concepto || '')}</td>
       <td style="text-align:right;">${formatearLDS(parseMontoLDS(m.monto ?? m.montoLDS ?? 0))}</td>
@@ -2107,24 +2191,28 @@ async function imprimirReporteGrupal() {
   window.print();
 }
 
+// RENDERIZADO DE TABLA EN ORDEN CRONOLÓGICO CON FECHAS GARANTIZADAS
 function renderMovimientos(movimientos, estudianteObj, anioEscolar) {
   const tabla = document.getElementById("tablaMovimientos");
   tabla.innerHTML = "";
   document.getElementById("contadorMovimientos").textContent = String(movimientos.length);
 
   if (!movimientos.length) {
-    tabla.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS PARA EL AÑO ' + anioEscolar + '.</td></tr>';
+    tabla.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS PARA EL AÑO ' + anioEscolar + '.</td></tr>';
     return;
   }
 
   movimientos.forEach(m => {
     const tr = document.createElement("tr");
+    const fechaTexto = getFecha(m);
+    const esEgreso = String(m.tipo).toUpperCase().includes('EGRESO');
+
     tr.innerHTML = `
       <td><strong>${escaparHTML(m.anio || anioEscolar)}</strong></td>
-      <td>${escaparHTML(obtenerTimestampMovimientoVisible(m))}</td>
-      <td>${escaparHTML(m.estudiante || estudianteObj?.nombreCompleto || '')}</td>
+      <td style="white-space:nowrap;"><strong>${escaparHTML(fechaTexto)}</strong></td>
+      <td><strong>${escaparHTML(m.estudiante || estudianteObj?.nombreCompleto || estudianteObj?.nombre || '')}</strong></td>
       <td>${escaparHTML(m.grado || estudianteObj?.grado || '')}</td>
-      <td><span class="${String(m.tipo).includes('EGRESO') ? 'badge-egreso' : 'badge-ingreso'}">${escaparHTML(m.tipo)}</span></td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${escaparHTML(m.tipo || 'INGRESO')}</span></td>
       <td>${escaparHTML(m.concepto || '')}</td>
       <td><strong>${formatearLDS(m.monto ?? m.montoLDS ?? 0)}</strong></td>
       <td>${escaparHTML(m.responsable || '')}</td>
