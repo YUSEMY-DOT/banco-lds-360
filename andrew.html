@@ -149,7 +149,6 @@ header {
   width: 100%;
 }
 
-/* PROFILE BANNER EN UNA SOLA LÍNEA (PC/LAPTOP) Y TOTALMENTE RESPONSIVO */
 .profile-banner {
   background: #ffffff;
   border: 2px solid var(--dorado);
@@ -255,11 +254,8 @@ header {
   color: var(--azul);
 }
 
-/* RESPONSIVO TABLET Y MÓVIL */
 @media (max-width: 992px) {
-  .profile-banner {
-    flex-wrap: wrap;
-  }
+  .profile-banner { flex-wrap: wrap; }
   .stats-grid {
     width: 100%;
     display: grid;
@@ -269,29 +265,13 @@ header {
 }
 
 @media (max-width: 600px) {
-  .profile-banner {
-    padding: 10px;
-    gap: 10px;
-  }
-  .avatar-wrap {
-    width: 55px;
-    height: 55px;
-  }
-  .profile-text h3 {
-    font-size: 1rem;
-  }
-  .profile-text p {
-    font-size: 0.65rem;
-  }
-  .stat-pill {
-    padding: 6px 4px;
-  }
-  .stat-pill span {
-    font-size: 0.55rem;
-  }
-  .stat-pill strong {
-    font-size: 0.85rem;
-  }
+  .profile-banner { padding: 10px; gap: 10px; }
+  .avatar-wrap { width: 55px; height: 55px; }
+  .profile-text h3 { font-size: 1rem; }
+  .profile-text p { font-size: 0.65rem; }
+  .stat-pill { padding: 6px 4px; }
+  .stat-pill span { font-size: 0.55rem; }
+  .stat-pill strong { font-size: 0.85rem; }
 }
 
 .alert-status {
@@ -709,7 +689,7 @@ textarea { height: auto; padding: 8px 10px; }
 
 <main class="layout-main">
   <div class="left-stack">
-    <!-- BANNER PERFIL ANDREW PERFECTAMENTE OPTIMIZADO -->
+    <!-- BANNER PERFIL ANDREW -->
     <div class="profile-banner">
       <div class="profile-info">
         <div class="avatar-wrap">
@@ -1016,7 +996,20 @@ function getConcepto(m) { return getProp(m, "concepto", "CONCEPTO"); }
 function getMonto(m) { return parsearMonto(getProp(m, "monto", "MONTO LDS", "MONTO_LDS", "montoLDS", "MONTO")); }
 function getResponsable(m) { return getProp(m, "responsable", "RESPONSABLE", "cajero", "CAJERO", "CAJERO(A)", "usuario"); }
 function getEstudiante(m) { return getProp(m, "estudiante", "CUENTA/ESTUDIANTE", "CUENTA / ESTUDIANTE", "cuenta", "nombreCompleto", "nombre"); }
-function getFecha(m) { return getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "timestamp"); }
+
+// DETECTOR INTELIGENTE DE FECHA (GARANTIZA QUE NUNCA QUEDE EN BLANCO)
+function getFecha(m) {
+  let val = getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "FECHA_Y_HORA", "fechayhora", "timestamp", "Fecha", "Fecha y Hora", "DATE", "TIME");
+  if (!val && m && typeof m === 'object') {
+    for (let k in m) {
+      if (k.toLowerCase().includes("fech") || k.toLowerCase().includes("time")) {
+        if (m[k]) return String(m[k]).trim();
+      }
+    }
+  }
+  return val || "-";
+}
+
 function getGrado(m) { return getProp(m, "grado", "GRADO"); }
 function getObservacion(m) { return getProp(m, "observacion", "OBSERVACIÓN", "OBSERVACION", "observaciones"); }
 function getAnio(m) { return getProp(m, "anio", "AÑO", "ANIO", "anioEscolar"); }
@@ -1199,6 +1192,7 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
+// FILTRADO EN PASADA ÚNICA QUE MANTIENE EL ORDEN CRONOLÓGICO STRICTO
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
@@ -1216,31 +1210,15 @@ function filtrarYRenderizarTabla() {
       const obs = String(getObservacion(m)).toUpperCase();
       const fecha = getFecha(m);
       const monto = getMonto(m);
+      const llaveUnica = `${fecha}_${monto}_${conc}`;
 
-      if (cod.startsWith("LDS-DOC-") && cod !== "LDS-DOC-005") {
-        if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA")) {
+      const esTransferenciaAMiss = cod.startsWith("LDS-DOC-") && cod !== "LDS-DOC-005" && (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA"));
+      const esCapitalOIngresoAndrew = (cod === "LDS-DOC-005") && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || conc.includes("DEVOLUCION") || String(getTipo(m)).toUpperCase().includes("INGRESO"));
+
+      if (esTransferenciaAMiss || esCapitalOIngresoAndrew) {
+        if (!llavesRegistradas.has(llaveUnica)) {
+          llavesRegistradas.add(llaveUnica);
           movsAndrew.push(m);
-          llavesRegistradas.add(`${fecha}_${monto}_${conc}`);
-        }
-      }
-    });
-
-    todosLosMovimientosGlobales.forEach(m => {
-      if (!m) return;
-      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
-
-      const cod = normalizarCodigo(getCodigo(m));
-      const conc = String(getConcepto(m)).toUpperCase();
-      const fecha = getFecha(m);
-      const monto = getMonto(m);
-      const llave = `${fecha}_${monto}_${conc}`;
-
-      if (cod === "LDS-DOC-005") {
-        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || conc.includes("DEVOLUCION") || String(getTipo(m)).toUpperCase().includes("INGRESO")) {
-          if (!llavesRegistradas.has(llave)) {
-            llavesRegistradas.add(llave);
-            movsAndrew.push(m);
-          }
         }
       }
     });
