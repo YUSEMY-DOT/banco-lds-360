@@ -374,7 +374,6 @@ th {
 .badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; }
 .badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #fecaca; }
 
-/* ACORDEÓN / PANELES LATERALES DERECHOS */
 .accordion-panel {
   background: #ffffff;
   border: 2px solid var(--dorado);
@@ -460,7 +459,6 @@ textarea { height: auto; padding: 8px 10px; }
 .msg-box.ok { display: block; background: #ecfdf3; color: #047857; border: 1px solid #a7f3d0; }
 .msg-box.error { display: block; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
-/* MODAL DE REPORTES E IMPRESIÓN */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -529,7 +527,6 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
@@ -541,27 +538,16 @@ textarea { height: auto; padding: 8px 10px; }
   margin-bottom: 14px;
 }
 
-.membrete-logo {
-  flex-shrink: 0;
-}
-
 .membrete-logo img {
   width: 75px;
   height: 75px;
   object-fit: contain;
 }
 
-.membrete-texto {
-  text-align: left;
-  flex: 1;
-  padding-right: 15px;
-}
-
 .membrete-texto h1 {
   font-size: 1.35rem;
   font-weight: 900;
   color: var(--azul);
-  letter-spacing: 0.5px;
   margin: 0;
 }
 
@@ -598,7 +584,6 @@ textarea { height: auto; padding: 8px 10px; }
   border: 3px solid var(--dorado);
   overflow: hidden;
   background: #f1f5f9;
-  flex-shrink: 0;
 }
 
 .foto-reporte img {
@@ -624,32 +609,6 @@ textarea { height: auto; padding: 8px 10px; }
     break-after: page;
     padding: 20px 10px;
     border-bottom: 2px dashed #000;
-  }
-  .reporte-pagina-alumno:last-child {
-    page-break-after: auto;
-    break-after: auto;
-    border-bottom: none;
-  }
-  .membrete-colegio {
-    border-bottom: 3px solid #000 !important;
-  }
-  .membrete-texto h1 { color: #000 !important; font-size: 1.35rem !important; }
-  .membrete-texto h2 { color: #333 !important; }
-  .encabezado-alumno {
-    border: 2px solid #000;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .encabezado-alumno h2 { font-size: 1.05rem; font-weight: 900; margin: 0; }
-  .encabezado-alumno p { font-size: 0.78rem; font-weight: 700; margin: 2px 0 0; }
-  .foto-reporte {
-    width: 70px !important;
-    height: 70px !important;
-    border: 2px solid #000 !important;
   }
   .tabla-print {
     width: 100%;
@@ -692,9 +651,8 @@ textarea { height: auto; padding: 8px 10px; }
 </header>
 
 <main class="layout-main">
-  <!-- COLUMNA IZQUIERDA -->
   <div class="left-stack">
-    <!-- BANNER PROFILE -->
+    <!-- BANNER PROFILE MISTER ANDREW -->
     <div class="profile-banner">
       <div class="profile-info">
         <div class="avatar-wrap">
@@ -712,7 +670,7 @@ textarea { height: auto; padding: 8px 10px; }
         </div>
         <div class="stat-pill pill-actual">
           <span>SALDO ACTUAL</span>
-          <strong id="saldoActualAndrew">80.000,00 LDS</strong>
+          <strong id="saldoActualAndrew">200.000,00 LDS</strong>
         </div>
         <div class="stat-pill pill-mov">
           <span>MOVIMIENTOS</span>
@@ -725,16 +683,16 @@ textarea { height: auto; padding: 8px 10px; }
       CAJA GENERAL ACTUALIZADA CORRECTAMENTE.
     </div>
 
-    <!-- SALDOS DE LAS MISS -->
+    <!-- TARJETAS DE SALDO POR CADA MISS -->
     <div class="mises-panel">
-      <h3>📊 SALDOS DE LAS MISS</h3>
+      <h3>📊 SALDOS EN CAJA DE LAS MISSES</h3>
       <div class="mises-grid">
         <div class="mise-card">
           <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" referrerpolicy="no-referrer" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
           <div class="mise-card-info">
             <strong>MISS LILY MELO AZAÑERO</strong>
             <span>CAJA-LILY (LDS-DOC-001)</span>
-            <p id="saldoLily">30.000,00 LDS</p>
+            <p id="saldoLily">0,00 LDS</p>
           </div>
         </div>
 
@@ -743,7 +701,7 @@ textarea { height: auto; padding: 8px 10px; }
           <div class="mise-card-info">
             <strong>MISS KIARA MORALES ELGUERA</strong>
             <span>CAJA-KIARA (LDS-DOC-002)</span>
-            <p id="saldoKiara">30.000,00 LDS</p>
+            <p id="saldoKiara">0,00 LDS</p>
           </div>
         </div>
 
@@ -752,7 +710,7 @@ textarea { height: auto; padding: 8px 10px; }
           <div class="mise-card-info">
             <strong>MISS ANGHY REYES MELO</strong>
             <span>CAJA-ANGHY (LDS-DOC-003)</span>
-            <p id="saldoAnghy">30.000,00 LDS</p>
+            <p id="saldoAnghy">0,00 LDS</p>
           </div>
         </div>
 
@@ -761,7 +719,7 @@ textarea { height: auto; padding: 8px 10px; }
           <div class="mise-card-info">
             <strong>MISS KARIN MOLERO ROMANI</strong>
             <span>CAJA-KARIN (LDS-DOC-004)</span>
-            <p id="saldoKarin">30.000,00 LDS</p>
+            <p id="saldoKarin">0,00 LDS</p>
           </div>
         </div>
       </div>
@@ -770,7 +728,7 @@ textarea { height: auto; padding: 8px 10px; }
     <!-- TABLA DE MOVIMIENTOS -->
     <div class="table-panel">
       <div class="table-head">
-        <h3>📋 MOVIMIENTOS DE CAJA</h3>
+        <h3>📋 MOVIMIENTOS DE CAJA GENERAL</h3>
         <div class="table-actions">
           <button class="btn btn-blue" type="button" onclick="abrirModalMenuReportes()">🖨️ REPORTES</button>
           <button id="btnVerTodo" class="btn btn-gold" type="button" onclick="toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
@@ -783,12 +741,12 @@ textarea { height: auto; padding: 8px 10px; }
             <tr>
               <th>AÑO</th>
               <th>FECHA Y HORA</th>
-              <th>CUENTA / ESTUDIANTE</th>
+              <th>CUENTA / DESTINO</th>
               <th>GRADO</th>
               <th>TIPO</th>
               <th>CONCEPTO</th>
               <th>MONTO LDS</th>
-              <th>CAJERO(A)</th>
+              <th>RESPONSABLE</th>
               <th>OBSERVACIÓN</th>
             </tr>
           </thead>
@@ -800,10 +758,10 @@ textarea { height: auto; padding: 8px 10px; }
     </div>
   </div>
 
-  <!-- COLUMNA DERECHA -->
+  <!-- COLUMNA DERECHA - PANELES DE OPERACIONES -->
   <div class="right-stack">
-    <!-- PANEL 1: TRANSFERIR FONDO -->
-    <div id="panelTransferir" class="accordion-panel collapsed">
+    <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
+    <div id="panelTransferir" class="accordion-panel">
       <div class="accordion-head" onclick="togglePanel('panelTransferir')">
         <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
         <span class="toggle-arrow">▼</span>
@@ -835,8 +793,8 @@ textarea { height: auto; padding: 8px 10px; }
         </div>
 
         <div class="form-group">
-          <label for="transfObs">OBSERVACIÓN / MES (EJ: PAGO MES DE AGOSTO)</label>
-          <input id="transfObs" type="text" class="input-field" placeholder="PAGO MES DE AGOSTO">
+          <label for="transfObs">OBSERVACIÓN / NOTA (EJ: PAGO MES DE OCTUBRE)</label>
+          <input id="transfObs" type="text" class="input-field" placeholder="PAGO MES DE OCTUBRE">
         </div>
 
         <button class="btn btn-gold btn-full" type="button" onclick="ejecutarTransferenciaFondo()">💸 TRANSFERIR FONDO</button>
@@ -844,7 +802,7 @@ textarea { height: auto; padding: 8px 10px; }
       </div>
     </div>
 
-    <!-- PANEL 2: RECIBIR DEVOLUCIÓN -->
+    <!-- PANEL 2: RECIBIR DEVOLUCIÓN DE UNA MISS -->
     <div id="panelDevolucion" class="accordion-panel collapsed">
       <div class="accordion-head" onclick="togglePanel('panelDevolucion')">
         <h3>↩ RECIBIR DEVOLUCIÓN DE UNA MISS</h3>
@@ -896,26 +854,23 @@ textarea { height: auto; padding: 8px 10px; }
   </div>
 </main>
 
-<!-- MODAL 1: MENÚ OPCIONES DE REPORTES -->
+<!-- MODAL MENU REPORTES -->
 <div id="modalMenuReportes" class="modal-overlay">
   <div class="modal-box">
     <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
-    
     <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
       <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
       <span>➔</span>
     </button>
-    
     <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
       <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
       <span>➔</span>
     </button>
-
     <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModal('modalMenuReportes')">CANCELAR</button>
   </div>
 </div>
 
-<!-- MODAL 2: SELECCIÓN DE ALUMNO O MAESTRO PARA REPORTE UNITARIO -->
+<!-- MODAL SELECCION ALUMNO O CAJA -->
 <div id="modalSeleccionAlumno" class="modal-overlay">
   <div class="modal-box">
     <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
@@ -940,7 +895,6 @@ textarea { height: auto; padding: 8px 10px; }
   </div>
 </div>
 
-<!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
 <div id="contenedorImpresion"></div>
 
 <script>
@@ -950,7 +904,6 @@ let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
 
-// BASE DE DATOS MAPPING OFICIAL DE USUARIOS
 const MAPA_USUARIOS_OFICIALES = {
   "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
   "LDS-DOC-002": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "CAJA-KIARA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
@@ -971,7 +924,6 @@ const MAPA_USUARIOS_OFICIALES = {
   "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
 };
 
-// Extractor universal de atributos para prevenir variaciones de nombres en el JSON de Sheets
 function getProp(obj, ...possibleKeys) {
   if (!obj || typeof obj !== 'object') return "";
   const objKeys = Object.keys(obj);
@@ -1133,7 +1085,7 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO GENERAL DE SALDOS DE PANTALLA
+// CÁLCULO ESTRICTO DE SALDOS DE LA CAJA GENERAL Y LAS MAESTRAS
 function calcularYSincronizarSaldos(movimientos) {
   let capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1155,22 +1107,32 @@ function calcularYSincronizarSaldos(movimientos) {
       const respCod = normalizarCodigo(getResponsable(m));
       const monto = getMonto(m);
       const conc = String(getConcepto(m)).toUpperCase();
+      const tipoOrig = String(getTipo(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
 
-      // Capital base Andrew
+      // 1. Capital Inicial Gerencial Andrew (200.000 LDS)
       if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
         capitalInicialAndrew = monto > 0 ? monto : 200000;
         return;
       }
 
-      // Procesar saldos de las Misses y Egresos de Andrew
+      // 2. Transacciones con las Misses
       if (saldosMises.hasOwnProperty(targetCod)) {
-        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA")) {
+        // Toda transferencia de Andrew a la Miss = INGRESO para la Miss, EGRESO para Andrew
+        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO") || obs.includes("TRANSFERENCIA")) {
           saldosMises[targetCod] += monto;
           egresosAndrew += monto;
+        } else if (tipoOrig.includes("EGRESO")) {
+          // Desembolsos de la Miss a sus alumnos
+          saldosMises[targetCod] -= monto;
         }
-      } else if (targetCod === "LDS-DOC-005") {
-        if (obs.includes("DEVOLUCION")) ingresosAndrew += monto;
+      } 
+      // Devolución de la Miss a Andrew
+      else if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN"))) {
+        ingresosAndrew += monto;
+        if (saldosMises.hasOwnProperty(respCod)) {
+          saldosMises[respCod] -= monto;
+        }
       }
     });
   }
@@ -1190,6 +1152,7 @@ function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
   } else {
+    // Mostrar solo movimientos vinculados a Mister Andrew
     const movsAndrew = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
       const cod = normalizarCodigo(getCodigo(m));
@@ -1273,10 +1236,7 @@ function renderTabla(lista) {
   });
 }
 
-// MODALES Y REPORTES
-function abrirModalMenuReportes() {
-  abrirModal('modalMenuReportes');
-}
+function abrirModalMenuReportes() { abrirModal('modalMenuReportes'); }
 
 function abrirListaSeleccionUnitario() {
   cerrarModal('modalMenuReportes');
@@ -1349,7 +1309,7 @@ function generarEImprimirReporteGrupal() {
   setTimeout(() => { window.print(); }, 300);
 }
 
-// LOGICA MULTI-PERSPECTIVA CORREGIDA EXACTA POR ROL
+// MATRIZ CONTABLE DE PARTIDA DOBLE EXACTA PARA REPORTES E IMPRESIÓN
 function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   let filas = "";
   let totalIngresos = 0;
@@ -1373,39 +1333,36 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
       const fechaVal = getFecha(m);
       const estNombre = getEstudiante(m);
 
-      // A. REPORTE PARA MISTER ANDREW (CAJA GENERAL - LDS-DOC-005)
+      // -------------------------------------------------------------
+      // 1. REPORTE MISTER ANDREW (CAJA GENERAL - LDS-DOC-005)
+      // -------------------------------------------------------------
       if (codUsr === "LDS-DOC-005") {
-        // 1. Capital Inicial -> INGRESO (+)
         if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && conc.includes("BASE"))) {
           movsProcesados.push({
             fecha: fechaVal,
             tipo: "INGRESO",
-            concepto: conc || "FONDO BASE GERENTE GENERAL",
+            concepto: conc || "CAPITAL INICIAL GERENCIAL",
             monto: monto,
-            responsable: respNombre || "SISTEMA",
-            observacion: obs || "CAPITAL INICIAL DE OPERACIONES Y FONDEO",
+            responsable: respNombre,
+            observacion: obs,
             esEgreso: false
           });
-        }
-        // 2. Transferencias de Fondos a las Misses -> EGRESO (-) para Andrew
-        else if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(codDestino)) {
+        } else if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS")) {
           let targetName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
           movsProcesados.push({
             fecha: fechaVal,
             tipo: "EGRESO",
-            concepto: (conc || "FONDO PARA PAGOS A ALUMNOS") + " → " + targetName,
+            concepto: conc + " → " + targetName,
             monto: monto,
             responsable: "MISTER ANDREW",
             observacion: obs,
             esEgreso: true
           });
-        }
-        // 3. Devoluciones recibidas -> INGRESO (+)
-        else if (obs.includes("DEVOLUCION") && (codDestino === "LDS-DOC-005" || respCod === "LDS-DOC-005")) {
+        } else if (obs.includes("DEVOLUCION") && codDestino === "LDS-DOC-005") {
           movsProcesados.push({
             fecha: fechaVal,
             tipo: "INGRESO",
-            concepto: conc || "DEVOLUCIÓN DE FONDO",
+            concepto: "DEVOLUCIÓN RECIBIDA DE DOCENTE",
             monto: monto,
             responsable: respNombre,
             observacion: obs,
@@ -1414,10 +1371,12 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
         }
       }
 
-      // B. REPORTE PARA UNA MISS (LDS-DOC-001, LDS-DOC-002, LDS-DOC-003, LDS-DOC-004)
+      // -------------------------------------------------------------
+      // 2. REPORTE DE MAESTRA (MISS: LDS-DOC-001 A LDS-DOC-004)
+      // -------------------------------------------------------------
       else if (codUsr.startsWith("LDS-DOC-")) {
-        // 1. Fondos recibidos de Andrew -> INGRESO (+) para la Miss
-        if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO BASE") || tipoOrig.includes("INGRESO"))) {
+        // A) FONDO RECIBIDO DE ANDREW -> INGRESO PARA LA MISS
+        if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"))) {
           movsProcesados.push({
             fecha: fechaVal,
             tipo: "INGRESO",
@@ -1428,8 +1387,8 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
             esEgreso: false
           });
         }
-        // 2. Pagos efectuados por la Miss a Alumnos -> EGRESO (-) para la Miss
-        else if (respCod === codUsr && (codDestino.startsWith("LDS-EST-") || tipoOrig.includes("EGRESO"))) {
+        // B) PAGO HECHO POR LA MISS AL ALUMNO -> EGRESO PARA LA MISS
+        else if (respCod === codUsr && (tipoOrig.includes("EGRESO") || conc.includes("PAGO") || conc.includes("PREMIO"))) {
           let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
           movsProcesados.push({
             fecha: fechaVal,
@@ -1441,12 +1400,28 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
             esEgreso: true
           });
         }
+        // C) COBRO / PAGO QUE EL ALUMNO LE HACE A LA MISS -> INGRESO PARA LA MISS
+        else if ((codDestino === codUsr || respCod === codUsr) && (tipoOrig.includes("INGRESO") || conc.includes("COBRO") || conc.includes("DEVOLUCION"))) {
+          let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc + " (DE " + alumnoName + ")",
+            monto: monto,
+            responsable: usuario.nombre,
+            observacion: obs,
+            esEgreso: false
+          });
+        }
       }
 
-      // C. REPORTE PARA UN ESTUDIANTE (LDS-EST-xxx)
+      // -------------------------------------------------------------
+      // 3. REPORTE DE ALUMNO (ESTUDIANTE: LDS-EST-xxx)
+      // -------------------------------------------------------------
       else if (codUsr.startsWith("LDS-EST-")) {
         if (codDestino === codUsr || normalizarCodigo(estNombre) === codUsr) {
-          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO")) {
+          // A) SI LA MISS LE PAGA AL ALUMNO -> INGRESO PARA EL ALUMNO
+          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO") || respCod.startsWith("LDS-DOC-")) {
             movsProcesados.push({
               fecha: fechaVal,
               tipo: "INGRESO",
@@ -1456,7 +1431,9 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
               observacion: obs,
               esEgreso: false
             });
-          } else {
+          }
+          // B) SI EL ALUMNO LE PAGA / RINDE A LA MISS -> EGRESO PARA EL ALUMNO
+          else if (tipoOrig.includes("EGRESO") || conc.includes("COBRO") || conc.includes("CONSUMO")) {
             movsProcesados.push({
               fecha: fechaVal,
               tipo: "EGRESO",
@@ -1543,6 +1520,7 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   `;
 }
 
+// EJECUCIÓN DE TRANSFERENCIA DE FONDO DESDE ANDREW
 function ejecutarTransferenciaFondo() {
   const missDocCode = document.getElementById("transfMiss").value;
   const concepto = document.getElementById("transfConcepto").value;
@@ -1572,7 +1550,7 @@ function ejecutarTransferenciaFondo() {
     observacion: detalleObs
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡FONDO TRANSFERIDO Y REGISTRADO CORRECTAMENTE!";
+      msg.textContent = "¡FONDO TRANSFERIDO Y REGISTRADO CORRECTAMENTE EN LA CAJA DE LA MISS!";
       msg.className = "msg-box ok";
       document.getElementById("transfMonto").value = "";
       document.getElementById("transfObs").value = "";
