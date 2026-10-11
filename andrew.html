@@ -971,6 +971,17 @@ const MAPA_USUARIOS_OFICIALES = {
   "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
 };
 
+// Helper universal para extraer propiedades independientemente del nombre del encabezado en Excel
+function getVal(obj, ...keys) {
+  if (!obj) return "";
+  for (let k of keys) {
+    if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") {
+      return obj[k];
+    }
+  }
+  return "";
+}
+
 function parsearMonto(val) {
   if (typeof val === 'number') return isNaN(val) ? 0 : val;
   if (!val) return 0;
@@ -983,6 +994,17 @@ function parsearMonto(val) {
   const n = parseFloat(str);
   return isNaN(n) ? 0 : n;
 }
+
+function getCodigo(m) { return getVal(m, "codigo", "CÓDIGO", "codigoQR"); }
+function getTipo(m) { return getVal(m, "tipo", "TIPO"); }
+function getConcepto(m) { return getVal(m, "concepto", "CONCEPTO"); }
+function getMonto(m) { return parsearMonto(getVal(m, "monto", "MONTO LDS", "montoLDS", "MONTO")); }
+function getResponsable(m) { return getVal(m, "responsable", "RESPONSABLE", "cajero"); }
+function getEstudiante(m) { return getVal(m, "estudiante", "CUENTA/ESTUDIANTE", "nombreCompleto", "nombre"); }
+function getFecha(m) { return getVal(m, "fecha", "FECHA", "timestamp"); }
+function getGrado(m) { return getVal(m, "grado", "GRADO"); }
+function getObservacion(m) { return getVal(m, "observacion", "OBSERVACIÓN", "observaciones"); }
+function getAnio(m) { return getVal(m, "anio", "AÑO", "anioEscolar"); }
 
 function togglePanel(id) {
   const p = document.getElementById(id);
@@ -1091,12 +1113,12 @@ function extraerListaCuentasUnicas(movimientos) {
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
       if (!m) return;
-      const codRaw = String(m.codigo || m.CÓDIGO || m.codigoQR || "").trim().toUpperCase();
+      const codRaw = getCodigo(m);
       const cod = normalizarCodigo(codRaw);
-      const nom = String(m.estudiante || m["CUENTA/ESTUDIANTE"] || m.nombreCompleto || cod).trim().toUpperCase();
+      const nom = String(getEstudiante(m) || cod).trim().toUpperCase();
       if (cod && !mapa.has(cod)) {
         const datos = obtenerDatosCompletosUsuario(cod, nom);
-        datos.grado = m.grado || m.GRADO || "";
+        datos.grado = getGrado(m);
         mapa.set(cod, datos);
       }
     });
@@ -1105,9 +1127,11 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO DE SALDOS UNIFICADO
+// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS DE EXCEL
 function calcularYSincronizarSaldos(movimientos) {
-  const CAPITAL_INICIAL_ANDREW = 200000;
+  let capitalInicialAndrew = 200000;
+  let egresosAndrew = 0;
+  let ingresosAndrew = 0;
 
   const saldosMises = {
     "LDS-DOC-001": 0,
@@ -1119,13 +1143,22 @@ function calcularYSincronizarSaldos(movimientos) {
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
       if (!m) return;
-      if (String(m.estado || m.ESTADO || "").toUpperCase() === "ANULADO") return;
+      if (String(getVal(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
 
-      const cod = normalizarCodigo(m.codigo || m.CÓDIGO || "");
-      const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
-      const tipo = String(m.tipo || m.TIPO || "").toUpperCase();
+      const cod = normalizarCodigo(getCodigo(m));
+      const resp = normalizarCodigo(getResponsable(m));
+      const monto = getMonto(m);
+      const tipo = String(getTipo(m)).toUpperCase();
+      const conc = String(getConcepto(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
 
-      // Calcular el saldo individual de cada Miss
+      // Si es la carga de Capital Inicial para Andrew
+      if (conc.includes("FONDO BASE GERENTE GENERAL") || conc.includes("CAPITAL INICIAL")) {
+        capitalInicialAndrew = monto > 0 ? monto : 200000;
+        return;
+      }
+
+      // Saldos de las Misses
       if (saldosMises.hasOwnProperty(cod)) {
         if (tipo.includes("EGRESO")) {
           saldosMises[cod] -= monto;
@@ -1133,16 +1166,24 @@ function calcularYSincronizarSaldos(movimientos) {
           saldosMises[cod] += monto;
         }
       }
+
+      // Egresos / Ingresos de Mister Andrew
+      const esTransferenciaAMiss = saldosMises.hasOwnProperty(cod) && (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"));
+      const esEgresoAndrew = tipo.includes("EGRESO") || esTransferenciaAMiss;
+
+      if (cod === "LDS-DOC-005" || resp === "LDS-DOC-005") {
+        if (esEgresoAndrew) {
+          egresosAndrew += monto;
+        } else if (tipo.includes("INGRESO") && obs.includes("DEVOLUCION")) {
+          ingresosAndrew += monto;
+        }
+      }
     });
   }
 
-  // Total de fondos transferidos a las Misses
-  const totalFondosEnMises = saldosMises["LDS-DOC-001"] + saldosMises["LDS-DOC-002"] + saldosMises["LDS-DOC-003"] + saldosMises["LDS-DOC-004"];
-  
-  // Saldo Actual de Mister Andrew = Capital Inicial (200.000) menos Fondos Transferidos a las Misses (120.000)
-  const saldoActualAndrew = Math.max(0, CAPITAL_INICIAL_ANDREW - totalFondosEnMises);
+  const saldoActualAndrew = Math.max(0, capitalInicialAndrew + ingresosAndrew - egresosAndrew);
 
-  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(CAPITAL_INICIAL_ANDREW);
+  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(capitalInicialAndrew);
   document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
 
   document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-001"]));
@@ -1157,10 +1198,10 @@ function filtrarYRenderizarTabla() {
   } else {
     const movsAndrew = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
-      const cod = normalizarCodigo(m.codigo || m.CÓDIGO || "");
-      const resp = normalizarCodigo(m.responsable || m.RESPONSABLE || "");
-      const obs = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
-      const est = String(m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+      const cod = normalizarCodigo(getCodigo(m));
+      const resp = normalizarCodigo(getResponsable(m));
+      const obs = String(getObservacion(m)).toUpperCase();
+      const est = String(getEstudiante(m)).toUpperCase();
       return cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("ANDREW") || est.includes("ANDREW");
     });
     renderTabla(movsAndrew.length > 0 ? movsAndrew : todosLosMovimientosGlobales);
@@ -1196,24 +1237,45 @@ function renderTabla(lista) {
   lista.forEach(m => {
     if (!m) return;
     const tr = document.createElement("tr");
-    const fechaVal = m.fecha || m.FECHA || m.timestamp || '';
-    const tipoStr = String(m.tipo || m.TIPO || "").toUpperCase();
-    const concStr = String(m.concepto || m.CONCEPTO || "").toUpperCase();
-    const obsStr = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
-    const estudianteVal = m.estudiante || m["CUENTA/ESTUDIANTE"] || m.codigo || m.CÓDIGO || 'MISTER ANDREW';
 
-    const esEgreso = tipoStr.includes("EGRESO");
-    const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
+    const cod = normalizarCodigo(getCodigo(m));
+    const resp = normalizarCodigo(getResponsable(m));
+    const concStr = String(getConcepto(m)).toUpperCase();
+    const tipoOriginal = String(getTipo(m)).toUpperCase();
+    const monto = getMonto(m);
+    const fechaVal = getFecha(m);
+    const gradoVal = getGrado(m) || 'CAJA GENERAL';
+    const obsStr = String(getObservacion(m)).toUpperCase();
+
+    // Determinar si es un EGRESO desde la perspectiva de la caja de Andrew
+    let esEgreso = false;
+    let tipoMostrar = "INGRESO";
+
+    if (concStr.includes("FONDO BASE GERENTE GENERAL") || concStr.includes("CAPITAL INICIAL")) {
+      esEgreso = false;
+      tipoMostrar = "INGRESO";
+    } else if (tipoOriginal.includes("EGRESO") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(cod) && cod !== "LDS-DOC-005" || concStr.includes("FONDO PARA PAGOS")) {
+      esEgreso = true;
+      tipoMostrar = "EGRESO";
+    }
+
+    // Nombre a mostrar en la columna CUENTA / ESTUDIANTE
+    let cuentaNombre = getEstudiante(m);
+    if (MAPA_USUARIOS_OFICIALES[cod] && cod !== "LDS-DOC-005") {
+      cuentaNombre = MAPA_USUARIOS_OFICIALES[cod].nombre;
+    } else if (cod === "LDS-DOC-005") {
+      cuentaNombre = "MISTER ANDREW";
+    }
 
     tr.innerHTML = `
-      <td><strong>${m.anio || '2026'}</strong></td>
+      <td><strong>${getAnio(m) || '2026'}</strong></td>
       <td><strong>${fechaVal}</strong></td>
-      <td><strong>${estudianteVal}</strong></td>
-      <td>${m.grado || m.GRADO || 'CAJA GENERAL'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoStr || 'INGRESO'}</span></td>
+      <td><strong>${cuentaNombre}</strong></td>
+      <td>${gradoVal}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
       <td>${concStr}</td>
       <td><strong>${formatearLDS(monto)}</strong></td>
-      <td>${m.responsable || m.RESPONSABLE || 'SISTEMA'}</td>
+      <td>${getResponsable(m) || 'SISTEMA'}</td>
       <td>${obsStr}</td>
     `;
     tbody.appendChild(tr);
@@ -1270,7 +1332,7 @@ function generarEImprimirReporteUnitario(codigo, nombre) {
   const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
   const movs = todosLosMovimientosGlobales.filter(m => {
     if (!m) return false;
-    const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+    const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
     const codNorm = normalizarCodigo(c);
     return codNorm === usuario.codigo || c.includes(codigo.toUpperCase()) || String(usuario.nombre).toUpperCase().includes(c);
   });
@@ -1298,7 +1360,7 @@ function generarEImprimirReporteGrupal() {
   listaCuentasYAlumnosGlobal.forEach(usr => {
     const movsUsr = todosLosMovimientosGlobales.filter(m => {
       if (!m) return false;
-      const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+      const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
       const codNorm = normalizarCodigo(c);
       return codNorm === usr.codigo || c.includes(usr.codigo.toUpperCase()) || String(usr.nombre).toUpperCase().includes(c);
     });
@@ -1320,13 +1382,13 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
   } else {
     movimientos.forEach(m => {
       if (!m) return;
-      const monto = parsearMonto(m.monto || m["MONTO LDS"] || m.montoLDS || 0);
-      const fechaVal = m.fecha || m.FECHA || m.timestamp || '';
-      const tipoStr = String(m.tipo || m.TIPO || "").toUpperCase();
-      const concStr = String(m.concepto || m.CONCEPTO || "").toUpperCase();
-      const obsStr = String(m.observacion || m.OBSERVACIÓN || "").toUpperCase();
+      const monto = getMonto(m);
+      const fechaVal = getFecha(m);
+      const tipoStr = String(getTipo(m)).toUpperCase();
+      const concStr = String(getConcepto(m)).toUpperCase();
+      const obsStr = String(getObservacion(m)).toUpperCase();
 
-      const esEgreso = tipoStr.includes("EGRESO");
+      const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO PARA PAGOS");
       
       if (esEgreso) totalEgresos += monto;
       else totalIngresos += monto;
@@ -1334,10 +1396,10 @@ function construirHTMLPaginaUsuario(usuario, movimientos) {
       filas += `
         <tr>
           <td>${fechaVal}</td>
-          <td><strong>${tipoStr || 'INGRESO'}</strong></td>
+          <td><strong>${esEgreso ? 'EGRESO' : 'INGRESO'}</strong></td>
           <td>${concStr}</td>
           <td style="text-align:right;"><strong>${formatearLDS(monto)}</strong></td>
-          <td>${m.responsable || m.RESPONSABLE || ''}</td>
+          <td>${getResponsable(m) || ''}</td>
           <td>${obsStr}</td>
         </tr>
       `;
@@ -1484,7 +1546,7 @@ function consultarCuentaEspecifica() {
 
   const filtrados = todosLosMovimientosGlobales.filter(m => {
     if (!m) return false;
-    const c = String(m.codigo || m.CÓDIGO || m.estudiante || m["CUENTA/ESTUDIANTE"] || "").toUpperCase();
+    const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
     return c.includes(cod) || normalizarCodigo(c) === normalizarCodigo(cod);
   });
 
