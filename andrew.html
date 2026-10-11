@@ -529,7 +529,7 @@ textarea { height: auto; padding: 8px 10px; }
   font-weight: 700;
 }
 
-/* MEMBRETE INSTITUCIONAL CON ÚNICAMENTE UNA INSIGNIA A LA DERECHA */
+/* MEMBRETE INSTITUCIONAL */
 #contenedorImpresion { display: none; }
 
 .membrete-colegio {
@@ -800,7 +800,7 @@ textarea { height: auto; padding: 8px 10px; }
     </div>
   </div>
 
-  <!-- COLUMNA DERECHA (PANELES LATERALES) -->
+  <!-- COLUMNA DERECHA -->
   <div class="right-stack">
     <!-- PANEL 1: TRANSFERIR FONDO -->
     <div id="panelTransferir" class="accordion-panel collapsed">
@@ -950,7 +950,7 @@ let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
 
-// BASE DE DATOS MAPPING OFICIAL DEL EXCEL / GOOGLE SHEETS
+// BASE DE DATOS MAPPING OFICIAL
 const MAPA_USUARIOS_OFICIALES = {
   "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
   "LDS-DOC-002": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "CAJA-KIARA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
@@ -971,7 +971,6 @@ const MAPA_USUARIOS_OFICIALES = {
   "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
 };
 
-// Helper universal para extraer propiedades independientemente del nombre del encabezado en Excel
 function getVal(obj, ...keys) {
   if (!obj) return "";
   for (let k of keys) {
@@ -1127,7 +1126,7 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS DE EXCEL
+// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS REAL DE EXCEL
 function calcularYSincronizarSaldos(movimientos) {
   let capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1145,36 +1144,36 @@ function calcularYSincronizarSaldos(movimientos) {
       if (!m) return;
       if (String(getVal(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
 
-      const cod = normalizarCodigo(getCodigo(m));
-      const resp = normalizarCodigo(getResponsable(m));
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const respCod = normalizarCodigo(getResponsable(m));
       const monto = getMonto(m);
-      const tipo = String(getTipo(m)).toUpperCase();
       const conc = String(getConcepto(m)).toUpperCase();
-      const obs = String(getObservacion(m)).toUpperCase();
+      const tipo = String(getTipo(m)).toUpperCase();
 
-      // Si es la carga de Capital Inicial para Andrew
-      if (conc.includes("FONDO BASE GERENTE GENERAL") || conc.includes("CAPITAL INICIAL")) {
+      // Capital base Andrew
+      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
         capitalInicialAndrew = monto > 0 ? monto : 200000;
         return;
       }
 
-      // Saldos de las Misses
-      if (saldosMises.hasOwnProperty(cod)) {
-        if (tipo.includes("EGRESO")) {
-          saldosMises[cod] -= monto;
-        } else {
-          saldosMises[cod] += monto;
-        }
-      }
-
-      // Egresos / Ingresos de Mister Andrew
-      const esTransferenciaAMiss = saldosMises.hasOwnProperty(cod) && (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"));
-      const esEgresoAndrew = tipo.includes("EGRESO") || esTransferenciaAMiss;
-
-      if (cod === "LDS-DOC-005" || resp === "LDS-DOC-005") {
-        if (esEgresoAndrew) {
+      // Fondos asignados a las Misses
+      if (saldosMises.hasOwnProperty(targetCod)) {
+        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipo.includes("INGRESO")) {
+          // Es un INGRESO para la Miss y un EGRESO para Mister Andrew
+          saldosMises[targetCod] += monto;
           egresosAndrew += monto;
-        } else if (tipo.includes("INGRESO") && obs.includes("DEVOLUCION")) {
+        } else if (tipo.includes("EGRESO")) {
+          // Pagos realizados por la Miss a los alumnos
+          saldosMises[targetCod] -= monto;
+        }
+      } else if (saldosMises.hasOwnProperty(respCod)) {
+        if (tipo.includes("EGRESO") || tipo.includes("INGRESO")) {
+          saldosMises[respCod] -= monto;
+        }
+      } else if (targetCod === "LDS-DOC-005") {
+        if (tipo.includes("EGRESO")) {
+          egresosAndrew += monto;
+        } else if (tipo.includes("INGRESO")) {
           ingresosAndrew += monto;
         }
       }
@@ -1241,25 +1240,22 @@ function renderTabla(lista) {
     const cod = normalizarCodigo(getCodigo(m));
     const resp = normalizarCodigo(getResponsable(m));
     const concStr = String(getConcepto(m)).toUpperCase();
-    const tipoOriginal = String(getTipo(m)).toUpperCase();
     const monto = getMonto(m);
     const fechaVal = getFecha(m);
     const gradoVal = getGrado(m) || 'CAJA GENERAL';
     const obsStr = String(getObservacion(m)).toUpperCase();
 
-    // Determinar si es un EGRESO desde la perspectiva de la caja de Andrew
     let esEgreso = false;
     let tipoMostrar = "INGRESO";
 
-    if (concStr.includes("FONDO BASE GERENTE GENERAL") || concStr.includes("CAPITAL INICIAL")) {
+    if (concStr.includes("GERENTE") || concStr.includes("CAPITAL")) {
       esEgreso = false;
       tipoMostrar = "INGRESO";
-    } else if (tipoOriginal.includes("EGRESO") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(cod) && cod !== "LDS-DOC-005" || concStr.includes("FONDO PARA PAGOS")) {
+    } else if (resp === "LDS-DOC-005" || concStr.includes("FONDO PARA PAGOS")) {
       esEgreso = true;
       tipoMostrar = "EGRESO";
     }
 
-    // Nombre a mostrar en la columna CUENTA / ESTUDIANTE
     let cuentaNombre = getEstudiante(m);
     if (MAPA_USUARIOS_OFICIALES[cod] && cod !== "LDS-DOC-005") {
       cuentaNombre = MAPA_USUARIOS_OFICIALES[cod].nombre;
@@ -1330,16 +1326,9 @@ function generarEImprimirReporteUnitario(codigo, nombre) {
   cerrarModal('modalSeleccionAlumno');
 
   const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
-  const movs = todosLosMovimientosGlobales.filter(m => {
-    if (!m) return false;
-    const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
-    const codNorm = normalizarCodigo(c);
-    return codNorm === usuario.codigo || c.includes(codigo.toUpperCase()) || String(usuario.nombre).toUpperCase().includes(c);
-  });
-
   const cont = document.getElementById("contenedorImpresion");
   if (cont) {
-    cont.innerHTML = construirHTMLPaginaUsuario(usuario, movs);
+    cont.innerHTML = construirHTMLPaginaUsuario(usuario, todosLosMovimientosGlobales);
     setTimeout(() => { window.print(); }, 250);
   }
 }
@@ -1358,49 +1347,133 @@ function generarEImprimirReporteGrupal() {
 
   let htmlAcumulado = "";
   listaCuentasYAlumnosGlobal.forEach(usr => {
-    const movsUsr = todosLosMovimientosGlobales.filter(m => {
-      if (!m) return false;
-      const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
-      const codNorm = normalizarCodigo(c);
-      return codNorm === usr.codigo || c.includes(usr.codigo.toUpperCase()) || String(usr.nombre).toUpperCase().includes(c);
-    });
-
-    htmlAcumulado += construirHTMLPaginaUsuario(usr, movsUsr);
+    htmlAcumulado += construirHTMLPaginaUsuario(usr, todosLosMovimientosGlobales);
   });
 
   cont.innerHTML = htmlAcumulado;
   setTimeout(() => { window.print(); }, 300);
 }
 
-function construirHTMLPaginaUsuario(usuario, movimientos) {
+// LOGICA MULTI-PERSPECTIVA CORREGIDA SEGÚN ROL
+function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   let filas = "";
   let totalIngresos = 0;
   let totalEgresos = 0;
 
-  if (!movimientos || !movimientos.length) {
+  const codUsr = normalizarCodigo(usuario.codigo);
+  const movsProcesados = [];
+
+  if (Array.isArray(todosLosMovimientos)) {
+    todosLosMovimientos.forEach(m => {
+      if (!m) return;
+      if (String(getVal(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
+      const codDestino = normalizarCodigo(getCodigo(m));
+      const resp = normalizarCodigo(getResponsable(m));
+      const conc = String(getConcepto(m)).toUpperCase();
+      const tipoOrig = String(getTipo(m)).toUpperCase();
+      const monto = getMonto(m);
+      const obs = String(getObservacion(m)).toUpperCase();
+
+      // 1. SI EL ESTADO DE CUENTA ES DE MISTER ANDREW (CAJA GENERAL)
+      if (codUsr === "LDS-DOC-005") {
+        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && !conc.includes("FONDO PARA PAGOS"))) {
+          movsProcesados.push({
+            fecha: getFecha(m),
+            tipo: "INGRESO",
+            concepto: conc,
+            monto: monto,
+            responsable: getResponsable(m) || "SISTEMA",
+            observacion: obs,
+            esEgreso: false
+          });
+        } else if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(codDestino)) {
+          const nomDestino = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (getEstudiante(m) || codDestino);
+          movsProcesados.push({
+            fecha: getFecha(m),
+            tipo: "EGRESO",
+            concepto: conc + " → " + nomDestino,
+            monto: monto,
+            responsable: "MISTER ANDREW",
+            observacion: obs,
+            esEgreso: true
+          });
+        }
+      }
+
+      // 2. SI EL ESTADO DE CUENTA ES DE UNA MISS (LDS-DOC-001 A 004)
+      else if (codUsr.startsWith("LDS-DOC-")) {
+        if (codDestino === codUsr) {
+          // El dinero transferido por Andrew es INGRESO para la Miss
+          if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO")) {
+            movsProcesados.push({
+              fecha: getFecha(m),
+              tipo: "INGRESO",
+              concepto: conc,
+              monto: monto,
+              responsable: "MISTER ANDREW",
+              observacion: obs,
+              esEgreso: false
+            });
+          }
+        } else if (resp === codUsr && tipoOrig.includes("EGRESO")) {
+          // Lo que la Miss paga a los alumnos es EGRESO para la Miss
+          movsProcesados.push({
+            fecha: getFecha(m),
+            tipo: "EGRESO",
+            concepto: conc,
+            monto: monto,
+            responsable: getResponsable(m),
+            observacion: obs,
+            esEgreso: true
+          });
+        }
+      }
+
+      // 3. SI EL ESTADO DE CUENTA ES DE UN ESTUDIANTE
+      else {
+        if (codDestino === codUsr || normalizarCodigo(getEstudiante(m)) === codUsr) {
+          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO")) {
+            movsProcesados.push({
+              fecha: getFecha(m),
+              tipo: "INGRESO",
+              concepto: conc,
+              monto: monto,
+              responsable: getResponsable(m),
+              observacion: obs,
+              esEgreso: false
+            });
+          } else {
+            movsProcesados.push({
+              fecha: getFecha(m),
+              tipo: "EGRESO",
+              concepto: conc,
+              monto: monto,
+              responsable: getResponsable(m),
+              observacion: obs,
+              esEgreso: true
+            });
+          }
+        }
+      }
+    });
+  }
+
+  if (!movsProcesados.length) {
     filas = `<tr><td colspan="6" style="text-align:center; padding: 12px; font-style:italic;">SIN MOVIMIENTOS REGISTRADOS EN EL PERÍODO.</td></tr>`;
   } else {
-    movimientos.forEach(m => {
-      if (!m) return;
-      const monto = getMonto(m);
-      const fechaVal = getFecha(m);
-      const tipoStr = String(getTipo(m)).toUpperCase();
-      const concStr = String(getConcepto(m)).toUpperCase();
-      const obsStr = String(getObservacion(m)).toUpperCase();
-
-      const esEgreso = tipoStr.includes("EGRESO") || concStr.includes("FONDO PARA PAGOS");
-      
-      if (esEgreso) totalEgresos += monto;
-      else totalIngresos += monto;
+    movsProcesados.forEach(item => {
+      if (item.esEgreso) totalEgresos += item.monto;
+      else totalIngresos += item.monto;
 
       filas += `
         <tr>
-          <td>${fechaVal}</td>
-          <td><strong>${esEgreso ? 'EGRESO' : 'INGRESO'}</strong></td>
-          <td>${concStr}</td>
-          <td style="text-align:right;"><strong>${formatearLDS(monto)}</strong></td>
-          <td>${getResponsable(m) || ''}</td>
-          <td>${obsStr}</td>
+          <td>${item.fecha || ''}</td>
+          <td><strong class="${item.esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${item.tipo}</strong></td>
+          <td>${item.concepto}</td>
+          <td style="text-align:right;"><strong>${formatearLDS(item.monto)}</strong></td>
+          <td>${item.responsable || ''}</td>
+          <td>${item.observacion || ''}</td>
         </tr>
       `;
     });
