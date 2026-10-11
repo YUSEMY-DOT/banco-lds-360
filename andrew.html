@@ -149,27 +149,29 @@ header {
   width: 100%;
 }
 
+/* PROFILE BANNER EN UNA SOLA LÍNEA (PC/LAPTOP) Y TOTALMENTE RESPONSIVO */
 .profile-banner {
   background: #ffffff;
   border: 2px solid var(--dorado);
   border-radius: 14px;
-  padding: 15px 18px;
+  padding: 10px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .profile-info {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .avatar-wrap {
-  width: 90px;
-  height: 90px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   border: 3px solid var(--dorado);
   overflow: hidden;
@@ -184,43 +186,53 @@ header {
 }
 
 .profile-text h3 {
-  font-size: 1.4rem;
+  font-size: 1.15rem;
   color: var(--azul);
   font-weight: 900;
   margin: 0;
+  white-space: nowrap;
 }
 
 .profile-text p {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 800;
   margin-top: 2px;
+  white-space: nowrap;
 }
 
 .stats-grid {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .stat-pill {
-  border-radius: 12px;
-  padding: 10px 16px;
+  border-radius: 10px;
+  padding: 8px 10px;
   text-align: center;
-  min-width: 130px;
+  flex: 1;
+  min-width: 0;
 }
 
 .stat-pill span {
   display: block;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
   margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .stat-pill strong {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 900;
   display: block;
+  white-space: nowrap;
 }
 
 .pill-inicial {
@@ -241,6 +253,45 @@ header {
   background: #f8fafc;
   border: 1.5px solid var(--borde);
   color: var(--azul);
+}
+
+/* RESPONSIVO TABLET Y MÓVIL */
+@media (max-width: 992px) {
+  .profile-banner {
+    flex-wrap: wrap;
+  }
+  .stats-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-banner {
+    padding: 10px;
+    gap: 10px;
+  }
+  .avatar-wrap {
+    width: 55px;
+    height: 55px;
+  }
+  .profile-text h3 {
+    font-size: 1rem;
+  }
+  .profile-text p {
+    font-size: 0.65rem;
+  }
+  .stat-pill {
+    padding: 6px 4px;
+  }
+  .stat-pill span {
+    font-size: 0.55rem;
+  }
+  .stat-pill strong {
+    font-size: 0.85rem;
+  }
 }
 
 .alert-status {
@@ -658,7 +709,7 @@ textarea { height: auto; padding: 8px 10px; }
 
 <main class="layout-main">
   <div class="left-stack">
-    <!-- PROFILE ANDREW -->
+    <!-- BANNER PERFIL ANDREW PERFECTAMENTE OPTIMIZADO -->
     <div class="profile-banner">
       <div class="profile-info">
         <div class="avatar-wrap">
@@ -1148,7 +1199,6 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
-// FILTRADO SIN DUPLICADOS PARA LA TABLA DE CAJA GENERAL
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
@@ -1156,7 +1206,6 @@ function filtrarYRenderizarTabla() {
     const movsAndrew = [];
     const llavesRegistradas = new Set();
 
-    // 1. Recolectamos las transferencias a favor de las Misses
     todosLosMovimientosGlobales.forEach(m => {
       if (!m) return;
       if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
@@ -1176,7 +1225,6 @@ function filtrarYRenderizarTabla() {
       }
     });
 
-    // 2. Recolectamos los ingresos de Andrew (Capital Inicial o Devoluciones)
     todosLosMovimientosGlobales.forEach(m => {
       if (!m) return;
       if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
