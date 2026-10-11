@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BANCO LDS 360 — Panel Administrativo</title>
+<title>BANCO LDS 360 — Panel de Administración</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
 :root {
-  --azul-oscuro: #07111e;
+  --azul-oscuro: #081325;
   --azul-medio: #0f2340;
   --azul-brillante: #1d4ed8;
   --dorado: #f59e0b;
@@ -45,9 +45,9 @@ html, body {
 header {
   background: #040a14;
   color: #fff;
-  padding: 12px 20px;
-  border-bottom: 3.5px solid var(--dorado);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+  padding: 12px 18px;
+  border-bottom: 3px solid var(--dorado);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
 .header-inner {
@@ -62,17 +62,17 @@ header {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand img {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }
 
 .brand h1 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #ffffff;
   letter-spacing: .02em;
@@ -80,18 +80,18 @@ header {
 
 .brand p {
   color: var(--dorado);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
 }
 
 .btn-header {
   background: rgba(255, 255, 255, 0.12);
-  border: 2px solid var(--dorado);
+  border: 1.5px solid var(--dorado);
   color: #ffffff;
-  padding: 10px 20px;
-  border-radius: 22px;
-  font-weight: 900;
-  font-size: 0.82rem;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.78rem;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -102,12 +102,12 @@ header {
   color: var(--azul-oscuro);
 }
 
-/* PANTALLA DE ACCESO */
+/* ACCESO / LOGIN */
 .login-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 85px);
+  min-height: calc(100vh - 75px);
   padding: 20px 12px;
 }
 
@@ -116,7 +116,7 @@ header {
   width: 100%;
   background: #ffffff;
   border-radius: 20px;
-  padding: 30px 22px;
+  padding: 28px 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   text-align: center;
   border-top: 6px solid var(--dorado);
@@ -124,30 +124,30 @@ header {
 
 .login-card h2 {
   color: var(--azul-oscuro);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 900;
   margin-bottom: 4px;
 }
 
 .login-card p {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .mises-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .mise-btn {
   border: 2px solid var(--borde);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #f8fafc;
-  padding: 12px 6px;
+  padding: 10px 4px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -160,35 +160,35 @@ header {
   border-color: var(--dorado);
   background: #fef3c7;
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
 }
 
 .mise-btn img {
-  width: 58px;
-  height: 58px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2.5px solid var(--dorado);
+  border: 2px solid var(--dorado);
   background: #fff;
 }
 
 .mise-btn span {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 900;
   color: var(--azul-oscuro);
 }
 
 .input-field {
   width: 100%;
-  height: 48px;
+  height: 44px;
   border: 2px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 0 14px;
-  font-size: 0.88rem;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 0.85rem;
   background: #f8fafc;
   font-weight: 800;
   outline: none;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .input-field:focus {
@@ -198,15 +198,15 @@ header {
 
 .primary-btn {
   width: 100%;
-  height: 50px;
+  height: 46px;
   border: 0;
   border-radius: 12px;
   background: linear-gradient(135deg, #0f2340 0%, #1d4ed8 100%);
   color: #ffffff;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.35);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
   transition: all 0.2s ease;
 }
 
@@ -219,36 +219,36 @@ header {
 main {
   max-width: 1650px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 14px;
   display: none;
 }
 
-/* BANNER DE CAJA Y TARJETAS DE SALDO */
+/* BANNER DE USUARIO Y ESTADÍSTICAS */
 .profile-banner {
   background: linear-gradient(145deg, #091628 0%, #030812 100%);
-  border: 2.5px solid var(--dorado);
-  border-radius: 18px;
-  padding: 16px 22px;
-  margin-bottom: 16px;
+  border: 2px solid var(--dorado);
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
 }
 
 .profile-info {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .avatar-wrap {
-  width: 68px;
-  height: 68px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  border: 3px solid var(--dorado);
+  border: 2.5px solid var(--dorado);
   overflow: hidden;
   background: #ffffff;
   flex-shrink: 0;
@@ -258,41 +258,40 @@ main {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(130px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 10px;
   flex-grow: 1;
-  max-width: 850px;
+  max-width: 800px;
 }
 
 .stat-pill {
-  background: rgba(3, 8, 15, 0.92);
-  border: 2px solid rgba(245, 158, 11, 0.5);
-  border-radius: 14px;
-  padding: 12px 14px;
+  background: rgba(3, 8, 15, 0.9);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  padding: 10px 12px;
   text-align: center;
 }
 
 .stat-pill span {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: #cbd5e1;
-  font-weight: 900;
-  margin-bottom: 3px;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  margin-bottom: 2px;
 }
 
 .stat-pill strong {
-  font-size: 1.20rem;
+  font-size: 1.10rem;
   color: #ffffff;
   font-weight: 900;
   display: block;
 }
 
-/* ESTRUCTURA GENERAL */
+/* ESTRUCTURA Y COLUMNAS */
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.75fr);
-  gap: 16px;
+  gap: 14px;
   align-items: start;
 }
 
@@ -303,15 +302,15 @@ main {
 
 .panel {
   background: #ffffff;
-  border: 2.5px solid var(--dorado);
-  border-radius: 18px;
+  border: 2px solid var(--dorado);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  margin-bottom: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  margin-bottom: 14px;
 }
 
 .panel-head {
-  padding: 16px 20px;
+  padding: 14px 18px;
   background: #f8fafc;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
@@ -323,122 +322,80 @@ main {
 
 .panel-head h3 {
   color: var(--azul-oscuro);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 900;
 }
 
 .panel.collapsed .panel-body { display: none; }
-.toggle-icon { font-size: 0.90rem; color: var(--muted); }
+.toggle-icon { font-size: 0.85rem; color: var(--muted); }
 
-.panel-body { padding: 18px; }
+.panel-body { padding: 16px; }
 
-/* BARRA DE 6 BOTONES PRINCIPALES */
+/* BOTONES DE ACCIÓN GRANDES VISIBLES */
 .action-buttons-bar {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
   gap: 10px;
-  margin-bottom: 16px;
-}
-
-@media(max-width: 1200px) {
-  .action-buttons-bar { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media(max-width: 640px) {
-  .action-buttons-bar { grid-template-columns: repeat(2, 1fr); }
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 
 .icon-btn-large {
-  min-height: 56px;
-  padding: 10px 14px;
-  border-radius: 16px;
-  border: 2.5px solid;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 2px solid;
   font-weight: 900;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.22s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-  text-align: center;
-  line-height: 1.1;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
 
-.icon-btn-large:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  filter: brightness(1.08);
-}
+.icon-btn-large:hover { transform: translateY(-2px); filter: brightness(1.05); }
 
-.icon-btn-large.btn-escaner {
-  background: linear-gradient(135deg, #0f2340 0%, #1e3a8a 100%);
-  color: #ffffff;
-  border-color: var(--dorado);
-}
-
-.icon-btn-large.btn-alumno {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-  color: #ffffff;
-  border-color: #0369a1;
-}
-
-.icon-btn-large.btn-mises {
-  background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
-  color: #ffffff;
-  border-color: #be123c;
-}
-
-.icon-btn-large.btn-prestamo {
-  background: linear-gradient(135deg, #a78bfa 0%, #6d28d9 100%);
-  color: #ffffff;
-  border-color: #5b21b6;
-}
-
-.icon-btn-large.btn-actualizar {
-  background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
-  color: #713f12;
-  border-color: #ca8a04;
-}
-
-.icon-btn-large.btn-imprimir {
-  background: linear-gradient(135deg, #facc15 0%, #d97706 100%);
-  color: #451a03;
-  border-color: #b45309;
-}
+.icon-btn-large.qr { background: #0f2340; color: #ffffff; border-color: var(--dorado); }
+.icon-btn-large.refresh { background: linear-gradient(135deg, #fef3c7, #f59e0b); color: #7c4300; border-color: #f59e0b; }
+.icon-btn-large.loan { background: linear-gradient(135deg, #ede9fe, #7c3aed); color: #ffffff; border-color: #6d28d9; }
+.icon-btn-large.print { background: linear-gradient(135deg, #fef08a, #eab308); color: #713f12; border-color: #ca8a04; }
+.icon-btn-large.alumno-top { background: linear-gradient(135deg, #cff4fc, #0284c7); color: #ffffff; border-color: #0284c7; }
+.icon-btn-large.mises-top { background: linear-gradient(135deg, #fecdd3, #e11d48); color: #ffffff; border-color: #e11d48; }
 
 /* LISTAS DESPLEGABLES INLINE */
 .dropdown-inline {
-  margin-bottom: 16px;
-  border: 2.5px solid var(--dorado);
-  border-radius: 14px;
+  margin-bottom: 14px;
+  border: 2px solid var(--dorado);
+  border-radius: 12px;
   background: #ffffff;
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .dropdown-head {
   padding: 12px 16px;
   background: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.dropdown-head strong { font-size: 0.85rem; color: var(--azul-oscuro); font-weight: 900; }
+.dropdown-head strong { font-size: 0.82rem; color: var(--azul-oscuro); font-weight: 900; }
 
-.dropdown-list { max-height: 260px; overflow-y: auto; padding: 6px; }
+.dropdown-list { max-height: 250px; overflow-y: auto; padding: 6px; }
 
 .dropdown-row {
   display: grid;
-  grid-template-columns: 40px 120px 1fr 100px;
+  grid-template-columns: 40px 110px 1fr 100px;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   align-items: center;
 }
 
@@ -446,26 +403,26 @@ main {
 .dropdown-row .code { font-weight: 900; color: var(--azul-brillante); }
 .dropdown-row .name { font-weight: 800; color: var(--texto); }
 
-/* TABLA DE MOVIMIENTOS EN EXCEL */
+/* TABLA DE MOVIMIENTOS COMPLETA DE EXCEL */
 .table-wrap {
   width: 100%;
-  height: 450px;
+  height: 420px;
   overflow: auto;
-  border: 2.5px solid var(--borde);
-  border-radius: 14px;
+  border: 2px solid var(--borde);
+  border-radius: 12px;
   background: #ffffff;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 950px;
+  min-width: 920px;
 }
 
 th, td {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid #e2e8f0;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-align: left;
   vertical-align: middle;
 }
@@ -485,43 +442,43 @@ th {
 .badge-ingreso {
   color: var(--verde-oscuro);
   background: #ecfdf5;
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-weight: 900;
-  border: 1.5px solid #a7f3d0;
+  border: 1px solid #a7f3d0;
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.70rem;
 }
 
 .badge-egreso {
   color: var(--rojo-oscuro);
   background: #fef2f2;
-  padding: 5px 12px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-weight: 900;
-  border: 1.5px solid #fecaca;
+  border: 1px solid #fecaca;
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.70rem;
 }
 
-/* SECCIÓN PAGOS Y COBROS */
+/* SECCIÓN PAGOS Y COBROS AL ALUMNO */
 .pago-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 12px;
   border: 2px solid #bae6fd;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #f0f9ff;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .pago-card img {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2.5px solid #0ea5e9;
+  border: 2px solid #0ea5e9;
   background: #ffffff;
 }
 
@@ -529,19 +486,19 @@ th {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin: 12px 0 16px;
+  margin: 10px 0 14px;
 }
 
 .cat-btn {
   border: 2px solid #cbd5e1;
   background: #f8fafc;
-  border-radius: 12px;
-  padding: 12px 8px;
-  font-size: 0.72rem;
+  border-radius: 10px;
+  padding: 10px 6px;
+  font-size: 0.70rem;
   font-weight: 900;
   cursor: pointer;
   line-height: 1.2;
-  min-height: 50px;
+  min-height: 48px;
   transition: all 0.2s ease;
 }
 
@@ -549,29 +506,29 @@ th {
   border-color: var(--dorado);
   background: #fef3c7;
   color: #92400e;
-  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
 }
 
 .pago-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .btn-pago-grande {
-  min-height: 52px;
-  border-radius: 14px;
-  border: 2.5px solid;
+  min-height: 50px;
+  border-radius: 12px;
+  border: 2px solid;
   font-weight: 900;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .btn-pago-grande.pagar {
@@ -588,17 +545,17 @@ th {
 
 .btn-pago-grande:hover {
   transform: translateY(-2px);
-  filter: brightness(1.06);
+  filter: brightness(1.05);
 }
 
 /* INCIDENCIAS */
-.incident-list { display: grid; gap: 10px; margin-top: 14px; }
+.incident-list { display: grid; gap: 8px; margin-top: 12px; }
 .incident {
-  border: 2px solid var(--borde);
-  border-radius: 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
   padding: 12px;
   background: #f8fafc;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
 }
 
 .incident-top {
@@ -609,26 +566,26 @@ th {
 }
 
 .badge-inc {
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
   background: #fef3c7;
   color: #92400e;
   font-weight: 900;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
 }
 
 /* MENSAJES Y MODALES */
 .message {
-  padding: 12px 16px;
-  border-radius: 12px;
-  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 10px;
   display: none;
   font-weight: 800;
-  font-size: 0.80rem;
+  font-size: 0.78rem;
 }
 
-.message.ok { display: block; background: #ecfdf3; color: var(--verde-oscuro); border: 2px solid #a7f3d0; }
-.message.error { display: block; background: #fef2f2; color: var(--rojo-oscuro); border: 2px solid #fecaca; }
+.message.ok { display: block; background: #ecfdf3; color: var(--verde-oscuro); border: 1.5px solid #a7f3d0; }
+.message.error { display: block; background: #fef2f2; color: var(--rojo-oscuro); border: 1.5px solid #fecaca; }
 
 .modal {
   display: none;
@@ -638,14 +595,14 @@ th {
   z-index: 1000;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 14px;
 }
 
 .modal-box {
   background: #ffffff;
-  padding: 24px;
-  border-radius: 20px;
-  max-width: 500px;
+  padding: 22px;
+  border-radius: 18px;
+  max-width: 480px;
   width: 100%;
   border-top: 6px solid var(--dorado);
   box-shadow: 0 20px 40px rgba(0,0,0,0.5);
@@ -707,7 +664,7 @@ th {
 
 <!-- PANEL DE CONTROL PRINCIPAL -->
 <main id="panelView">
-  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS DE LA BASE DE DATOS -->
+  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS DE LA BASE DE DATOS EXCEL -->
   <div class="profile-banner">
     <div class="profile-info">
       <div class="avatar-wrap">
@@ -715,7 +672,7 @@ th {
       </div>
       <div>
         <p style="color:#fde68a;font-size:0.65rem;font-weight:900;">DOCENTE · TUTORA · CAJERA</p>
-        <h3 id="maestraActivaNombre" style="color:#ffffff;font-size:1.20rem;font-weight:900;">—</h3>
+        <h3 id="maestraActivaNombre" style="color:#ffffff;font-size:1.15rem;font-weight:900;">—</h3>
       </div>
     </div>
 
@@ -740,43 +697,37 @@ th {
   </div>
 
   <section class="layout">
-    <!-- COLUMNA IZQUIERDA: ESTADO DE CUENTA Y BOTONES -->
+    <!-- COLUMNA IZQUIERDA: ESTADO DE CUENTA Y ACCIONES -->
     <div class="panel">
       <div class="panel-head">
         <h3>📋 CONSULTA Y ESTADO DE CUENTA EN EXCEL</h3>
         <div style="display:flex;gap:8px;align-items:center;">
-          <span style="font-size:0.72rem;font-weight:900;color:#64748b;">AÑO:</span>
-          <input id="selectAnioEscolar" type="number" value="2026" min="2000" max="2100" style="width:75px;height:36px;border-radius:8px;border:2px solid #8b5cf6;text-align:center;font-weight:900;background:#ede9fe;font-size:0.90rem;" onchange="cambiarAnioEscolar()">
+          <span style="font-size:0.68rem;font-weight:900;color:#64748b;">AÑO:</span>
+          <input id="selectAnioEscolar" type="number" value="2026" min="2000" max="2100" style="width:75px;height:34px;border-radius:8px;border:2px solid #8b5cf6;text-align:center;font-weight:900;background:#ede9fe;font-size:0.85rem;" onchange="cambiarAnioEscolar()">
         </div>
       </div>
 
       <div class="panel-body">
-        <!-- BARRA DE 6 BOTONES EN EL ORDEN SOLICITADO -->
+        <!-- BARRA DE BOTONES VISIBLES GRANDES -->
         <div class="action-buttons-bar">
-          <button class="icon-btn-large btn-escaner" type="button" onclick="abrirEscanerQR()">
-            <span>📷 ESCANEAR QR</span>
-          </button>
-
-          <button class="icon-btn-large btn-alumno" type="button" onclick="toggleDropdown('listaAlumnosDropdown')">
+          <button class="icon-btn-large alumno-top" type="button" onclick="toggleDropdown('listaAlumnosDropdown')">
             <span>👤 VER ALUMNO</span>
           </button>
-
-          <button class="icon-btn-large btn-mises" type="button" onclick="toggleDropdown('listaMisesDropdown')">
+          <button class="icon-btn-large mises-top" type="button" onclick="toggleDropdown('listaMisesDropdown')">
             <span>👩‍🏫 VER MISES</span>
           </button>
-
-          <button class="icon-btn-large btn-prestamo" type="button" onclick="abrirModalPrestamo()">
-            <span>🤝 PRÉSTAMO</span>
+          <button class="icon-btn-large qr" type="button" onclick="abrirEscanerQR()">
+            <span>📷 ESCANEAR QR</span>
           </button>
-
-          <button class="icon-btn-large btn-actualizar" type="button" onclick="consultarEstudiante(true)">
+          <button class="icon-btn-large refresh" type="button" onclick="consultarEstudiante(true)">
             <span>🔄 ACTUALIZAR</span>
           </button>
-
-          <button class="icon-btn-large btn-imprimir" type="button" onclick="window.print()">
+          <button class="icon-btn-large loan" type="button" onclick="abrirModalPrestamo()">
+            <span>🤝 PRÉSTAMO</span>
+          </button>
+          <button class="icon-btn-large print" type="button" onclick="window.print()">
             <span>🖨️ IMPRIMIR</span>
           </button>
-
           <input id="codigo" type="hidden">
         </div>
 
@@ -784,7 +735,7 @@ th {
         <div id="listaAlumnosDropdown" class="dropdown-inline" style="display:none;">
           <div class="dropdown-head">
             <strong>📋 BÚSQUEDA DE ALUMNOS</strong>
-            <input id="filtroAlumnos" class="input-field" style="width:220px;height:34px;margin:0;" placeholder="BUSCAR POR NOMBRE O CÓDIGO..." oninput="filtrarAlumnosInline()">
+            <input id="filtroAlumnos" class="input-field" style="width:200px;height:32px;margin:0;" placeholder="BUSCAR POR NOMBRE O CÓDIGO..." oninput="filtrarAlumnosInline()">
           </div>
           <div id="listaAlumnosItems" class="dropdown-list"></div>
         </div>
@@ -799,12 +750,12 @@ th {
 
         <div id="mensaje" class="message"></div>
 
-        <!-- TABLA DE MOVIMIENTOS EN EXCEL -->
+        <!-- TABLA COMPLETA DE MOVIMIENTOS DESDE LA BASE DE DATOS DE EXCEL -->
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th style="width:50px;text-align:center;">N°</th>
+                <th style="width:45px;text-align:center;">N°</th>
                 <th>AÑO</th>
                 <th>FECHA Y HORA</th>
                 <th>ESTUDIANTE / CUENTA</th>
@@ -824,7 +775,7 @@ th {
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: OPERACIONES E INCIDENCIAS -->
+    <!-- COLUMNA DERECHA: OPERACIONES Y INCIDENCIAS -->
     <div class="right-stack">
       <!-- PANEL PAGOS Y COBROS AL ALUMNO -->
       <div id="panelPago" class="panel">
@@ -838,13 +789,13 @@ th {
           <div id="pagoAlumnoCard" class="pago-card" style="display:none;">
             <img id="pagoAlumnoFoto" src="" alt="Foto Alumno">
             <div>
-              <strong id="pagoAlumnoNombre" style="display:block;font-size:0.90rem;color:var(--azul-oscuro);">—</strong>
-              <span id="pagoAlumnoMeta" style="font-size:0.72rem;color:var(--muted);font-weight:800;">—</span>
-              <b id="pagoAlumnoSaldo" style="display:block;color:var(--verde-oscuro);font-size:0.85rem;margin-top:2px;">SALDO: 0 LDS</b>
+              <strong id="pagoAlumnoNombre" style="display:block;font-size:0.88rem;color:var(--azul-oscuro);">—</strong>
+              <span id="pagoAlumnoMeta" style="font-size:0.70rem;color:var(--muted);font-weight:800;">—</span>
+              <b id="pagoAlumnoSaldo" style="display:block;color:var(--verde-oscuro);font-size:0.82rem;margin-top:2px;">SALDO: 0 LDS</b>
             </div>
           </div>
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">CATEGORÍA DE OPERACIÓN</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">CATEGORÍA DE OPERACIÓN</label>
           <div class="cats-grid">
             <button type="button" class="cat-btn active" onclick="seleccionarCat('INGRESOS_Y_SUELDOS', this)">💼 SUELDOS</button>
             <button type="button" class="cat-btn" onclick="seleccionarCat('PREMIOS_Y_BONIFICACIONES', this)">🏆 PREMIOS</button>
@@ -852,13 +803,13 @@ th {
           </div>
           <select id="pagoCategoria" style="display:none;"><option value="INGRESOS_Y_SUELDOS">INGRESOS_Y_SUELDOS</option></select>
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);margin-top:4px;display:block;">CONCEPTO</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);margin-top:4px;display:block;">CONCEPTO</label>
           <select id="pagoConcepto" class="input-field"></select>
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">MONTO EN LDS</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">MONTO EN LDS</label>
           <input id="pagoMonto" type="number" step="0.5" min="0" class="input-field" placeholder="0.00">
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">OBSERVACIÓN / DETALLE</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">OBSERVACIÓN / DETALLE</label>
           <input id="pagoObs" class="input-field" placeholder="MOTIVO OPCIONAL...">
 
           <div class="pago-actions">
@@ -880,16 +831,16 @@ th {
           <span class="toggle-icon">▼</span>
         </div>
         <div class="panel-body">
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">CÓDIGO ALUMNO</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">CÓDIGO ALUMNO</label>
           <input id="incCodigo" class="input-field" placeholder="LDS-EST-001">
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">PROBLEMA REPORTADO</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">PROBLEMA REPORTADO</label>
           <textarea id="incProblema" class="input-field" rows="2" style="height:auto;padding:8px;" placeholder="DESCRIPCIÓN DEL INCONVENIENTE..."></textarea>
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">SOLUCIÓN APLICADA</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">SOLUCIÓN APLICADA</label>
           <textarea id="incSolucion" class="input-field" rows="2" style="height:auto;padding:8px;" placeholder="SOLUCIÓN REGISTRADA..."></textarea>
 
-          <label style="font-size:0.72rem;font-weight:900;color:var(--azul-oscuro);">ESTADO</label>
+          <label style="font-size:0.70rem;font-weight:900;color:var(--azul-oscuro);">ESTADO</label>
           <select id="incEstado" class="input-field">
             <option value="PENDIENTE">PENDIENTE</option>
             <option value="EN ATENCIÓN">EN ATENCIÓN</option>
@@ -911,17 +862,17 @@ th {
 <!-- MODAL PRÉSTAMO -->
 <div id="prestamoModal" class="modal">
   <div class="modal-box">
-    <h3 style="color:var(--azul-oscuro);font-size:1.05rem;font-weight:900;margin-bottom:14px;">🤝 REGISTRAR PRÉSTAMO DE DINERO</h3>
-    <label style="font-size:0.72rem;font-weight:900;">SELECCIONE DESTINATARIO</label>
+    <h3 style="color:var(--azul-oscuro);font-size:1rem;font-weight:900;margin-bottom:12px;">🤝 REGISTRAR PRÉSTAMO DE DINERO</h3>
+    <label style="font-size:0.70rem;font-weight:900;">SELECCIONE DESTINATARIO</label>
     <select id="prestamoDestino" class="input-field"></select>
 
-    <label style="font-size:0.72rem;font-weight:900;">CANTIDAD EN LDS</label>
+    <label style="font-size:0.70rem;font-weight:900;">CANTIDAD EN LDS</label>
     <input id="prestamoMonto" type="number" step="0.5" class="input-field" placeholder="0.00">
 
-    <label style="font-size:0.72rem;font-weight:900;">MOTIVO O DETALLE</label>
+    <label style="font-size:0.70rem;font-weight:900;">MOTIVO O DETALLE</label>
     <input id="prestamoMotivo" class="input-field" placeholder="MOTIVO DEL PRÉSTAMO...">
 
-    <div style="display:flex;gap:10px;margin-top:12px;">
+    <div style="display:flex;gap:10px;margin-top:10px;">
       <button class="primary-btn" style="background:#cbd5e1;color:#000;" type="button" onclick="cerrarModal('prestamoModal')">CANCELAR</button>
       <button class="primary-btn" type="button" onclick="registrarPrestamo()">REGISTRAR PRÉSTAMO</button>
     </div>
@@ -931,14 +882,13 @@ th {
 <!-- MODAL QR -->
 <div id="qrModal" class="modal">
   <div class="modal-box" style="text-align:center;">
-    <h3 style="margin-bottom:14px;color:var(--azul-oscuro);">ESCANEAR CÓDIGO QR</h3>
-    <div id="reader" style="width:100%;min-height:220px;border-radius:14px;overflow:hidden;background:#000;"></div>
-    <button class="primary-btn" style="margin-top:14px;background:var(--rojo);" type="button" onclick="cerrarEscanerQR()">CERRAR CÁMARA</button>
+    <h3 style="margin-bottom:12px;color:var(--azul-oscuro);">ESCANEAR CÓDIGO QR</h3>
+    <div id="reader" style="width:100%;min-height:220px;border-radius:12px;overflow:hidden;background:#000;"></div>
+    <button class="primary-btn" style="margin-top:12px;background:var(--rojo);" type="button" onclick="cerrarEscanerQR()">CERRAR CÁMARA</button>
   </div>
 </div>
 
 <script>
-// DIRECCIÓN OFICIAL DEL EJECUTABLE DE MISTER ANDREW EN GOOGLE APPS SCRIPT
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 
 const FOTOS_DOCENTES = {
@@ -948,7 +898,7 @@ const FOTOS_DOCENTES = {
   "MISS KARIN": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv"
 };
 
-/* CÓDIGOS OFICIALES DE DOCENTES EN LA BASE DE DATOS DE MISTER ANDREW */
+/* CÓDIGOS OFICIALES ASIGNADOS EN LA HOJA DE EXCEL CUENTAS */
 const CODIGOS_MISES = { 
   "LILY": "LDS-DOC-001", 
   "KIARA": "LDS-DOC-002", 
@@ -994,7 +944,7 @@ function validarAccesoDocente() {
   cargarConceptos();
   renderIncidencias();
 
-  // Asignar el código oficial LDS-DOC-001 de Miss Lily
+  // Asignar CÓDIGO OFICIAL de la base de datos de Excel (ej: LDS-DOC-001 para Miss Lily)
   const codigoCaja = CODIGOS_MISES[miseSeleccionadaClave];
   document.getElementById("codigo").value = codigoCaja;
   consultarEstudiante(true);
@@ -1015,45 +965,27 @@ function formatearLDS(v) {
 }
 
 function consultarEstudiante(silencioso = false) {
-  const codigoDocente = document.getElementById("codigo").value.trim().toUpperCase(); // ej. LDS-DOC-001
+  const codigo = document.getElementById("codigo").value.trim().toUpperCase();
   const anio = document.getElementById("selectAnioEscolar").value;
-  if (!codigoDocente) return;
+  if (!codigo) return;
 
   const msg = document.getElementById("mensaje");
-  if (!silencioso) { msg.textContent = "CONSULTANDO BASE DE DATOS DE MISTER ANDREW..."; msg.className = "message ok"; }
+  if (!silencioso) { msg.textContent = "CONSULTANDO Y CALCULANDO SALDOS DESDE EXCEL..."; msg.className = "message ok"; }
 
-  llamarAPI({ accion: "ESTUDIANTE", codigo: codigoDocente }, r => {
-    if (!r || (!r.estudiante && !r.cuenta && !r.movimientos)) {
-      msg.textContent = "REGISTRO NO ENCONTRADO EN LA BASE DE DATOS."; msg.className = "message error"; return;
+  llamarAPI({ accion: "estudiante", codigo }, r => {
+    if (!r || (!r.estudiante && !r.cuenta)) {
+      msg.textContent = "REGISTRO NO ENCONTRADO EN LA BASE DE DATOS EXCEL."; msg.className = "message error"; return;
     }
     msg.style.display = "none";
-
-    const todosMovs = r.movimientos || [];
-
-    // FILTRADO ESTRICTO EN CLIENTE WEB:
-    // Muestra únicamente las filas que pertenecen al código docente de la Miss seleccionada (LDS-DOC-001)
-    const movsMise = todosMovs.filter(m => {
-      const c = String(m.codigo || m["CÓDIGO"] || m["CODIGO"] || '').toUpperCase().trim();
-      return c === codigoDocente;
-    });
-
-    // CÁLCULO DE ABONOS RECIBIDOS DE GERENCIA DE MISTER ANDREW (30,000 LDS)
-    let abonoInicialSuma = 0;
-    movsMise.forEach(m => {
-      const tipo = String(m.tipo || m["TIPO"] || '').toUpperCase();
-      const monto = Number(m.monto || m["MONTO LDS"] || m["MONTO"] || 0);
-      if (tipo.includes("INGRESO") || tipo.includes("ABONO")) {
-        abonoInicialSuma += monto;
-      }
-    });
-
-    // MOSTRAR TARJETAS DE SALDOS
-    const abonoFinal = abonoInicialSuma > 0 ? abonoInicialSuma : 30000;
-    document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoFinal);
-    document.getElementById("saldoDisponibleMise").textContent = formatearLDS(r.cuenta?.saldoActual ?? 28900);
+    
+    // Lectura directa de CUENTAS de la hoja de cálculo
+    if (r.cuenta) {
+      document.getElementById("saldoInicialMise").textContent = formatearLDS(r.cuenta.totalIngresos || 0);
+      document.getElementById("saldoDisponibleMise").textContent = formatearLDS(r.cuenta.saldoActual || 0);
+    }
 
     const e = r.estudiante || {};
-    if (String(e.codigo || '').startsWith("LDS-EST-")) {
+    if (String(e.codigo).startsWith("LDS-EST-")) {
       document.getElementById("pagoCodigo").value = e.codigo;
       document.getElementById("pagoAlumnoNombre").textContent = e.nombreCompleto || e.nombre;
       document.getElementById("pagoAlumnoMeta").textContent = `${e.grado || ''} ${e.seccion || ''}`;
@@ -1065,7 +997,7 @@ function consultarEstudiante(silencioso = false) {
       document.getElementById("pagoAlumnoCard").style.display = "none";
     }
 
-    renderTablaMovimientos(movsMise, anio, e, codigoDocente);
+    renderTablaMovimientos(r.movimientos || [], anio, e, codigo);
   });
 }
 
@@ -1075,43 +1007,28 @@ function renderTablaMovimientos(movs, anio, estudiante, codigoActual) {
   document.getElementById("contadorMovimientos").textContent = movs.length;
 
   if (!movs.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:25px;color:#64748b;font-weight:800;">SIN MOVIMIENTOS EN EXCEL PARA ${codigoActual}.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-weight:800;">SIN MOVIMIENTOS REGISTRADOS PARA EL CÓDIGO ${codigoActual}.</td></tr>`;
     return;
   }
 
   movs.forEach((m, idx) => {
     const tr = document.createElement("tr");
-
-    // LECTURA DE CAMPOS DE RESPUESTA DE APPS SCRIPT
-    const fecha = m.fechaTexto || m["FECHA Y HORA"] || m["FECHA"] || m.fecha || '-';
-    let persona = m.estudiante || m["CUENTA/ESTUDIANTE"] || m["ESTUDIANTE"] || estudiante?.nombreCompleto || 'ABONO MISTER ANDREW (GERENCIA)';
-    const grado = m.grado || m["GRADO"] || 'PROMOTORA';
-    let tipo = String(m.tipo || m["TIPO"] || 'INGRESO').toUpperCase();
-    const concepto = m.concepto || m["CONCEPTO"] || '-';
-    const monto = Number(m.monto || m["MONTO LDS"] || m["MONTO"] || 0);
-    const cajero = m.responsable || m["CAJERO(A)"] || m["RESPONSABLE"] || 'MISTER ANDREW';
-    const obs = m.observacion || m["OBSERVACIÓN"] || m["OBSERVACION"] || '';
-    const correlativo = "TX-" + (idx + 1);
-
-    // INTERPRETAR ABONOS DE MISTER ANDREW COMO INGRESO
-    if (cajero.toUpperCase().includes("ANDREW") || obs.toUpperCase().includes("PAGO MES") || concepto.toUpperCase().includes("FONDO") || obs.toUpperCase().includes("TRANSFERENCIA")) {
-      tipo = "INGRESO";
-      persona = "ABONO MISTER ANDREW (GERENCIA)";
-    }
-
-    const esEgreso = tipo.includes("EGRESO");
+    
+    let tipoMov = String(m.tipo || 'INGRESO').toUpperCase();
+    const esEgreso = tipoMov.includes("EGRESO");
+    const correlativo = m.correlativo || m.id || (idx + 1);
 
     tr.innerHTML = `
       <td class="col-correlativo">${correlativo}</td>
       <td><strong>${m.anio || anio}</strong></td>
-      <td style="white-space:nowrap;">${fecha}</td>
-      <td><strong>${persona}</strong></td>
-      <td>${grado}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipo}</span></td>
-      <td>${concepto}</td>
-      <td><strong>${formatearLDS(monto)}</strong></td>
-      <td>${cajero}</td>
-      <td>${obs}</td>`;
+      <td style="white-space:nowrap;">${m.fecha || m.timestamp || '-'}</td>
+      <td><strong>${m.estudiante || estudiante?.nombreCompleto || 'CUENTA DOCENTE'}</strong></td>
+      <td>${m.grado || estudiante?.grado || 'DOCENTE'}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMov}</span></td>
+      <td>${m.concepto || ''}</td>
+      <td><strong>${formatearLDS(m.monto || m.montoLDS || 0)}</strong></td>
+      <td>${m.responsable || 'SISTEMA'}</td>
+      <td>${m.observacion || ''}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1141,17 +1058,17 @@ function procesarMovimientoAlumno(tipo) {
 
   if (!codigo || !monto || monto <= 0) { msg.textContent = "SELECCIONE UN ALUMNO E INGRESE EL MONTO"; msg.className = "message error"; return; }
 
-  msg.textContent = "REGISTRANDO OPERACIÓN EN LA BASE DE DATOS..."; msg.className = "message ok";
+  msg.textContent = "REGISTRANDO OPERACIÓN EN EXCEL..."; msg.className = "message ok";
 
   llamarAPI({
-    accion: "REGISTRARMOVIMIENTO",
+    accion: "registrarMovimiento",
     codigo, anio, tipo, categoria, concepto, monto,
     responsable: maestraActivaNombre,
     responsableClave: sessionStorage.getItem("responsableClave"),
     observacion: obs
   }, r => {
-    if (r && (r.ok || r.success)) {
-      msg.textContent = "TRANSACCIÓN REGISTRADA CORRECTAMENTE"; msg.className = "message ok";
+    if (r && r.ok) {
+      msg.textContent = "TRANSACCIÓN EXITOSA Y GUARDADA EN LA HOJA DE EXCEL"; msg.className = "message ok";
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       consultarEstudiante(true);
@@ -1161,7 +1078,7 @@ function procesarMovimientoAlumno(tipo) {
   });
 }
 
-/* INCIDENCIAS LOCALES */
+/* INCIDENCIAS */
 function obtenerIncidencias() {
   try { return JSON.parse(localStorage.getItem("BANCO_LDS_INCIDENCIAS") || "[]"); } catch (e) { return []; }
 }
@@ -1248,7 +1165,7 @@ function seleccionarAlumno(codigo) {
 function cargarListaMises() {
   const cont = document.getElementById("listaMisesItems");
   cont.innerHTML = "<div style='padding:10px;text-align:center;font-weight:800;'>CONSULTANDO CAJAS...</div>";
-  llamarAPI({ accion: "CUENTAS", anio: document.getElementById("selectAnioEscolar").value }, r => {
+  llamarAPI({ accion: "cuentas", anio: document.getElementById("selectAnioEscolar").value }, r => {
     if (r && r.cuentas) {
       const mises = r.cuentas.filter(c => String(c.codigo).startsWith("LDS-DOC-"));
       cont.innerHTML = mises.map((c, i) => `
@@ -1266,7 +1183,7 @@ function abrirModalPrestamo() {
   document.getElementById("prestamoModal").style.display = "flex";
   const sel = document.getElementById("prestamoDestino");
   sel.innerHTML = "<option value=''>CARGANDO USUARIOS...</option>";
-  llamarAPI({ accion: "CUENTAS", anio: document.getElementById("selectAnioEscolar").value }, r => {
+  llamarAPI({ accion: "cuentas", anio: document.getElementById("selectAnioEscolar").value }, r => {
     if (r && r.cuentas) {
       sel.innerHTML = r.cuentas.map(c => `<option value="${c.codigo}">${c.nombre || c.codigo} (${c.codigo})</option>`).join('');
     }
@@ -1282,13 +1199,13 @@ function registrarPrestamo() {
   if (!destino || !monto) return;
 
   llamarAPI({
-    accion: "REGISTRARMOVIMIENTO",
+    accion: "registrarMovimiento",
     codigo: destino, anio, tipo: "EGRESO", categoria: "PRESTAMO", concepto: "PRÉSTAMO", monto,
     responsable: maestraActivaNombre,
     responsableClave: sessionStorage.getItem("responsableClave"),
     observacion: motivo || "PRÉSTAMO REGISTRADO"
   }, r => {
-    if (r && (r.ok || r.success)) {
+    if (r && r.ok) {
       cerrarModal('prestamoModal');
       consultarEstudiante(true);
     }
