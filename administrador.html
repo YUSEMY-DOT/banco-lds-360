@@ -45,7 +45,7 @@ html, body {
 header {
   background: #040a14;
   color: #fff;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-bottom: 3px solid var(--dorado);
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
@@ -66,13 +66,13 @@ header {
 }
 
 .brand img {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
 }
 
 .brand h1 {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #ffffff;
   letter-spacing: .02em;
@@ -88,7 +88,7 @@ header {
   background: rgba(255, 255, 255, 0.12);
   border: 1.5px solid var(--dorado);
   color: #ffffff;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
   font-weight: 800;
   font-size: 0.78rem;
@@ -107,7 +107,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 75px);
   padding: 20px 12px;
 }
 
@@ -228,12 +228,12 @@ main {
   background: linear-gradient(145deg, #091628 0%, #030812 100%);
   border: 2px solid var(--dorado);
   border-radius: 16px;
-  padding: 12px 18px;
+  padding: 14px 20px;
   margin-bottom: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
   box-shadow: 0 6px 18px rgba(0,0,0,0.4);
 }
@@ -241,12 +241,12 @@ main {
 .profile-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .avatar-wrap {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: 2.5px solid var(--dorado);
   overflow: hidden;
@@ -258,30 +258,30 @@ main {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(110px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 10px;
   flex-grow: 1;
-  max-width: 750px;
+  max-width: 800px;
 }
 
 .stat-pill {
   background: rgba(3, 8, 15, 0.9);
   border: 1.5px solid rgba(245, 158, 11, 0.4);
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   text-align: center;
 }
 
 .stat-pill span {
   display: block;
-  font-size: 0.60rem;
+  font-size: 0.62rem;
   color: #cbd5e1;
   font-weight: 800;
   margin-bottom: 2px;
 }
 
 .stat-pill strong {
-  font-size: 1.05rem;
+  font-size: 1.10rem;
   color: #ffffff;
   font-weight: 900;
   display: block;
@@ -310,7 +310,7 @@ main {
 }
 
 .panel-head {
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: #f8fafc;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
@@ -322,41 +322,41 @@ main {
 
 .panel-head h3 {
   color: var(--azul-oscuro);
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 900;
 }
 
 .panel.collapsed .panel-body { display: none; }
-.toggle-icon { font-size: 0.80rem; color: var(--muted); }
+.toggle-icon { font-size: 0.85rem; color: var(--muted); }
 
-.panel-body { padding: 14px; }
+.panel-body { padding: 16px; }
 
-/* BOTONES DE ACCIÓN VISIBLES */
+/* BOTONES DE ACCIÓN GRANDES VISIBLES */
 .action-buttons-bar {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 
 .icon-btn-large {
-  min-height: 42px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1.5px solid;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 2px solid;
   font-weight: 900;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
 
-.icon-btn-large:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.icon-btn-large:hover { transform: translateY(-2px); filter: brightness(1.05); }
 
 .icon-btn-large.qr { background: #0f2340; color: #ffffff; border-color: var(--dorado); }
 .icon-btn-large.refresh { background: linear-gradient(135deg, #fef3c7, #f59e0b); color: #7c4300; border-color: #f59e0b; }
@@ -367,7 +367,7 @@ main {
 
 /* LISTAS DESPLEGABLES INLINE */
 .dropdown-inline {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   border: 2px solid var(--dorado);
   border-radius: 12px;
   background: #ffffff;
@@ -376,7 +376,7 @@ main {
 }
 
 .dropdown-head {
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: #f8fafc;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
@@ -384,18 +384,18 @@ main {
   align-items: center;
 }
 
-.dropdown-head strong { font-size: 0.78rem; color: var(--azul-oscuro); font-weight: 900; }
+.dropdown-head strong { font-size: 0.82rem; color: var(--azul-oscuro); font-weight: 900; }
 
-.dropdown-list { max-height: 240px; overflow-y: auto; padding: 6px; }
+.dropdown-list { max-height: 250px; overflow-y: auto; padding: 6px; }
 
 .dropdown-row {
   display: grid;
-  grid-template-columns: 35px 100px 1fr 90px;
-  gap: 8px;
-  padding: 8px 10px;
+  grid-template-columns: 40px 110px 1fr 100px;
+  gap: 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   align-items: center;
 }
 
@@ -403,26 +403,26 @@ main {
 .dropdown-row .code { font-weight: 900; color: var(--azul-brillante); }
 .dropdown-row .name { font-weight: 800; color: var(--texto); }
 
-/* TABLA DE MOVIMIENTOS COMPLETA */
+/* TABLA DE MOVIMIENTOS COMPLETA DE EXCEL */
 .table-wrap {
   width: 100%;
-  height: 400px;
+  height: 420px;
   overflow: auto;
   border: 2px solid var(--borde);
-  border-radius: 10px;
+  border-radius: 12px;
   background: #ffffff;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: 920px;
 }
 
 th, td {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid #e2e8f0;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   text-align: left;
   vertical-align: middle;
 }
@@ -442,31 +442,31 @@ th {
 .badge-ingreso {
   color: var(--verde-oscuro);
   background: #ecfdf5;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   font-weight: 900;
   border: 1px solid #a7f3d0;
   display: inline-block;
-  font-size: 0.68rem;
+  font-size: 0.70rem;
 }
 
 .badge-egreso {
   color: var(--rojo-oscuro);
   background: #fef2f2;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   font-weight: 900;
   border: 1px solid #fecaca;
   display: inline-block;
-  font-size: 0.68rem;
+  font-size: 0.70rem;
 }
 
-/* SECCIÓN PAGOS Y COBROS */
+/* SECCIÓN PAGOS Y COBROS AL ALUMNO */
 .pago-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
+  padding: 12px;
   border: 2px solid #bae6fd;
   border-radius: 12px;
   background: #f0f9ff;
@@ -474,8 +474,8 @@ th {
 }
 
 .pago-card img {
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #0ea5e9;
@@ -486,7 +486,7 @@ th {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin: 8px 0 12px;
+  margin: 10px 0 14px;
 }
 
 .cat-btn {
@@ -494,7 +494,7 @@ th {
   background: #f8fafc;
   border-radius: 10px;
   padding: 10px 6px;
-  font-size: 0.68rem;
+  font-size: 0.70rem;
   font-weight: 900;
   cursor: pointer;
   line-height: 1.2;
@@ -512,23 +512,23 @@ th {
 .pago-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .btn-pago-grande {
-  min-height: 48px;
+  min-height: 50px;
   border-radius: 12px;
   border: 2px solid;
   font-weight: 900;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .btn-pago-grande.pagar {
@@ -549,39 +549,39 @@ th {
 }
 
 /* INCIDENCIAS */
-.incident-list { display: grid; gap: 8px; margin-top: 10px; }
+.incident-list { display: grid; gap: 8px; margin-top: 12px; }
 .incident {
   border: 1.5px solid var(--borde);
   border-radius: 10px;
-  padding: 10px;
+  padding: 12px;
   background: #f8fafc;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .incident-top {
   display: flex;
   justify-content: space-between;
   font-weight: 900;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .badge-inc {
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
   background: #fef3c7;
   color: #92400e;
   font-weight: 900;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
 }
 
 /* MENSAJES Y MODALES */
 .message {
-  padding: 8px 12px;
-  border-radius: 8px;
-  margin-top: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 10px;
   display: none;
   font-weight: 800;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
 }
 
 .message.ok { display: block; background: #ecfdf3; color: var(--verde-oscuro); border: 1.5px solid #a7f3d0; }
@@ -600,11 +600,11 @@ th {
 
 .modal-box {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 16px;
+  padding: 22px;
+  border-radius: 18px;
   max-width: 480px;
   width: 100%;
-  border-top: 5px solid var(--dorado);
+  border-top: 6px solid var(--dorado);
   box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
@@ -664,7 +664,7 @@ th {
 
 <!-- PANEL DE CONTROL PRINCIPAL -->
 <main id="panelView">
-  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS -->
+  <!-- PERFIL DE CAJA Y TARJETAS DE SALDOS DE LA BASE DE DATOS EXCEL -->
   <div class="profile-banner">
     <div class="profile-info">
       <div class="avatar-wrap">
@@ -700,7 +700,7 @@ th {
     <!-- COLUMNA IZQUIERDA: ESTADO DE CUENTA Y ACCIONES -->
     <div class="panel">
       <div class="panel-head">
-        <h3>📋 CONSULTA Y ESTADO DE CUENTA DE LA CAJA</h3>
+        <h3>📋 CONSULTA Y ESTADO DE CUENTA EN EXCEL</h3>
         <div style="display:flex;gap:8px;align-items:center;">
           <span style="font-size:0.68rem;font-weight:900;color:#64748b;">AÑO:</span>
           <input id="selectAnioEscolar" type="number" value="2026" min="2000" max="2100" style="width:75px;height:34px;border-radius:8px;border:2px solid #8b5cf6;text-align:center;font-weight:900;background:#ede9fe;font-size:0.85rem;" onchange="cambiarAnioEscolar()">
@@ -750,7 +750,7 @@ th {
 
         <div id="mensaje" class="message"></div>
 
-        <!-- TABLA COMPLETA DE MOVIMIENTOS -->
+        <!-- TABLA COMPLETA DE MOVIMIENTOS DESDE LA BASE DE DATOS DE EXCEL -->
         <div class="table-wrap">
           <table>
             <thead>
@@ -768,7 +768,7 @@ th {
               </tr>
             </thead>
             <tbody id="tablaMovimientos">
-              <tr><td colspan="10" style="text-align:center;padding:25px;color:#64748b;font-weight:800;">CARGANDO MOVIMIENTOS DE LA BASE DE DATOS...</td></tr>
+              <tr><td colspan="10" style="text-align:center;padding:25px;color:#64748b;font-weight:800;">CARGANDO MOVIMIENTOS DE LA BASE DE DATOS DE EXCEL...</td></tr>
             </tbody>
           </table>
         </div>
@@ -898,7 +898,14 @@ const FOTOS_DOCENTES = {
   "MISS KARIN": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv"
 };
 
-const CODIGOS_MISES = { "LILY": "CAJA-LILY", "KIARA": "CAJA-KIARA", "ANGHY": "CAJA-ANGHY", "KARIN": "CAJA-KARIN" };
+/* CÓDIGOS OFICIALES ASIGNADOS EN LA HOJA DE EXCEL CUENTAS */
+const CODIGOS_MISES = { 
+  "LILY": "LDS-DOC-001", 
+  "KIARA": "LDS-DOC-002", 
+  "ANGHY": "LDS-DOC-003", 
+  "KARIN": "LDS-DOC-004" 
+};
+
 let miseSeleccionadaClave = "LILY";
 let maestraActivaNombre = "";
 
@@ -937,7 +944,7 @@ function validarAccesoDocente() {
   cargarConceptos();
   renderIncidencias();
 
-  // Asignar código de caja de la Miss por defecto para cargar sus movimientos
+  // Asignar CÓDIGO OFICIAL de la base de datos de Excel (ej: LDS-DOC-001 para Miss Lily)
   const codigoCaja = CODIGOS_MISES[miseSeleccionadaClave];
   document.getElementById("codigo").value = codigoCaja;
   consultarEstudiante(true);
@@ -963,17 +970,17 @@ function consultarEstudiante(silencioso = false) {
   if (!codigo) return;
 
   const msg = document.getElementById("mensaje");
-  if (!silencioso) { msg.textContent = "CONSULTANDO Y CALCULANDO SALDOS..."; msg.className = "message ok"; }
+  if (!silencioso) { msg.textContent = "CONSULTANDO Y CALCULANDO SALDOS DESDE EXCEL..."; msg.className = "message ok"; }
 
   llamarAPI({ accion: "estudiante", codigo }, r => {
     if (!r || (!r.estudiante && !r.cuenta)) {
-      msg.textContent = "REGISTRO NO ENCONTRADO EN LA BASE DE DATOS."; msg.className = "message error"; return;
+      msg.textContent = "REGISTRO NO ENCONTRADO EN LA BASE DE DATOS EXCEL."; msg.className = "message error"; return;
     }
     msg.style.display = "none";
     
-    // Actualización de saldos principales
+    // Lectura directa de CUENTAS de la hoja de cálculo
     if (r.cuenta) {
-      document.getElementById("saldoInicialMise").textContent = formatearLDS(r.cuenta.totalIngresos || 30000);
+      document.getElementById("saldoInicialMise").textContent = formatearLDS(r.cuenta.totalIngresos || 0);
       document.getElementById("saldoDisponibleMise").textContent = formatearLDS(r.cuenta.saldoActual || 0);
     }
 
@@ -1000,24 +1007,14 @@ function renderTablaMovimientos(movs, anio, estudiante, codigoActual) {
   document.getElementById("contadorMovimientos").textContent = movs.length;
 
   if (!movs.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-weight:800;">SIN MOVIMIENTOS EN EL AÑO ${anio}.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-weight:800;">SIN MOVIMIENTOS REGISTRADOS PARA EL CÓDIGO ${codigoActual}.</td></tr>`;
     return;
   }
 
   movs.forEach((m, idx) => {
     const tr = document.createElement("tr");
     
-    // LÓGICA DE TRANSFERENCIAS ESPEJO (MISTER ANDREW / SISTEMA -> MISS):
-    // Si la transaccion proviene de Andrew o Sistema para fondeo de caja, en la caja de la Miss es INGRESO.
     let tipoMov = String(m.tipo || 'INGRESO').toUpperCase();
-    const obsUpper = String(m.observacion || '').toUpperCase();
-    const conceptoUpper = String(m.concepto || '').toUpperCase();
-    const esTransferenciaFondeo = obsUpper.includes('FONDO') || conceptoUpper.includes('FONDO') || obsUpper.includes('ANDREW') || obsUpper.includes('ABONO');
-
-    if (codigoActual.startsWith("CAJA-") && esTransferenciaFondeo) {
-      tipoMov = "INGRESO";
-    }
-
     const esEgreso = tipoMov.includes("EGRESO");
     const correlativo = m.correlativo || m.id || (idx + 1);
 
@@ -1025,7 +1022,7 @@ function renderTablaMovimientos(movs, anio, estudiante, codigoActual) {
       <td class="col-correlativo">${correlativo}</td>
       <td><strong>${m.anio || anio}</strong></td>
       <td style="white-space:nowrap;">${m.fecha || m.timestamp || '-'}</td>
-      <td><strong>${m.estudiante || estudiante?.nombreCompleto || 'FONDO DE CAJA'}</strong></td>
+      <td><strong>${m.estudiante || estudiante?.nombreCompleto || 'CUENTA DOCENTE'}</strong></td>
       <td>${m.grado || estudiante?.grado || 'DOCENTE'}</td>
       <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMov}</span></td>
       <td>${m.concepto || ''}</td>
@@ -1061,7 +1058,7 @@ function procesarMovimientoAlumno(tipo) {
 
   if (!codigo || !monto || monto <= 0) { msg.textContent = "SELECCIONE UN ALUMNO E INGRESE EL MONTO"; msg.className = "message error"; return; }
 
-  msg.textContent = "REGISTRANDO OPERACIÓN..."; msg.className = "message ok";
+  msg.textContent = "REGISTRANDO OPERACIÓN EN EXCEL..."; msg.className = "message ok";
 
   llamarAPI({
     accion: "registrarMovimiento",
@@ -1071,7 +1068,7 @@ function procesarMovimientoAlumno(tipo) {
     observacion: obs
   }, r => {
     if (r && r.ok) {
-      msg.textContent = "TRANSACCIÓN EXITOSA Y GUARDADA EN EXCEL"; msg.className = "message ok";
+      msg.textContent = "TRANSACCIÓN EXITOSA Y GUARDADA EN LA HOJA DE EXCEL"; msg.className = "message ok";
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       consultarEstudiante(true);
@@ -1170,7 +1167,7 @@ function cargarListaMises() {
   cont.innerHTML = "<div style='padding:10px;text-align:center;font-weight:800;'>CONSULTANDO CAJAS...</div>";
   llamarAPI({ accion: "cuentas", anio: document.getElementById("selectAnioEscolar").value }, r => {
     if (r && r.cuentas) {
-      const mises = r.cuentas.filter(c => String(c.codigo).startsWith("CAJA-"));
+      const mises = r.cuentas.filter(c => String(c.codigo).startsWith("LDS-DOC-"));
       cont.innerHTML = mises.map((c, i) => `
         <div class="dropdown-row" onclick="seleccionarAlumno('${c.codigo}')">
           <span>${i+1}</span>
