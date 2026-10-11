@@ -950,7 +950,7 @@ let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
 
-// BASE DE DATOS MAPPING OFICIAL
+// BASE DE DATOS MAPPING OFICIAL DE USUARIOS
 const MAPA_USUARIOS_OFICIALES = {
   "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
   "LDS-DOC-002": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "CAJA-KIARA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
@@ -971,11 +971,18 @@ const MAPA_USUARIOS_OFICIALES = {
   "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
 };
 
-function getVal(obj, ...keys) {
-  if (!obj) return "";
-  for (let k of keys) {
-    if (obj[k] !== undefined && obj[k] !== null && String(obj[k]).trim() !== "") {
-      return obj[k];
+// Extractor universal de atributos para prevenir variaciones de nombres en el JSON de Sheets
+function getProp(obj, ...possibleKeys) {
+  if (!obj || typeof obj !== 'object') return "";
+  const objKeys = Object.keys(obj);
+  for (let key of possibleKeys) {
+    if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== "") {
+      return String(obj[key]).trim();
+    }
+    const lowerKey = key.toLowerCase();
+    const foundKey = objKeys.find(k => k.toLowerCase() === lowerKey);
+    if (foundKey && obj[foundKey] !== undefined && obj[foundKey] !== null && String(obj[foundKey]).trim() !== "") {
+      return String(obj[foundKey]).trim();
     }
   }
   return "";
@@ -994,16 +1001,16 @@ function parsearMonto(val) {
   return isNaN(n) ? 0 : n;
 }
 
-function getCodigo(m) { return getVal(m, "codigo", "CÓDIGO", "codigoQR"); }
-function getTipo(m) { return getVal(m, "tipo", "TIPO"); }
-function getConcepto(m) { return getVal(m, "concepto", "CONCEPTO"); }
-function getMonto(m) { return parsearMonto(getVal(m, "monto", "MONTO LDS", "montoLDS", "MONTO")); }
-function getResponsable(m) { return getVal(m, "responsable", "RESPONSABLE", "cajero"); }
-function getEstudiante(m) { return getVal(m, "estudiante", "CUENTA/ESTUDIANTE", "nombreCompleto", "nombre"); }
-function getFecha(m) { return getVal(m, "fecha", "FECHA", "timestamp"); }
-function getGrado(m) { return getVal(m, "grado", "GRADO"); }
-function getObservacion(m) { return getVal(m, "observacion", "OBSERVACIÓN", "observaciones"); }
-function getAnio(m) { return getVal(m, "anio", "AÑO", "anioEscolar"); }
+function getCodigo(m) { return getProp(m, "codigo", "CÓDIGO", "CODIGO", "codigoQR", "id"); }
+function getTipo(m) { return getProp(m, "tipo", "TIPO"); }
+function getConcepto(m) { return getProp(m, "concepto", "CONCEPTO"); }
+function getMonto(m) { return parsearMonto(getProp(m, "monto", "MONTO LDS", "MONTO_LDS", "montoLDS", "MONTO")); }
+function getResponsable(m) { return getProp(m, "responsable", "RESPONSABLE", "cajero", "CAJERO", "CAJERO(A)", "usuario"); }
+function getEstudiante(m) { return getProp(m, "estudiante", "CUENTA/ESTUDIANTE", "CUENTA / ESTUDIANTE", "cuenta", "nombreCompleto", "nombre"); }
+function getFecha(m) { return getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "timestamp"); }
+function getGrado(m) { return getProp(m, "grado", "GRADO"); }
+function getObservacion(m) { return getProp(m, "observacion", "OBSERVACIÓN", "OBSERVACION", "observaciones"); }
+function getAnio(m) { return getProp(m, "anio", "AÑO", "ANIO", "anioEscolar"); }
 
 function togglePanel(id) {
   const p = document.getElementById(id);
@@ -1126,7 +1133,7 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-// CÁLCULO DE SALDOS DESDE LA BASE DE DATOS REAL DE EXCEL
+// CÁLCULO GENERAL DE SALDOS DE PANTALLA
 function calcularYSincronizarSaldos(movimientos) {
   let capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1142,13 +1149,13 @@ function calcularYSincronizarSaldos(movimientos) {
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
       if (!m) return;
-      if (String(getVal(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
 
       const targetCod = normalizarCodigo(getCodigo(m));
       const respCod = normalizarCodigo(getResponsable(m));
       const monto = getMonto(m);
       const conc = String(getConcepto(m)).toUpperCase();
-      const tipo = String(getTipo(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
 
       // Capital base Andrew
       if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
@@ -1156,26 +1163,14 @@ function calcularYSincronizarSaldos(movimientos) {
         return;
       }
 
-      // Fondos asignados a las Misses
+      // Procesar saldos de las Misses y Egresos de Andrew
       if (saldosMises.hasOwnProperty(targetCod)) {
-        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipo.includes("INGRESO")) {
-          // Es un INGRESO para la Miss y un EGRESO para Mister Andrew
+        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA")) {
           saldosMises[targetCod] += monto;
           egresosAndrew += monto;
-        } else if (tipo.includes("EGRESO")) {
-          // Pagos realizados por la Miss a los alumnos
-          saldosMises[targetCod] -= monto;
-        }
-      } else if (saldosMises.hasOwnProperty(respCod)) {
-        if (tipo.includes("EGRESO") || tipo.includes("INGRESO")) {
-          saldosMises[respCod] -= monto;
         }
       } else if (targetCod === "LDS-DOC-005") {
-        if (tipo.includes("EGRESO")) {
-          egresosAndrew += monto;
-        } else if (tipo.includes("INGRESO")) {
-          ingresosAndrew += monto;
-        }
+        if (obs.includes("DEVOLUCION")) ingresosAndrew += monto;
       }
     });
   }
@@ -1278,7 +1273,7 @@ function renderTabla(lista) {
   });
 }
 
-// SELECCIÓN Y REPORTES
+// MODALES Y REPORTES
 function abrirModalMenuReportes() {
   abrirModal('modalMenuReportes');
 }
@@ -1354,7 +1349,7 @@ function generarEImprimirReporteGrupal() {
   setTimeout(() => { window.print(); }, 300);
 }
 
-// LOGICA MULTI-PERSPECTIVA CORREGIDA SEGÚN ROL
+// LOGICA MULTI-PERSPECTIVA CORREGIDA EXACTA POR ROL
 function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   let filas = "";
   let totalIngresos = 0;
@@ -1366,90 +1361,108 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   if (Array.isArray(todosLosMovimientos)) {
     todosLosMovimientos.forEach(m => {
       if (!m) return;
-      if (String(getVal(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+      if (getProp(m, "estado", "ESTADO").toUpperCase() === "ANULADO") return;
 
       const codDestino = normalizarCodigo(getCodigo(m));
-      const resp = normalizarCodigo(getResponsable(m));
-      const conc = String(getConcepto(m)).toUpperCase();
-      const tipoOrig = String(getTipo(m)).toUpperCase();
+      const respCod = normalizarCodigo(getResponsable(m));
+      const respNombre = getResponsable(m) || "SISTEMA";
+      const conc = getConcepto(m).toUpperCase();
+      const tipoOrig = getTipo(m).toUpperCase();
       const monto = getMonto(m);
-      const obs = String(getObservacion(m)).toUpperCase();
+      const obs = getObservacion(m).toUpperCase();
+      const fechaVal = getFecha(m);
+      const estNombre = getEstudiante(m);
 
-      // 1. SI EL ESTADO DE CUENTA ES DE MISTER ANDREW (CAJA GENERAL)
+      // A. REPORTE PARA MISTER ANDREW (CAJA GENERAL - LDS-DOC-005)
       if (codUsr === "LDS-DOC-005") {
-        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && !conc.includes("FONDO PARA PAGOS"))) {
+        // 1. Capital Inicial -> INGRESO (+)
+        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && conc.includes("BASE"))) {
           movsProcesados.push({
-            fecha: getFecha(m),
+            fecha: fechaVal,
             tipo: "INGRESO",
-            concepto: conc,
+            concepto: conc || "FONDO BASE GERENTE GENERAL",
             monto: monto,
-            responsable: getResponsable(m) || "SISTEMA",
-            observacion: obs,
+            responsable: respNombre || "SISTEMA",
+            observacion: obs || "CAPITAL INICIAL DE OPERACIONES Y FONDEO",
             esEgreso: false
           });
-        } else if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(codDestino)) {
-          const nomDestino = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (getEstudiante(m) || codDestino);
+        }
+        // 2. Transferencias de Fondos a las Misses -> EGRESO (-) para Andrew
+        else if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || MAPA_USUARIOS_OFICIALES.hasOwnProperty(codDestino)) {
+          let targetName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
           movsProcesados.push({
-            fecha: getFecha(m),
+            fecha: fechaVal,
             tipo: "EGRESO",
-            concepto: conc + " → " + nomDestino,
+            concepto: (conc || "FONDO PARA PAGOS A ALUMNOS") + " → " + targetName,
             monto: monto,
             responsable: "MISTER ANDREW",
             observacion: obs,
             esEgreso: true
           });
         }
+        // 3. Devoluciones recibidas -> INGRESO (+)
+        else if (obs.includes("DEVOLUCION") && (codDestino === "LDS-DOC-005" || respCod === "LDS-DOC-005")) {
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc || "DEVOLUCIÓN DE FONDO",
+            monto: monto,
+            responsable: respNombre,
+            observacion: obs,
+            esEgreso: false
+          });
+        }
       }
 
-      // 2. SI EL ESTADO DE CUENTA ES DE UNA MISS (LDS-DOC-001 A 004)
+      // B. REPORTE PARA UNA MISS (LDS-DOC-001, LDS-DOC-002, LDS-DOC-003, LDS-DOC-004)
       else if (codUsr.startsWith("LDS-DOC-")) {
-        if (codDestino === codUsr) {
-          // El dinero transferido por Andrew es INGRESO para la Miss
-          if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO")) {
-            movsProcesados.push({
-              fecha: getFecha(m),
-              tipo: "INGRESO",
-              concepto: conc,
-              monto: monto,
-              responsable: "MISTER ANDREW",
-              observacion: obs,
-              esEgreso: false
-            });
-          }
-        } else if (resp === codUsr && tipoOrig.includes("EGRESO")) {
-          // Lo que la Miss paga a los alumnos es EGRESO para la Miss
+        // 1. Fondos recibidos de Andrew -> INGRESO (+) para la Miss
+        if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO BASE") || tipoOrig.includes("INGRESO"))) {
           movsProcesados.push({
-            fecha: getFecha(m),
-            tipo: "EGRESO",
-            concepto: conc,
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc || "FONDO PARA PAGOS A ALUMNOS",
             monto: monto,
-            responsable: getResponsable(m),
+            responsable: "MISTER ANDREW",
+            observacion: obs,
+            esEgreso: false
+          });
+        }
+        // 2. Pagos efectuados por la Miss a Alumnos -> EGRESO (-) para la Miss
+        else if (respCod === codUsr && (codDestino.startsWith("LDS-EST-") || tipoOrig.includes("EGRESO"))) {
+          let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "EGRESO",
+            concepto: conc + " → " + alumnoName,
+            monto: monto,
+            responsable: usuario.nombre,
             observacion: obs,
             esEgreso: true
           });
         }
       }
 
-      // 3. SI EL ESTADO DE CUENTA ES DE UN ESTUDIANTE
-      else {
-        if (codDestino === codUsr || normalizarCodigo(getEstudiante(m)) === codUsr) {
-          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO")) {
+      // C. REPORTE PARA UN ESTUDIANTE (LDS-EST-xxx)
+      else if (codUsr.startsWith("LDS-EST-")) {
+        if (codDestino === codUsr || normalizarCodigo(estNombre) === codUsr) {
+          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO")) {
             movsProcesados.push({
-              fecha: getFecha(m),
+              fecha: fechaVal,
               tipo: "INGRESO",
               concepto: conc,
               monto: monto,
-              responsable: getResponsable(m),
+              responsable: respNombre,
               observacion: obs,
               esEgreso: false
             });
           } else {
             movsProcesados.push({
-              fecha: getFecha(m),
+              fecha: fechaVal,
               tipo: "EGRESO",
               concepto: conc,
               monto: monto,
-              responsable: getResponsable(m),
+              responsable: respNombre,
               observacion: obs,
               esEgreso: true
             });
