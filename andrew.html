@@ -339,7 +339,6 @@ header {
   gap: 8px;
 }
 
-/* TAMAÑO Y DESPLAZAMIENTO FIJO DE TABLA PRINCIPAL */
 .table-wrap {
   width: 100%;
   height: 380px;
@@ -375,14 +374,8 @@ th {
   white-space: nowrap;
 }
 
-.col-nowrap {
-  white-space: nowrap;
-}
-
-.col-monto {
-  white-space: nowrap;
-  font-weight: 800;
-}
+.col-nowrap { white-space: nowrap; }
+.col-monto { white-space: nowrap; font-weight: 800; }
 
 .badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; }
 .badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #fecaca; }
@@ -696,7 +689,7 @@ textarea { height: auto; padding: 8px 10px; }
       CAJA GENERAL ACTUALIZADA CORRECTAMENTE.
     </div>
 
-    <!-- TARJETAS DE SALDOS EN CAJA DE LAS MISSES -->
+    <!-- SALDOS DE LAS MISSES -->
     <div class="mises-panel">
       <h3>📊 SALDOS EN CAJA DE LAS MISSES</h3>
       <div class="mises-grid">
@@ -1122,13 +1115,11 @@ function calcularYSincronizarSaldos(movimientos) {
       const tipoOrig = String(getTipo(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
 
-      // 1. Capital Inicial Gerencial Andrew (200.000 LDS)
       if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
         capitalInicialAndrew = monto > 0 ? monto : 200000;
         return;
       }
 
-      // 2. Transacciones con las Misses
       if (saldosMises.hasOwnProperty(targetCod)) {
         if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO") || obs.includes("TRANSFERENCIA")) {
           saldosMises[targetCod] += monto;
@@ -1137,7 +1128,6 @@ function calcularYSincronizarSaldos(movimientos) {
           saldosMises[targetCod] -= monto;
         }
       } 
-      // Devolución de la Miss a Andrew
       else if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN"))) {
         ingresosAndrew += monto;
         if (saldosMises.hasOwnProperty(respCod)) {
@@ -1158,22 +1148,55 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
-// FILTRADO ESTRICTO DE LA TABLA INFERIOR (SOLO MISTER ANDREW / CAJA GENERAL)
+// FILTRADO SIN DUPLICADOS PARA LA TABLA DE CAJA GENERAL
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
   } else {
-    const movsAndrew = todosLosMovimientosGlobales.filter(m => {
-      if (!m) return false;
+    const movsAndrew = [];
+    const llavesRegistradas = new Set();
+
+    // 1. Recolectamos las transferencias a favor de las Misses
+    todosLosMovimientosGlobales.forEach(m => {
+      if (!m) return;
+      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
       const cod = normalizarCodigo(getCodigo(m));
       const resp = normalizarCodigo(getResponsable(m));
+      const conc = String(getConcepto(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
-      const est = String(getEstudiante(m)).toUpperCase();
-      
-      return cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("ANDREW") || est.includes("ANDREW");
+      const fecha = getFecha(m);
+      const monto = getMonto(m);
+
+      if (cod.startsWith("LDS-DOC-") && cod !== "LDS-DOC-005") {
+        if (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA")) {
+          movsAndrew.push(m);
+          llavesRegistradas.add(`${fecha}_${monto}_${conc}`);
+        }
+      }
     });
-    
-    // MUESTRA SOLAMENTE LA LISTA FILTRADA DE ANDREW (SIN FALLBACK A TODO EL BANCO)
+
+    // 2. Recolectamos los ingresos de Andrew (Capital Inicial o Devoluciones)
+    todosLosMovimientosGlobales.forEach(m => {
+      if (!m) return;
+      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
+      const cod = normalizarCodigo(getCodigo(m));
+      const conc = String(getConcepto(m)).toUpperCase();
+      const fecha = getFecha(m);
+      const monto = getMonto(m);
+      const llave = `${fecha}_${monto}_${conc}`;
+
+      if (cod === "LDS-DOC-005") {
+        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || conc.includes("DEVOLUCION") || String(getTipo(m)).toUpperCase().includes("INGRESO")) {
+          if (!llavesRegistradas.has(llave)) {
+            llavesRegistradas.add(llave);
+            movsAndrew.push(m);
+          }
+        }
+      }
+    });
+
     renderTabla(movsAndrew);
   }
 }
@@ -1322,7 +1345,6 @@ function generarEImprimirReporteGrupal() {
   setTimeout(() => { window.print(); }, 300);
 }
 
-// REPORTES CON ACCESO Y DESGLOSE COMPLETO POR ROL
 function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
   let filas = "";
   let totalIngresos = 0;
@@ -1346,7 +1368,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
       const fechaVal = getFecha(m);
       const estNombre = getEstudiante(m);
 
-      // 1. REPORTE CAJA GENERAL ANDREW
       if (codUsr === "LDS-DOC-005") {
         if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && conc.includes("BASE"))) {
           movsProcesados.push({
@@ -1381,8 +1402,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
           });
         }
       }
-
-      // 2. REPORTE DE CADA MISS
       else if (codUsr.startsWith("LDS-DOC-")) {
         if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"))) {
           movsProcesados.push({
@@ -1420,8 +1439,6 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
           });
         }
       }
-
-      // 3. REPORTE DE CADA ALUMNO
       else if (codUsr.startsWith("LDS-EST-")) {
         if (codDestino === codUsr || normalizarCodigo(estNombre) === codUsr) {
           if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO") || respCod.startsWith("LDS-DOC-")) {
@@ -1523,6 +1540,7 @@ function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
 }
 
 function ejecutarTransferenciaFondo() {
+  const btn = document.querySelector("#panelTransferir .btn-gold");
   const missDocCode = document.getElementById("transfMiss").value;
   const concepto = document.getElementById("transfConcepto").value;
   const monto = Number(document.getElementById("transfMonto").value) || 0;
@@ -1532,6 +1550,8 @@ function ejecutarTransferenciaFondo() {
 
   if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  if (btn) btn.disabled = true;
 
   msg.textContent = "PROCESANDO TRANSFERENCIA...";
   msg.className = "msg-box ok";
@@ -1550,6 +1570,7 @@ function ejecutarTransferenciaFondo() {
     responsableClave: "360LDS@@@",
     observacion: detalleObs
   }, function(res) {
+    if (btn) btn.disabled = false;
     if (res && res.ok) {
       msg.textContent = "¡FONDO TRANSFERIDO Y REGISTRADO CORRECTAMENTE EN LA CAJA DE LA MISS!";
       msg.className = "msg-box ok";
