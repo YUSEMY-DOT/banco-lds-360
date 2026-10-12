@@ -397,38 +397,18 @@ main {
 }
 .header-dropdown-head strong{font-size:.82rem;color:#0f172a;font-weight:900;}
 
-/* BARRA Y SECCIONES ABATIBLES (PLEGABLES / DESPLEGABLES) */
-.section-toggle {
+/* DESPLIEGUE DIRECTO */
+.direct-list-head {
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #f59e0b;
   padding: 10px 14px;
   font-weight: 800;
-  font-size: 0.78rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 8px;
-  margin: 6px 0 4px;
-  user-select: none;
-  transition: background 0.2s ease;
-}
-.section-toggle:hover {
-  background: linear-gradient(135deg, #1e3a8a 0%, #0c1e30 100%);
-}
-.section-toggle .arrow {
-  transition: transform 0.2s ease;
-  font-size: 0.75rem;
-}
-.section-toggle.collapsed .arrow {
-  transform: rotate(-90deg);
+  font-size: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 6px;
 }
 
-.seccion-abatible-body.collapsed {
-  display: none !important;
-}
-
-.header-list-items{max-height:380px;overflow:auto;padding:6px;}
+.header-list-items{max-height:400px;overflow-y:auto;padding:6px;}
 .header-list-row{
   display:grid; grid-template-columns:36px 105px 1fr 120px 90px; gap:8px; align-items:center;
   padding:9px 10px; border-bottom:1px solid #edf2f7; cursor:pointer; font-size:.72rem;
@@ -786,11 +766,11 @@ footer {
         </div>
       </div>
 
-      <!-- DIRECTORIO PLEGABLE / ABATIBLE -->
+      <!-- DESPLIEGUE DIRECTO DE LISTAS -->
       <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
         <div class="header-dropdown-head">
           <strong id="dropdownTitulo">📋 DIRECTORIO DE CUENTAS</strong>
-          <span style="font-size:0.68rem; color:#64748b; font-weight:700;">HAZ CLIC EN LA BARRA PARA DESPLEGAR</span>
+          <button type="button" onclick="cerrarListaCodigos()" style="border:0; background:var(--rojo); color:#fff; padding:2px 8px; border-radius:4px; font-weight:800; cursor:pointer; font-size:10px;">✕ CERRAR</button>
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
           <div class="header-list-loading">CARGANDO DIRECTORIO...</div>
@@ -1460,15 +1440,13 @@ function procesarMovimientoAlumno(tipoOperacion) {
   });
 }
 
-/* FUNCIONALIDAD ABATIBLE EXCLUSIVA POR BOTÓN */
+/* DESPLIEGUE DIRECTO Y CIERRE AUTOMÁTICO */
 function abrirListaCodigos(tipo) {
   const panel = document.getElementById("listaAlumnosDropdown");
   const tituloHead = document.getElementById("dropdownTitulo");
   
-  // Toggle: si ya está abierto el mismo tipo, se cierra
   if (panel.style.display === "block" && seccionListaActual === tipo) {
-    panel.style.display = "none";
-    seccionListaActual = "";
+    cerrarListaCodigos();
     return;
   }
 
@@ -1477,31 +1455,27 @@ function abrirListaCodigos(tipo) {
 
   if (tipo === 'ALUMNOS') {
     if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS";
-    renderListaAlumnosSolo();
+    renderListaAlumnosDirecta();
   } else if (tipo === 'MISES') {
     if (tituloHead) tituloHead.textContent = "👩‍🏫 DIRECTORIO DE MISES Y DIRECCIÓN GENERAL";
-    renderListaMisesSolo();
+    renderListaMisesDirecta();
   }
 }
 
-function toggleSeccionAbatible(idSeccion, idBtn) {
-  const body = document.getElementById(idSeccion);
-  const btn = document.getElementById(idBtn);
-  if (!body) return;
-  body.classList.toggle("collapsed");
-  if (btn) btn.classList.toggle("collapsed");
+function cerrarListaCodigos() {
+  const panel = document.getElementById("listaAlumnosDropdown");
+  if (panel) panel.style.display = "none";
+  seccionListaActual = "";
 }
 
-function renderListaAlumnosSolo() {
+function renderListaAlumnosDirecta() {
   const cont = document.getElementById("listaAlumnosItems");
   const alumnos = obtenerEstudiantesOrdenados();
 
   let html = `
-    <div id="btnSecAlumnos" class="section-toggle collapsed" onclick="toggleSeccionAbatible('secAlumnosList', 'btnSecAlumnos')">
-      <span>🎓 ESTUDIANTES / ALUMNOS (${alumnos.length})</span>
-      <span class="arrow">▼</span>
+    <div class="direct-list-head">
+      <span>🎓 LISTA DE ESTUDIANTES / ALUMNOS REGISTRADOS (${alumnos.length})</span>
     </div>
-    <div id="secAlumnosList" class="seccion-abatible-body collapsed">
   `;
 
   if (!alumnos.length) {
@@ -1520,20 +1494,17 @@ function renderListaAlumnosSolo() {
       `;
     });
   }
-  html += `</div>`;
   cont.innerHTML = html;
 }
 
-function renderListaMisesSolo() {
+function renderListaMisesDirecta() {
   const cont = document.getElementById("listaAlumnosItems");
   const docentes = obtenerDocentesYDireccion();
 
   let html = `
-    <div id="btnSecDocentes" class="section-toggle collapsed" onclick="toggleSeccionAbatible('secDocentesList', 'btnSecDocentes')">
+    <div class="direct-list-head">
       <span>👩‍🏫 MISES Y DIRECCIÓN GENERAL (${docentes.length})</span>
-      <span class="arrow">▼</span>
     </div>
-    <div id="secDocentesList" class="seccion-abatible-body collapsed">
   `;
 
   docentes.forEach((cod, i) => {
@@ -1548,13 +1519,11 @@ function renderListaMisesSolo() {
       </div>
     `;
   });
-  html += `</div>`;
   cont.innerHTML = html;
 }
 
 function seleccionarAlumnoLista(cod) {
-  document.getElementById("listaAlumnosDropdown").style.display = "none";
-  seccionListaActual = "";
+  cerrarListaCodigos(); // CIERRE AUTOMÁTICO AL SELECCIONAR
   document.getElementById("codigo").value = cod;
   consultarEstudiante();
 }
