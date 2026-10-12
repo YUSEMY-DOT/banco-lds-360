@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -660,6 +659,32 @@ textarea { height: auto; padding: 8px 10px; }
     text-align: left;
   }
   .tabla-print th { background: #e2e8f0 !important; font-weight: 900; }
+}
+
+/* AJUSTE EXCLUSIVO DE BOTONES: no modifica paneles, contenido ni funciones */
+.btn,
+.opcion-reporte-btn {
+  border-radius: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover,
+.opcion-reporte-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
+}
+.btn:active,
+.opcion-reporte-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+.btn:focus-visible,
+.opcion-reporte-btn:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 2px;
 }
 </style>
 </head>
@@ -1687,3 +1712,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
 ```
+`
