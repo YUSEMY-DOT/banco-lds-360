@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BANCO LDS 360 — Administración</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
 <style>
@@ -63,8 +63,8 @@ header {
 }
 
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand img { width: 40px; height: 40px; object-fit: contain; }
-.brand h1 { margin: 0; font-size: 1.05rem; font-weight: 800; color: #fff; }
+.brand img { width: 42px; height: 42px; object-fit: contain; }
+.brand h1 { margin: 0; font-size: 1.1rem; font-weight: 800; color: #fff; }
 .brand p { margin: 0; color: var(--dorado); font-size: 0.65rem; font-weight: 700; }
 
 .btn {
@@ -82,8 +82,6 @@ header {
 }
 
 .btn-light { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--dorado); color: #fff; }
-.btn-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; border: 1px solid #fcd34d; }
-.btn-outline { background: #fff; border: 1.5px solid var(--borde); color: var(--azul); }
 
 .login-wrapper {
   display: flex;
@@ -119,7 +117,6 @@ header {
 }
 
 .card-insignia { width: 100%; height: 100%; object-fit: contain; }
-
 .login-card h2 { color: var(--azul); font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
 .login-card p { color: var(--muted); font-size: 0.75rem; font-weight: 600; margin-bottom: 15px; }
 
@@ -206,9 +203,9 @@ main {
 }
 
 .stat-pill.stat-abono { border-color: #fbbf24; background: linear-gradient(135deg,#3b2f12,#111827); }
-.stat-pill.stat-abono strong { color: #fde68a; font-size: 1.35rem; }
+.stat-pill.stat-abono strong { color: #fde68a; font-size: 1.25rem; }
 .stat-pill.stat-disponible { border-color: #22c55e; background: linear-gradient(135deg,#052e16,#0f172a); }
-.stat-pill.stat-disponible strong { color: #86efac; font-size: 1.35rem; }
+.stat-pill.stat-disponible strong { color: #86efac; font-size: 1.25rem; }
 .stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
 .stat-pill strong { font-size: 0.9rem; color: #fff; font-weight: 800; }
 
@@ -220,7 +217,7 @@ main {
 }
 
 @media(min-width: 1100px) {
-  .layout { grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr); }
+  .layout { grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.8fr); }
 }
 
 .panel {
@@ -246,13 +243,98 @@ main {
 .panel-head h3 { margin: 0; color: var(--azul); font-size: 0.9rem; font-weight: 800; }
 .panel-body { padding: 16px; }
 
-/* === TABLA DE MOVIMIENTOS HORIZONTAL COMPACTA === */
+/* === BARRA DE HERRAMIENTAS Y BÚSQUEDA === */
+.search-row-ordered {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.icon-header-btn, .icon-query-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
+  height: 38px;
+}
+
+.icon-header-btn { width: 38px; border-radius: 50%; padding: 6px; }
+.icon-header-btn svg, .icon-query-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.icon-header-btn.alumno { background: linear-gradient(135deg,#67e8f9,#0284c7); color: #fff; border-color: #0284c7; }
+.icon-header-btn.mises { background: linear-gradient(135deg,#fda4af,#dc2626); color: #fff; border-color: #dc2626; }
+
+.icon-query-btn.refresh { width: 38px; border-radius: 50%; background: linear-gradient(135deg,#fff7cc,#f59e0b); color: #8a4b00; border-color: #f59e0b; }
+.icon-query-btn.qr-btn { width: 38px; border-radius: 50%; background: #0f172a; color: #f59e0b; border-color: #f59e0b; }
+
+.btn-mis-movs {
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #fff;
+  border: 1.5px solid var(--dorado);
+  border-radius: 10px;
+  padding: 0 12px;
+  font-weight: 800;
+  font-size: 0.72rem;
+  cursor: pointer;
+  height: 38px;
+}
+
+.btn-print-dropdown {
+  background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
+  color: #7c4300;
+  border: 1.5px solid #d97706;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-weight: 800;
+  font-size: 0.72rem;
+  cursor: pointer;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.print-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: #fff;
+  border: 2px solid var(--dorado);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 100;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.print-menu button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid #f1f5f9;
+  background: #fff;
+  color: var(--azul);
+  font-weight: 800;
+  font-size: 0.7rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.print-menu button:hover { background: #fef3c7; color: #92400e; }
+
+/* === TABLA DE MOVIMIENTOS === */
 .table-wrap {
   width: 100%;
   max-height: 460px;
   overflow-y: auto;
   overflow-x: auto;
-  margin-top: 10px;
   border: 1.5px solid var(--borde);
   border-radius: 10px;
   background: #fff;
@@ -270,7 +352,7 @@ th, td {
   border-bottom: 1px solid #e2e8f0;
   text-align: left;
   font-size: 9px !important;
-  line-height: 1.2;
+  line-height: 1.25;
   vertical-align: middle;
   font-weight: 700;
   white-space: nowrap !important;
@@ -286,6 +368,11 @@ th {
   z-index: 10;
 }
 
+td.td-fecha-hora {
+  white-space: normal !important;
+  min-width: 110px;
+}
+
 td:last-child {
   white-space: normal !important;
   word-break: break-word !important;
@@ -293,65 +380,48 @@ td:last-child {
 }
 
 .badge-ingreso {
-  color: #047857;
-  background: #ecfdf5;
-  padding: 3px 8px !important;
-  border-radius: 4px;
-  font-weight: 800;
-  border: 1px solid #a7f3d0;
-  display: inline-block !important;
-  white-space: nowrap !important;
-  font-size: 9px !important;
-  text-align: center;
+  color: #047857; background: #ecfdf5; padding: 3px 8px !important;
+  border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0;
+  display: inline-block !important; font-size: 9px !important; text-align: center;
 }
 
 .badge-egreso {
-  color: #b91c1c;
-  background: #fef2f2;
-  padding: 3px 8px !important;
-  border-radius: 4px;
-  font-weight: 800;
-  border: 1px solid #fecaca;
-  display: inline-block !important;
-  white-space: nowrap !important;
-  font-size: 9px !important;
-  text-align: center;
+  color: #b91c1c; background: #fef2f2; padding: 3px 8px !important;
+  border-radius: 4px; font-weight: 800; border: 1px solid #fecaca;
+  display: inline-block !important; font-size: 9px !important; text-align: center;
 }
 
 .empty { text-align: center; color: var(--muted); padding: 20px; font-weight: 700; font-size: 0.85rem; }
 
-.search-row-ordered { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
-
-.icon-header-btn, .icon-query-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  flex: 0 0 auto;
+/* NAV PESTAÑAS DE MÓDULOS */
+.modulos-nav {
+  display: flex;
+  gap: 6px;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 8px 12px 0;
+  background: #f8fafc;
+  overflow-x: auto;
 }
 
-.icon-header-btn { width: 38px; height: 38px; border-radius: 50%; padding: 6px; }
-.icon-header-btn svg, .icon-query-btn svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.icon-header-btn.alumno { background: linear-gradient(135deg,#67e8f9,#0284c7); color: #fff; border-color: #0284c7; }
-.icon-header-btn.mises { background: linear-gradient(135deg,#fda4af,#dc2626); color: #fff; border-color: #dc2626; }
-
-.icon-query-btn { width: 44px; height: 38px; border-radius: 10px; padding: 6px; }
-.icon-query-btn.qr-shape { background: #0f2340; color: #fff; border-color: #eab308; }
-.icon-query-btn.refresh { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#fff7cc,#f59e0b); color: #8a4b00; border-color: #f59e0b; }
-.icon-query-btn.loan { background: linear-gradient(135deg,#ddd6fe,#7c3aed); color: #fff; border-color: #6d28d9; }
-.icon-query-btn.print { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#fde68a,#f59e0b); color: #7c4300; border-color: #f59e0b; }
-
-.btn-mis-movs {
-  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
-  color: #fff;
-  border: 1.5px solid var(--dorado);
-  border-radius: 10px;
-  padding: 6px 12px;
-  font-weight: 800;
+.modulo-tab-btn {
+  border: 1.5px solid #cbd5e1;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: #e2e8f0;
+  color: #475569;
+  padding: 8px 12px;
   font-size: 0.72rem;
+  font-weight: 800;
   cursor: pointer;
-  height: 38px;
+  white-space: nowrap;
+}
+
+.modulo-tab-btn.active {
+  background: #fff;
+  border-color: var(--dorado);
+  color: var(--azul);
+  border-bottom: 2px solid #fff;
+  margin-bottom: -2px;
 }
 
 .pago-alumno-card {
@@ -378,12 +448,7 @@ td:last-child {
   justify-content: center;
 }
 
-.pago-alumno-foto {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
+.pago-alumno-foto { width: 100%; height: 100%; object-fit: cover; }
 
 .pago-alumno-datos { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .pago-alumno-datos strong { font-size: 0.9rem; color: #0f172a; font-weight: 800; }
@@ -403,7 +468,6 @@ td:last-child {
   font-weight: 900;
   cursor: pointer;
   font-size: 0.75rem;
-  transition: all 0.2s ease;
 }
 
 .btn-accion-pago svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
@@ -460,13 +524,46 @@ td:last-child {
 .message.ok { display: block; background: #ecfdf3; color: var(--verde); border: 1px solid #a7f3d0; }
 .message.error { display: block; background: #fef2f2; color: var(--rojo); border: 1px solid #fecaca; }
 
-footer { text-align: center; color: #cbd5e1; padding: 12px; font-size: 0.7rem; font-weight: 700; }
+#qrScannerContainer { display: none; background: #000; padding: 10px; border-radius: 10px; margin-bottom: 12px; }
 
+/* === FORMATOS Y ESTILOS PARA IMPRESIÓN OFICIAL === */
 #contenedorImpresion { display: none; }
+
 @media print {
   body * { visibility: hidden !important; }
   #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
-  #contenedorImpresion { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 20px; }
+  #contenedorImpresion {
+    display: block !important;
+    position: absolute;
+    left: 0; top: 0; width: 100%;
+    background: #fff; color: #000;
+    padding: 25px;
+  }
+
+  .print-header {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px double #0c1e30; padding-bottom: 12px; margin-bottom: 20px;
+  }
+  .print-logo { width: 75px; height: 75px; object-fit: contain; }
+  .print-title { text-align: center; }
+  .print-title h1 { font-size: 18px; color: #0c1e30; margin: 0; font-weight: 900; }
+  .print-title h2 { font-size: 13px; color: #d97706; margin: 2px 0; font-weight: 800; }
+  .print-title p { font-size: 10px; color: #475569; margin: 0; font-weight: 700; }
+
+  .print-user-box {
+    display: flex; gap: 15px; align-items: center;
+    border: 1.5px solid #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 15px; background: #f8fafc;
+  }
+  .print-user-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #d97706; }
+
+  .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .print-table th, .print-table td { border: 1px solid #94a3b8; padding: 6px 8px; font-size: 10px !important; text-align: left; }
+  .print-table th { background: #e2e8f0; color: #0f172a; font-weight: 800; }
+
+  .print-footer-signatures {
+    display: flex; justify-content: space-around; margin-top: 50px; text-align: center;
+  }
+  .print-signature-line { width: 180px; border-top: 1.5px dashed #000; padding-top: 5px; font-size: 10px; font-weight: 800; }
 }
 </style>
 </head>
@@ -548,8 +645,8 @@ footer { text-align: center; color: #cbd5e1; padding: 12px; font-size: 0.7rem; f
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">15.000 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">15.000 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
     </div>
   </div>
@@ -581,13 +678,30 @@ footer { text-align: center; color: #cbd5e1; padding: 12px; font-size: 0.7rem; f
       </div>
 
       <div class="panel-body">
+        <div id="qrScannerContainer">
+          <div id="qrReader" style="width:100%;"></div>
+        </div>
+
         <div>
           <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">CONSULTA DE ALUMNOS O CAJA</label>
           <div class="search-row-ordered">
             <button class="icon-query-btn refresh" type="button" onclick="actualizarPanelAdmin()" title="Actualizar Datos">
               <svg viewBox="0 0 48 48"><path d="M39 18a16 16 0 1 0 2 13"/><path d="M39 8v10H29"/></svg>
             </button>
-            <button class="btn-mis-movs" type="button" onclick="cargarMisMovimientosPrioritarios()">👤 MIS MOVIMIENTOS DE CAJA</button>
+
+            <button class="icon-query-btn qr-btn" type="button" onclick="toggleQRScanner()" title="Escanear Código QR">
+              <svg viewBox="0 0 48 48"><path d="M6 6h12v12H6zM30 6h12v12H30zM6 30h12v12H6zM30 36h6v6h-6zM36 36h6v6h-6zM30 36h6v6h-6z"/></svg>
+            </button>
+
+            <button class="btn-mis-movs" type="button" onclick="cargarMisMovimientosPrioritarios()">👤 MIS MOVIMIENTOS</button>
+
+            <div class="btn-print-dropdown" onclick="togglePrintMenu(event)">
+              <span>🖨️ IMPRESIONES ▾</span>
+              <div id="printMenu" class="print-menu">
+                <button type="button" onclick="imprimirEstadoCuentaIndividual()">📄 IMPRESIÓN INDIVIDUAL</button>
+                <button type="button" onclick="imprimirConsolidadoGrupal()">📊 IMPRESIÓN GRUPAL (SALÓN)</button>
+              </div>
+            </div>
           </div>
           <input id="codigo" type="hidden" value="">
         </div>
@@ -617,72 +731,127 @@ footer { text-align: center; color: #cbd5e1; padding: 12px; font-size: 0.7rem; f
       </div>
     </div>
 
-    <!-- PANEL DERECHO: OPERACIONES Y COBROS -->
-    <div>
-      <div id="panelPago" class="panel">
-        <div class="panel-head">
-          <h3>💰 PAGOS Y COBROS AL ALUMNO</h3>
+    <!-- PANEL DERECHO: OPERACIONES (PAGOS, PRÉSTAMOS, INCIDENCIAS) -->
+    <div class="panel">
+      <div class="modulos-nav">
+        <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="cambiarModuloOperacion('PAGOS')">💰 PAGOS / COBROS</button>
+        <button id="tabPrestamosBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('PRESTAMOS')">🤝 PRÉSTAMOS</button>
+        <button id="tabIncidenciasBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('INCIDENCIAS')">⚠️ INCIDENCIAS</button>
+      </div>
+
+      <!-- MODULO 1: PAGOS Y COBROS -->
+      <div id="moduloPagos" class="panel-body">
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">ALUMNO SELECCIONADO</label>
+        <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA" readonly style="background:#f1f5f9;">
+
+        <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
+          <div class="pago-alumno-foto-wrap">
+            <img id="pagoAlumnoFoto" class="pago-alumno-foto" src="" alt="">
+          </div>
+          <div class="pago-alumno-datos">
+            <strong id="pagoAlumnoNombre">ALUMNO</strong>
+            <span id="pagoAlumnoMeta">—</span>
+            <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
+          </div>
         </div>
-        <div class="panel-body">
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">ALUMNO SELECCIONADO</label>
-          <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA" readonly style="background:#f1f5f9;">
 
-          <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
-            <div class="pago-alumno-foto-wrap">
-              <img id="pagoAlumnoFoto" class="pago-alumno-foto" src="" alt="">
-            </div>
-            <div class="pago-alumno-datos">
-              <strong id="pagoAlumnoNombre">ALUMNO</strong>
-              <span id="pagoAlumnoMeta">—</span>
-              <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
-            </div>
-          </div>
-
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CATEGORÍA DEL MOVIMIENTO</label>
-          <div class="categorias-grid" id="categoriasPagoBotones">
-            <button type="button" class="categoria-btn" data-categoria="INGRESOS_Y_SUELDOS" onclick="seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
-            <button type="button" class="categoria-btn active" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
-            <button type="button" class="categoria-btn" data-categoria="AHORROS_E_INVERSIONES" onclick="seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
-            <button type="button" class="categoria-btn" data-categoria="PAGOS_Y_GASTOS" onclick="seleccionarCategoriaPago('PAGOS_Y_GASTOS')">🛒 PAGOS Y GASTOS</button>
-            <button type="button" class="categoria-btn" data-categoria="SANCIONES_Y_MULTAS" onclick="seleccionarCategoriaPago('SANCIONES_Y_MULTAS')">⚠️ SANCIONES Y MULTAS</button>
-            <button type="button" class="categoria-btn" data-categoria="COSTOS_Y_OTROS" onclick="seleccionarCategoriaPago('COSTOS_Y_OTROS')">⚙️ COSTOS Y OTROS</button>
-          </div>
-          <select id="pagoCategoria" style="display:none;">
-            <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
-            <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
-            <option value="AHORROS_E_INVERSIONES">AHORROS E INVERSIONES</option>
-            <option value="PAGOS_Y_GASTOS">PAGOS Y GASTOS</option>
-            <option value="SANCIONES_Y_MULTAS">SANCIONES Y MULTAS</option>
-            <option value="COSTOS_Y_OTROS">COSTOS Y OTROS</option>
-          </select>
-
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CONCEPTO</label>
-          <select id="pagoConcepto">
-            <option value="">SELECCIONA EL CONCEPTO</option>
-          </select>
-
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO LDS</label>
-          <input id="pagoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO">
-
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN (OPCIONAL)</label>
-          <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO..."></textarea>
-
-          <div class="pago-acciones">
-            <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">
-              <svg viewBox="0 0 48 48"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
-              <span>PAGAR ALUMNO</span>
-            </button>
-            <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarMovimientoAlumno('EGRESO')">
-              <svg viewBox="0 0 48 48"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
-              <span>COBRAR ALUMNO</span>
-            </button>
-          </div>
-          <div id="pagoMensaje" class="message"></div>
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CATEGORÍA DEL MOVIMIENTO</label>
+        <div class="categorias-grid" id="categoriasPagoBotones">
+          <button type="button" class="categoria-btn" data-categoria="INGRESOS_Y_SUELDOS" onclick="seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
+          <button type="button" class="categoria-btn active" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
+          <button type="button" class="categoria-btn" data-categoria="AHORROS_E_INVERSIONES" onclick="seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
+          <button type="button" class="categoria-btn" data-categoria="PAGOS_Y_GASTOS" onclick="seleccionarCategoriaPago('PAGOS_Y_GASTOS')">🛒 PAGOS Y GASTOS</button>
+          <button type="button" class="categoria-btn" data-categoria="SANCIONES_Y_MULTAS" onclick="seleccionarCategoriaPago('SANCIONES_Y_MULTAS')">⚠️ SANCIONES Y MULTAS</button>
+          <button type="button" class="categoria-btn" data-categoria="COSTOS_Y_OTROS" onclick="seleccionarCategoriaPago('COSTOS_Y_OTROS')">⚙️ COSTOS Y OTROS</button>
         </div>
+        <select id="pagoCategoria" style="display:none;">
+          <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
+          <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
+          <option value="AHORROS_E_INVERSIONES">AHORROS E INVERSIONES</option>
+          <option value="PAGOS_Y_GASTOS">PAGOS Y GASTOS</option>
+          <option value="SANCIONES_Y_MULTAS">SANCIONES Y MULTAS</option>
+          <option value="COSTOS_Y_OTROS">COSTOS Y OTROS</option>
+        </select>
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CONCEPTO</label>
+        <select id="pagoConcepto">
+          <option value="">SELECCIONA EL CONCEPTO</option>
+        </select>
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO LDS</label>
+        <input id="pagoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO">
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN (OPCIONAL)</label>
+        <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO..."></textarea>
+
+        <div class="pago-acciones">
+          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">
+            <svg viewBox="0 0 48 48"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
+            <span>PAGAR ALUMNO</span>
+          </button>
+          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarMovimientoAlumno('EGRESO')">
+            <svg viewBox="0 0 48 48"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
+            <span>COBRAR ALUMNO</span>
+          </button>
+        </div>
+        <div id="pagoMensaje" class="message"></div>
+      </div>
+
+      <!-- MODULO 2: PRÉSTAMOS -->
+      <div id="moduloPrestamos" class="panel-body" style="display:none;">
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">CUENTA ORIGEN (MISE / GERENCIA)</label>
+        <input id="prestamoOrigen" readonly style="background:#f1f5f9;">
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CUENTA DESTINO / CAJA BENEFICIARIA</label>
+        <select id="prestamoDestino">
+          <option value="">SELECCIONAR DESTINO</option>
+          <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO</option>
+          <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA</option>
+          <option value="LDS-DOC-003">MISS ANGHY REYES MELO</option>
+          <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI</option>
+          <option value="LDS-DOC-005">MISTER ANDREW REYES MELO (GERENCIA)</option>
+        </select>
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO DEL PRÉSTAMO / TRANSFERENCIA (LDS)</label>
+        <input id="prestamoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO EN LDS">
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN / MOTIVO</label>
+        <textarea id="prestamoObs" rows="2" placeholder="DETALLE DE LA TRANSFERENCIA ENTRE CAJAS..."></textarea>
+
+        <button class="primary-btn" type="button" onclick="procesarPrestamoCaja()" style="margin-top:12px;">🤝 REGISTRAR PRÉSTAMO / TRANSFERENCIA</button>
+        <div id="prestamoMensaje" class="message"></div>
+      </div>
+
+      <!-- MODULO 3: INCIDENCIAS -->
+      <div id="moduloIncidencias" class="panel-body" style="display:none;">
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">ALUMNO CON INCIDENCIA</label>
+        <input id="incidenciaAlumno" placeholder="SELECCIONA UN ALUMNO DE LA LISTA" readonly style="background:#f1f5f9;">
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">TIPO DE FALTA / INCIDENCIA</label>
+        <select id="incidenciaFalta">
+          <option value="Multa por llevar mal el uniforme o incompleto">Multa por llevar mal el uniforme o incompleto</option>
+          <option value="Incumplimiento de tareas o asignaciones a tiempo">Incumplimiento de tareas o asignaciones a tiempo</option>
+          <option value="Llegada tarde al aula o formación">Llegada tarde al aula o formación</option>
+          <option value="Uso no autorizado de dispositivos electrónicos en clase">Uso no autorizado de dispositivos electrónicos en clase</option>
+          <option value="Desorden o indisciplina leve durante las horas de clase">Desorden o indisciplina leve durante las horas de clase</option>
+          <option value="Falta de respeto o modales con compañeros o docentes">Falta de respeto o modales con compañeros o docentes</option>
+          <option value="Basura fuera de su lugar / No respetar áreas verdes">Basura fuera de su lugar / No respetar áreas verdes</option>
+          <option value="Faltar a la verdad">Faltar a la verdad</option>
+        </select>
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO DE LA MULTA (LDS)</label>
+        <input id="incidenciaMonto" type="number" step="1" min="0" placeholder="MONTO DE SANCIÓN">
+
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN DISCIPLINARIA</label>
+        <textarea id="incidenciaObs" rows="2" placeholder="DESCRIPCIÓN DE LA INCIDENCIA PEDAGÓGICA..."></textarea>
+
+        <button class="primary-btn" type="button" onclick="procesarIncidenciaAlumno()" style="background:linear-gradient(135deg,#991b1b,#dc2626); margin-top:12px;">⚠️ REGISTRAR INCIDENCIA Y APLICAR MULTA</button>
+        <div id="incidenciaMensaje" class="message"></div>
       </div>
     </div>
   </section>
 
+  <!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
   <div id="contenedorImpresion"></div>
 </main>
 
@@ -695,6 +864,7 @@ let maestraActivaGlobal = "";
 let todosLosMovimientosGlobales = [];
 let seccionListaActual = "";
 let listaEstudiantesGoogleSheets = [];
+let html5QrCodeScanner = null;
 
 const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
@@ -734,7 +904,14 @@ let CATALOGO_EXCEL = {
 function parseMontoLDS(val) {
   if (typeof val === "number") return Math.trunc(val);
   if (!val) return 0;
-  let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim().replace(/[.,]/g, "");
+  let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim();
+  if (str.includes(".") && !str.includes(",")) {
+    let partes = str.split(".");
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
+      str = str.replace(/\./g, "");
+    }
+  }
+  str = str.replace(/,/g, ".");
   const n = Number(str);
   return Number.isFinite(n) ? Math.trunc(n) : 0;
 }
@@ -765,7 +942,7 @@ function obtenerFotoUsuario(codigo) {
     const convertida = convertDriveUrl(MAPA_USUARIOS[c].foto);
     if (convertida) return convertida;
   }
-  return LOGO_OFICIAL_URL;
+  return "";
 }
 
 function llamarAPI(parametros, callback) {
@@ -840,10 +1017,10 @@ function desbloquearPanel(nombreMaestra) {
 
   const codMise = CODIGOS_MISE[nombreMaestra] || "LDS-DOC-001";
   document.getElementById("codigo").value = codMise;
+  document.getElementById("prestamoOrigen").value = nombreMaestra + " (" + codMise + ")";
 
   seleccionarCategoriaPago("PREMIOS_Y_BONIFICACIONES");
 
-  // Carga lista dinámica de estudiantes directamente desde Google Sheets
   cargarEstudiantesDesdeServidor();
   actualizarPanelAdmin();
 }
@@ -874,7 +1051,7 @@ function cargarEstudiantesDesdeServidor(callbackDone) {
 function abrirListaCodigos(tipo) {
   const panel = document.getElementById("listaAlumnosDropdown");
   const tituloHead = document.getElementById("dropdownTitulo");
-  
+
   if (panel.style.display === "block" && seccionListaActual === tipo) {
     cerrarListaCodigos();
     return;
@@ -884,7 +1061,7 @@ function abrirListaCodigos(tipo) {
   panel.style.display = "block";
 
   if (tipo === 'ALUMNOS') {
-    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS (GOOGLE SHEETS)";
+    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS";
     renderListaAlumnosDirecta();
     cargarEstudiantesDesdeServidor(function() {
       renderListaAlumnosDirecta();
@@ -916,10 +1093,12 @@ function renderListaAlumnosDirecta() {
       const foto = convertDriveUrl(est.fotoUrl || est.foto) || obtenerFotoUsuario(cod);
       const gradoText = est.grado ? (est.grado + " " + (est.seccion || "")) : "ALUMNO";
 
+      const fotoTag = foto ? `<img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:26px; height:26px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:12px;">👤</div>`;
+
       html += `
         <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
           <span>${i + 1}</span>
-          <img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;" onerror="this.src='${LOGO_OFICIAL_URL}';">
+          ${fotoTag}
           <span style="font-weight:900; color:#1d4ed8;">${cod}</span>
           <span style="font-weight:800; color:#0f172a;">${nom}</span>
           <span style="font-weight:700; color:#475569;">${gradoText}</span>
@@ -940,10 +1119,12 @@ function renderListaMisesDirecta() {
   docentes.forEach((cod, i) => {
     const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
     const foto = obtenerFotoUsuario(cod);
+    const fotoTag = foto ? `<img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:26px; height:26px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:12px;">👩‍🏫</div>`;
+
     html += `
       <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
         <span>${i + 1}</span>
-        <img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;" onerror="this.src='${LOGO_OFICIAL_URL}';">
+        ${fotoTag}
         <span style="font-weight:900; color:#1d4ed8;">${cod}</span>
         <span style="font-weight:800; color:#0f172a;">${item.nombre}</span>
         <span style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
@@ -969,6 +1150,16 @@ function cargarMisMovimientosPrioritarios() {
   actualizarPanelAdmin();
 }
 
+function cambiarModuloOperacion(modulo) {
+  document.getElementById("moduloPagos").style.display = modulo === 'PAGOS' ? 'block' : 'none';
+  document.getElementById("moduloPrestamos").style.display = modulo === 'PRESTAMOS' ? 'block' : 'none';
+  document.getElementById("moduloIncidencias").style.display = modulo === 'INCIDENCIAS' ? 'block' : 'none';
+
+  document.getElementById("tabPagosBtn").classList.toggle("active", modulo === 'PAGOS');
+  document.getElementById("tabPrestamosBtn").classList.toggle("active", modulo === 'PRESTAMOS');
+  document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS');
+}
+
 function actualizarPanelAdmin() {
   const msg = document.getElementById("mensaje");
   msg.textContent = "🔄 CARGANDO DATOS DE GOOGLE SHEETS...";
@@ -984,7 +1175,7 @@ function actualizarPanelAdmin() {
 
       if (res.cuenta) {
         document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra || 15000);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 0);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 15000);
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
@@ -1016,43 +1207,40 @@ function consultarEstudiante() {
 
   if (cod.startsWith("LDS-EST-")) {
     const info = MAPA_USUARIOS[cod] || { nombre: cod, foto: "" };
-    
+
     document.getElementById("pagoCodigo").value = cod;
     document.getElementById("pagoAlumnoNombre").textContent = info.nombre;
     document.getElementById("pagoAlumnoMeta").textContent = cod + " · AÑO " + anio;
+    document.getElementById("incidenciaAlumno").value = info.nombre + " (" + cod + ")";
 
     const fotoEst = obtenerFotoUsuario(cod);
-    const imgEl = document.getElementById("pagoAlumnoFoto");
-    if (imgEl) {
-      imgEl.src = fotoEst;
-      imgEl.onerror = function() {
-        this.onerror = null;
-        this.src = LOGO_OFICIAL_URL;
-      };
+    const imgWrap = document.querySelector(".pago-alumno-foto-wrap");
+
+    if (fotoEst) {
+      imgWrap.innerHTML = `<img id="pagoAlumnoFoto" class="pago-alumno-foto" src="${fotoEst}">`;
+    } else {
+      imgWrap.innerHTML = `<div style="font-size:26px;">👤</div>`;
     }
+
     document.getElementById("pagoAlumnoCard").style.display = "flex";
   } else {
     document.getElementById("pagoAlumnoCard").style.display = "none";
+    document.getElementById("incidenciaAlumno").value = "";
   }
 
   actualizarPanelAdmin();
 }
 
-function formatearFechaLimpia(fStr) {
-  if (!fStr) return "-";
+function desglosarFechaHora(fStr) {
+  if (!fStr) return { fecha: "-", hora: "-" };
   let s = String(fStr).trim();
-  if (s.includes("GMT") || s.includes("HORA") || /[a-zA-Z]{3}\s+[a-zA-Z]{3}/.test(s)) {
-    const d = new Date(s);
-    if (!isNaN(d.getTime())) {
-      const dia = String(d.getDate()).padStart(2, '0');
-      const mes = String(d.getMonth() + 1).padStart(2, '0');
-      const anio = d.getFullYear();
-      const hora = String(d.getHours()).padStart(2, '0');
-      const min = String(d.getMinutes()).padStart(2, '0');
-      return `${dia}/${mes}/${anio} ${hora}:${min}`;
-    }
+
+  if (s.includes(" ")) {
+    let partes = s.split(" ");
+    return { fecha: partes[0], hora: partes.slice(1).join(" ") };
   }
-  return s;
+
+  return { fecha: s, hora: "" };
 }
 
 function extraerAnio(fStr) {
@@ -1079,7 +1267,7 @@ function renderTablaMovimientos(lista) {
 
     const rawFecha = m.fechaTexto || m.fecha || "";
     const anioVal = extraerAnio(rawFecha);
-    const fechaLimpia = formatearFechaLimpia(rawFecha);
+    const dt = desglosarFechaHora(rawFecha);
 
     let obsVal = String(m.observacion || "");
     if (obsVal.includes("ID_OPERACION") || obsVal.includes("BOTON")) {
@@ -1088,7 +1276,10 @@ function renderTablaMovimientos(lista) {
 
     tr.innerHTML = `
       <td><strong>${anioVal}</strong></td>
-      <td><strong>${fechaLimpia}</strong></td>
+      <td class="td-fecha-hora">
+        <div style="font-weight:800; color:#0f172a;">${dt.fecha}</div>
+        <div style="font-size:0.7rem; color:#64748b; font-weight:700;">${dt.hora}</div>
+      </td>
       <td><strong>${m.estudiante || m.codigo || '-'}</strong></td>
       <td>${m.grado || 'AULA'}</td>
       <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoVal}</span></td>
@@ -1156,6 +1347,244 @@ function procesarMovimientoAlumno(tipoOperacion) {
       msg.className = "message error";
     }
   });
+}
+
+function procesarPrestamoCaja() {
+  const destino = document.getElementById("prestamoDestino").value;
+  const monto = Number(document.getElementById("prestamoMonto").value) || 0;
+  const obs = document.getElementById("prestamoObs").value.trim();
+  const msg = document.getElementById("prestamoMensaje");
+  const origen = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+
+  if (!destino) { msg.textContent = "SELECCIONA LA CAJA DE DESTINO."; msg.className = "message error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
+
+  msg.textContent = "REGISTRANDO PRÉSTAMO / TRANSFERENCIA...";
+  msg.className = "message ok";
+
+  llamarAPI({
+    accion: "REGISTRAR_PRESTAMO",
+    origen: origen,
+    destino: destino,
+    monto: monto,
+    observacion: obs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡PRÉSTAMO REGISTRADO CON ÉXITO EN GOOGLE SHEETS!";
+      msg.className = "message ok";
+      document.getElementById("prestamoMonto").value = "";
+      document.getElementById("prestamoObs").value = "";
+      actualizarPanelAdmin();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL PRÉSTAMO.";
+      msg.className = "message error";
+    }
+  });
+}
+
+function procesarIncidenciaAlumno() {
+  const alumnoCod = document.getElementById("pagoCodigo").value.trim();
+  const falta = document.getElementById("incidenciaFalta").value;
+  const monto = Number(document.getElementById("incidenciaMonto").value) || 0;
+  const obs = document.getElementById("incidenciaObs").value.trim();
+  const msg = document.getElementById("incidenciaMensaje");
+  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+
+  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DESDE LA LISTA."; msg.className = "message error"; return; }
+
+  msg.textContent = "REGISTRANDO INCIDENCIA Y APLICANDO SANCIÓN...";
+  msg.className = "message ok";
+
+  llamarAPI({
+    accion: "REGISTRAR_INCIDENCIA",
+    codigo: alumnoCod,
+    falta: falta,
+    monto: monto,
+    responsable: responsable,
+    observacion: obs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡INCIDENCIA Y MULTA REGISTRADA CON ÉXITO!";
+      msg.className = "message ok";
+      document.getElementById("incidenciaMonto").value = "";
+      document.getElementById("incidenciaObs").value = "";
+      actualizarPanelAdmin();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR LA INCIDENCIA.";
+      msg.className = "message error";
+    }
+  });
+}
+
+function toggleQRScanner() {
+  const container = document.getElementById("qrScannerContainer");
+  if (container.style.display === "block") {
+    container.style.display = "none";
+    if (html5QrCodeScanner) {
+      html5QrCodeScanner.stop().catch(() => {});
+    }
+  } else {
+    container.style.display = "block";
+    html5QrCodeScanner = new Html5Qrcode("qrReader");
+    html5QrCodeScanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
+      (decodedText) => {
+        let code = decodedText.trim().toUpperCase();
+        document.getElementById("codigo").value = code;
+        consultarEstudiante();
+        toggleQRScanner();
+      },
+      () => {}
+    ).catch(err => {
+      alert("No se pudo iniciar la cámara para el escáner QR: " + err);
+    });
+  }
+}
+
+function togglePrintMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById("printMenu");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", () => {
+  const menu = document.getElementById("printMenu");
+  if (menu) menu.style.display = "none";
+});
+
+function imprimirEstadoCuentaIndividual() {
+  const cod = document.getElementById("codigo").value.trim().toUpperCase();
+  const cont = document.getElementById("contenedorImpresion");
+  const usuarioInfo = MAPA_USUARIOS[cod] || { nombre: cod, rol: "ESTUDIANTE", foto: "" };
+  const fotoEst = obtenerFotoUsuario(cod);
+
+  const imgTag = fotoEst ? `<img class="print-user-img" src="${fotoEst}">` : `<div style="width:65px; height:65px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:30px;">👤</div>`;
+
+  let filasHtml = "";
+  todosLosMovimientosGlobales.forEach(m => {
+    const rawFecha = m.fechaTexto || m.fecha || "";
+    const dt = desglosarFechaHora(rawFecha);
+    filasHtml += `
+      <tr>
+        <td>${dt.fecha} ${dt.hora}</td>
+        <td>${m.tipo || 'INGRESO'}</td>
+        <td>${m.concepto || '-'}</td>
+        <td><strong>${formatearLDS(m.monto)}</strong></td>
+        <td>${m.responsable || 'SISTEMA'}</td>
+        <td>${m.observacion || ''}</td>
+      </tr>
+    `;
+  });
+
+  cont.innerHTML = `
+    <div class="print-header">
+      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <div class="print-title">
+        <h1>I.E.P. LA SALLE DEL SUR</h1>
+        <h2>BANCO LASALLISTA 360</h2>
+        <p>REPORTE DE ESTADO DE CUENTA INDIVIDUAL — AÑO ESCOLAR 2026</p>
+      </div>
+      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+    </div>
+
+    <div class="print-user-box">
+      ${imgTag}
+      <div>
+        <h3 style="margin:0; font-size:14px; color:#0c1e30;">${usuarioInfo.nombre}</h3>
+        <p style="margin:2px 0; font-size:11px;">CÓDIGO DE CUENTA: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'ALUMNO'}</strong></p>
+        <p style="margin:0; font-size:11px; color:#15803d;">SALDO ACTUAL: <strong>${document.getElementById("pagoAlumnoSaldo").textContent || '0 LDS'}</strong></p>
+      </div>
+    </div>
+
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th>FECHA Y HORA</th>
+          <th>TIPO</th>
+          <th>CONCEPTO</th>
+          <th>MONTO</th>
+          <th>RESPONSABLE</th>
+          <th>OBSERVACIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filasHtml || '<tr><td colspan="6">Sin movimientos registrados.</td></tr>'}
+      </tbody>
+    </table>
+
+    <div class="print-footer-signatures">
+      <div class="print-signature-line">
+        ${sessionStorage.getItem("maestraActiva") || maestraActivaGlobal}<br>
+        DOCENTE / CAJERA RESPONSABLE
+      </div>
+      <div class="print-signature-line">
+        MISTER ANDREW REYES MELO<br>
+        GERENCIA GENERAL / BANCO 360
+      </div>
+    </div>
+  `;
+
+  window.print();
+}
+
+function imprimirConsolidadoGrupal() {
+  const cont = document.getElementById("contenedorImpresion");
+  let filasHtml = "";
+
+  listaEstudiantesGoogleSheets.forEach((est, idx) => {
+    filasHtml += `
+      <tr>
+        <td>${idx + 1}</td>
+        <td><strong>${est.codigo}</strong></td>
+        <td>${est.nombreCompleto || est.nombre}</td>
+        <td>${est.grado || 'AULA'}</td>
+        <td>ALUMNO</td>
+        <td><strong>0 LDS</strong></td>
+      </tr>
+    `;
+  });
+
+  cont.innerHTML = `
+    <div class="print-header">
+      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <div class="print-title">
+        <h1>I.E.P. LA SALLE DEL SUR</h1>
+        <h2>BANCO LASALLISTA 360</h2>
+        <p>REPORTE CONSOLIDADO GENERAL DEL SALÓN Y AULA — AÑO ESCOLAR 2026</p>
+      </div>
+      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+    </div>
+
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>CÓDIGO</th>
+          <th>ESTUDIANTE / ALUMNO</th>
+          <th>GRADO</th>
+          <th>ESTADO</th>
+          <th>SALDO ACTUAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filasHtml || '<tr><td colspan="6">Cargando padrón de alumnos...</td></tr>'}
+      </tbody>
+    </table>
+
+    <div class="print-footer-signatures">
+      <div class="print-signature-line">
+        ${sessionStorage.getItem("maestraActiva") || maestraActivaGlobal}<br>
+        DOCENTE / CAJERA RESPONSABLE
+      </div>
+      <div class="print-signature-line">
+        MISTER ANDREW REYES MELO<br>
+        GERENCIA GENERAL / BANCO 360
+      </div>
+    </div>
+  `;
+
+  window.print();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
