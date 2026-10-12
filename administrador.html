@@ -937,7 +937,7 @@ footer {
     <div class="codigo-modal-body">
       <p style="font-size:0.75rem; margin-bottom:10px; color:var(--muted); font-weight:700;">EL DINERO SE DESCONTARÁ DE SU CAJA DOCENTE Y SE TRANSFERIRÁ AL USUARIO SELECCIONADO.</p>
       <label class="small-label" for="prestamoDestino">USUARIO DESTINO</label>
-      <select id="prestamoDestino"><option value="">CARGANDO USUARIOS...</option></select>
+      <select id="prestamoDestino"><option value="">SELECCIONA EL USUARIO</option></select>
       
       <label class="small-label" for="prestamoMonto">MONTO LDS</label>
       <input id="prestamoMonto" type="number" min="1" step="1" placeholder="INGRESA EL MONTO">
@@ -971,7 +971,7 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCR
 let maestraActivaGlobal = "";
 let datosEstudianteActualGlobal = null;
 let movimientosActualesGlobal = [];
-let cacheCuentasEscolares = {};
+let todosLosMovimientosGlobales = [];
 
 const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
@@ -1132,6 +1132,85 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
+function calcularResumenMise(movimientos, codigoMise) {
+  const codNorm = normalizarCodigo(codigoMise);
+  if (!codNorm) return { abono: 0, ingresos: 0, egresos: 0, saldo: 0, cantMov: 0 };
+
+  let abonoInicial = 0;
+  let totalIngresos = 0;
+  let totalEgresos = 0;
+  let cantMov = 0;
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m || String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const respCod = normalizarCodigo(getResponsable(m));
+      const monto = Math.abs(getMonto(m));
+      const tipo = String(getTipo(m)).toUpperCase();
+      const conc = String(getConcepto(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
+
+      // 1. Ingreso recibido de Andrew a la Miss (Abono Inicial)
+      if (targetCod === codNorm) {
+        if (tipo.includes("INGRESO")) {
+          cantMov++;
+          totalIngresos += monto;
+          if (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("TRANSFERENCIA") || obs.includes("DE FONDO")) {
+            abonoInicial += monto;
+          }
+        } else if (tipo.includes("EGRESO")) {
+          cantMov++;
+          totalEgresos += monto;
+        }
+      }
+      // 2. Egreso enviado de la Miss a Andrew (Devolución)
+      else if (targetCod === "LDS-DOC-005" && (respCod === codNorm || obs.includes(codNorm))) {
+        cantMov++;
+        totalEgresos += monto;
+      }
+      // 3. Pagos o cobros de la Miss a un alumno
+      else if (respCod === codNorm && targetCod.startsWith("LDS-EST-")) {
+        cantMov++;
+        if (tipo.includes("INGRESO")) { // Pago al alumno -> Egreso para la Miss
+          totalEgresos += monto;
+        } else if (tipo.includes("EGRESO")) { // Cobro al alumno -> Ingreso para la Miss
+          totalIngresos += monto;
+        }
+      }
+    });
+  }
+
+  const saldoDisponible = Math.max(0, totalIngresos - totalEgresos);
+
+  return {
+    abono: abonoInicial,
+    ingresos: totalIngresos,
+    egresos: totalEgresos,
+    saldo: saldoDisponible,
+    cantMov: cantMov
+  };
+}
+
+function cargarSaldoMiseAlIngresar(nombreMaestra) {
+  const codMise = normalizarCodigo(CODIGOS_MISE[nombreMaestra] || nombreMaestra);
+  if (!codMise) return;
+
+  const anio = document.getElementById("selectAnioEscolar")?.value || "2026";
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    if (!res || !Array.isArray(res.movimientos)) return;
+
+    todosLosMovimientosGlobales = res.movimientos;
+    const calc = calcularResumenMise(res.movimientos, codMise);
+
+    document.getElementById("saldoInicialMise").textContent = formatearLDS(calc.abono);
+    document.getElementById("saldoDisponibleMise").textContent = formatearLDS(calc.saldo);
+    document.getElementById("contadorMovimientos").textContent = String(calc.cantMov);
+  });
+}
+
 function desbloquearPanel(nombreMaestra) {
   maestraActivaGlobal = nombreMaestra;
   document.getElementById("loginView").style.display = "none";
@@ -1152,60 +1231,13 @@ function desbloquearPanel(nombreMaestra) {
   document.getElementById("codigo").value = codMise;
 
   cargarCategoriasPago();
-  cargarSaldoMiseAlIngresar(codMise);
-}
-
-function cargarSaldoMiseAlIngresar(codMise) {
-  const codNorm = normalizarCodigo(codMise);
-  llamarAPI({ accion: "movimientos" }, function(res) {
-    if (!res || !Array.isArray(res.movimientos)) return;
-    calcularYSincronizarMise(res.movimientos, codNorm);
-  });
-}
-
-function calcularYSincronizarMise(movimientos, codNorm) {
-  let abonoInicial = 0;
-  let ingresos = 0;
-  let egresos = 0;
-
-  movimientos.forEach(m => {
-    if (!m || String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
-
-    const targetCod = normalizarCodigo(getCodigo(m));
-    const respCod = normalizarCodigo(getResponsable(m));
-    const monto = Math.abs(getMonto(m));
-    const tipo = String(getTipo(m)).toUpperCase();
-    const conc = String(getConcepto(m)).toUpperCase();
-    const obs = String(getObservacion(m)).toUpperCase();
-
-    // 1. Fondo recibido de Andrew
-    if (targetCod === codNorm && (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("TRANSFERENCIA"))) {
-      if (tipo.includes("INGRESO")) {
-        abonoInicial += monto;
-        ingresos += monto;
-      }
-    }
-    // 2. Devolución enviada a Andrew
-    else if (targetCod === "LDS-DOC-005" && (respCod === codNorm || obs.includes(codNorm))) {
-      egresos += monto;
-    }
-    // 3. Pagos / Premios a alumnos realizados por esta Miss
-    else if (respCod === codNorm && targetCod.startsWith("LDS-EST-")) {
-      if (tipo.includes("INGRESO")) { // Alumno recibe -> Miss gasta
-        egresos += monto;
-      } else if (tipo.includes("EGRESO")) { // Alumno paga -> Miss cobra
-        ingresos += monto;
-      }
-    }
-  });
-
-  const saldoDisponible = Math.max(0, ingresos - egresos);
-  document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicial);
-  document.getElementById("saldoDisponibleMise").textContent = formatearLDS(saldoDisponible);
+  cargarSaldoMiseAlIngresar(nombreMaestra);
+  consultarEstudiante();
 }
 
 function actualizarPanelAdmin() {
-  const cod = document.getElementById("codigo").value;
+  const maestra = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  if (maestra) cargarSaldoMiseAlIngresar(maestra);
   consultarEstudiante();
 }
 
@@ -1230,8 +1262,8 @@ function consultarEstudiante() {
       return;
     }
 
+    todosLosMovimientosGlobales = res.movimientos;
     const codNorm = normalizarCodigo(cod);
-    movimientosActualesGlobal = res.movimientos;
 
     const filtrados = res.movimientos.filter(m => {
       if (!m) return false;
@@ -1260,6 +1292,8 @@ function consultarEstudiante() {
       if (info.foto) document.getElementById("pagoAlumnoFoto").src = info.foto;
       document.getElementById("pagoAlumnoCard").style.display = "flex";
       document.getElementById("panelPago").classList.remove("collapsed");
+    } else {
+      document.getElementById("pagoAlumnoCard").style.display = "none";
     }
 
     msg.textContent = "CONSULTA FINALIZADA.";
@@ -1271,8 +1305,6 @@ function renderTablaMovimientos(lista, codNorm) {
   const tbody = document.getElementById("tablaMovimientos");
   if (!tbody) return;
   tbody.innerHTML = "";
-
-  document.getElementById("contadorMovimientos").textContent = String(lista.length);
 
   if (!lista || !lista.length) {
     tbody.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS PARA ESTA CUENTA.</td></tr>';
@@ -1365,8 +1397,7 @@ function procesarMovimientoAlumno(tipoOperacion) {
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       
-      const codMise = CODIGOS_MISE[responsable] || "";
-      cargarSaldoMiseAlIngresar(codMise);
+      cargarSaldoMiseAlIngresar(responsable);
       consultarEstudiante();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR MOVIMIENTO.";
