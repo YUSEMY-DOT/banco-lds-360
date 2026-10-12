@@ -225,10 +225,11 @@ textarea { height: auto; padding: 10px 12px; }
 
 .error-msg {
   color: var(--rojo);
-  font-size: 0.75rem;
-  min-height: 16px;
+  font-size: 0.78rem;
+  min-height: 20px;
   font-weight: 800;
-  margin-top: 6px;
+  margin-top: 8px;
+  text-align: center;
 }
 
 main {
@@ -539,8 +540,8 @@ footer {
 }
 
 .mise-foto-btn{
-  border:1.5px solid var(--borde);
-  border-radius:10px;
+  border:2.5px solid #cbd5e1;
+  border-radius:12px;
   background:#f8fafc;
   padding:10px 6px;
   cursor:pointer;
@@ -551,13 +552,19 @@ footer {
   gap:6px;
   min-height:104px;
   transition:all .2s ease;
+  user-select:none;
 }
 
-.mise-foto-btn:hover,
+.mise-foto-btn:hover{
+  border-color:#0ea5e9;
+  background:#f0f9ff;
+}
+
 .mise-foto-btn.activa{
-  border-color:var(--dorado);
-  background:#fffaf0;
-  box-shadow:0 2px 8px rgba(0,0,0,.10);
+  border-color:#f59e0b !important;
+  border-width:3px !important;
+  background:#fef3c7 !important;
+  box-shadow:0 0 12px rgba(245,158,11,0.5) !important;
 }
 
 .mise-foto-btn img{
@@ -567,9 +574,8 @@ footer {
   object-fit:cover;
   border:2px solid var(--dorado);
   background:#fff;
+  pointer-events:none;
 }
-
-#docenteSelect{ display:none !important; }
 
 .mise-foto-btn span{
   color:var(--azul);
@@ -578,7 +584,10 @@ footer {
   font-weight:800;
   text-align:center;
   word-break:break-word;
+  pointer-events:none;
 }
+
+#docenteSelect{ display:none !important; }
 
 .codigo-modal{
   display:none;
@@ -956,6 +965,7 @@ footer {
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 
+let docenteSeleccionadoGlobal = "";
 let maestraActivaGlobal = "";
 let datosEstudianteActualGlobal = null;
 let movimientosActualesGlobal = [];
@@ -1032,3 +1042,808 @@ function parseMontoLDS(val) {
   if (typeof val === "number") return Number.isFinite(val) ? Math.trunc(val) : 0;
   if (val === null || val === undefined || String(val).trim() === "") return 0;
   let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim().replace(/[.,]/g, "");
+  const n = Number(str);
+  return Number.isFinite(n) ? Math.trunc(n) : 0;
+}
+
+function formatearLDS(val) {
+  const n = parseMontoLDS(val);
+  return Math.trunc(n).toLocaleString("de-DE", { maximumFractionDigits: 0 }) + " LDS";
+}
+
+function getProp(obj, ...possibleKeys) {
+  if (!obj || typeof obj !== 'object') return "";
+  const objKeys = Object.keys(obj);
+  for (let key of possibleKeys) {
+    if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== "") {
+      return String(obj[key]).trim();
+    }
+    const lowerKey = key.toLowerCase();
+    const foundKey = objKeys.find(k => k.toLowerCase() === lowerKey);
+    if (foundKey && obj[foundKey] !== undefined && obj[foundKey] !== null && String(obj[foundKey]).trim() !== "") {
+      return String(obj[foundKey]).trim();
+    }
+  }
+  return "";
+}
+
+function getCodigo(m) { return getProp(m, "codigo", "CÓDIGO", "CODIGO", "codigoQR", "id"); }
+function getTipo(m) { return getProp(m, "tipo", "TIPO"); }
+function getConcepto(m) { return getProp(m, "concepto", "CONCEPTO"); }
+function getMonto(m) { return parseMontoLDS(getProp(m, "monto", "MONTO LDS", "MONTO_LDS", "montoLDS", "MONTO")); }
+function getResponsable(m) { return getProp(m, "responsable", "RESPONSABLE", "cajero"); }
+function getEstudiante(m) { return getProp(m, "estudiante", "CUENTA/ESTUDIANTE", "cuenta", "nombreCompleto", "nombre"); }
+function getFecha(m) { return getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA") || "-"; }
+function getGrado(m) { return getProp(m, "grado", "GRADO"); }
+function getObservacion(m) { return getProp(m, "observacion", "OBSERVACIÓN", "OBSERVACION"); }
+
+function togglePanel(id) {
+  const p = document.getElementById(id);
+  if (p) p.classList.toggle("collapsed");
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback = "callbackAdminLDS_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
+  const script = document.createElement("script");
+
+  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
+  window[nombreCallback] = function(respuesta) {
+    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
+  };
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+    callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
+  };
+  document.body.appendChild(script);
+}
+
+function seleccionarMiseVisual(valor) {
+  docenteSeleccionadoGlobal = valor;
+  const select = document.getElementById("docenteSelect");
+  if (select) select.value = valor;
+
+  document.querySelectorAll('.mise-foto-btn').forEach(btn => {
+    if (btn.dataset.mise === valor) {
+      btn.classList.add('activa');
+      btn.style.borderColor = '#f59e0b';
+      btn.style.borderWidth = '3px';
+      btn.style.backgroundColor = '#fef3c7';
+      btn.style.boxShadow = '0 0 12px rgba(245, 158, 11, 0.5)';
+    } else {
+      btn.classList.remove('activa');
+      btn.style.borderColor = '#cbd5e1';
+      btn.style.borderWidth = '2.5px';
+      btn.style.backgroundColor = '#f8fafc';
+      btn.style.boxShadow = 'none';
+    }
+  });
+
+  const errorEl = document.getElementById("adminError");
+  if (errorEl) errorEl.textContent = "";
+}
+
+function validarAccesoDocente() {
+  const docenteSel = document.getElementById("docenteSelect");
+  const claveEl = document.getElementById("claveDocente");
+  const errorEl = document.getElementById("adminError");
+
+  let docenteVal = docenteSeleccionadoGlobal || (docenteSel ? docenteSel.value : "");
+  docenteVal = String(docenteVal || "").trim().toUpperCase();
+
+  const claveVal = String(claveEl ? claveEl.value : "").trim();
+  if (errorEl) errorEl.textContent = "";
+
+  if (!docenteVal) {
+    if (errorEl) errorEl.textContent = "⚠️ SELEACCIONE SU NOMBRE DANDO CLIC EN SU FOTO.";
+    return;
+  }
+  if (!claveVal) {
+    if (errorEl) errorEl.textContent = "⚠️ INGRESE SU CLAVE DE ACCESO.";
+    return;
+  }
+  if (claveVal !== "360LDS@") {
+    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA (REVISE MAYÚSCULAS Y @).";
+    return;
+  }
+
+  const NOMBRES_MAP = {
+    "LILY": "MISS LILY MELO AZAÑERO",
+    "KIARA": "MISS KIARA MORALES ELGUERA",
+    "ANGHY": "MISS ANGHY REYES MELO",
+    "KARIN": "MISS KARIN MOLERO ROMANI"
+  };
+
+  const nombreMaestra = NOMBRES_MAP[docenteVal] || docenteVal;
+  sessionStorage.setItem("maestraActiva", nombreMaestra);
+  sessionStorage.setItem("responsableClave", claveVal);
+  desbloquearPanel(nombreMaestra);
+}
+
+function obtenerDocentesYDireccion() {
+  return ["LDS-DOC-001", "LDS-DOC-002", "LDS-DOC-003", "LDS-DOC-004", "LDS-DOC-005"];
+}
+
+function obtenerEstudiantesOrdenados() {
+  return Object.keys(MAPA_USUARIOS)
+    .filter(k => k.startsWith("LDS-EST-"))
+    .sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10) || 0;
+      const numB = parseInt(b.replace(/\D/g, ''), 10) || 0;
+      return numA - numB;
+    });
+}
+
+function cargarEstudiantesYMapa(movimientos, callbackTerminado) {
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const nombreEst = getEstudiante(m);
+      if (targetCod && targetCod.startsWith("LDS-EST-") && nombreEst) {
+        if (!MAPA_USUARIOS[targetCod]) {
+          MAPA_USUARIOS[targetCod] = { nombre: nombreEst.toUpperCase(), rol: "ALUMNO", foto: "" };
+        } else if (MAPA_USUARIOS[targetCod].nombre !== nombreEst.toUpperCase()) {
+          MAPA_USUARIOS[targetCod].nombre = nombreEst.toUpperCase();
+        }
+      }
+    });
+  }
+
+  llamarAPI({ accion: "estudiantes" }, function(res) {
+    if (res && (res.estudiantes || res.alumnos || res.datos || Array.isArray(res))) {
+      const lista = res.estudiantes || res.alumnos || res.datos || res;
+      if (Array.isArray(lista)) {
+        lista.forEach(est => {
+          const cod = normalizarCodigo(getProp(est, "codigo", "CÓDIGO", "CODIGO", "id"));
+          const nom = getProp(est, "nombre", "NOMBRE", "estudiante", "nombreCompleto");
+          const foto = getProp(est, "foto", "FOTO");
+          if (cod && cod.startsWith("LDS-EST-")) {
+            const fotoExistente = (MAPA_USUARIOS[cod] && MAPA_USUARIOS[cod].foto) ? MAPA_USUARIOS[cod].foto : "";
+            const nombreExistente = (MAPA_USUARIOS[cod] && MAPA_USUARIOS[cod].nombre) ? MAPA_USUARIOS[cod].nombre : cod;
+            MAPA_USUARIOS[cod] = {
+              nombre: (nom || nombreExistente).toUpperCase(),
+              rol: "ALUMNO",
+              foto: foto || fotoExistente
+            };
+          }
+        });
+      }
+    }
+    if (typeof callbackTerminado === "function") callbackTerminado();
+  });
+}
+
+function calcularResumenMise(movimientos, codigoMise) {
+  const codNorm = normalizarCodigo(codigoMise);
+  if (!codNorm) return { abono: 0, ingresos: 0, egresos: 0, saldo: 0, cantMov: 0 };
+
+  let abonoInicial = 0;
+  let totalIngresos = 0;
+  let totalEgresos = 0;
+  let cantMov = 0;
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m || String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const respCod = normalizarCodigo(getResponsable(m));
+      const monto = Math.abs(getMonto(m));
+      const tipo = String(getTipo(m)).toUpperCase();
+      const conc = String(getConcepto(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
+
+      if (targetCod === codNorm) {
+        cantMov++;
+        if (respCod !== codNorm) {
+          totalIngresos += monto;
+          if (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("FONDO") || obs.includes("TRANSFERENCIA")) {
+            abonoInicial += monto;
+          }
+        } else {
+          if (tipo.includes("INGRESO")) totalIngresos += monto;
+          else if (tipo.includes("EGRESO")) totalEgresos += monto;
+        }
+      } else if (respCod === codNorm) {
+        cantMov++;
+        if (targetCod.startsWith("LDS-EST-")) {
+          if (tipo.includes("INGRESO")) totalEgresos += monto;
+          else if (tipo.includes("EGRESO")) totalIngresos += monto;
+        } else if (targetCod === "LDS-DOC-005") {
+          totalEgresos += monto;
+        }
+      }
+    });
+  }
+
+  const saldoDisponible = Math.max(0, totalIngresos - totalEgresos);
+
+  return {
+    abono: abonoInicial,
+    ingresos: totalIngresos,
+    egresos: totalEgresos,
+    saldo: saldoDisponible,
+    cantMov: cantMov
+  };
+}
+
+function cargarSaldoMiseAlIngresar(nombreMaestra) {
+  const codMise = normalizarCodigo(CODIGOS_MISE[nombreMaestra] || nombreMaestra);
+  if (!codMise) return;
+
+  const anio = document.getElementById("selectAnioEscolar") ? document.getElementById("selectAnioEscolar").value : "2026";
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    if (!res || !Array.isArray(res.movimientos)) return;
+
+    todosLosMovimientosGlobales = res.movimientos;
+    cargarEstudiantesYMapa(res.movimientos);
+
+    const calc = calcularResumenMise(res.movimientos, codMise);
+
+    document.getElementById("saldoInicialMise").textContent = formatearLDS(calc.abono);
+    document.getElementById("saldoDisponibleMise").textContent = formatearLDS(calc.saldo);
+    document.getElementById("contadorMovimientos").textContent = String(calc.cantMov);
+  });
+}
+
+function desbloquearPanel(nombreMaestra) {
+  maestraActivaGlobal = nombreMaestra;
+  document.getElementById("loginView").style.display = "none";
+  document.getElementById("panelView").style.display = "block";
+  document.getElementById("maestraActivaNombre").textContent = nombreMaestra || "MAESTRA";
+
+  const fotoEl = document.getElementById("missFoto");
+  const placeholderEl = document.getElementById("missPlaceholder");
+  const fotoUrl = FOTOS_DOCENTES[nombreMaestra] || "";
+
+  if (fotoUrl) {
+    fotoEl.src = fotoUrl;
+    fotoEl.style.display = "block";
+    placeholderEl.style.display = "none";
+  }
+
+  const codMise = CODIGOS_MISE[nombreMaestra] || CODIGOS_MISE[nombreMaestra.split(" ")[1]] || "";
+  document.getElementById("codigo").value = codMise;
+
+  cargarCategoriasPago();
+  cargarSaldoMiseAlIngresar(nombreMaestra);
+  consultarEstudiante();
+}
+
+function actualizarPanelAdmin() {
+  const msg = document.getElementById("mensaje");
+  msg.textContent = "🔄 SINCRONIZANDO CON GOOGLE SHEETS...";
+  msg.className = "message ok";
+
+  const maestra = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  if (maestra) cargarSaldoMiseAlIngresar(maestra);
+  consultarEstudiante();
+}
+
+function consultarEstudiante() {
+  const cod = document.getElementById("codigo").value.trim().toUpperCase();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("mensaje");
+
+  if (!cod) {
+    msg.textContent = "INGRESA UN CÓDIGO A CONSULTAR.";
+    msg.className = "message error";
+    return;
+  }
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    if (!res || !Array.isArray(res.movimientos)) {
+      msg.textContent = "NO SE PUDIERON CARGAR LOS DATOS.";
+      msg.className = "message error";
+      return;
+    }
+
+    todosLosMovimientosGlobales = res.movimientos;
+    cargarEstudiantesYMapa(res.movimientos);
+
+    const codNorm = normalizarCodigo(cod);
+
+    const filtrados = res.movimientos.filter(m => {
+      if (!m) return false;
+      const tCod = normalizarCodigo(getCodigo(m));
+      const rCod = normalizarCodigo(getResponsable(m));
+      return tCod === codNorm || rCod === codNorm;
+    });
+
+    renderTablaMovimientos(filtrados, codNorm);
+
+    if (codNorm.startsWith("LDS-EST-")) {
+      const info = MAPA_USUARIOS[codNorm] || { nombre: codNorm, foto: "" };
+      let saldoAlumno = 0;
+      filtrados.forEach(m => {
+        const monto = getMonto(m);
+        const tipo = String(getTipo(m)).toUpperCase();
+        if (tipo.includes("INGRESO")) saldoAlumno += monto;
+        else if (tipo.includes("EGRESO")) saldoAlumno -= monto;
+      });
+
+      document.getElementById("pagoCodigo").value = codNorm;
+      document.getElementById("pagoAlumnoNombre").textContent = info.nombre;
+      document.getElementById("pagoAlumnoMeta").textContent = codNorm + " · AÑO " + anio;
+      document.getElementById("pagoAlumnoSaldo").textContent = "SALDO ACTUAL: " + formatearLDS(Math.max(0, saldoAlumno));
+      if (info.foto) document.getElementById("pagoAlumnoFoto").src = info.foto;
+      document.getElementById("pagoAlumnoCard").style.display = "flex";
+      document.getElementById("panelPago").classList.remove("collapsed");
+    } else {
+      document.getElementById("pagoAlumnoCard").style.display = "none";
+    }
+
+    msg.textContent = "CONSULTA FINALIZADA.";
+    msg.className = "message ok";
+  });
+}
+
+function renderTablaMovimientos(lista, codNorm) {
+  const tbody = document.getElementById("tablaMovimientos");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (!lista || !lista.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS PARA ESTA CUENTA.</td></tr>';
+    return;
+  }
+
+  lista.forEach(m => {
+    const tr = document.createElement("tr");
+    const codT = normalizarCodigo(getCodigo(m));
+    const monto = getMonto(m);
+    const tipoOrig = String(getTipo(m)).toUpperCase();
+
+    let esEgreso = tipoOrig.includes("EGRESO");
+    let nombreCuenta = getEstudiante(m) || codT;
+
+    if (MAPA_USUARIOS[codT]) nombreCuenta = MAPA_USUARIOS[codT].nombre;
+
+    tr.innerHTML = `
+      <td><strong>${getProp(m, "anio", "AÑO") || '2026'}</strong></td>
+      <td style="white-space:nowrap;"><strong>${getFecha(m)}</strong></td>
+      <td><strong>${nombreCuenta}</strong></td>
+      <td>${getGrado(m) || 'AULA'}</td>
+      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoOrig}</span></td>
+      <td>${getConcepto(m)}</td>
+      <td><strong>${formatearLDS(monto)}</strong></td>
+      <td>${getResponsable(m) || 'SISTEMA'}</td>
+      <td>${getObservacion(m)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function seleccionarCategoriaPago(cat) {
+  document.getElementById("pagoCategoria").value = cat;
+  document.querySelectorAll("#categoriasPagoBotones .categoria-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.categoria === cat);
+  });
+
+  const selectConc = document.getElementById("pagoConcepto");
+  selectConc.innerHTML = '<option value="">SELECCIONA EL CONCEPTO</option>';
+
+  const conceptos = CATALOGO_EXCEL[cat] || [];
+  conceptos.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c.toUpperCase();
+    selectConc.appendChild(opt);
+  });
+  if (conceptos.length) selectConc.value = conceptos[0];
+}
+
+function cargarCategoriasPago() {
+  seleccionarCategoriaPago("PREMIOS_Y_BONIFICACIONES");
+}
+
+function procesarMovimientoAlumno(tipoOperacion) {
+  const alumnoCod = document.getElementById("pagoCodigo").value.trim();
+  const categoria = document.getElementById("pagoCategoria").value;
+  const concepto = document.getElementById("pagoConcepto").value;
+  const monto = Number(document.getElementById("pagoMonto").value) || 0;
+  const obs = document.getElementById("pagoObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("pagoMensaje");
+  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+
+  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO VÁLIDO."; msg.className = "message error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
+  if (!concepto) { msg.textContent = "SELECCIONA UN CONCEPTO."; msg.className = "message error"; return; }
+
+  msg.textContent = "PROCESANDO MOVIMIENTO...";
+  msg.className = "message ok";
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: alumnoCod,
+    codigoDestino: alumnoCod,
+    anio: anio,
+    tipo: tipoOperacion,
+    categoria: categoria,
+    concepto: concepto,
+    monto: monto,
+    responsable: responsable,
+    responsableClave: "360LDS@",
+    observacion: obs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡MOVIMIENTO REGISTRADO CORRECTAMENTE!";
+      msg.className = "message ok";
+      document.getElementById("pagoMonto").value = "";
+      document.getElementById("pagoObs").value = "";
+      
+      cargarSaldoMiseAlIngresar(responsable);
+      consultarEstudiante();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR MOVIMIENTO.";
+      msg.className = "message error";
+    }
+  });
+}
+
+function abrirListaCodigos(tipo) {
+  const panel = document.getElementById("listaAlumnosDropdown");
+  const tituloHead = document.getElementById("dropdownTitulo");
+  const cont = document.getElementById("listaAlumnosItems");
+  
+  if (panel.style.display === "block" && seccionListaActual === tipo) {
+    cerrarListaCodigos();
+    return;
+  }
+
+  seccionListaActual = tipo;
+  panel.style.display = "block";
+
+  if (tipo === 'ALUMNOS') {
+    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS";
+    cont.innerHTML = '<div class="header-list-loading" style="padding:15px; text-align:center; font-weight:800; color:#1e3a8a;">🔄 CARGANDO TODOS LOS ALUMNOS DE LA BASE DE DATOS...</div>';
+    
+    cargarEstudiantesYMapa(todosLosMovimientosGlobales, function() {
+      renderListaAlumnosDirecta();
+    });
+  } else if (tipo === 'MISES') {
+    if (tituloHead) tituloHead.textContent = "👩‍🏫 DIRECTORIO DE MISES Y DIRECCIÓN GENERAL";
+    renderListaMisesDirecta();
+  }
+}
+
+function cerrarListaCodigos() {
+  const panel = document.getElementById("listaAlumnosDropdown");
+  if (panel) panel.style.display = "none";
+  seccionListaActual = "";
+}
+
+function renderListaAlumnosDirecta() {
+  const cont = document.getElementById("listaAlumnosItems");
+  const alumnos = obtenerEstudiantesOrdenados();
+
+  let html = `
+    <div class="direct-list-head">
+      <span>🎓 LISTA DE ESTUDIANTES / ALUMNOS REGISTRADOS EN BASE DE DATOS (${alumnos.length})</span>
+    </div>
+  `;
+
+  if (!alumnos.length) {
+    html += '<div class="header-list-loading" style="padding:15px; text-align:center;">NO HAY ALUMNOS REGISTRADOS EN LA BASE DE DATOS.</div>';
+  } else {
+    alumnos.forEach((cod, i) => {
+      const item = MAPA_USUARIOS[cod] || { nombre: cod };
+      html += `
+        <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+          <span class="meta">${i + 1}</span>
+          <span class="code">${cod}</span>
+          <span class="name">${item.nombre}</span>
+          <span class="meta">ALUMNO</span>
+          <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+        </div>
+      `;
+    });
+  }
+  cont.innerHTML = html;
+}
+
+function renderListaMisesDirecta() {
+  const cont = document.getElementById("listaAlumnosItems");
+  const docentes = obtenerDocentesYDireccion();
+
+  let html = `
+    <div class="direct-list-head">
+      <span>👩‍🏫 MISES Y DIRECCIÓN GENERAL (${docentes.length})</span>
+    </div>
+  `;
+
+  docentes.forEach((cod, i) => {
+    const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
+    html += `
+      <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+        <span class="meta">${i + 1}</span>
+        <span class="code">${cod}</span>
+        <span class="name">${item.nombre}</span>
+        <span class="meta" style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
+        <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+      </div>
+    `;
+  });
+  cont.innerHTML = html;
+}
+
+function seleccionarAlumnoLista(cod) {
+  cerrarListaCodigos();
+  document.getElementById("codigo").value = cod;
+  consultarEstudiante();
+}
+
+function abrirModalPrestamo() {
+  document.getElementById("prestamoModal").style.display = "flex";
+  poblarDestinosPrestamo();
+}
+
+function cerrarModalPrestamo() {
+  document.getElementById("prestamoModal").style.display = "none";
+}
+
+function poblarDestinosPrestamo() {
+  const sel = document.getElementById("prestamoDestino");
+  sel.innerHTML = '<option value="">SELECCIONA EL USUARIO</option>';
+
+  const docentes = obtenerDocentesYDireccion();
+  docentes.forEach(k => {
+    const u = MAPA_USUARIOS[k];
+    if (u) {
+      const opt = document.createElement("option");
+      opt.value = k;
+      opt.textContent = u.nombre + " (" + k + ")";
+      sel.appendChild(opt);
+    }
+  });
+
+  const estudiantes = obtenerEstudiantesOrdenados();
+  estudiantes.forEach(k => {
+    const u = MAPA_USUARIOS[k];
+    if (u) {
+      const opt = document.createElement("option");
+      opt.value = k;
+      opt.textContent = u.nombre + " (" + k + ")";
+      sel.appendChild(opt);
+    }
+  });
+}
+
+function registrarPrestamo() {
+  const dest = document.getElementById("prestamoDestino").value;
+  const monto = Number(document.getElementById("prestamoMonto").value) || 0;
+  const obs = document.getElementById("prestamoMotivo").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("prestamoMensaje");
+  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+
+  if (!dest) { msg.textContent = "SELECCIONA UN DESTINO."; msg.className = "message error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
+
+  msg.textContent = "PROCESANDO PRÉSTAMO...";
+  msg.className = "message ok";
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: dest,
+    codigoDestino: dest,
+    anio: anio,
+    tipo: "EGRESO",
+    categoria: "PRESTAMO",
+    concepto: "PRÉSTAMO REGISTRADO",
+    monto: monto,
+    responsable: responsable,
+    responsableClave: "360LDS@",
+    observacion: obs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡PRÉSTAMO REGISTRADO EXITOSAMENTE!";
+      msg.className = "message ok";
+      document.getElementById("prestamoMonto").value = "";
+      document.getElementById("prestamoMotivo").value = "";
+      setTimeout(cerrarModalPrestamo, 1000);
+      actualizarPanelAdmin();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR PRÉSTAMO.";
+      msg.className = "message error";
+    }
+  });
+}
+
+function imprimirReporteOficial() {
+  const contenedor = document.getElementById("contenedorImpresion");
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const fechaHoy = new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal || "DOCENTE RESPONSABLE";
+  const codSel = normalizarCodigo(document.getElementById("codigo").value);
+
+  const htmlMembrete = `
+    <div style="border-bottom: 3px solid #f59e0b; padding-bottom: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="assets/insignia.png" style="width: 60px; height: 60px; object-fit: contain;" onerror="this.src='assets/insignia.jpg';">
+        <div>
+          <h2 style="margin:0; font-size: 1.25rem; color: #0c1e30; font-weight: 800;">I.E.P. LA SALLE DEL SUR</h2>
+          <p style="margin:0; font-size: 0.85rem; color: #d97706; font-weight: 700;">SISTEMA FINANCIERO ESCOLAR — BANCO LDS 360</p>
+          <p style="margin:0; font-size: 0.72rem; color: #475569;">"Aprendiendo con alegría, educándonos con amor en La Salle del Sur"</p>
+        </div>
+      </div>
+      <div style="text-align: right; font-size: 0.75rem; color: #334155;">
+        <p style="margin:0;"><strong>ESTADO DE CUENTA BANCARIO</strong></p>
+        <p style="margin:0;">AÑO ESCOLAR: <strong>${anio}</strong></p>
+        <p style="margin:0;">CAJERA: <strong>${responsable}</strong></p>
+        <p style="margin:0;">FECHA: ${fechaHoy}</p>
+      </div>
+    </div>
+  `;
+
+  if (codSel && codSel.startsWith("LDS-EST-")) {
+    const uInfo = MAPA_USUARIOS[codSel] || { nombre: codSel, foto: "" };
+    const movs = todosLosMovimientosGlobales.filter(m => normalizarCodigo(getCodigo(m)) === codSel || normalizarCodigo(getResponsable(m)) === codSel);
+    
+    let saldo = 0;
+    movs.forEach(m => {
+      const monto = getMonto(m);
+      if (String(getTipo(m)).toUpperCase().includes("INGRESO")) saldo += monto;
+      else saldo -= monto;
+    });
+
+    const tablaRows = movs.map(m => `
+      <tr>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px;">${getFecha(m)}</td>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px;"><strong>${getTipo(m)}</strong></td>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px;">${getConcepto(m)}</td>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px; text-align:right; font-weight:bold;">${formatearLDS(getMonto(m))}</td>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px;">${getResponsable(m)}</td>
+        <td style="padding:6px; border:1px solid #cbd5e1; font-size:11px;">${getObservacion(m)}</td>
+      </tr>
+    `).join("");
+
+    contenedor.innerHTML = htmlMembrete + `
+      <div style="display:flex; align-items:center; gap:20px; background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:10px; padding:15px; margin-bottom:20px;">
+        ${uInfo.foto ? `<img src="${uInfo.foto}" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2.5px solid #f59e0b; background:#fff;">` : ''}
+        <div>
+          <h3 style="margin:0; font-size:1.1rem; color:#0c1e30; font-weight:800;">${uInfo.nombre}</h3>
+          <p style="margin:3px 0; font-size:0.85rem; color:#475569;">CÓDIGO: <strong>${codSel}</strong> | TIPO: <strong>ESTUDIANTE / ALUMNO</strong></p>
+          <p style="margin:3px 0; font-size:1.05rem; color:#15803d; font-weight:900;">SALDO DISPONIBLE: ${formatearLDS(Math.max(0, saldo))}</p>
+        </div>
+      </div>
+      <h4 style="margin-bottom:10px; color:#0c1e30;">HISTORIAL DE MOVIMIENTOS INDIVIDUAL</h4>
+      <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+        <thead>
+          <tr style="background:#0c1e30; color:#fff; font-size:11px;">
+            <th style="padding:6px; border:1px solid #ccc; text-align:left;">FECHA Y HORA</th>
+            <th style="padding:6px; border:1px solid #ccc; text-align:left;">TIPO</th>
+            <th style="padding:6px; border:1px solid #ccc; text-align:left;">CONCEPTO</th>
+            <th style="padding:6px; border:1px solid #ccc; text-align:right;">MONTO</th>
+            <th style="padding:6px; border:1px solid #ccc; text-align:left;">CAJERO(A)</th>
+            <th style="padding:6px; border:1px solid #ccc; text-align:left;">OBSERVACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>${tablaRows || '<tr><td colspan="6" style="padding:15px; text-align:center;">SIN MOVIMIENTOS REGISTRADOS.</td></tr>'}</tbody>
+      </table>
+    `;
+  } else {
+    const estudiantes = obtenerEstudiantesOrdenados();
+    let bloquesEstudiantes = "";
+
+    estudiantes.forEach(estCod => {
+      const uInfo = MAPA_USUARIOS[estCod] || { nombre: estCod };
+      const movs = todosLosMovimientosGlobales.filter(m => normalizarCodigo(getCodigo(m)) === estCod);
+      
+      let saldo = 0;
+      const rows = movs.map(m => {
+        const monto = getMonto(m);
+        if (String(getTipo(m)).toUpperCase().includes("INGRESO")) saldo += monto;
+        else saldo -= monto;
+        return `
+          <tr>
+            <td style="padding:4px 6px; border:1px solid #e2e8f0; font-size:10px;">${getFecha(m)}</td>
+            <td style="padding:4px 6px; border:1px solid #e2e8f0; font-size:10px;">${getTipo(m)}</td>
+            <td style="padding:4px 6px; border:1px solid #e2e8f0; font-size:10px;">${getConcepto(m)}</td>
+            <td style="padding:4px 6px; border:1px solid #e2e8f0; font-size:10px; text-align:right; font-weight:bold;">${formatearLDS(monto)}</td>
+            <td style="padding:4px 6px; border:1px solid #e2e8f0; font-size:10px;">${getResponsable(m)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      bloquesEstudiantes += `
+        <div style="margin-bottom:18px; page-break-inside:avoid; border:1px solid #cbd5e1; border-radius:8px; padding:10px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f59e0b; padding-bottom:5px; margin-bottom:8px;">
+            <strong style="font-size:12px; color:#0c1e30;">🎓 ${estCod} — ${uInfo.nombre}</strong>
+            <span style="font-size:12px; font-weight:900; color:#15803d;">SALDO: ${formatearLDS(Math.max(0, saldo))}</span>
+          </div>
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f1f5f9; font-size:10px; color:#1e293b;">
+                <th style="padding:4px; border:1px solid #cbd5e1; text-align:left;">FECHA Y HORA</th>
+                <th style="padding:4px; border:1px solid #cbd5e1; text-align:left;">TIPO</th>
+                <th style="padding:4px; border:1px solid #cbd5e1; text-align:left;">CONCEPTO</th>
+                <th style="padding:4px; border:1px solid #cbd5e1; text-align:right;">MONTO</th>
+                <th style="padding:4px; border:1px solid #cbd5e1; text-align:left;">CAJERO(A)</th>
+              </tr>
+            </thead>
+            <tbody>${rows || '<tr><td colspan="5" style="padding:6px; text-align:center; font-size:10px;">SIN MOVIMIENTOS REGISTRADOS.</td></tr>'}</tbody>
+          </table>
+        </div>
+      `;
+    });
+
+    contenedor.innerHTML = htmlMembrete + `
+      <h3 style="margin-bottom:15px; color:#0c1e30; text-align:center;">REPORTE GENERAL Y CONSOLIDADO DE ESTUDIANTES</h3>
+      ${bloquesEstudiantes || '<p style="text-align:center;">NO HAY MOVIMIENTOS REGISTRADOS EN EL AÑO ESCOLAR.</p>'}
+    `;
+  }
+
+  window.print();
+}
+
+let html5QrCode = null;
+function abrirEscanerQR() {
+  document.getElementById("qrModal").style.display = "flex";
+  html5QrCode = new Html5Qrcode("reader");
+  html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 220, height: 220 } }, onScanSuccess)
+    .catch(() => { html5QrCode.start({ facingMode: "user" }, { fps: 10, qrbox: { width: 220, height: 220 } }, onScanSuccess).catch(() => cerrarEscanerQR()); });
+}
+
+function onScanSuccess(decodedText) {
+  cerrarEscanerQR();
+  document.getElementById("codigo").value = String(decodedText || "").trim().toUpperCase();
+  consultarEstudiante();
+}
+
+function cerrarEscanerQR() {
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => { html5QrCode.clear(); document.getElementById("qrModal").style.display = "none"; }).catch(() => { document.getElementById("qrModal").style.display = "none"; });
+  } else {
+    document.getElementById("qrModal").style.display = "none";
+  }
+}
+
+function guardarIncidencia() {
+  const cod = document.getElementById("incCodigo").value.trim().toUpperCase();
+  const prob = document.getElementById("incProblema").value.trim();
+  const sol = document.getElementById("incSolucion").value.trim();
+  const est = document.getElementById("incEstado").value;
+  const anio = document.getElementById("selectAnioEscolar").value;
+
+  if (!cod || !prob) { alert("INGRESA CÓDIGO Y PROBLEMA."); return; }
+  const items = JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS") || "[]");
+  items.unshift({ id: Date.now(), fecha: new Date().toLocaleDateString(), anio, cod, prob, sol, est });
+  localStorage.setItem("BANCO_LDS_360_INCIDENCIAS", JSON.stringify(items));
+  limpiarIncidencia();
+  renderIncidencias();
+}
+
+function limpiarIncidencia() {
+  document.getElementById("incProblema").value = "";
+  document.getElementById("incSolucion").value = "";
+  document.getElementById("incEstado").value = "PENDIENTE";
+}
+
+function renderIncidencias() {
+  const items = JSON.parse(localStorage.getItem("BANCO_LDS_360_INCIDENCIAS") || "[]");
+  document.getElementById("contadorIncidencias").textContent = String(items.length);
+  const box = document.getElementById("listaIncidencias");
+  if (!items.length) { box.innerHTML = '<div class="empty">NO HAY INCIDENCIAS REGISTRADOS.</div>'; return; }
+  box.innerHTML = items.slice(0, 10).map(x => `
+    <div class="incident">
+      <div class="incident-top"><strong>[${x.anio}] ${x.cod}</strong><span class="badge">${x.est}</span></div>
+      <div>${x.prob}</div>
+      ${x.sol ? `<small><strong>SOLUCIÓN:</strong> ${x.sol}</small>` : ""}
+    </div>`).join("");
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  sessionStorage.removeItem("maestraActiva");
+  sessionStorage.removeItem("responsableClave");
+  document.getElementById("loginView").style.display = "flex";
+  document.getElementById("panelView").style.display = "none";
+  renderIncidencias();
+});
+</script>
+
+</body>
+</html>
