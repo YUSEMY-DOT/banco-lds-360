@@ -413,11 +413,6 @@ main {
 .header-list-row .meta{font-weight:700;color:#64748b;}
 .header-list-row .saldo{font-weight:900;color:#15803d;text-align:right;}
 
-.impresiones-dropdown .header-list-items{padding:10px;}
-.impresiones-opciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
-.impresion-opcion{border:1.5px solid #f59e0b;background:#fff7ed;color:#9a3412;border-radius:10px;padding:12px;font-weight:900;cursor:pointer;font-size:.75rem;}
-.impresion-opcion:hover{background:#ffedd5;}
-
 .pago-alumno-card{display:flex;align-items:center;gap:16px;margin:8px 0 12px;padding:10px;border:1.5px solid #bae6fd;border-radius:10px;background:#f0f9ff;}
 .pago-alumno-foto{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #0ea5e9;background:#fff;}
 .pago-alumno-datos{display:flex;flex-direction:column;gap:3px;min-width:0;}
@@ -772,16 +767,6 @@ footer {
         </div>
       </div>
 
-      <div id="listaImpresionesDropdown" class="header-dropdown-list impresiones-dropdown" style="display:none;">
-        <div class="header-dropdown-head">
-          <strong>🖨️ IMPRESIONES</strong>
-        </div>
-        <div class="impresiones-opciones">
-          <button type="button" class="impresion-opcion" onclick="imprimirReportePersonal()">👤 ESTADO DE CUENTA INDIVIDUAL</button>
-          <button type="button" class="impresion-opcion" onclick="imprimirReporteGrupal()">👥 ESTADO DE CUENTA GRUPAL</button>
-        </div>
-      </div>
-
       <div id="listaMisesDropdown" class="header-dropdown-list mises-dropdown" style="display:none;">
         <div class="header-dropdown-head">
           <strong>👩‍🏫 LISTA DE MISES Y SALDOS</strong>
@@ -805,7 +790,7 @@ footer {
               <button class="icon-query-btn loan" type="button" onclick="abrirModalPrestamo()" title="Préstamo">
                 <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19"/><path d="M16 20h16a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4z"/><path d="M20 20v-4h8v4"/><path d="M20 27h8"/></svg>
               </button>
-              <button id="btnHeaderImpresiones" class="icon-query-btn print" type="button" onclick="abrirImpresiones()" title="Impresiones">
+              <button id="btnHeaderImpresiones" class="icon-query-btn print" type="button" onclick="window.print()" title="Imprimir">
                 <svg viewBox="0 0 48 48"><path d="M14 17V7h20v10"/><rect x="8" y="17" width="32" height="17" rx="3"/><path d="M14 29h20v12H14z"/><path d="M32 23h4"/></svg>
               </button>
             </div>
@@ -1132,6 +1117,9 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
+/**
+ * MOTOR CONTABLE UNIVERSAL DE SALDOS
+ */
 function calcularResumenMise(movimientos, codigoMise) {
   const codNorm = normalizarCodigo(codigoMise);
   if (!codNorm) return { abono: 0, ingresos: 0, egresos: 0, saldo: 0, cantMov: 0 };
@@ -1152,34 +1140,35 @@ function calcularResumenMise(movimientos, codigoMise) {
       const conc = String(getConcepto(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
 
-      const esTransferenciaDeAndrew = (respCod === "LDS-DOC-005" || conc.includes("FONDO") || conc.includes("TRANSFERENCIA") || obs.includes("FONDO") || obs.includes("TRANSFERENCIA"));
-
-      // 1. Registro asignado a la Miss
+      // REGLA 1: Registros dirigidos a la cuenta de la Miss
       if (targetCod === codNorm) {
         cantMov++;
-        // Si proviene de Andrew o es transferencia de fondo -> Siempre es INGRESO para la Miss
-        if (esTransferenciaDeAndrew) {
-          abonoInicial += monto;
+        // Si la operación la generó otra entidad (Míster Andrew u otra Miss), es dinero ENTRANTE
+        if (respCod !== codNorm) {
           totalIngresos += monto;
-        } else {
-          if (tipo.includes("INGRESO")) {
-            totalIngresos += monto;
-          } else if (tipo.includes("EGRESO")) {
-            totalEgresos += monto;
+          if (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("FONDO") || obs.includes("TRANSFERENCIA")) {
+            abonoInicial += monto;
           }
+        } else {
+          // Si fue generada por ella misma sobre su propia cuenta
+          if (tipo.includes("INGRESO")) totalIngresos += monto;
+          else if (tipo.includes("EGRESO")) totalEgresos += monto;
         }
       }
-      // 2. Registro realizado por la Miss como Cajera
+      // REGLA 2: Registros procesados por la Miss como CAJERA hacia terceros
       else if (respCod === codNorm) {
         cantMov++;
-        if (targetCod === "LDS-DOC-005") {
-          totalEgresos += monto; // Devolución enviada a Andrew
-        } else if (targetCod.startsWith("LDS-EST-")) {
-          if (tipo.includes("INGRESO")) { // Alumno recibe ingreso -> Egreso para Miss
+        if (targetCod.startsWith("LDS-EST-")) {
+          if (tipo.includes("INGRESO")) {
+            // Un "INGRESO" para el alumno equivale a una SALIDA (EGRESO) de la caja de la Miss
             totalEgresos += monto;
-          } else if (tipo.includes("EGRESO")) { // Alumno recibe egreso -> Ingreso para Miss
+          } else if (tipo.includes("EGRESO")) {
+            // Un "EGRESO" del alumno equivale a un COBRO (INGRESO) para la caja de la Miss
             totalIngresos += monto;
           }
+        } else if (targetCod === "LDS-DOC-005") {
+          // Devolución enviada por la Miss a Míster Andrew
+          totalEgresos += monto;
         }
       }
     });
@@ -1450,22 +1439,6 @@ function abrirListaMises() {
   const panel = document.getElementById("listaMisesDropdown");
   const abrir = panel.style.display === "none" || !panel.style.display;
   panel.style.display = abrir ? "block" : "none";
-}
-
-function abrirImpresiones() {
-  const panel = document.getElementById("listaImpresionesDropdown");
-  const abrir = panel.style.display === "none" || !panel.style.display;
-  panel.style.display = abrir ? "block" : "none";
-}
-
-function imprimirReportePersonal() {
-  document.getElementById("listaImpresionesDropdown").style.display = "none";
-  window.print();
-}
-
-function imprimirReporteGrupal() {
-  document.getElementById("listaImpresionesDropdown").style.display = "none";
-  window.print();
 }
 
 function abrirModalPrestamo() {
