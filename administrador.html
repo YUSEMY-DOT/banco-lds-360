@@ -401,7 +401,37 @@ main {
   border-radius:7px; font-size:.72rem; font-weight:700;
 }
 
-.header-list-items{max-height:280px;overflow:auto;padding:6px;}
+/* TABLA ABATIBLE (SECCIONES PLEGABLES/DESPLEGABLES) */
+.section-toggle {
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #f59e0b;
+  padding: 8px 12px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  margin: 6px 0 4px;
+  user-select: none;
+}
+.section-toggle:hover {
+  background: linear-gradient(135deg, #1e3a8a 0%, #0c1e30 100%);
+}
+.section-toggle .arrow {
+  transition: transform 0.2s ease;
+  font-size: 0.7rem;
+}
+.section-toggle.collapsed .arrow {
+  transform: rotate(-90deg);
+}
+
+.seccion-abatible-body.collapsed {
+  display: none !important;
+}
+
+.header-list-items{max-height:360px;overflow:auto;padding:6px;}
 .header-list-row{
   display:grid; grid-template-columns:36px 105px 1fr 120px 90px; gap:8px; align-items:center;
   padding:9px 10px; border-bottom:1px solid #edf2f7; cursor:pointer; font-size:.72rem;
@@ -748,28 +778,29 @@ footer {
             <label for="selectAnioEscolar">AÑO</label>
             <input id="selectAnioEscolar" class="anio-abierto" type="number" value="2026" min="2000" max="2100" step="1" onchange="actualizarPanelAdmin()">
           </div>
-          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos()" title="Alumnos">
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos()" title="Lista de Cuentas (Alumnos y Mises)">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
           </button>
-          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaMises()" title="Mises">
+          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaMises()" title="Mises y Cajas">
             <svg viewBox="0 0 48 48"><circle cx="17" cy="16" r="6"/><circle cx="31" cy="16" r="6"/><path d="M5 39c1.4-7 5.6-11 12-11s10.6 4 12 11"/><path d="M19 39c1.5-7 5.5-11 12-11s10.6 4 12 11"/></svg>
           </button>
         </div>
       </div>
 
+      <!-- TABLA ABATIBLE GENERAL (MISES, MISTER ANDREW Y ALUMNOS) -->
       <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
         <div class="header-dropdown-head">
-          <strong>📋 LISTA DE ALUMNOS</strong>
-          <input id="filtroCodigosInline" type="search" placeholder="BUSCAR ALUMNO O CÓDIGO..." oninput="filtrarListaCodigosInline()">
+          <strong>📋 DIRECTORIO DE CUENTAS</strong>
+          <input id="filtroCodigosInline" type="search" placeholder="BUSCAR NOMBRE O CÓDIGO..." oninput="filtrarListaCodigosInline()">
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
-          <div class="header-list-loading">CARGANDO LISTA DE ALUMNOS...</div>
+          <div class="header-list-loading">CARGANDO DIRECTORIO DE CUENTAS...</div>
         </div>
       </div>
 
       <div id="listaMisesDropdown" class="header-dropdown-list mises-dropdown" style="display:none;">
         <div class="header-dropdown-head">
-          <strong>👩‍🏫 LISTA DE MISES Y SALDOS</strong>
+          <strong>👩‍🏫 LISTA DE MISES Y CAJAS</strong>
         </div>
         <div id="listaMisesItems" class="header-list-items">
           <div class="header-list-loading">CARGANDO CUENTAS DE MISES...</div>
@@ -977,16 +1008,16 @@ const CODIGOS_MISE = {
 };
 
 let MAPA_USUARIOS = {
-  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" },
-  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
-  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" },
-  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" },
-  "LDS-DOC-005": { nombre: "MISTER ANDREW TECSUO REYES MELO", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" },
-  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl" },
-  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd" },
-  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", foto: "https://lh3.googleusercontent.com/d/1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg" },
-  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", foto: "https://lh3.googleusercontent.com/d/19KV30WDkKReEo5vBbx9ia4bebrPpyWPw" },
-  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU" }
+  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" },
+  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
+  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" },
+  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW TECSUO REYES MELO", rol: "GERENCIA / CAJA GENERAL", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" },
+  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", rol: "ALUMNO", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl" },
+  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", rol: "ALUMNO", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd" },
+  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", rol: "ALUMNO", foto: "https://lh3.googleusercontent.com/d/1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg" },
+  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", rol: "ALUMNO", foto: "https://lh3.googleusercontent.com/d/19KV30WDkKReEo5vBbx9ia4bebrPpyWPw" },
+  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", rol: "ALUMNO", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU" }
 };
 
 const CATALOGO_EXCEL = {
@@ -1117,9 +1148,10 @@ function validarAccesoDocente() {
   desbloquearPanel(nombreMaestra);
 }
 
-/**
- * OBTENER LISTA CORRELATIVA DE ALUMNOS (LDS-EST-001 AL N)
- */
+function obtenerDocentesYDireccion() {
+  return ["LDS-DOC-001", "LDS-DOC-002", "LDS-DOC-003", "LDS-DOC-004", "LDS-DOC-005"];
+}
+
 function obtenerEstudiantesOrdenados() {
   return Object.keys(MAPA_USUARIOS)
     .filter(k => k.startsWith("LDS-EST-"))
@@ -1130,9 +1162,6 @@ function obtenerEstudiantesOrdenados() {
     });
 }
 
-/**
- * EXTRAER Y POBLAR TODOS LOS ESTUDIANTES DESDE LA BASE DE DATOS
- */
 function cargarEstudiantesYMapa(movimientos) {
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
@@ -1140,7 +1169,7 @@ function cargarEstudiantesYMapa(movimientos) {
       const nombreEst = getEstudiante(m);
       if (targetCod && targetCod.startsWith("LDS-EST-") && nombreEst) {
         if (!MAPA_USUARIOS[targetCod]) {
-          MAPA_USUARIOS[targetCod] = { nombre: nombreEst.toUpperCase(), foto: "" };
+          MAPA_USUARIOS[targetCod] = { nombre: nombreEst.toUpperCase(), rol: "ALUMNO", foto: "" };
         } else if (MAPA_USUARIOS[targetCod].nombre !== nombreEst.toUpperCase()) {
           MAPA_USUARIOS[targetCod].nombre = nombreEst.toUpperCase();
         }
@@ -1148,7 +1177,6 @@ function cargarEstudiantesYMapa(movimientos) {
     });
   }
 
-  // Consulta complementaria para obtener el listado maestro de la hoja 'ESTUDIANTES'
   llamarAPI({ accion: "estudiantes" }, function(res) {
     if (res && (res.estudiantes || res.alumnos || Array.isArray(res))) {
       const lista = res.estudiantes || res.alumnos || res;
@@ -1160,6 +1188,7 @@ function cargarEstudiantesYMapa(movimientos) {
           if (cod && cod.startsWith("LDS-EST-")) {
             MAPA_USUARIOS[cod] = {
               nombre: (nom || MAPA_USUARIOS[cod]?.nombre || cod).toUpperCase(),
+              rol: "ALUMNO",
               foto: foto || MAPA_USUARIOS[cod]?.foto || ""
             };
           }
@@ -1445,27 +1474,69 @@ function abrirListaCodigos() {
   if (abrir) renderListaAlumnos();
 }
 
+function toggleSeccionAbatible(idSeccion, btnEl) {
+  const body = document.getElementById(idSeccion);
+  if (!body) return;
+  body.classList.toggle("collapsed");
+  if (btnEl) btnEl.classList.toggle("collapsed");
+}
+
 function renderListaAlumnos() {
   const cont = document.getElementById("listaAlumnosItems");
+  const docentes = obtenerDocentesYDireccion();
   const alumnos = obtenerEstudiantesOrdenados();
 
-  if (!alumnos.length) {
-    cont.innerHTML = '<div class="header-list-loading">NO HAY ALUMNOS REGISTRADOS.</div>';
-    return;
-  }
+  let html = "";
 
-  cont.innerHTML = alumnos.map((cod, i) => {
-    const item = MAPA_USUARIOS[cod] || { nombre: cod };
-    return `
+  // 1. SECCIÓN ABATIBLE: MISES Y DIRECCIÓN
+  html += `
+    <div class="section-toggle" onclick="toggleSeccionAbatible('secDocentesList', this)">
+      <span>👩‍🏫 MISES Y DIRECCIÓN GENERAL (${docentes.length})</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div id="secDocentesList" class="seccion-abatible-body">
+  `;
+  docentes.forEach((cod, i) => {
+    const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
+    html += `
       <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
         <span class="meta">${i + 1}</span>
         <span class="code">${cod}</span>
         <span class="name">${item.nombre}</span>
-        <span class="meta">ALUMNO</span>
+        <span class="meta" style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
         <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
       </div>
     `;
-  }).join("");
+  });
+  html += `</div>`;
+
+  // 2. SECCIÓN ABATIBLE: ALUMNOS / ESTUDIANTES
+  html += `
+    <div class="section-toggle" onclick="toggleSeccionAbatible('secAlumnosList', this)">
+      <span>🎓 ESTUDIANTES / ALUMNOS (${alumnos.length})</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div id="secAlumnosList" class="seccion-abatible-body">
+  `;
+  if (!alumnos.length) {
+    html += '<div class="header-list-loading">NO HAY ALUMNOS REGISTRADOS.</div>';
+  } else {
+    alumnos.forEach((cod, i) => {
+      const item = MAPA_USUARIOS[cod] || { nombre: cod };
+      html += `
+        <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+          <span class="meta">${i + 1}</span>
+          <span class="code">${cod}</span>
+          <span class="name">${item.nombre}</span>
+          <span class="meta">ALUMNO</span>
+          <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+        </div>
+      `;
+    });
+  }
+  html += `</div>`;
+
+  cont.innerHTML = html;
 }
 
 function seleccionarAlumnoLista(cod) {
@@ -1501,8 +1572,7 @@ function poblarDestinosPrestamo() {
   const sel = document.getElementById("prestamoDestino");
   sel.innerHTML = '<option value="">SELECCIONA EL USUARIO</option>';
 
-  // 1. Agregar Mises y Míster Andrew
-  const docentes = Object.keys(MAPA_USUARIOS).filter(k => k.startsWith("LDS-DOC-"));
+  const docentes = obtenerDocentesYDireccion();
   docentes.forEach(k => {
     const u = MAPA_USUARIOS[k];
     const opt = document.createElement("option");
@@ -1511,7 +1581,6 @@ function poblarDestinosPrestamo() {
     sel.appendChild(opt);
   });
 
-  // 2. Agregar Todos los Estudiantes en orden correlativo
   const estudiantes = obtenerEstudiantesOrdenados();
   estudiantes.forEach(k => {
     const u = MAPA_USUARIOS[k];
