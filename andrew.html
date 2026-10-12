@@ -913,7 +913,7 @@ textarea { height: auto; padding: 8px 10px; }
   <div class="modal-box">
     <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
     <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
-    
+
     <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
       <table class="lista-alumnos-tabla">
         <thead>
@@ -1139,10 +1139,10 @@ function extraerListaCuentasUnicas(movimientos) {
 }
 
 function calcularYSincronizarSaldos(movimientos) {
-  let capitalInicialAndrew = 200000;
+  // CAPITAL BASE FIJO: no se toma de ningún movimiento.
+  const capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
   let ingresosAndrew = 0;
-
   const saldosMises = {
     "LDS-DOC-001": 0,
     "LDS-DOC-002": 0,
@@ -1152,43 +1152,42 @@ function calcularYSincronizarSaldos(movimientos) {
 
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
-      if (!m) return;
-      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
-
+      if (!m || String(getProp(m, "estado", "ESTADO")).trim().toUpperCase() === "ANULADO") return;
       const targetCod = normalizarCodigo(getCodigo(m));
       const respCod = normalizarCodigo(getResponsable(m));
-      const monto = getMonto(m);
-      const conc = String(getConcepto(m)).toUpperCase();
-      const tipoOrig = String(getTipo(m)).toUpperCase();
-      const obs = String(getObservacion(m)).toUpperCase();
+      const monto = Math.abs(getMonto(m));
+      const conc = String(getConcepto(m) || "").toUpperCase();
+      const tipo = String(getTipo(m) || "").trim().toUpperCase();
+      const obs = String(getObservacion(m) || "").toUpperCase();
 
-      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
-        capitalInicialAndrew = monto > 0 ? monto : 200000;
+      // El registro de capital base nunca altera el saldo actual ni el capital fijo.
+      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL"))) return;
+
+      // Entrega de fondos a una miss: disminuye Andrew y aumenta la miss.
+      if (Object.prototype.hasOwnProperty.call(saldosMises, targetCod)) {
+        const esTransferenciaDesdeAndrew = respCod === "LDS-DOC-005" || obs.includes("TRANSFERENCIA DE FONDO") || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO DOCENTE");
+        if (tipo.includes("INGRESO")) {
+          saldosMises[targetCod] += monto;
+          if (esTransferenciaDesdeAndrew) egresosAndrew += monto;
+        } else if (tipo.includes("EGRESO")) {
+          saldosMises[targetCod] -= monto;
+        }
         return;
       }
 
-      if (saldosMises.hasOwnProperty(targetCod)) {
-        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO") || obs.includes("TRANSFERENCIA")) {
-          saldosMises[targetCod] += monto;
-          egresosAndrew += monto;
-        } else if (tipoOrig.includes("EGRESO")) {
-          saldosMises[targetCod] -= monto;
-        }
-      } 
-      else if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN"))) {
+      // Devolución de una miss a Andrew: aumenta Andrew y reduce la miss indicada.
+      if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN") || conc.includes("DEVOLUCION"))) {
         ingresosAndrew += monto;
-        if (saldosMises.hasOwnProperty(respCod)) {
-          saldosMises[respCod] -= monto;
-        }
+        const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
+        const origenMiss = normalizarCodigo(match ? match[0] : respCod);
+        if (Object.prototype.hasOwnProperty.call(saldosMises, origenMiss)) saldosMises[origenMiss] -= monto;
       }
     });
   }
 
   const saldoActualAndrew = Math.max(0, capitalInicialAndrew + ingresosAndrew - egresosAndrew);
-
   document.getElementById("saldoInicialAndrew").textContent = formatearLDS(capitalInicialAndrew);
   document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
-
   document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-001"]));
   document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-002"]));
   document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-003"]));
@@ -1246,7 +1245,7 @@ function renderTabla(lista) {
   const tbody = document.getElementById("tablaMovimientos");
   if (!tbody) return;
   tbody.innerHTML = "";
-  
+
   const totalCount = Array.isArray(lista) ? lista.length : 0;
   const elCant = document.getElementById("cantMovimientos");
   if (elCant) elCant.textContent = String(totalCount);
@@ -1336,7 +1335,7 @@ function renderTablaSeleccionAlumno(lista) {
 
 function filtrarTablaSeleccionAlumno() {
   const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
-  const filtrados = listaCuentasYAlumnosGlobal.filter(a => 
+  const filtrados = listaCuentasYAlumnosGlobal.filter(a =>
     a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
   );
   renderTablaSeleccionAlumno(filtrados);
@@ -1590,6 +1589,8 @@ function ejecutarTransferenciaFondo() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: missDocCode,
+    codigoDestino: missDocCode,
+    codigoOrigen: "LDS-DOC-005",
     anio: anio,
     tipo: "INGRESO",
     categoria: "FONDO_DOCENTE",
@@ -1631,6 +1632,8 @@ function ejecutarDevolucion() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: "LDS-DOC-005",
+    codigoDestino: "LDS-DOC-005",
+    codigoOrigen: missDocCode,
     anio: anio,
     tipo: "INGRESO",
     categoria: "DEVOLUCION_FONDO",
