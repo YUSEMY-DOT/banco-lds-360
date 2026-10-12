@@ -976,7 +976,7 @@ const CODIGOS_MISE = {
   "KARIN": "LDS-DOC-004"
 };
 
-const MAPA_USUARIOS = {
+let MAPA_USUARIOS = {
   "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" },
   "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
   "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" },
@@ -1118,8 +1118,57 @@ function validarAccesoDocente() {
 }
 
 /**
- * MOTOR CONTABLE UNIVERSAL DE SALDOS
+ * OBTENER LISTA CORRELATIVA DE ALUMNOS (LDS-EST-001 AL N)
  */
+function obtenerEstudiantesOrdenados() {
+  return Object.keys(MAPA_USUARIOS)
+    .filter(k => k.startsWith("LDS-EST-"))
+    .sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, ''), 10) || 0;
+      const numB = parseInt(b.replace(/\D/g, ''), 10) || 0;
+      return numA - numB;
+    });
+}
+
+/**
+ * EXTRAER Y POBLAR TODOS LOS ESTUDIANTES DESDE LA BASE DE DATOS
+ */
+function cargarEstudiantesYMapa(movimientos) {
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const nombreEst = getEstudiante(m);
+      if (targetCod && targetCod.startsWith("LDS-EST-") && nombreEst) {
+        if (!MAPA_USUARIOS[targetCod]) {
+          MAPA_USUARIOS[targetCod] = { nombre: nombreEst.toUpperCase(), foto: "" };
+        } else if (MAPA_USUARIOS[targetCod].nombre !== nombreEst.toUpperCase()) {
+          MAPA_USUARIOS[targetCod].nombre = nombreEst.toUpperCase();
+        }
+      }
+    });
+  }
+
+  // Consulta complementaria para obtener el listado maestro de la hoja 'ESTUDIANTES'
+  llamarAPI({ accion: "estudiantes" }, function(res) {
+    if (res && (res.estudiantes || res.alumnos || Array.isArray(res))) {
+      const lista = res.estudiantes || res.alumnos || res;
+      if (Array.isArray(lista)) {
+        lista.forEach(est => {
+          const cod = normalizarCodigo(getProp(est, "codigo", "CÓDIGO", "CODIGO", "id"));
+          const nom = getProp(est, "nombre", "NOMBRE", "estudiante", "nombreCompleto");
+          const foto = getProp(est, "foto", "FOTO");
+          if (cod && cod.startsWith("LDS-EST-")) {
+            MAPA_USUARIOS[cod] = {
+              nombre: (nom || MAPA_USUARIOS[cod]?.nombre || cod).toUpperCase(),
+              foto: foto || MAPA_USUARIOS[cod]?.foto || ""
+            };
+          }
+        });
+      }
+    }
+  });
+}
+
 function calcularResumenMise(movimientos, codigoMise) {
   const codNorm = normalizarCodigo(codigoMise);
   if (!codNorm) return { abono: 0, ingresos: 0, egresos: 0, saldo: 0, cantMov: 0 };
@@ -1140,34 +1189,23 @@ function calcularResumenMise(movimientos, codigoMise) {
       const conc = String(getConcepto(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
 
-      // REGLA 1: Registros dirigidos a la cuenta de la Miss
       if (targetCod === codNorm) {
         cantMov++;
-        // Si la operación la generó otra entidad (Míster Andrew u otra Miss), es dinero ENTRANTE
         if (respCod !== codNorm) {
           totalIngresos += monto;
           if (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("FONDO") || obs.includes("TRANSFERENCIA")) {
             abonoInicial += monto;
           }
         } else {
-          // Si fue generada por ella misma sobre su propia cuenta
           if (tipo.includes("INGRESO")) totalIngresos += monto;
           else if (tipo.includes("EGRESO")) totalEgresos += monto;
         }
-      }
-      // REGLA 2: Registros procesados por la Miss como CAJERA hacia terceros
-      else if (respCod === codNorm) {
+      } else if (respCod === codNorm) {
         cantMov++;
         if (targetCod.startsWith("LDS-EST-")) {
-          if (tipo.includes("INGRESO")) {
-            // Un "INGRESO" para el alumno equivale a una SALIDA (EGRESO) de la caja de la Miss
-            totalEgresos += monto;
-          } else if (tipo.includes("EGRESO")) {
-            // Un "EGRESO" del alumno equivale a un COBRO (INGRESO) para la caja de la Miss
-            totalIngresos += monto;
-          }
+          if (tipo.includes("INGRESO")) totalEgresos += monto;
+          else if (tipo.includes("EGRESO")) totalIngresos += monto;
         } else if (targetCod === "LDS-DOC-005") {
-          // Devolución enviada por la Miss a Míster Andrew
           totalEgresos += monto;
         }
       }
@@ -1195,6 +1233,8 @@ function cargarSaldoMiseAlIngresar(nombreMaestra) {
     if (!res || !Array.isArray(res.movimientos)) return;
 
     todosLosMovimientosGlobales = res.movimientos;
+    cargarEstudiantesYMapa(res.movimientos);
+
     const calc = calcularResumenMise(res.movimientos, codMise);
 
     document.getElementById("saldoInicialMise").textContent = formatearLDS(calc.abono);
@@ -1255,6 +1295,8 @@ function consultarEstudiante() {
     }
 
     todosLosMovimientosGlobales = res.movimientos;
+    cargarEstudiantesYMapa(res.movimientos);
+
     const codNorm = normalizarCodigo(cod);
 
     const filtrados = res.movimientos.filter(m => {
@@ -1405,10 +1447,15 @@ function abrirListaCodigos() {
 
 function renderListaAlumnos() {
   const cont = document.getElementById("listaAlumnosItems");
-  const alumnos = Object.keys(MAPA_USUARIOS).filter(k => k.startsWith("LDS-EST-"));
+  const alumnos = obtenerEstudiantesOrdenados();
+
+  if (!alumnos.length) {
+    cont.innerHTML = '<div class="header-list-loading">NO HAY ALUMNOS REGISTRADOS.</div>';
+    return;
+  }
 
   cont.innerHTML = alumnos.map((cod, i) => {
-    const item = MAPA_USUARIOS[cod];
+    const item = MAPA_USUARIOS[cod] || { nombre: cod };
     return `
       <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
         <span class="meta">${i + 1}</span>
@@ -1454,7 +1501,19 @@ function poblarDestinosPrestamo() {
   const sel = document.getElementById("prestamoDestino");
   sel.innerHTML = '<option value="">SELECCIONA EL USUARIO</option>';
 
-  Object.keys(MAPA_USUARIOS).forEach(k => {
+  // 1. Agregar Mises y Míster Andrew
+  const docentes = Object.keys(MAPA_USUARIOS).filter(k => k.startsWith("LDS-DOC-"));
+  docentes.forEach(k => {
+    const u = MAPA_USUARIOS[k];
+    const opt = document.createElement("option");
+    opt.value = k;
+    opt.textContent = u.nombre + " (" + k + ")";
+    sel.appendChild(opt);
+  });
+
+  // 2. Agregar Todos los Estudiantes en orden correlativo
+  const estudiantes = obtenerEstudiantesOrdenados();
+  estudiantes.forEach(k => {
     const u = MAPA_USUARIOS[k];
     const opt = document.createElement("option");
     opt.value = k;
