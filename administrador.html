@@ -1152,31 +1152,34 @@ function calcularResumenMise(movimientos, codigoMise) {
       const conc = String(getConcepto(m)).toUpperCase();
       const obs = String(getObservacion(m)).toUpperCase();
 
-      // 1. Ingreso recibido de Andrew a la Miss (Abono Inicial)
+      const esTransferenciaDeAndrew = (respCod === "LDS-DOC-005" || conc.includes("FONDO") || conc.includes("TRANSFERENCIA") || obs.includes("FONDO") || obs.includes("TRANSFERENCIA"));
+
+      // 1. Registro asignado a la Miss
       if (targetCod === codNorm) {
-        if (tipo.includes("INGRESO")) {
-          cantMov++;
+        cantMov++;
+        // Si proviene de Andrew o es transferencia de fondo -> Siempre es INGRESO para la Miss
+        if (esTransferenciaDeAndrew) {
+          abonoInicial += monto;
           totalIngresos += monto;
-          if (respCod === "LDS-DOC-005" || conc.includes("FONDO") || obs.includes("TRANSFERENCIA") || obs.includes("DE FONDO")) {
-            abonoInicial += monto;
+        } else {
+          if (tipo.includes("INGRESO")) {
+            totalIngresos += monto;
+          } else if (tipo.includes("EGRESO")) {
+            totalEgresos += monto;
           }
-        } else if (tipo.includes("EGRESO")) {
-          cantMov++;
-          totalEgresos += monto;
         }
       }
-      // 2. Egreso enviado de la Miss a Andrew (Devolución)
-      else if (targetCod === "LDS-DOC-005" && (respCod === codNorm || obs.includes(codNorm))) {
+      // 2. Registro realizado por la Miss como Cajera
+      else if (respCod === codNorm) {
         cantMov++;
-        totalEgresos += monto;
-      }
-      // 3. Pagos o cobros de la Miss a un alumno
-      else if (respCod === codNorm && targetCod.startsWith("LDS-EST-")) {
-        cantMov++;
-        if (tipo.includes("INGRESO")) { // Pago al alumno -> Egreso para la Miss
-          totalEgresos += monto;
-        } else if (tipo.includes("EGRESO")) { // Cobro al alumno -> Ingreso para la Miss
-          totalIngresos += monto;
+        if (targetCod === "LDS-DOC-005") {
+          totalEgresos += monto; // Devolución enviada a Andrew
+        } else if (targetCod.startsWith("LDS-EST-")) {
+          if (tipo.includes("INGRESO")) { // Alumno recibe ingreso -> Egreso para Miss
+            totalEgresos += monto;
+          } else if (tipo.includes("EGRESO")) { // Alumno recibe egreso -> Ingreso para Miss
+            totalIngresos += monto;
+          }
         }
       }
     });
@@ -1274,7 +1277,6 @@ function consultarEstudiante() {
 
     renderTablaMovimientos(filtrados, codNorm);
 
-    // Si se consultó un alumno, actualizar tarjeta de pago
     if (codNorm.startsWith("LDS-EST-")) {
       const info = MAPA_USUARIOS[codNorm] || { nombre: codNorm, foto: "" };
       let saldoAlumno = 0;
@@ -1314,7 +1316,6 @@ function renderTablaMovimientos(lista, codNorm) {
   lista.forEach(m => {
     const tr = document.createElement("tr");
     const codT = normalizarCodigo(getCodigo(m));
-    const resp = normalizarCodigo(getResponsable(m));
     const monto = getMonto(m);
     const tipoOrig = String(getTipo(m)).toUpperCase();
 
