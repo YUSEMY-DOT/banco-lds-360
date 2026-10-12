@@ -1317,7 +1317,9 @@ function procesarMovimientoAlumno(tipoOperacion) {
   const monto = Number(document.getElementById("pagoMonto").value) || 0;
   const obs = document.getElementById("pagoObs").value.trim();
   const msg = document.getElementById("pagoMensaje");
-  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const responsableNom = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
+  const responsableCompleto = responsableNom + " (" + codMise + ")";
 
   if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DESDE LA LISTA."; msg.className = "message error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
@@ -1332,7 +1334,7 @@ function procesarMovimientoAlumno(tipoOperacion) {
     tipo: tipoOperacion,
     concepto: concepto,
     monto: monto,
-    responsable: responsable,
+    responsable: responsableCompleto,
     observacion: obs,
     categoria: "2026"
   }, function(res) {
@@ -1354,7 +1356,9 @@ function procesarPrestamoCaja() {
   const monto = Number(document.getElementById("prestamoMonto").value) || 0;
   const obs = document.getElementById("prestamoObs").value.trim();
   const msg = document.getElementById("prestamoMensaje");
-  const origen = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const responsableNom = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
+  const origen = responsableNom + " (" + codMise + ")";
 
   if (!destino) { msg.textContent = "SELECCIONA LA CAJA DE DESTINO."; msg.className = "message error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
@@ -1388,7 +1392,9 @@ function procesarIncidenciaAlumno() {
   const monto = Number(document.getElementById("incidenciaMonto").value) || 0;
   const obs = document.getElementById("incidenciaObs").value.trim();
   const msg = document.getElementById("incidenciaMensaje");
-  const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const responsableNom = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
+  const responsableCompleto = responsableNom + " (" + codMise + ")";
 
   if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DESDE LA LISTA."; msg.className = "message error"; return; }
 
@@ -1400,7 +1406,7 @@ function procesarIncidenciaAlumno() {
     codigo: alumnoCod,
     falta: falta,
     monto: monto,
-    responsable: responsable,
+    responsable: responsableCompleto,
     observacion: obs
   }, function(res) {
     if (res && res.ok) {
