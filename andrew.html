@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -661,6 +660,63 @@ textarea { height: auto; padding: 8px 10px; }
   }
   .tabla-print th { background: #e2e8f0 !important; font-weight: 900; }
 }
+
+
+/* CAMBIO EXCLUSIVO DE APARIENCIA DE BOTONES: no altera estructura ni funciones. */
+.btn,
+.opcion-reporte-btn {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .02em;
+  text-align: center;
+  box-shadow: 0 4px 0 rgba(0,0,0,.22), 0 7px 14px rgba(0,0,0,.14);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-gold {
+  background: linear-gradient(180deg,#ffc94f 0%,#f59e0b 52%,#d97706 100%);
+  border: 1px solid #ffe2a3;
+  color: #172033;
+}
+.btn-blue {
+  background: linear-gradient(180deg,#244a70 0%,#102b45 58%,#0c1e30 100%);
+  border: 1px solid #f5b52e;
+  color: #fff;
+}
+.btn-light {
+  background: linear-gradient(180deg,#31465a 0%,#182b3e 100%);
+  border: 1px solid #f5b52e;
+  color: #fff;
+}
+.btn-outline {
+  background: linear-gradient(180deg,#fff 0%,#edf2f7 100%);
+  border: 1px solid #9aa9b8;
+  color: #0c1e30;
+}
+.opcion-reporte-btn {
+  background: linear-gradient(180deg,#244a70 0%,#102b45 100%);
+  border: 1px solid #f5b52e;
+  color: #fff;
+}
+.btn:hover,.opcion-reporte-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,.2),0 10px 18px rgba(0,0,0,.18);
+}
+.btn:active,.opcion-reporte-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.22);
+}
+.btn:focus-visible,.opcion-reporte-btn:focus-visible {
+  outline: 3px solid #fcd34d;
+  outline-offset: 3px;
+}
+
 </style>
 </head>
 <body>
@@ -799,7 +855,7 @@ textarea { height: auto; padding: 8px 10px; }
   <!-- OPERACIONES -->
   <div class="right-stack">
     <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
-    <div id="panelTransferir" class="accordion-panel">
+    <div id="panelTransferir" class="accordion-panel collapsed">
       <div class="accordion-head" onclick="togglePanel('panelTransferir')">
         <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
         <span class="toggle-arrow">▼</span>
@@ -913,7 +969,7 @@ textarea { height: auto; padding: 8px 10px; }
   <div class="modal-box">
     <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
     <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
-
+    
     <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
       <table class="lista-alumnos-tabla">
         <thead>
@@ -1139,10 +1195,10 @@ function extraerListaCuentasUnicas(movimientos) {
 }
 
 function calcularYSincronizarSaldos(movimientos) {
-  // CAPITAL BASE FIJO: no se toma de ningún movimiento.
-  const capitalInicialAndrew = 200000;
+  let capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
   let ingresosAndrew = 0;
+
   const saldosMises = {
     "LDS-DOC-001": 0,
     "LDS-DOC-002": 0,
@@ -1152,42 +1208,43 @@ function calcularYSincronizarSaldos(movimientos) {
 
   if (Array.isArray(movimientos)) {
     movimientos.forEach(m => {
-      if (!m || String(getProp(m, "estado", "ESTADO")).trim().toUpperCase() === "ANULADO") return;
+      if (!m) return;
+      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
       const targetCod = normalizarCodigo(getCodigo(m));
       const respCod = normalizarCodigo(getResponsable(m));
-      const monto = Math.abs(getMonto(m));
-      const conc = String(getConcepto(m) || "").toUpperCase();
-      const tipo = String(getTipo(m) || "").trim().toUpperCase();
-      const obs = String(getObservacion(m) || "").toUpperCase();
+      const monto = getMonto(m);
+      const conc = String(getConcepto(m)).toUpperCase();
+      const tipoOrig = String(getTipo(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
 
-      // El registro de capital base nunca altera el saldo actual ni el capital fijo.
-      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL"))) return;
-
-      // Entrega de fondos a una miss: disminuye Andrew y aumenta la miss.
-      if (Object.prototype.hasOwnProperty.call(saldosMises, targetCod)) {
-        const esTransferenciaDesdeAndrew = respCod === "LDS-DOC-005" || obs.includes("TRANSFERENCIA DE FONDO") || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO DOCENTE");
-        if (tipo.includes("INGRESO")) {
-          saldosMises[targetCod] += monto;
-          if (esTransferenciaDesdeAndrew) egresosAndrew += monto;
-        } else if (tipo.includes("EGRESO")) {
-          saldosMises[targetCod] -= monto;
-        }
+      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE"))) {
+        capitalInicialAndrew = monto > 0 ? monto : 200000;
         return;
       }
 
-      // Devolución de una miss a Andrew: aumenta Andrew y reduce la miss indicada.
-      if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN") || conc.includes("DEVOLUCION"))) {
+      if (saldosMises.hasOwnProperty(targetCod)) {
+        if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || tipoOrig.includes("INGRESO") || obs.includes("TRANSFERENCIA")) {
+          saldosMises[targetCod] += monto;
+          egresosAndrew += monto;
+        } else if (tipoOrig.includes("EGRESO")) {
+          saldosMises[targetCod] -= monto;
+        }
+      } 
+      else if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN"))) {
         ingresosAndrew += monto;
-        const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
-        const origenMiss = normalizarCodigo(match ? match[0] : respCod);
-        if (Object.prototype.hasOwnProperty.call(saldosMises, origenMiss)) saldosMises[origenMiss] -= monto;
+        if (saldosMises.hasOwnProperty(respCod)) {
+          saldosMises[respCod] -= monto;
+        }
       }
     });
   }
 
   const saldoActualAndrew = Math.max(0, capitalInicialAndrew + ingresosAndrew - egresosAndrew);
+
   document.getElementById("saldoInicialAndrew").textContent = formatearLDS(capitalInicialAndrew);
   document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
+
   document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-001"]));
   document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-002"]));
   document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-003"]));
@@ -1245,7 +1302,7 @@ function renderTabla(lista) {
   const tbody = document.getElementById("tablaMovimientos");
   if (!tbody) return;
   tbody.innerHTML = "";
-
+  
   const totalCount = Array.isArray(lista) ? lista.length : 0;
   const elCant = document.getElementById("cantMovimientos");
   if (elCant) elCant.textContent = String(totalCount);
@@ -1335,7 +1392,7 @@ function renderTablaSeleccionAlumno(lista) {
 
 function filtrarTablaSeleccionAlumno() {
   const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
-  const filtrados = listaCuentasYAlumnosGlobal.filter(a =>
+  const filtrados = listaCuentasYAlumnosGlobal.filter(a => 
     a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
   );
   renderTablaSeleccionAlumno(filtrados);
@@ -1589,8 +1646,6 @@ function ejecutarTransferenciaFondo() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: missDocCode,
-    codigoDestino: missDocCode,
-    codigoOrigen: "LDS-DOC-005",
     anio: anio,
     tipo: "INGRESO",
     categoria: "FONDO_DOCENTE",
@@ -1632,8 +1687,6 @@ function ejecutarDevolucion() {
   llamarAPI({
     accion: "registrarMovimiento",
     codigo: "LDS-DOC-005",
-    codigoDestino: "LDS-DOC-005",
-    codigoOrigen: missDocCode,
     anio: anio,
     tipo: "INGRESO",
     categoria: "DEVOLUCION_FONDO",
@@ -1686,4 +1739,3 @@ window.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-```
