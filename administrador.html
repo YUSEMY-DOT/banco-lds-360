@@ -243,7 +243,6 @@ main {
 .panel-head h3 { margin: 0; color: var(--azul); font-size: 0.9rem; font-weight: 800; }
 .panel-body { padding: 16px; }
 
-/* === BARRA DE HERRAMIENTAS Y BÚSQUEDA === */
 .search-row-ordered {
   display: flex;
   gap: 8px;
@@ -329,7 +328,6 @@ main {
 
 .print-menu button:hover { background: #fef3c7; color: #92400e; }
 
-/* === TABLA DE MOVIMIENTOS === */
 .table-wrap {
   width: 100%;
   max-height: 460px;
@@ -393,7 +391,6 @@ td:last-child {
 
 .empty { text-align: center; color: var(--muted); padding: 20px; font-weight: 700; font-size: 0.85rem; }
 
-/* NAV PESTAÑAS DE MÓDULOS */
 .modulos-nav {
   display: flex;
   gap: 6px;
@@ -572,7 +569,7 @@ td:last-child {
 <header>
   <div class="header-inner">
     <div class="brand">
-      <img src="assets/insignia.png" alt="" onerror="this.src='https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW';">
+      <img src="assets/insignia.png" alt="Insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE';">
       <div>
         <h1>BANCO LDS 360</h1>
         <p>I.E.P. LA SALLE DEL SUR</p>
@@ -586,7 +583,7 @@ td:last-child {
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
-      <img src="assets/insignia.png" alt="" class="card-insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW';">
+      <img src="assets/insignia.png" alt="Insignia" class="card-insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE';">
     </div>
     <h2>ACCESO ADMINISTRATIVO</h2>
     <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE DE SEGURIDAD.</p>
@@ -716,7 +713,7 @@ td:last-child {
                 <th style="width:120px;">FECHA Y HORA</th>
                 <th style="width:180px;">ESTUDIANTE / CUENTA</th>
                 <th style="width:75px;">GRADO</th>
-                <th style="width:80px;">TIPO</th>
+                <th style="width:100px;">TIPO MOV.</th>
                 <th style="width:160px;">CONCEPTO</th>
                 <th style="width:90px;">MONTO LDS</th>
                 <th style="width:130px;">CAJERO(A)</th>
@@ -857,7 +854,8 @@ td:last-child {
 
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
-const LOGO_OFICIAL_URL = "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW";
+const LOGO_INSIGNIA_URL = "assets/insignia.png";
+const LOGO_FALLBACK = "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE";
 
 let docenteSeleccionadoGlobal = "";
 let maestraActivaGlobal = "";
@@ -1485,13 +1483,13 @@ function imprimirEstadoCuentaIndividual() {
 
   cont.innerHTML = `
     <div class="print-header">
-      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
       <div class="print-title">
         <h1>I.E.P. LA SALLE DEL SUR</h1>
         <h2>BANCO LASALLISTA 360</h2>
         <p>REPORTE DE ESTADO DE CUENTA INDIVIDUAL — AÑO ESCOLAR 2026</p>
       </div>
-      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
     </div>
 
     <div class="print-user-box">
@@ -1507,7 +1505,7 @@ function imprimirEstadoCuentaIndividual() {
       <thead>
         <tr>
           <th>FECHA Y HORA</th>
-          <th>TIPO</th>
+          <th>TIPO MOV.</th>
           <th>CONCEPTO</th>
           <th>MONTO</th>
           <th>RESPONSABLE</th>
@@ -1553,13 +1551,13 @@ function imprimirConsolidadoGrupal() {
 
   cont.innerHTML = `
     <div class="print-header">
-      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
       <div class="print-title">
         <h1>I.E.P. LA SALLE DEL SUR</h1>
         <h2>BANCO LASALLISTA 360</h2>
         <p>REPORTE CONSOLIDADO GENERAL DEL SALÓN Y AULA — AÑO ESCOLAR 2026</p>
       </div>
-      <img src="${LOGO_OFICIAL_URL}" class="print-logo">
+      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
     </div>
 
     <table class="print-table">
