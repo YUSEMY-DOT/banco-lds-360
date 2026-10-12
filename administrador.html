@@ -397,7 +397,7 @@ main {
 }
 .header-dropdown-head strong{font-size:.82rem;color:#0f172a;font-weight:900;}
 
-/* SECCIONES ABATIBLES (PLEGABLES/DESPLEGABLES) */
+/* BARRA Y SECCIONES ABATIBLES (PLEGABLES / DESPLEGABLES) */
 .section-toggle {
   background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
   color: #f59e0b;
@@ -786,11 +786,11 @@ footer {
         </div>
       </div>
 
-      <!-- DIRECTORIO DE CUENTAS PLEGABLE / ABATIBLE -->
+      <!-- DIRECTORIO PLEGABLE / ABATIBLE -->
       <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
         <div class="header-dropdown-head">
-          <strong>📋 DIRECTORIO DE CUENTAS</strong>
-          <span style="font-size:0.68rem; color:#64748b; font-weight:700;">HAZ CLIC EN CADA SECCIÓN PARA DESPLEGAR</span>
+          <strong id="dropdownTitulo">📋 DIRECTORIO DE CUENTAS</strong>
+          <span style="font-size:0.68rem; color:#64748b; font-weight:700;">HAZ CLIC EN LA BARRA PARA DESPLEGAR</span>
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
           <div class="header-list-loading">CARGANDO DIRECTORIO...</div>
@@ -979,6 +979,7 @@ let maestraActivaGlobal = "";
 let datosEstudianteActualGlobal = null;
 let movimientosActualesGlobal = [];
 let todosLosMovimientosGlobales = [];
+let seccionListaActual = "";
 
 const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
@@ -1459,21 +1460,27 @@ function procesarMovimientoAlumno(tipoOperacion) {
   });
 }
 
-function abrirListaCodigos(seccionFoco) {
+/* FUNCIONALIDAD ABATIBLE EXCLUSIVA POR BOTÓN */
+function abrirListaCodigos(tipo) {
   const panel = document.getElementById("listaAlumnosDropdown");
-  const estaAbierto = panel.style.display === "block";
+  const tituloHead = document.getElementById("dropdownTitulo");
   
-  panel.style.display = "block";
-  renderListaAlumnos();
-
-  if (seccionFoco === 'ALUMNOS') {
-    desplegarSeccionAbatible('secAlumnosList', 'btnSecAlumnos');
-    plegarSeccionAbatible('secDocentesList', 'btnSecDocentes');
-  } else if (seccionFoco === 'MISES') {
-    desplegarSeccionAbatible('secDocentesList', 'btnSecDocentes');
-    plegarSeccionAbatible('secAlumnosList', 'btnSecAlumnos');
-  } else if (estaAbierto) {
+  // Toggle: si ya está abierto el mismo tipo, se cierra
+  if (panel.style.display === "block" && seccionListaActual === tipo) {
     panel.style.display = "none";
+    seccionListaActual = "";
+    return;
+  }
+
+  seccionListaActual = tipo;
+  panel.style.display = "block";
+
+  if (tipo === 'ALUMNOS') {
+    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS";
+    renderListaAlumnosSolo();
+  } else if (tipo === 'MISES') {
+    if (tituloHead) tituloHead.textContent = "👩‍🏫 DIRECTORIO DE MISES Y DIRECCIÓN GENERAL";
+    renderListaMisesSolo();
   }
 }
 
@@ -1485,59 +1492,20 @@ function toggleSeccionAbatible(idSeccion, idBtn) {
   if (btn) btn.classList.toggle("collapsed");
 }
 
-function desplegarSeccionAbatible(idSeccion, idBtn) {
-  const body = document.getElementById(idSeccion);
-  const btn = document.getElementById(idBtn);
-  if (body) body.classList.remove("collapsed");
-  if (btn) btn.classList.remove("collapsed");
-}
-
-function plegarSeccionAbatible(idSeccion, idBtn) {
-  const body = document.getElementById(idSeccion);
-  const btn = document.getElementById(idBtn);
-  if (body) body.classList.add("collapsed");
-  if (btn) btn.classList.add("collapsed");
-}
-
-function renderListaAlumnos() {
+function renderListaAlumnosSolo() {
   const cont = document.getElementById("listaAlumnosItems");
-  const docentes = obtenerDocentesYDireccion();
   const alumnos = obtenerEstudiantesOrdenados();
 
-  let html = "";
-
-  // 1. SECCIÓN ABATIBLE: MISES Y DIRECCIÓN (CERRADA POR DEFECTO)
-  html += `
-    <div id="btnSecDocentes" class="section-toggle collapsed" onclick="toggleSeccionAbatible('secDocentesList', 'btnSecDocentes')">
-      <span>👩‍🏫 MISES Y DIRECCIÓN GENERAL (${docentes.length})</span>
-      <span class="arrow">▼</span>
-    </div>
-    <div id="secDocentesList" class="seccion-abatible-body collapsed">
-  `;
-  docentes.forEach((cod, i) => {
-    const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
-    html += `
-      <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
-        <span class="meta">${i + 1}</span>
-        <span class="code">${cod}</span>
-        <span class="name">${item.nombre}</span>
-        <span class="meta" style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
-        <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
-      </div>
-    `;
-  });
-  html += `</div>`;
-
-  // 2. SECCIÓN ABATIBLE: ESTUDIANTES / ALUMNOS (CERRADA POR DEFECTO)
-  html += `
+  let html = `
     <div id="btnSecAlumnos" class="section-toggle collapsed" onclick="toggleSeccionAbatible('secAlumnosList', 'btnSecAlumnos')">
       <span>🎓 ESTUDIANTES / ALUMNOS (${alumnos.length})</span>
       <span class="arrow">▼</span>
     </div>
     <div id="secAlumnosList" class="seccion-abatible-body collapsed">
   `;
+
   if (!alumnos.length) {
-    html += '<div class="header-list-loading">NO HAY ALUMNOS REGISTRADOS.</div>';
+    html += '<div class="header-list-loading">NO HAY ALUMNOS REGISTRADOS EN LA BASE DE DATOS.</div>';
   } else {
     alumnos.forEach((cod, i) => {
       const item = MAPA_USUARIOS[cod] || { nombre: cod };
@@ -1553,12 +1521,40 @@ function renderListaAlumnos() {
     });
   }
   html += `</div>`;
+  cont.innerHTML = html;
+}
 
+function renderListaMisesSolo() {
+  const cont = document.getElementById("listaAlumnosItems");
+  const docentes = obtenerDocentesYDireccion();
+
+  let html = `
+    <div id="btnSecDocentes" class="section-toggle collapsed" onclick="toggleSeccionAbatible('secDocentesList', 'btnSecDocentes')">
+      <span>👩‍🏫 MISES Y DIRECCIÓN GENERAL (${docentes.length})</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div id="secDocentesList" class="seccion-abatible-body collapsed">
+  `;
+
+  docentes.forEach((cod, i) => {
+    const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
+    html += `
+      <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+        <span class="meta">${i + 1}</span>
+        <span class="code">${cod}</span>
+        <span class="name">${item.nombre}</span>
+        <span class="meta" style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
+        <span class="meta" style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+      </div>
+    `;
+  });
+  html += `</div>`;
   cont.innerHTML = html;
 }
 
 function seleccionarAlumnoLista(cod) {
   document.getElementById("listaAlumnosDropdown").style.display = "none";
+  seccionListaActual = "";
   document.getElementById("codigo").value = cod;
   consultarEstudiante();
 }
@@ -1667,7 +1663,6 @@ function imprimirReporteOficial() {
   `;
 
   if (codSel && codSel.startsWith("LDS-EST-")) {
-    // 1. REPORTE INDIVIDUAL CON FOTO Y DETALLE
     const uInfo = MAPA_USUARIOS[codSel] || { nombre: codSel, foto: "" };
     const movs = todosLosMovimientosGlobales.filter(m => normalizarCodigo(getCodigo(m)) === codSel || normalizarCodigo(getResponsable(m)) === codSel);
     
@@ -1714,7 +1709,6 @@ function imprimirReporteOficial() {
       </table>
     `;
   } else {
-    // 2. REPORTE GRUPAL ORGANIZADO ESTUDIANTE POR ESTUDIANTE
     const estudiantes = obtenerEstudiantesOrdenados();
     let bloquesEstudiantes = "";
 
