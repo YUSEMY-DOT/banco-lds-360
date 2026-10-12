@@ -50,6 +50,8 @@ header {
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   border-bottom: 4px solid var(--dorado);
   width: 100%;
+  position: relative;
+  z-index: 100;
 }
 
 .header-inner {
@@ -531,4 +533,502 @@ footer {
 
 .mises-fotos-grid{
   display:grid;
-  grid-template
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:12px 0 14px;
+}
+
+.mise-foto-btn{
+  border:1.5px solid var(--borde);
+  border-radius:10px;
+  background:#f8fafc;
+  padding:10px 6px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:104px;
+  transition:all .2s ease;
+}
+
+.mise-foto-btn:hover,
+.mise-foto-btn.activa{
+  border-color:var(--dorado);
+  background:#fffaf0;
+  box-shadow:0 2px 8px rgba(0,0,0,.10);
+}
+
+.mise-foto-btn img{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--dorado);
+  background:#fff;
+}
+
+#docenteSelect{ display:none !important; }
+
+.mise-foto-btn span{
+  color:var(--azul);
+  font-size:.64rem;
+  line-height:1.15;
+  font-weight:800;
+  text-align:center;
+  word-break:break-word;
+}
+
+.codigo-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1100;
+  background:rgba(12,30,48,.86);
+  padding:14px;
+  align-items:center;
+  justify-content:center;
+}
+
+.codigo-modal-content{
+  background:#fff;
+  width:min(760px,100%);
+  max-height:88vh;
+  border-radius:16px;
+  border-top:5px solid var(--dorado);
+  box-shadow:0 18px 45px rgba(0,0,0,.35);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.codigo-modal-head{
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid #e2e8f0;
+  background:#f8fafc;
+}
+
+.codigo-modal-head h3{color:var(--azul);font-size:1rem;font-weight:900;margin:0;}
+.codigo-modal-body{padding:14px;overflow:auto;}
+.codigo-close{border:0;background:var(--rojo);color:#fff;border-radius:8px;padding:8px 12px;font-weight:800;cursor:pointer;}
+
+.search-row-ordered{display:flex!important;gap:12px!important;align-items:center!important;flex-wrap:nowrap!important}
+.categorias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:5px 0 8px}
+.categoria-btn{border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;border-radius:10px;padding:11px 8px;font-size:.72rem;font-weight:900;cursor:pointer;line-height:1.2;min-height:52px;transition:.2s ease}
+.categoria-btn.active{border-color:#f59e0b;background:linear-gradient(135deg,#fff7d6,#fef3c7);color:#92400e;box-shadow:0 4px 12px rgba(245,158,11,.18)}
+
+.icon-header-btn,.icon-query-btn{display:inline-flex;align-items:center;justify-content:center;border:1.5px solid transparent;cursor:pointer;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;flex:0 0 auto}
+.icon-header-btn{width:42px;height:42px;border-radius:50%;padding:8px;box-shadow:0 5px 12px rgba(15,23,42,.16)}
+.icon-header-btn svg,.icon-query-btn svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.icon-header-btn.alumno{background:linear-gradient(135deg,#67e8f9,#0284c7);color:#fff;border-color:#0284c7}
+.icon-header-btn.mises{background:linear-gradient(135deg,#fda4af,#dc2626);color:#fff;border-color:#dc2626}
+
+.icon-query-btn{width:54px;height:42px;border-radius:12px;padding:8px}
+.icon-query-btn.qr-shape{border-radius:10px;background:#0f2340;color:#fff;border-color:#eab308}
+.icon-query-btn.refresh{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#fff7cc,#f59e0b);color:#8a4b00;border-color:#f59e0b}
+.icon-query-btn.loan{background:linear-gradient(135deg,#ddd6fe,#7c3aed);color:#fff;border-color:#6d28d9}
+.icon-query-btn.print{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#fde68a,#f59e0b);color:#7c4300;border-color:#f59e0b}
+
+.pago-acciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.btn-accion-pago{min-height:50px;border-radius:12px;border:1.5px solid;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;cursor:pointer;transition:.18s ease;font-size:.74rem}
+.btn-accion-pago svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.btn-accion-pago.pagar{background:linear-gradient(135deg,#fff7d6,#f59e0b);color:#7c4300;border-color:#f59e0b}
+.btn-accion-pago.cobrar{background:linear-gradient(135deg,#dcfce7,#22c55e);color:#166534;border-color:#16a34a}
+
+.anio-control-wrap{display:flex;align-items:center;gap:6px;margin-right:12px;padding-right:12px;border-right:1px solid #dbe3ee}
+.anio-control-wrap label{font-size:.62rem;font-weight:900;color:#64748b;}
+.anio-abierto{width:88px;height:38px!important;border:1.5px solid #8b5cf6!important;border-radius:10px!important;background:linear-gradient(135deg,#ede9fe,#ddd6fe)!important;color:#312e81!important;font-weight:900!important;text-align:center;font-size:.82rem!important}
+
+#contenedorImpresion { display: none; }
+
+@media print {
+  body * { visibility: hidden !important; }
+  #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
+  #contenedorImpresion {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+    padding: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="assets/insignia.png" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+      </div>
+      <div>
+        <h1>BANCO LDS 360</h1>
+        <p>I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <a class="btn btn-light" href="./">← INICIO</a>
+  </div>
+</header>
+
+<!-- PANTALLA LOGIN -->
+<div id="loginView" class="login-wrapper" style="display: flex;">
+  <div class="login-card">
+    <div class="card-insignia-container">
+      <img src="assets/insignia.png" alt="Insignia" class="card-insignia" onerror="this.src='assets/insignia.jpg';">
+    </div>
+    <h2>ACCESO ADMINISTRATIVO</h2>
+    <p>SELECCIONE SU NOMBRE E INGRESE SU CLAVE DE SEGURIDAD.</p>
+
+    <div class="form-group">
+      <div class="mises-fotos-grid">
+        <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
+          <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
+          <span>MISS LILY</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="seleccionarMiseVisual('KIARA')">
+          <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" alt="Miss Kiara" onerror="this.src='https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300';">
+          <span>MISS KIARA</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="seleccionarMiseVisual('ANGHY')">
+          <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" alt="Miss Anghy" onerror="this.src='https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300';">
+          <span>MISS ANGHY</span>
+        </button>
+        <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="seleccionarMiseVisual('KARIN')">
+          <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" alt="Miss Karin" onerror="this.src='https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300';">
+          <span>MISS KARIN</span>
+        </button>
+      </div>
+
+      <select id="docenteSelect" aria-hidden="true">
+        <option value="" disabled selected hidden>SELECCIONE SU NOMBRE</option>
+        <option value="LILY">MISS LILY MELO AZAÑERO</option>
+        <option value="KIARA">MISS KIARA MORALES ELGUERA</option>
+        <option value="ANGHY">MISS ANGHY REYES MELO</option>
+        <option value="KARIN">MISS KARIN MOLERO ROMANI</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="claveDocente">CLAVE DE ACCESO DOCENTE</label>
+      <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
+    </div>
+
+    <button class="primary-btn" type="button" onclick="validarAccesoDocente()">INGRESAR AL PANEL</button>
+    <div id="adminError" class="error-msg"></div>
+  </div>
+</div>
+
+<!-- PANEL PRINCIPAL MAESTRA -->
+<main id="panelView" style="display: none;">
+  <div class="admin-profile-banner">
+    <div class="admin-profile-info">
+      <div class="admin-avatar-wrap">
+        <img id="missFoto" class="admin-avatar-img" src="" alt="Foto Miss">
+        <div id="missPlaceholder" class="admin-avatar-placeholder">👩‍🏫</div>
+      </div>
+      <div class="admin-text-details">
+        <p>DOCENTE · TUTORA · CAJERA</p>
+        <h3 id="maestraActivaNombre">—</h3>
+      </div>
+    </div>
+
+    <div class="admin-stats-box">
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
+      <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
+      <div class="stat-pill"><span>INCIDENCIAS</span><strong id="contadorIncidencias">0</strong></div>
+    </div>
+  </div>
+
+  <section class="layout">
+    <div class="panel">
+      <div class="panel-head">
+        <h3>📋 CONSULTA Y ESTADO DE CUENTA</h3>
+        <div class="header-actions-group">
+          <div class="anio-control-wrap">
+            <label for="selectAnioEscolar">AÑO</label>
+            <input id="selectAnioEscolar" class="anio-abierto" type="number" value="2026" min="2000" max="2100" step="1" onchange="actualizarPanelAdmin()">
+          </div>
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos('ALUMNOS')" title="Lista de Estudiantes / Alumnos">
+            <svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
+          </button>
+          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaCodigos('MISES')" title="Mises y Dirección General">
+            <svg viewBox="0 0 48 48"><circle cx="17" cy="16" r="6"/><circle cx="31" cy="16" r="6"/><path d="M5 39c1.4-7 5.6-11 12-11s10.6 4 12 11"/><path d="M19 39c1.5-7 5.5-11 12-11s10.6 4 12 11"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- DESPLIEGUE DIRECTO DE LISTAS -->
+      <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
+        <div class="header-dropdown-head">
+          <strong id="dropdownTitulo">📋 DIRECTORIO DE CUENTAS</strong>
+          <button type="button" onclick="cerrarListaCodigos()" style="border:0; background:var(--rojo); color:#fff; padding:2px 8px; border-radius:4px; font-weight:800; cursor:pointer; font-size:10px;">✕ CERRAR</button>
+        </div>
+        <div id="listaAlumnosItems" class="header-list-items">
+          <div class="header-list-loading">CARGANDO DIRECTORIO...</div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="search-container">
+          <div>
+            <label class="small-label">CONSULTA DE ALUMNOS O CAJA</label>
+            <div class="search-row-ordered">
+              <button class="icon-query-btn qr-shape" type="button" onclick="abrirEscanerQR()" title="Escanear QR">
+                <svg viewBox="0 0 48 48"><path d="M5 19V5h14M29 5h14v14M43 29v14H29M19 43H5V29"/><rect x="10" y="10" width="7" height="7"/><rect x="31" y="10" width="7" height="7"/><rect x="10" y="31" width="7" height="7"/><path d="M29 29h4v4h-4zM36 36h7v7h-7zM29 36h4v7h-4z"/></svg>
+              </button>
+              <button class="icon-query-btn refresh" type="button" onclick="actualizarPanelAdmin()" title="Actualizar Datos">
+                <svg viewBox="0 0 48 48"><path d="M39 18a16 16 0 1 0 2 13"/><path d="M39 8v10H29"/></svg>
+              </button>
+              <button class="icon-query-btn loan" type="button" onclick="abrirModalPrestamo()" title="Préstamo de Caja">
+                <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19"/><path d="M16 20h16a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4z"/><path d="M20 20v-4h8v4"/><path d="M20 27h8"/></svg>
+              </button>
+              <button id="btnHeaderImpresiones" class="icon-query-btn print" type="button" onclick="imprimirReporteOficial()" title="Imprimir Estado de Cuenta">
+                <svg viewBox="0 0 48 48"><path d="M14 17V7h20v10"/><rect x="8" y="17" width="32" height="17" rx="3"/><path d="M14 29h20v12H14z"/><path d="M32 23h4"/></svg>
+              </button>
+            </div>
+            <input id="codigo" type="hidden" value="">
+          </div>
+        </div>
+
+        <div id="mensaje" class="message"></div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>AÑO</th>
+                <th>FECHA Y HORA</th>
+                <th>ESTUDIANTE / CUENTA</th>
+                <th>GRADO</th>
+                <th>TIPO</th>
+                <th>CONCEPTO</th>
+                <th>MONTO LDS</th>
+                <th>CAJERO(A)</th>
+                <th>OBSERVACIÓN</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMovimientos">
+              <tr><td colspan="9" class="empty">SELECCIONA UN ALUMNO O MISE PARA CONSULTAR.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO: OPERACIONES CON ALUMNOS -->
+    <div class="right-stack">
+      <div id="panelPago" class="panel collapsed">
+        <div class="panel-head clickable" onclick="togglePanel('panelPago')">
+          <h3>💰 PAGOS Y COBROS AL ALUMNO</h3>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="panel-body">
+          <label class="small-label" for="pagoCodigo">ALUMNO SELECCIONADO</label>
+          <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA O QR" readonly style="background:#f1f5f9;">
+
+          <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
+            <img id="pagoAlumnoFoto" class="pago-alumno-foto" src="" alt="Foto">
+            <div class="pago-alumno-datos">
+              <strong id="pagoAlumnoNombre">ALUMNO</strong>
+              <span id="pagoAlumnoMeta">—</span>
+              <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
+            </div>
+          </div>
+
+          <label class="small-label">CATEGORÍA DEL MOVIMIENTO</label>
+          <div class="categorias-grid" id="categoriasPagoBotones">
+            <button type="button" class="categoria-btn" data-categoria="INGRESOS_Y_SUELDOS" onclick="seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
+            <button type="button" class="categoria-btn active" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
+            <button type="button" class="categoria-btn" data-categoria="AHORROS_E_INVERSIONES" onclick="seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
+          </div>
+          <select id="pagoCategoria" style="display:none;">
+            <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
+            <option value="INGRESOS_Y_SUELDOS">INGRESOS Y SUELDOS</option>
+            <option value="AHORROS_E_INVERSIONES">AHORROS E INVERSIONES</option>
+          </select>
+
+          <label class="small-label" for="pagoConcepto">CONCEPTO</label>
+          <select id="pagoConcepto">
+            <option value="">SELECCIONA EL CONCEPTO</option>
+          </select>
+
+          <label class="small-label" for="pagoMonto">MONTO LDS</label>
+          <input id="pagoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO">
+
+          <label class="small-label" for="pagoObs">OBSERVACIÓN (OPCIONAL)</label>
+          <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO..."></textarea>
+
+          <div class="pago-acciones">
+            <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">
+              <svg viewBox="0 0 48 48"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
+              <span>PAGAR ALUMNO</span>
+            </button>
+            <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarMovimientoAlumno('EGRESO')">
+              <svg viewBox="0 0 48 48"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
+              <span>COBRAR ALUMNO</span>
+            </button>
+          </div>
+          <div id="pagoMensaje" class="message"></div>
+        </div>
+      </div>
+
+      <!-- INCIDENCIAS -->
+      <div id="panelIncidencias" class="panel collapsed">
+        <div class="panel-head clickable" onclick="togglePanel('panelIncidencias')">
+          <h3>🛠 ATENCIÓN DE INCIDENCIAS</h3>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="panel-body">
+          <label class="small-label" for="incCodigo">CÓDIGO</label>
+          <input id="incCodigo" placeholder="LDS-EST-001">
+          <label class="small-label" for="incProblema">PROBLEMA</label>
+          <textarea id="incProblema" rows="2" placeholder="DESCRIBE QUÉ OCURRIÓ..."></textarea>
+          <label class="small-label" for="incSolucion">SOLUCIÓN</label>
+          <textarea id="incSolucion" rows="2" placeholder="SOLUCIÓN APLICADA..."></textarea>
+          <label class="small-label" for="incEstado">ESTADO</label>
+          <select id="incEstado">
+            <option>PENDIENTE</option>
+            <option>EN ATENCIÓN</option>
+            <option>RESUELTO</option>
+          </select>
+          <div style="display:flex;gap:12px;margin-top:12px;">
+            <button class="btn btn-gold" style="flex:1" type="button" onclick="guardarIncidencia()">GUARDAR</button>
+            <button class="btn btn-outline" type="button" onclick="limpiarIncidencia()">LIMPIAR</button>
+          </div>
+          <div id="listaIncidencias" class="incident-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENEDOR DE IMPRESIÓN CON MEMBRETE -->
+  <div id="contenedorImpresion"></div>
+</main>
+
+<!-- MODAL PRÉSTAMO -->
+<div id="prestamoModal" class="codigo-modal" style="display:none;">
+  <div class="codigo-modal-content" style="max-width:500px;">
+    <div class="codigo-modal-head">
+      <h3>🤝 PRÉSTAMO DE CAJA</h3>
+      <button class="codigo-close" type="button" onclick="cerrarModalPrestamo()">CERRAR</button>
+    </div>
+    <div class="codigo-modal-body">
+      <p style="font-size:0.75rem; margin-bottom:10px; color:var(--muted); font-weight:700;">EL DINERO SE DESCONTARÁ DE SU CAJA DOCENTE Y SE TRANSFERIRÁ AL USUARIO SELECCIONADO.</p>
+      <label class="small-label" for="prestamoDestino">USUARIO DESTINO (MISES, MÍSTER O ALUMNOS)</label>
+      <select id="prestamoDestino"><option value="">SELECCIONA EL USUARIO</option></select>
+      
+      <label class="small-label" for="prestamoMonto">MONTO LDS</label>
+      <input id="prestamoMonto" type="number" min="1" step="1" placeholder="INGRESA EL MONTO">
+      
+      <label class="small-label" for="prestamoMotivo">MOTIVO / OBSERVACIÓN</label>
+      <textarea id="prestamoMotivo" rows="2" placeholder="DETALLE DEL PRÉSTAMO..."></textarea>
+      
+      <div id="prestamoMensaje" class="message"></div>
+      <div style="display:flex; gap:10px; margin-top:14px;">
+        <button type="button" class="btn btn-outline" style="flex:1" onclick="cerrarModalPrestamo()">CANCELAR</button>
+        <button type="button" class="btn btn-gold" style="flex:1" onclick="registrarPrestamo()">🤝 REGISTRAR PRÉSTAMO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ESCÁNER QR -->
+<div id="qrModal" class="qr-modal">
+  <div class="qr-modal-content">
+    <h3>ESCANEAR CÓDIGO QR</h3>
+    <div id="reader"></div>
+    <button class="close-qr-btn" type="button" onclick="cerrarEscanerQR()">CERRAR CÁMARA</button>
+  </div>
+</div>
+
+<footer>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS</footer>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
+
+let maestraActivaGlobal = "";
+let datosEstudianteActualGlobal = null;
+let movimientosActualesGlobal = [];
+let todosLosMovimientosGlobales = [];
+let seccionListaActual = "";
+
+const FOTOS_DOCENTES = {
+  "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
+  "MISS KIARA MORALES ELGUERA": "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O",
+  "MISS ANGHY REYES MELO": "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U",
+  "MISS KARIN MOLERO ROMANI": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv"
+};
+
+const CODIGOS_MISE = {
+  "MISS LILY MELO AZAÑERO": "LDS-DOC-001",
+  "MISS KIARA MORALES ELGUERA": "LDS-DOC-002",
+  "MISS ANGHY REYES MELO": "LDS-DOC-003",
+  "MISS KARIN MOLERO ROMANI": "LDS-DOC-004",
+  "LILY": "LDS-DOC-001",
+  "KIARA": "LDS-DOC-002",
+  "ANGHY": "LDS-DOC-003",
+  "KARIN": "LDS-DOC-004"
+};
+
+let MAPA_USUARIOS = {
+  "LDS-DOC-001": { nombre: "MISS LILY MELO AZAÑERO", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" },
+  "LDS-DOC-002": { nombre: "MISS KIARA MORALES ELGUERA", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
+  "LDS-DOC-003": { nombre: "MISS ANGHY REYES MELO", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" },
+  "LDS-DOC-004": { nombre: "MISS KARIN MOLERO ROMANI", rol: "DOCENTE / TUTORA", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW TECSUO REYES MELO", rol: "GERENCIA / CAJA GENERAL", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" }
+};
+
+const CATALOGO_EXCEL = {
+  "INGRESOS_Y_SUELDOS": [
+    "Ingreso Sueldo Base Mensual",
+    "Ingreso Sueldo por Rol de Liderazgo",
+    "Ingreso Bono por desempeño"
+  ],
+  "PREMIOS_Y_BONIFICACIONES": [
+    "Bono por llevar el uniforme impecable y reglamentario",
+    "Bono Participación destacada en clase",
+    "Bono Premio por primer lugar en concurso académico o deportivo",
+    "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)",
+    "Bono Apoyo destacado en limpieza, orden o ecología del aula",
+    "Bono por ayuda solidaria / Compañerismo destacado",
+    "Bono Creatividad e innovación en proyectos escolares",
+    "Bono Representar dignamente al colegio en eventos externos",
+    "Bono Leer un libro de acuerdo a su edad y presentar evidencia",
+    "Bono Completar un reto educativo",
+    "Bono Llegar antes de la hora",
+    "Bono Participar en Escuela para Padres junto a su familia",
+    "Bono Ser responsable con sus materiales",
+    "Bono Ayudar a mantener limpia el aula"
+  ],
+  "AHORROS_E_INVERSIONES": [
+    "Depósito a cuenta de ahorros (Ahorro voluntario)",
+    "Inversión en fondo común del aula / cooperativa",
+    "Retiro de ahorros (Emergencia o meta cumplida)"
+  ]
+};
+
+function normalizarCodigo(str) {
+  if (!str) return "";
+  const s = String(str).trim().toUpperCase();
+  if (s === "LDS-DOC-001" || s.includes("LILY") || s === "CAJA-LILY") return "LDS-DOC-001";
+  if (s === "LDS-DOC-002" || s.includes("KIARA") || s === "CAJA-KIARA") return "LDS-DOC-002";
+  if (s === "LDS-DOC-003" || s.includes("ANGHY") || s === "CAJA-ANGHY") return "LDS-DOC-003";
+  if (s === "LDS-DOC-004" || s.includes("KARIN") || s === "CAJA-KARIN") return "LDS-DOC-004";
+  if (s === "LDS-DOC-005" || s.includes("ANDREW") || s === "CAJA-ANDREW") return "LDS-DOC-005";
+  return s;
+}
+
+function parseMontoLDS(val) {
+  if (typeof val === "number") return Number.isFinite(val) ? Math.trunc(val) : 0;
+  if (val === null || val === undefined || String(val).trim() === "") return 0;
+  let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim().replace(/[.,]/g, "");
