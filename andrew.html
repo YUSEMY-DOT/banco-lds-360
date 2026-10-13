@@ -708,7 +708,7 @@ textarea { height: auto; padding: 8px 10px; }
 </head>
 <body>
 
-<!-- PANTALLA DE ACCESO GERENCIAL (CLAVE DE MR. ANDREW) -->
+<!-- PANTALLA DE ACCESO GERENCIAL (CLAVE DE MR. ANDREW CON FOTO DE COSTADO) -->
 <div id="pantallaAcceso">
   <div class="acceso-card">
     <img src="https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" referrerpolicy="no-referrer" alt="Mister Andrew" class="acceso-avatar" onerror="this.src='https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w300';">
@@ -1009,8 +1009,8 @@ function hablarVoz(texto) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'es-PE';
-    utterance.rate = 0.95; // Velocidad más pausada y cordial
-    utterance.pitch = 1.05; // Tono ligeramente más cálido
+    utterance.rate = 0.95;
+    utterance.pitch = 1.05;
     window.speechSynthesis.speak(utterance);
   }
 }
