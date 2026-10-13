@@ -29,9 +29,28 @@
     }
     .school-info { display: flex; align-items: center; gap: 12px; }
     .school-info img { width: 42px; height: 42px; object-fit: contain; }
-    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; }
-    .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; margin: 0; }
+    .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin: 0; }
     
+    .header-btns { display: flex; gap: 8px; align-items: center; }
+
+    .btn-actualizar-top {
+      background: linear-gradient(135deg, #059669, #047857);
+      border: 2px solid #6ee7b7;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-actualizar-top:hover { transform: scale(1.04); background: #10b981; }
+
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid #f59e0b;
@@ -70,8 +89,9 @@
       .dashboard-container { grid-template-columns: 1fr; }
     }
 
+    /* TARJETA PRINCIPAL DEL ESTUDIANTE */
     .saldo-card {
-      background: linear-gradient(145deg, #091628 0%, #050d18 100%);
+      background: #091628;
       color: #ffffff;
       border-radius: 22px;
       padding: 20px;
@@ -93,29 +113,25 @@
       z-index: 2; 
     }
 
+    /* CONTENEDOR DORADO DEL SALDO */
     .saldo-box-dorado {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+      background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #eab308 100%);
       color: #0c1e30;
-      border-radius: 16px;
-      padding: 12px;
+      border-radius: 18px;
+      padding: 12px 10px;
       flex: 1;
       text-align: center;
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 6px 15px rgba(0,0,0,0.35);
-      border: 2px solid #fbbf24;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.9), 0 6px 15px rgba(0,0,0,0.35);
+      border: 2px solid #fef08a;
     }
-    .saldo-title { font-size: 0.65rem; color: #78350f; font-weight: 800; letter-spacing: 1px; }
-    .saldo-amount { font-size: 1.8rem; font-weight: 900; color: #0f172a; line-height: 1; margin: 4px 0; }
-    .saldo-sub { font-size: 0.65rem; color: #047857; font-weight: 800; }
+    .saldo-title { font-size: 0.65rem; color: #854d0e; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .saldo-amount { font-size: 1.8rem; font-weight: 900; color: #0c1e30; line-height: 1; margin: 2px 0; }
+    .saldo-sub { font-size: 0.62rem; color: #047857; font-weight: 800; margin-top: 3px; }
     
-    @keyframes flotarBrillar {
-      0% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
-      50% { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(245, 158, 11, 0.5); }
-      100% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
-    }
-
+    /* FOTO CIRCULAR CON ARO DORADO */
     .avatar-wrap {
-      width: 130px;
-      height: 130px;
+      width: 125px;
+      height: 125px;
       border-radius: 50%;
       border: 4px solid #f59e0b;
       background: #ffffff;
@@ -124,7 +140,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: flotarBrillar 4s ease-in-out infinite;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
     }
 
     .avatar-img { 
@@ -133,22 +149,24 @@
       object-fit: cover; 
     }
     
+    /* CAJA DE NOMBRE Y GRADO ESCOLAR */
     .alumno-info-box { 
       margin-top: 14px; 
-      background: rgba(3, 8, 15, 0.85); 
+      background: #040a12; 
       padding: 12px; 
       border-radius: 14px; 
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      border: 1.5px solid #f59e0b;
       text-align: center;
     }
-    .alumno-nombre { font-size: 0.95rem; font-weight: 800; color: #ffffff; cursor: pointer; }
+    .alumno-nombre { font-size: 0.92rem; font-weight: 800; color: #ffffff; cursor: pointer; margin-bottom: 3px; }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
-    .alumno-grado { font-size: 0.82rem; color: #fde68a; font-weight: 700; margin-top: 4px; }
+    .alumno-grado { font-size: 0.8rem; color: #fde047; font-weight: 800; }
     
+    /* BOTONES DE ACCIÓN EN CUADRÍCULA 2X2 */
     .actions-grid { 
       display: grid; 
       grid-template-columns: 1fr 1fr; 
-      gap: 8px; 
+      gap: 10px; 
       margin-top: 14px; 
     }
     
@@ -160,20 +178,21 @@
       text-align: center; 
       font-size: 0.72rem; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
-      transition: transform 0.2s;
+      transition: transform 0.2s, filter 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 5px;
       border: 1.5px solid;
     }
-    .action-btn:hover { transform: translateY(-2px); }
+    .action-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
     
-    .btn-pagar { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border-color: #fca5a5; }
-    .btn-movs { background: linear-gradient(135deg, #059669, #047857); color: #fff; border-color: #6ee7b7; }
-    .btn-prestamo { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; border-color: #fde68a; }
-    .btn-mensaje { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border-color: #bfdbfe; }
+    .btn-pagar { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #fff; border-color: #fca5a5; }
+    .btn-movs { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #fff; border-color: #6ee7b7; }
+    .btn-prestamo { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #fff; border-color: #fde68a; }
+    .btn-mensaje { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border-color: #bfdbfe; }
 
+    /* PANEL DERECHO SECCIONAL */
     .sub-card { 
       background: #ffffff; 
       color: #1e293b; 
@@ -263,17 +282,21 @@
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a href="./" class="inicio-btn">← INICIO</a>
+    <div class="header-btns">
+      <button onclick="consultarDatosEstudiante(codigoEstudianteActual)" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
+      <a href="./" class="inicio-btn">← INICIO</a>
+    </div>
   </header>
 
   <main>
     <div class="dashboard-container">
       
+      <!-- TARJETA BASE DE LA IMAGEN -->
       <div class="saldo-card">
         <div class="saldo-top">
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
+            <h3 class="saldo-amount"><span id="saldoLDS">1.080</span> LDS</h3>
             <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">1.130 LDS</span></p>
           </div>
 
@@ -283,8 +306,8 @@
         </div>
 
         <div class="alumno-info-box">
-          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
+          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC PARA CAMBIAR CÓDIGO">DANY SMITH FRANCISCO CRIOLLO</p>
+          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">TERCERO LOS DIVERGENTES</span></p>
         </div>
 
         <div class="actions-grid">
@@ -295,6 +318,7 @@
         </div>
       </div>
 
+      <!-- VISTAS INTERACTIVAS A LA DERECHA -->
       <div>
         
         <div id="seccionOperacion" class="sub-card hidden">
@@ -353,7 +377,10 @@
         <div id="seccionMovimientos" class="sub-card">
           <div class="sub-card-header">
             <h4>📊 HISTORIAL DE MOVIMIENTOS</h4>
-            <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
+            <div style="display:flex; gap:6px;">
+              <button onclick="consultarDatosEstudiante(codigoEstudianteActual)" class="btn-imprimir" style="background:#059669; border-color:#6ee7b7;">🔄 ACTUALIZAR</button>
+              <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
+            </div>
           </div>
 
           <div id="listaMovimientos" class="lista-movs">
