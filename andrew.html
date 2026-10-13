@@ -962,7 +962,7 @@ const MAPA_USUARIOS_OFICIALES = {
 
   "CAJA-LILY": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "LDS-DOC-001", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
   "CAJA-KIARA": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "LDS-DOC-002", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
-  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "CAJA-ANGHY", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "LDS-DOC-003", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
   "CAJA-KARIN": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "LDS-DOC-004", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
   "CAJA-ANDREW": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "LDS-DOC-005", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
 
@@ -1146,7 +1146,6 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-/* LÓGICA DE CÁLCULO DE SALDOS ARREGLADA (CASCADAS Y RETORNOS) */
 function calcularYSincronizarSaldos(movimientos) {
   const capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1168,14 +1167,11 @@ function calcularYSincronizarSaldos(movimientos) {
       const tipo = String(getTipo(m) || "").trim().toUpperCase();
       const obs = String(getObservacion(m) || "").toUpperCase();
 
-      // 1. LÓGICA DE ANDREW (CABEZA)
       if (targetCod === "LDS-DOC-005") {
         if (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL")) {
-          // Es el capital base, ignoramos porque ya sumamos 200.000 LDS
+          // Capital inicial
         } else if (tipo.includes("INGRESO") || conc.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN")) {
-          // Ingreso a Andrew (Devolución)
           ingresosAndrew += monto;
-          // Descontamos a la Miss que devuelve
           const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
           const origenMiss = normalizarCodigo(match ? match[0] : respCod);
           if (saldosMises[origenMiss] !== undefined) {
@@ -1183,28 +1179,22 @@ function calcularYSincronizarSaldos(movimientos) {
           }
         }
       } else if (respCod === "LDS-DOC-005") {
-        // Andrew envía dinero (Transferencia a Miss u otro)
         egresosAndrew += monto;
         if (saldosMises[targetCod] !== undefined && tipo.includes("INGRESO")) {
           saldosMises[targetCod] += monto;
         }
       }
 
-      // 2. LÓGICA DE MISES CON ALUMNOS
       if (saldosMises[respCod] !== undefined && targetCod !== "LDS-DOC-005") {
-        // La Miss es la cajera responsable
         if (targetCod.startsWith("LDS-EST-") || (!targetCod.startsWith("LDS-DOC-") && targetCod !== "")) {
           if (tipo.includes("EGRESO")) {
-            // Alumno paga (Multa/Compra) -> Egreso para alumno = INGRESO para la Miss
             saldosMises[respCod] += monto;
           } else if (tipo.includes("INGRESO")) {
-            // Miss paga al Alumno (Sueldo/Bono) -> Ingreso para alumno = EGRESO para la Miss
             saldosMises[respCod] -= monto;
           }
         }
       }
       
-      // 3. MOVIMIENTOS DIRECTOS A MISES (Ajustes o ingresos directos sin Andrew)
       if (saldosMises[targetCod] !== undefined && respCod !== "LDS-DOC-005" && respCod !== targetCod) {
          if (tipo.includes("INGRESO") && conc.includes("DEVOLUCION")) {
              saldosMises[targetCod] += monto;
@@ -1222,7 +1212,6 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
-/* LÓGICA DE FILTRO ARREGLADA (Lo que Andrew ve por defecto) */
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
@@ -1242,7 +1231,6 @@ function filtrarYRenderizarTabla() {
       const monto = getMonto(m);
       const llaveUnica = `${fecha}_${monto}_${conc}`;
 
-      // Mostrar si Andrew es el emisor o el receptor (Transferencias a misses y devoluciones recibidas)
       const esMovimientoAndrew = (cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("CAJA-ANDREW"));
 
       if (esMovimientoAndrew) {
@@ -1292,7 +1280,7 @@ function renderTabla(lista) {
     const concStr = String(getConcepto(m)).toUpperCase();
     const monto = getMonto(m);
     
-    // FORMATO DE FECHA (ARRIBA) Y HORA (ABAJO)
+    // 1. FECHA (ARRIBA) Y HORA (ABAJO)
     let fechaOnly = "-";
     let horaOnly = "";
     const fechaOriginal = getFecha(m);
@@ -1303,14 +1291,20 @@ function renderTabla(lista) {
       if (partesFecha.length >= 2) {
         const hPartes = partesFecha[1].split(":");
         if (hPartes.length >= 2) {
-          horaOnly = hPartes[0] + ":" + hPartes[1]; // hh:mm
+          horaOnly = hPartes[0] + ":" + hPartes[1];
         }
       }
     }
 
-    const gradoVal = getGrado(m) || 'CAJA GENERAL';
-    
-    // LIMPIEZA DE OBSERVACION
+    // 2. GRADO / ROL ABREVIADO
+    let gradoRaw = String(getGrado(m) || "CAJA GENERAL").toUpperCase();
+    let gradoCorto = gradoRaw;
+    if (gradoRaw.includes("PROMOTORA")) gradoCorto = "PROM";
+    else if (gradoRaw.includes("DOCENTE")) gradoCorto = "DOC";
+    else if (gradoRaw.includes("ADMINISTRACIÓN") || gradoRaw.includes("ADMIN")) gradoCorto = "ADM";
+    else if (gradoRaw.includes("ESTUDIANTE")) gradoCorto = "EST";
+
+    // 3. LIMPIEZA DE OBSERVACIÓN
     let obsRaw = String(getObservacion(m)).toUpperCase();
     let obsLimpia = obsRaw
       .replace(/^TRANSFERENCIA DE FONDO A [^|]+\|\s*/i, "")
@@ -1331,25 +1325,68 @@ function renderTabla(lista) {
       tipoMostrar = "EGRESO";
     }
 
-    let cuentaNombre = getEstudiante(m);
+    // 4. CUENTA / DESTINO EN 2 LÍNEAS (Nombre Arriba, Código Abajo)
+    let nombreCuenta = getEstudiante(m);
+    let codigoCuenta = cod;
     if (MAPA_USUARIOS_OFICIALES[cod] && cod !== "LDS-DOC-005") {
-      cuentaNombre = MAPA_USUARIOS_OFICIALES[cod].nombre;
+      nombreCuenta = MAPA_USUARIOS_OFICIALES[cod].nombre;
     } else if (cod === "LDS-DOC-005") {
-      cuentaNombre = "MISTER ANDREW";
+      nombreCuenta = "MISTER ANDREW";
+    }
+    if (nombreCuenta.length > 22) {
+      nombreCuenta = nombreCuenta.split(" ")[0] + " " + (nombreCuenta.split(" ")[1] || "");
     }
 
+    // 5. RESPONSABLE EN 2 LÍNEAS
+    let respNombreOriginal = getResponsable(m) || "SISTEMA";
+    if (respNombreOriginal.toUpperCase().includes("ANDREW")) {
+      respNombreOriginal = "MISTER ANDREW";
+    }
+    let partesResp = respNombreOriginal.split(" ");
+    let respArriba = partesResp[0] || "SISTEMA";
+    let respAbajo = partesResp.slice(1).join(" ") || "";
+
     tr.innerHTML = `
-      <td class="col-nowrap" style="text-align: center; vertical-align: middle;">
-        <div style="font-weight: 800; font-size: 0.75rem; color: #0c1e30; line-height: 1.1;">${fechaOnly}</div>
-        ${horaOnly ? `<div style="font-size: 0.65rem; color: #64748b; font-weight: 700; margin-top: 2px;">${horaOnly}</div>` : ''}
+      <!-- FECHA Y HORA -->
+      <td class="col-nowrap" style="text-align: center; vertical-align: middle; padding: 6px;">
+        <div style="font-weight: 800; font-size: 0.7rem; color: #0c1e30; line-height: 1.1;">${fechaOnly}</div>
+        ${horaOnly ? `<div style="font-size: 0.6rem; color: #64748b; font-weight: 700; margin-top: 1px;">${horaOnly}</div>` : ''}
       </td>
-      <td><strong>${cuentaNombre}</strong></td>
-      <td class="col-nowrap">${gradoVal}</td>
-      <td class="col-nowrap"><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
-      <td>${concStr}</td>
-      <td class="col-monto">${formatearLDS(monto)}</td>
-      <td class="col-nowrap">${getResponsable(m) || 'SISTEMA'}</td>
-      <td>${obsLimpia}</td>
+
+      <!-- CUENTA / DESTINO (2 LÍNEAS) -->
+      <td style="vertical-align: middle; padding: 6px;">
+        <div style="font-weight: 800; font-size: 0.7rem; color: #0c1e30; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${nombreCuenta}</div>
+        <div style="font-size: 0.58rem; color: #64748b; font-weight: 700; margin-top: 1px;">${codigoCuenta}</div>
+      </td>
+
+      <!-- GRADO / ROL -->
+      <td class="col-nowrap" style="vertical-align: middle; padding: 6px; font-size: 0.68rem; font-weight: 800;">${gradoCorto}</td>
+
+      <!-- TIPO -->
+      <td class="col-nowrap" style="vertical-align: middle; padding: 6px;">
+        <span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}" style="font-size: 0.65rem; padding: 1px 4px;">${tipoMostrar}</span>
+      </td>
+
+      <!-- CONCEPTO (LETRA MÁS PEQUEÑA EN 2 LÍNEAS) -->
+      <td style="vertical-align: middle; padding: 6px; font-size: 0.65rem; font-weight: 700; line-height: 1.2; max-width: 160px;">
+        ${concStr}
+      </td>
+
+      <!-- MONTO LDS -->
+      <td class="col-monto" style="vertical-align: middle; padding: 6px; font-size: 0.72rem; font-weight: 900;">
+        ${formatearLDS(monto)}
+      </td>
+
+      <!-- RESPONSABLE (2 LÍNEAS) -->
+      <td class="col-nowrap" style="vertical-align: middle; padding: 6px;">
+        <div style="font-weight: 800; font-size: 0.68rem; color: #0c1e30; line-height: 1.1;">${respArriba}</div>
+        ${respAbajo ? `<div style="font-size: 0.58rem; color: #64748b; font-weight: 700; margin-top: 1px;">${respAbajo}</div>` : ''}
+      </td>
+
+      <!-- OBSERVACIÓN (LETRA MÁS PEQUEÑA) -->
+      <td style="vertical-align: middle; padding: 6px; font-size: 0.65rem; font-weight: 700; line-height: 1.2; max-width: 150px; color: #475569;">
+        ${obsLimpia}
+      </td>
     `;
     tbody.appendChild(tr);
   });
