@@ -689,13 +689,13 @@ textarea { height: auto; padding: 8px 10px; }
       </div>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
-      <select id="selectAnioEscolar" class="input-field" style="width: 110px; height: 36px;" onchange="actualizarCajaAndrew()">
+      <select id="selectAnioEscolar" class="input-field" style="width: 110px; height: 36px;" onchange="reproducirSonido('clic'); actualizarCajaAndrew()">
         <option value="2026" selected>AÑO 2026</option>
         <option value="2027">AÑO 2027</option>
         <option value="2028">AÑO 2028</option>
       </select>
-      <button class="btn btn-gold" type="button" onclick="actualizarCajaAndrew()">🔄 ACTUALIZAR</button>
-      <a class="btn btn-light" href="./">← INICIO</a>
+      <button class="btn btn-gold" type="button" onclick="reproducirSonido('clic'); actualizarCajaAndrew()">🔄 ACTUALIZAR</button>
+      <a class="btn btn-light" href="./" onclick="reproducirSonido('clic')">← INICIO</a>
     </div>
   </div>
 </header>
@@ -780,8 +780,8 @@ textarea { height: auto; padding: 8px 10px; }
       <div class="table-head">
         <h3>📋 MOVIMIENTOS DE CAJA GENERAL</h3>
         <div class="table-actions">
-          <button class="btn btn-blue" type="button" onclick="abrirModalMenuReportes()">🖨️ REPORTES</button>
-          <button id="btnVerTodo" class="btn btn-gold" type="button" onclick="toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
+          <button class="btn btn-blue" type="button" onclick="reproducirSonido('clic'); abrirModalMenuReportes()">🖨️ REPORTES</button>
+          <button id="btnVerTodo" class="btn btn-gold" type="button" onclick="reproducirSonido('clic'); toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
         </div>
       </div>
 
@@ -811,7 +811,7 @@ textarea { height: auto; padding: 8px 10px; }
   <div class="right-stack">
     <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
     <div id="panelTransferir" class="accordion-panel collapsed">
-      <div class="accordion-head" onclick="togglePanel('panelTransferir')">
+      <div class="accordion-head" onclick="reproducirSonido('clic'); togglePanel('panelTransferir')">
         <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
         <span class="toggle-arrow">▼</span>
       </div>
@@ -846,14 +846,14 @@ textarea { height: auto; padding: 8px 10px; }
           <input id="transfObs" type="text" class="input-field" placeholder="PAGO MES DE OCTUBRE">
         </div>
 
-        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarTransferenciaFondo()">💸 TRANSFERIR FONDO</button>
+        <button class="btn btn-gold btn-full" type="button" onclick="reproducirSonido('exito'); ejecutarTransferenciaFondo()">💸 TRANSFERIR FONDO</button>
         <div id="msgTransferencia" class="msg-box"></div>
       </div>
     </div>
 
     <!-- PANEL 2: RECIBIR DEVOLUCIÓN DE UNA MISS -->
     <div id="panelDevolucion" class="accordion-panel collapsed">
-      <div class="accordion-head" onclick="togglePanel('panelDevolucion')">
+      <div class="accordion-head" onclick="reproducirSonido('clic'); togglePanel('panelDevolucion')">
         <h3>↩ RECIBIR DEVOLUCIÓN DE UNA MISS</h3>
         <span class="toggle-arrow">▼</span>
       </div>
@@ -879,14 +879,14 @@ textarea { height: auto; padding: 8px 10px; }
           <textarea id="devolObs" rows="2" class="input-field" placeholder="DEVOLUCIÓN DE SALDO NO UTILIZADO..."></textarea>
         </div>
 
-        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarDevolucion()">↩ REGISTRAR DEVOLUCIÓN</button>
+        <button class="btn btn-gold btn-full" type="button" onclick="reproducirSonido('exito'); ejecutarDevolucion()">↩ REGISTRAR DEVOLUCIÓN</button>
         <div id="msgDevolucion" class="msg-box"></div>
       </div>
     </div>
 
     <!-- PANEL 3: CONSULTAR CUENTA -->
     <div id="panelConsulta" class="accordion-panel collapsed">
-      <div class="accordion-head" onclick="togglePanel('panelConsulta')">
+      <div class="accordion-head" onclick="reproducirSonido('clic'); togglePanel('panelConsulta')">
         <h3>🔎 CONSULTAR CUENTA</h3>
         <span class="toggle-arrow">▼</span>
       </div>
@@ -896,7 +896,7 @@ textarea { height: auto; padding: 8px 10px; }
           <input id="consultaCodigo" type="text" class="input-field" placeholder="LDS-EST-001 O LDS-DOC-001">
         </div>
 
-        <button class="btn btn-blue btn-full" type="button" onclick="consultarCuentaEspecifica()">🔎 CONSULTAR CUENTA</button>
+        <button class="btn btn-blue btn-full" type="button" onclick="reproducirSonido('clic'); consultarCuentaEspecifica()">🔎 CONSULTAR CUENTA</button>
         <div id="msgConsulta" class="msg-box"></div>
       </div>
     </div>
@@ -907,15 +907,15 @@ textarea { height: auto; padding: 8px 10px; }
 <div id="modalMenuReportes" class="modal-overlay">
   <div class="modal-box">
     <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
-    <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
+    <button class="opcion-reporte-btn" type="button" onclick="reproducirSonido('clic'); abrirListaSeleccionUnitario()">
       <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
       <span>➔</span>
     </button>
-    <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
+    <button class="opcion-reporte-btn" type="button" onclick="reproducirSonido('clic'); generarEImprimirReporteGrupal()">
       <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
       <span>➔</span>
     </button>
-    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModal('modalMenuReportes')">CANCELAR</button>
+    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="reproducirSonido('clic'); cerrarModal('modalMenuReportes')">CANCELAR</button>
   </div>
 </div>
 
@@ -940,7 +940,7 @@ textarea { height: auto; padding: 8px 10px; }
       </table>
     </div>
 
-    <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" type="button" onclick="cerrarModal('modalSeleccionAlumno')">VOLVER</button>
+    <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" type="button" onclick="reproducirSonido('clic'); cerrarModal('modalSeleccionAlumno')">VOLVER</button>
   </div>
 </div>
 
@@ -952,6 +952,42 @@ const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCR
 let mostrandoTodoElBanco = false;
 let todosLosMovimientosGlobales = [];
 let listaCuentasYAlumnosGlobal = [];
+
+// MOTOR DE VOZ Y SONIDOS NATIVOS
+function hablarVoz(texto) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = 'es-PE';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+function reproducirSonido(tipo) {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (tipo === 'clic') {
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    } else if (tipo === 'exito') {
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+  } catch (e) {}
+}
 
 const MAPA_USUARIOS_OFICIALES = {
   "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
@@ -1102,7 +1138,7 @@ function actualizarCajaAndrew() {
   if (btnVer) btnVer.textContent = "🌐 VER TODO EL BANCO";
 
   const tbody = document.getElementById("tablaMovimientos");
-  if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 20px; font-weight:700;">CARGANDO MOVIMIENTOS...</td></tr>';
+  if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 20px; font-weight: 700;">CARGANDO MOVIMIENTOS...</td></tr>';
 
   llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
     try {
@@ -1146,7 +1182,6 @@ function extraerListaCuentasUnicas(movimientos) {
   listaCuentasYAlumnosGlobal = Array.from(mapa.values());
 }
 
-/* LÓGICA DE CÁLCULO DE SALDOS ARREGLADA (CASCADAS Y RETORNOS) */
 function calcularYSincronizarSaldos(movimientos) {
   const capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
@@ -1168,14 +1203,11 @@ function calcularYSincronizarSaldos(movimientos) {
       const tipo = String(getTipo(m) || "").trim().toUpperCase();
       const obs = String(getObservacion(m) || "").toUpperCase();
 
-      // 1. LÓGICA DE ANDREW (CABEZA)
       if (targetCod === "LDS-DOC-005") {
         if (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL")) {
-          // Es el capital base, ignoramos porque ya sumamos 200.000 LDS
+          // Capital inicial
         } else if (tipo.includes("INGRESO") || conc.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN")) {
-          // Ingreso a Andrew (Devolución)
           ingresosAndrew += monto;
-          // Descontamos a la Miss que devuelve
           const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
           const origenMiss = normalizarCodigo(match ? match[0] : respCod);
           if (saldosMises[origenMiss] !== undefined) {
@@ -1183,28 +1215,22 @@ function calcularYSincronizarSaldos(movimientos) {
           }
         }
       } else if (respCod === "LDS-DOC-005") {
-        // Andrew envía dinero (Transferencia a Miss u otro)
         egresosAndrew += monto;
         if (saldosMises[targetCod] !== undefined && tipo.includes("INGRESO")) {
           saldosMises[targetCod] += monto;
         }
       }
 
-      // 2. LÓGICA DE MISES CON ALUMNOS
       if (saldosMises[respCod] !== undefined && targetCod !== "LDS-DOC-005") {
-        // La Miss es la cajera responsable
         if (targetCod.startsWith("LDS-EST-") || (!targetCod.startsWith("LDS-DOC-") && targetCod !== "")) {
           if (tipo.includes("EGRESO")) {
-            // Alumno paga (Multa/Compra) -> Egreso para alumno = INGRESO para la Miss
             saldosMises[respCod] += monto;
           } else if (tipo.includes("INGRESO")) {
-            // Miss paga al Alumno (Sueldo/Bono) -> Ingreso para alumno = EGRESO para la Miss
             saldosMises[respCod] -= monto;
           }
         }
       }
       
-      // 3. MOVIMIENTOS DIRECTOS A MISES (Ajustes o ingresos directos sin Andrew)
       if (saldosMises[targetCod] !== undefined && respCod !== "LDS-DOC-005" && respCod !== targetCod) {
          if (tipo.includes("INGRESO") && conc.includes("DEVOLUCION")) {
              saldosMises[targetCod] += monto;
@@ -1222,7 +1248,6 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
-/* LÓGICA DE FILTRO ARREGLADA (Lo que Andrew ve por defecto) */
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
@@ -1242,7 +1267,6 @@ function filtrarYRenderizarTabla() {
       const monto = getMonto(m);
       const llaveUnica = `${fecha}_${monto}_${conc}`;
 
-      // Mostrar si Andrew es el emisor o el receptor (Transferencias a misses y devoluciones recibidas)
       const esMovimientoAndrew = (cod === "LDS-DOC-005" || resp === "LDS-DOC-005" || obs.includes("CAJA-ANDREW"));
 
       if (esMovimientoAndrew) {
@@ -1263,8 +1287,10 @@ function toggleVerTodoElBanco() {
 
   if (mostrandoTodoElBanco) {
     if (btn) btn.textContent = "💼 VER SOLO CAJA ANDREW";
+    hablarVoz("Mostrando todos los movimientos del banco.");
   } else {
     if (btn) btn.textContent = "🌐 VER TODO EL BANCO";
+    hablarVoz("Mostrando movimientos exclusivos de Caja Andrew.");
   }
   filtrarYRenderizarTabla();
 }
@@ -1292,7 +1318,6 @@ function renderTabla(lista) {
     const concStr = String(getConcepto(m)).toUpperCase();
     const monto = getMonto(m);
     
-    // FORMATO DE FECHA (ARRIBA) Y HORA (ABAJO)
     let fechaOnly = "-";
     let horaOnly = "";
     const fechaOriginal = getFecha(m);
@@ -1303,14 +1328,13 @@ function renderTabla(lista) {
       if (partesFecha.length >= 2) {
         const hPartes = partesFecha[1].split(":");
         if (hPartes.length >= 2) {
-          horaOnly = hPartes[0] + ":" + hPartes[1]; // hh:mm
+          horaOnly = hPartes[0] + ":" + hPartes[1];
         }
       }
     }
 
     const gradoVal = getGrado(m) || 'CAJA GENERAL';
     
-    // LIMPIEZA DE OBSERVACION
     let obsRaw = String(getObservacion(m)).toUpperCase();
     let obsLimpia = obsRaw
       .replace(/^TRANSFERENCIA DE FONDO A [^|]+\|\s*/i, "")
@@ -1355,12 +1379,16 @@ function renderTabla(lista) {
   });
 }
 
-function abrirModalMenuReportes() { abrirModal('modalMenuReportes'); }
+function abrirModalMenuReportes() { 
+  hablarVoz("Abriendo panel de reportes.");
+  abrirModal('modalMenuReportes'); 
+}
 
 function abrirListaSeleccionUnitario() {
   cerrarModal('modalMenuReportes');
   renderTablaSeleccionAlumno(listaCuentasYAlumnosGlobal);
   abrirModal('modalSeleccionAlumno');
+  hablarVoz("Seleccione un usuario para generar su estado de cuenta.");
 }
 
 function renderTablaSeleccionAlumno(lista) {
@@ -1375,7 +1403,10 @@ function renderTablaSeleccionAlumno(lista) {
 
   lista.forEach(item => {
     const tr = document.createElement("tr");
-    tr.onclick = () => generarEImprimirReporteUnitario(item.codigo, item.nombre);
+    tr.onclick = () => {
+      reproducirSonido('clic');
+      generarEImprimirReporteUnitario(item.codigo, item.nombre);
+    };
     tr.innerHTML = `
       <td><strong style="color:var(--azul-claro);">${item.codigo}</strong></td>
       <td>
@@ -1398,6 +1429,7 @@ function filtrarTablaSeleccionAlumno() {
 
 function generarEImprimirReporteUnitario(codigo, nombre) {
   cerrarModal('modalSeleccionAlumno');
+  hablarVoz("Generando reporte para " + nombre);
 
   const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
   const cont = document.getElementById("contenedorImpresion");
@@ -1409,6 +1441,7 @@ function generarEImprimirReporteUnitario(codigo, nombre) {
 
 function generarEImprimirReporteGrupal() {
   cerrarModal('modalMenuReportes');
+  hablarVoz("Generando reporte consolidado grupal.");
 
   const cont = document.getElementById("contenedorImpresion");
   if (!cont) return;
@@ -1631,13 +1664,24 @@ function ejecutarTransferenciaFondo() {
   const anio = document.getElementById("selectAnioEscolar").value;
   const msg = document.getElementById("msgTransferencia");
 
-  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+  if (!missDocCode) { 
+    msg.textContent = "SELECCIONA UNA MISS DESTINO."; 
+    msg.className = "msg-box error"; 
+    hablarVoz("Seleccione una miss destino.");
+    return; 
+  }
+  if (monto <= 0) { 
+    msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
+    msg.className = "msg-box error"; 
+    hablarVoz("Ingrese un monto válido.");
+    return; 
+  }
 
   if (btn) btn.disabled = true;
 
   msg.textContent = "PROCESANDO TRANSFERENCIA...";
   msg.className = "msg-box ok";
+  hablarVoz("Procesando transferencia de fondos...");
 
   const detalleObs = "TRANSFERENCIA DE FONDO A " + missDocCode + (obs ? " | " + obs : "");
 
@@ -1661,10 +1705,12 @@ function ejecutarTransferenciaFondo() {
       msg.className = "msg-box ok";
       document.getElementById("transfMonto").value = "";
       document.getElementById("transfObs").value = "";
+      hablarVoz("Transferencia registrada con éxito.");
       actualizarCajaAndrew();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSFERENCIA.";
       msg.className = "msg-box error";
+      hablarVoz("Error al registrar transferencia.");
     }
   });
 }
@@ -1676,11 +1722,22 @@ function ejecutarDevolucion() {
   const anio = document.getElementById("selectAnioEscolar").value;
   const msg = document.getElementById("msgDevolucion");
 
-  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+  if (!missDocCode) { 
+    msg.textContent = "SELECCIONA UNA MISS ORIGEN."; 
+    msg.className = "msg-box error"; 
+    hablarVoz("Seleccione una miss origen.");
+    return; 
+  }
+  if (monto <= 0) { 
+    msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
+    msg.className = "msg-box error"; 
+    hablarVoz("Ingrese un monto válido.");
+    return; 
+  }
 
   msg.textContent = "PROCESANDO DEVOLUCIÓN...";
   msg.className = "msg-box ok";
+  hablarVoz("Procesando devolución de saldo...");
 
   const detalleObs = "DEVOLUCIÓN DE SALDO DE " + missDocCode + (obs ? " | " + obs : "");
 
@@ -1703,10 +1760,12 @@ function ejecutarDevolucion() {
       msg.className = "msg-box ok";
       document.getElementById("devolMonto").value = "";
       document.getElementById("devolObs").value = "";
+      hablarVoz("Devolución registrada con éxito.");
       actualizarCajaAndrew();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR DEVOLUCIÓN.";
       msg.className = "msg-box error";
+      hablarVoz("Error al registrar devolución.");
     }
   });
 }
@@ -1715,7 +1774,12 @@ function consultarCuentaEspecifica() {
   const cod = document.getElementById("consultaCodigo").value.trim().toUpperCase();
   const msg = document.getElementById("msgConsulta");
 
-  if (!cod) { msg.textContent = "INGRESE UN CÓDIGO."; msg.className = "msg-box error"; return; }
+  if (!cod) { 
+    msg.textContent = "INGRESE UN CÓDIGO."; 
+    msg.className = "msg-box error"; 
+    hablarVoz("Ingrese un código.");
+    return; 
+  }
 
   const filtrados = todosLosMovimientosGlobales.filter(m => {
     if (!m) return false;
@@ -1726,16 +1790,19 @@ function consultarCuentaEspecifica() {
   if (!filtrados.length) {
     msg.textContent = "NO SE ENCONTRARON REGISTROS.";
     msg.className = "msg-box error";
+    hablarVoz("No se encontraron registros.");
     return;
   }
 
   msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
   msg.className = "msg-box ok";
+  hablarVoz("Se encontraron " + filtrados.length + " movimientos.");
   renderTabla(filtrados);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   actualizarCajaAndrew();
+  hablarVoz("Bienvenido a Caja Andrew. Panel gerencial general listo.");
 });
 </script>
 
