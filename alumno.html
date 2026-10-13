@@ -284,8 +284,8 @@
       </div>
     </div>
     <div class="header-btns">
-      <button onclick="consultarDatosEstudiante(codigoEstudianteActual)" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
-      <a href="./" class="inicio-btn">← INICIO</a>
+      <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual);" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
+      <a href="./" class="inicio-btn" onclick="reproducirSonido('clic')">← INICIO</a>
     </div>
   </header>
 
@@ -312,10 +312,10 @@
         </div>
 
         <div class="actions-grid">
-          <button onclick="mostrarSeccion('seccionOperacion')" class="action-btn btn-pagar">💰 PAGAR / GASTOS</button>
-          <button onclick="mostrarSeccion('seccionMovimientos')" class="action-btn btn-movs">📊 MOVIMIENTOS</button>
-          <button onclick="mostrarSeccion('seccionPrestamo')" class="action-btn btn-prestamo">🤝 PRÉSTAMOS</button>
-          <button onclick="mostrarSeccion('seccionMensaje')" class="action-btn btn-mensaje">✉️ BUZÓN / AVISO</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionOperacion')" class="action-btn btn-pagar">💰 PAGAR / GASTOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionMovimientos')" class="action-btn btn-movs">📊 MOVIMIENTOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionPrestamo')" class="action-btn btn-prestamo">🤝 PRÉSTAMOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionMensaje')" class="action-btn btn-mensaje">✉️ BUZÓN / AVISO</button>
         </div>
       </div>
 
@@ -330,7 +330,7 @@
           <div class="form-scroll-area">
             <div class="form-group">
               <label>CATEGORÍA DE GASTO</label>
-              <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
+              <select id="selectCategoria" onchange="alCambiarCategoria(); reproducirSonido('clic');" class="input-field">
                 <option value="PAGOS_Y_GASTOS">🛒 PAGOS Y GASTOS</option>
                 <option value="SANCIONES_Y_MULTAS">⚠️ SANCIONES Y MULTAS</option>
                 <option value="PREMIOS_Y_BONIFICACIONES">🏆 PREMIOS Y BONIFICACIONES</option>
@@ -370,7 +370,7 @@
           </div>
 
           <div>
-            <button onclick="registrarMovimientoOperacion()" class="btn-primary">CONFIRMAR Y REGISTRAR GASTO</button>
+            <button onclick="reproducirSonido('exito'); registrarMovimientoOperacion();" class="btn-primary">CONFIRMAR Y REGISTRAR GASTO</button>
             <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
           </div>
         </div>
@@ -379,8 +379,8 @@
           <div class="sub-card-header">
             <h4>📊 HISTORIAL DE MOVIMIENTOS</h4>
             <div style="display:flex; gap:6px;">
-              <button onclick="consultarDatosEstudiante(codigoEstudianteActual)" class="btn-imprimir" style="background:#059669; border-color:#6ee7b7;">🔄 ACTUALIZAR</button>
-              <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
+              <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual)" class="btn-imprimir" style="background:#059669; border-color:#6ee7b7;">🔄 ACTUALIZAR</button>
+              <button onclick="reproducirSonido('clic'); imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
             </div>
           </div>
 
@@ -420,7 +420,7 @@
           </div>
 
           <div>
-            <button onclick="registrarPrestamoAlumno()" class="btn-primary" style="background:linear-gradient(135deg,#d97706,#b45309);">ENVIAR SOLICITUD DE PRÉSTAMO</button>
+            <button onclick="reproducirSonido('exito'); registrarPrestamoAlumno();" class="btn-primary" style="background:linear-gradient(135deg,#d97706,#b45309);">ENVIAR SOLICITUD DE PRÉSTAMO</button>
             <div id="mensajePrestamo" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
           </div>
         </div>
@@ -453,7 +453,7 @@
           </div>
 
           <div>
-            <button onclick="enviarMensajeAMaestra()" class="btn-primary" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">ENVIAR MENSAJE AL BUZÓN</button>
+            <button onclick="reproducirSonido('exito'); enviarMensajeAMaestra();" class="btn-primary" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">ENVIAR MENSAJE AL BUZÓN</button>
             <div id="mensajeStatus" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
           </div>
         </div>
@@ -478,6 +478,41 @@
     let estudianteGlobal = null;
     let cuentaGlobal = null;
     let movimientosGlobales = [];
+
+    // SISTEMA DE VOZ HABLADA Y EFECTOS DE SONIDO NATIVOS
+    function hablarVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function reproducirSonido(tipo) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (tipo === 'clic') {
+          osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.05);
+        } else if (tipo === 'exito') {
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.2);
+        }
+      } catch (e) {}
+    }
 
     const CATALOGO_TARIFAS = {
       "INGRESOS_Y_SUELDOS": [
@@ -606,6 +641,7 @@
     }
 
     function cambiarCodigoManual() {
+      reproducirSonido('clic');
       const nuevoCod = prompt("INGRESE EL CÓDIGO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
       if (nuevoCod && nuevoCod.trim() !== "") {
         codigoEstudianteActual = nuevoCod.trim().toUpperCase();
@@ -646,9 +682,12 @@
           }
 
           renderizarMovimientos(movimientosGlobales);
+          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
+
         } else {
           document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
           document.getElementById('listaMovimientos').innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN REGISTROS EN GOOGLE SHEETS.</p>';
+          hablarVoz("Estudiante no encontrado en el sistema.");
         }
       });
     }
@@ -698,11 +737,13 @@
       if (!monto || monto <= 0 || !con || !resp) {
         msg.style.color = "#dc2626";
         msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
+        hablarVoz("Por favor complete todos los campos obligatorios.");
         return;
       }
 
       msg.style.color = "#2563eb";
       msg.textContent = "REGISTRANDO GASTO EN SISTEMA...";
+      hablarVoz("Registrando movimiento en el sistema...");
 
       llamarAPI({
         accion: 'REGISTRARMOVIMIENTO',
@@ -718,11 +759,13 @@
           msg.style.color = "#059669";
           msg.textContent = "¡GASTO REGISTRADO CON ÉXITO!";
           document.getElementById('inputObservacion').value = "";
+          hablarVoz("Gasto registrado con éxito.");
           consultarDatosEstudiante(codigoEstudianteActual);
           setTimeout(() => mostrarSeccion('seccionMovimientos'), 1000);
         } else {
           msg.style.color = "#dc2626";
           msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL GASTO.";
+          hablarVoz("Error al registrar la transacción.");
         }
       });
     }
@@ -734,10 +777,13 @@
       const msg = document.getElementById('mensajePrestamo');
 
       if (!destino || monto <= 0) {
-        msg.style.color = "#dc2626"; msg.textContent = "INGRESE DESTINO Y MONTO VÁLIDO."; return;
+        msg.style.color = "#dc2626"; msg.textContent = "INGRESE DESTINO Y MONTO VÁLIDO.";
+        hablarVoz("Ingrese un destino y monto válido.");
+        return;
       }
 
       msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO SOLICITUD DE PRÉSTAMO...";
+      hablarVoz("Enviando solicitud de préstamo...");
       
       llamarAPI({
         accion: 'REGISTRAR_PRESTAMO',
@@ -751,10 +797,12 @@
           msg.textContent = "¡PRÉSTAMO / TRANSFERENCIA REGISTRADA!";
           document.getElementById('prestamoMonto').value = "";
           document.getElementById('prestamoObs').value = "";
+          hablarVoz("Préstamo y transferencia registrada correctamente.");
           consultarDatosEstudiante(codigoEstudianteActual);
         } else {
           msg.style.color = "#dc2626";
           msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR PRÉSTAMO.";
+          hablarVoz("Error al registrar el préstamo.");
         }
       });
     }
@@ -765,9 +813,14 @@
       const texto = document.getElementById('mensajeTexto').value.trim();
       const msg = document.getElementById('mensajeStatus');
 
-      if (!texto) { msg.style.color = "#dc2626"; msg.textContent = "ESCRIBA UN MENSAJE."; return; }
+      if (!texto) { 
+        msg.style.color = "#dc2626"; msg.textContent = "ESCRIBA UN MENSAJE."; 
+        hablarVoz("Por favor escriba un mensaje para la maestra.");
+        return; 
+      }
 
       msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO AVISO A LA MAESTRA...";
+      hablarVoz("Enviando mensaje al buzón de la maestra...");
       
       llamarAPI({
         accion: 'ENVIAR_RECORDATORIO',
@@ -781,9 +834,11 @@
           msg.textContent = "¡MENSAJE ENVIADO A LA MAESTRA!";
           document.getElementById('mensajeTexto').value = "";
           document.getElementById('mensajeAsunto').value = "";
+          hablarVoz("Mensaje enviado con éxito a la maestra.");
         } else {
           msg.style.color = "#dc2626";
           msg.textContent = "ERROR AL ENVIAR EL MENSAJE.";
+          hablarVoz("Error al enviar el mensaje.");
         }
       });
     }
@@ -818,6 +873,7 @@
     }
 
     function imprimirEstadoCuenta() {
+      hablarVoz("Generando reporte impreso de estado de cuenta.");
       const cont = document.getElementById("contenedorImpresion");
       const nom = estudianteGlobal ? (estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigoEstudianteActual) : codigoEstudianteActual;
       const gradoText = estudianteGlobal ? ((estudianteGlobal.grado || 'AULA') + " " + (estudianteGlobal.seccion || '')) : 'AULA';
