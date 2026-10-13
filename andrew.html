@@ -789,7 +789,6 @@ textarea { height: auto; padding: 8px 10px; }
         <table>
           <thead>
             <tr>
-              <th>AÑO</th>
               <th>FECHA Y HORA</th>
               <th>CUENTA / DESTINO</th>
               <th>GRADO</th>
@@ -801,7 +800,7 @@ textarea { height: auto; padding: 8px 10px; }
             </tr>
           </thead>
           <tbody id="tablaMovimientos">
-            <tr><td colspan="9" style="text-align:center; padding: 20px; font-weight: 700;">CARGANDO MOVIMIENTOS...</td></tr>
+            <tr><td colspan="8" style="text-align:center; padding: 20px; font-weight: 700;">CARGANDO MOVIMIENTOS...</td></tr>
           </tbody>
         </table>
       </div>
@@ -963,7 +962,7 @@ const MAPA_USUARIOS_OFICIALES = {
 
   "CAJA-LILY": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "LDS-DOC-001", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
   "CAJA-KIARA": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "LDS-DOC-002", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
-  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "LDS-DOC-003", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "CAJA-ANGHY", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
   "CAJA-KARIN": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "LDS-DOC-004", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
   "CAJA-ANDREW": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "LDS-DOC-005", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
 
@@ -1103,12 +1102,12 @@ function actualizarCajaAndrew() {
   if (btnVer) btnVer.textContent = "🌐 VER TODO EL BANCO";
 
   const tbody = document.getElementById("tablaMovimientos");
-  if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; font-weight:700;">CARGANDO MOVIMIENTOS...</td></tr>';
+  if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 20px; font-weight:700;">CARGANDO MOVIMIENTOS...</td></tr>';
 
   llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
     try {
       if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS O NO HAY MOVIMIENTOS.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">NO SE PUDIERON CARGAR DATOS O NO HAY MOVIMIENTOS.</td></tr>';
         return;
       }
 
@@ -1118,7 +1117,7 @@ function actualizarCajaAndrew() {
       extraerListaCuentasUnicas(res.movimientos);
     } catch (e) {
       console.error(e);
-      if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">ERROR AL PROCESAR MOVIMIENTOS.</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:red;">ERROR AL PROCESAR MOVIMIENTOS.</td></tr>';
     }
   });
 }
@@ -1280,7 +1279,7 @@ function renderTabla(lista) {
   if (elCant) elCant.textContent = String(totalCount);
 
   if (!lista || !lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 25px; font-weight:700; color: var(--muted);">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 25px; font-weight:700; color: var(--muted);">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
     return;
   }
 
@@ -1292,9 +1291,34 @@ function renderTabla(lista) {
     const resp = normalizarCodigo(getResponsable(m));
     const concStr = String(getConcepto(m)).toUpperCase();
     const monto = getMonto(m);
-    const fechaVal = getFecha(m);
+    
+    // FORMATO DE FECHA (ARRIBA) Y HORA (ABAJO)
+    let fechaOnly = "-";
+    let horaOnly = "";
+    const fechaOriginal = getFecha(m);
+    
+    if (fechaOriginal && fechaOriginal !== "-") {
+      const partesFecha = String(fechaOriginal).trim().split(" ");
+      if (partesFecha.length >= 1) fechaOnly = partesFecha[0];
+      if (partesFecha.length >= 2) {
+        const hPartes = partesFecha[1].split(":");
+        if (hPartes.length >= 2) {
+          horaOnly = hPartes[0] + ":" + hPartes[1]; // hh:mm
+        }
+      }
+    }
+
     const gradoVal = getGrado(m) || 'CAJA GENERAL';
-    const obsStr = String(getObservacion(m)).toUpperCase();
+    
+    // LIMPIEZA DE OBSERVACION
+    let obsRaw = String(getObservacion(m)).toUpperCase();
+    let obsLimpia = obsRaw
+      .replace(/^TRANSFERENCIA DE FONDO A [^|]+\|\s*/i, "")
+      .replace(/^DEVOLUCIÓN DE SALDO DE [^|]+\|\s*/i, "")
+      .replace(/^DEVOLUCIÓN DE FONDO A [^|]+\|\s*/i, "")
+      .trim();
+      
+    if (!obsLimpia) obsLimpia = "-";
 
     let esEgreso = false;
     let tipoMostrar = "INGRESO";
@@ -1315,15 +1339,17 @@ function renderTabla(lista) {
     }
 
     tr.innerHTML = `
-      <td class="col-nowrap"><strong>${getAnio(m) || '2026'}</strong></td>
-      <td class="col-nowrap"><strong>${fechaVal}</strong></td>
+      <td class="col-nowrap" style="text-align: center; vertical-align: middle;">
+        <div style="font-weight: 800; font-size: 0.75rem; color: #0c1e30; line-height: 1.1;">${fechaOnly}</div>
+        ${horaOnly ? `<div style="font-size: 0.65rem; color: #64748b; font-weight: 700; margin-top: 2px;">${horaOnly}</div>` : ''}
+      </td>
       <td><strong>${cuentaNombre}</strong></td>
       <td class="col-nowrap">${gradoVal}</td>
       <td class="col-nowrap"><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
       <td>${concStr}</td>
       <td class="col-monto">${formatearLDS(monto)}</td>
       <td class="col-nowrap">${getResponsable(m) || 'SISTEMA'}</td>
-      <td>${obsStr}</td>
+      <td>${obsLimpia}</td>
     `;
     tbody.appendChild(tr);
   });
