@@ -314,9 +314,10 @@
             <div class="form-group">
               <label>CATEGORÍA DE GASTO</label>
               <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
-                <option value="">SELECCIONE CATEGORÍA</option>
                 <option value="PAGOS_Y_GASTOS">🛒 PAGOS Y GASTOS</option>
                 <option value="SANCIONES_Y_MULTAS">⚠️ SANCIONES Y MULTAS</option>
+                <option value="PREMIOS_Y_BONIFICACIONES">🏆 PREMIOS Y BONIFICACIONES</option>
+                <option value="INGRESOS_Y_SUELDOS">💼 INGRESOS Y SUELDOS</option>
                 <option value="AHORROS_E_INVERSIONES">💰 AHORROS E INVERSIONES</option>
                 <option value="COSTOS_Y_OTROS">⚙️ COSTOS Y OTROS</option>
               </select>
@@ -324,14 +325,14 @@
 
             <div class="form-group">
               <label>CONCEPTO</label>
-              <select id="selectConcepto" class="input-field">
+              <select id="selectConcepto" onchange="alCambiarConcepto()" class="input-field">
                 <option value="">SELECCIONE CONCEPTO</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label>MONTO LDS</label>
-              <input type="number" id="inputMonto" min="0" step="1" placeholder="INGRESE EL MONTO" class="input-field" />
+              <label>MONTO LDS (TARIFA AUTOMÁTICA)</label>
+              <input type="number" id="inputMonto" min="0" step="1" placeholder="MONTO EN LDS" class="input-field" />
             </div>
 
             <div class="form-group">
@@ -462,46 +463,68 @@
     let cuentaGlobal = null;
     let movimientosGlobales = [];
 
-    const CATALOGO_EXCEL = {
-      "PAGOS_Y_GASTOS": [
-        "Pago Compra en la tienda escolar / cafetín",
-        "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo",
-        "Pago de servicios del aula: Agua",
-        "Pago de servicios del aula: Energía",
-        "pago por Compra de material escolar de emergencia",
-        "Gasto médico imprevisto menor",
-        "Alquiler de libros de la biblioteca o material didáctico",
-        "Pago por custodia de equipos tecnológicos",
-        "Pago por copias extras",
-        "Comprar stickers",
-        "Pagar para una actividad extra",
-        "Pagar por jugar 10 minutos más"
+    // CATALOGO OFICIAL DE TARIFAS Y COSTOS EN LDS
+    const CATALOGO_TARIFAS = {
+      "INGRESOS_Y_SUELDOS": [
+        { concepto: "Ingreso Sueldo Base Mensual", monto: 1130 },
+        { concepto: "Ingreso Sueldo por Rol de Liderazgo", monto: 150 },
+        { concepto: "Ingreso Bono por desempeño", monto: 50 }
       ],
-      "SANCIONES_Y_MULTAS": [
-        "Multa por llevar mal el uniforme o incompleto",
-        "Incumplimiento de tareas o asignaciones a tiempo",
-        "Llegada tarde al aula o formación",
-        "Uso no autorizado de dispositivos electrónicos en clase",
-        "Desorden o indisciplina leve durante las horas de clase",
-        "Falta de respeto o modales con compañeros o docentes",
-        "No traer el material escolar requerido para la sesión",
-        "Descuido o daño leve al mobiliario o infraestructura del aula",
-        "Basura fuera de su lugar / No respetar áreas verdes o comunes",
-        "Inasistencia injustificada a reuniones o actividades obligatorias",
-        "No ponerse al día en sus pendientes o cuadernos",
-        "Malograr los cuadernos u objetos personales del compañero",
-        "Faltar a la verdad",
-        "Llevarse objetos del compañero y/o institucion"
+      "PREMIOS_Y_BONIFICACIONES": [
+        { concepto: "Bono por llevar el uniforme impecable y reglamentario", monto: 50 },
+        { concepto: "Bono Participación destacada en clase", monto: 50 },
+        { concepto: "Bono Premio por primer lugar en concurso académico o deportivo", monto: 200 },
+        { concepto: "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)", monto: 200 },
+        { concepto: "Bono Apoyo destacado en limpieza, orden o ecología del aula", monto: 100 },
+        { concepto: "Bono por ayuda solidaria / Compañerismo destacado", monto: 50 },
+        { concepto: "Bono Creatividad e innovación en proyectos escolares", monto: 200 },
+        { concepto: "Bono Representar dignamente al colegio en eventos externos", monto: 100 },
+        { concepto: "Bono Leer un libro y presentar evidencia de 20 preguntas y respuestas", monto: 500 },
+        { concepto: "Bono Completar un reto educativo", monto: 200 },
+        { concepto: "Bono Llegar puntual al refrigerio", monto: 50 },
+        { concepto: "Bono Participar en Escuela para Padres junto a su familia", monto: 700 },
+        { concepto: "Bono Ser responsable con sus materiales", monto: 50 },
+        { concepto: "Bono Ayudar a mantener limpia el aula", monto: 100 }
       ],
       "AHORROS_E_INVERSIONES": [
-        "Depósito a cuenta de ahorros (Ahorro voluntario)",
-        "Inversión en fondo común del aula / cooperativa",
-        "Retiro de ahorros (Emergencia o meta cumplida)"
+        { concepto: "Depósito a cuenta de ahorros (Ahorro voluntario)", monto: 10 },
+        { concepto: "Inversión en fondo común del aula / cooperativa", monto: 50 },
+        { concepto: "Retiro de ahorros (Emergencia o meta cumplida)", monto: 20 }
+      ],
+      "PAGOS_Y_GASTOS": [
+        { concepto: "Pago Compra en la tienda escolar / cafetín", monto: 30 },
+        { concepto: "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", monto: 20 },
+        { concepto: "Pago de servicios del aula: Agua", monto: 20 },
+        { concepto: "Pago de servicios del aula: Energía", monto: 20 },
+        { concepto: "Pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)", monto: 50 },
+        { concepto: "Gasto médico imprevisto menor (Botiquín escolar / Curitas)", monto: 40 },
+        { concepto: "Alquiler de libros de la biblioteca o material didáctico", monto: 20 },
+        { concepto: "Pago por custodia de equipos tecnológicos", monto: 50 },
+        { concepto: "Pago por copias extras", monto: 100 },
+        { concepto: "Comprar stickers", monto: 20 },
+        { concepto: "Pagar para una actividad extra", monto: 100 },
+        { concepto: "Pagar por jugar 10 minutos más", monto: 150 }
+      ],
+      "SANCIONES_Y_MULTAS": [
+        { concepto: "Multa por llevar mal el uniforme o incompleto", monto: 150 },
+        { concepto: "Incumplimiento de tareas o asignaciones a tiempo", monto: 200 },
+        { concepto: "Llegada tarde al aula o formación", monto: 120 },
+        { concepto: "Uso no autorizado de dispositivos electrónicos en clase", monto: 200 },
+        { concepto: "Desorden o indisciplina leve durante las horas de clase", monto: 200 },
+        { concepto: "Falta de respeto o modales con compañeros o docentes", monto: 200 },
+        { concepto: "No traer el material escolar requerido para la sesión", monto: 250 },
+        { concepto: "Descuido o daño leve al mobiliario o infraestructura del aula", monto: 300 },
+        { concepto: "Basura fuera de su lugar / No respetar áreas verdes o comunes", monto: 120 },
+        { concepto: "Inasistencia injustificada a reuniones o actividades obligatorias", monto: 300 },
+        { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
+        { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
+        { concepto: "Faltar a la verdad", monto: 500 },
+        { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
       ],
       "COSTOS_Y_OTROS": [
-        "Impuesto escolar mensual por uso de instalaciones",
-        "Cuota extraordinaria de mantenimiento grupal",
-        "Transacción personalizada / Ajuste de caja"
+        { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
+        { concepto: "Cuota extraordinaria de mantenimiento grupal", monto: 100 },
+        { concepto: "Transacción personalizada / Ajuste de caja", monto: 10 }
       ]
     };
 
@@ -615,14 +638,33 @@
       const selectCon = document.getElementById('selectConcepto');
       selectCon.innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
 
-      const conceptos = CATALOGO_EXCEL[cat] || [];
+      const conceptos = CATALOGO_TARIFAS[cat] || [];
       conceptos.forEach(c => {
         const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c.toUpperCase();
+        opt.value = c.concepto;
+        opt.textContent = c.concepto.toUpperCase();
         selectCon.appendChild(opt);
       });
-      if (conceptos.length) selectCon.value = conceptos[0];
+
+      if (conceptos.length) {
+        selectCon.value = conceptos[0].concepto;
+        alCambiarConcepto();
+      } else {
+        document.getElementById('inputMonto').value = "";
+      }
+    }
+
+    function alCambiarConcepto() {
+      const cat = document.getElementById('selectCategoria').value || "PAGOS_Y_GASTOS";
+      const conSel = document.getElementById('selectConcepto').value;
+      const conceptos = CATALOGO_TARIFAS[cat] || [];
+
+      const encontrado = conceptos.find(item => item.concepto === conSel);
+      if (encontrado) {
+        document.getElementById('inputMonto').value = encontrado.monto;
+      } else {
+        document.getElementById('inputMonto').value = "";
+      }
     }
 
     function registrarMovimientoOperacion() {
@@ -655,7 +697,6 @@
         if (res && res.ok) {
           msg.style.color = "#059669";
           msg.textContent = "¡GASTO REGISTRADO CON ÉXITO!";
-          document.getElementById('inputMonto').value = "";
           document.getElementById('inputObservacion').value = "";
           consultarDatosEstudiante(codigoEstudianteActual);
           setTimeout(() => mostrarSeccion('seccionMovimientos'), 1000);
