@@ -1,501 +1,1679 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BANCO LDS 360 - CAJERO GENERAL (MR. ANDREW)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
-    
-    body {
-      background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: #ffffff;
-      font-size: 11px;
-    }
-    
-    header {
-      background: #040a12;
-      padding: 12px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 4px solid #f59e0b;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      z-index: 10;
-    }
-    .school-info { display: flex; align-items: center; gap: 12px; }
-    .school-info img { width: 42px; height: 42px; object-fit: contain; }
-    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; margin: 0; }
-    .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin: 0; }
-    
-    .header-btns { display: flex; gap: 8px; align-items: center; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BANCO LDS 360 — Caja Andrew / Gerencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul: #0c1e30;
+  --azul-claro: #1e3a8a;
+  --dorado: #f59e0b;
+  --fondo: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 50%, #0f172a 100%);
+  --blanco: #ffffff;
+  --texto: #1e293b;
+  --muted: #64748b;
+  --borde: #cbd5e1;
+  --verde: #059669;
+  --rojo: #e11d48;
+}
 
-    .btn-actualizar-top {
-      background: linear-gradient(135deg, #059669, #047857);
-      border: 2px solid #6ee7b7;
-      color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-weight: 800;
-      font-size: 0.75rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
-      transition: all 0.2s ease;
-    }
-    .btn-actualizar-top:hover { transform: scale(1.04); background: #10b981; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+}
 
-    .inicio-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #f59e0b;
-      color: #ffffff;
-      padding: 6px 18px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .inicio-btn:hover { background: #f59e0b; color: #06111f; }
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
-    main {
-      max-width: 1200px;
-      width: 100%;
-      margin: auto;
-      padding: 20px 15px;
-      flex: 1;
-    }
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 15px;
+}
 
-    /* BANNER DE PERFIL GERENCIAL */
-    .gerencia-card {
-      background: #091628;
-      border: 3px solid #f59e0b;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-    }
+header {
+  background: #08121e;
+  color: #fff;
+  padding: 10px 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-bottom: 4px solid var(--dorado);
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
 
-    .gerencia-info { display: flex; align-items: center; gap: 15px; }
+.header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    .avatar-wrap {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      border: 3.5px solid #f59e0b;
-      overflow: hidden;
-      background: #ffffff;
-      flex-shrink: 0;
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
-    }
-    .avatar-img { width: 100%; height: 100%; object-fit: cover; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .gerencia-detalles h2 { font-size: 1.2rem; color: #ffffff; font-weight: 800; margin-bottom: 2px; }
-    .gerencia-detalles p { font-size: 0.8rem; color: #fde047; font-weight: 700; margin: 0; }
-    .gerencia-detalles span { font-size: 0.7rem; color: #94a3b8; font-weight: 600; }
+.brand-mark img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 
-    .saldo-box-gerente {
-      background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #eab308 100%);
-      color: #0c1e30;
-      border-radius: 16px;
-      padding: 12px 20px;
-      text-align: center;
-      border: 2px solid #fef08a;
-      box-shadow: inset 0 2px 6px rgba(255,255,255,0.9), 0 6px 15px rgba(0,0,0,0.35);
-      min-width: 220px;
-    }
-    .saldo-box-gerente .title { font-size: 0.65rem; color: #854d0e; font-weight: 800; }
-    .saldo-box-gerente .amount { font-size: 1.8rem; font-weight: 900; line-height: 1.1; margin: 2px 0; }
-    .saldo-box-gerente .sub { font-size: 0.65rem; color: #047857; font-weight: 800; }
+.brand h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+}
 
-    /* LAYOUT DE DOS COLUMNAS */
-    .grid-container {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 20px;
-    }
+.brand p {
+  margin: 0;
+  color: var(--dorado);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
 
-    @media (max-width: 900px) {
-      .grid-container { grid-template-columns: 1fr; }
-      .gerencia-card { flex-direction: column; text-align: center; }
-      .gerencia-info { flex-direction: column; }
-    }
+.btn {
+  border: 0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  min-height: 34px;
+}
 
-    .panel-card {
-      background: #ffffff;
-      color: #0c1e30;
-      border-radius: 18px;
-      padding: 20px;
-      border: 3px solid #f59e0b;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
+.btn-light {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--dorado);
+  color: #ffffff;
+}
 
-    .panel-card h4 {
-      font-size: 0.95rem;
-      color: #0c1e30;
-      font-weight: 800;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 8px;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  border: 1px solid #fcd34d;
+}
 
-    .form-group { margin-bottom: 12px; text-align: left; }
-    .form-group label { display: block; color: #334155; font-size: 0.72rem; font-weight: 800; margin-bottom: 4px; }
-    .input-field, select, textarea, input { 
-      width: 100%; padding: 9px 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.8rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
-    }
+.btn-blue {
+  background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+  color: #ffffff;
+  border: 1px solid var(--dorado);
+}
 
-    .btn-primary {
-      width: 100%; height: 42px; background: linear-gradient(135deg, #059669 0%, #047857 100%);
-      color: #ffffff; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.35); margin-top: 10px;
-    }
-    .btn-primary:hover { background: #10b981; }
+.btn-outline {
+  background: #ffffff;
+  border: 1.5px solid var(--borde);
+  color: var(--azul);
+}
 
-    .btn-imprimir {
-      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
-      color: #ffffff; border: 1.5px solid #f59e0b; padding: 6px 14px;
-      border-radius: 8px; font-size: 0.72rem; font-weight: 800; cursor: pointer;
-    }
+.layout-main {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
 
-    .lista-movs { min-height: 280px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+@media (min-width: 1100px) {
+  .layout-main {
+    grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.75fr);
+  }
+}
 
-    footer { 
-      text-align: center; padding: 12px; font-size: 0.72rem; color: #ffffff; background-color: #040a12; 
-      border-top: 3px solid #f59e0b; font-weight: 700; margin-top: 20px;
-    }
+.left-stack, .right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
 
-    #contenedorImpresion { display: none; }
+.profile-banner {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
 
-    @media print {
-      body * { visibility: hidden !important; }
-      #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
-      #contenedorImpresion {
-        display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 25px;
-      }
-      .print-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #0c1e30; padding-bottom: 12px; margin-bottom: 20px; }
-      .print-logo { width: 75px; height: 75px; object-fit: contain; }
-      .print-title { text-align: center; }
-      .print-title h1 { font-size: 18px; color: #0c1e30; margin: 0; font-weight: 900; }
-      .print-title h2 { font-size: 13px; color: #d97706; margin: 2px 0; font-weight: 800; }
-      .print-title p { font-size: 10px; color: #475569; margin: 0; font-weight: 700; }
-      .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-      .print-table th, .print-table td { border: 1px solid #94a3b8; padding: 6px 8px; font-size: 10px !important; text-align: left; }
-      .print-table th { background: #e2e8f0; color: #0f172a; font-weight: 800; }
-      .print-footer-signatures { display: flex; justify-content: space-around; margin-top: 50px; text-align: center; }
-      .print-signature-line { width: 180px; border-top: 1.5px dashed #000; padding-top: 5px; font-size: 10px; font-weight: 800; }
-    }
-  </style>
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.avatar-wrap {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 3px solid var(--dorado);
+  overflow: hidden;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+.avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-text h3 {
+  font-size: 1.15rem;
+  color: var(--azul);
+  font-weight: 900;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.profile-text p {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.stat-pill {
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-pill span {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-pill strong {
+  font-size: 1.1rem;
+  font-weight: 900;
+  display: block;
+  white-space: nowrap;
+}
+
+.pill-inicial {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #3b82f6;
+  color: #1e40af;
+}
+
+.pill-actual {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 2px solid #10b981;
+  color: #065f46;
+}
+
+.pill-actual strong { color: #047857; }
+
+.pill-mov {
+  background: #f8fafc;
+  border: 1.5px solid var(--borde);
+  color: var(--azul);
+}
+
+@media (max-width: 992px) {
+  .profile-banner { flex-wrap: wrap; }
+  .stats-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-banner { padding: 10px; gap: 10px; }
+  .avatar-wrap { width: 55px; height: 55px; }
+  .profile-text h3 { font-size: 1rem; }
+  .profile-text p { font-size: 0.65rem; }
+  .stat-pill { padding: 6px 4px; }
+  .stat-pill span { font-size: 0.55rem; }
+  .stat-pill strong { font-size: 0.85rem; }
+}
+
+.alert-status {
+  background: #ecfdf5;
+  border: 1.5px solid #a7f3d0;
+  color: #047857;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.mises-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.mises-panel h3 {
+  color: var(--azul);
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.mises-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.mise-card {
+  border: 1.5px solid var(--dorado);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fffdf7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mise-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--dorado);
+  object-fit: cover;
+}
+
+.mise-card-info strong {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--azul);
+  font-weight: 900;
+}
+
+.mise-card-info span {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.mise-card-info p {
+  font-size: 1rem;
+  color: #047857;
+  font-weight: 900;
+  margin-top: 2px;
+}
+
+.table-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.table-head h3 {
+  color: var(--azul);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.table-wrap {
+  width: 100%;
+  height: 380px;
+  max-height: 380px;
+  overflow: auto;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 850px;
+}
+
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+th {
+  background: #f1f5f9;
+  color: var(--azul);
+  font-weight: 800;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.col-nowrap { white-space: nowrap; }
+.col-monto { white-space: nowrap; font-weight: 800; }
+
+.badge-ingreso { color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #a7f3d0; }
+.badge-egreso { color: #b91c1c; background: #fef2f2; padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid #fecaca; }
+
+.accordion-panel {
+  background: #ffffff;
+  border: 2px solid var(--dorado);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.accordion-head {
+  padding: 12px 16px;
+  background: #f8fafc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #e2e8f0;
+  user-select: none;
+}
+
+.accordion-head:hover { background: #f1f5f9; }
+
+.accordion-head h3 {
+  font-size: 0.82rem;
+  color: var(--azul);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toggle-arrow {
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+
+.accordion-panel.collapsed .accordion-body { display: none; }
+.accordion-panel.collapsed .toggle-arrow { transform: rotate(-90deg); }
+.accordion-panel.collapsed .accordion-head { border-bottom: none; }
+
+.accordion-body { padding: 16px; }
+
+.form-group { margin-bottom: 12px; }
+
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--azul);
+  margin-bottom: 4px;
+}
+
+.input-field, select, textarea {
+  width: 100%;
+  height: 42px;
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: none;
+  background: #f8fafc;
+}
+
+textarea { height: auto; padding: 8px 10px; }
+
+.btn-full {
+  width: 100%;
+  height: 44px;
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.msg-box {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: none;
+}
+.msg-box.ok { display: block; background: #ecfdf3; color: #047857; border: 1px solid #a7f3d0; }
+.msg-box.error { display: block; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 30, 48, 0.88);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  padding: 22px;
+  border-top: 5px solid var(--dorado);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-box h3 {
+  font-size: 1.05rem;
+  color: var(--azul);
+  font-weight: 900;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.opcion-reporte-btn {
+  width: 100%;
+  border: 2px solid var(--dorado);
+  background: #fffdf7;
+  color: #7c4300;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.opcion-reporte-btn:hover { background: #fff7d6; }
+
+.lista-alumnos-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lista-alumnos-tabla tr {
+  cursor: pointer;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.lista-alumnos-tabla tr:hover { background: #eff6ff; }
+
+.lista-alumnos-tabla td {
+  padding: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+#contenedorImpresion { display: none; }
+
+.membrete-colegio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--azul);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.membrete-logo img {
+  width: 75px;
+  height: 75px;
+  object-fit: contain;
+}
+
+.membrete-texto h1 {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--azul);
+  margin: 0;
+}
+
+.membrete-texto h2 {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--dorado);
+  margin-top: 2px;
+}
+
+.membrete-texto p {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.tag-rol {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  margin-left: 6px;
+}
+
+.tag-rol-docente { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+.tag-rol-estudiante { background: #dbeafe; color: #1e40af; border: 1px solid #3b82f6; }
+
+.foto-reporte {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 3px solid var(--dorado);
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.foto-reporte img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media print {
+  body * { visibility: hidden !important; }
+  #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
+  #contenedorImpresion {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+  }
+  .reporte-pagina-alumno {
+    page-break-after: always;
+    break-after: page;
+    padding: 20px 10px;
+    border-bottom: 2px dashed #000;
+  }
+  .tabla-print {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  .tabla-print th, .tabla-print td {
+    border: 1px solid #000;
+    padding: 8px;
+    font-size: 0.75rem;
+    text-align: left;
+  }
+  .tabla-print th { background: #e2e8f0 !important; font-weight: 900; }
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <div class="school-info">
-      <img src="assets/insignia.png" alt="Insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE';">
-      <div class="school-title">
-        <h1>BANCO LDS 360</h1>
-        <p>I.E.P. LA SALLE DEL SUR</p>
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="assets/insignia.png" referrerpolicy="no-referrer" alt="Insignia" onerror="this.src='assets/insignia.jpg';">
+      </div>
+      <div>
+        <h1>CAJA ANDREW</h1>
+        <p>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <div class="header-btns">
-      <button onclick="consultarCajaGerencia()" class="btn-actualizar-top">🔄 ACTUALIZAR CAJA</button>
-      <a href="./" class="inicio-btn">← INICIO</a>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <select id="selectAnioEscolar" class="input-field" style="width: 110px; height: 36px;" onchange="actualizarCajaAndrew()">
+        <option value="2026" selected>AÑO 2026</option>
+        <option value="2027">AÑO 2027</option>
+        <option value="2028">AÑO 2028</option>
+      </select>
+      <button class="btn btn-gold" type="button" onclick="actualizarCajaAndrew()">🔄 ACTUALIZAR</button>
+      <a class="btn btn-light" href="./">← INICIO</a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main>
-    
-    <!-- BANNER OFICIAL DE MR. ANDREW -->
-    <div class="gerencia-card">
-      <div class="gerencia-info">
+<main class="layout-main">
+  <div class="left-stack">
+    <!-- BANNER PERFIL ANDREW -->
+    <div class="profile-banner">
+      <div class="profile-info">
         <div class="avatar-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" alt="Míster Andrew" class="avatar-img">
+          <img src="https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" referrerpolicy="no-referrer" alt="Mister Andrew" onerror="this.src='https://drive.google.com/thumbnail?id=1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW&sz=w800';">
         </div>
-        <div class="gerencia-detalles">
-          <h2>MÍSTER ANDREW TECSUO REYES MELO</h2>
-          <p>💼 GERENCIA GENERAL · CAJERO GENERAL</p>
-          <span>CÓDIGO: LDS-DOC-005 · CORPORACIÓN LA SALLE</span>
+        <div class="profile-text">
+          <h3>MISTER ANDREW</h3>
+          <p>CAJA-ANDREW · CAJA GENERAL</p>
         </div>
       </div>
-
-      <div class="saldo-box-gerente">
-        <p class="title">SALDO DISPONIBLE EN CAJA GENERAL</p>
-        <h3 class="amount" id="saldoGerenciaLDS">200.000</h3>
-        <p class="sub">FONDO BASE ASIGNADO: <span id="montoBaseLDS">200.000 LDS</span></p>
+      <div class="stats-grid">
+        <div class="stat-pill pill-inicial">
+          <span>SALDO INICIAL</span>
+          <strong id="saldoInicialAndrew">200.000,00 LDS</strong>
+        </div>
+        <div class="stat-pill pill-actual">
+          <span>SALDO ACTUAL</span>
+          <strong id="saldoActualAndrew">200.000,00 LDS</strong>
+        </div>
+        <div class="stat-pill pill-mov">
+          <span>MOVIMIENTOS</span>
+          <strong id="cantMovimientos">0</strong>
+        </div>
       </div>
     </div>
 
-    <div class="grid-container">
-      
-      <!-- FORMULARIO DE FONDEO Y ASIGNACIÓN A MISES -->
-      <div class="panel-card">
-        <h4>🏦 ASIGNAR FONDO / PRÉSTAMO A DOCENTE</h4>
-
-        <div class="form-group">
-          <label>CAJA DOCENTE DESTINATARIA</label>
-          <select id="selectDestinoDocente" class="input-field">
-            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO (LDS-DOC-001)</option>
-            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA (LDS-DOC-002)</option>
-            <option value="LDS-DOC-003">MISS ANGHY REYES MELO (LDS-DOC-003)</option>
-            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI (LDS-DOC-004)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>TIPO DE OPERACIÓN</label>
-          <select id="selectTipoOperacion" class="input-field">
-            <option value="ASIGNACION_FONDO">ASIGNACIÓN DE FONDO INICIAL</option>
-            <option value="PRESTAMO_GERENCIA">PRÉSTAMO EXTRAORDINARIO</option>
-            <option value="BONO_ADMINISTRATIVO">BONO O BONIFICACIÓN ESPECIAL</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>MONTO EN LDS</label>
-          <input type="number" id="inputMontoGerencia" min="1" step="1" placeholder="INGRESE EL MONTO" class="input-field">
-        </div>
-
-        <div class="form-group">
-          <label>DETALLE / OBSERVACIÓN DE GERENCIA</label>
-          <textarea id="inputObsGerencia" rows="3" placeholder="MOTIVO DE LA ASIGNACIÓN O PRÉSTAMO..." class="input-field" style="resize:none;"></textarea>
-        </div>
-
-        <button onclick="registrarTransferenciaGerencia()" class="btn-primary">CONFIRMAR Y TRANSFERIR FONDOS</button>
-        <div id="mensajeStatus" style="font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 800;"></div>
-      </div>
-
-      <!-- LIBRO DIARIO DE CAJA GENERAL -->
-      <div class="panel-card">
-        <h4>
-          <span>📊 LIBRO DIARIO DE CAJA GENERAL</span>
-          <button onclick="imprimirReporteGerencia()" class="btn-imprimir">🖨️ IMPRIMIR</button>
-        </h4>
-
-        <div id="listaMovimientosGerencia" class="lista-movs">
-          <p style="color: #64748b; text-align: center; font-style: italic; padding: 20px;">CARGANDO LIBRO DIARIO DESDE GOOGLE SHEETS...</p>
-        </div>
-      </div>
-
+    <div id="alertBanner" class="alert-status">
+      CAJA GENERAL ACTUALIZADA CORRECTAMENTE.
     </div>
 
-  </main>
-
-  <footer>
-    BANCO LDS 360 — GERENCIA GENERAL — I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
-  </footer>
-
-  <div id="contenedorImpresion"></div>
-
-  <script>
-    const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
-    const LOGO_INSIGNIA_URL = "assets/insignia.png";
-    const LOGO_FALLBACK = "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE";
-
-    const CODIGO_GERENTE = "LDS-DOC-005";
-    let cuentaGerenciaGlobal = null;
-    let movimientosGerenciaGlobal = [];
-
-    function parseMontoLDS(val) {
-      if (typeof val === "number") return Math.trunc(val);
-      if (!val) return 0;
-      let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim();
-      if (str.includes(".") && !str.includes(",")) {
-        let partes = str.split(".");
-        if (partes.length > 1 && partes[partes.length - 1].length === 3) str = str.replace(/\./g, "");
-      }
-      str = str.replace(/,/g, ".");
-      const n = Number(str);
-      return Number.isFinite(n) ? Math.trunc(n) : 0;
-    }
-
-    function formatearLDS(val) {
-      return parseMontoLDS(val).toLocaleString("de-DE") + " LDS";
-    }
-
-    function llamarAPI(parametros, callback) {
-      const nombreCallback = "cb_gerencia_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-      const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
-      const script = document.createElement("script");
-
-      script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
-      window[nombreCallback] = function(res) {
-        try { callback(res); } finally { delete window[nombreCallback]; script.remove(); }
-      };
-      script.onerror = function() {
-        delete window[nombreCallback]; script.remove();
-        callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
-      };
-      document.body.appendChild(script);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      consultarCajaGerencia();
-    });
-
-    function consultarCajaGerencia() {
-      llamarAPI({ accion: "CONSULTAR", codigo: CODIGO_GERENTE }, function(res) {
-        if (res && res.ok) {
-          cuentaGerenciaGlobal = res.cuenta || {};
-          movimientosGerenciaGlobal = res.movimientos || [];
-
-          const saldo = parseMontoLDS(cuentaGerenciaGlobal.saldoActual || 200000);
-          const base = parseMontoLDS(cuentaGerenciaGlobal.totalIngresos || 200000);
-
-          document.getElementById('saldoGerenciaLDS').textContent = saldo.toLocaleString("de-DE");
-          document.getElementById('montoBaseLDS').textContent = base.toLocaleString("de-DE") + " LDS";
-
-          renderizarMovimientos(movimientosGerenciaGlobal);
-        } else {
-          document.getElementById('listaMovimientosGerencia').innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN REGISTROS EN GOOGLE SHEETS.</p>';
-        }
-      });
-    }
-
-    function registrarTransferenciaGerencia() {
-      const destino = document.getElementById('selectDestinoDocente').value;
-      const tipoOp = document.getElementById('selectTipoOperacion').value;
-      const monto = Number(document.getElementById('inputMontoGerencia').value) || 0;
-      const obs = document.getElementById('inputObsGerencia').value.trim();
-      const msg = document.getElementById('mensajeStatus');
-
-      if (!destino || monto <= 0) {
-        msg.style.color = "#dc2626";
-        msg.textContent = "INGRESE UN MONTO VÁLIDO.";
-        return;
-      }
-
-      msg.style.color = "#2563eb";
-      msg.textContent = "PROCESANDO TRANSFERENCIA DE GERENCIA...";
-
-      llamarAPI({
-        accion: 'REGISTRAR_PRESTAMO',
-        origen: CODIGO_GERENTE,
-        destino: destino,
-        monto: monto,
-        observacion: tipoOp + " - " + obs
-      }, function(res) {
-        if (res && res.ok) {
-          msg.style.color = "#059669";
-          msg.textContent = "¡TRANSFERENCIA COMPLETADA CON ÉXITO!";
-          document.getElementById('inputMontoGerencia').value = "";
-          document.getElementById('inputObsGerencia').value = "";
-          consultarCajaGerencia();
-        } else {
-          msg.style.color = "#dc2626";
-          msg.textContent = (res && res.mensaje) || "ERROR AL PROCESAR LA TRANSFERENCIA.";
-        }
-      });
-    }
-
-    function renderizarMovimientos(movs) {
-      const cont = document.getElementById('listaMovimientosGerencia');
-      cont.innerHTML = "";
-
-      if (!movs || !movs.length) {
-        cont.innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN MOVIMIENTOS REGISTRADOS.</p>';
-        return;
-      }
-
-      movs.forEach(m => {
-        const div = document.createElement('div');
-        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-bottom:1px solid #e2e8f0; font-size:0.8rem;";
-        const tipoVal = String(m.tipo || "EGRESO").toUpperCase();
-        const esEgreso = (tipoVal === "EGRESO");
-        const montoVal = parseMontoLDS(m.monto);
-
-        div.innerHTML = `
-          <div>
-            <strong style="color:#0c1e30;">${m.concepto || 'OPERACIÓN GERENCIAL'}</strong><br>
-            <span style="font-size:0.65rem; color:#64748b;">${m.fechaTexto || m.fecha || ''} · RESP: ${m.responsable || 'MÍSTER ANDREW'}</span>
+    <!-- SALDOS DE LAS MISSES -->
+    <div class="mises-panel">
+      <h3>📊 SALDOS EN CAJA DE LAS MISSES</h3>
+      <div class="mises-grid">
+        <div class="mise-card">
+          <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" referrerpolicy="no-referrer" alt="Miss Lily" onerror="this.src='https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w300';">
+          <div class="mise-card-info">
+            <strong>MISS LILY MELO AZAÑERO</strong>
+            <span>CAJA-LILY (LDS-DOC-001)</span>
+            <p id="saldoLily">0,00 LDS</p>
           </div>
-          <strong style="color:${esEgreso ? '#e11d48' : '#059669'}; font-size:0.85rem;">
-            ${esEgreso ? '-' : '+'} ${formatearLDS(montoVal)}
-          </strong>
-        `;
-        cont.appendChild(div);
-      });
-    }
-
-    function imprimirReporteGerencia() {
-      const cont = document.getElementById("contenedorImpresion");
-      let filasHtml = "";
-
-      movimientosGerenciaGlobal.forEach(m => {
-        filasHtml += `
-          <tr>
-            <td>${m.fechaTexto || m.fecha || '-'}</td>
-            <td>${m.tipo || 'EGRESO'}</td>
-            <td>${m.concepto || '-'}</td>
-            <td><strong>${formatearLDS(m.monto)}</strong></td>
-            <td>${m.responsable || 'MÍSTER ANDREW'}</td>
-            <td>${m.observacion || ''}</td>
-          </tr>
-        `;
-      });
-
-      cont.innerHTML = `
-        <div class="print-header">
-          <div style="width:75px; height:75px;"></div>
-          <div class="print-title">
-            <h1>I.E.P. LA SALLE DEL SUR</h1>
-            <h2>BANCO LASALLISTA 360 — GERENCIA GENERAL</h2>
-            <p>REPORTE DE MOVIMIENTOS Y LIBRO DIARIO DE CAJA GENERAL</p>
-          </div>
-          <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
         </div>
 
-        <div style="border: 1.5px solid #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 15px; background: #f8fafc;">
-          <h3 style="margin:0; font-size:14px; color:#0c1e30;">MÍSTER ANDREW TECSUO REYES MELO</h3>
-          <p style="margin:2px 0; font-size:11px;">CARGO: <strong>GERENCIA GENERAL / CAJERO GENERAL</strong> · CÓDIGO: <strong>LDS-DOC-005</strong></p>
-          <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA GENERAL: <strong>${formatearLDS(cuentaGerenciaGlobal ? cuentaGerenciaGlobal.saldoActual : 200000)}</strong></p>
+        <div class="mise-card">
+          <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" referrerpolicy="no-referrer" alt="Miss Kiara" onerror="this.src='https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w300';">
+          <div class="mise-card-info">
+            <strong>MISS KIARA MORALES ELGUERA</strong>
+            <span>CAJA-KIARA (LDS-DOC-002)</span>
+            <p id="saldoKiara">0,00 LDS</p>
+          </div>
         </div>
 
-        <table class="print-table">
+        <div class="mise-card">
+          <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" referrerpolicy="no-referrer" alt="Miss Anghy" onerror="this.src='https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w300';">
+          <div class="mise-card-info">
+            <strong>MISS ANGHY REYES MELO</strong>
+            <span>CAJA-ANGHY (LDS-DOC-003)</span>
+            <p id="saldoAnghy">0,00 LDS</p>
+          </div>
+        </div>
+
+        <div class="mise-card">
+          <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" referrerpolicy="no-referrer" alt="Miss Karin" onerror="this.src='https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w300';">
+          <div class="mise-card-info">
+            <strong>MISS KARIN MOLERO ROMANI</strong>
+            <span>CAJA-KARIN (LDS-DOC-004)</span>
+            <p id="saldoKarin">0,00 LDS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE MOVIMIENTOS EXCLUSIVA DE CAJA GENERAL -->
+    <div class="table-panel">
+      <div class="table-head">
+        <h3>📋 MOVIMIENTOS DE CAJA GENERAL</h3>
+        <div class="table-actions">
+          <button class="btn btn-blue" type="button" onclick="abrirModalMenuReportes()">🖨️ REPORTES</button>
+          <button id="btnVerTodo" class="btn btn-gold" type="button" onclick="toggleVerTodoElBanco()">🌐 VER TODO EL BANCO</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
           <thead>
             <tr>
+              <th>AÑO</th>
               <th>FECHA Y HORA</th>
-              <th>TIPO MOV.</th>
+              <th>CUENTA / DESTINO</th>
+              <th>GRADO</th>
+              <th>TIPO</th>
               <th>CONCEPTO</th>
-              <th>MONTO</th>
+              <th>MONTO LDS</th>
               <th>RESPONSABLE</th>
               <th>OBSERVACIÓN</th>
             </tr>
           </thead>
-          <tbody>
-            ${filasHtml || '<tr><td colspan="6">Sin movimientos registrados.</td></tr>'}
+          <tbody id="tablaMovimientos">
+            <tr><td colspan="9" style="text-align:center; padding: 20px; font-weight: 700;">CARGANDO MOVIMIENTOS...</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
 
-        <div class="print-footer-signatures">
-          <div class="print-signature-line">
-            MÍSTER ANDREW REYES MELO<br>
-            GERENCIA GENERAL / BANCO 360
+  <!-- OPERACIONES -->
+  <div class="right-stack">
+    <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
+    <div id="panelTransferir" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelTransferir')">
+        <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="transfMiss">SELECCIONAR MISS DESTINO</label>
+          <select id="transfMiss" class="input-field">
+            <option value="">SELECCIONA UNA MISS</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="transfConcepto">CONCEPTO / MES</label>
+          <select id="transfConcepto" class="input-field">
+            <option value="FONDO PARA PAGOS A ALUMNOS">FONDO PARA PAGOS A ALUMNOS</option>
+            <option value="FONDO BASE DOCENTE">FONDO BASE DOCENTE</option>
+            <option value="ASIGNACIÓN ESPECIAL">ASIGNACIÓN ESPECIAL</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="transfMonto">MONTO LDS</label>
+          <input id="transfMonto" type="number" step="1" min="0" class="input-field" placeholder="15000">
+        </div>
+
+        <div class="form-group">
+          <label for="transfObs">OBSERVACIÓN / NOTA (EJ: PAGO MES DE OCTUBRE)</label>
+          <input id="transfObs" type="text" class="input-field" placeholder="PAGO MES DE OCTUBRE">
+        </div>
+
+        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarTransferenciaFondo()">💸 TRANSFERIR FONDO</button>
+        <div id="msgTransferencia" class="msg-box"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: RECIBIR DEVOLUCIÓN DE UNA MISS -->
+    <div id="panelDevolucion" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelDevolucion')">
+        <h3>↩ RECIBIR DEVOLUCIÓN DE UNA MISS</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="devolMiss">SELECCIONAR MISS ORIGEN</label>
+          <select id="devolMiss" class="input-field">
+            <option value="">SELECCIONA UNA MISS</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO (CAJA-LILY)</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA (CAJA-KIARA)</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO (CAJA-ANGHY)</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI (CAJA-KARIN)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="devolMonto">MONTO LDS</label>
+          <input id="devolMonto" type="number" step="0.5" min="0" class="input-field" placeholder="0">
+        </div>
+
+        <div class="form-group">
+          <label for="devolObs">MOTIVO / NOTA</label>
+          <textarea id="devolObs" rows="2" class="input-field" placeholder="DEVOLUCIÓN DE SALDO NO UTILIZADO..."></textarea>
+        </div>
+
+        <button class="btn btn-gold btn-full" type="button" onclick="ejecutarDevolucion()">↩ REGISTRAR DEVOLUCIÓN</button>
+        <div id="msgDevolucion" class="msg-box"></div>
+      </div>
+    </div>
+
+    <!-- PANEL 3: CONSULTAR CUENTA -->
+    <div id="panelConsulta" class="accordion-panel collapsed">
+      <div class="accordion-head" onclick="togglePanel('panelConsulta')">
+        <h3>🔎 CONSULTAR CUENTA</h3>
+        <span class="toggle-arrow">▼</span>
+      </div>
+      <div class="accordion-body">
+        <div class="form-group">
+          <label for="consultaCodigo">CÓDIGO DE ALUMNO O CAJA</label>
+          <input id="consultaCodigo" type="text" class="input-field" placeholder="LDS-EST-001 O LDS-DOC-001">
+        </div>
+
+        <button class="btn btn-blue btn-full" type="button" onclick="consultarCuentaEspecifica()">🔎 CONSULTAR CUENTA</button>
+        <div id="msgConsulta" class="msg-box"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL MENU REPORTES -->
+<div id="modalMenuReportes" class="modal-overlay">
+  <div class="modal-box">
+    <h3>🖨️ OPCIONES DE IMPRESIÓN Y REPORTES</h3>
+    <button class="opcion-reporte-btn" type="button" onclick="abrirListaSeleccionUnitario()">
+      <span>👤 ESTADO DE CUENTA UNITARIO (SELECCIONAR USUARIO)</span>
+      <span>➔</span>
+    </button>
+    <button class="opcion-reporte-btn" type="button" onclick="generarEImprimirReporteGrupal()">
+      <span>👥 REPORTE GRUPAL (1 HOJA SEPARADA POR USUARIO)</span>
+      <span>➔</span>
+    </button>
+    <button class="btn btn-outline" style="width: 100%; margin-top: 10px;" type="button" onclick="cerrarModal('modalMenuReportes')">CANCELAR</button>
+  </div>
+</div>
+
+<!-- MODAL SELECCION ALUMNO O CAJA -->
+<div id="modalSeleccionAlumno" class="modal-overlay">
+  <div class="modal-box">
+    <h3>📋 SELECCIONAR USUARIO O CAJA</h3>
+    <input id="filtroBuscarAlumnoReporte" type="text" class="input-field" style="margin-bottom: 12px;" placeholder="BUSCAR POR NOMBRE, ROL O CÓDIGO..." oninput="filtrarTablaSeleccionAlumno()">
+
+    <div style="overflow-y: auto; max-height: 50vh; border: 1.5px solid var(--borde); border-radius: 10px;">
+      <table class="lista-alumnos-tabla">
+        <thead>
+          <tr style="background: #f1f5f9; position: sticky; top: 0;">
+            <th style="padding: 8px 10px;">CÓDIGO</th>
+            <th style="padding: 8px 10px;">NOMBRE / ROL</th>
+            <th style="padding: 8px 10px; text-align: right;">ACCIÓN</th>
+          </tr>
+        </thead>
+        <tbody id="bodyListaSeleccionAlumno">
+          <tr><td colspan="3" style="text-align: center; padding: 15px;">CARGANDO USUARIOS...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn btn-outline" style="width: 100%; margin-top: 12px;" type="button" onclick="cerrarModal('modalSeleccionAlumno')">VOLVER</button>
+  </div>
+</div>
+
+<div id="contenedorImpresion"></div>
+
+<script>
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
+
+let mostrandoTodoElBanco = false;
+let todosLosMovimientosGlobales = [];
+let listaCuentasYAlumnosGlobal = [];
+
+const MAPA_USUARIOS_OFICIALES = {
+  "LDS-DOC-001": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "CAJA-LILY", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
+  "LDS-DOC-002": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "CAJA-KIARA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
+  "LDS-DOC-003": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "CAJA-ANGHY", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "LDS-DOC-004": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "CAJA-KARIN", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  "LDS-DOC-005": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "CAJA-ANDREW", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
+
+  "CAJA-LILY": { nombre: "MISS LILY SANDRA MELO AZAÑERO", alias: "LDS-DOC-001", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE", rol: "GERENTE / PROMOTORA", esDocente: true },
+  "CAJA-KIARA": { nombre: "MISS KIARA YESABELLA MORALES ELGUERA", alias: "LDS-DOC-002", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O", rol: "COORDINADORA", esDocente: true },
+  "CAJA-ANGHY": { nombre: "MISS ANGHY MARIANA REYES MELO", alias: "LDS-DOC-003", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U", rol: "COORDINADORA", esDocente: true },
+  "CAJA-KARIN": { nombre: "MISS KARIN ISDENKA MOLERO ROMANI", alias: "LDS-DOC-004", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv", rol: "DOCENTE", esDocente: true },
+  "CAJA-ANDREW": { nombre: "MISTER ANDREW TECSUO REYES MELO", alias: "LDS-DOC-005", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW", rol: "GERENTE GENERAL", esDocente: true },
+
+  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", foto: "https://lh3.googleusercontent.com/d/1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", foto: "https://lh3.googleusercontent.com/d/19KV30WDkKReEo5vBbx9ia4bebrPpyWPw", rol: "ESTUDIANTE", esDocente: false },
+  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU", rol: "ESTUDIANTE", esDocente: false }
+};
+
+function getProp(obj, ...possibleKeys) {
+  if (!obj || typeof obj !== 'object') return "";
+  const objKeys = Object.keys(obj);
+  for (let key of possibleKeys) {
+    if (obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== "") {
+      return String(obj[key]).trim();
+    }
+    const lowerKey = key.toLowerCase();
+    const foundKey = objKeys.find(k => k.toLowerCase() === lowerKey);
+    if (foundKey && obj[foundKey] !== undefined && obj[foundKey] !== null && String(obj[foundKey]).trim() !== "") {
+      return String(obj[foundKey]).trim();
+    }
+  }
+  return "";
+}
+
+function parsearMonto(val) {
+  if (typeof val === "number") return Number.isFinite(val) ? Math.trunc(val) : 0;
+  if (val === null || val === undefined || String(val).trim() === "") return 0;
+  let str = String(val)
+    .replace(/LDS/gi, "")
+    .replace(/S\/\.?/gi, "")
+    .replace(/\s/g, "")
+    .trim();
+  str = str.replace(/[.,]/g, "");
+  const n = Number(str);
+  return Number.isFinite(n) ? Math.trunc(n) : 0;
+}
+
+function getCodigo(m) { return getProp(m, "codigo", "CÓDIGO", "CODIGO", "codigoQR", "id"); }
+function getTipo(m) { return getProp(m, "tipo", "TIPO"); }
+function getConcepto(m) { return getProp(m, "concepto", "CONCEPTO"); }
+function getMonto(m) { return parsearMonto(getProp(m, "monto", "MONTO LDS", "MONTO_LDS", "montoLDS", "MONTO")); }
+function getResponsable(m) { return getProp(m, "responsable", "RESPONSABLE", "cajero", "CAJERO", "CAJERO(A)", "usuario"); }
+function getEstudiante(m) { return getProp(m, "estudiante", "CUENTA/ESTUDIANTE", "CUENTA / ESTUDIANTE", "cuenta", "nombreCompleto", "nombre"); }
+
+function getFecha(m) {
+  let val = getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "FECHA_Y_HORA", "fechayhora", "timestamp", "Fecha", "Fecha y Hora", "DATE", "TIME");
+  if (!val && m && typeof m === 'object') {
+    for (let k in m) {
+      if (k.toLowerCase().includes("fech") || k.toLowerCase().includes("time")) {
+        if (m[k]) return String(m[k]).trim();
+      }
+    }
+  }
+  return val || "-";
+}
+
+function getGrado(m) { return getProp(m, "grado", "GRADO"); }
+function getObservacion(m) { return getProp(m, "observacion", "OBSERVACIÓN", "OBSERVACION", "observaciones"); }
+function getAnio(m) { return getProp(m, "anio", "AÑO", "ANIO", "anioEscolar"); }
+
+function togglePanel(id) {
+  const p = document.getElementById(id);
+  if (p) p.classList.toggle("collapsed");
+}
+
+function abrirModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.style.display = "flex";
+}
+
+function cerrarModal(id) {
+  const m = document.getElementById(id);
+  if (m) m.style.display = "none";
+}
+
+function llamarAPI(parametros, callback) {
+  const nombreCallback = "callbackAndrew_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+  const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
+  const script = document.createElement("script");
+
+  script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
+  window[nombreCallback] = function(respuesta) {
+    try { callback(respuesta); } finally { delete window[nombreCallback]; script.remove(); }
+  };
+  script.onerror = function() {
+    delete window[nombreCallback];
+    script.remove();
+    callback({ok:false, mensaje:"ERROR DE CONEXIÓN CON EL SERVIDOR."});
+  };
+  document.body.appendChild(script);
+}
+
+function formatearLDS(valor) {
+  const n = parsearMonto(valor);
+  return Math.trunc(n).toLocaleString("de-DE", { maximumFractionDigits: 0 }) + " LDS";
+}
+
+function normalizarCodigo(str) {
+  if (!str) return "";
+  const s = String(str).trim().toUpperCase();
+  if (s === "LDS-DOC-001" || s.includes("LILY") || s === "CAJA-LILY") return "LDS-DOC-001";
+  if (s === "LDS-DOC-002" || s.includes("KIARA") || s === "CAJA-KIARA") return "LDS-DOC-002";
+  if (s === "LDS-DOC-003" || s.includes("ANGHY") || s === "CAJA-ANGHY") return "LDS-DOC-003";
+  if (s === "LDS-DOC-004" || s.includes("KARIN") || s === "CAJA-KARIN") return "LDS-DOC-004";
+  if (s === "LDS-DOC-005" || s.includes("ANDREW") || s === "CAJA-ANDREW") return "LDS-DOC-005";
+  return s;
+}
+
+function obtenerDatosCompletosUsuario(codigoRaw, nombreRaw) {
+  const codNorm = normalizarCodigo(codigoRaw);
+  const infoOficial = MAPA_USUARIOS_OFICIALES[codNorm] || MAPA_USUARIOS_OFICIALES[codigoRaw] || {};
+
+  const esDocente = infoOficial.esDocente || codNorm.startsWith("LDS-DOC") || codNorm.startsWith("CAJA-");
+  const nombreFinal = infoOficial.nombre || String(nombreRaw || codigoRaw).toUpperCase();
+  const rolTexto = esDocente ? (infoOficial.rol || "DOCENTE / MAESTRO(A)") : "ESTUDIANTE";
+  const tituloReporte = esDocente ? "ESTADO DE CUENTA — CAJA DOCENTE / GENERAL" : "ESTADO DE CUENTA INDIVIDUAL DEL ESTUDIANTE";
+  const etiquetaUsuario = esDocente ? "DOCENTE / CAJA:" : "ESTUDIANTE / ALUMNO:";
+  const fotoUrl = infoOficial.foto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(nombreFinal) + "&background=0c1e30&color=fff";
+
+  return {
+    codigo: codNorm || codigoRaw,
+    nombre: nombreFinal,
+    esDocente,
+    rolTexto,
+    tituloReporte,
+    etiquetaUsuario,
+    fotoUrl
+  };
+}
+
+function actualizarCajaAndrew() {
+  const anio = document.getElementById("selectAnioEscolar").value;
+  mostrandoTodoElBanco = false;
+  const btnVer = document.getElementById("btnVerTodo");
+  if (btnVer) btnVer.textContent = "🌐 VER TODO EL BANCO";
+
+  const tbody = document.getElementById("tablaMovimientos");
+  if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 20px; font-weight:700;">CARGANDO MOVIMIENTOS...</td></tr>';
+
+  llamarAPI({ accion: "movimientos", anio: anio }, function(res) {
+    try {
+      if (!res || res.ok === false || !Array.isArray(res.movimientos)) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">NO SE PUDIERON CARGAR DATOS O NO HAY MOVIMIENTOS.</td></tr>';
+        return;
+      }
+
+      todosLosMovimientosGlobales = res.movimientos;
+      calcularYSincronizarSaldos(res.movimientos);
+      filtrarYRenderizarTabla();
+      extraerListaCuentasUnicas(res.movimientos);
+    } catch (e) {
+      console.error(e);
+      if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">ERROR AL PROCESAR MOVIMIENTOS.</td></tr>';
+    }
+  });
+}
+
+function extraerListaCuentasUnicas(movimientos) {
+  const mapa = new Map();
+
+  ["LDS-DOC-005", "LDS-DOC-001", "LDS-DOC-002", "LDS-DOC-003", "LDS-DOC-004"].forEach(caja => {
+    mapa.set(caja, obtenerDatosCompletosUsuario(caja, ""));
+  });
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m) return;
+      const codRaw = getCodigo(m);
+      const cod = normalizarCodigo(codRaw);
+      const nom = String(getEstudiante(m) || cod).trim().toUpperCase();
+      if (cod && !mapa.has(cod)) {
+        const datos = obtenerDatosCompletosUsuario(cod, nom);
+        datos.grado = getGrado(m);
+        mapa.set(cod, datos);
+      }
+    });
+  }
+
+  listaCuentasYAlumnosGlobal = Array.from(mapa.values());
+}
+
+function calcularYSincronizarSaldos(movimientos) {
+  const capitalInicialAndrew = 200000;
+  let egresosAndrew = 0;
+  let ingresosAndrew = 0;
+  const saldosMises = {
+    "LDS-DOC-001": 0,
+    "LDS-DOC-002": 0,
+    "LDS-DOC-003": 0,
+    "LDS-DOC-004": 0
+  };
+
+  if (Array.isArray(movimientos)) {
+    movimientos.forEach(m => {
+      if (!m || String(getProp(m, "estado", "ESTADO")).trim().toUpperCase() === "ANULADO") return;
+      const targetCod = normalizarCodigo(getCodigo(m));
+      const respCod = normalizarCodigo(getResponsable(m));
+      const monto = Math.abs(getMonto(m));
+      const conc = String(getConcepto(m) || "").toUpperCase();
+      const tipo = String(getTipo(m) || "").trim().toUpperCase();
+      const obs = String(getObservacion(m) || "").toUpperCase();
+
+      if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL"))) return;
+
+      if (Object.prototype.hasOwnProperty.call(saldosMises, targetCod)) {
+        const esTransferenciaDesdeAndrew = respCod === "LDS-DOC-005" || obs.includes("TRANSFERENCIA DE FONDO") || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO DOCENTE");
+        if (tipo.includes("INGRESO")) {
+          saldosMises[targetCod] += monto;
+          if (esTransferenciaDesdeAndrew) egresosAndrew += monto;
+        } else if (tipo.includes("EGRESO")) {
+          saldosMises[targetCod] -= monto;
+        }
+        return;
+      }
+
+      if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN") || conc.includes("DEVOLUCION"))) {
+        ingresosAndrew += monto;
+        const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
+        const origenMiss = normalizarCodigo(match ? match[0] : respCod);
+        if (Object.prototype.hasOwnProperty.call(saldosMises, origenMiss)) saldosMises[origenMiss] -= monto;
+      }
+    });
+  }
+
+  const saldoActualAndrew = Math.max(0, capitalInicialAndrew + ingresosAndrew - egresosAndrew);
+  document.getElementById("saldoInicialAndrew").textContent = formatearLDS(capitalInicialAndrew);
+  document.getElementById("saldoActualAndrew").textContent = formatearLDS(saldoActualAndrew);
+  document.getElementById("saldoLily").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-001"]));
+  document.getElementById("saldoKiara").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-002"]));
+  document.getElementById("saldoAnghy").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-003"]));
+  document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
+}
+
+function filtrarYRenderizarTabla() {
+  if (mostrandoTodoElBanco) {
+    renderTabla(todosLosMovimientosGlobales);
+  } else {
+    const movsAndrew = [];
+    const llavesRegistradas = new Set();
+
+    todosLosMovimientosGlobales.forEach(m => {
+      if (!m) return;
+      if (String(getProp(m, "estado", "ESTADO")).toUpperCase() === "ANULADO") return;
+
+      const cod = normalizarCodigo(getCodigo(m));
+      const resp = normalizarCodigo(getResponsable(m));
+      const conc = String(getConcepto(m)).toUpperCase();
+      const obs = String(getObservacion(m)).toUpperCase();
+      const fecha = getFecha(m);
+      const monto = getMonto(m);
+      const llaveUnica = `${fecha}_${monto}_${conc}`;
+
+      const esTransferenciaAMiss = cod.startsWith("LDS-DOC-") && cod !== "LDS-DOC-005" && (resp === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS") || obs.includes("TRANSFERENCIA"));
+      const esCapitalOIngresoAndrew = (cod === "LDS-DOC-005") && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || conc.includes("DEVOLUCION") || String(getTipo(m)).toUpperCase().includes("INGRESO"));
+
+      if (esTransferenciaAMiss || esCapitalOIngresoAndrew) {
+        if (!llavesRegistradas.has(llaveUnica)) {
+          llavesRegistradas.add(llaveUnica);
+          movsAndrew.push(m);
+        }
+      }
+    });
+
+    renderTabla(movsAndrew);
+  }
+}
+
+function toggleVerTodoElBanco() {
+  mostrandoTodoElBanco = !mostrandoTodoElBanco;
+  const btn = document.getElementById("btnVerTodo");
+
+  if (mostrandoTodoElBanco) {
+    if (btn) btn.textContent = "💼 VER SOLO CAJA ANDREW";
+  } else {
+    if (btn) btn.textContent = "🌐 VER TODO EL BANCO";
+  }
+  filtrarYRenderizarTabla();
+}
+
+function renderTabla(lista) {
+  const tbody = document.getElementById("tablaMovimientos");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  const totalCount = Array.isArray(lista) ? lista.length : 0;
+  const elCant = document.getElementById("cantMovimientos");
+  if (elCant) elCant.textContent = String(totalCount);
+
+  if (!lista || !lista.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 25px; font-weight:700; color: var(--muted);">NO HAY MOVIMIENTOS REGISTRADOS EN CAJA GENERAL.</td></tr>';
+    return;
+  }
+
+  lista.forEach(m => {
+    if (!m) return;
+    const tr = document.createElement("tr");
+
+    const cod = normalizarCodigo(getCodigo(m));
+    const resp = normalizarCodigo(getResponsable(m));
+    const concStr = String(getConcepto(m)).toUpperCase();
+    const monto = getMonto(m);
+    const fechaVal = getFecha(m);
+    const gradoVal = getGrado(m) || 'CAJA GENERAL';
+    const obsStr = String(getObservacion(m)).toUpperCase();
+
+    let esEgreso = false;
+    let tipoMostrar = "INGRESO";
+
+    if (concStr.includes("GERENTE") || concStr.includes("CAPITAL")) {
+      esEgreso = false;
+      tipoMostrar = "INGRESO";
+    } else if (resp === "LDS-DOC-005" || concStr.includes("FONDO PARA PAGOS")) {
+      esEgreso = true;
+      tipoMostrar = "EGRESO";
+    }
+
+    let cuentaNombre = getEstudiante(m);
+    if (MAPA_USUARIOS_OFICIALES[cod] && cod !== "LDS-DOC-005") {
+      cuentaNombre = MAPA_USUARIOS_OFICIALES[cod].nombre;
+    } else if (cod === "LDS-DOC-005") {
+      cuentaNombre = "MISTER ANDREW";
+    }
+
+    tr.innerHTML = `
+      <td class="col-nowrap"><strong>${getAnio(m) || '2026'}</strong></td>
+      <td class="col-nowrap"><strong>${fechaVal}</strong></td>
+      <td><strong>${cuentaNombre}</strong></td>
+      <td class="col-nowrap">${gradoVal}</td>
+      <td class="col-nowrap"><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoMostrar}</span></td>
+      <td>${concStr}</td>
+      <td class="col-monto">${formatearLDS(monto)}</td>
+      <td class="col-nowrap">${getResponsable(m) || 'SISTEMA'}</td>
+      <td>${obsStr}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function abrirModalMenuReportes() { abrirModal('modalMenuReportes'); }
+
+function abrirListaSeleccionUnitario() {
+  cerrarModal('modalMenuReportes');
+  renderTablaSeleccionAlumno(listaCuentasYAlumnosGlobal);
+  abrirModal('modalSeleccionAlumno');
+}
+
+function renderTablaSeleccionAlumno(lista) {
+  const tbody = document.getElementById("bodyListaSeleccionAlumno");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (!lista || !lista.length) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 12px;">NO HAY USUARIOS DISPONIBLES.</td></tr>';
+    return;
+  }
+
+  lista.forEach(item => {
+    const tr = document.createElement("tr");
+    tr.onclick = () => generarEImprimirReporteUnitario(item.codigo, item.nombre);
+    tr.innerHTML = `
+      <td><strong style="color:var(--azul-claro);">${item.codigo}</strong></td>
+      <td>
+        <strong>${item.nombre}</strong>
+        <span class="tag-rol ${item.esDocente ? 'tag-rol-docente' : 'tag-rol-estudiante'}">${item.rolTexto}</span>
+      </td>
+      <td style="text-align:right;"><button class="btn btn-gold" style="padding:2px 8px; font-size:0.65rem;">IMPRIMIR</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filtrarTablaSeleccionAlumno() {
+  const txt = document.getElementById("filtroBuscarAlumnoReporte").value.trim().toUpperCase();
+  const filtrados = listaCuentasYAlumnosGlobal.filter(a =>
+    a.codigo.toUpperCase().includes(txt) || a.nombre.toUpperCase().includes(txt) || a.rolTexto.toUpperCase().includes(txt)
+  );
+  renderTablaSeleccionAlumno(filtrados);
+}
+
+function generarEImprimirReporteUnitario(codigo, nombre) {
+  cerrarModal('modalSeleccionAlumno');
+
+  const usuario = obtenerDatosCompletosUsuario(codigo, nombre);
+  const cont = document.getElementById("contenedorImpresion");
+  if (cont) {
+    cont.innerHTML = construirHTMLPaginaUsuario(usuario, todosLosMovimientosGlobales);
+    setTimeout(() => { window.print(); }, 250);
+  }
+}
+
+function generarEImprimirReporteGrupal() {
+  cerrarModal('modalMenuReportes');
+
+  const cont = document.getElementById("contenedorImpresion");
+  if (!cont) return;
+  cont.innerHTML = "";
+
+  if (!listaCuentasYAlumnosGlobal.length) {
+    alert("NO HAY DATOS REGISTRADOS PARA GENERAR EL REPORTE GRUPAL.");
+    return;
+  }
+
+  let htmlAcumulado = "";
+  listaCuentasYAlumnosGlobal.forEach(usr => {
+    htmlAcumulado += construirHTMLPaginaUsuario(usr, todosLosMovimientosGlobales);
+  });
+
+  cont.innerHTML = htmlAcumulado;
+  setTimeout(() => { window.print(); }, 300);
+}
+
+function construirHTMLPaginaUsuario(usuario, todosLosMovimientos) {
+  let filas = "";
+  let totalIngresos = 0;
+  let totalEgresos = 0;
+
+  const codUsr = normalizarCodigo(usuario.codigo);
+  const movsProcesados = [];
+
+  if (Array.isArray(todosLosMovimientos)) {
+    todosLosMovimientos.forEach(m => {
+      if (!m) return;
+      if (getProp(m, "estado", "ESTADO").toUpperCase() === "ANULADO") return;
+
+      const codDestino = normalizarCodigo(getCodigo(m));
+      const respCod = normalizarCodigo(getResponsable(m));
+      const respNombre = getResponsable(m) || "SISTEMA";
+      const conc = getConcepto(m).toUpperCase();
+      const tipoOrig = getTipo(m).toUpperCase();
+      const monto = getMonto(m);
+      const obs = getObservacion(m).toUpperCase();
+      const fechaVal = getFecha(m);
+      const estNombre = getEstudiante(m);
+
+      if (codUsr === "LDS-DOC-005") {
+        if (conc.includes("GERENTE") || conc.includes("CAPITAL") || (codDestino === "LDS-DOC-005" && conc.includes("BASE"))) {
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc || "CAPITAL INICIAL GERENCIAL",
+            monto: monto,
+            responsable: respNombre,
+            observacion: obs,
+            esEgreso: false
+          });
+        } else if (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS")) {
+          let targetName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "EGRESO",
+            concepto: conc + " → " + targetName,
+            monto: monto,
+            responsable: "MISTER ANDREW",
+            observacion: obs,
+            esEgreso: true
+          });
+        } else if (obs.includes("DEVOLUCION") && codDestino === "LDS-DOC-005") {
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: "DEVOLUCIÓN RECIBIDA DE DOCENTE",
+            monto: monto,
+            responsable: respNombre,
+            observacion: obs,
+            esEgreso: false
+          });
+        }
+      }
+      else if (codUsr.startsWith("LDS-DOC-")) {
+        if (codDestino === codUsr && (respCod === "LDS-DOC-005" || conc.includes("FONDO PARA PAGOS"))) {
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc || "FONDO PARA PAGOS A ALUMNOS",
+            monto: monto,
+            responsable: "MISTER ANDREW",
+            observacion: obs,
+            esEgreso: false
+          });
+        }
+        else if (respCod === codUsr && (tipoOrig.includes("EGRESO") || conc.includes("PAGO") || conc.includes("PREMIO"))) {
+          let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "EGRESO",
+            concepto: conc + " → " + alumnoName,
+            monto: monto,
+            responsable: usuario.nombre,
+            observacion: obs,
+            esEgreso: true
+          });
+        }
+        else if ((codDestino === codUsr || respCod === codUsr) && (tipoOrig.includes("INGRESO") || conc.includes("COBRO") || conc.includes("DEVOLUCION"))) {
+          let alumnoName = MAPA_USUARIOS_OFICIALES[codDestino] ? MAPA_USUARIOS_OFICIALES[codDestino].nombre : (estNombre || codDestino);
+          movsProcesados.push({
+            fecha: fechaVal,
+            tipo: "INGRESO",
+            concepto: conc + " (DE " + alumnoName + ")",
+            monto: monto,
+            responsable: usuario.nombre,
+            observacion: obs,
+            esEgreso: false
+          });
+        }
+      }
+      else if (codUsr.startsWith("LDS-EST-")) {
+        if (codDestino === codUsr || normalizarCodigo(estNombre) === codUsr) {
+          if (tipoOrig.includes("INGRESO") || conc.includes("PAGO") || conc.includes("PREMIO") || conc.includes("ABONO") || respCod.startsWith("LDS-DOC-")) {
+            movsProcesados.push({
+              fecha: fechaVal,
+              tipo: "INGRESO",
+              concepto: conc,
+              monto: monto,
+              responsable: respNombre,
+              observacion: obs,
+              esEgreso: false
+            });
+          }
+          else if (tipoOrig.includes("EGRESO") || conc.includes("COBRO") || conc.includes("CONSUMO")) {
+            movsProcesados.push({
+              fecha: fechaVal,
+              tipo: "EGRESO",
+              concepto: conc,
+              monto: monto,
+              responsable: respNombre,
+              observacion: obs,
+              esEgreso: true
+            });
+          }
+        }
+      }
+    });
+  }
+
+  if (!movsProcesados.length) {
+    filas = `<tr><td colspan="6" style="text-align:center; padding: 12px; font-style:italic;">SIN MOVIMIENTOS REGISTRADOS EN EL PERÍODO.</td></tr>`;
+  } else {
+    movsProcesados.forEach(item => {
+      if (item.esEgreso) totalEgresos += item.monto;
+      else totalIngresos += item.monto;
+
+      filas += `
+        <tr>
+          <td>${item.fecha || ''}</td>
+          <td><strong class="${item.esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${item.tipo}</strong></td>
+          <td>${item.concepto}</td>
+          <td style="text-align:right;"><strong>${formatearLDS(item.monto)}</strong></td>
+          <td>${item.responsable || ''}</td>
+          <td>${item.observacion || ''}</td>
+        </tr>
+      `;
+    });
+  }
+
+  const saldoDisponible = Math.max(0, totalIngresos - totalEgresos);
+
+  return `
+    <div class="reporte-pagina-alumno">
+      <div class="membrete-colegio">
+        <div class="membrete-texto">
+          <h1>I.E.P. LA SALLE DEL SUR</h1>
+          <h2>BANCO LASALLISTA 360 · SISTEMA EDUCATIVO FINANCIERO Y DE CONVIVENCIA</h2>
+          <p>EDUCANDO EN VALORES Y EMPOWERMENT FINANCIERO · AÑO ESCOLAR 2026</p>
+        </div>
+        <div class="membrete-logo">
+          <img src="assets/insignia.png" referrerpolicy="no-referrer" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+        </div>
+      </div>
+
+      <div class="encabezado-alumno">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div class="foto-reporte">
+            <img src="${usuario.fotoUrl}" referrerpolicy="no-referrer" alt="Foto ${usuario.nombre}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=0c1e30&color=fff';">
           </div>
-          <div class="print-signature-line">
-            DIRECCIÓN ACADÉMICA<br>
-            I.E.P. LA SALLE DEL SUR
+          <div>
+            <h2>${usuario.tituloReporte}</h2>
+            <p style="margin-top: 3px;"><strong>ROL:</strong> ${usuario.rolTexto}</p>
+            <p style="margin-top: 2px;"><strong>${usuario.etiquetaUsuario}</strong> ${usuario.nombre} (${usuario.codigo})</p>
           </div>
         </div>
-      `;
+        <div style="text-align: right;">
+          <p><strong>SALDO DISPONIBLE:</strong></p>
+          <h2 style="color: #047857; font-size: 1.3rem;">${formatearLDS(saldoDisponible)}</h2>
+        </div>
+      </div>
 
-      window.print();
+      <table class="tabla-print">
+        <thead>
+          <tr>
+            <th>FECHA Y HORA</th>
+            <th>TIPO</th>
+            <th>CONCEPTO</th>
+            <th style="text-align:right;">MONTO LDS</th>
+            <th>RESPONSABLE</th>
+            <th>OBSERVACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filas}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function ejecutarTransferenciaFondo() {
+  const btn = document.querySelector("#panelTransferir .btn-gold");
+  const missDocCode = document.getElementById("transfMiss").value;
+  const concepto = document.getElementById("transfConcepto").value;
+  const monto = Number(document.getElementById("transfMonto").value) || 0;
+  const obs = document.getElementById("transfObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgTransferencia");
+
+  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS DESTINO."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  if (btn) btn.disabled = true;
+
+  msg.textContent = "PROCESANDO TRANSFERENCIA...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "TRANSFERENCIA DE FONDO A " + missDocCode + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: missDocCode,
+    codigoDestino: missDocCode,
+    codigoOrigen: "LDS-DOC-005",
+    anio: anio,
+    tipo: "INGRESO",
+    categoria: "FONDO_DOCENTE",
+    concepto: concepto,
+    monto: monto,
+    responsable: "Mister Andrew",
+    responsableClave: "360LDS@@@",
+    observacion: detalleObs
+  }, function(res) {
+    if (btn) btn.disabled = false;
+    if (res && res.ok) {
+      msg.textContent = "¡FONDO TRANSFERIDO Y REGISTRADO CORRECTAMENTE EN LA CAJA DE LA MISS!";
+      msg.className = "msg-box ok";
+      document.getElementById("transfMonto").value = "";
+      document.getElementById("transfObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSFERENCIA.";
+      msg.className = "msg-box error";
     }
-  </script>
+  });
+}
+
+function ejecutarDevolucion() {
+  const missDocCode = document.getElementById("devolMiss").value;
+  const monto = Number(document.getElementById("devolMonto").value) || 0;
+  const obs = document.getElementById("devolObs").value.trim();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const msg = document.getElementById("msgDevolucion");
+
+  if (!missDocCode) { msg.textContent = "SELECCIONA UNA MISS ORIGEN."; msg.className = "msg-box error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "msg-box error"; return; }
+
+  msg.textContent = "PROCESANDO DEVOLUCIÓN...";
+  msg.className = "msg-box ok";
+
+  const detalleObs = "DEVOLUCIÓN DE SALDO DE " + missDocCode + (obs ? " | " + obs : "");
+
+  llamarAPI({
+    accion: "registrarMovimiento",
+    codigo: "LDS-DOC-005",
+    codigoDestino: "LDS-DOC-005",
+    codigoOrigen: missDocCode,
+    anio: anio,
+    tipo: "INGRESO",
+    categoria: "DEVOLUCION_FONDO",
+    concepto: "DEVOLUCIÓN DE FONDO",
+    monto: monto,
+    responsable: "Mister Andrew",
+    responsableClave: "360LDS@@@",
+    observacion: detalleObs
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡DEVOLUCIÓN REGISTRADA CORRECTAMENTE!";
+      msg.className = "msg-box ok";
+      document.getElementById("devolMonto").value = "";
+      document.getElementById("devolObs").value = "";
+      actualizarCajaAndrew();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR DEVOLUCIÓN.";
+      msg.className = "msg-box error";
+    }
+  });
+}
+
+function consultarCuentaEspecifica() {
+  const cod = document.getElementById("consultaCodigo").value.trim().toUpperCase();
+  const msg = document.getElementById("msgConsulta");
+
+  if (!cod) { msg.textContent = "INGRESE UN CÓDIGO."; msg.className = "msg-box error"; return; }
+
+  const filtrados = todosLosMovimientosGlobales.filter(m => {
+    if (!m) return false;
+    const c = String(getCodigo(m) || getEstudiante(m) || "").toUpperCase();
+    return c.includes(cod) || normalizarCodigo(c) === normalizarCodigo(cod);
+  });
+
+  if (!filtrados.length) {
+    msg.textContent = "NO SE ENCONTRARON REGISTROS.";
+    msg.className = "msg-box error";
+    return;
+  }
+
+  msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
+  msg.className = "msg-box ok";
+  renderTabla(filtrados);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  actualizarCajaAndrew();
+});
+</script>
 
 </body>
 </html>
