@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BANCO LDS 360 - IEP LA SALLE DEL SUR</title>
+  <title>BANCO LDS 360 - PORTAL ESTUDIANTIL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    
     body {
       background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       color: #ffffff;
+      font-size: 11px;
     }
+    
     header {
       background: #040a12;
-      padding: 14px 30px;
+      padding: 12px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -25,18 +27,19 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       z-index: 10;
     }
-    .school-info { display: flex; align-items: center; gap: 14px; }
-    .school-info img { width: 45px; height: 45px; object-fit: contain; }
-    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; letter-spacing: 0.8px; }
-    .school-title p { font-size: 0.78rem; color: #f59e0b; font-weight: 700; }
+    .school-info { display: flex; align-items: center; gap: 12px; }
+    .school-info img { width: 42px; height: 42px; object-fit: contain; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; }
+    .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; }
+    
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid #f59e0b;
       color: #ffffff;
-      padding: 8px 20px;
+      padding: 6px 18px;
       border-radius: 30px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -44,7 +47,7 @@
     .inicio-btn:hover { background: #f59e0b; color: #06111f; }
     
     main { 
-      max-width: 1100px; 
+      max-width: 1150px; 
       width: 100%; 
       margin: auto; 
       padding: 20px 15px; 
@@ -55,10 +58,9 @@
 
     .hidden { display: none !important; }
 
-    /* CONTENEDOR PRINCIPAL COMPARTIDO - TAMAÑO ESTÁNDAR PARA PC */
     .dashboard-container {
       display: grid;
-      grid-template-columns: 450px 1fr;
+      grid-template-columns: 420px 1fr;
       gap: 20px;
       width: 100%;
       align-items: stretch;
@@ -72,31 +74,22 @@
     .saldo-card {
       background: linear-gradient(145deg, #091628 0%, #050d18 100%);
       color: #ffffff;
-      border-radius: 24px;
-      padding: 24px 20px;
+      border-radius: 22px;
+      padding: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       border: 3px solid #f59e0b;
-      text-align: left;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
       overflow: hidden;
     }
-    
-    .saldo-card::before {
-      content: "";
-      position: absolute;
-      top: -50%; left: -50%; width: 200%; height: 200%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
-      pointer-events: none;
-    }
 
     .saldo-top { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      gap: 15px; 
+      gap: 12px; 
       position: relative; 
       z-index: 2; 
     }
@@ -104,106 +97,84 @@
     .saldo-box-dorado {
       background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
       color: #0c1e30;
-      border-radius: 18px;
-      padding: 14px 12px;
+      border-radius: 16px;
+      padding: 12px;
       flex: 1;
       text-align: center;
       box-shadow: inset 0 2px 6px rgba(255,255,255,0.8), 0 6px 15px rgba(0,0,0,0.35);
       border: 2px solid #fbbf24;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
-    .saldo-title { font-size: 0.7rem; color: #78350f; font-weight: 800; letter-spacing: 1.2px; }
-    .saldo-amount { font-size: 2rem; font-weight: 800; margin-top: 2px; color: #1e293b; line-height: 1.1; }
+    .saldo-title { font-size: 0.65rem; color: #78350f; font-weight: 800; letter-spacing: 1px; }
+    .saldo-amount { font-size: 1.8rem; font-weight: 900; color: #0f172a; line-height: 1; margin: 4px 0; }
+    .saldo-sub { font-size: 0.65rem; color: #047857; font-weight: 800; }
     
-    .avatar-container {
-      flex-shrink: 0;
-    }
-    
-    @keyframes flotarYBrillar {
-      0% { transform: translateY(0px) scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
-      50% { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 14px rgba(245, 158, 11, 0.6); }
-      100% { transform: translateY(0px) scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 0px rgba(245, 158, 11, 0); }
+    @keyframes flotarBrillar {
+      0% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+      50% { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(245, 158, 11, 0.5); }
+      100% { transform: translateY(0px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
     }
 
     .avatar-img { 
-      width: 140px; 
-      height: 140px; 
+      width: 130px; 
+      height: 130px; 
       border-radius: 50%; 
       border: 4px solid #f59e0b; 
       object-fit: cover; 
       background: #ffffff; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-      animation: flotarYBrillar 4s ease-in-out infinite;
-      transition: transform 0.3s ease;
-    }
-    .avatar-img:hover {
-      transform: scale(1.06);
+      animation: flotarBrillar 4s ease-in-out infinite;
     }
     
     .alumno-info-box { 
-      margin-top: 16px; 
+      margin-top: 14px; 
       background: rgba(3, 8, 15, 0.85); 
-      padding: 14px; 
+      padding: 12px; 
       border-radius: 14px; 
       border: 1px solid rgba(245, 158, 11, 0.4);
       text-align: center;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      width: 100%;
     }
-    .alumno-nombre { 
-      font-size: 1.1rem; 
-      font-weight: 800; 
-      color: #ffffff; 
-      line-height: 1.3; 
-      cursor: pointer; 
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
+    .alumno-nombre { font-size: 1rem; font-weight: 800; color: #ffffff; cursor: pointer; }
     .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
-    .alumno-grado { 
-      font-size: 0.9rem; 
-      color: #fde68a; 
-      font-weight: 700; 
-      margin-top: 6px; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      letter-spacing: 0.5px;
+    .alumno-grado { font-size: 0.82rem; color: #fde68a; font-weight: 700; margin-top: 4px; }
+    
+    /* GRID DE 4 BOTONES DE ACCIÓN */
+    .actions-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 8px; 
+      margin-top: 14px; 
     }
     
-    .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; position: relative; z-index: 2; width: 100%; }
     .action-btn { 
-      padding: 12px 8px; border-radius: 14px; font-weight: 800; cursor: pointer; text-align: center; font-size: 0.8rem; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s; 
+      padding: 10px 6px; 
+      border-radius: 12px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      text-align: center; 
+      font-size: 0.72rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+      transition: transform 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
+      border: 1.5px solid;
     }
     .action-btn:hover { transform: translateY(-2px); }
     
-    .btn-pagar { 
-      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); 
-      color: #ffffff; 
-      border: 2px solid #fca5a5; 
-    }
-    
-    .btn-movs { 
-      background: linear-gradient(135deg, #059669 0%, #047857 100%); 
-      color: #ffffff; 
-      border: 2px solid #6ee7b7; 
-    }
+    .btn-pagar { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border-color: #fca5a5; }
+    .btn-movs { background: linear-gradient(135deg, #059669, #047857); color: #fff; border-color: #6ee7b7; }
+    .btn-prestamo { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; border-color: #fde68a; }
+    .btn-mensaje { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border-color: #bfdbfe; }
 
-    /* SUB-TARJETA ACHICADA Y MÁS COMPACTA */
+    /* SUB-TARJETAS PANELES DERECHOS */
     .sub-card { 
-      background: #ffffff; color: #1e293b; border-radius: 22px; padding: 22px; 
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border: 3px solid #f59e0b; text-align: left; 
-      height: 100%;
+      background: #ffffff; 
+      color: #1e293b; 
+      border-radius: 20px; 
+      padding: 20px; 
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
+      border: 3px solid #f59e0b; 
+      min-height: 380px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -217,67 +188,47 @@
       border-bottom: 2px solid #e2e8f0;
       padding-bottom: 8px;
     }
-    .sub-card h4 { font-size: 1rem; color: #0c1e30; font-weight: 800; }
+    .sub-card h4 { font-size: 0.95rem; color: #0c1e30; font-weight: 800; }
     
     .btn-imprimir {
       background: #1e3a8a;
       color: #ffffff;
-      border: 2px solid #f59e0b;
+      border: 1.5px solid #f59e0b;
       padding: 5px 12px;
-      border-radius: 10px;
-      font-size: 0.72rem;
+      border-radius: 8px;
+      font-size: 0.7rem;
       font-weight: 800;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: background 0.2s;
     }
-    .btn-imprimir:hover { background: #0c1e30; }
 
-    .form-scroll-area { max-height: 280px; overflow-y: auto; padding-right: 4px; }
-    .form-group { margin-bottom: 12px; text-align: left; }
-    .form-group label { display: block; color: #334155; font-size: 0.75rem; font-weight: 800; margin-bottom: 4px; }
+    .form-scroll-area { max-height: 260px; overflow-y: auto; padding-right: 4px; }
+    .form-group { margin-bottom: 10px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.72rem; font-weight: 800; margin-bottom: 3px; }
     .input-field { 
-      width: 100%; padding: 9px 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.85rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+      width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.8rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
     }
-    .input-field:focus { border-color: #0284c7; background: #fff; }
     
-    /* LISTA DE MOVIMIENTOS MÁS COMPACTA Y REDucida */
-    .lista-movs { min-height: 200px; max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .lista-movs { min-height: 220px; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
     
     .btn-primary {
-      width: 100%; height: 44px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-      color: #ffffff; border: none; border-radius: 14px; font-size: 0.9rem; font-weight: 800; cursor: pointer;
-      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); margin-top: 12px; transition: opacity 0.2s;
+      width: 100%; height: 42px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); margin-top: 10px;
     }
-    .btn-primary:hover { opacity: 0.95; }
     
     footer { 
-      text-align: center; padding: 12px; font-size: 0.75rem; color: #ffffff; background-color: #040a12; 
-      border-top: 3px solid #f59e0b; font-weight: 700; letter-spacing: 0.5px;
+      text-align: center; padding: 10px; font-size: 0.72rem; color: #ffffff; background-color: #040a12; 
+      border-top: 3px solid #f59e0b; font-weight: 700;
     }
 
     .print-header { display: none; }
 
     @media print {
-      body { background: #ffffff; color: #000000; }
-      header, .actions-grid, .inicio-btn, .btn-imprimir, footer, .sub-card:has(#seccionOperacion:not(.hidden)) { display: none !important; }
-      .dashboard-container { display: block; }
-      .saldo-card, .sub-card { border: 2px solid #000; box-shadow: none; color: #000; background: #fff !important; margin-bottom: 20px; }
-      .saldo-box-dorado { background: #fef3c7 !important; color: #000 !important; border: 1px solid #000 !important; }
-      .saldo-title, .saldo-amount, .alumno-nombre, .alumno-grado, .alumno-info-box { color: #000 !important; background: transparent !important; border-color: #000 !important; }
-      .print-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 3px solid #000;
-        padding-bottom: 12px;
-        margin-bottom: 15px;
-      }
-      .print-header img { width: 50px; height: 50px; object-fit: contain; }
-      .print-header-text h2 { font-size: 1.1rem; font-weight: 800; }
-      .print-header-text p { font-size: 0.8rem; font-weight: 700; }
+      body * { visibility: hidden !important; }
+      #seccionMovimientos, #seccionMovimientos * { visibility: visible !important; }
+      #seccionMovimientos { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+      .btn-imprimir, header, footer { display: none !important; }
+      .print-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
     }
   </style>
 </head>
@@ -285,13 +236,13 @@
 
   <header>
     <div class="school-info">
-      <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
+      <img src="assets/insignia.png" alt="Insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE';">
       <div class="school-title">
         <h1>BANCO LDS 360</h1>
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a href="./" class="inicio-btn" onclick="reproducirSonido('clic'); hablarTextoVoz('Regresando al inicio')">← INICIO</a>
+    <a href="./" class="inicio-btn">← INICIO</a>
   </header>
 
   <main>
@@ -302,7 +253,8 @@
         <div class="saldo-top">
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> <span style="font-size: 0.85rem; font-weight: 700;">LDS</span></h3>
+            <h3 class="saldo-amount"><span id="saldoLDS">0.00</span> LDS</h3>
+            <p class="saldo-sub">INGRESOS APROBADOS: <span id="totalIngresosLDS">0.00</span> LDS</p>
           </div>
 
           <div class="avatar-container">
@@ -311,27 +263,31 @@
         </div>
 
         <div class="alumno-info-box">
-          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC AQUÍ PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
-          <p class="alumno-grado"><span style="font-size: 1.1rem;">🎓</span> <span id="textoGradoSeccion">---</span></p>
+          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC PARA CAMBIAR CÓDIGO">CARGANDO DATOS...</p>
+          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">---</span></p>
         </div>
 
+        <!-- 4 BOTONES PRINCIPALES -->
         <div class="actions-grid">
-          <button onclick="accionBotonPagar()" class="action-btn btn-pagar"><span style="font-size: 1.1rem;">💰</span> PAGAR / GASTOS</button>
-          <button onclick="accionBotonMovimientos()" class="action-btn btn-movs"><span style="font-size: 1.1rem;">📊</span> MOVIMIENTOS</button>
+          <button onclick="mostrarSeccion('seccionOperacion')" class="action-btn btn-pagar">💰 PAGAR / GASTOS</button>
+          <button onclick="mostrarSeccion('seccionMovimientos')" class="action-btn btn-movs">📊 MOVIMIENTOS</button>
+          <button onclick="mostrarSeccion('seccionPrestamo')" class="action-btn btn-prestamo">🤝 PRÉSTAMOS</button>
+          <button onclick="mostrarSeccion('seccionMensaje')" class="action-btn btn-mensaje">✉️ BUZÓN / AVISO</button>
         </div>
       </div>
 
-      <!-- LADO DERECHO: PANELES COMPARTIDOS (MÁS COMPACTOS) -->
+      <!-- LADO DERECHO: PANELES INTERACTIVOS -->
       <div>
-        <!-- FORMULARIO DE REGISTRO DE PAGO O GASTO -->
+        
+        <!-- PANEL 1: PAGO / GASTO -->
         <div id="seccionOperacion" class="sub-card hidden">
           <div class="sub-card-header">
-            <h4 id="tituloOperacion">REGISTRAR PAGO O GASTO</h4>
+            <h4>💸 REGISTRAR PAGO O GASTO EN TIENDA / AULA</h4>
           </div>
           
           <div class="form-scroll-area">
             <div class="form-group">
-              <label>CATEGORÍA</label>
+              <label>CATEGORÍA DE GASTO</label>
               <select id="selectCategoria" onchange="alCambiarCategoria()" class="input-field">
                 <option value="">SELECCIONE CATEGORÍA</option>
               </select>
@@ -346,13 +302,13 @@
 
             <div class="form-group">
               <label>MONTO LDS</label>
-              <input type="number" id="inputMonto" min="0" step="0.01" placeholder="0.00" class="input-field" />
+              <input type="number" id="inputMonto" min="0" step="1" placeholder="0" class="input-field" />
             </div>
 
             <div class="form-group">
-              <label>CAJERO / CAJERA</label>
+              <label>DOCENTE / CAJERA RESPONSABLE</label>
               <select id="selectResponsable" class="input-field">
-                <option value="">SELECCIONE CAJERO(A)</option>
+                <option value="">SELECCIONE CAJERA</option>
                 <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
                 <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
                 <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
@@ -367,33 +323,101 @@
           </div>
 
           <div>
-            <button onclick="registrarMovimientoOperacion()" class="btn-primary">
-              CONFIRMAR Y REGISTRAR PAGO
-            </button>
-            <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 6px; min-height: 16px; font-weight: 800;"></div>
+            <button onclick="registrarMovimientoOperacion()" class="btn-primary">CONFIRMAR Y REGISTRAR GASTO</button>
+            <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
           </div>
         </div>
 
-        <!-- HISTORIAL DE MOVIMIENTOS (REDUCIDO) -->
+        <!-- PANEL 2: HISTORIAL DE MOVIMIENTOS -->
         <div id="seccionMovimientos" class="sub-card">
           <div class="print-header">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <img src="assets/insignia.png" alt="Insignia La Salle del Sur" onerror="this.src='assets/insignia.jpg';">
-              <div class="print-header-text">
-                <h2>BANCO LDS 360 - ESTADO DE CUENTA</h2>
-                <p>I.E.P. LA SALLE DEL SUR — KIDSWork LS</p>
+              <img src="assets/insignia.png" style="width:50px; height:50px;" alt="Insignia">
+              <div>
+                <h2 style="font-size:1.1rem; font-weight:800;">I.E.P. LA SALLE DEL SUR</h2>
+                <p style="font-size:0.8rem; font-weight:700; color:#d97706;">BANCO LASALLISTA 360 — ESTADO DE CUENTA</p>
               </div>
             </div>
           </div>
 
           <div class="sub-card-header">
-            <h4>HISTORIAL DE MOVIMIENTOS</h4>
-            <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">
-              🖨️ IMPRIMIR
-            </button>
+            <h4>📊 HISTORIAL DE MOVIMIENTOS</h4>
+            <button onclick="imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
           </div>
+
           <div id="listaMovimientos" class="lista-movs">
-            <p style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</p>
+            <p style="color: #64748b; text-align: center; font-style: italic; padding: 20px;">SIN MOVIMIENTOS RECIENTES.</p>
+          </div>
+        </div>
+
+        <!-- PANEL 3: PRÉSTAMOS ENTRE ALUMNOS / CAJA -->
+        <div id="seccionPrestamo" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4>🤝 SOLICITAR PRÉSTAMO / TRANSFERIR A COMPAÑERO</h4>
+          </div>
+
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>TIPO DE OPERACIÓN</label>
+              <select id="prestamoTipo" class="input-field">
+                <option value="TRANSFERENCIA_COMPANERO">TRANSFERIR A UN COMPAÑERO DE AULA</option>
+                <option value="SOLICITUD_CAJA">SOLICITAR PRÉSTAMO A CAJA DOCENTE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>CÓDIGO O DESTINATARIO (EJ: LDS-EST-002)</label>
+              <input type="text" id="prestamoDestino" placeholder="INGRESE CÓDIGO DEL COMPAÑERO O MISSE" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MONTO EN LDS</label>
+              <input type="number" id="prestamoMonto" min="1" placeholder="MONTO EN LDS" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MOTIVO / OBSERVACIÓN</label>
+              <textarea id="prestamoObs" rows="2" placeholder="MOTIVO DEL PRÉSTAMO..." class="input-field" style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="registrarPrestamoAlumno()" class="btn-primary" style="background:linear-gradient(135deg,#d97706,#b45309);">ENVIAR SOLICITUD DE PRÉSTAMO</button>
+            <div id="mensajePrestamo" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
+          </div>
+        </div>
+
+        <!-- PANEL 4: BUZÓN DE MENSAJES Y AVISOS -->
+        <div id="seccionMensaje" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4>✉️ BUZÓN DE MENSAJES PARA LA MAESTRA</h4>
+          </div>
+
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>DOCENTE DESTINATARIA</label>
+              <select id="mensajeDocente" class="input-field">
+                <option value="MISS LILY MELO AZAÑERO">MISS LILY MELO AZAÑERO</option>
+                <option value="MISS KIARA MORALES ELGUERA">MISS KIARA MORALES ELGUERA</option>
+                <option value="MISS ANGHY REYES MELO">MISS ANGHY REYES MELO</option>
+                <option value="MISS KARIN MOLERO ROMANI">MISS KARIN MOLERO ROMANI</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>ASUNTO / TEMA</label>
+              <input type="text" id="mensajeAsunto" placeholder="EJ: CONSULTA DE BONO / TAREA" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MENSAJE / RECADITO</label>
+              <textarea id="mensajeTexto" rows="4" placeholder="ESCRIBE TU MENSAJE PARA LA MISS..." class="input-field" style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="enviarMensajeAMaestra()" class="btn-primary" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">ENVIAR MENSAJE AL BUZÓN</button>
+            <div id="mensajeStatus" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
           </div>
         </div>
 
@@ -403,325 +427,131 @@
   </main>
 
   <footer>
-    KIDSWork LS - I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
+    BANCO LDS 360 — I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjiBdoI09pAE1HlIHXK_A-Du4W4MVN7aX-Vrf4SXvy-TdKobto7rHEo3CKX5o6RQPb/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
     let codigoEstudianteActual = "";
 
-    function hablarTextoVoz(texto) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(texto);
-        utterance.lang = 'es-PE';
-        utterance.rate = 0.95;
-        utterance.pitch = 1.1;
-
-        function ejecutarVoz() {
-          const voces = window.speechSynthesis.getVoices();
-          let vozIdeal = voces.find(v => v.lang.includes('es') && (
-            v.name.toLowerCase().includes('female') || 
-            v.name.toLowerCase().includes('google español') || 
-            v.name.toLowerCase().includes('lucia') || 
-            v.name.toLowerCase().includes('elena') || 
-            v.name.toLowerCase().includes('monica')
-          ));
-          if (!vozIdeal) vozIdeal = voces.find(v => v.lang.includes('es'));
-          if (vozIdeal) utterance.voice = vozIdeal;
-          window.speechSynthesis.speak(utterance);
-        }
-
-        if (window.speechSynthesis.getVoices().length === 0) {
-          window.speechSynthesis.onvoiceschanged = ejecutarVoz;
-        } else {
-          ejecutarVoz();
-        }
-      }
-    }
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function reproducirSonido(tipo) {
-      try {
-        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        const ahora = audioCtx.currentTime;
-
-        if (tipo === 'clic') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(600, ahora);
-          gain.gain.setValueAtTime(0.1, ahora);
-          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.1);
-          osc.start(ahora);
-          osc.stop(ahora + 0.1);
-        } else if (tipo === 'exito') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(440, ahora);
-          osc.frequency.setValueAtTime(554.37, ahora + 0.08);
-          osc.frequency.setValueAtTime(659.25, ahora + 0.16);
-          gain.gain.setValueAtTime(0.12, ahora);
-          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.35);
-          osc.start(ahora);
-          osc.stop(ahora + 0.35);
-        } else if (tipo === 'error') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(200, ahora);
-          osc.frequency.setValueAtTime(150, ahora + 0.15);
-          gain.gain.setValueAtTime(0.15, ahora);
-          gain.gain.exponentialRampToValueAtTime(0.001, ahora + 0.3);
-          osc.start(ahora);
-          osc.stop(ahora + 0.3);
-        }
-      } catch (e) {
-        console.log("Audio interactivo activado");
-      }
-    }
-
-    function hacerPeticionJSONP(parametros, callback) {
-      const nombreCallback = 'jsonp_callback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-      let respuestaEnviada = false;
-
-      const timeoutSeguridad = setTimeout(() => {
-        if (!respuestaEnviada) {
-          respuestaEnviada = true;
-          delete window[nombreCallback];
-          if (script && script.parentNode) document.body.removeChild(script);
-          callback({ success: false, ok: false, mensaje: "EL SERVIDOR TARDÓ DEMASIADO." });
-        }
-      }, 10000);
-
-      window[nombreCallback] = function(data) {
-        if (respuestaEnviada) return;
-        respuestaEnviada = true;
-        clearTimeout(timeoutSeguridad);
-        delete window[nombreCallback];
-        if (script && script.parentNode) document.body.removeChild(script);
-        callback(data);
-      };
-
-      let url = SCRIPT_URL + '?callback=' + nombreCallback;
-      for (let clave in parametros) {
-        if (parametros[clave] !== undefined && parametros[clave] !== null) {
-          url += '&' + encodeURIComponent(clave) + '=' + encodeURIComponent(parametros[clave]);
-        }
-      }
-
-      const script = document.createElement('script');
-      script.src = url;
-      script.onerror = function() {
-        if (respuestaEnviada) return;
-        respuestaEnviada = true;
-        clearTimeout(timeoutSeguridad);
-        delete window[nombreCallback];
-        if (script && script.parentNode) document.body.removeChild(script);
-        callback({ success: false, ok: false, mensaje: "ERROR DE CONEXIÓN." });
-      };
-      document.body.appendChild(script);
-    }
-
     let catalogoGlobal = {
-      "AHORROS_E_INVERSIONES": [
-        "Depósito a cuenta de ahorros (Ahorro voluntario)", 
-        "Inversión en fondo común del aula / cooperativa", 
-        "Retiro de ahorros (Emergencia o meta cumplida)"
-      ],
       "PAGOS_Y_GASTOS": [
         "Pago Compra en la tienda escolar / cafetín", 
-        "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", 
-        "Pago de servicios del aula: Agua", 
-        "Pago de servicios del aula: Energía", 
-        "Compra de material escolar de emergencia", 
-        "Gasto médico imprevisto menor", 
-        "Alquiler de libros de la biblioteca", 
-        "Pago por custodia de equipos tecnológicos", 
+        "Pago de alquiler / mantenimiento de carpeta", 
         "Pago por copias extras", 
         "Comprar stickers", 
-        "Pagar para una actividad extra", 
         "Pagar por jugar 10 minutos más"
       ],
       "SANCIONES_Y_MULTAS": [
         "Multa por llevar mal el uniforme o incompleto", 
-        "Incumplimiento de tareas o asignaciones a tiempo", 
-        "Llegada tarde al aula o formación", 
-        "Uso no autorizado de dispositivos electrónicos", 
-        "Desorden o indisciplina leve", 
-        "Falta de respeto o modales", 
-        "No traer el material escolar requerido", 
-        "Descuido o daño leve al mobiliario", 
-        "Basura fuera de su lugar / No respetar áreas verdes", 
-        "Inasistencia injustificada a reuniones", 
-        "No ponerse al día en sus pendientes", 
-        "Malograr los cuadernos u objetos personales", 
-        "Faltar a la verdad", 
-        "Llevarse objetos del compañero"
-      ],
-      "COSTOS_Y_OTROS": [
-        "Impuesto escolar mensual por uso de instalaciones", 
-        "Cuota extraordinaria de mantenimiento grupal", 
-        "Transacción personalizada / Ajuste de caja"
+        "Incumplimiento de tareas a tiempo", 
+        "Llegada tarde al aula", 
+        "Faltar a la verdad"
       ]
     };
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const parametros = new URLSearchParams(window.location.search);
-      const codigoRecibido = parametros.get('codigo') || 'LDS-EST-001';
-      codigoEstudianteActual = codigoRecibido.trim().toUpperCase();
-      
-      if (!parametros.has('codigo')) {
-        window.history.replaceState({}, '', '?codigo=' + codigoEstudianteActual);
+    function hablarTextoVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const ut = new SpeechSynthesisUtterance(texto);
+        ut.lang = 'es-PE';
+        window.speechSynthesis.speak(ut);
       }
+    }
 
+    function hacerPeticionJSONP(parametros, callback) {
+      const nombreCallback = 'jsonp_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+      window[nombreCallback] = function(data) {
+        delete window[nombreCallback];
+        if (script.parentNode) script.remove();
+        callback(data);
+      };
+      let url = SCRIPT_URL + '?callback=' + nombreCallback;
+      for (let k in parametros) {
+        url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(parametros[k]);
+      }
+      const script = document.createElement('script');
+      script.src = url;
+      document.body.appendChild(script);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      codigoEstudianteActual = (params.get('codigo') || 'LDS-EST-001').trim().toUpperCase();
       consultarDatosEstudiante(codigoEstudianteActual);
     });
 
+    function mostrarSeccion(idSeccion) {
+      ['seccionOperacion', 'seccionMovimientos', 'seccionPrestamo', 'seccionMensaje'].forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+      document.getElementById(idSeccion).classList.remove('hidden');
+    }
+
     function cambiarCodigoManual() {
-      reproducirSonido('clic');
-      const nuevoCod = prompt("INGRESE EL CÓDIGO CORRECTO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
+      const nuevoCod = prompt("INGRESE CÓDIGO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
       if (nuevoCod && nuevoCod.trim() !== "") {
-        const codigoLimpio = nuevoCod.trim().toUpperCase();
-        window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoLimpio));
-        codigoEstudianteActual = codigoLimpio;
-        consultarDatosEstudiante(codigoLimpio);
-        hablarTextoVoz("Buscando estudiante.");
+        codigoEstudianteActual = nuevoCod.trim().toUpperCase();
+        window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoEstudianteActual));
+        consultarDatosEstudiante(codigoEstudianteActual);
       }
-    }
-
-    function imprimirEstadoCuenta() {
-      reproducirSonido('clic');
-      hablarTextoVoz("Imprimiendo estado de cuenta oficial");
-      window.print();
-    }
-
-    function detectarGenero(est) {
-      const generoCampo = String(est.genero || est.sexo || '').trim().toUpperCase();
-      if (generoCampo.startsWith('F') || generoCampo === 'MUJER' || generoCampo === 'NIÑA') return 'F';
-      if (generoCampo.startsWith('M') || generoCampo === 'HOMBRE' || generoCampo === 'NIÑO') return 'M';
-
-      const nombre = String(est.nombre || est.nombreCompleto || '').trim().toUpperCase();
-      const primerNombre = nombre.split(' ')[0] || '';
-      if (primerNombre.endsWith('A') && !['ELÍAS', 'JOSÉ', 'LUCAS', 'NICOLÁS', 'T.'].includes(primerNombre)) {
-        return 'F';
-      }
-      return 'M';
     }
 
     function consultarDatosEstudiante(codigo) {
       document.getElementById('alumnoNombre').textContent = "CARGANDO DATOS...";
-      
       hacerPeticionJSONP({ accion: 'CONSULTAR', codigo: codigo }, function(res) {
-        const datos = (res && res.data) ? res.data : ((res && res.resultado) ? res.resultado : res);
-        const est = (datos && (datos.estudiante || datos.alumno)) || (res && res.estudiante) || {};
+        if (res && res.ok) {
+          const est = res.estudiante || {};
+          const cuenta = res.cuenta || {};
+          const movs = res.movimientos || [];
 
-        const encontrado = !!(est && (est.codigo || est.nombreCompleto || est.nombre || (datos && datos.encontrado === true) || (res && res.ok === true)));
+          document.getElementById('alumnoNombre').textContent = est.nombreCompleto || est.nombre || codigo;
+          document.getElementById('textoGradoSeccion').textContent = (est.grado || 'AULA') + " " + (est.seccion || '');
+          document.getElementById('saldoLDS').textContent = (cuenta.saldoActual || 0).toLocaleString("de-DE");
+          document.getElementById('totalIngresosLDS').textContent = (cuenta.totalIngresos || 0).toLocaleString("de-DE");
 
-        if (encontrado) {
-          const nombreCompleto = est.nombreCompleto || [est.nombre, est.apellido].filter(Boolean).join(' ') || codigo;
-          document.getElementById('alumnoNombre').textContent = nombreCompleto;
-          
-          const gradoSeccion = [est.grado, est.seccion].filter(Boolean).join(' ');
-          document.getElementById('textoGradoSeccion').textContent = gradoSeccion || '---';
-
-          const cuenta = (datos && datos.cuenta) || (res && res.cuenta) || {};
-          const movimientos = (datos && Array.isArray(datos.movimientos) ? datos.movimientos : []) || (res && Array.isArray(res.movimientos) ? res.movimientos : []) || [];
-          const saldoBackend = Number((datos && datos.saldoActual !== undefined ? datos.saldoActual : undefined) ?? cuenta.saldoActual ?? res.saldoActual ?? 0);
-          
-          const saldoFinal = Number.isFinite(saldoBackend) ? saldoBackend : 0;
-          document.getElementById('saldoLDS').textContent = saldoFinal.toFixed(2);
-
-          const fotoUrl = est.fotoUrl || est.foto || '';
-          document.getElementById('alumnoFoto').src = fotoUrl.trim() !== '' ? fotoUrl.trim() : 'https://via.placeholder.com/150';
-
-          renderizarMovimientos(movimientos);
-
-          reproducirSonido('exito');
-          const genero = detectarGenero(est);
-          const saludoTerm = genero === 'F' ? 'Bienvenida' : 'Bienvenido';
-          hablarTextoVoz(saludoTerm + " " + nombreCompleto + ". Tu saldo disponible es de " + saldoFinal.toFixed(2) + " L D S.");
-          return;
+          if (est.fotoUrl) document.getElementById('alumnoFoto').src = est.fotoUrl;
+          renderizarMovimientos(movs);
+          hablarTextoVoz("Saldo cargado exitosamente.");
+        } else {
+          document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
         }
-
-        reproducirSonido('error');
-        document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
-        document.getElementById('textoGradoSeccion').textContent = "CÓDIGO BUSCADO: " + codigo;
-        document.getElementById('saldoLDS').textContent = "0.00";
-        document.getElementById('alumnoFoto').src = 'https://via.placeholder.com/150';
-        document.getElementById('listaMovimientos').innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</div>';
-        hablarTextoVoz("Estudiante no encontrado. Haz clic aquí para ingresar el código.");
       });
-    }
-
-    function accionBotonPagar() {
-      reproducirSonido('clic');
-      hablarTextoVoz("Panel de registro de pagos o gastos. Selecciona la categoría y el concepto.");
-      document.getElementById('seccionOperacion').classList.remove('hidden');
-      document.getElementById('seccionMovimientos').classList.add('hidden');
-      document.getElementById('tituloOperacion').textContent = "💸 REGISTRAR PAGO O GASTO";
-      
-      const selectCat = document.getElementById('selectCategoria');
-      selectCat.innerHTML = '<option value="">SELECCIONE CATEGORÍA</option>';
-
-      Object.keys(catalogoGlobal).forEach(cat => {
-        const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat.replace(/_/g, " ");
-        selectCat.appendChild(opt);
-      });
-
-      document.getElementById('selectConcepto').innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
-      document.getElementById('inputMonto').value = '';
-      document.getElementById('selectResponsable').value = '';
-      document.getElementById('inputObservacion').value = '';
-      document.getElementById('mensajeOperacion').textContent = '';
     }
 
     function alCambiarCategoria() {
-      reproducirSonido('clic');
       const cat = document.getElementById('selectCategoria').value;
       const selectCon = document.getElementById('selectConcepto');
       selectCon.innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
-      if (!cat || !catalogoGlobal[cat]) return;
-
-      catalogoGlobal[cat].forEach(con => {
-        const opt = document.createElement('option');
-        opt.value = con;
-        opt.textContent = con;
-        selectCon.appendChild(opt);
-      });
-    }
-
-    function accionBotonMovimientos() {
-      reproducirSonido('clic');
-      hablarTextoVoz("Revisando historial de movimientos y estado de cuenta.");
-      document.getElementById('seccionOperacion').classList.add('hidden');
-      document.getElementById('seccionMovimientos').classList.remove('hidden');
+      if (catalogoGlobal[cat]) {
+        catalogoGlobal[cat].forEach(con => {
+          const opt = document.createElement('option');
+          opt.value = con;
+          opt.textContent = con;
+          selectCon.appendChild(opt);
+        });
+      }
     }
 
     function registrarMovimientoOperacion() {
       const cat = document.getElementById('selectCategoria').value;
       const con = document.getElementById('selectConcepto').value;
-      const monto = document.getElementById('inputMonto').value.trim();
+      const monto = document.getElementById('inputMonto').value;
       const resp = document.getElementById('selectResponsable').value;
-      const obs = document.getElementById('inputObservacion').value.trim();
+      const obs = document.getElementById('inputObservacion').value;
       const msg = document.getElementById('mensajeOperacion');
 
       if (!cat || !con || !monto || !resp) {
-        reproducirSonido('error');
         msg.style.color = "#dc2626";
         msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
-        hablarTextoVoz("Atención: Complete todos los campos obligatorios.");
         return;
       }
 
-      reproducirSonido('clic');
       msg.style.color = "#2563eb";
       msg.textContent = "REGISTRANDO...";
-      hablarTextoVoz("Registrando transacción en el sistema.");
 
       hacerPeticionJSONP({
-        accion: 'REGISTRAR_TRANSACCION',
+        accion: 'REGISTRARMOVIMIENTO',
         codigo: codigoEstudianteActual,
         tipo: 'EGRESO',
         monto: monto,
@@ -729,59 +559,89 @@
         responsable: resp,
         observacion: obs
       }, function(res) {
-        if (res && (res.success || res.ok)) {
-          reproducirSonido('exito');
+        if (res && res.ok) {
           msg.style.color = "#059669";
-          msg.textContent = "¡REGISTRADO CON ÉXITO!";
-          hablarTextoVoz("¡Transacción registrada con éxito!");
-
-          setTimeout(() => {
-            consultarDatosEstudiante(codigoEstudianteActual);
-            accionBotonMovimientos();
-            msg.textContent = '';
-          }, 1200);
+          msg.textContent = "¡GASTO REGISTRADO CON ÉXITO!";
+          consultarDatosEstudiante(codigoEstudianteActual);
+          setTimeout(() => mostrarSeccion('seccionMovimientos'), 1000);
         } else {
-          reproducirSonido('error');
           msg.style.color = "#dc2626";
-          msg.textContent = (res && res.mensaje) ? res.mensaje : "ERROR AL REGISTRAR.";
-          hablarTextoVoz("Error al registrar la transacción.");
+          msg.textContent = "ERROR AL REGISTRAR GASTO.";
         }
       });
     }
 
-    function renderizarMovimientos(movimientos) {
-      const contenedor = document.getElementById('listaMovimientos');
-      if (!contenedor) return;
-      contenedor.innerHTML = '';
+    function registrarPrestamoAlumno() {
+      const destino = document.getElementById('prestamoDestino').value.trim();
+      const monto = document.getElementById('prestamoMonto').value;
+      const obs = document.getElementById('prestamoObs').value;
+      const msg = document.getElementById('mensajePrestamo');
 
-      if (!Array.isArray(movimientos) || movimientos.length === 0) {
-        contenedor.innerHTML = '<div style="color: #64748b; text-align: center; font-style: italic; padding: 20px; font-size: 0.85rem;">SIN MOVIMIENTOS RECIENTES.</div>';
-        return;
+      if (!destino || !monto) {
+        msg.style.color = "#dc2626"; msg.textContent = "INGRESE DESTINO Y MONTO."; return;
       }
 
-      movimientos.forEach(function(mov) {
-        const tipo = String(mov.tipo || mov.tipoMovimiento || '').toUpperCase();
-        const concepto = mov.concepto || mov.descripcion || 'MOVIMIENTO';
-        const monto = Number(mov.monto ?? 0);
-        const fecha = mov.fechaTexto || mov.fecha || '';
-
-        const fila = document.createElement('div');
-        fila.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem;";
-
-        const signo = tipo === 'EGRESO' || tipo === 'GASTO' || tipo.includes('EGRESO') ? '-' : '+';
-        fila.innerHTML = `
-          <div style="display: flex; flex-direction: column;">
-            <strong style="color: #0c1e30;">${concepto}</strong>
-            <span style="color: #64748b; font-size: 0.7rem;">${fecha}</span>
-          </div>
-          <div style="font-weight: 800; color: ${signo === '-' ? '#e11d48' : '#059669'};">
-            ${signo} ${Math.abs(monto).toFixed(2)} LDS
-          </div>
-        `;
-        contenedor.appendChild(fila);
+      msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO SOLICITUD...";
+      hacerPeticionJSONP({
+        accion: 'REGISTRAR_PRESTAMO',
+        origen: codigoEstudianteActual,
+        destino: destino,
+        monto: monto,
+        observacion: obs
+      }, function(res) {
+        msg.style.color = "#059669";
+        msg.textContent = "¡SOLICITUD REGISTRADA Y ENVIADA!";
+        consultarDatosEstudiante(codigoEstudianteActual);
       });
     }
+
+    function enviarMensajeAMaestra() {
+      const docente = document.getElementById('mensajeDocente').value;
+      const asunto = document.getElementById('mensajeAsunto').value;
+      const texto = document.getElementById('mensajeTexto').value;
+      const msg = document.getElementById('mensajeStatus');
+
+      if (!texto) { msg.style.color = "#dc2626"; msg.textContent = "ESCRIBA UN MENSAJE."; return; }
+
+      msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO RECADITO...";
+      hacerPeticionJSONP({
+        accion: 'ENVIAR_RECORDATORIO',
+        codigo: codigoEstudianteActual,
+        responsable: docente,
+        concepto: "MENSAJE: " + (asunto || "RECADITO DE ALUMNO"),
+        observacion: texto
+      }, function(res) {
+        msg.style.color = "#059669";
+        msg.textContent = "¡MENSAJE ENVIADO A LA MAESTRA!";
+        document.getElementById('mensajeTexto').value = "";
+      });
+    }
+
+    function renderizarMovimientos(movs) {
+      const cont = document.getElementById('listaMovimientos');
+      cont.innerHTML = "";
+      if (!movs || !movs.length) {
+        cont.innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN MOVIMIENTOS RECIENTES.</p>';
+        return;
+      }
+      movs.forEach(m => {
+        const div = document.createElement('div');
+        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid #f1f5f9;";
+        const esEgreso = m.tipo === 'EGRESO';
+        div.innerHTML = `
+          <div>
+            <strong>${m.concepto}</strong><br>
+            <span style="font-size:0.65rem; color:#64748b;">${m.fechaTexto || m.fecha || ''}</span>
+          </div>
+          <strong style="color:${esEgreso ? '#e11d48' : '#059669'}; font-size:0.9rem;">
+            ${esEgreso ? '-' : '+'} ${(Number(m.monto)||0).toLocaleString("de-DE")} LDS
+          </strong>
+        `;
+        cont.appendChild(div);
+      });
+    }
+
+    function imprimirEstadoCuenta() { window.print(); }
   </script>
 </body>
 </html>
-
