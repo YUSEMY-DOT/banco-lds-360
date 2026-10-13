@@ -389,6 +389,12 @@ td:last-child {
   display: inline-block !important; font-size: 9px !important; text-align: center;
 }
 
+.badge-aviso {
+  color: #1e40af; background: #eff6ff; padding: 3px 8px !important;
+  border-radius: 4px; font-weight: 800; border: 1px solid #bfdbfe;
+  display: inline-block !important; font-size: 9px !important; text-align: center;
+}
+
 .empty { text-align: center; color: var(--muted); padding: 20px; font-weight: 700; font-size: 0.85rem; }
 
 .modulos-nav {
@@ -469,7 +475,7 @@ td:last-child {
 
 .btn-accion-pago svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .btn-accion-pago.pagar { background: linear-gradient(135deg,#fff7d6,#f59e0b); color: #7c4300; border-color: #f59e0b; }
-.btn-accion-pago.cobrar { background: linear-gradient(135deg,#fef2f2,#ef4444); color: #991b1b; border-color: #dc2626; }
+.btn-accion-pago.cobrar { background: linear-gradient(135deg,#ecfdf5,#10b981); color: #065f46; border-color: #059669; }
 
 .mises-fotos-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; margin: 10px 0 12px; }
 
@@ -507,11 +513,17 @@ td:last-child {
 .header-list-items { max-height: 400px; overflow-y: auto; padding: 4px; }
 
 .header-list-row {
-  display: grid; grid-template-columns: 30px 36px 100px 1fr 100px 90px; gap: 6px; align-items: center;
-  padding: 8px; border-bottom: 1px solid #edf2f7; cursor: pointer; font-size: 0.7rem;
+  display: grid; grid-template-columns: 24px 32px 95px 1fr 80px 170px; gap: 6px; align-items: center;
+  padding: 6px; border-bottom: 1px solid #edf2f7; font-size: 0.7rem;
 }
 
 .header-list-row:hover { background: #eff6ff; }
+
+.btn-opt-list {
+  padding: 4px 6px; border-radius: 6px; border: 1px solid; font-weight: 800; font-size: 0.62rem; cursor: pointer; text-align: center;
+}
+.btn-opt-list.sel { background: #dbeafe; color: #1e40af; border-color: #3b82f6; }
+.btn-opt-list.mov { background: #fef3c7; color: #92400e; border-color: #f59e0b; }
 
 .categorias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 5px 0; }
 .categoria-btn { border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a; border-radius: 8px; padding: 8px 4px; font-size: 0.68rem; font-weight: 800; cursor: pointer; min-height: 48px; text-align: center; }
@@ -523,7 +535,6 @@ td:last-child {
 
 #qrScannerContainer { display: none; background: #000; padding: 10px; border-radius: 10px; margin-bottom: 12px; }
 
-/* === FORMATOS Y ESTILOS PARA IMPRESIÓN OFICIAL === */
 #contenedorImpresion { display: none; }
 
 @media print {
@@ -531,35 +542,20 @@ td:last-child {
   #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
   #contenedorImpresion {
     display: block !important;
-    position: absolute;
-    left: 0; top: 0; width: 100%;
-    background: #fff; color: #000;
-    padding: 25px;
+    position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 25px;
   }
-
-  .print-header {
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 3px double #0c1e30; padding-bottom: 12px; margin-bottom: 20px;
-  }
+  .print-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #0c1e30; padding-bottom: 12px; margin-bottom: 20px; }
   .print-logo { width: 75px; height: 75px; object-fit: contain; }
   .print-title { text-align: center; }
   .print-title h1 { font-size: 18px; color: #0c1e30; margin: 0; font-weight: 900; }
   .print-title h2 { font-size: 13px; color: #d97706; margin: 2px 0; font-weight: 800; }
   .print-title p { font-size: 10px; color: #475569; margin: 0; font-weight: 700; }
-
-  .print-user-box {
-    display: flex; gap: 15px; align-items: center;
-    border: 1.5px solid #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 15px; background: #f8fafc;
-  }
+  .print-user-box { display: flex; gap: 15px; align-items: center; border: 1.5px solid #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 15px; background: #f8fafc; }
   .print-user-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #d97706; }
-
   .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
   .print-table th, .print-table td { border: 1px solid #94a3b8; padding: 6px 8px; font-size: 10px !important; text-align: left; }
   .print-table th { background: #e2e8f0; color: #0f172a; font-weight: 800; }
-
-  .print-footer-signatures {
-    display: flex; justify-content: space-around; margin-top: 50px; text-align: center;
-  }
+  .print-footer-signatures { display: flex; justify-content: space-around; margin-top: 50px; text-align: center; }
   .print-signature-line { width: 180px; border-top: 1.5px dashed #000; padding-top: 5px; font-size: 10px; font-weight: 800; }
 }
 </style>
@@ -649,16 +645,16 @@ td:last-child {
   </div>
 
   <section class="layout">
-    <!-- PANEL IZQUIERDO: CONSULTA Y ESTADO DE CUENTA -->
+    <!-- PANEL IZQUIERDO: LIBRO DE CAJA Y CONSULTAS -->
     <div class="panel">
       <div class="panel-head">
-        <h3 id="tituloTablaMovs">📋 CONSULTA Y ESTADO DE CUENTA</h3>
+        <h3 id="tituloTablaMovs">📋 LIBRO DIARIO DE CAJA (MIS MOVIMIENTOS)</h3>
         <div style="display:flex; gap:8px; align-items:center;">
           <input id="selectAnioEscolar" type="number" value="2026" min="2000" max="2100" style="width:70px; height:34px; text-align:center; font-weight:800;" onchange="actualizarPanelAdmin()">
-          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos('ALUMNOS')" title="Lista de Estudiantes">
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos('ALUMNOS')" title="Directorio de Estudiantes">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
           </button>
-          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaCodigos('MISES')" title="Mises y Dirección">
+          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaCodigos('MISES')" title="Directorio de Mises">
             <svg viewBox="0 0 48 48"><circle cx="17" cy="16" r="6"/><circle cx="31" cy="16" r="6"/><path d="M5 39c1.4-7 5.6-11 12-11s10.6 4 12 11"/><path d="M19 39c1.5-7 5.5-11 12-11s10.6 4 12 11"/></svg>
           </button>
         </div>
@@ -666,7 +662,7 @@ td:last-child {
 
       <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
         <div class="header-dropdown-head">
-          <strong id="dropdownTitulo">📋 DIRECTORIO DE CUENTAS</strong>
+          <strong id="dropdownTitulo">📋 DIRECTORIO GENERAL</strong>
           <button type="button" onclick="cerrarListaCodigos()" style="border:0; background:var(--rojo); color:#fff; padding:2px 8px; border-radius:4px; font-weight:800; cursor:pointer; font-size:10px;">✕ CERRAR</button>
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
@@ -680,17 +676,17 @@ td:last-child {
         </div>
 
         <div>
-          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">CONSULTA DE ALUMNOS O CAJA</label>
+          <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">OPCIONES DE VISTA Y CONSULTA</label>
           <div class="search-row-ordered">
             <button class="icon-query-btn refresh" type="button" onclick="actualizarPanelAdmin()" title="Actualizar Datos">
               <svg viewBox="0 0 48 48"><path d="M39 18a16 16 0 1 0 2 13"/><path d="M39 8v10H29"/></svg>
             </button>
 
-            <button class="icon-query-btn qr-btn" type="button" onclick="toggleQRScanner()" title="Escanear Código QR">
-              <svg viewBox="0 0 48 48"><path d="M6 6h12v12H6zM30 6h12v12H30zM6 30h12v12H6zM30 36h6v6h-6zM36 36h6v6h-6zM30 36h6v6h-6z"/></svg>
+            <button class="icon-query-btn qr-btn" type="button" onclick="toggleQRScanner()" title="Escanear QR">
+              <svg viewBox="0 0 48 48"><path d="M6 6h12v12H6zM30 6h12v12H6zM30 36h6v6h-6zM36 36h6v6h-6zM30 36h6v6h-6z"/></svg>
             </button>
 
-            <button class="btn-mis-movs" type="button" onclick="cargarMisMovimientosPrioritarios()">👤 MIS MOVIMIENTOS</button>
+            <button class="btn-mis-movs" type="button" onclick="cargarMiCajaDiaria()">👤 MI LIBRO DE CAJA</button>
 
             <div class="btn-print-dropdown" onclick="togglePrintMenu(event)">
               <span>🖨️ IMPRESIONES ▾</span>
@@ -713,7 +709,7 @@ td:last-child {
                 <th style="width:120px;">FECHA Y HORA</th>
                 <th style="width:180px;">ESTUDIANTE / CUENTA</th>
                 <th style="width:75px;">GRADO</th>
-                <th style="width:100px;">TIPO MOV.</th>
+                <th style="width:90px;">TIPO MOV.</th>
                 <th style="width:160px;">CONCEPTO</th>
                 <th style="width:90px;">MONTO LDS</th>
                 <th style="width:130px;">CAJERO(A)</th>
@@ -721,32 +717,32 @@ td:last-child {
               </tr>
             </thead>
             <tbody id="tablaMovimientos">
-              <tr><td colspan="9" class="empty">SELECCIONA UN ALUMNO O MISE PARA CONSULTAR.</td></tr>
+              <tr><td colspan="9" class="empty">CARGANDO REGISTROS DE CAJA...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- PANEL DERECHO: OPERACIONES (PAGOS, PRÉSTAMOS, INCIDENCIAS) -->
+    <!-- PANEL DERECHO: REGISTRO DE PAGOS Y COBROS -->
     <div class="panel">
       <div class="modulos-nav">
-        <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="cambiarModuloOperacion('PAGOS')">💰 PAGOS / COBROS</button>
+        <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="cambiarModuloOperacion('PAGOS')">💰 PAGAR / COBRAR</button>
         <button id="tabPrestamosBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('PRESTAMOS')">🤝 PRÉSTAMOS</button>
         <button id="tabIncidenciasBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('INCIDENCIAS')">⚠️ INCIDENCIAS</button>
       </div>
 
       <!-- MODULO 1: PAGOS Y COBROS -->
       <div id="moduloPagos" class="panel-body">
-        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">ALUMNO SELECCIONADO</label>
-        <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO DESDE LA LISTA" readonly style="background:#f1f5f9;">
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">DESTINATARIO SELECCIONADO</label>
+        <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO O MISE DE LA LISTA" readonly style="background:#f1f5f9;">
 
         <div id="pagoAlumnoCard" class="pago-alumno-card" style="display:none;">
           <div class="pago-alumno-foto-wrap">
             <img id="pagoAlumnoFoto" class="pago-alumno-foto" src="" alt="">
           </div>
           <div class="pago-alumno-datos">
-            <strong id="pagoAlumnoNombre">ALUMNO</strong>
+            <strong id="pagoAlumnoNombre">SELECCIONADO</strong>
             <span id="pagoAlumnoMeta">—</span>
             <b id="pagoAlumnoSaldo">SALDO ACTUAL: 0 LDS</b>
           </div>
@@ -779,16 +775,17 @@ td:last-child {
         <input id="pagoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO">
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN (OPCIONAL)</label>
-        <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO..."></textarea>
+        <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO O AVISO..."></textarea>
 
         <div class="pago-acciones">
-          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarMovimientoAlumno('INGRESO')">
+          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarPagoAEstudiante()">
             <svg viewBox="0 0 48 48"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
-            <span>PAGAR ALUMNO</span>
+            <span>PAGAR ALUMNO (EGRESO)</span>
           </button>
-          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarMovimientoAlumno('EGRESO')">
+
+          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarCobroAEstudiante()">
             <svg viewBox="0 0 48 48"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
-            <span>COBRAR ALUMNO</span>
+            <span>COBRAR ALUMNO (INGRESO)</span>
           </button>
         </div>
         <div id="pagoMensaje" class="message"></div>
@@ -855,7 +852,7 @@ td:last-child {
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 const LOGO_INSIGNIA_URL = "assets/insignia.png";
-const LOGO_FALLBACK = "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE";
+const LOGO_FALLBACK = "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW";
 
 let docenteSeleccionadoGlobal = "";
 let maestraActivaGlobal = "";
@@ -905,9 +902,7 @@ function parseMontoLDS(val) {
   let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim();
   if (str.includes(".") && !str.includes(",")) {
     let partes = str.split(".");
-    if (partes.length > 1 && partes[partes.length - 1].length === 3) {
-      str = str.replace(/\./g, "");
-    }
+    if (partes.length > 1 && partes[partes.length - 1].length === 3) str = str.replace(/\./g, "");
   }
   str = str.replace(/,/g, ".");
   const n = Number(str);
@@ -953,8 +948,7 @@ function llamarAPI(parametros, callback) {
     try { callback(res); } finally { delete window[nombreCallback]; script.remove(); }
   };
   script.onerror = function() {
-    delete window[nombreCallback];
-    script.remove();
+    delete window[nombreCallback]; script.remove();
     callback({ok:false, mensaje:"ERROR DE CONEXIÓN AL SERVIDOR."});
   };
   document.body.appendChild(script);
@@ -1008,9 +1002,7 @@ function desbloquearPanel(nombreMaestra) {
   const fotoUrl = FOTOS_DOCENTES[nombreMaestra] || "";
 
   if (fotoUrl) {
-    fotoEl.src = fotoUrl;
-    fotoEl.style.display = "block";
-    placeholderEl.style.display = "none";
+    fotoEl.src = fotoUrl; fotoEl.style.display = "block"; placeholderEl.style.display = "none";
   }
 
   const codMise = CODIGOS_MISE[nombreMaestra] || "LDS-DOC-001";
@@ -1018,9 +1010,8 @@ function desbloquearPanel(nombreMaestra) {
   document.getElementById("prestamoOrigen").value = nombreMaestra + " (" + codMise + ")";
 
   seleccionarCategoriaPago("PREMIOS_Y_BONIFICACIONES");
-
   cargarEstudiantesDesdeServidor();
-  actualizarPanelAdmin();
+  cargarMiCajaDiaria();
 }
 
 function cargarEstudiantesDesdeServidor(callbackDone) {
@@ -1051,19 +1042,16 @@ function abrirListaCodigos(tipo) {
   const tituloHead = document.getElementById("dropdownTitulo");
 
   if (panel.style.display === "block" && seccionListaActual === tipo) {
-    cerrarListaCodigos();
-    return;
+    cerrarListaCodigos(); return;
   }
 
   seccionListaActual = tipo;
   panel.style.display = "block";
 
   if (tipo === 'ALUMNOS') {
-    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES / ALUMNOS";
+    if (tituloHead) tituloHead.textContent = "🎓 DIRECTORIO DE ESTUDIANTES";
     renderListaAlumnosDirecta();
-    cargarEstudiantesDesdeServidor(function() {
-      renderListaAlumnosDirecta();
-    });
+    cargarEstudiantesDesdeServidor(function() { renderListaAlumnosDirecta(); });
   } else if (tipo === 'MISES') {
     if (tituloHead) tituloHead.textContent = "👩‍🏫 DIRECTORIO DE MISES Y DIRECCIÓN";
     renderListaMisesDirecta();
@@ -1080,7 +1068,7 @@ function renderListaAlumnosDirecta() {
   const cont = document.getElementById("listaAlumnosItems");
   const alumnos = listaEstudiantesGoogleSheets.length ? listaEstudiantesGoogleSheets : Object.keys(MAPA_USUARIOS).filter(k => k.startsWith("LDS-EST-")).map(k => ({ codigo: k, ...MAPA_USUARIOS[k] }));
 
-  let html = `<div style="background:#0c1e30; color:#f59e0b; padding:8px 10px; font-weight:800; font-size:11px;">🎓 ALUMNOS REGISTRADOS EN GOOGLE SHEETS (${alumnos.length})</div>`;
+  let html = `<div style="background:#0c1e30; color:#f59e0b; padding:6px 10px; font-weight:800; font-size:10px;">🎓 ALUMNOS REGISTRADOS EN GOOGLE SHEETS (${alumnos.length})</div>`;
 
   if (!alumnos.length) {
     html += '<div style="padding:15px; text-align:center; font-weight:800;">CARGANDO DESDE GOOGLE SHEETS...</div>';
@@ -1090,17 +1078,19 @@ function renderListaAlumnosDirecta() {
       const nom = est.nombreCompleto || est.nombre || cod;
       const foto = convertDriveUrl(est.fotoUrl || est.foto) || obtenerFotoUsuario(cod);
       const gradoText = est.grado ? (est.grado + " " + (est.seccion || "")) : "ALUMNO";
-
-      const fotoTag = foto ? `<img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:26px; height:26px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:12px;">👤</div>`;
+      const fotoTag = foto ? `<img src="${foto}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:24px; height:24px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:10px;">👤</div>`;
 
       html += `
-        <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+        <div class="header-list-row">
           <span>${i + 1}</span>
           ${fotoTag}
           <span style="font-weight:900; color:#1d4ed8;">${cod}</span>
-          <span style="font-weight:800; color:#0f172a;">${nom}</span>
+          <span style="font-weight:800; color:#0f172a; overflow:hidden; text-overflow:ellipsis;">${nom}</span>
           <span style="font-weight:700; color:#475569;">${gradoText}</span>
-          <span style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+          <div style="display:flex; gap:4px;">
+            <button type="button" class="btn-opt-list sel" onclick="seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
+            <button type="button" class="btn-opt-list mov" onclick="verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
+          </div>
         </div>
       `;
     });
@@ -1112,39 +1102,65 @@ function renderListaMisesDirecta() {
   const cont = document.getElementById("listaAlumnosItems");
   const docentes = ["LDS-DOC-001", "LDS-DOC-002", "LDS-DOC-003", "LDS-DOC-004", "LDS-DOC-005"];
 
-  let html = `<div style="background:#0c1e30; color:#f59e0b; padding:8px 10px; font-weight:800; font-size:11px;">👩‍🏫 MISES Y DIRECCIÓN (${docentes.length})</div>`;
+  let html = `<div style="background:#0c1e30; color:#f59e0b; padding:6px 10px; font-weight:800; font-size:10px;">👩‍🏫 MISES Y DIRECCIÓN (${docentes.length})</div>`;
 
   docentes.forEach((cod, i) => {
     const item = MAPA_USUARIOS[cod] || { nombre: cod, rol: "DOCENTE" };
     const foto = obtenerFotoUsuario(cod);
-    const fotoTag = foto ? `<img src="${foto}" style="width:26px; height:26px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:26px; height:26px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:12px;">👩‍🏫</div>`;
+    const fotoTag = foto ? `<img src="${foto}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1px solid #f59e0b;">` : `<div style="width:24px; height:24px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:10px;">👩‍🏫</div>`;
 
     html += `
-      <div class="header-list-row" onclick="seleccionarAlumnoLista('${cod}')">
+      <div class="header-list-row">
         <span>${i + 1}</span>
         ${fotoTag}
         <span style="font-weight:900; color:#1d4ed8;">${cod}</span>
-        <span style="font-weight:800; color:#0f172a;">${item.nombre}</span>
+        <span style="font-weight:800; color:#0f172a; overflow:hidden; text-overflow:ellipsis;">${item.nombre}</span>
         <span style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
-        <span style="color:var(--azul-claro); font-weight:900;">SELECCIONAR</span>
+        <div style="display:flex; gap:4px;">
+          <button type="button" class="btn-opt-list sel" onclick="seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
+          <button type="button" class="btn-opt-list mov" onclick="verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
+        </div>
       </div>
     `;
   });
   cont.innerHTML = html;
 }
 
-function seleccionarAlumnoLista(cod) {
+function seleccionarParaOperar(cod) {
   cerrarListaCodigos();
-  document.getElementById("codigo").value = cod;
-  document.getElementById("tituloTablaMovs").textContent = "📋 CONSULTA Y ESTADO DE CUENTA (" + cod + ")";
-  consultarEstudiante();
+  const anio = document.getElementById("selectAnioEscolar").value;
+  const info = MAPA_USUARIOS[cod] || { nombre: cod, foto: "" };
+
+  document.getElementById("pagoCodigo").value = cod;
+  document.getElementById("pagoAlumnoNombre").textContent = info.nombre;
+  document.getElementById("pagoAlumnoMeta").textContent = cod + " · AÑO " + anio;
+  document.getElementById("incidenciaAlumno").value = info.nombre + " (" + cod + ")";
+
+  const fotoEst = obtenerFotoUsuario(cod);
+  const imgWrap = document.querySelector(".pago-alumno-foto-wrap");
+
+  if (fotoEst) {
+    imgWrap.innerHTML = `<img id="pagoAlumnoFoto" class="pago-alumno-foto" src="${fotoEst}">`;
+  } else {
+    imgWrap.innerHTML = `<div style="font-size:26px;">👤</div>`;
+  }
+
+  document.getElementById("pagoAlumnoCard").style.display = "flex";
 }
 
-function cargarMisMovimientosPrioritarios() {
+function verMovimientosUsuario(cod) {
+  cerrarListaCodigos();
+  document.getElementById("codigo").value = cod;
+  const usuarioInfo = MAPA_USUARIOS[cod] || { nombre: cod };
+  document.getElementById("tituloTablaMovs").textContent = "👁️ MOVIMIENTOS DE: " + usuarioInfo.nombre + " (" + cod + ")";
+  actualizarPanelAdmin();
+}
+
+function cargarMiCajaDiaria() {
   const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
   const codMise = CODIGOS_MISE[responsable] || "LDS-DOC-001";
   document.getElementById("codigo").value = codMise;
-  document.getElementById("tituloTablaMovs").textContent = "📋 CONSULTA Y ESTADO DE CUENTA (" + responsable + ")";
+  document.getElementById("tituloTablaMovs").textContent = "📋 LIBRO DIARIO DE CAJA (MIS MOVIMIENTOS)";
   actualizarPanelAdmin();
 }
 
@@ -1160,7 +1176,7 @@ function cambiarModuloOperacion(modulo) {
 
 function actualizarPanelAdmin() {
   const msg = document.getElementById("mensaje");
-  msg.textContent = "🔄 CARGANDO DATOS DE GOOGLE SHEETS...";
+  msg.textContent = "🔄 SINCRONIZANDO CON GOOGLE SHEETS...";
   msg.className = "message ok";
 
   const responsable = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
@@ -1177,67 +1193,24 @@ function actualizarPanelAdmin() {
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
-      if (res.estudiante) {
-        const est = res.estudiante;
-        if (!MAPA_USUARIOS[est.codigo]) {
-          MAPA_USUARIOS[est.codigo] = {
-            nombre: (est.nombreCompleto || est.nombre).toUpperCase(),
-            rol: est.rol || "ALUMNO",
-            foto: convertDriveUrl(est.fotoUrl || est.foto)
-          };
-        }
-      }
-
       renderTablaMovimientos(todosLosMovimientosGlobales);
 
-      msg.textContent = "✅ DATOS SINCRONIZADOS CORRECTAMENTE CON GOOGLE SHEETS.";
+      msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO.";
       msg.className = "message ok";
     } else {
-      msg.textContent = "⚠️ " + ((res && res.mensaje) || "NO SE PUDIERON CARGAR LOS DATOS.");
+      msg.textContent = "⚠️ " + ((res && res.mensaje) || "ERROR AL CONSULTAR REGISTROS.");
       msg.className = "message error";
     }
   });
 }
 
-function consultarEstudiante() {
-  const cod = document.getElementById("codigo").value.trim().toUpperCase();
-  const anio = document.getElementById("selectAnioEscolar").value;
-
-  if (cod.startsWith("LDS-EST-")) {
-    const info = MAPA_USUARIOS[cod] || { nombre: cod, foto: "" };
-
-    document.getElementById("pagoCodigo").value = cod;
-    document.getElementById("pagoAlumnoNombre").textContent = info.nombre;
-    document.getElementById("pagoAlumnoMeta").textContent = cod + " · AÑO " + anio;
-    document.getElementById("incidenciaAlumno").value = info.nombre + " (" + cod + ")";
-
-    const fotoEst = obtenerFotoUsuario(cod);
-    const imgWrap = document.querySelector(".pago-alumno-foto-wrap");
-
-    if (fotoEst) {
-      imgWrap.innerHTML = `<img id="pagoAlumnoFoto" class="pago-alumno-foto" src="${fotoEst}">`;
-    } else {
-      imgWrap.innerHTML = `<div style="font-size:26px;">👤</div>`;
-    }
-
-    document.getElementById("pagoAlumnoCard").style.display = "flex";
-  } else {
-    document.getElementById("pagoAlumnoCard").style.display = "none";
-    document.getElementById("incidenciaAlumno").value = "";
-  }
-
-  actualizarPanelAdmin();
-}
-
 function desglosarFechaHora(fStr) {
   if (!fStr) return { fecha: "-", hora: "-" };
   let s = String(fStr).trim();
-
   if (s.includes(" ")) {
     let partes = s.split(" ");
     return { fecha: partes[0], hora: partes.slice(1).join(" ") };
   }
-
   return { fecha: s, hora: "" };
 }
 
@@ -1253,15 +1226,16 @@ function renderTablaMovimientos(lista) {
   tbody.innerHTML = "";
 
   if (!lista || !lista.length) {
-    tbody.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS EN ESTA CUENTA.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS REGISTRADOS.</td></tr>';
     return;
   }
 
   lista.forEach(m => {
     const tr = document.createElement("tr");
     const montoVal = parseMontoLDS(m.monto);
-    const tipoVal = String(m.tipo || "INGRESO").toUpperCase();
-    const esEgreso = tipoVal.includes("EGRESO");
+    const tipoVal = String(m.tipo || "EGRESO").toUpperCase();
+    const esEgreso = (tipoVal === "EGRESO");
+    const esAviso = (tipoVal === "RECORDATORIO");
 
     const rawFecha = m.fechaTexto || m.fecha || "";
     const anioVal = extraerAnio(rawFecha);
@@ -1272,6 +1246,10 @@ function renderTablaMovimientos(lista) {
       obsVal = obsVal.replace(/BOTON\s*\|\s*ID_OPERACION=[^\s]+/gi, "").trim();
     }
 
+    let badgeClass = "badge-ingreso";
+    if (esEgreso) badgeClass = "badge-egreso";
+    if (esAviso) badgeClass = "badge-aviso";
+
     tr.innerHTML = `
       <td><strong>${anioVal}</strong></td>
       <td class="td-fecha-hora">
@@ -1280,7 +1258,7 @@ function renderTablaMovimientos(lista) {
       </td>
       <td><strong>${m.estudiante || m.codigo || '-'}</strong></td>
       <td>${m.grado || 'AULA'}</td>
-      <td><span class="${esEgreso ? 'badge-egreso' : 'badge-ingreso'}">${tipoVal}</span></td>
+      <td><span class="${badgeClass}">${tipoVal}</span></td>
       <td>${m.concepto || '-'}</td>
       <td><strong>${formatearLDS(montoVal)}</strong></td>
       <td>${m.responsable || 'SISTEMA'}</td>
@@ -1309,7 +1287,8 @@ function seleccionarCategoriaPago(cat) {
   if (conceptos.length) selectConc.value = conceptos[0];
 }
 
-function procesarMovimientoAlumno(tipoOperacion) {
+// 1. PAGAR AL ALUMNO (Descuenta de tu caja -> EGRESO)
+function procesarPagoAEstudiante() {
   const alumnoCod = document.getElementById("pagoCodigo").value.trim();
   const concepto = document.getElementById("pagoConcepto").value;
   const monto = Number(document.getElementById("pagoMonto").value) || 0;
@@ -1319,17 +1298,17 @@ function procesarMovimientoAlumno(tipoOperacion) {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const responsableCompleto = responsableNom + " (" + codMise + ")";
 
-  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DESDE LA LISTA."; msg.className = "message error"; return; }
+  if (!alumnoCod) { msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; msg.className = "message error"; return; }
   if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
   if (!concepto) { msg.textContent = "SELECCIONA UN CONCEPTO."; msg.className = "message error"; return; }
 
-  msg.textContent = "REGISTRANDO TRANSACCIÓN...";
+  msg.textContent = "REGISTRANDO PAGO EN SU LIBRO DE CAJA...";
   msg.className = "message ok";
 
   llamarAPI({
     accion: "REGISTRARMOVIMIENTO",
     codigo: alumnoCod,
-    tipo: tipoOperacion,
+    tipo: "EGRESO",
     concepto: concepto,
     monto: monto,
     responsable: responsableCompleto,
@@ -1337,13 +1316,54 @@ function procesarMovimientoAlumno(tipoOperacion) {
     categoria: "2026"
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡TRANSACCIÓN REGISTRADA CON ÉXITO EN GOOGLE SHEETS!";
+      msg.textContent = "¡PAGO REGISTRADO CON ÉXITO COMO EGRESO!";
       msg.className = "message ok";
       document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
-      actualizarPanelAdmin();
+      cargarMiCajaDiaria();
     } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR TRANSACCIÓN.";
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL PAGO.";
+      msg.className = "message error";
+    }
+  });
+}
+
+// 2. COBRAR AL ALUMNO (Suma a tu caja -> INGRESO A FAVOR)
+function procesarCobroAEstudiante() {
+  const alumnoCod = document.getElementById("pagoCodigo").value.trim();
+  const concepto = document.getElementById("pagoConcepto").value;
+  const monto = Number(document.getElementById("pagoMonto").value) || 0;
+  const obs = document.getElementById("pagoObs").value.trim();
+  const msg = document.getElementById("pagoMensaje");
+  const responsableNom = sessionStorage.getItem("maestraActiva") || maestraActivaGlobal;
+  const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
+  const responsableCompleto = responsableNom + " (" + codMise + ")";
+
+  if (!alumnoCod) { msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; msg.className = "message error"; return; }
+  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
+  if (!concepto) { msg.textContent = "SELECCIONA UN CONCEPTO."; msg.className = "message error"; return; }
+
+  msg.textContent = "REGISTRANDO COBRO A FAVOR EN SU LIBRO DE CAJA...";
+  msg.className = "message ok";
+
+  llamarAPI({
+    accion: "REGISTRARMOVIMIENTO",
+    codigo: alumnoCod,
+    tipo: "COBRO",
+    concepto: concepto,
+    monto: monto,
+    responsable: responsableCompleto,
+    observacion: obs,
+    categoria: "2026"
+  }, function(res) {
+    if (res && res.ok) {
+      msg.textContent = "¡COBRO REGISTRADO CON ÉXITO COMO INGRESO A SU FAVOR!";
+      msg.className = "message ok";
+      document.getElementById("pagoMonto").value = "";
+      document.getElementById("pagoObs").value = "";
+      cargarMiCajaDiaria();
+    } else {
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL COBRO.";
       msg.className = "message error";
     }
   });
@@ -1366,19 +1386,16 @@ function procesarPrestamoCaja() {
 
   llamarAPI({
     accion: "REGISTRAR_PRESTAMO",
-    origen: origen,
-    destino: destino,
-    monto: monto,
-    observacion: obs
+    origen: origen, destino: destino, monto: monto, observacion: obs
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡PRÉSTAMO REGISTRADO CON ÉXITO EN GOOGLE SHEETS!";
+      msg.textContent = "¡PRÉSTAMO REGISTRADO CON ÉXITO!";
       msg.className = "message ok";
       document.getElementById("prestamoMonto").value = "";
       document.getElementById("prestamoObs").value = "";
-      actualizarPanelAdmin();
+      cargarMiCajaDiaria();
     } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL PRÉSTAMO.";
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR PRÉSTAMO.";
       msg.className = "message error";
     }
   });
@@ -1394,27 +1411,23 @@ function procesarIncidenciaAlumno() {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const responsableCompleto = responsableNom + " (" + codMise + ")";
 
-  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DESDE LA LISTA."; msg.className = "message error"; return; }
+  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DE LA LISTA."; msg.className = "message error"; return; }
 
-  msg.textContent = "REGISTRANDO INCIDENCIA Y APLICANDO SANCIÓN...";
+  msg.textContent = "REGISTRANDO INCIDENCIA...";
   msg.className = "message ok";
 
   llamarAPI({
     accion: "REGISTRAR_INCIDENCIA",
-    codigo: alumnoCod,
-    falta: falta,
-    monto: monto,
-    responsable: responsableCompleto,
-    observacion: obs
+    codigo: alumnoCod, falta: falta, monto: monto, responsable: responsableCompleto, observacion: obs
   }, function(res) {
     if (res && res.ok) {
       msg.textContent = "¡INCIDENCIA Y MULTA REGISTRADA CON ÉXITO!";
       msg.className = "message ok";
       document.getElementById("incidenciaMonto").value = "";
       document.getElementById("incidenciaObs").value = "";
-      actualizarPanelAdmin();
+      cargarMiCajaDiaria();
     } else {
-      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR LA INCIDENCIA.";
+      msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR INCIDENCIA.";
       msg.className = "message error";
     }
   });
@@ -1424,9 +1437,7 @@ function toggleQRScanner() {
   const container = document.getElementById("qrScannerContainer");
   if (container.style.display === "block") {
     container.style.display = "none";
-    if (html5QrCodeScanner) {
-      html5QrCodeScanner.stop().catch(() => {});
-    }
+    if (html5QrCodeScanner) html5QrCodeScanner.stop().catch(() => {});
   } else {
     container.style.display = "block";
     html5QrCodeScanner = new Html5Qrcode("qrReader");
@@ -1435,14 +1446,11 @@ function toggleQRScanner() {
       { fps: 10, qrbox: { width: 250, height: 250 } },
       (decodedText) => {
         let code = decodedText.trim().toUpperCase();
-        document.getElementById("codigo").value = code;
-        consultarEstudiante();
+        seleccionarParaOperar(code);
         toggleQRScanner();
       },
       () => {}
-    ).catch(err => {
-      alert("No se pudo iniciar la cámara para el escáner QR: " + err);
-    });
+    ).catch(err => { alert("No se pudo iniciar la cámara: " + err); });
   }
 }
 
@@ -1472,7 +1480,7 @@ function imprimirEstadoCuentaIndividual() {
     filasHtml += `
       <tr>
         <td>${dt.fecha} ${dt.hora}</td>
-        <td>${m.tipo || 'INGRESO'}</td>
+        <td>${m.tipo || 'EGRESO'}</td>
         <td>${m.concepto || '-'}</td>
         <td><strong>${formatearLDS(m.monto)}</strong></td>
         <td>${m.responsable || 'SISTEMA'}</td>
@@ -1483,11 +1491,11 @@ function imprimirEstadoCuentaIndividual() {
 
   cont.innerHTML = `
     <div class="print-header">
-      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
+      <div style="width:75px; height:75px;"></div>
       <div class="print-title">
         <h1>I.E.P. LA SALLE DEL SUR</h1>
         <h2>BANCO LASALLISTA 360</h2>
-        <p>REPORTE DE ESTADO DE CUENTA INDIVIDUAL — AÑO ESCOLAR 2026</p>
+        <p>REPORTE DE ESTADO DE CUENTA — AÑO ESCOLAR 2026</p>
       </div>
       <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
     </div>
@@ -1496,8 +1504,8 @@ function imprimirEstadoCuentaIndividual() {
       ${imgTag}
       <div>
         <h3 style="margin:0; font-size:14px; color:#0c1e30;">${usuarioInfo.nombre}</h3>
-        <p style="margin:2px 0; font-size:11px;">CÓDIGO DE CUENTA: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'ALUMNO'}</strong></p>
-        <p style="margin:0; font-size:11px; color:#15803d;">SALDO ACTUAL: <strong>${document.getElementById("pagoAlumnoSaldo").textContent || '0 LDS'}</strong></p>
+        <p style="margin:2px 0; font-size:11px;">CÓDIGO: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'DOCENTE'}</strong></p>
+        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '15.000 LDS'}</strong></p>
       </div>
     </div>
 
@@ -1551,7 +1559,7 @@ function imprimirConsolidadoGrupal() {
 
   cont.innerHTML = `
     <div class="print-header">
-      <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
+      <div style="width:75px; height:75px;"></div>
       <div class="print-title">
         <h1>I.E.P. LA SALLE DEL SUR</h1>
         <h2>BANCO LASALLISTA 360</h2>
