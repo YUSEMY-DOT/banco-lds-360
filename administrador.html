@@ -575,7 +575,6 @@ td:last-child {
   </div>
 </header>
 
-<!-- LOGIN -->
 <div id="loginView" class="login-wrapper">
   <div class="login-card">
     <div class="card-insignia-container">
@@ -623,7 +622,6 @@ td:last-child {
   </div>
 </div>
 
-<!-- PANEL PRINCIPAL MAESTRA -->
 <main id="panelView">
   <div class="admin-profile-banner">
     <div class="admin-profile-info">
@@ -645,7 +643,6 @@ td:last-child {
   </div>
 
   <section class="layout">
-    <!-- PANEL IZQUIERDO: LIBRO DE CAJA Y CONSULTAS -->
     <div class="panel">
       <div class="panel-head">
         <h3 id="tituloTablaMovs">📋 LIBRO DIARIO DE CAJA (MIS MOVIMIENTOS)</h3>
@@ -724,7 +721,6 @@ td:last-child {
       </div>
     </div>
 
-    <!-- PANEL DERECHO: REGISTRO DE PAGOS Y COBROS -->
     <div class="panel">
       <div class="modulos-nav">
         <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="cambiarModuloOperacion('PAGOS')">💰 PAGAR / COBRAR</button>
@@ -732,7 +728,6 @@ td:last-child {
         <button id="tabIncidenciasBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('INCIDENCIAS')">⚠️ INCIDENCIAS</button>
       </div>
 
-      <!-- MODULO 1: PAGOS Y COBROS -->
       <div id="moduloPagos" class="panel-body">
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">DESTINATARIO SELECCIONADO</label>
         <input id="pagoCodigo" placeholder="SELECCIONA UN ALUMNO O MISE DE LA LISTA" readonly style="background:#f1f5f9;">
@@ -767,12 +762,12 @@ td:last-child {
         </select>
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CONCEPTO</label>
-        <select id="pagoConcepto">
+        <select id="pagoConcepto" onchange="alCambiarConceptoPago()">
           <option value="">SELECCIONA EL CONCEPTO</option>
         </select>
 
-        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO LDS</label>
-        <input id="pagoMonto" type="number" step="1" min="0" placeholder="INGRESA EL MONTO">
+        <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO LDS (TARIFA AUTOMÁTICA)</label>
+        <input id="pagoMonto" type="number" step="1" min="0" placeholder="MONTO EN LDS">
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN (OPCIONAL)</label>
         <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO O AVISO..."></textarea>
@@ -791,7 +786,6 @@ td:last-child {
         <div id="pagoMensaje" class="message"></div>
       </div>
 
-      <!-- MODULO 2: PRÉSTAMOS -->
       <div id="moduloPrestamos" class="panel-body" style="display:none;">
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">CUENTA ORIGEN (MISE / GERENCIA)</label>
         <input id="prestamoOrigen" readonly style="background:#f1f5f9;">
@@ -816,21 +810,26 @@ td:last-child {
         <div id="prestamoMensaje" class="message"></div>
       </div>
 
-      <!-- MODULO 3: INCIDENCIAS -->
       <div id="moduloIncidencias" class="panel-body" style="display:none;">
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">ALUMNO CON INCIDENCIA</label>
         <input id="incidenciaAlumno" placeholder="SELECCIONA UN ALUMNO DE LA LISTA" readonly style="background:#f1f5f9;">
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">TIPO DE FALTA / INCIDENCIA</label>
-        <select id="incidenciaFalta">
-          <option value="Multa por llevar mal el uniforme o incompleto">Multa por llevar mal el uniforme o incompleto</option>
-          <option value="Incumplimiento de tareas o asignaciones a tiempo">Incumplimiento de tareas o asignaciones a tiempo</option>
-          <option value="Llegada tarde al aula o formación">Llegada tarde al aula o formación</option>
-          <option value="Uso no autorizado de dispositivos electrónicos en clase">Uso no autorizado de dispositivos electrónicos en clase</option>
-          <option value="Desorden o indisciplina leve durante las horas de clase">Desorden o indisciplina leve durante las horas de clase</option>
-          <option value="Falta de respeto o modales con compañeros o docentes">Falta de respeto o modales con compañeros o docentes</option>
-          <option value="Basura fuera de su lugar / No respetar áreas verdes">Basura fuera de su lugar / No respetar áreas verdes</option>
-          <option value="Faltar a la verdad">Faltar a la verdad</option>
+        <select id="incidenciaFalta" onchange="alCambiarIncidenciaFalta()">
+          <option value="Multa por llevar mal el uniforme o incompleto">Multa por llevar mal el uniforme o incompleto (150 LDS)</option>
+          <option value="Incumplimiento de tareas o asignaciones a tiempo">Incumplimiento de tareas o asignaciones a tiempo (200 LDS)</option>
+          <option value="Llegada tarde al aula o formación">Llegada tarde al aula o formación (120 LDS)</option>
+          <option value="Uso no autorizado de dispositivos electrónicos en clase">Uso no autorizado de dispositivos electrónicos en clase (200 LDS)</option>
+          <option value="Desorden o indisciplina leve durante las horas de clase">Desorden o indisciplina leve durante las horas de clase (200 LDS)</option>
+          <option value="Falta de respeto o modales con compañeros o docentes">Falta de respeto o modales con compañeros o docentes (200 LDS)</option>
+          <option value="No traer el material escolar requerido para la sesión">No traer el material escolar requerido para la sesión (250 LDS)</option>
+          <option value="Descuido o daño leve al mobiliario o infraestructura del aula">Descuido o daño leve al mobiliario o infraestructura del aula (300 LDS)</option>
+          <option value="Basura fuera de su lugar / No respetar áreas verdes o comunes">Basura fuera de su lugar / No respetar áreas verdes o comunes (120 LDS)</option>
+          <option value="Inasistencia injustificada a reuniones o actividades obligatorias">Inasistencia injustificada a reuniones o actividades obligatorias (300 LDS)</option>
+          <option value="No ponerse al día en sus pendientes o cuadernos">No ponerse al día en sus pendientes o cuadernos (300 LDS)</option>
+          <option value="Malograr los cuadernos u objetos personales del compañero">Malograr los cuadernos u objetos personales del compañero (350 LDS)</option>
+          <option value="Faltar a la verdad">Faltar a la verdad (500 LDS)</option>
+          <option value="Llevarse objetos del compañero y/o institución">Llevarse objetos del compañero y/o institución (1000 LDS)</option>
         </select>
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">MONTO DE LA MULTA (LDS)</label>
@@ -845,7 +844,6 @@ td:last-child {
     </div>
   </section>
 
-  <!-- CONTENEDOR OCULTO PARA IMPRESIÓN -->
   <div id="contenedorImpresion"></div>
 </main>
 
@@ -888,12 +886,67 @@ let MAPA_USUARIOS = {
 };
 
 let CATALOGO_EXCEL = {
-  "INGRESOS_Y_SUELDOS": ["Ingreso Sueldo Base Mensual", "Ingreso Sueldo por Rol de Liderazgo", "Ingreso Bono por desempeño"],
-  "PREMIOS_Y_BONIFICACIONES": ["Bono por llevar el uniforme impecable y reglamentario", "Bono Participación destacada en clase", "Bono Premio por primer lugar en concurso académico o deportivo", "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)", "Bono Apoyo destacado en limpieza, orden o ecología del aula", "Bono por ayuda solidaria / Compañerismo destacado", "Bono Creatividad e innovación en proyectos escolares", "Bono Representar dignamente al colegio en eventos externos", "Bono Leer un libro de acuerdo a su edad y presentar evidencia", "Bono Completar un reto educativo", "Bono Llegar antes de la hora", "Bono Participar en Escuela para Padres junto a su familia", "Bono Ser responsable con sus materiales", "Bono Ayudar a mantener limpia el aula"],
-  "AHORROS_E_INVERSIONES": ["Depósito a cuenta de ahorros (Ahorro voluntario)", "Inversión en fondo común del aula / cooperativa", "Retiro de ahorros (Emergencia o meta cumplida)"],
-  "PAGOS_Y_GASTOS": ["Pago Compra en la tienda escolar / cafetín", "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", "Pago de servicios del aula: Agua", "Pago de servicios del aula: Energía", "pago por Compra de material escolar de emergencia", "Gasto médico imprevisto menor", "Alquiler de libros de la biblioteca o material didáctico", "Pago por custodia de equipos tecnológicos", "Pago por copias extras", "Comprar stickers", "Pagar para una actividad extra", "Pagar por jugar 10 minutos más"],
-  "SANCIONES_Y_MULTAS": ["Multa por llevar mal el uniforme o incompleto", "Incumplimiento de tareas o asignaciones a tiempo", "Llegada tarde al aula o formación", "Uso no autorizado de dispositivos electrónicos en clase", "Desorden o indisciplina leve durante las horas de clase", "Falta de respeto o modales con compañeros o docentes", "No traer el material escolar requerido para la sesión", "Descuido o daño leve al mobiliario o infraestructura del aula", "Basura fuera de su lugar / No respetar áreas verdes o comunes", "Inasistencia injustificada a reuniones o actividades obligatorias", "No ponerse al día en sus pendientes o cuadernos", "Malograr los cuadernos u objetos personales del compañero", "Faltar a la verdad", "Llevarse objetos del compañero y/o institucion"],
-  "COSTOS_Y_OTROS": ["Impuesto escolar mensual por uso de instalaciones", "Cuota extraordinaria de mantenimiento grupal", "Transacción personalizada / Ajuste de caja"]
+  "INGRESOS_Y_SUELDOS": [
+    { concepto: "Ingreso Sueldo Base Mensual", monto: 1130 },
+    { concepto: "Ingreso Sueldo por Rol de Liderazgo", monto: 150 },
+    { concepto: "Ingreso Bono por desempeño", monto: 50 }
+  ],
+  "PREMIOS_Y_BONIFICACIONES": [
+    { concepto: "Bono por llevar el uniforme impecable y reglamentario", monto: 50 },
+    { concepto: "Bono Participación destacada en clase", monto: 50 },
+    { concepto: "Bono Premio por primer lugar en concurso académico o deportivo", monto: 200 },
+    { concepto: "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)", monto: 200 },
+    { concepto: "Bono Apoyo destacado en limpieza, orden o ecología del aula", monto: 100 },
+    { concepto: "Bono por ayuda solidaria / Compañerismo destacado", monto: 50 },
+    { concepto: "Bono Creatividad e innovación en proyectos escolares", monto: 200 },
+    { concepto: "Bono Representar dignamente al colegio en eventos externos", monto: 100 },
+    { concepto: "Bono Leer un libro y presentar evidencia de 20 preguntas y respuestas", monto: 500 },
+    { concepto: "Bono Completar un reto educativo", monto: 200 },
+    { concepto: "Bono Llegar puntual al refrigerio", monto: 50 },
+    { concepto: "Bono Participar en Escuela para Padres junto a su familia", monto: 700 },
+    { concepto: "Bono Ser responsable con sus materiales", monto: 50 },
+    { concepto: "Bono Ayudar a mantener limpia el aula", monto: 100 }
+  ],
+  "AHORROS_E_INVERSIONES": [
+    { concepto: "Depósito a cuenta de ahorros (Ahorro voluntario)", monto: 10 },
+    { concepto: "Inversión en fondo común del aula / cooperativa", monto: 50 },
+    { concepto: "Retiro de ahorros (Emergencia o meta cumplida)", monto: 20 }
+  ],
+  "PAGOS_Y_GASTOS": [
+    { concepto: "Pago Compra en la tienda escolar / cafetín", monto: 30 },
+    { concepto: "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", monto: 20 },
+    { concepto: "Pago de servicios del aula: Agua", monto: 20 },
+    { concepto: "Pago de servicios del aula: Energía", monto: 20 },
+    { concepto: "Pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)", monto: 50 },
+    { concepto: "Gasto médico imprevisto menor (Botiquín escolar / Curitas)", monto: 40 },
+    { concepto: "Alquiler de libros de la biblioteca o material didáctico", monto: 20 },
+    { concepto: "Pago por custodia de equipos tecnológicos", monto: 50 },
+    { concepto: "Pago por copias extras", monto: 100 },
+    { concepto: "Comprar stickers", monto: 20 },
+    { concepto: "Pagar para una actividad extra", monto: 100 },
+    { concepto: "Pagar por jugar 10 minutos más", monto: 150 }
+  ],
+  "SANCIONES_Y_MULTAS": [
+    { concepto: "Multa por llevar mal el uniforme o incompleto", monto: 150 },
+    { concepto: "Incumplimiento de tareas o asignaciones a tiempo", monto: 200 },
+    { concepto: "Llegada tarde al aula o formación", monto: 120 },
+    { concepto: "Uso no autorizado de dispositivos electrónicos en clase", monto: 200 },
+    { concepto: "Desorden o indisciplina leve durante las horas de clase", monto: 200 },
+    { concepto: "Falta de respeto o modales con compañeros o docentes", monto: 200 },
+    { concepto: "No traer el material escolar requerido para la sesión", monto: 250 },
+    { concepto: "Descuido o daño leve al mobiliario o infraestructura del aula", monto: 300 },
+    { concepto: "Basura fuera de su lugar / No respetar áreas verdes o comunes", monto: 120 },
+    { concepto: "Inasistencia injustificada a reuniones o actividades obligatorias", monto: 300 },
+    { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
+    { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
+    { concepto: "Faltar a la verdad", monto: 500 },
+    { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
+  ],
+  "COSTOS_Y_OTROS": [
+    { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
+    { concepto: "Cuota extraordinaria de mantenimiento grupal", monto: 100 },
+    { concepto: "Transacción personalizada / Ajuste de caja", monto: 10 }
+  ]
 };
 
 function parseMontoLDS(val) {
@@ -1172,6 +1225,10 @@ function cambiarModuloOperacion(modulo) {
   document.getElementById("tabPagosBtn").classList.toggle("active", modulo === 'PAGOS');
   document.getElementById("tabPrestamosBtn").classList.toggle("active", modulo === 'PRESTAMOS');
   document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS');
+
+  if (modulo === 'INCIDENCIAS') {
+    alCambiarIncidenciaFalta();
+  }
 }
 
 function actualizarPanelAdmin() {
@@ -1280,14 +1337,44 @@ function seleccionarCategoriaPago(cat) {
   const conceptos = CATALOGO_EXCEL[cat] || [];
   conceptos.forEach(c => {
     const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c.toUpperCase();
+    opt.value = c.concepto;
+    opt.textContent = c.concepto.toUpperCase();
     selectConc.appendChild(opt);
   });
-  if (conceptos.length) selectConc.value = conceptos[0];
+
+  if (conceptos.length) {
+    selectConc.value = conceptos[0].concepto;
+    alCambiarConceptoPago();
+  } else {
+    document.getElementById("pagoMonto").value = "";
+  }
 }
 
-// 1. PAGAR AL ALUMNO (Descuenta de tu caja -> EGRESO)
+function alCambiarConceptoPago() {
+  const cat = document.getElementById("pagoCategoria").value || "PREMIOS_Y_BONIFICACIONES";
+  const conSel = document.getElementById("pagoConcepto").value;
+  const conceptos = CATALOGO_EXCEL[cat] || [];
+
+  const encontrado = conceptos.find(item => item.concepto === conSel);
+  if (encontrado) {
+    document.getElementById("pagoMonto").value = encontrado.monto;
+  } else {
+    document.getElementById("pagoMonto").value = "";
+  }
+}
+
+function alCambiarIncidenciaFalta() {
+  const faltaSel = document.getElementById("incidenciaFalta").value;
+  const faltas = CATALOGO_EXCEL["SANCIONES_Y_MULTAS"] || [];
+
+  const encontrado = faltas.find(item => item.concepto === faltaSel);
+  if (encontrado) {
+    document.getElementById("incidenciaMonto").value = encontrado.monto;
+  } else {
+    document.getElementById("incidenciaMonto").value = "";
+  }
+}
+
 function procesarPagoAEstudiante() {
   const alumnoCod = document.getElementById("pagoCodigo").value.trim();
   const concepto = document.getElementById("pagoConcepto").value;
@@ -1318,7 +1405,6 @@ function procesarPagoAEstudiante() {
     if (res && res.ok) {
       msg.textContent = "¡PAGO REGISTRADO CON ÉXITO COMO EGRESO!";
       msg.className = "message ok";
-      document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       cargarMiCajaDiaria();
     } else {
@@ -1328,7 +1414,6 @@ function procesarPagoAEstudiante() {
   });
 }
 
-// 2. COBRAR AL ALUMNO (Suma a tu caja -> INGRESO A FAVOR)
 function procesarCobroAEstudiante() {
   const alumnoCod = document.getElementById("pagoCodigo").value.trim();
   const concepto = document.getElementById("pagoConcepto").value;
@@ -1359,7 +1444,6 @@ function procesarCobroAEstudiante() {
     if (res && res.ok) {
       msg.textContent = "¡COBRO REGISTRADO CON ÉXITO COMO INGRESO A SU FAVOR!";
       msg.className = "message ok";
-      document.getElementById("pagoMonto").value = "";
       document.getElementById("pagoObs").value = "";
       cargarMiCajaDiaria();
     } else {
@@ -1423,7 +1507,6 @@ function procesarIncidenciaAlumno() {
     if (res && res.ok) {
       msg.textContent = "¡INCIDENCIA Y MULTA REGISTRADA CON ÉXITO!";
       msg.className = "message ok";
-      document.getElementById("incidenciaMonto").value = "";
       document.getElementById("incidenciaObs").value = "";
       cargarMiCajaDiaria();
     } else {
