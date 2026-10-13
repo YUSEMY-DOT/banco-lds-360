@@ -147,6 +147,7 @@
       width: 100%; 
       height: 100%; 
       object-fit: cover; 
+      display: none;
     }
     
     /* CAJA DE NOMBRE Y GRADO ESCOLAR */
@@ -301,7 +302,7 @@
           </div>
 
           <div class="avatar-wrap">
-            <img id="alumnoFoto" src="https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" alt="Foto del Estudiante" class="avatar-img" />
+            <img id="alumnoFoto" src="" alt="Foto del Estudiante" class="avatar-img" />
           </div>
         </div>
 
@@ -635,8 +636,13 @@
           document.getElementById('montoInicialLDS').textContent = baseIngresos.toLocaleString("de-DE") + " LDS";
 
           const fotoConverted = convertDriveUrl(estudianteGlobal.fotoUrl || estudianteGlobal.foto);
+          const imgEl = document.getElementById('alumnoFoto');
+
           if (fotoConverted) {
-            document.getElementById('alumnoFoto').src = fotoConverted;
+            imgEl.src = fotoConverted;
+            imgEl.style.display = "block";
+          } else {
+            imgEl.style.display = "none";
           }
 
           renderizarMovimientos(movimientosGlobales);
