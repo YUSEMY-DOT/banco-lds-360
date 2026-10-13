@@ -976,7 +976,7 @@ let CATALOGO_EXCEL = {
     { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
     { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
     { concepto: "Faltar a la verdad", monto: 500 },
-    { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
+    {cuno: "Llevarse objetos del compañero y/o institución", monto: 1000 }
   ],
   "COSTOS_Y_OTROS": [
     { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
@@ -1051,6 +1051,15 @@ function seleccionarMiseVisual(valor) {
   document.querySelectorAll('.mise-foto-btn').forEach(btn => {
     btn.classList.toggle('activa', btn.dataset.mise === valor);
   });
+
+  // HABLADA INMEDIATA AL SELECCIONAR LA FOTO EN EL LOGIN
+  const nombresAcceso = {
+    "LILY": "Miss Lily Melo",
+    "KIARA": "Miss Kiara Morales",
+    "ANGHY": "Miss Anghy Reyes",
+    "KARIN": "Miss Karin Molero"
+  };
+  hablarVoz("Seleccionada " + (nombresAcceso[valor] || valor) + ". Ingrese su clave de acceso.");
 }
 
 function validarAccesoDocente() {
@@ -1071,7 +1080,7 @@ function validarAccesoDocente() {
   }
   if (!claveVal) { 
     if (errorEl) errorEl.textContent = "⚠️ INGRESE SU CLAVE DE ACCESO."; 
-    hablarVoz("Ingrese su clave de acceso.");
+    hablarVoz("Ingrese su clave de acceso docente.");
     return; 
   }
   if (claveVal !== "360LDS@") { 
@@ -1114,8 +1123,7 @@ function desbloquearPanel(nombreMaestra) {
   cargarEstudiantesDesdeServidor();
   cargarMiCajaDiaria();
 
-  // VOZ DE BIENVENIDA AL PANEL ADMINISTRATIVO
-  hablarVoz("Bienvenida al panel administrativo del Banco L D S 360, " + nombreMaestra + ". Sistema listo para operar.");
+  hablarVoz("Bienvenida al panel administrativo, " + nombreMaestra + ". Sistema listo para operar.");
 }
 
 function cargarEstudiantesDesdeServidor(callbackDone) {
@@ -1793,10 +1801,17 @@ function imprimirConsolidadoGrupal() {
   window.print();
 }
 
+// VOZ DE SALUDO INICIAL AL HACER CLIC EN CUALQUIER PARTE DE LA PORTADA
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
+
+  // Desbloquea y anuncia el inicio al primer toque o clic de la docente en el login
+  document.getElementById("loginView").addEventListener('click', function initVozLogin() {
+    hablarVoz("Seleccione su nombre dando clic en su foto.");
+    document.getElementById("loginView").removeEventListener('click', initVozLogin);
+  }, { once: true });
 });
 </script>
 
