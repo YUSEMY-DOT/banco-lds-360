@@ -1009,8 +1009,8 @@ function hablarVoz(texto) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'es-PE';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
+    utterance.rate = 0.95; // Velocidad más pausada y cordial
+    utterance.pitch = 1.05; // Tono ligeramente más cálido
     window.speechSynthesis.speak(utterance);
   }
 }
@@ -1057,14 +1057,14 @@ function validarAccesoGerencial() {
 
   if (inputClave === claveGerencialActual || inputClave === "360LDS") {
     reproducirSonido('exito');
-    hablarVoz("Bienvenido Mister Andrew. Acceso gerencial concedido.");
+    hablarVoz("Bienvenido, Gerente General Mister Andrew, a la caja.");
     document.getElementById("pantallaAcceso").style.display = "none";
     actualizarCajaAndrew();
   } else {
     reproducirSonido('error');
     msg.textContent = "CLAVE INCORRECTA. ACCESO DENEGADO.";
     msg.className = "msg-box error";
-    hablarVoz("Clave incorrecta. Acceso denegado.");
+    hablarVoz("Lo siento, la clave es incorrecta. Acceso denegado.");
   }
 }
 
@@ -1740,14 +1740,14 @@ function ejecutarTransferenciaFondo() {
     reproducirSonido('error');
     msg.textContent = "SELECCIONA UNA MISS DESTINO."; 
     msg.className = "msg-box error"; 
-    hablarVoz("Seleccione una miss destino.");
+    hablarVoz("Por favor, seleccione una miss destino.");
     return; 
   }
   if (monto <= 0) { 
     reproducirSonido('error');
     msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
     msg.className = "msg-box error"; 
-    hablarVoz("Ingrese un monto válido.");
+    hablarVoz("Por favor, ingrese un monto válido.");
     return; 
   }
 
@@ -1756,7 +1756,7 @@ function ejecutarTransferenciaFondo() {
   reproducirSonido('clic');
   msg.textContent = "PROCESANDO TRANSFERENCIA...";
   msg.className = "msg-box ok";
-  hablarVoz("Procesando transferencia de fondos...");
+  hablarVoz("Procesando transferencia de fondos.");
 
   const detalleObs = "TRANSFERENCIA DE FONDO A " + missDocCode + (obs ? " | " + obs : "");
 
@@ -1781,13 +1781,13 @@ function ejecutarTransferenciaFondo() {
       document.getElementById("transfMonto").value = "";
       document.getElementById("transfObs").value = "";
       reproducirSonido('exito');
-      hablarVoz("Transferencia registrada con éxito.");
+      hablarVoz("La transferencia se ha registrado con gran éxito.");
       actualizarCajaAndrew();
     } else {
       reproducirSonido('error');
       msg.textContent = (res && res.mensaje) || "ERROR EN EL SERVIDOR.";
       msg.className = "msg-box error";
-      hablarVoz("Error al registrar transferencia.");
+      hablarVoz("Ha ocurrido un error al procesar la transferencia.");
     }
   });
 }
@@ -1803,21 +1803,21 @@ function ejecutarDevolucion() {
     reproducirSonido('error');
     msg.textContent = "SELECCIONA UNA MISS ORIGEN."; 
     msg.className = "msg-box error"; 
-    hablarVoz("Seleccione una miss origen.");
+    hablarVoz("Por favor, seleccione una miss origen.");
     return; 
   }
   if (monto <= 0) { 
     reproducirSonido('error');
     msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
     msg.className = "msg-box error"; 
-    hablarVoz("Ingrese un monto válido.");
+    hablarVoz("Por favor, ingrese un monto válido.");
     return; 
   }
 
   reproducirSonido('clic');
   msg.textContent = "PROCESANDO DEVOLUCIÓN...";
   msg.className = "msg-box ok";
-  hablarVoz("Procesando devolución de saldo...");
+  hablarVoz("Procesando devolución de saldo.");
 
   const detalleObs = "DEVOLUCIÓN DE SALDO DE " + missDocCode + (obs ? " | " + obs : "");
 
@@ -1841,13 +1841,13 @@ function ejecutarDevolucion() {
       document.getElementById("devolMonto").value = "";
       document.getElementById("devolObs").value = "";
       reproducirSonido('exito');
-      hablarVoz("Devolución registrada con éxito.");
+      hablarVoz("La devolución se ha registrado exitosamente.");
       actualizarCajaAndrew();
     } else {
       reproducirSonido('error');
       msg.textContent = (res && res.mensaje) || "ERROR EN EL SERVIDOR.";
       msg.className = "msg-box error";
-      hablarVoz("Error al registrar devolución.");
+      hablarVoz("Ha ocurrido un error al registrar la devolución.");
     }
   });
 }
@@ -1860,7 +1860,7 @@ function consultarCuentaEspecifica() {
     reproducirSonido('error');
     msg.textContent = "INGRESE UN CÓDIGO."; 
     msg.className = "msg-box error"; 
-    hablarVoz("Ingrese un código.");
+    hablarVoz("Por favor, ingrese un código para consultar.");
     return; 
   }
 
@@ -1874,19 +1874,19 @@ function consultarCuentaEspecifica() {
     reproducirSonido('error');
     msg.textContent = "NO SE ENCONTRARON REGISTROS.";
     msg.className = "msg-box error";
-    hablarVoz("No se encontraron registros.");
+    hablarVoz("No se encontraron registros para esta cuenta.");
     return;
   }
 
   reproducirSonido('exito');
   msg.textContent = "SE ENCONTRARON " + filtrados.length + " MOVIMIENTOS.";
   msg.className = "msg-box ok";
-  hablarVoz("Se encontraron " + filtrados.length + " movimientos.");
+  hablarVoz("Se encontraron " + filtrados.length + " movimientos en total.");
   renderTabla(filtrados);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  hablarVoz("Bienvenido a Caja Andrew. Por favor, ingrese su clave de acceso gerencial.");
+  hablarVoz("Bienvenido a Caja Andrew. Por favor, ingrese su clave gerencial.");
 });
 </script>
 
