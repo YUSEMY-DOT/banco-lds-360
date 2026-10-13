@@ -571,7 +571,7 @@ td:last-child {
         <p>I.E.P. LA SALLE DEL SUR</p>
       </div>
     </div>
-    <a class="btn btn-light" href="./">← INICIO</a>
+    <a class="btn btn-light" href="./" onclick="reproducirSonido('clic')">← INICIO</a>
   </div>
 </header>
 
@@ -585,19 +585,19 @@ td:last-child {
 
     <div class="form-group">
       <div class="mises-fotos-grid">
-        <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="seleccionarMiseVisual('LILY')">
+        <button type="button" class="mise-foto-btn" data-mise="LILY" onclick="reproducirSonido('clic'); seleccionarMiseVisual('LILY')">
           <img src="https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" alt="">
           <span>MISS LILY</span>
         </button>
-        <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="seleccionarMiseVisual('KIARA')">
+        <button type="button" class="mise-foto-btn" data-mise="KIARA" onclick="reproducirSonido('clic'); seleccionarMiseVisual('KIARA')">
           <img src="https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" alt="">
           <span>MISS KIARA</span>
         </button>
-        <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="seleccionarMiseVisual('ANGHY')">
+        <button type="button" class="mise-foto-btn" data-mise="ANGHY" onclick="reproducirSonido('clic'); seleccionarMiseVisual('ANGHY')">
           <img src="https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" alt="">
           <span>MISS ANGHY</span>
         </button>
-        <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="seleccionarMiseVisual('KARIN')">
+        <button type="button" class="mise-foto-btn" data-mise="KARIN" onclick="reproducirSonido('clic'); seleccionarMiseVisual('KARIN')">
           <img src="https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" alt="">
           <span>MISS KARIN</span>
         </button>
@@ -617,7 +617,7 @@ td:last-child {
       <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
     </div>
 
-    <button class="primary-btn" type="button" onclick="validarAccesoDocente()">INGRESAR AL PANEL</button>
+    <button class="primary-btn" type="button" onclick="reproducirSonido('exito'); validarAccesoDocente();">INGRESAR AL PANEL</button>
     <div id="adminError" class="error-msg"></div>
   </div>
 </div>
@@ -648,10 +648,10 @@ td:last-child {
         <h3 id="tituloTablaMovs">📋 LIBRO DIARIO DE CAJA (MIS MOVIMIENTOS)</h3>
         <div style="display:flex; gap:8px; align-items:center;">
           <input id="selectAnioEscolar" type="number" value="2026" min="2000" max="2100" style="width:70px; height:34px; text-align:center; font-weight:800;" onchange="actualizarPanelAdmin()">
-          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="abrirListaCodigos('ALUMNOS')" title="Directorio de Estudiantes">
+          <button id="btnHeaderAlumnos" class="icon-header-btn alumno" type="button" onclick="reproducirSonido('clic'); abrirListaCodigos('ALUMNOS')" title="Directorio de Estudiantes">
             <svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8"/><path d="M9 39c1.8-8 7.2-12 15-12s13.2 4 15 12"/><path d="M6 41h36"/></svg>
           </button>
-          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="abrirListaCodigos('MISES')" title="Directorio de Mises">
+          <button id="btnHeaderMises" class="icon-header-btn mises" type="button" onclick="reproducirSonido('clic'); abrirListaCodigos('MISES')" title="Directorio de Mises">
             <svg viewBox="0 0 48 48"><circle cx="17" cy="16" r="6"/><circle cx="31" cy="16" r="6"/><path d="M5 39c1.4-7 5.6-11 12-11s10.6 4 12 11"/><path d="M19 39c1.5-7 5.5-11 12-11s10.6 4 12 11"/></svg>
           </button>
         </div>
@@ -660,7 +660,7 @@ td:last-child {
       <div id="listaAlumnosDropdown" class="header-dropdown-list" style="display:none;">
         <div class="header-dropdown-head">
           <strong id="dropdownTitulo">📋 DIRECTORIO GENERAL</strong>
-          <button type="button" onclick="cerrarListaCodigos()" style="border:0; background:var(--rojo); color:#fff; padding:2px 8px; border-radius:4px; font-weight:800; cursor:pointer; font-size:10px;">✕ CERRAR</button>
+          <button type="button" onclick="reproducirSonido('clic'); cerrarListaCodigos()" style="border:0; background:var(--rojo); color:#fff; padding:2px 8px; border-radius:4px; font-weight:800; cursor:pointer; font-size:10px;">✕ CERRAR</button>
         </div>
         <div id="listaAlumnosItems" class="header-list-items">
           <div style="padding:15px; text-align:center; font-weight:800;">CARGANDO DIRECTORIO...</div>
@@ -675,21 +675,21 @@ td:last-child {
         <div>
           <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-bottom:4px;">OPCIONES DE VISTA Y CONSULTA</label>
           <div class="search-row-ordered">
-            <button class="icon-query-btn refresh" type="button" onclick="actualizarPanelAdmin()" title="Actualizar Datos">
+            <button class="icon-query-btn refresh" type="button" onclick="reproducirSonido('clic'); actualizarPanelAdmin()" title="Actualizar Datos">
               <svg viewBox="0 0 48 48"><path d="M39 18a16 16 0 1 0 2 13"/><path d="M39 8v10H29"/></svg>
             </button>
 
-            <button class="icon-query-btn qr-btn" type="button" onclick="toggleQRScanner()" title="Escanear QR">
+            <button class="icon-query-btn qr-btn" type="button" onclick="reproducirSonido('clic'); toggleQRScanner()" title="Escanear QR">
               <svg viewBox="0 0 48 48"><path d="M6 6h12v12H6zM30 6h12v12H6zM30 36h6v6h-6zM36 36h6v6h-6zM30 36h6v6h-6z"/></svg>
             </button>
 
-            <button class="btn-mis-movs" type="button" onclick="cargarMiCajaDiaria()">👤 MI LIBRO DE CAJA</button>
+            <button class="btn-mis-movs" type="button" onclick="reproducirSonido('clic'); cargarMiCajaDiaria()">👤 MI LIBRO DE CAJA</button>
 
-            <div class="btn-print-dropdown" onclick="togglePrintMenu(event)">
+            <div class="btn-print-dropdown" onclick="reproducirSonido('clic'); togglePrintMenu(event)">
               <span>🖨️ IMPRESIONES ▾</span>
               <div id="printMenu" class="print-menu">
-                <button type="button" onclick="imprimirEstadoCuentaIndividual()">📄 IMPRESIÓN INDIVIDUAL</button>
-                <button type="button" onclick="imprimirConsolidadoGrupal()">📊 IMPRESIÓN GRUPAL (SALÓN)</button>
+                <button type="button" onclick="reproducirSonido('clic'); imprimirEstadoCuentaIndividual()">📄 IMPRESIÓN INDIVIDUAL</button>
+                <button type="button" onclick="reproducirSonido('clic'); imprimirConsolidadoGrupal()">📊 IMPRESIÓN GRUPAL (SALÓN)</button>
               </div>
             </div>
           </div>
@@ -723,9 +723,9 @@ td:last-child {
 
     <div class="panel">
       <div class="modulos-nav">
-        <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="cambiarModuloOperacion('PAGOS')">💰 PAGAR / COBRAR</button>
-        <button id="tabPrestamosBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('PRESTAMOS')">🤝 PRÉSTAMOS</button>
-        <button id="tabIncidenciasBtn" type="button" class="modulo-tab-btn" onclick="cambiarModuloOperacion('INCIDENCIAS')">⚠️ INCIDENCIAS</button>
+        <button id="tabPagosBtn" type="button" class="modulo-tab-btn active" onclick="reproducirSonido('clic'); cambiarModuloOperacion('PAGOS')">💰 PAGAR / COBRAR</button>
+        <button id="tabPrestamosBtn" type="button" class="modulo-tab-btn" onclick="reproducirSonido('clic'); cambiarModuloOperacion('PRESTAMOS')">🤝 PRÉSTAMOS</button>
+        <button id="tabIncidenciasBtn" type="button" class="modulo-tab-btn" onclick="reproducirSonido('clic'); cambiarModuloOperacion('INCIDENCIAS')">⚠️ INCIDENCIAS</button>
       </div>
 
       <div id="moduloPagos" class="panel-body">
@@ -745,12 +745,12 @@ td:last-child {
 
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">CATEGORÍA DEL MOVIMIENTO</label>
         <div class="categorias-grid" id="categoriasPagoBotones">
-          <button type="button" class="categoria-btn" data-categoria="INGRESOS_Y_SUELDOS" onclick="seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
-          <button type="button" class="categoria-btn active" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
-          <button type="button" class="categoria-btn" data-categoria="AHORROS_E_INVERSIONES" onclick="seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
-          <button type="button" class="categoria-btn" data-categoria="PAGOS_Y_GASTOS" onclick="seleccionarCategoriaPago('PAGOS_Y_GASTOS')">🛒 PAGOS Y GASTOS</button>
-          <button type="button" class="categoria-btn" data-categoria="SANCIONES_Y_MULTAS" onclick="seleccionarCategoriaPago('SANCIONES_Y_MULTAS')">⚠️ SANCIONES Y MULTAS</button>
-          <button type="button" class="categoria-btn" data-categoria="COSTOS_Y_OTROS" onclick="seleccionarCategoriaPago('COSTOS_Y_OTROS')">⚙️ COSTOS Y OTROS</button>
+          <button type="button" class="categoria-btn" data-categoria="INGRESOS_Y_SUELDOS" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('INGRESOS_Y_SUELDOS')">💼 INGRESOS Y SUELDOS</button>
+          <button type="button" class="categoria-btn active" data-categoria="PREMIOS_Y_BONIFICACIONES" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('PREMIOS_Y_BONIFICACIONES')">🏆 PREMIOS Y BONIFICACIONES</button>
+          <button type="button" class="categoria-btn" data-categoria="AHORROS_E_INVERSIONES" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('AHORROS_E_INVERSIONES')">💰 AHORROS E INVERSIONES</button>
+          <button type="button" class="categoria-btn" data-categoria="PAGOS_Y_GASTOS" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('PAGOS_Y_GASTOS')">🛒 PAGOS Y GASTOS</button>
+          <button type="button" class="categoria-btn" data-categoria="SANCIONES_Y_MULTAS" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('SANCIONES_Y_MULTAS')">⚠️ SANCIONES Y MULTAS</button>
+          <button type="button" class="categoria-btn" data-categoria="COSTOS_Y_OTROS" onclick="reproducirSonido('clic'); seleccionarCategoriaPago('COSTOS_Y_OTROS')">⚙️ COSTOS Y OTROS</button>
         </div>
         <select id="pagoCategoria" style="display:none;">
           <option value="PREMIOS_Y_BONIFICACIONES">PREMIOS Y BONIFICACIONES</option>
@@ -773,12 +773,12 @@ td:last-child {
         <textarea id="pagoObs" rows="2" placeholder="DETALLE DEL MOVIMIENTO O AVISO..."></textarea>
 
         <div class="pago-acciones">
-          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="procesarPagoAEstudiante()">
+          <button id="btnPagarAlumno" class="btn-accion-pago pagar" type="button" onclick="reproducirSonido('exito'); procesarPagoAEstudiante()">
             <svg viewBox="0 0 48 48"><path d="M24 8v24"/><path d="M15 23l9 9 9-9"/><rect x="8" y="34" width="32" height="7" rx="3"/></svg>
             <span>PAGAR ALUMNO (EGRESO)</span>
           </button>
 
-          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="procesarCobroAEstudiante()">
+          <button id="btnCobrarAlumno" class="btn-accion-pago cobrar" type="button" onclick="reproducirSonido('exito'); procesarCobroAEstudiante()">
             <svg viewBox="0 0 48 48"><path d="M24 40V16"/><path d="M15 25l9-9 9 9"/><rect x="8" y="7" width="32" height="7" rx="3"/></svg>
             <span>COBRAR ALUMNO (INGRESO)</span>
           </button>
@@ -806,7 +806,7 @@ td:last-child {
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN / MOTIVO</label>
         <textarea id="prestamoObs" rows="2" placeholder="DETALLE DE LA TRANSFERENCIA ENTRE CAJAS..."></textarea>
 
-        <button class="primary-btn" type="button" onclick="procesarPrestamoCaja()" style="margin-top:12px;">🤝 REGISTRAR PRÉSTAMO / TRANSFERENCIA</button>
+        <button class="primary-btn" type="button" onclick="reproducirSonido('exito'); procesarPrestamoCaja()" style="margin-top:12px;">🤝 REGISTRAR PRÉSTAMO / TRANSFERENCIA</button>
         <div id="prestamoMensaje" class="message"></div>
       </div>
 
@@ -838,7 +838,7 @@ td:last-child {
         <label style="display:block; font-size:0.75rem; font-weight:800; color:var(--azul); margin-top:8px; margin-bottom:4px;">OBSERVACIÓN DISCIPLINARIA</label>
         <textarea id="incidenciaObs" rows="2" placeholder="DESCRIPCIÓN DE LA INCIDENCIA PEDAGÓGICA..."></textarea>
 
-        <button class="primary-btn" type="button" onclick="procesarIncidenciaAlumno()" style="background:linear-gradient(135deg,#991b1b,#dc2626); margin-top:12px;">⚠️ REGISTRAR INCIDENCIA Y APLICAR MULTA</button>
+        <button class="primary-btn" type="button" onclick="reproducirSonido('exito'); procesarIncidenciaAlumno()" style="background:linear-gradient(135deg,#991b1b,#dc2626); margin-top:12px;">⚠️ REGISTRAR INCIDENCIA Y APLICAR MULTA</button>
         <div id="incidenciaMensaje" class="message"></div>
       </div>
     </div>
@@ -858,6 +858,42 @@ let todosLosMovimientosGlobales = [];
 let seccionListaActual = "";
 let listaEstudiantesGoogleSheets = [];
 let html5QrCodeScanner = null;
+
+// MOTOR DE VOZ Y SONIDOS NATIVOS
+function hablarVoz(texto) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = 'es-PE';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+function reproducirSonido(tipo) {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (tipo === 'clic') {
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    } else if (tipo === 'exito') {
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    }
+  } catch (e) {}
+}
 
 const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
@@ -1028,9 +1064,21 @@ function validarAccesoDocente() {
   const claveVal = String(claveEl ? claveEl.value : "").trim();
   if (errorEl) errorEl.textContent = "";
 
-  if (!docenteVal) { if (errorEl) errorEl.textContent = "⚠️ SELEACCIONE SU NOMBRE DANDO CLIC EN SU FOTO."; return; }
-  if (!claveVal) { if (errorEl) errorEl.textContent = "⚠️ INGRESE SU CLAVE DE ACCESO."; return; }
-  if (claveVal !== "360LDS@") { if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; return; }
+  if (!docenteVal) { 
+    if (errorEl) errorEl.textContent = "⚠️ SELECCIONE SU NOMBRE DANDO CLIC EN SU FOTO."; 
+    hablarVoz("Seleccione su nombre dando clic en su foto.");
+    return; 
+  }
+  if (!claveVal) { 
+    if (errorEl) errorEl.textContent = "⚠️ INGRESE SU CLAVE DE ACCESO."; 
+    hablarVoz("Ingrese su clave de acceso.");
+    return; 
+  }
+  if (claveVal !== "360LDS@") { 
+    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; 
+    hablarVoz("Clave incorrecta.");
+    return; 
+  }
 
   const NOMBRES_MAP = {
     "LILY": "MISS LILY MELO AZAÑERO",
@@ -1065,6 +1113,9 @@ function desbloquearPanel(nombreMaestra) {
   seleccionarCategoriaPago("PREMIOS_Y_BONIFICACIONES");
   cargarEstudiantesDesdeServidor();
   cargarMiCajaDiaria();
+
+  // VOZ DE BIENVENIDA AL PANEL ADMINISTRATIVO
+  hablarVoz("Bienvenida al panel administrativo del Banco L D S 360, " + nombreMaestra + ". Sistema listo para operar.");
 }
 
 function cargarEstudiantesDesdeServidor(callbackDone) {
@@ -1141,8 +1192,8 @@ function renderListaAlumnosDirecta() {
           <span style="font-weight:800; color:#0f172a; overflow:hidden; text-overflow:ellipsis;">${nom}</span>
           <span style="font-weight:700; color:#475569;">${gradoText}</span>
           <div style="display:flex; gap:4px;">
-            <button type="button" class="btn-opt-list sel" onclick="seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
-            <button type="button" class="btn-opt-list mov" onclick="verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
+            <button type="button" class="btn-opt-list sel" onclick="reproducirSonido('clic'); seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
+            <button type="button" class="btn-opt-list mov" onclick="reproducirSonido('clic'); verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
           </div>
         </div>
       `;
@@ -1170,8 +1221,8 @@ function renderListaMisesDirecta() {
         <span style="font-weight:800; color:#0f172a; overflow:hidden; text-overflow:ellipsis;">${item.nombre}</span>
         <span style="color:#b91c1c; font-weight:800;">${item.rol || "DOCENTE"}</span>
         <div style="display:flex; gap:4px;">
-          <button type="button" class="btn-opt-list sel" onclick="seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
-          <button type="button" class="btn-opt-list mov" onclick="verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
+          <button type="button" class="btn-opt-list sel" onclick="reproducirSonido('clic'); seleccionarParaOperar('${cod}')">🎯 SELECCIONAR</button>
+          <button type="button" class="btn-opt-list mov" onclick="reproducirSonido('clic'); verMovimientosUsuario('${cod}')">👁️ MOVIMIENTOS</button>
         </div>
       </div>
     `;
@@ -1199,6 +1250,7 @@ function seleccionarParaOperar(cod) {
   }
 
   document.getElementById("pagoAlumnoCard").style.display = "flex";
+  hablarVoz("Seleccionado: " + info.nombre);
 }
 
 function verMovimientosUsuario(cod) {
@@ -1385,12 +1437,28 @@ function procesarPagoAEstudiante() {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const responsableCompleto = responsableNom + " (" + codMise + ")";
 
-  if (!alumnoCod) { msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; msg.className = "message error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
-  if (!concepto) { msg.textContent = "SELECCIONA UN CONCEPTO."; msg.className = "message error"; return; }
+  if (!alumnoCod) { 
+    msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione un destinatario de la lista.");
+    return; 
+  }
+  if (monto <= 0) { 
+    msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
+    msg.className = "message error"; 
+    hablarVoz("Ingrese un monto válido.");
+    return; 
+  }
+  if (!concepto) { 
+    msg.textContent = "SELECCIONA UN CONCEPTO."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione un concepto.");
+    return; 
+  }
 
   msg.textContent = "REGISTRANDO PAGO EN SU LIBRO DE CAJA...";
   msg.className = "message ok";
+  hablarVoz("Registrando pago en el sistema...");
 
   llamarAPI({
     accion: "REGISTRARMOVIMIENTO",
@@ -1406,10 +1474,12 @@ function procesarPagoAEstudiante() {
       msg.textContent = "¡PAGO REGISTRADO CON ÉXITO COMO EGRESO!";
       msg.className = "message ok";
       document.getElementById("pagoObs").value = "";
+      hablarVoz("Pago registrado con éxito.");
       cargarMiCajaDiaria();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL PAGO.";
       msg.className = "message error";
+      hablarVoz("Error al registrar el pago.");
     }
   });
 }
@@ -1424,12 +1494,28 @@ function procesarCobroAEstudiante() {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const responsableCompleto = responsableNom + " (" + codMise + ")";
 
-  if (!alumnoCod) { msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; msg.className = "message error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
-  if (!concepto) { msg.textContent = "SELECCIONA UN CONCEPTO."; msg.className = "message error"; return; }
+  if (!alumnoCod) { 
+    msg.textContent = "SELECCIONA UN DESTINATARIO DE LA LISTA."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione un destinatario de la lista.");
+    return; 
+  }
+  if (monto <= 0) { 
+    msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
+    msg.className = "message error"; 
+    hablarVoz("Ingrese un monto válido.");
+    return; 
+  }
+  if (!concepto) { 
+    msg.textContent = "SELECCIONA UN CONCEPTO."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione un concepto.");
+    return; 
+  }
 
   msg.textContent = "REGISTRANDO COBRO A FAVOR EN SU LIBRO DE CAJA...";
   msg.className = "message ok";
+  hablarVoz("Registrando cobro en el sistema...");
 
   llamarAPI({
     accion: "REGISTRARMOVIMIENTO",
@@ -1445,10 +1531,12 @@ function procesarCobroAEstudiante() {
       msg.textContent = "¡COBRO REGISTRADO CON ÉXITO COMO INGRESO A SU FAVOR!";
       msg.className = "message ok";
       document.getElementById("pagoObs").value = "";
+      hablarVoz("Cobro registrado con éxito.");
       cargarMiCajaDiaria();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL COBRO.";
       msg.className = "message error";
+      hablarVoz("Error al registrar el cobro.");
     }
   });
 }
@@ -1462,11 +1550,22 @@ function procesarPrestamoCaja() {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const origen = responsableNom + " (" + codMise + ")";
 
-  if (!destino) { msg.textContent = "SELECCIONA LA CAJA DE DESTINO."; msg.className = "message error"; return; }
-  if (monto <= 0) { msg.textContent = "INGRESA UN MONTO VÁLIDO."; msg.className = "message error"; return; }
+  if (!destino) { 
+    msg.textContent = "SELECCIONA LA CAJA DE DESTINO."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione la caja de destino.");
+    return; 
+  }
+  if (monto <= 0) { 
+    msg.textContent = "INGRESA UN MONTO VÁLIDO."; 
+    msg.className = "message error"; 
+    hablarVoz("Ingrese un monto válido.");
+    return; 
+  }
 
   msg.textContent = "REGISTRANDO PRÉSTAMO / TRANSFERENCIA...";
   msg.className = "message ok";
+  hablarVoz("Registrando transferencia...");
 
   llamarAPI({
     accion: "REGISTRAR_PRESTAMO",
@@ -1477,10 +1576,12 @@ function procesarPrestamoCaja() {
       msg.className = "message ok";
       document.getElementById("prestamoMonto").value = "";
       document.getElementById("prestamoObs").value = "";
+      hablarVoz("Préstamo y transferencia registrada con éxito.");
       cargarMiCajaDiaria();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR PRÉSTAMO.";
       msg.className = "message error";
+      hablarVoz("Error al registrar el préstamo.");
     }
   });
 }
@@ -1495,10 +1596,16 @@ function procesarIncidenciaAlumno() {
   const codMise = CODIGOS_MISE[responsableNom] || "LDS-DOC-001";
   const responsableCompleto = responsableNom + " (" + codMise + ")";
 
-  if (!alumnoCod) { msg.textContent = "SELECCIONA UN ALUMNO DE LA LISTA."; msg.className = "message error"; return; }
+  if (!alumnoCod) { 
+    msg.textContent = "SELECCIONA UN ALUMNO DE LA LISTA."; 
+    msg.className = "message error"; 
+    hablarVoz("Seleccione un alumno de la lista.");
+    return; 
+  }
 
   msg.textContent = "REGISTRANDO INCIDENCIA...";
   msg.className = "message ok";
+  hablarVoz("Registrando incidencia disciplinaria...");
 
   llamarAPI({
     accion: "REGISTRAR_INCIDENCIA",
@@ -1508,10 +1615,12 @@ function procesarIncidenciaAlumno() {
       msg.textContent = "¡INCIDENCIA Y MULTA REGISTRADA CON ÉXITO!";
       msg.className = "message ok";
       document.getElementById("incidenciaObs").value = "";
+      hablarVoz("Incidencia y multa registrada con éxito.");
       cargarMiCajaDiaria();
     } else {
       msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR INCIDENCIA.";
       msg.className = "message error";
+      hablarVoz("Error al registrar la incidencia.");
     }
   });
 }
@@ -1549,6 +1658,7 @@ document.addEventListener("click", () => {
 });
 
 function imprimirEstadoCuentaIndividual() {
+  hablarVoz("Generando reporte individual.");
   const cod = document.getElementById("codigo").value.trim().toUpperCase();
   const cont = document.getElementById("contenedorImpresion");
   const usuarioInfo = MAPA_USUARIOS[cod] || { nombre: cod, rol: "ESTUDIANTE", foto: "" };
@@ -1624,6 +1734,7 @@ function imprimirEstadoCuentaIndividual() {
 }
 
 function imprimirConsolidadoGrupal() {
+  hablarVoz("Generando reporte consolidado grupal.");
   const cont = document.getElementById("contenedorImpresion");
   let filasHtml = "";
 
