@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -798,7 +799,7 @@ textarea { height: auto; padding: 8px 10px; }
   <!-- OPERACIONES -->
   <div class="right-stack">
     <!-- PANEL 1: TRANSFERIR FONDO A UNA MISS -->
-    <div id="panelTransferir" class="accordion-panel collapsed">
+    <div id="panelTransferir" class="accordion-panel">
       <div class="accordion-head" onclick="togglePanel('panelTransferir')">
         <h3>💸 TRANSFERIR FONDO A UNA MISS</h3>
         <span class="toggle-arrow">▼</span>
@@ -978,6 +979,8 @@ function getProp(obj, ...possibleKeys) {
 }
 
 function parsearMonto(val) {
+  // LDS se maneja como número entero. Admite 15000, "15.000" y "15,000".
+  // Los puntos y comas en texto se interpretan como separadores de miles.
   if (typeof val === "number") return Number.isFinite(val) ? Math.trunc(val) : 0;
   if (val === null || val === undefined || String(val).trim() === "") return 0;
   let str = String(val)
@@ -997,6 +1000,7 @@ function getMonto(m) { return parsearMonto(getProp(m, "monto", "MONTO LDS", "MON
 function getResponsable(m) { return getProp(m, "responsable", "RESPONSABLE", "cajero", "CAJERO", "CAJERO(A)", "usuario"); }
 function getEstudiante(m) { return getProp(m, "estudiante", "CUENTA/ESTUDIANTE", "CUENTA / ESTUDIANTE", "cuenta", "nombreCompleto", "nombre"); }
 
+// DETECTOR INTELIGENTE DE FECHA (GARANTIZA QUE NUNCA QUEDE EN BLANCO)
 function getFecha(m) {
   let val = getProp(m, "fecha", "FECHA", "fechaYHora", "FECHA Y HORA", "FECHA_Y_HORA", "fechayhora", "timestamp", "Fecha", "Fecha y Hora", "DATE", "TIME");
   if (!val && m && typeof m === 'object') {
@@ -1135,6 +1139,7 @@ function extraerListaCuentasUnicas(movimientos) {
 }
 
 function calcularYSincronizarSaldos(movimientos) {
+  // CAPITAL BASE FIJO: no se toma de ningún movimiento.
   const capitalInicialAndrew = 200000;
   let egresosAndrew = 0;
   let ingresosAndrew = 0;
@@ -1155,8 +1160,10 @@ function calcularYSincronizarSaldos(movimientos) {
       const tipo = String(getTipo(m) || "").trim().toUpperCase();
       const obs = String(getObservacion(m) || "").toUpperCase();
 
+      // El registro de capital base nunca altera el saldo actual ni el capital fijo.
       if (targetCod === "LDS-DOC-005" && (conc.includes("GERENTE") || conc.includes("CAPITAL") || conc.includes("BASE") || String(getProp(m, "categoria", "CATEGORÍA")).toUpperCase().includes("CAPITAL_INICIAL"))) return;
 
+      // Entrega de fondos a una miss: disminuye Andrew y aumenta la miss.
       if (Object.prototype.hasOwnProperty.call(saldosMises, targetCod)) {
         const esTransferenciaDesdeAndrew = respCod === "LDS-DOC-005" || obs.includes("TRANSFERENCIA DE FONDO") || conc.includes("FONDO PARA PAGOS") || conc.includes("FONDO DOCENTE");
         if (tipo.includes("INGRESO")) {
@@ -1168,6 +1175,7 @@ function calcularYSincronizarSaldos(movimientos) {
         return;
       }
 
+      // Devolución de una miss a Andrew: aumenta Andrew y reduce la miss indicada.
       if (targetCod === "LDS-DOC-005" && (obs.includes("DEVOLUCION") || conc.includes("DEVOLUCIÓN") || conc.includes("DEVOLUCION"))) {
         ingresosAndrew += monto;
         const match = obs.match(/LDS-DOC-00[1-4]|CAJA-(?:LILY|KIARA|ANGHY|KARIN)/);
@@ -1186,6 +1194,7 @@ function calcularYSincronizarSaldos(movimientos) {
   document.getElementById("saldoKarin").textContent = formatearLDS(Math.max(0, saldosMises["LDS-DOC-004"]));
 }
 
+// FILTRADO EN PASADA ÚNICA QUE MANTIENE EL ORDEN CRONOLÓGICO STRICTO
 function filtrarYRenderizarTabla() {
   if (mostrandoTodoElBanco) {
     renderTabla(todosLosMovimientosGlobales);
@@ -1677,3 +1686,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+```
