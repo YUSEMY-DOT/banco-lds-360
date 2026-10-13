@@ -307,7 +307,7 @@
         </div>
 
         <div class="alumno-info-box">
-          <p id="alumnoNombre" class="alumno-nombre" onclick="cambiarCodigoManual()" title="CLIC PARA CAMBIAR CÓDIGO">DANY SMITH FRANCISCO CRIOLLO</p>
+          <p id="alumnoNombre" class="alumno-nombre" onclick="reproducirSonido('clic'); cambiarCodigoManual();" title="CLIC PARA CAMBIAR CÓDIGO">DANY SMITH FRANCISCO CRIOLLO</p>
           <p class="alumno-grado">🎓 <span id="textoGradoSeccion">TERCERO LOS DIVERGENTES</span></p>
         </div>
 
@@ -479,7 +479,7 @@
     let cuentaGlobal = null;
     let movimientosGlobales = [];
 
-    // SISTEMA DE VOZ HABLADA Y EFECTOS DE SONIDO NATIVOS
+    // MOTOR DE SÍNTESIS DE VOZ Y AUDIO AUTOMÁTICO
     function hablarVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -494,6 +494,7 @@
     function reproducirSonido(tipo) {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain);
@@ -641,7 +642,6 @@
     }
 
     function cambiarCodigoManual() {
-      reproducirSonido('clic');
       const nuevoCod = prompt("INGRESE EL CÓDIGO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
       if (nuevoCod && nuevoCod.trim() !== "") {
         codigoEstudianteActual = nuevoCod.trim().toUpperCase();
@@ -682,6 +682,8 @@
           }
 
           renderizarMovimientos(movimientosGlobales);
+
+          // Saludo automático por voz al cargar los datos del alumno
           hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
 
         } else {
