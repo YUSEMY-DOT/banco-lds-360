@@ -1052,14 +1052,14 @@ function seleccionarMiseVisual(valor) {
     btn.classList.toggle('activa', btn.dataset.mise === valor);
   });
 
-  // HABLADA INMEDIATA AL SELECCIONAR LA FOTO EN EL LOGIN
+  // VOZ AL SELECCIONAR UNA DOCENTE: SOLO NOMBRE Y SOLICITUD DE CLAVE
   const nombresAcceso = {
-    "LILY": "Miss Lily Melo",
-    "KIARA": "Miss Kiara Morales",
-    "ANGHY": "Miss Anghy Reyes",
-    "KARIN": "Miss Karin Molero"
+    "LILY": "Miss Lily",
+    "KIARA": "Miss Kiara",
+    "ANGHY": "Miss Anghy",
+    "KARIN": "Miss Karin"
   };
-  hablarVoz("Seleccionada " + (nombresAcceso[valor] || valor) + ". Ingrese su clave de acceso.");
+  hablarVoz((nombresAcceso[valor] || valor) + ", ingresa tu clave de seguridad.");
 }
 
 function validarAccesoDocente() {
@@ -1801,17 +1801,16 @@ function imprimirConsolidadoGrupal() {
   window.print();
 }
 
-// VOZ DE SALUDO INICIAL AL HACER CLIC EN CUALQUIER PARTE DE LA PORTADA
+// SALUDO INICIAL DEL ACCESO ADMINISTRATIVO SEGÚN LA HORA
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
 
-  // Desbloquea y anuncia el inicio al primer toque o clic de la docente en el login
-  document.getElementById("loginView").addEventListener('click', function initVozLogin() {
-    hablarVoz("Seleccione su nombre dando clic en su foto.");
-    document.getElementById("loginView").removeEventListener('click', initVozLogin);
-  }, { once: true });
+  const hora = new Date().getHours();
+  const saludo = hora >= 5 && hora < 12 ? "Buenos días" :
+                 hora >= 12 && hora < 19 ? "Buenas tardes" : "Buenas noches";
+  hablarVoz(saludo + ". Bienvenidas al acceso administrativo del Banco LDS 360. Seleccione su nombre e ingrese su clave de seguridad.");
 });
 </script>
 
