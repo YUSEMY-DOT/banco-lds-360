@@ -7,10 +7,10 @@
     
     <!-- Enlace al manifest para la PWA (Instalación en móviles) -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1b365d">
+    <meta name="theme-color" content="#061a32">
 
     <style>
-        /* Estilos generales limpios para respetar tu portada original */
+        /* Estilos limpios y seguros para tu portada institucional */
         html, body {
             margin: 0;
             padding: 0;
@@ -135,10 +135,10 @@
 </head>
 <body>
 
-    <!-- Aquí va tu portada e imagen institucional original -->
+    <!-- Imagen de portada corregida con el nombre real de tu archivo -->
     <div class="contenedor-portada">
-        <img src="assets/portada.webp" alt="Banco LDS 360 Portada">
-        <!-- Puedes mantener tus etiquetas <map> y áreas interactivas originales aquí abajo -->
+        <img src="assets/portada miss lily.jpg" alt="Banco LDS 360 Portada" usemap="#mapa-portada">
+        <!-- Aquí puedes mantener tus etiquetas map y áreas interactivas originales si las usas -->
     </div>
 
     <!-- Banner colorido de instalación (Aparece una sola vez) -->
@@ -179,7 +179,7 @@
             e.preventDefault();
             deferredPrompt = e;
 
-            // Se muestra únicamente si el padre NUNCA antes le ha dado a instalar o cerrar
+            // Se muestra únicamente si el usuario NUNCA antes le ha dado a instalar o cerrar
             if (!appYaInstaladaOOculta) {
                 setTimeout(() => {
                     bannerInstalacion.classList.add('mostrar');
