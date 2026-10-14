@@ -143,6 +143,8 @@ footer{max-width:1050px;margin:15px auto 0;color:var(--muted);font-size:10px;tex
   .cat-icon{font-size:25px}
   .product-image{max-height:none}
 }
+
+
 </style>
 </head>
 <body>
@@ -159,7 +161,6 @@ footer{max-width:1050px;margin:15px auto 0;color:var(--muted);font-size:10px;tex
     <a class="btn btn-light" href="index.html">← INICIO</a>
   </div>
 </header>
-
 <div class="container">
   <section class="hero">
     <div class="hero-title">🛍️ TIENDA ESCOLAR KIDSWork LS</div>
@@ -324,6 +325,25 @@ function detenerMusica(){
   }
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){cerrarAmpliacion();}});
+
+// Bienvenida hablada sin textos ni botones adicionales.
+ // Se activa en el primer clic del usuario dentro de la página para respetar
+ // las restricciones de reproducción de voz de los navegadores.
+const mensajeBienvenidaTienda = '¡Hola, hola, campeones! ¡Bienvenidos a la Tienda LDS 360! Aquí tus ahorros se convierten en premios y tus esfuerzos tienen recompensa. Explora, elige tus favoritos y disfruta de esta aventura. ¡Sigue aprendiendo, ahorrando y brillando! ¡La Tienda LDS 360 te espera!';
+let bienvenidaTiendaReproducida = false;
+function reproducirBienvenidaTiendaEnPrimerClic(){
+  if (bienvenidaTiendaReproducida || !('speechSynthesis' in window)) return;
+  bienvenidaTiendaReproducida = true;
+  const voz = new SpeechSynthesisUtterance(mensajeBienvenidaTienda);
+  voz.lang = 'es-PE';
+  voz.rate = 0.92;
+  voz.pitch = 1.12;
+  voz.volume = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(voz);
+  document.removeEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
+}
+document.addEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
 </script>
 </body>
 </html>
