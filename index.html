@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -435,13 +436,15 @@ function cerrarCamaraQR() {
     }
   }
 
-  // Control discreto para silenciar únicamente la voz; conserva la secuencia y la música.
+  // Control del megáfono: silencia SOLO la voz y deja continuar la música.
   let vozInstruccionesActiva = true;
   let ultimaVozInstrucciones = null;
   let inicioUltimaVoz = 0;
   let duracionUltimaVoz = 0;
   let himnoEnCurso = false;
   let temporizadorHimnoSilenciado = null;
+  let faseSecuenciaInstitucional = 'inactiva';
+  let avanzarTrasSilenciarBienvenida = null;
 
   function estimarDuracionVoz(texto, rate){
     return Math.max(2500, (texto.length / (14 * (rate || .88))) * 1000);
@@ -454,6 +457,7 @@ function cerrarCamaraQR() {
       detenerMusica();
       himnoEnCurso = false;
       temporizadorHimnoSilenciado = null;
+      faseSecuenciaInstitucional = 'final';
       continuarComoAntes();
     }, Math.max(0, duracion));
   }
@@ -468,13 +472,24 @@ function cerrarCamaraQR() {
       boton.setAttribute('aria-label', vozInstruccionesActiva ? 'Silenciar voz de instrucciones' : 'Activar voz de instrucciones');
       boton.title = vozInstruccionesActiva ? 'Silenciar voz' : 'Activar voz';
     }
+
     if(!vozInstruccionesActiva){
-      if(himnoEnCurso){
+      // Marcar la locución cancelada antes de cancelar para que sus callbacks
+      // no detengan la música ni reinicien la secuencia por su cuenta.
+      if(ultimaVozInstrucciones){ ultimaVozInstrucciones.__ldsSilenciada = true; }
+      if('speechSynthesis' in window) speechSynthesis.cancel();
+      ultimaVozInstrucciones = null;
+
+      // Si se silencia durante la bienvenida, avanzar al himno sin volver a hablar.
+      if(faseSecuenciaInstitucional === 'bienvenida' && avanzarTrasSilenciarBienvenida){
+        const avanzar = avanzarTrasSilenciarBienvenida;
+        avanzarTrasSilenciarBienvenida = null;
+        avanzar();
+      } else if(faseSecuenciaInstitucional === 'himno' && himnoEnCurso){
+        // La música sigue hasta completar el tiempo restante del himno.
         const transcurrido = Date.now() - inicioUltimaVoz;
         terminarHimnoSilenciado(Math.max(0, duracionUltimaVoz - transcurrido));
       }
-      if('speechSynthesis' in window) speechSynthesis.cancel();
-      ultimaVozInstrucciones = null;
     }
   }
 
@@ -484,10 +499,7 @@ function cerrarCamaraQR() {
   }
 
   function hablar(texto, opciones, onend, onerror){
-    if(!vozInstruccionesActiva){
-      if(onend) onend();
-      return false;
-    }
+    if(!vozInstruccionesActiva) return false;
     if(!('speechSynthesis' in window)){
       if(onerror) onerror();
       return false;
@@ -500,10 +512,12 @@ function cerrarCamaraQR() {
     u.rate=opciones?.rate ?? .88;
     u.pitch=opciones?.pitch ?? .95;
     if(onend) u.onend=()=>{
+      if(u.__ldsSilenciada) return;
       if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
       onend();
     };
     if(onerror) u.onerror=()=>{
+      if(u.__ldsSilenciada) return;
       if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
       onerror();
     };
@@ -527,6 +541,7 @@ function cerrarCamaraQR() {
   async function iniciarSecuenciaInstitucional(){
     if(iniciado) return;
     iniciado=true;
+    faseSecuenciaInstitucional='campanilla';
 
     const AC=window.AudioContext || window.webkitAudioContext;
     if(!AC){
@@ -551,6 +566,9 @@ function cerrarCamaraQR() {
       "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.";
 
     const comenzarHimno=()=>{
+      if(faseSecuenciaInstitucional === 'himno' || faseSecuenciaInstitucional === 'final') return;
+      avanzarTrasSilenciarBienvenida=null;
+      faseSecuenciaInstitucional='himno';
       // 3. SOLO después de la bienvenida comienza la melodía del himno.
       const inicioHimno=audioCtx ? audioCtx.currentTime+.06 : 0;
       musicaActiva=true;
@@ -573,10 +591,11 @@ function cerrarCamaraQR() {
       }
 
       hablar(letraHimno,{rate:.84,pitch:.95},()=>{
-        if(!himnoEnCurso) return;
+        if(!himnoEnCurso || !vozInstruccionesActiva) return;
         if(temporizadorHimnoSilenciado) clearTimeout(temporizadorHimnoSilenciado);
         temporizadorHimnoSilenciado=null;
         himnoEnCurso=false;
+        faseSecuenciaInstitucional='final';
         // 5. Cuando termina la voz, termina también el acompañamiento.
         detenerMusica();
         continuarComoAntes();
@@ -591,6 +610,13 @@ function cerrarCamaraQR() {
     };
 
     const hablarBienvenida=()=>{
+      if(faseSecuenciaInstitucional === 'final' || faseSecuenciaInstitucional === 'himno') return;
+      faseSecuenciaInstitucional='bienvenida';
+      avanzarTrasSilenciarBienvenida=comenzarHimno;
+      if(!vozInstruccionesActiva){
+        comenzarHimno();
+        return;
+      }
       hablar(bienvenidaTexto,{rate:.88,pitch:.95},comenzarHimno,comenzarHimno);
     };
 
@@ -599,6 +625,8 @@ function cerrarCamaraQR() {
   }
 
   function iniciarSoloVoz(){
+    faseSecuenciaInstitucional='bienvenida';
+    if(!vozInstruccionesActiva){ faseSecuenciaInstitucional='final'; return; }
     if(!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
     hablar(
@@ -610,6 +638,9 @@ function cerrarCamaraQR() {
   }
 
   function continuarComoAntes(){
+    faseSecuenciaInstitucional='final';
+    avanzarTrasSilenciarBienvenida=null;
+    if(!vozInstruccionesActiva) return;
     // No depende de elementos que no existen en el HTML original.
     // El portal simplemente queda disponible y continúa con su funcionamiento normal.
     // La indicación final se conserva como en la versión anterior.
