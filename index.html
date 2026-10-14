@@ -118,7 +118,7 @@ cursor:pointer;
     >
     <button class="zona zona-qr" aria-label="Escanea QR" onclick="abrirCamaraQR()"></button>
     <button class="zona zona-codigo" aria-label="Ingresa código" onclick="ingresarCodigoManual()"></button>
-    <a class="zona zona-tienda" href="tienda.html" aria-label="Tienda escolar"></a>
+    <a class="zona zona-tienda" href="./tienda.html" aria-label="Tienda escolar" onclick="try{sessionStorage.setItem('lds_tienda_bienvenida_pendiente','1')}catch(e){}; window.location.assign(new URL('tienda.html', document.baseURI).href); return false;"></a>
     <a class="zona zona-padres" href="padres.html" aria-label="Padres"></a>
     <a class="zona zona-manual" href="manual.html" aria-label="Manual del sistema"></a>
     <a class="zona zona-andrew" href="andrew.html" aria-label="Caja General - MISTER ANDREW" role="button" onclick="abrirCajaGeneralConVoz(event)">🏦 CAJA GENERAL</a>
