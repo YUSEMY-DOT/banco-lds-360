@@ -1,4 +1,4 @@
-```
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -58,6 +58,38 @@ padding:5px 7px;
 @media(prefers-reduced-motion:reduce){
 #ldsInstrucciones{animation:none;opacity:1;}
 }
+
+#ldsBotonVoz{
+position:absolute;
+left:calc(26.5% - 2cm - 38px);
+top:56%;
+transform:translateY(-50%);
+z-index:21;
+width:30px;
+height:30px;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:0;
+border:1px solid rgba(245,205,83,.9);
+border-radius:50%;
+background:rgba(5,25,48,.76);
+color:#ffe08a;
+font-size:16px;
+line-height:1;
+box-shadow:0 2px 8px rgba(0,0,0,.42),inset 0 0 5px rgba(255,224,138,.12);
+cursor:pointer;
+-webkit-tap-highlight-color:transparent;
+}
+#ldsBotonVoz:hover{background:rgba(12,47,79,.94);filter:brightness(1.08);}
+#ldsBotonVoz:focus-visible{outline:2px solid #fff0b0;outline-offset:3px;}
+#ldsBotonVoz[aria-pressed="true"]{color:#d8e0e8;border-color:rgba(216,224,232,.8);}
+@media(max-width:900px){
+ #ldsBotonVoz{left:calc(25.5% - 2cm - 34px);width:27px;height:27px;font-size:14px;}
+}
+@media(max-width:420px){
+ #ldsBotonVoz{left:calc(25.5% - 2cm - 31px);width:25px;height:25px;font-size:13px;}
+}
 </style>
 
 </head>
@@ -75,6 +107,7 @@ padding:5px 7px;
 </script>
 <body>
 <div class="pantalla">
+    <button id="ldsBotonVoz" type="button" aria-label="Silenciar voz de instrucciones" aria-pressed="false" title="Silenciar voz" >🔊</button>
     <div id="ldsInstrucciones" role="button" tabindex="0" aria-label="Pulsa aquí para escuchar las instrucciones">
       <span>INSTRUCCIONES</span>
       <span>👉 AQUÍ</span>
@@ -403,17 +436,91 @@ function cerrarCamaraQR() {
     }
   }
 
+  // Control del megáfono: silencia SOLO la voz y deja continuar la música.
+  let vozInstruccionesActiva = true;
+  let ultimaVozInstrucciones = null;
+  let inicioUltimaVoz = 0;
+  let duracionUltimaVoz = 0;
+  let himnoEnCurso = false;
+  let temporizadorHimnoSilenciado = null;
+  let faseSecuenciaInstitucional = 'inactiva';
+  let avanzarTrasSilenciarBienvenida = null;
+
+  function estimarDuracionVoz(texto, rate){
+    return Math.max(2500, (texto.length / (14 * (rate || .88))) * 1000);
+  }
+
+  function terminarHimnoSilenciado(duracion){
+    if(temporizadorHimnoSilenciado) clearTimeout(temporizadorHimnoSilenciado);
+    temporizadorHimnoSilenciado = setTimeout(()=>{
+      if(!himnoEnCurso) return;
+      detenerMusica();
+      himnoEnCurso = false;
+      temporizadorHimnoSilenciado = null;
+      faseSecuenciaInstitucional = 'final';
+      continuarComoAntes();
+    }, Math.max(0, duracion));
+  }
+
+  function alternarVozInstrucciones(event){
+    if(event){ event.preventDefault(); event.stopPropagation(); }
+    vozInstruccionesActiva = !vozInstruccionesActiva;
+    const boton = document.getElementById('ldsBotonVoz');
+    if(boton){
+      boton.textContent = vozInstruccionesActiva ? '🔊' : '🔇';
+      boton.setAttribute('aria-pressed', vozInstruccionesActiva ? 'false' : 'true');
+      boton.setAttribute('aria-label', vozInstruccionesActiva ? 'Silenciar voz de instrucciones' : 'Activar voz de instrucciones');
+      boton.title = vozInstruccionesActiva ? 'Silenciar voz' : 'Activar voz';
+    }
+
+    if(!vozInstruccionesActiva){
+      // Marcar la locución cancelada antes de cancelar para que sus callbacks
+      // no detengan la música ni reinicien la secuencia por su cuenta.
+      if(ultimaVozInstrucciones){ ultimaVozInstrucciones.__ldsSilenciada = true; }
+      if('speechSynthesis' in window) speechSynthesis.cancel();
+      ultimaVozInstrucciones = null;
+
+      // Si se silencia durante la bienvenida, avanzar al himno sin volver a hablar.
+      if(faseSecuenciaInstitucional === 'bienvenida' && avanzarTrasSilenciarBienvenida){
+        const avanzar = avanzarTrasSilenciarBienvenida;
+        avanzarTrasSilenciarBienvenida = null;
+        avanzar();
+      } else if(faseSecuenciaInstitucional === 'himno' && himnoEnCurso){
+        // La música sigue hasta completar el tiempo restante del himno.
+        const transcurrido = Date.now() - inicioUltimaVoz;
+        terminarHimnoSilenciado(Math.max(0, duracionUltimaVoz - transcurrido));
+      }
+    }
+  }
+
+  const botonVozInstrucciones = document.getElementById('ldsBotonVoz');
+  if(botonVozInstrucciones){
+    botonVozInstrucciones.addEventListener('click', alternarVozInstrucciones);
+  }
+
   function hablar(texto, opciones, onend, onerror){
+    if(!vozInstruccionesActiva) return false;
     if(!('speechSynthesis' in window)){
       if(onerror) onerror();
       return false;
     }
     const u=new SpeechSynthesisUtterance(texto);
+    ultimaVozInstrucciones = u;
+    inicioUltimaVoz = Date.now();
+    duracionUltimaVoz = estimarDuracionVoz(texto, opciones?.rate ?? .88);
     u.lang=opciones?.lang || 'es-PE';
     u.rate=opciones?.rate ?? .88;
     u.pitch=opciones?.pitch ?? .95;
-    if(onend) u.onend=onend;
-    if(onerror) u.onerror=onerror;
+    if(onend) u.onend=()=>{
+      if(u.__ldsSilenciada) return;
+      if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
+      onend();
+    };
+    if(onerror) u.onerror=()=>{
+      if(u.__ldsSilenciada) return;
+      if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
+      onerror();
+    };
     speechSynthesis.speak(u);
     return true;
   }
@@ -434,6 +541,7 @@ function cerrarCamaraQR() {
   async function iniciarSecuenciaInstitucional(){
     if(iniciado) return;
     iniciado=true;
+    faseSecuenciaInstitucional='campanilla';
 
     const AC=window.AudioContext || window.webkitAudioContext;
     if(!AC){
@@ -458,9 +566,13 @@ function cerrarCamaraQR() {
       "Bienvenidos a tu entidad financiera LDS 360, La Salle del Sur. Sencillez, responsabilidad y honor.";
 
     const comenzarHimno=()=>{
+      if(faseSecuenciaInstitucional === 'himno' || faseSecuenciaInstitucional === 'final') return;
+      avanzarTrasSilenciarBienvenida=null;
+      faseSecuenciaInstitucional='himno';
       // 3. SOLO después de la bienvenida comienza la melodía del himno.
       const inicioHimno=audioCtx ? audioCtx.currentTime+.06 : 0;
       musicaActiva=true;
+      himnoEnCurso=true;
       if(audioCtx) mantenerHimno(audioCtx,inicioHimno);
 
       // 4. La voz acompaña TODO el himno completo.
@@ -473,17 +585,38 @@ function cerrarCamaraQR() {
         "Sabiduría de grandes mentores, en nuestras aulas se educa con amor. " +
         "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
 
+      if(!vozInstruccionesActiva){
+        terminarHimnoSilenciado(estimarDuracionVoz(letraHimno,.84));
+        return;
+      }
+
       hablar(letraHimno,{rate:.84,pitch:.95},()=>{
+        if(!himnoEnCurso || !vozInstruccionesActiva) return;
+        if(temporizadorHimnoSilenciado) clearTimeout(temporizadorHimnoSilenciado);
+        temporizadorHimnoSilenciado=null;
+        himnoEnCurso=false;
+        faseSecuenciaInstitucional='final';
         // 5. Cuando termina la voz, termina también el acompañamiento.
         detenerMusica();
         continuarComoAntes();
       },()=>{
+        // Si el usuario silenció la voz, la música sigue hasta completar el himno.
+        if(!vozInstruccionesActiva && himnoEnCurso) return;
+        if(!himnoEnCurso) return;
         detenerMusica();
+        himnoEnCurso=false;
         continuarComoAntes();
       });
     };
 
     const hablarBienvenida=()=>{
+      if(faseSecuenciaInstitucional === 'final' || faseSecuenciaInstitucional === 'himno') return;
+      faseSecuenciaInstitucional='bienvenida';
+      avanzarTrasSilenciarBienvenida=comenzarHimno;
+      if(!vozInstruccionesActiva){
+        comenzarHimno();
+        return;
+      }
       hablar(bienvenidaTexto,{rate:.88,pitch:.95},comenzarHimno,comenzarHimno);
     };
 
@@ -492,6 +625,8 @@ function cerrarCamaraQR() {
   }
 
   function iniciarSoloVoz(){
+    faseSecuenciaInstitucional='bienvenida';
+    if(!vozInstruccionesActiva){ faseSecuenciaInstitucional='final'; return; }
     if(!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();
     hablar(
@@ -503,6 +638,9 @@ function cerrarCamaraQR() {
   }
 
   function continuarComoAntes(){
+    faseSecuenciaInstitucional='final';
+    avanzarTrasSilenciarBienvenida=null;
+    if(!vozInstruccionesActiva) return;
     // No depende de elementos que no existen en el HTML original.
     // El portal simplemente queda disponible y continúa con su funcionamiento normal.
     // La indicación final se conserva como en la versión anterior.
@@ -596,4 +734,3 @@ function cerrarCamaraQR() {
   actualizarBotonInstalacion();
 </script>
 </html>
-```
