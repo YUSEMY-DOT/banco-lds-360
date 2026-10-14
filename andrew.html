@@ -368,6 +368,43 @@ button{cursor:pointer;}
 }
 
 </style>
+
+<style id="ajuste-boton-inicio-andrew">
+/* Ajuste puntual: sacar el botón de regreso del panel de acceso y ubicarlo sobre el fondo. */
+#loginAndrew .login-home{
+  position:fixed!important;
+  right:24px!important;
+  bottom:22px!important;
+  left:auto!important;
+  z-index:1000000!important;
+  width:auto!important;
+  min-width:190px!important;
+  padding:10px 18px!important;
+  margin:0!important;
+  border:1.5px solid #f5b400!important;
+  border-radius:12px!important;
+  background:rgba(6,27,63,.94)!important;
+  color:#fff!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.35)!important;
+  backdrop-filter:blur(4px);
+}
+#loginAndrew .login-home:hover{
+  background:#12366f!important;
+  border-color:#ffd34d!important;
+  transform:translateY(-2px);
+}
+@media(max-width:600px){
+  #loginAndrew .login-home{
+    right:12px!important;
+    bottom:12px!important;
+    left:12px!important;
+    width:calc(100% - 24px)!important;
+    min-width:0!important;
+    padding:9px 12px!important;
+    font-size:.78rem!important;
+  }
+}
+</style>
 </head>
 <body class="login-screen">
 
@@ -2358,7 +2395,7 @@ document.addEventListener("click",function(ev){
   function textoBienvenidaAndrew(){
     const h=new Date().getHours();
     const saludo=h>=5&&h<12?'Buenos días':h>=12&&h<19?'Buenas tardes':'Buenas noches';
-    return saludo+', Mr. Andrew, Gerente General del Banco LDS 360. ¡Qué alegría tenerte aquí! Cuando estés listo, introduce tu clave de acceso y abre tu Caja General.';
+    return saludo+', Andrew, Gerente General del Banco LDS 360. ¡Qué alegría tenerte aquí! Cuando estés listo, introduce tu clave de acceso y abre tu Caja General.';
   }
   function reproducirBienvenidaAndrew(){
     if(saludoAndrewIniciado || !('speechSynthesis' in window)) return;
