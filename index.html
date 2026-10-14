@@ -107,7 +107,7 @@ cursor:pointer;
 </script>
 <body>
 <div class="pantalla">
-    <button id="ldsBotonVoz" type="button" aria-label="Silenciar voz de instrucciones" aria-pressed="false" title="Silenciar voz" onclick="alternarVozInstrucciones(event)">🔊</button>
+    <button id="ldsBotonVoz" type="button" aria-label="Silenciar voz de instrucciones" aria-pressed="false" title="Silenciar voz" >🔊</button>
     <div id="ldsInstrucciones" role="button" tabindex="0" aria-label="Pulsa aquí para escuchar las instrucciones">
       <span>INSTRUCCIONES</span>
       <span>👉 AQUÍ</span>
@@ -436,9 +436,29 @@ function cerrarCamaraQR() {
     }
   }
 
-  // Control discreto para silenciar únicamente la voz; no modifica la música ni otras funciones.
+  // Control discreto para silenciar únicamente la voz; conserva la secuencia y la música.
   let vozInstruccionesActiva = true;
   let ultimaVozInstrucciones = null;
+  let inicioUltimaVoz = 0;
+  let duracionUltimaVoz = 0;
+  let himnoEnCurso = false;
+  let temporizadorHimnoSilenciado = null;
+
+  function estimarDuracionVoz(texto, rate){
+    return Math.max(2500, (texto.length / (14 * (rate || .88))) * 1000);
+  }
+
+  function terminarHimnoSilenciado(duracion){
+    if(temporizadorHimnoSilenciado) clearTimeout(temporizadorHimnoSilenciado);
+    temporizadorHimnoSilenciado = setTimeout(()=>{
+      if(!himnoEnCurso) return;
+      detenerMusica();
+      himnoEnCurso = false;
+      temporizadorHimnoSilenciado = null;
+      continuarComoAntes();
+    }, Math.max(0, duracion));
+  }
+
   function alternarVozInstrucciones(event){
     if(event){ event.preventDefault(); event.stopPropagation(); }
     vozInstruccionesActiva = !vozInstruccionesActiva;
@@ -449,10 +469,19 @@ function cerrarCamaraQR() {
       boton.setAttribute('aria-label', vozInstruccionesActiva ? 'Silenciar voz de instrucciones' : 'Activar voz de instrucciones');
       boton.title = vozInstruccionesActiva ? 'Silenciar voz' : 'Activar voz';
     }
-    if(!vozInstruccionesActiva && ('speechSynthesis' in window)){
-      speechSynthesis.cancel();
+    if(!vozInstruccionesActiva){
+      if(himnoEnCurso){
+        const transcurrido = Date.now() - inicioUltimaVoz;
+        terminarHimnoSilenciado(Math.max(0, duracionUltimaVoz - transcurrido));
+      }
+      if('speechSynthesis' in window) speechSynthesis.cancel();
       ultimaVozInstrucciones = null;
     }
+  }
+
+  const botonVozInstrucciones = document.getElementById('ldsBotonVoz');
+  if(botonVozInstrucciones){
+    botonVozInstrucciones.addEventListener('click', alternarVozInstrucciones);
   }
 
   function hablar(texto, opciones, onend, onerror){
@@ -466,11 +495,19 @@ function cerrarCamaraQR() {
     }
     const u=new SpeechSynthesisUtterance(texto);
     ultimaVozInstrucciones = u;
+    inicioUltimaVoz = Date.now();
+    duracionUltimaVoz = estimarDuracionVoz(texto, opciones?.rate ?? .88);
     u.lang=opciones?.lang || 'es-PE';
     u.rate=opciones?.rate ?? .88;
     u.pitch=opciones?.pitch ?? .95;
-    if(onend) u.onend=onend;
-    if(onerror) u.onerror=onerror;
+    if(onend) u.onend=()=>{
+      if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
+      onend();
+    };
+    if(onerror) u.onerror=()=>{
+      if(ultimaVozInstrucciones === u) ultimaVozInstrucciones = null;
+      onerror();
+    };
     speechSynthesis.speak(u);
     return true;
   }
@@ -518,6 +555,7 @@ function cerrarCamaraQR() {
       // 3. SOLO después de la bienvenida comienza la melodía del himno.
       const inicioHimno=audioCtx ? audioCtx.currentTime+.06 : 0;
       musicaActiva=true;
+      himnoEnCurso=true;
       if(audioCtx) mantenerHimno(audioCtx,inicioHimno);
 
       // 4. La voz acompaña TODO el himno completo.
@@ -530,12 +568,25 @@ function cerrarCamaraQR() {
         "Sabiduría de grandes mentores, en nuestras aulas se educa con amor. " +
         "Lasallista del Sur es nuestro ejemplo de enseñanza, disciplina y lealtad.";
 
+      if(!vozInstruccionesActiva){
+        terminarHimnoSilenciado(estimarDuracionVoz(letraHimno,.84));
+        return;
+      }
+
       hablar(letraHimno,{rate:.84,pitch:.95},()=>{
+        if(!himnoEnCurso) return;
+        if(temporizadorHimnoSilenciado) clearTimeout(temporizadorHimnoSilenciado);
+        temporizadorHimnoSilenciado=null;
+        himnoEnCurso=false;
         // 5. Cuando termina la voz, termina también el acompañamiento.
         detenerMusica();
         continuarComoAntes();
       },()=>{
+        // Si el usuario silenció la voz, la música sigue hasta completar el himno.
+        if(!vozInstruccionesActiva && himnoEnCurso) return;
+        if(!himnoEnCurso) return;
         detenerMusica();
+        himnoEnCurso=false;
         continuarComoAntes();
       });
     };
