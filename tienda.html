@@ -157,7 +157,7 @@ footer{max-width:1050px;margin:15px auto 0;color:var(--muted);font-size:10px;tex
     </div>
   </div>
   <div class="top-actions">
-    <button class="btn btn-music" id="musicBtn" onclick="toggleMusica()">🎵 Música: OFF</button>
+    <button class="btn btn-music" id="musicBtn" type="button" onclick="toggleMusica()" aria-label="Activar música" aria-pressed="false" title="Activar o silenciar música">🔇</button>
     <a class="btn btn-light" href="index.html">← INICIO</a>
   </div>
 </header>
@@ -273,6 +273,7 @@ function cerrarAmpliacion(){
 document.getElementById('modal').addEventListener('click', cerrarAmpliacion);
 
 function iniciarMusica(){
+  // Compatibilidad: solo inicia cuando el usuario la activa expresamente.
   if(musicOn) return;
   musicOn = true;
   actualizarBotonMusica();
@@ -280,13 +281,23 @@ function iniciarMusica(){
 }
 
 function toggleMusica(){
-  musicOn = !musicOn;
-  if(musicOn) crearMusica();
-  else detenerMusica();
+  const boton = document.getElementById('musicBtn');
+  if(musicOn){
+    musicOn = false;
+    detenerMusica();
+  }else{
+    musicOn = true;
+    crearMusica();
+  }
   actualizarBotonMusica();
 }
 function actualizarBotonMusica(){
-  document.getElementById('musicBtn').textContent = musicOn ? '🎵 Música: ON' : '🎵 Música: OFF';
+  const boton = document.getElementById('musicBtn');
+  if(!boton) return;
+  boton.textContent = musicOn ? '🔊' : '🔇';
+  boton.setAttribute('aria-label', musicOn ? 'Silenciar música' : 'Activar música');
+  boton.setAttribute('title', musicOn ? 'Silenciar música' : 'Activar música');
+  boton.setAttribute('aria-pressed', musicOn ? 'true' : 'false');
 }
 function crearMusica(){
   detenerMusica();
@@ -326,56 +337,24 @@ function detenerMusica(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){cerrarAmpliacion();}});
 
-// Bienvenida hablada al entrar a la tienda, sin añadir textos ni botones.
+// Bienvenida hablada sin textos ni botones adicionales.
+ // Se activa en el primer clic del usuario dentro de la página para respetar
+ // las restricciones de reproducción de voz de los navegadores.
 const mensajeBienvenidaTienda = '¡Hola, hola, campeones! ¡Bienvenidos a la Tienda LDS 360! Aquí tus ahorros se convierten en premios y tus esfuerzos tienen recompensa. Explora, elige tus favoritos y disfruta de esta aventura. ¡Sigue aprendiendo, ahorrando y brillando! ¡La Tienda LDS 360 te espera!';
 let bienvenidaTiendaReproducida = false;
-let vozBienvenidaTienda = null;
-let intentoBienvenidaTienda = false;
-
-function reproducirBienvenidaTienda(){
-  if (bienvenidaTiendaReproducida || intentoBienvenidaTienda || !('speechSynthesis' in window)) return;
-  intentoBienvenidaTienda = true;
-  try {
-    vozBienvenidaTienda = new SpeechSynthesisUtterance(mensajeBienvenidaTienda);
-    vozBienvenidaTienda.lang = 'es-PE';
-    vozBienvenidaTienda.rate = 0.92;
-    vozBienvenidaTienda.pitch = 1.12;
-    vozBienvenidaTienda.volume = 1;
-    vozBienvenidaTienda.onstart = () => {
-      bienvenidaTiendaReproducida = true;
-      document.removeEventListener('pointerdown', reintentarBienvenidaTienda, true);
-      document.removeEventListener('keydown', reintentarBienvenidaTienda, true);
-    };
-    vozBienvenidaTienda.onerror = () => {
-      intentoBienvenidaTienda = false;
-    };
-    window.speechSynthesis.speak(vozBienvenidaTienda);
-    // Algunos navegadores bloquean la voz automática al navegar a otra página.
-    // En ese caso se reintenta en la primera interacción real del usuario.
-    setTimeout(() => {
-      if (!bienvenidaTiendaReproducida && window.speechSynthesis && window.speechSynthesis.speaking) {
-        bienvenidaTiendaReproducida = true;
-        document.removeEventListener('pointerdown', reintentarBienvenidaTienda, true);
-        document.removeEventListener('keydown', reintentarBienvenidaTienda, true);
-      } else if (!bienvenidaTiendaReproducida) {
-        intentoBienvenidaTienda = false;
-      }
-    }, 700);
-  } catch (e) {
-    intentoBienvenidaTienda = false;
-  }
+function reproducirBienvenidaTiendaEnPrimerClic(){
+  if (bienvenidaTiendaReproducida || !('speechSynthesis' in window)) return;
+  bienvenidaTiendaReproducida = true;
+  const voz = new SpeechSynthesisUtterance(mensajeBienvenidaTienda);
+  voz.lang = 'es-PE';
+  voz.rate = 0.92;
+  voz.pitch = 1.12;
+  voz.volume = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(voz);
+  document.removeEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
 }
-function reintentarBienvenidaTienda(){
-  if (bienvenidaTiendaReproducida) return;
-  reproducirBienvenidaTienda();
-}
-document.addEventListener('pointerdown', reintentarBienvenidaTienda, true);
-document.addEventListener('keydown', reintentarBienvenidaTienda, true);
-window.addEventListener('pageshow', () => {
-  // El intento automático se hace al entrar. Si el navegador lo bloquea,
-  // queda preparada la reproducción en la primera interacción.
-  setTimeout(reproducirBienvenidaTienda, 150);
-});
+document.addEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
 </script>
 </body>
 </html>
