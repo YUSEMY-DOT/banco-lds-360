@@ -688,53 +688,22 @@ function cerrarCamaraQR() {
 })();
 </script>
 
-<script id="ldsBienvenidaTiendaDesdePortada">
+<script id="lds360TiendaIntentoVoz">
 (function () {
+  // El clic se realiza en la zona TIENDA de la portada general.
+  // La tienda recibe la señal en la URL y reproduce el saludo al cargar.
   const botonTienda = document.querySelector('a.zona-tienda[href="tienda.html"]');
   if (!botonTienda) return;
 
-  const saludo = '¡Hola, campeones! ¡Bienvenidos a la Tienda LDS 360! Aquí tus ahorros se convierten en premios y tus esfuerzos tienen recompensa. Explora, elige tus favoritos y disfruta de esta aventura. ¡Sigue aprendiendo, ahorrando y brillando! ¡La Tienda LDS 360 te espera!';
-  let iniciada = false;
-
   botonTienda.addEventListener('click', function (event) {
     event.preventDefault();
-    if (iniciada) return;
-    iniciada = true;
-
-    const destino = botonTienda.href;
-    const entrarATienda = function () {
-      window.location.assign(destino);
-    };
-
-    if (!('speechSynthesis' in window) || typeof window.SpeechSynthesisUtterance === 'undefined') {
-      entrarATienda();
-      return;
-    }
-
     try {
-      window.speechSynthesis.cancel();
-      const voz = new SpeechSynthesisUtterance(saludo);
-      voz.lang = 'es-PE';
-      voz.rate = 0.92;
-      voz.pitch = 1.12;
-      voz.volume = 1;
-
-      let navegada = false;
-      let respaldo = null;
-      const entrarUnaVez = function () {
-        if (navegada) return;
-        navegada = true;
-        if (respaldo !== null) window.clearTimeout(respaldo);
-        entrarATienda();
-      };
-      voz.onend = entrarUnaVez;
-      voz.onerror = entrarUnaVez;
-      window.speechSynthesis.speak(voz);
-
-      // Respaldo únicamente si el navegador no entrega onend/onerror.
-      respaldo = window.setTimeout(entrarUnaVez, 45000);
+      const destino = new URL(botonTienda.getAttribute('href'), document.baseURI);
+      destino.searchParams.set('lds360saludo', '1');
+      window.location.assign(destino.href);
     } catch (error) {
-      entrarATienda();
+      // Alternativa para navegadores que no permitan construir una URL.
+      window.location.assign(botonTienda.href);
     }
   });
 })();
