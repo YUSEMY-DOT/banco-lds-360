@@ -30,7 +30,7 @@ button,input,select,textarea{font:inherit}
   background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2")!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
-  background-size:cover!important;
+  background-size:100% 100%!important;
 }
 
 #loginAndrew::before{content:"";position:absolute;inset:0;background:transparent!important;pointer-events:none!important;z-index:0!important;}
@@ -230,7 +230,7 @@ select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;pa
 
 button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
-#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;}
+#loginAndrew{background-image:url("assets/FONDO%20ANDREW%20.png?v=20261003-2") !important;background-size:100% 100% !important;background-position:center center !important;background-repeat:no-repeat !important;}
 
 #appHeader{position:sticky!important;top:0!important;z-index:5000!important;background:#061b3f!important;border-bottom:2px solid #f5b400!important;width:100%;min-height:72px;padding:10px clamp(12px,2vw,30px)!important;}
 #appHeader.topbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;}
@@ -332,23 +332,39 @@ button{cursor:pointer;}
 @media (max-width:560px){.report-window{padding:8px;}.report-person{grid-template-columns:72px 1fr;gap:10px;}.report-person-photo{width:64px;height:64px;}.report-person-name{font-size:15px;}.report-table{font-size:8px;}.report-table th,.report-table td{padding:4px;}.report-footer{display:block;}}
 
 
-/* AJUSTES RESPONSIVOS DE PORTADA: conservan proporciones y elementos existentes. */
-#loginAndrew{background-size:cover!important;background-position:center center!important;}
-#loginAndrew .login-bg-image{object-fit:cover!important;object-position:center center!important;}
-#loginAndrew .andrew-login-photo{margin-right:-18px!important;}
-#loginAndrew > .panel{width:min(270px,26vw)!important;max-width:270px!important;flex-basis:270px!important;margin-left:-22px!important;}
+
+/* AJUSTES PUNTUALES DE PORTADA: proporciones, posición y controles interactivos. */
+#loginAndrew{
+  background-size:cover!important;
+  background-position:center center!important;
+}
+#loginAndrew .login-bg-image{
+  object-fit:cover!important;
+  object-position:center center!important;
+  pointer-events:none!important;
+}
+#loginAndrew .andrew-login-photo,
+#loginAndrew > .panel{
+  position:relative!important;
+  z-index:2!important;
+}
+#loginAndrew .andrew-login-photo{margin-right:-12px!important;}
+#loginAndrew > .panel{
+  width:min(290px,27vw)!important;
+  max-width:290px!important;
+  flex:0 1 290px!important;
+  margin-left:-12px!important;
+}
 @media (max-width:900px){
-  #loginAndrew{padding:clamp(54px,8vh,90px) 18px 16px!important;gap:12px!important;}
-  #loginAndrew .andrew-login-photo{width:min(42vw,400px)!important;height:min(66vh,560px)!important;flex:0 1 42vw!important;margin-left:0!important;margin-right:-14px!important;}
-  #loginAndrew > .panel{width:min(270px,38vw)!important;max-width:270px!important;flex:0 1 270px!important;margin:0 0 18px -10px!important;}
+  #loginAndrew{gap:12px!important;padding:clamp(56px,8vh,90px) 18px 16px!important;}
+  #loginAndrew .andrew-login-photo{width:min(42vw,400px)!important;height:min(66vh,560px)!important;flex:0 1 42vw!important;margin-left:0!important;margin-right:-8px!important;}
+  #loginAndrew > .panel{width:min(290px,38vw)!important;max-width:290px!important;flex:0 1 290px!important;margin:0 0 16px -8px!important;}
 }
 @media (max-width:600px){
-  #loginAndrew{flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;overflow-y:auto!important;padding:16px 12px!important;}
-  #loginAndrew .andrew-login-photo{width:min(54vw,230px)!important;height:min(34vh,270px)!important;flex:0 0 auto!important;align-items:flex-end!important;justify-content:center!important;margin:0 0 -8px!important;}
-  #loginAndrew .andrew-login-photo img{object-position:center bottom!important;}
-  #loginAndrew > .panel{width:min(340px,92vw)!important;max-width:340px!important;flex:0 0 auto!important;margin:0!important;}
-  #loginAndrew .panel-head{padding:10px 12px!important;}
-  #loginAndrew .panel-body{padding:12px!important;}
+  #loginAndrew{flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;overflow-y:auto!important;overflow-x:hidden!important;padding:12px 12px 20px!important;height:100dvh!important;min-height:100dvh!important;}
+  #loginAndrew .andrew-login-photo{width:min(52vw,220px)!important;height:min(30vh,220px)!important;flex:0 0 auto!important;margin:0 0 -4px!important;}
+  #loginAndrew .andrew-login-photo img{object-fit:contain!important;object-position:center bottom!important;}
+  #loginAndrew > .panel{width:min(360px,94vw)!important;max-width:360px!important;flex:0 0 auto!important;margin:0 0 10px!important;}
 }
 
 </style>
@@ -1834,31 +1850,7 @@ function escribirVentanaReporte(w,html,orientation){
      </head>
      <body class="report-window">
        <main class="report-sheet">${html}</main>
-     
-<script>
-/* BIENVENIDA BREVE A MISTER ANDREW — solo en la pantalla de acceso. */
-(function(){
-  function bienvenidaVozAndrew(){
-    const pantalla=document.getElementById("loginAndrew");
-    if(!pantalla || !document.body.classList.contains("login-screen")) return;
-    if(!("speechSynthesis" in window) || typeof window.hablarAndrew!=="function") return;
-    const hora=new Date().getHours();
-    const saludo=hora>=5 && hora<12 ? "Buenos días" : hora>=12 && hora<19 ? "Buenas tardes" : "Buenas noches";
-    const mensaje=saludo+", Mr. Andrew, Gerente General del Banco LDS 360. ¡Qué alegría tenerte aquí! Cuando estés listo, introduce tu clave de acceso y abre tu Caja General.";
-    window.setTimeout(function(){
-      /* No interrumpe la navegación ni bloquea los controles de acceso. */
-      try{ window.hablarAndrew(mensaje); }catch(e){}
-    },650);
-  }
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",bienvenidaVozAndrew,{once:true});
-  }else{
-    bienvenidaVozAndrew();
-  }
-})();
-</script>
-
-</body>
+     </body>
      </html>`
   );
   w.document.close();
@@ -2356,6 +2348,47 @@ document.addEventListener("click",function(ev){
 
   if(texto) hablarAndrew(texto);
 });
+</script>
+<script>
+/* Bienvenida breve de Mister Andrew. La voz se intenta al cargar y, si el navegador
+   bloquea el audio automático, se reproduce en la primera interacción del usuario. */
+(function(){
+  let saludoAndrewIniciado=false;
+  let saludoAndrewPendiente=false;
+  function textoBienvenidaAndrew(){
+    const h=new Date().getHours();
+    const saludo=h>=5&&h<12?'Buenos días':h>=12&&h<19?'Buenas tardes':'Buenas noches';
+    return saludo+', Mr. Andrew, Gerente General del Banco LDS 360. ¡Qué alegría tenerte aquí! Cuando estés listo, introduce tu clave de acceso y abre tu Caja General.';
+  }
+  function reproducirBienvenidaAndrew(){
+    if(saludoAndrewIniciado || !('speechSynthesis' in window)) return;
+    saludoAndrewPendiente=true;
+    try{
+      const ss=window.speechSynthesis;
+      ss.cancel();
+      const u=new SpeechSynthesisUtterance(textoBienvenidaAndrew());
+      u.lang='es-PE'; u.rate=0.92; u.pitch=1; u.volume=1;
+      const voces=ss.getVoices();
+      const voz=voces.find(v=>/^es(-|_)/i.test(v.lang||'')) || voces.find(v=>/spanish|español/i.test(v.name||''));
+      if(voz) u.voice=voz;
+      u.onstart=function(){saludoAndrewIniciado=true;saludoAndrewPendiente=false;};
+      u.onend=function(){saludoAndrewIniciado=true;saludoAndrewPendiente=false;};
+      u.onerror=function(){saludoAndrewPendiente=true;};
+      ss.speak(u);
+      /* No se marca como iniciada hasta que el navegador confirme el comienzo. */
+    }catch(e){saludoAndrewPendiente=true;}
+  }
+  function activarVozPorInteraccion(){
+    if(saludoAndrewIniciado || !saludoAndrewPendiente) return;
+    reproducirBienvenidaAndrew();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',reproducirBienvenidaAndrew,{once:true});
+  else reproducirBienvenidaAndrew();
+  ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,activarVozPorInteraccion,{once:true,passive:true}));
+  if('speechSynthesis' in window) window.speechSynthesis.onvoiceschanged=function(){
+    if(saludoAndrewPendiente && !saludoAndrewIniciado && !window.speechSynthesis.speaking) reproducirBienvenidaAndrew();
+  };
+})();
 </script>
 <div id="printAreaAndrew" class="print-area-andrew" aria-hidden="true"></div>
 
