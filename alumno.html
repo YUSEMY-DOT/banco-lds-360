@@ -6,7 +6,7 @@
   <title>BANCO LDS 360 - PORTAL ESTUDIANTIL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+- { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
     
     body {
       background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
@@ -491,6 +491,18 @@
       }
     }
 
+    // FUNCIÓN PARA OBTENER SALUDO SEGÚN LA HORA
+    function obtenerSaludoSegunHora() {
+      const hora = new Date().getHours();
+      if (hora >= 5 && hora < 12) {
+        return "¡Buenos días!";
+      } else if (hora >= 12 && hora < 19) {
+        return "¡Buenas tardes!";
+      } else {
+        return "¡Buenas noches!";
+      }
+    }
+
     function reproducirSonido(tipo) {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -683,8 +695,9 @@
 
           renderizarMovimientos(movimientosGlobales);
 
-          // Saludo automático por voz al cargar los datos del alumno
-          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
+          // Saludo automático dinámico al cargar los datos del alumno
+          const saludoTiempo = obtenerSaludoSegunHora();
+          hablarVoz(saludoTiempo + " Hola, bienvenidos al área estudiantil del Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
 
         } else {
           document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
