@@ -157,7 +157,7 @@ footer{max-width:1050px;margin:15px auto 0;color:var(--muted);font-size:10px;tex
     </div>
   </div>
   <div class="top-actions">
-    <button class="btn btn-music" id="musicBtn" type="button" onclick="toggleMusica()" aria-label="Apagar música" aria-pressed="true" title="Apagar música">🔊</button>
+    <button class="btn btn-music" id="musicBtn" type="button" aria-label="Silenciar música" aria-pressed="true" title="Silenciar música" onclick="toggleMusica()">🔊</button>
     <a class="btn btn-light" href="index.html">← INICIO</a>
   </div>
 </header>
@@ -167,32 +167,32 @@ footer{max-width:1050px;margin:15px auto 0;color:var(--muted);font-size:10px;tex
     <div class="hero-sub">Toca una categoría para ver solamente los premios que pertenecen a esa sección.</div>
 
     <div class="categories">
-      <button class="category-btn" data-cat="papeleria" onclick="mostrarCategoria('papeleria', this); iniciarMusica()">
+      <button class="category-btn" data-cat="papeleria" onclick="mostrarCategoria('papeleria', this)">
       <span class="cat-icon">✏️</span>
       <span class="cat-label">PAPELERÍA</span>
       <small>Útiles y materiales para tus tareas</small>
     </button>
-<button class="category-btn" data-cat="tecnologia" onclick="mostrarCategoria('tecnologia', this); iniciarMusica()">
+<button class="category-btn" data-cat="tecnologia" onclick="mostrarCategoria('tecnologia', this)">
       <span class="cat-icon">🎧</span>
       <span class="cat-label">TECNOLOGÍA</span>
       <small>Accesorios y equipos tecnológicos</small>
     </button>
-<button class="category-btn" data-cat="juguetes" onclick="mostrarCategoria('juguetes', this); iniciarMusica()">
+<button class="category-btn" data-cat="juguetes" onclick="mostrarCategoria('juguetes', this)">
       <span class="cat-icon">🧸</span>
       <span class="cat-label">JUGUETES</span>
       <small>Premios para jugar y disfrutar</small>
     </button>
-<button class="category-btn" data-cat="deportivos" onclick="mostrarCategoria('deportivos', this); iniciarMusica()">
+<button class="category-btn" data-cat="deportivos" onclick="mostrarCategoria('deportivos', this)">
       <span class="cat-icon">⚽</span>
       <span class="cat-label">DEPORTIVOS</span>
       <small>Premios para moverte y practicar</small>
     </button>
-<button class="category-btn" data-cat="accesorios" onclick="mostrarCategoria('accesorios', this); iniciarMusica()">
+<button class="category-btn" data-cat="accesorios" onclick="mostrarCategoria('accesorios', this)">
       <span class="cat-icon">🎒</span>
       <span class="cat-label">ACCESORIOS</span>
       <small>Detalles para llevar y complementar</small>
     </button>
-<button class="category-btn" data-cat="comida" onclick="mostrarCategoria('comida', this); iniciarMusica()">
+<button class="category-btn" data-cat="comida" onclick="mostrarCategoria('comida', this)">
       <span class="cat-icon">🍎</span>
       <span class="cat-label">COMIDA</span>
       <small>Snacks y premios para disfrutar</small>
@@ -272,30 +272,45 @@ function cerrarAmpliacion(){
 }
 document.getElementById('modal').addEventListener('click', cerrarAmpliacion);
 
+function quitarInicioMusicaPendiente(){
+  inicioMusicaPendiente = false;
+  document.removeEventListener('pointerdown', iniciarMusicaPendiente, true);
+  document.removeEventListener('keydown', iniciarMusicaPendiente, true);
+}
+
+let inicioMusicaPendiente = true;
+function iniciarMusicaPendiente(event){
+  if(!inicioMusicaPendiente || !musicOn) return;
+  if(event && event.target && typeof event.target.closest === 'function' && event.target.closest('#musicBtn')) return;
+  quitarInicioMusicaPendiente();
+  crearMusica();
+  actualizarBotonMusica();
+}
+
+document.addEventListener('pointerdown', iniciarMusicaPendiente, true);
+document.addEventListener('keydown', iniciarMusicaPendiente, true);
+
 function iniciarMusica(){
   if(!musicOn) return;
-  if(!audioCtx || audioCtx.state === 'closed') crearMusica();
-  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+  quitarInicioMusicaPendiente();
+  crearMusica();
   actualizarBotonMusica();
 }
 
 function toggleMusica(){
   musicOn = !musicOn;
-  if(musicOn){
-    crearMusica();
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-  }else{
-    detenerMusica();
-  }
+  quitarInicioMusicaPendiente();
+  if(musicOn) crearMusica();
+  else detenerMusica();
   actualizarBotonMusica();
 }
 function actualizarBotonMusica(){
   const boton = document.getElementById('musicBtn');
   if(!boton) return;
   boton.textContent = musicOn ? '🔊' : '🔇';
-  boton.setAttribute('aria-label', musicOn ? 'Apagar música' : 'Activar música');
-  boton.setAttribute('title', musicOn ? 'Apagar música' : 'Activar música');
-  boton.setAttribute('aria-pressed', String(musicOn));
+  boton.setAttribute('aria-pressed', musicOn ? 'true' : 'false');
+  boton.setAttribute('aria-label', musicOn ? 'Silenciar música' : 'Activar música');
+  boton.title = musicOn ? 'Silenciar música' : 'Activar música';
 }
 function crearMusica(){
   detenerMusica();
@@ -335,29 +350,8 @@ function detenerMusica(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){cerrarAmpliacion();}});
 
-// Bienvenida hablada sin textos ni botones adicionales.
- // Se activa en el primer clic del usuario dentro de la página para respetar
- // las restricciones de reproducción de voz de los navegadores.
-const mensajeBienvenidaTienda = '¡Hola, campeones! ¡Bienvenidos a la Tienda LDS 360! Aquí tus ahorros se convierten en premios y tus esfuerzos tienen recompensa. Explora, elige tus favoritos y disfruta de esta aventura. ¡Sigue aprendiendo, ahorrando y brillando! ¡La Tienda LDS 360 te espera!';
-let bienvenidaTiendaReproducida = false;
-function reproducirBienvenidaTiendaEnPrimerClic(){
-  if (!bienvenidaTiendaReproducida) {
-    bienvenidaTiendaReproducida = true;
-    if ('speechSynthesis' in window) {
-      const voz = new SpeechSynthesisUtterance(mensajeBienvenidaTienda);
-      voz.lang = 'es-PE';
-      voz.rate = 0.92;
-      voz.pitch = 1.12;
-      voz.volume = 1;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(voz);
-    }
-  }
-  if (musicOn) iniciarMusica();
-  document.removeEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
-}
+// El saludo se reproduce desde el botón TIENDA de la portada principal.
 actualizarBotonMusica();
-document.addEventListener('click', reproducirBienvenidaTiendaEnPrimerClic, true);
 </script>
 </body>
 </html>
