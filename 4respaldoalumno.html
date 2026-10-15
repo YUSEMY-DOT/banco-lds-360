@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BANCO LDS 360 - PORTAL ESTUDIANTIL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    
+    body {
+      background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+      font-size: 11px;
+    }
+    
+    header {
+      background: #040a12;
+      padding: 12px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #f59e0b;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
+    .school-info { display: flex; align-items: center; gap: 12px; }
+    .school-info img { width: 42px; height: 42px; object-fit: contain; }
+    .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; margin: 0; }
+    .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin: 0; }
+    
+    .header-btns { display: flex; gap: 8px; align-items: center; }
+
+    .btn-actualizar-top {
+      background: linear-gradient(135deg, #059669, #047857);
+      border: 2px solid #6ee7b7;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-actualizar-top:hover { transform: scale(1.04); background: #10b981; }
+
+    .inicio-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #f59e0b;
+      color: #ffffff;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .inicio-btn:hover { background: #f59e0b; color: #06111f; }
+    
+    main { 
+      max-width: 1150px; 
+      width: 100%; 
+      margin: auto; 
+      padding: 20px 15px; 
+      flex: 1; 
+      display: flex; 
+      align-items: center;
+    }
+
+    .hidden { display: none !important; }
+
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 20px;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    @media (max-width: 950px) {
+      .dashboard-container { grid-template-columns: 1fr; }
+    }
+
+    /* TARJETA PRINCIPAL DEL ESTUDIANTE */
+    .saldo-card {
+      background: #091628;
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 3px solid #f59e0b;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .saldo-top { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 12px; 
+      position: relative; 
+      z-index: 2; 
+    }
+
+    /* CONTENEDOR DORADO DEL SALDO */
+    .saldo-box-dorado {
+      background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #eab308 100%);
+      color: #0c1e30;
+      border-radius: 18px;
+      padding: 12px 10px;
+      flex: 1;
+      text-align: center;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.9), 0 6px 15px rgba(0,0,0,0.35);
+      border: 2px solid #fef08a;
+    }
+    .saldo-title { font-size: 0.65rem; color: #854d0e; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .saldo-amount { font-size: 1.8rem; font-weight: 900; color: #0c1e30; line-height: 1; margin: 2px 0; }
+    .saldo-sub { font-size: 0.62rem; color: #047857; font-weight: 800; margin-top: 3px; }
+    
+    /* FOTO CIRCULAR CON ARO DORADO */
+    .avatar-wrap {
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      border: 4px solid #f59e0b;
+      background: #ffffff;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .avatar-img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      display: none;
+    }
+    
+    /* CAJA DE NOMBRE Y GRADO ESCOLAR */
+    .alumno-info-box { 
+      margin-top: 14px; 
+      background: #040a12; 
+      padding: 12px; 
+      border-radius: 14px; 
+      border: 1.5px solid #f59e0b;
+      text-align: center;
+    }
+    .alumno-nombre { font-size: 0.92rem; font-weight: 800; color: #ffffff; cursor: pointer; margin-bottom: 3px; }
+    .alumno-nombre:hover { color: #f59e0b; text-decoration: underline; }
+    .alumno-grado { font-size: 0.8rem; color: #fde047; font-weight: 800; }
+    
+    /* BOTONES DE ACCIÓN EN CUADRÍCULA 2X2 */
+    .actions-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 10px; 
+      margin-top: 14px; 
+    }
+    
+    .action-btn { 
+      padding: 10px 6px; 
+      border-radius: 12px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      text-align: center; 
+      font-size: 0.72rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+      transition: transform 0.2s, filter 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border: 1.5px solid;
+    }
+    .action-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    
+    .btn-pagar { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #fff; border-color: #fca5a5; }
+    .btn-movs { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #fff; border-color: #6ee7b7; }
+    .btn-prestamo { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #fff; border-color: #fde68a; }
+    .btn-mensaje { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border-color: #bfdbfe; }
+
+    /* PANEL DERECHO SECCIONAL */
+    .sub-card { 
+      background: #ffffff; 
+      color: #1e293b; 
+      border-radius: 20px; 
+      padding: 20px; 
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); 
+      border: 3px solid #f59e0b; 
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .sub-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    .sub-card h4 { font-size: 0.95rem; color: #0c1e30; font-weight: 800; }
+    
+    .btn-imprimir {
+      background: linear-gradient(135deg, #0c1e30 0%, #1e3a8a 100%);
+      color: #ffffff;
+      border: 1.5px solid #f59e0b;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .form-scroll-area { max-height: 260px; overflow-y: auto; padding-right: 4px; }
+    .form-group { margin-bottom: 10px; text-align: left; }
+    .form-group label { display: block; color: #334155; font-size: 0.72rem; font-weight: 800; margin-bottom: 3px; }
+    .input-field, select, textarea, input { 
+      width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.8rem; outline: none; color: #0c1e30; background: #f8fafc; font-weight: 700;
+    }
+    
+    .lista-movs { min-height: 220px; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    
+    .btn-primary {
+      width: 100%; height: 42px; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #ffffff; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); margin-top: 10px;
+    }
+    
+    footer { 
+      text-align: center; padding: 10px; font-size: 0.72rem; color: #ffffff; background-color: #040a12; 
+      border-top: 3px solid #f59e0b; font-weight: 700;
+    }
+
+    #contenedorImpresion { display: none; }
+
+    @media print {
+      body * { visibility: hidden !important; }
+      #contenedorImpresion, #contenedorImpresion * { visibility: visible !important; }
+      #contenedorImpresion {
+        display: block !important;
+        position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 25px;
+      }
+      .print-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px double #0c1e30; padding-bottom: 12px; margin-bottom: 20px; }
+      .print-logo { width: 75px; height: 75px; object-fit: contain; }
+      .print-title { text-align: center; }
+      .print-title h1 { font-size: 18px; color: #0c1e30; margin: 0; font-weight: 900; }
+      .print-title h2 { font-size: 13px; color: #d97706; margin: 2px 0; font-weight: 800; }
+      .print-title p { font-size: 10px; color: #475569; margin: 0; font-weight: 700; }
+      .print-user-box { display: flex; gap: 15px; align-items: center; border: 1.5px solid #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 15px; background: #f8fafc; }
+      .print-user-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #d97706; }
+      .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+      .print-table th, .print-table td { border: 1px solid #94a3b8; padding: 6px 8px; font-size: 10px !important; text-align: left; }
+      .print-table th { background: #e2e8f0; color: #0f172a; font-weight: 800; }
+      .print-footer-signatures { display: flex; justify-content: space-around; margin-top: 50px; text-align: center; }
+      .print-signature-line { width: 180px; border-top: 1.5px dashed #000; padding-top: 5px; font-size: 10px; font-weight: 800; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="school-info">
+      <img src="assets/insignia.png" alt="Insignia" onerror="this.src='https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE';">
+      <div class="school-title">
+        <h1>BANCO LDS 360</h1>
+        <p>I.E.P. LA SALLE DEL SUR</p>
+      </div>
+    </div>
+    <div class="header-btns">
+      <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual);" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
+      <a href="./" class="inicio-btn" onclick="reproducirSonido('clic')">← INICIO</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="dashboard-container">
+      
+      <!-- TARJETA BASE DE LA IMAGEN -->
+      <div class="saldo-card">
+        <div class="saldo-top">
+          <div class="saldo-box-dorado">
+            <p class="saldo-title">SALDO DISPONIBLE</p>
+            <h3 class="saldo-amount"><span id="saldoLDS">1.080</span> LDS</h3>
+            <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">1.130 LDS</span></p>
+          </div>
+
+          <div class="avatar-wrap">
+            <img id="alumnoFoto" src="" alt="Foto del Estudiante" class="avatar-img" />
+          </div>
+        </div>
+
+        <div class="alumno-info-box">
+          <p id="alumnoNombre" class="alumno-nombre" onclick="reproducirSonido('clic'); cambiarCodigoManual();" title="CLIC PARA CAMBIAR CÓDIGO">DANY SMITH FRANCISCO CRIOLLO</p>
+          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">TERCERO LOS DIVERGENTES</span></p>
+        </div>
+
+        <div class="actions-grid">
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionOperacion')" class="action-btn btn-pagar">💰 PAGAR / GASTOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionMovimientos')" class="action-btn btn-movs">📊 MOVIMIENTOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionPrestamo')" class="action-btn btn-prestamo">🤝 PRÉSTAMOS</button>
+          <button onclick="reproducirSonido('clic'); mostrarSeccion('seccionMensaje')" class="action-btn btn-mensaje">✉️ BUZÓN / AVISO</button>
+        </div>
+      </div>
+
+      <!-- VISTAS INTERACTIVAS A LA DERECHA -->
+      <div>
+        
+        <div id="seccionOperacion" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4>💸 REGISTRAR PAGO O GASTO DE ALUMNO</h4>
+          </div>
+          
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>CATEGORÍA DE GASTO</label>
+              <select id="selectCategoria" onchange="alCambiarCategoria(); reproducirSonido('clic');" class="input-field">
+                <option value="PAGOS_Y_GASTOS">🛒 PAGOS Y GASTOS</option>
+                <option value="SANCIONES_Y_MULTAS">⚠️ SANCIONES Y MULTAS</option>
+                <option value="PREMIOS_Y_BONIFICACIONES">🏆 PREMIOS Y BONIFICACIONES</option>
+                <option value="INGRESOS_Y_SUELDOS">💼 INGRESOS Y SUELDOS</option>
+                <option value="AHORROS_E_INVERSIONES">💰 AHORROS E INVERSIONES</option>
+                <option value="COSTOS_Y_OTROS">⚙️ COSTOS Y OTROS</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>CONCEPTO</label>
+              <select id="selectConcepto" onchange="alCambiarConcepto()" class="input-field">
+                <option value="">SELECCIONE CONCEPTO</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>MONTO LDS (TARIFA AUTOMÁTICA)</label>
+              <input type="number" id="inputMonto" min="0" step="1" placeholder="MONTO EN LDS" class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <label>DOCENTE / CAJERA RESPONSABLE</label>
+              <select id="selectResponsable" class="input-field">
+                <option value="">SELECCIONE CAJERA RESPONSABLE</option>
+                <option value="MISS LILY MELO AZAÑERO (LDS-DOC-001)">MISS LILY MELO AZAÑERO</option>
+                <option value="MISS KIARA MORALES ELGUERA (LDS-DOC-002)">MISS KIARA MORALES ELGUERA</option>
+                <option value="MISS ANGHY REYES MELO (LDS-DOC-003)">MISS ANGHY REYES MELO</option>
+                <option value="MISS KARIN MOLERO ROMANI (LDS-DOC-004)">MISS KARIN MOLERO ROMANI</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>OBSERVACIÓN (OPCIONAL)</label>
+              <textarea id="inputObservacion" rows="2" placeholder="DETALLE DEL GASTO..." class="input-field" style="resize: none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="reproducirSonido('exito'); registrarMovimientoOperacion();" class="btn-primary">CONFIRMAR Y REGISTRAR GASTO</button>
+            <div id="mensajeOperacion" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
+          </div>
+        </div>
+
+        <div id="seccionMovimientos" class="sub-card">
+          <div class="sub-card-header">
+            <h4>📊 HISTORIAL DE MOVIMIENTOS</h4>
+            <div style="display:flex; gap:6px;">
+              <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual)" class="btn-imprimir" style="background:#059669; border-color:#6ee7b7;">🔄 ACTUALIZAR</button>
+              <button onclick="reproducirSonido('clic'); imprimirEstadoCuenta()" class="btn-imprimir">🖨️ IMPRIMIR REPORTE</button>
+            </div>
+          </div>
+
+          <div id="listaMovimientos" class="lista-movs">
+            <p style="color: #64748b; text-align: center; font-style: italic; padding: 20px;">CARGANDO MOVIMIENTOS DESDE BASE DE DATOS...</p>
+          </div>
+        </div>
+
+        <div id="seccionPrestamo" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4>🤝 SOLICITAR PRÉSTAMO / TRANSFERIR A COMPAÑERO</h4>
+          </div>
+
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>TIPO DE OPERACIÓN</label>
+              <select id="prestamoTipo" class="input-field">
+                <option value="TRANSFERENCIA_COMPANERO">TRANSFERIR A UN COMPAÑERO DE AULA</option>
+                <option value="SOLICITUD_CAJA">SOLICITAR PRÉSTAMO A CAJA DOCENTE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>CÓDIGO DESTINO (EJ: LDS-EST-002 O LDS-DOC-001)</label>
+              <input type="text" id="prestamoDestino" placeholder="CÓDIGO DEL COMPAÑERO O MISSE" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MONTO EN LDS</label>
+              <input type="number" id="prestamoMonto" min="1" step="1" placeholder="INGRESE EL MONTO" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MOTIVO / OBSERVACIÓN</label>
+              <textarea id="prestamoObs" rows="2" placeholder="MOTIVO DEL PRÉSTAMO..." class="input-field" style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="reproducirSonido('exito'); registrarPrestamoAlumno();" class="btn-primary" style="background:linear-gradient(135deg,#d97706,#b45309);">ENVIAR SOLICITUD DE PRÉSTAMO</button>
+            <div id="mensajePrestamo" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
+          </div>
+        </div>
+
+        <div id="seccionMensaje" class="sub-card hidden">
+          <div class="sub-card-header">
+            <h4>✉️ BUZÓN DE MENSAJES PARA LA MAESTRA</h4>
+          </div>
+
+          <div class="form-scroll-area">
+            <div class="form-group">
+              <label>DOCENTE DESTINATARIA</label>
+              <select id="mensajeDocente" class="input-field">
+                <option value="MISS LILY MELO AZAÑERO (LDS-DOC-001)">MISS LILY MELO AZAÑERO</option>
+                <option value="MISS KIARA MORALES ELGUERA (LDS-DOC-002)">MISS KIARA MORALES ELGUERA</option>
+                <option value="MISS ANGHY REYES MELO (LDS-DOC-003)">MISS ANGHY REYES MELO</option>
+                <option value="MISS KARIN MOLERO ROMANI (LDS-DOC-004)">MISS KARIN MOLERO ROMANI</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>ASUNTO / TEMA</label>
+              <input type="text" id="mensajeAsunto" placeholder="EJ: CONSULTA DE BONO / TAREA" class="input-field">
+            </div>
+
+            <div class="form-group">
+              <label>MENSAJE / RECADITO</label>
+              <textarea id="mensajeTexto" rows="4" placeholder="ESCRIBE TU MENSAJE PARA LA MISS..." class="input-field" style="resize:none;"></textarea>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="reproducirSonido('exito'); enviarMensajeAMaestra();" class="btn-primary" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">ENVIAR MENSAJE AL BUZÓN</button>
+            <div id="mensajeStatus" style="font-size: 0.8rem; text-align: center; margin-top: 6px; font-weight: 800;"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    BANCO LDS 360 — I.E.P. LA SALLE DEL SUR — TODOS LOS DERECHOS RESERVADOS
+  </footer>
+
+  <div id="contenedorImpresion"></div>
+
+  <script>
+    const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
+    const LOGO_INSIGNIA_URL = "assets/insignia.png";
+    const LOGO_FALLBACK = "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE";
+
+    let codigoEstudianteActual = "LDS-EST-001";
+    let estudianteGlobal = null;
+    let cuentaGlobal = null;
+    let movimientosGlobales = [];
+
+    // MOTOR DE SÍNTESIS DE VOZ Y AUDIO AUTOMÁTICO
+    function hablarVoz(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'es-PE';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function reproducirSonido(tipo) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (tipo === 'clic') {
+          osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.05);
+        } else if (tipo === 'exito') {
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.2);
+        }
+      } catch (e) {}
+    }
+
+    const CATALOGO_TARIFAS = {
+      "INGRESOS_Y_SUELDOS": [
+        { concepto: "Ingreso Sueldo Base Mensual", monto: 1130 },
+        { concepto: "Ingreso Sueldo por Rol de Liderazgo", monto: 150 },
+        { concepto: "Ingreso Bono por desempeño", monto: 50 }
+      ],
+      "PREMIOS_Y_BONIFICACIONES": [
+        { concepto: "Bono por llevar el uniforme impecable y reglamentario", monto: 50 },
+        { concepto: "Bono Participación destacada en clase", monto: 50 },
+        { concepto: "Bono Premio por primer lugar en concurso académico o deportivo", monto: 200 },
+        { concepto: "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)", monto: 200 },
+        { concepto: "Bono Apoyo destacado en limpieza, orden o ecología del aula", monto: 100 },
+        { concepto: "Bono por ayuda solidaria / Compañerismo destacado", monto: 50 },
+        { concepto: "Bono Creatividad e innovación en proyectos escolares", monto: 200 },
+        { concepto: "Bono Representar dignamente al colegio en eventos externos", monto: 100 },
+        { concepto: "Bono Leer un libro y presentar evidencia de 20 preguntas y respuestas", monto: 500 },
+        { concepto: "Bono Completar un reto educativo", monto: 200 },
+        { concepto: "Bono Llegar puntual al refrigerio", monto: 50 },
+        { concepto: "Bono Participar en Escuela para Padres junto a su familia", monto: 700 },
+        { concepto: "Bono Ser responsable con sus materiales", monto: 50 },
+        { concepto: "Bono Ayudar a mantener limpia el aula", monto: 100 }
+      ],
+      "AHORROS_E_INVERSIONES": [
+        { concepto: "Depósito a cuenta de ahorros (Ahorro voluntario)", monto: 10 },
+        { concepto: "Inversión en fondo común del aula / cooperativa", monto: 50 },
+        { concepto: "Retiro de ahorros (Emergencia o meta cumplida)", monto: 20 }
+      ],
+      "PAGOS_Y_GASTOS": [
+        { concepto: "Pago Compra en la tienda escolar / cafetín", monto: 30 },
+        { concepto: "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", monto: 20 },
+        { concepto: "Pago de servicios del aula: Agua", monto: 20 },
+        { concepto: "Pago de servicios del aula: Energía", monto: 20 },
+        { concepto: "Pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)", monto: 50 },
+        { concepto: "Gasto médico imprevisto menor (Botiquín escolar / Curitas)", monto: 40 },
+        { concepto: "Alquiler de libros de la biblioteca o material didáctico", monto: 20 },
+        { concepto: "Pago por custodia de equipos tecnológicos", monto: 50 },
+        { concepto: "Pago por copias extras", monto: 100 },
+        { concepto: "Comprar stickers", monto: 20 },
+        { concepto: "Pagar para una actividad extra", monto: 100 },
+        { concepto: "Pagar por jugar 10 minutos más", monto: 150 }
+      ],
+      "SANCIONES_Y_MULTAS": [
+        { concepto: "Multa por llevar mal el uniforme o incompleto", monto: 150 },
+        { concepto: "Incumplimiento de tareas o asignaciones a tiempo", monto: 200 },
+        { concepto: "Llegada tarde al aula o formación", monto: 120 },
+        { concepto: "Uso no autorizado de dispositivos electrónicos en clase", monto: 200 },
+        { concepto: "Desorden o indisciplina leve durante las horas de clase", monto: 200 },
+        { concepto: "Falta de respeto o modales con compañeros o docentes", monto: 200 },
+        { concepto: "No traer el material escolar requerido para la sesión", monto: 250 },
+        { concepto: "Descuido o daño leve al mobiliario o infraestructura del aula", monto: 300 },
+        { concepto: "Basura fuera de su lugar / No respetar áreas verdes o comunes", monto: 120 },
+        { concepto: "Inasistencia injustificada a reuniones o actividades obligatorias", monto: 300 },
+        { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
+        { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
+        { concepto: "Faltar a la verdad", monto: 500 },
+        { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
+      ],
+      "COSTOS_Y_OTROS": [
+        { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
+        { concepto: "Cuota extraordinaria de mantenimiento grupal", monto: 100 },
+        { concepto: "Transacción personalizada / Ajuste de caja", monto: 10 }
+      ]
+    };
+
+    function parseMontoLDS(val) {
+      if (typeof val === "number") return Math.trunc(val);
+      if (!val) return 0;
+      let str = String(val).replace(/LDS/gi, "").replace(/\s/g, "").trim();
+      if (str.includes(".") && !str.includes(",")) {
+        let partes = str.split(".");
+        if (partes.length > 1 && partes[partes.length - 1].length === 3) str = str.replace(/\./g, "");
+      }
+      str = str.replace(/,/g, ".");
+      const n = Number(str);
+      return Number.isFinite(n) ? Math.trunc(n) : 0;
+    }
+
+    function formatearLDS(val) {
+      return parseMontoLDS(val).toLocaleString("de-DE") + " LDS";
+    }
+
+    function convertDriveUrl(url) {
+      if (!url) return "";
+      let s = String(url).trim();
+      if (s === "SIN_FOTO" || s === "undefined" || s === "null" || !s) return "";
+      let match = s.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || s.match(/id=([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) return "https://lh3.googleusercontent.com/d/" + match[1];
+      if (s.startsWith("https://lh3.googleusercontent.com/d/")) return s;
+      return s;
+    }
+
+    function llamarAPI(parametros, callback) {
+      const nombreCallback = "cb_est_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+      const query = Object.keys(parametros).map(k => encodeURIComponent(k) + "=" + encodeURIComponent(parametros[k])).join("&");
+      const script = document.createElement("script");
+
+      script.src = APP_SCRIPT_URL + "?" + query + "&callback=" + encodeURIComponent(nombreCallback);
+      window[nombreCallback] = function(res) {
+        try { callback(res); } finally { delete window[nombreCallback]; script.remove(); }
+      };
+      script.onerror = function() {
+        delete window[nombreCallback]; script.remove();
+        callback({ok:false, mensaje:"ERROR DE CONEXIÓN AL SERVIDOR."});
+      };
+      document.body.appendChild(script);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      codigoEstudianteActual = (params.get('codigo') || 'LDS-EST-001').trim().toUpperCase();
+      
+      if (!params.has('codigo')) {
+        window.history.replaceState({}, '', '?codigo=' + codigoEstudianteActual);
+      }
+
+      alCambiarCategoria();
+      consultarDatosEstudiante(codigoEstudianteActual);
+    });
+
+    function mostrarSeccion(idSeccion) {
+      ['seccionOperacion', 'seccionMovimientos', 'seccionPrestamo', 'seccionMensaje'].forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+      document.getElementById(idSeccion).classList.remove('hidden');
+    }
+
+    function cambiarCodigoManual() {
+      const nuevoCod = prompt("INGRESE EL CÓDIGO DEL ESTUDIANTE (EJ: LDS-EST-001):", codigoEstudianteActual);
+      if (nuevoCod && nuevoCod.trim() !== "") {
+        codigoEstudianteActual = nuevoCod.trim().toUpperCase();
+        window.history.replaceState({}, '', '?codigo=' + encodeURIComponent(codigoEstudianteActual));
+        consultarDatosEstudiante(codigoEstudianteActual);
+      }
+    }
+
+    function consultarDatosEstudiante(codigo) {
+      document.getElementById('alumnoNombre').textContent = "CARGANDO DATOS...";
+      
+      llamarAPI({ accion: "CONSULTAR", codigo: codigo }, function(res) {
+        if (res && res.ok) {
+          estudianteGlobal = res.estudiante || {};
+          cuentaGlobal = res.cuenta || {};
+          movimientosGlobales = res.movimientos || [];
+
+          const nom = estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigo;
+          const gradoText = (estudianteGlobal.grado || 'AULA') + " " + (estudianteGlobal.seccion || '');
+
+          document.getElementById('alumnoNombre').textContent = nom;
+          document.getElementById('textoGradoSeccion').textContent = gradoText;
+          
+          const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
+          const baseIngresos = parseMontoLDS(cuentaGlobal.totalIngresos || cuentaGlobal.totalEntregadoMaestra || 1130);
+
+          document.getElementById('saldoLDS').textContent = saldo.toLocaleString("de-DE");
+          document.getElementById('montoInicialLDS').textContent = baseIngresos.toLocaleString("de-DE") + " LDS";
+
+          const fotoConverted = convertDriveUrl(estudianteGlobal.fotoUrl || estudianteGlobal.foto);
+          const imgEl = document.getElementById('alumnoFoto');
+
+          if (fotoConverted) {
+            imgEl.src = fotoConverted;
+            imgEl.style.display = "block";
+          } else {
+            imgEl.style.display = "none";
+          }
+
+          renderizarMovimientos(movimientosGlobales);
+
+          // Saludo automático por voz al cargar los datos del alumno
+          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
+
+        } else {
+          document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
+          document.getElementById('listaMovimientos').innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN REGISTROS EN GOOGLE SHEETS.</p>';
+          hablarVoz("Estudiante no encontrado en el sistema.");
+        }
+      });
+    }
+
+    function alCambiarCategoria() {
+      const cat = document.getElementById('selectCategoria').value || "PAGOS_Y_GASTOS";
+      const selectCon = document.getElementById('selectConcepto');
+      selectCon.innerHTML = '<option value="">SELECCIONE CONCEPTO</option>';
+
+      const conceptos = CATALOGO_TARIFAS[cat] || [];
+      conceptos.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.concepto;
+        opt.textContent = c.concepto.toUpperCase();
+        selectCon.appendChild(opt);
+      });
+
+      if (conceptos.length) {
+        selectCon.value = conceptos[0].concepto;
+        alCambiarConcepto();
+      } else {
+        document.getElementById('inputMonto').value = "";
+      }
+    }
+
+    function alCambiarConcepto() {
+      const cat = document.getElementById('selectCategoria').value || "PAGOS_Y_GASTOS";
+      const conSel = document.getElementById('selectConcepto').value;
+      const conceptos = CATALOGO_TARIFAS[cat] || [];
+
+      const encontrado = conceptos.find(item => item.concepto === conSel);
+      if (encontrado) {
+        document.getElementById('inputMonto').value = encontrado.monto;
+      } else {
+        document.getElementById('inputMonto').value = "";
+      }
+    }
+
+    function registrarMovimientoOperacion() {
+      const cat = document.getElementById('selectCategoria').value;
+      const con = document.getElementById('selectConcepto').value;
+      const monto = Number(document.getElementById('inputMonto').value) || 0;
+      const resp = document.getElementById('selectResponsable').value;
+      const obs = document.getElementById('inputObservacion').value.trim();
+      const msg = document.getElementById('mensajeOperacion');
+
+      if (!monto || monto <= 0 || !con || !resp) {
+        msg.style.color = "#dc2626";
+        msg.textContent = "COMPLETE TODOS LOS CAMPOS OBLIGATORIOS.";
+        hablarVoz("Por favor complete todos los campos obligatorios.");
+        return;
+      }
+
+      msg.style.color = "#2563eb";
+      msg.textContent = "REGISTRANDO GASTO EN SISTEMA...";
+      hablarVoz("Registrando movimiento en el sistema...");
+
+      llamarAPI({
+        accion: 'REGISTRARMOVIMIENTO',
+        codigo: codigoEstudianteActual,
+        tipo: 'EGRESO',
+        monto: monto,
+        concepto: con,
+        responsable: resp,
+        observacion: obs,
+        categoria: "2026"
+      }, function(res) {
+        if (res && res.ok) {
+          msg.style.color = "#059669";
+          msg.textContent = "¡GASTO REGISTRADO CON ÉXITO!";
+          document.getElementById('inputObservacion').value = "";
+          hablarVoz("Gasto registrado con éxito.");
+          consultarDatosEstudiante(codigoEstudianteActual);
+          setTimeout(() => mostrarSeccion('seccionMovimientos'), 1000);
+        } else {
+          msg.style.color = "#dc2626";
+          msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR EL GASTO.";
+          hablarVoz("Error al registrar la transacción.");
+        }
+      });
+    }
+
+    function registrarPrestamoAlumno() {
+      const destino = document.getElementById('prestamoDestino').value.trim().toUpperCase();
+      const monto = Number(document.getElementById('prestamoMonto').value) || 0;
+      const obs = document.getElementById('prestamoObs').value.trim();
+      const msg = document.getElementById('mensajePrestamo');
+
+      if (!destino || monto <= 0) {
+        msg.style.color = "#dc2626"; msg.textContent = "INGRESE DESTINO Y MONTO VÁLIDO.";
+        hablarVoz("Ingrese un destino y monto válido.");
+        return;
+      }
+
+      msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO SOLICITUD DE PRÉSTAMO...";
+      hablarVoz("Enviando solicitud de préstamo...");
+      
+      llamarAPI({
+        accion: 'REGISTRAR_PRESTAMO',
+        origen: codigoEstudianteActual,
+        destino: destino,
+        monto: monto,
+        observacion: obs
+      }, function(res) {
+        if (res && res.ok) {
+          msg.style.color = "#059669";
+          msg.textContent = "¡PRÉSTAMO / TRANSFERENCIA REGISTRADA!";
+          document.getElementById('prestamoMonto').value = "";
+          document.getElementById('prestamoObs').value = "";
+          hablarVoz("Préstamo y transferencia registrada correctamente.");
+          consultarDatosEstudiante(codigoEstudianteActual);
+        } else {
+          msg.style.color = "#dc2626";
+          msg.textContent = (res && res.mensaje) || "ERROR AL REGISTRAR PRÉSTAMO.";
+          hablarVoz("Error al registrar el préstamo.");
+        }
+      });
+    }
+
+    function enviarMensajeAMaestra() {
+      const docente = document.getElementById('mensajeDocente').value;
+      const asunto = document.getElementById('mensajeAsunto').value.trim();
+      const texto = document.getElementById('mensajeTexto').value.trim();
+      const msg = document.getElementById('mensajeStatus');
+
+      if (!texto) { 
+        msg.style.color = "#dc2626"; msg.textContent = "ESCRIBA UN MENSAJE."; 
+        hablarVoz("Por favor escriba un mensaje para la maestra.");
+        return; 
+      }
+
+      msg.style.color = "#2563eb"; msg.textContent = "ENVIANDO AVISO A LA MAESTRA...";
+      hablarVoz("Enviando mensaje al buzón de la maestra...");
+      
+      llamarAPI({
+        accion: 'ENVIAR_RECORDATORIO',
+        codigo: codigoEstudianteActual,
+        responsable: docente,
+        concepto: "MENSAJE: " + (asunto || "AVISO DE ESTUDIANTE"),
+        observacion: texto
+      }, function(res) {
+        if (res && res.ok) {
+          msg.style.color = "#059669";
+          msg.textContent = "¡MENSAJE ENVIADO A LA MAESTRA!";
+          document.getElementById('mensajeTexto').value = "";
+          document.getElementById('mensajeAsunto').value = "";
+          hablarVoz("Mensaje enviado con éxito a la maestra.");
+        } else {
+          msg.style.color = "#dc2626";
+          msg.textContent = "ERROR AL ENVIAR EL MENSAJE.";
+          hablarVoz("Error al enviar el mensaje.");
+        }
+      });
+    }
+
+    function renderizarMovimientos(movs) {
+      const cont = document.getElementById('listaMovimientos');
+      cont.innerHTML = "";
+
+      if (!movs || !movs.length) {
+        cont.innerHTML = '<p style="color:#64748b; text-align:center; padding:20px;">SIN MOVIMIENTOS RECIENTES EN GOOGLE SHEETS.</p>';
+        return;
+      }
+
+      movs.forEach(m => {
+        const div = document.createElement('div');
+        div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-bottom:1px solid #e2e8f0; font-size:0.8rem;";
+        const tipoVal = String(m.tipo || "EGRESO").toUpperCase();
+        const esEgreso = (tipoVal === "EGRESO");
+        const montoVal = parseMontoLDS(m.monto);
+
+        div.innerHTML = `
+          <div>
+            <strong style="color:#0c1e30;">${m.concepto || 'MOVIMIENTO'}</strong><br>
+            <span style="font-size:0.65rem; color:#64748b;">${m.fechaTexto || m.fecha || ''} · RESP: ${m.responsable || 'SISTEMA'}</span>
+          </div>
+          <strong style="color:${esEgreso ? '#e11d48' : '#059669'}; font-size:0.85rem;">
+            ${esEgreso ? '-' : '+'} ${formatearLDS(montoVal)}
+          </strong>
+        `;
+        cont.appendChild(div);
+      });
+    }
+
+    function imprimirEstadoCuenta() {
+      hablarVoz("Generando reporte impreso de estado de cuenta.");
+      const cont = document.getElementById("contenedorImpresion");
+      const nom = estudianteGlobal ? (estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigoEstudianteActual) : codigoEstudianteActual;
+      const gradoText = estudianteGlobal ? ((estudianteGlobal.grado || 'AULA') + " " + (estudianteGlobal.seccion || '')) : 'AULA';
+      const fotoEst = convertDriveUrl(estudianteGlobal ? (estudianteGlobal.fotoUrl || estudianteGlobal.foto) : "");
+
+      const imgTag = fotoEst ? `<img class="print-user-img" src="${fotoEst}">` : `<div style="width:65px; height:65px; border-radius:50%; background:#e2e8f0; display:grid; place-items:center; font-size:30px;">👤</div>`;
+
+      let filasHtml = "";
+      movimientosGlobales.forEach(m => {
+        filasHtml += `
+          <tr>
+            <td>${m.fechaTexto || m.fecha || '-'}</td>
+            <td>${m.tipo || 'EGRESO'}</td>
+            <td>${m.concepto || '-'}</td>
+            <td><strong>${formatearLDS(m.monto)}</strong></td>
+            <td>${m.responsable || 'SISTEMA'}</td>
+            <td>${m.observacion || ''}</td>
+          </tr>
+        `;
+      });
+
+      cont.innerHTML = `
+        <div class="print-header">
+          <div style="width:75px; height:75px;"></div>
+          <div class="print-title">
+            <h1>I.E.P. LA SALLE DEL SUR</h1>
+            <h2>BANCO LASALLISTA 360</h2>
+            <p>REPORTE DE ESTADO DE CUENTA ESTUDIANTIL — AÑO ESCOLAR 2026</p>
+          </div>
+          <img src="${LOGO_INSIGNIA_URL}" class="print-logo" onerror="this.src='${LOGO_FALLBACK}';">
+        </div>
+
+        <div class="print-user-box">
+          ${imgTag}
+          <div>
+            <h3 style="margin:0; font-size:14px; color:#0c1e30;">${nom}</h3>
+            <p style="margin:2px 0; font-size:11px;">CÓDIGO: <strong>${codigoEstudianteActual}</strong> · GRADO: <strong>${gradoText}</strong></p>
+            <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${formatearLDS(cuentaGlobal ? cuentaGlobal.saldoActual : 0)}</strong></p>
+          </div>
+        </div>
+
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>FECHA Y HORA</th>
+              <th>TIPO MOV.</th>
+              <th>CONCEPTO</th>
+              <th>MONTO</th>
+              <th>RESPONSABLE</th>
+              <th>OBSERVACIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filasHtml || '<tr><td colspan="6">Sin movimientos registrados.</td></tr>'}
+          </tbody>
+        </table>
+
+        <div class="print-footer-signatures">
+          <div class="print-signature-line">
+            ESTUDIANTE / PADRE DE FAMILIA<br>
+            FIRMA DE CONFORMIDAD
+          </div>
+          <div class="print-signature-line">
+            MÍSTER ANDREW REYES MELO<br>
+            GERENCIA GENERAL / BANCO 360
+          </div>
+        </div>
+      `;
+
+      window.print();
+    }
+  </script>
+
+</body>
+</html>
