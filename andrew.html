@@ -414,6 +414,30 @@ button{cursor:pointer;}
   }
 }
 </style>
+<style id="ajuste-saldos-sin-recorte">
+/* Ajuste puntual: impedir que los importes largos se corten dentro de las tarjetas. */
+#andrewApp .caja-resumen > .resumen-metrica{min-width:0!important;padding:10px 8px!important;}
+#andrewApp .caja-resumen > .resumen-metrica strong,
+#andrewApp .caja-resumen > .resumen-metrica:nth-child(2) strong,
+#andrewApp .caja-resumen > .resumen-metrica:nth-child(3) strong{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  font-size:clamp(.82rem,1.15vw,1.22rem)!important;
+  line-height:1.12!important;
+  letter-spacing:-.025em!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+#andrewApp .caja-resumen > .resumen-metrica:nth-child(4) strong{
+  max-width:100%!important;
+  white-space:normal!important;
+  line-height:1.12!important;
+}
+</style>
 </head>
 <body class="login-screen">
 
