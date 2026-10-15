@@ -7,8 +7,8 @@
 <style>
 :root{--azul:#061b3f;--azul2:#0b2f67;--dorado:#f5b400;--texto:#14213d;--borde:#cbd5e1;--verde:#059669;--rojo:#dc2626}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif}
-body{background:#061b3f;color:var(--texto);overflow-x:hidden}
+html,body{margin:0;padding:0;width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif;overflow-anchor:none;scroll-behavior:auto}
+body{background:#061b3f;color:var(--texto);overflow-x:hidden;overflow-anchor:none}
 button,input,select,textarea{font:inherit}
 
 #loginAndrew{
@@ -1180,6 +1180,13 @@ function entrarAndrew(desdeQR=false){
   document.getElementById("appHeader").style.display = "flex";
   document.getElementById("andrewApp").style.display = "block";
   document.getElementById("appFooter").style.display = "block";
+  // Inicia la caja siempre desde la parte superior y evita el salto vertical durante la carga.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+  });
   cargarTodo();
 }
 
