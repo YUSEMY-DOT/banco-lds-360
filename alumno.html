@@ -297,8 +297,8 @@
         <div class="saldo-top">
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">1.080</span> LDS</h3>
-            <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">1.130 LDS</span></p>
+            <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
+            <p class="saldo-sub">INGRESOS REGISTRADOS: <span id="montoInicialLDS">0 LDS</span></p>
           </div>
 
           <div class="avatar-wrap">
@@ -666,10 +666,10 @@
           document.getElementById('textoGradoSeccion').textContent = gradoText;
           
           const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
-          const baseIngresos = parseMontoLDS(cuentaGlobal.totalIngresos || cuentaGlobal.totalEntregadoMaestra || 1130);
+          const ingresosRegistrados = parseMontoLDS(cuentaGlobal.totalIngresos ?? 0);
 
           document.getElementById('saldoLDS').textContent = saldo.toLocaleString("de-DE");
-          document.getElementById('montoInicialLDS').textContent = baseIngresos.toLocaleString("de-DE") + " LDS";
+          document.getElementById('montoInicialLDS').textContent = ingresosRegistrados.toLocaleString("de-DE") + " LDS";
 
           const fotoConverted = convertDriveUrl(estudianteGlobal.fotoUrl || estudianteGlobal.foto);
           const imgEl = document.getElementById('alumnoFoto');
@@ -684,7 +684,7 @@
           renderizarMovimientos(movimientosGlobales);
 
           // Saludo automático por voz al cargar los datos del alumno
-          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
+          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " LDS, LS Coins.");
 
         } else {
           document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
@@ -735,6 +735,19 @@
       const resp = document.getElementById('selectResponsable').value;
       const obs = document.getElementById('inputObservacion').value.trim();
       const msg = document.getElementById('mensajeOperacion');
+
+      // Las entradas de dinero y los retiros deben ser registrados por una caja autorizada.
+      // En el portal del alumno el catálogo es de consulta; no debe convertir un ingreso en egreso.
+      const requiereCajaAutorizada =
+        cat === "INGRESOS_Y_SUELDOS" ||
+        cat === "PREMIOS_Y_BONIFICACIONES" ||
+        (cat === "AHORROS_E_INVERSIONES" && /retiro de ahorros/i.test(con));
+      if (requiereCajaAutorizada) {
+        msg.style.color = "#b45309";
+        msg.textContent = "TARIFA DE REFERENCIA: ESTE CONCEPTO DEBE REGISTRARSE DESDE LA CAJA AUTORIZADA. NO SE REGISTRÓ NINGÚN MOVIMIENTO.";
+        hablarVoz("Este concepto requiere registro desde la caja autorizada. No se registró ningún movimiento.");
+        return;
+      }
 
       if (!monto || monto <= 0 || !con || !resp) {
         msg.style.color = "#dc2626";
