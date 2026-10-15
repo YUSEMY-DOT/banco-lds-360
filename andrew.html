@@ -221,14 +221,6 @@ header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid v
 .topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
 main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}
-.andrew-tarifario-body{max-height:58vh;overflow:auto;padding-right:3px}
-.andrew-tarifario-note{margin:0 0 10px;color:#475569;font-size:.72rem;line-height:1.4;font-weight:700}
-.andrew-tarifario-seccion{margin:10px 0 13px;border:1px solid #dbe4ef;border-radius:9px;overflow:hidden;background:#fff}
-.andrew-tarifario-title{margin:0;padding:9px 10px;background:#eef4fb;color:#0b2f67;font-size:.75rem;font-weight:900}
-.andrew-tarifario-table{width:100%;border-collapse:collapse;font-size:.72rem}
-.andrew-tarifario-table th{background:#f8fafc;color:#0b2f67;text-align:left;font-weight:900}
-.andrew-tarifario-table th,.andrew-tarifario-table td{padding:7px 9px;border-top:1px solid #e2e8f0;vertical-align:top}
-.andrew-tarifario-table th:last-child,.andrew-tarifario-table td:last-child{text-align:right;white-space:nowrap;font-weight:900;color:#047857}
 @keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
 .table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
@@ -587,16 +579,6 @@ button{cursor:pointer;}
     </div>
 
     <div class="right-stack" id="accionesAndrew">
-      <div class="panel accordion-panel">
-        <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
-          <div class="accordion-title-wrap"><h3>📘 TARIFARIO OFICIAL LDS</h3><span class="accordion-hint">CONSULTA DE IMPORTES</span></div>
-          <span class="accordion-arrow">⌄</span>
-        </div>
-        <div class="panel-body accordion-body" hidden>
-          <p class="andrew-tarifario-note">Estos importes son tarifas preestablecidas de referencia. Elegir un concepto no registra movimientos ni modifica saldos; toda operación debe autorizarse en su módulo correspondiente.</p>
-          <div id="tarifarioAndrewContenido" class="andrew-tarifario-body"><p class="empty">CARGANDO TARIFARIO LDS...</p></div>
-        </div>
-      </div>
       <div class="panel accordion-panel">
         <div class="panel-head accordion-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleAndrewPanel(this)">
           <div class="accordion-title-wrap"><h3>💸 TRANSFERIR FONDO A UNA MISS</h3><span class="accordion-hint">PRESIONA PARA ABRIR</span></div>
@@ -1506,98 +1488,6 @@ function renderTablaAndrew(mov){
   }).join("");
 }
 
-const CATALOGO_TARIFAS_LDS_ANDREW = {
-  "I. Ingresos y Sueldos": [
-    { concepto: "Ingreso Sueldo Base Mensual", monto: 1130 },
-    { concepto: "Ingreso Sueldo por Rol de Liderazgo", monto: 150 },
-    { concepto: "Ingreso Bono por desempeño", monto: 50 }
-  ],
-  "II. Premios y Bonificaciones": [
-    { concepto: "Bono por llevar el uniforme impecable y reglamentario", monto: 50 },
-    { concepto: "Bono Participación destacada en clase", monto: 50 },
-    { concepto: "Bono Premio por primer lugar en concurso académico o deportivo", monto: 200 },
-    { concepto: "Bono Puntualidad y asistencia perfecta (Semanal / Mensual)", monto: 200 },
-    { concepto: "Bono Apoyo destacado en limpieza, orden o ecología del aula", monto: 100 },
-    { concepto: "Bono por ayuda solidaria / Compañerismo destacado", monto: 50 },
-    { concepto: "Bono Creatividad e innovación en proyectos escolares", monto: 200 },
-    { concepto: "Bono Representar dignamente al colegio en eventos externos", monto: 100 },
-    { concepto: "Bono Leer un libro y presentar evidencia de 20 preguntas y respuestas", monto: 500 },
-    { concepto: "Bono Completar un reto educativo", monto: 200 },
-    { concepto: "Bono Llegar puntual al refrigerio", monto: 50 },
-    { concepto: "Bono Participar en Escuela para Padres junto a su familia", monto: 700 },
-    { concepto: "Bono Ser responsable con sus materiales", monto: 50 },
-    { concepto: "Bono Ayudar a mantener limpia el aula", monto: 100 }
-  ],
-  "III. Ahorros e Inversiones": [
-    { concepto: "Depósito a cuenta de ahorros (Ahorro voluntario)", monto: 10 },
-    { concepto: "Inversión en fondo común del aula / cooperativa", monto: 50 },
-    { concepto: "Retiro de ahorros (Emergencia o meta cumplida)", monto: 20 }
-  ],
-  "IV. Pagos y Gastos": [
-    { concepto: "Pago Compra en la tienda escolar / cafetín", monto: 30 },
-    { concepto: "Pago de alquiler / mantenimiento de carpeta o espacio de trabajo", monto: 20 },
-    { concepto: "Pago de servicios del aula: Agua", monto: 20 },
-    { concepto: "Pago de servicios del aula: Energía", monto: 20 },
-    { concepto: "Pago por Compra de material escolar de emergencia (Lápiz, borrador, hojas)", monto: 50 },
-    { concepto: "Gasto médico imprevisto menor (Botiquín escolar / Curitas)", monto: 40 },
-    { concepto: "Alquiler de libros de la biblioteca o material didáctico", monto: 20 },
-    { concepto: "Pago por custodia de equipos tecnológicos", monto: 50 },
-    { concepto: "Pago por copias extras", monto: 100 },
-    { concepto: "Comprar stickers", monto: 20 },
-    { concepto: "Pagar para una actividad extra", monto: 100 },
-    { concepto: "Pagar por jugar 10 minutos más", monto: 150 }
-  ],
-  "V. Sanciones y Multas": [
-    { concepto: "Multa por llevar mal el uniforme o incompleto", monto: 150 },
-    { concepto: "Incumplimiento de tareas o asignaciones a tiempo", monto: 200 },
-    { concepto: "Llegada tarde al aula o formación", monto: 120 },
-    { concepto: "Uso no autorizado de dispositivos electrónicos en clase", monto: 200 },
-    { concepto: "Desorden o indisciplina leve durante las horas de clase", monto: 200 },
-    { concepto: "Falta de respeto o modales con compañeros o docentes", monto: 200 },
-    { concepto: "No traer el material escolar requerido para la sesión", monto: 250 },
-    { concepto: "Descuido o daño leve al mobiliario o infraestructura del aula", monto: 300 },
-    { concepto: "Basura fuera de su lugar / No respetar áreas verdes o comunes", monto: 120 },
-    { concepto: "Inasistencia injustificada a reuniones o actividades obligatorias", monto: 300 },
-    { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
-    { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
-    { concepto: "Faltar a la verdad", monto: 500 },
-    { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
-  ],
-  "VI. Costos y Otros": [
-    { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
-    { concepto: "Cuota extraordinaria de mantenimiento grupal", monto: 100 },
-    { concepto: "Transacción personalizada / Ajuste de caja", monto: 10 }
-  ]
-};
-
-function renderizarTarifarioAndrew(){
-  const contenedor = document.getElementById("tarifarioAndrewContenido");
-  if (!contenedor) return;
-  contenedor.textContent = "";
-  Object.entries(CATALOGO_TARIFAS_LDS_ANDREW).forEach(([titulo, filas]) => {
-    const seccion = document.createElement("section");
-    seccion.className = "andrew-tarifario-seccion";
-    const encabezado = document.createElement("h4");
-    encabezado.className = "andrew-tarifario-title";
-    encabezado.textContent = titulo;
-    seccion.appendChild(encabezado);
-    const tabla = document.createElement("table");
-    tabla.className = "andrew-tarifario-table";
-    const thead = document.createElement("thead");
-    const trh = document.createElement("tr");
-    ["CONCEPTO", "MONTO LDS"].forEach(t => { const th = document.createElement("th"); th.textContent = t; trh.appendChild(th); });
-    thead.appendChild(trh); tabla.appendChild(thead);
-    const tbody = document.createElement("tbody");
-    filas.forEach(item => {
-      const tr = document.createElement("tr");
-      const tdConcepto = document.createElement("td"); tdConcepto.textContent = item.concepto;
-      const tdMonto = document.createElement("td"); tdMonto.textContent = Number(item.monto).toLocaleString("es-PE") + " LDS";
-      tr.appendChild(tdConcepto); tr.appendChild(tdMonto); tbody.appendChild(tr);
-    });
-    tabla.appendChild(tbody); seccion.appendChild(tabla); contenedor.appendChild(seccion);
-  });
-}
-
 function parseMontoLDS(valor){
   if(valor===null || valor===undefined || valor==="") return 0;
   if(typeof valor==="number") return Number.isFinite(valor) ? valor : 0;
@@ -2317,7 +2207,6 @@ async function imprimirReporteColectivo(){
   setTimeout(()=>w.print(),350);
 }
 
-document.addEventListener("DOMContentLoaded", function(){ renderizarTarifarioAndrew(); });
 
 function toggleAndrewPanel(head){
   const panel=head.closest(".accordion-panel");
