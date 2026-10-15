@@ -636,8 +636,8 @@ td:last-child {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">15.000 LDS</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">15.000 LDS</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">— LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">— LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
     </div>
   </div>
@@ -1052,14 +1052,14 @@ function seleccionarMiseVisual(valor) {
     btn.classList.toggle('activa', btn.dataset.mise === valor);
   });
 
-  // HABLADA INMEDIATA AL SELECCIONAR LA FOTO EN EL LOGIN
+  // VOZ AL SELECCIONAR UNA DOCENTE: SOLO NOMBRE Y SOLICITUD DE CLAVE
   const nombresAcceso = {
-    "LILY": "Miss Lily Melo",
-    "KIARA": "Miss Kiara Morales",
-    "ANGHY": "Miss Anghy Reyes",
-    "KARIN": "Miss Karin Molero"
+    "LILY": "Miss Lily",
+    "KIARA": "Miss Kiara",
+    "ANGHY": "Miss Anghy",
+    "KARIN": "Miss Karin"
   };
-  hablarVoz("Seleccionada " + (nombresAcceso[valor] || valor) + ". Ingrese su clave de acceso.");
+  hablarVoz((nombresAcceso[valor] || valor) + ", ingresa tu clave de seguridad.");
 }
 
 function validarAccesoDocente() {
@@ -1305,8 +1305,8 @@ function actualizarPanelAdmin() {
       todosLosMovimientosGlobales = res.movimientos || [];
 
       if (res.cuenta) {
-        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra || 15000);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 15000);
+        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra ?? 0);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual ?? 0);
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
@@ -1479,7 +1479,7 @@ function procesarPagoAEstudiante() {
     categoria: "2026"
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡PAGO REGISTRADO CON ÉXITO COMO EGRESO!";
+      msg.textContent = "¡PAGO REGISTRADO: EGRESO DE CAJA E INGRESO DEL ALUMNO!";
       msg.className = "message ok";
       document.getElementById("pagoObs").value = "";
       hablarVoz("Pago registrado con éxito.");
@@ -1706,7 +1706,7 @@ function imprimirEstadoCuentaIndividual() {
       <div>
         <h3 style="margin:0; font-size:14px; color:#0c1e30;">${usuarioInfo.nombre}</h3>
         <p style="margin:2px 0; font-size:11px;">CÓDIGO: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'DOCENTE'}</strong></p>
-        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '15.000 LDS'}</strong></p>
+        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '0 LDS'}</strong></p>
       </div>
     </div>
 
@@ -1801,17 +1801,16 @@ function imprimirConsolidadoGrupal() {
   window.print();
 }
 
-// VOZ DE SALUDO INICIAL AL HACER CLIC EN CUALQUIER PARTE DE LA PORTADA
+// SALUDO INICIAL DEL ACCESO ADMINISTRATIVO SEGÚN LA HORA
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
 
-  // Desbloquea y anuncia el inicio al primer toque o clic de la docente en el login
-  document.getElementById("loginView").addEventListener('click', function initVozLogin() {
-    hablarVoz("Seleccione su nombre dando clic en su foto.");
-    document.getElementById("loginView").removeEventListener('click', initVozLogin);
-  }, { once: true });
+  const hora = new Date().getHours();
+  const saludo = hora >= 5 && hora < 12 ? "Buenos días" :
+                 hora >= 12 && hora < 19 ? "Buenas tardes" : "Buenas noches";
+  hablarVoz(saludo + ". Bienvenidas al acceso administrativo del Banco LDS 360. Seleccione su nombre e ingrese su clave de seguridad.");
 });
 </script>
 
