@@ -636,8 +636,8 @@ td:last-child {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">— LDS</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">— LDS</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
     </div>
   </div>
@@ -1301,13 +1301,12 @@ function actualizarPanelAdmin() {
   const codConsulta = document.getElementById("codigo").value || codMise;
 
   llamarAPI({ accion: "CONSULTAR", codigo: codConsulta }, function(res) {
-    if (res && res.ok && (res.cuenta || res.estudiante || Array.isArray(res.movimientos))) {
+    if (res && res.ok) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
-      if (res.cuenta || res.estudiante) {
-        const cuentaRecibida = res.cuenta || res.estudiante;
-        document.getElementById("saldoInicialMise").textContent = formatearLDS(cuentaRecibida.totalEntregadoMaestra ?? cuentaRecibida.abonoInicial ?? 0);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(cuentaRecibida.saldoActual ?? cuentaRecibida.saldo ?? 0);
+      if (res.cuenta) {
+        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra ?? 0);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual ?? 0);
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
@@ -1316,7 +1315,7 @@ function actualizarPanelAdmin() {
       msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO.";
       msg.className = "message ok";
     } else {
-      msg.textContent = "⚠️ " + ((res && res.mensaje) || "EL SERVIDOR NO DEVOLVIÓ DATOS DE CUENTA. REVISAR ACCIONES DEL APPS SCRIPT.");
+      msg.textContent = "⚠️ " + ((res && res.mensaje) || "ERROR AL CONSULTAR REGISTROS.");
       msg.className = "message error";
     }
   });
