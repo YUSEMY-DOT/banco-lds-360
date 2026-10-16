@@ -1301,12 +1301,13 @@ function actualizarPanelAdmin() {
   const codConsulta = document.getElementById("codigo").value || codMise;
 
   llamarAPI({ accion: "CONSULTAR", codigo: codConsulta }, function(res) {
-    if (res && res.ok) {
+    if (res && res.ok && (res.cuenta || res.estudiante || Array.isArray(res.movimientos))) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
-      if (res.cuenta) {
-        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra ?? 0);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual ?? 0);
+      if (res.cuenta || res.estudiante) {
+        const cuentaRecibida = res.cuenta || res.estudiante;
+        document.getElementById("saldoInicialMise").textContent = formatearLDS(cuentaRecibida.totalEntregadoMaestra ?? cuentaRecibida.abonoInicial ?? 0);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(cuentaRecibida.saldoActual ?? cuentaRecibida.saldo ?? 0);
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
@@ -1315,7 +1316,7 @@ function actualizarPanelAdmin() {
       msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO.";
       msg.className = "message ok";
     } else {
-      msg.textContent = "⚠️ " + ((res && res.mensaje) || "ERROR AL CONSULTAR REGISTROS.");
+      msg.textContent = "⚠️ " + ((res && res.mensaje) || "EL SERVIDOR NO DEVOLVIÓ DATOS DE CUENTA. REVISAR ACCIONES DEL APPS SCRIPT.");
       msg.className = "message error";
     }
   });
@@ -1479,7 +1480,7 @@ function procesarPagoAEstudiante() {
     categoria: "2026"
   }, function(res) {
     if (res && res.ok) {
-      msg.textContent = "¡PAGO REGISTRADO: EGRESO DE CAJA E INGRESO DEL ALUMNO!";
+      msg.textContent = "¡PAGO REGISTRADO CON ÉXITO COMO EGRESO!";
       msg.className = "message ok";
       document.getElementById("pagoObs").value = "";
       hablarVoz("Pago registrado con éxito.");
