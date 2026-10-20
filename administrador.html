@@ -649,8 +649,8 @@ td:last-child {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">15.000 LDS</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">15.000 LDS</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">30.050 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">30.050 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
     </div>
   </div>
@@ -872,7 +872,6 @@ let seccionListaActual = "";
 let listaEstudiantesGoogleSheets = [];
 let html5QrCodeScanner = null;
 
-// MOTOR DE VOZ Y SONIDOS NATIVOS
 function hablarVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -926,12 +925,20 @@ const CODIGOS_MISE = {
   "KARIN": "LDS-DOC-004"
 };
 
-// Claves de acceso individuales y seguras para cada Miss
+// Claves oficiales sincronizadas con Google Sheets
 const CLAVES_MISES = {
-  "LDS-DOC-001": "360LDS@", // Miss Lily
-  "LDS-DOC-002": "360LDS@", // Miss Kiara
-  "LDS-DOC-003": "360LDS@", // Miss Anghy
-  "LDS-DOC-004": "360LDS@"  // Miss Karin
+  "LDS-DOC-001": "360LDS@",
+  "LDS-DOC-002": "360LDS@",
+  "LDS-DOC-003": "360LDS@",
+  "LDS-DOC-004": "360LDS@"
+};
+
+// Saldos iniciales oficiales por defecto registrados en la hoja CUENTAS de Google Sheets
+const SALDOS_INICIALES_SHEETS = {
+  "LDS-DOC-001": 30050,
+  "LDS-DOC-002": 30010,
+  "LDS-DOC-003": 30000,
+  "LDS-DOC-004": 30000
 };
 
 let MAPA_USUARIOS = {
@@ -1147,7 +1154,6 @@ function desbloquearPanel(nombreMaestra) {
   cargarEstudiantesDesdeServidor();
   cargarMiCajaDiaria();
 
-  // Saludo institucional por voz adaptado según la hora del día
   const horaActual = new Date().getHours();
   let saludoHora = "Buenos días";
   if (horaActual >= 12 && horaActual < 19) {
@@ -1316,7 +1322,7 @@ function cambiarModuloOperacion(modulo) {
 
   document.getElementById("tabPagosBtn").classList.toggle("active", modulo === 'PAGOS');
   document.getElementById("tabPrestamosBtn").classList.toggle("active", modulo === 'PRESTAMOS');
-  document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS');
+  document.getElementById("tabIncidenciasBtn", document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS'));
 
   if (modulo === 'INCIDENCIAS') {
     alCambiarIncidenciaFalta();
@@ -1336,15 +1342,35 @@ function actualizarPanelAdmin() {
     if (res && res.ok) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
-      // Sincronización exacta de saldos conectados con Google Sheets
-      if (res.cuenta) {
-        const abonoInicial = res.cuenta.totalEntregadoMaestra !== undefined ? res.cuenta.totalEntregadoMaestra : 30050;
-        const saldoDisp = res.cuenta.saldoActual !== undefined ? res.cuenta.saldoActual : abonoInicial;
+      // Sincronización exacta de saldos conectados con Google Sheets (CUENTAS)
+      let abonoInicial = SALDOS_INICIALES_SHEETS[codConsulta] || 30050;
+      let saldoDisponible = abonoInicial;
 
-        document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicial);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(saldoDisp);
-        document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
+      if (res.cuenta) {
+        if (res.cuenta.totalEntregadoMaestra !== undefined && res.cuenta.totalEntregadoMaestra !== "") {
+          abonoInicial = parseMontoLDS(res.cuenta.totalEntregadoMaestra);
+        }
+        if (res.cuenta.saldoActual !== undefined && res.cuenta.saldoActual !== "") {
+          saldoDisponible = parseMontoLDS(res.cuenta.saldoActual);
+        }
       }
+
+      // Si es consulta propia de la cajera, calculamos en base a su abono inicial y sus movimientos
+      if (codConsulta === codMise) {
+        let totalEgresos = 0;
+        let totalIngresos = 0;
+        todosLosMovimientosGlobales.forEach(m => {
+          const t = String(m.tipo || "").toUpperCase();
+          const monto = parseMontoLDS(m.monto);
+          if (t === "EGRESO" || t === "PAGO") totalEgresos += monto;
+          if (t === "INGRESO" || t === "COBRO") totalIngresos += monto;
+        });
+        saldoDisponible = abonoInicial + totalIngresos - totalEgresos;
+      }
+
+      document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicial);
+      document.getElementById("saldoDisponibleMise").textContent = formatearLDS(saldoDisponible);
+      document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
 
       renderTablaMovimientos(todosLosMovimientosGlobales);
 
@@ -1387,7 +1413,7 @@ function renderTablaMovimientos(lista) {
     const tr = document.createElement("tr");
     const montoVal = parseMontoLDS(m.monto);
     const tipoVal = String(m.tipo || "EGRESO").toUpperCase();
-    const esEgreso = (tipoVal === "EGRESO");
+    const esEgreso = (tipoVal === "EGRESO" || tipoVal === "PAGO");
     const esAviso = (tipoVal === "RECORDATORIO");
 
     const rawFecha = m.fechaTexto || m.fecha || "";
@@ -1742,7 +1768,7 @@ function imprimirEstadoCuentaIndividual() {
       <div>
         <h3 style="margin:0; font-size:14px; color:#0c1e30;">${usuarioInfo.nombre}</h3>
         <p style="margin:2px 0; font-size:11px;">CÓDIGO: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'DOCENTE'}</strong></p>
-        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '15.000 LDS'}</strong></p>
+        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '30.050 LDS'}</strong></p>
       </div>
     </div>
 
@@ -1837,7 +1863,6 @@ function imprimirConsolidadoGrupal() {
   window.print();
 }
 
-// VOZ DE SALUDO INICIAL AL HACER CLIC EN CUALQUIER PARTE DE LA PORTADA
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
   document.getElementById("loginView").style.display = "flex";
