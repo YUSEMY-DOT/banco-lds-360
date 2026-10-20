@@ -21,7 +21,7 @@
   --rojo: #e11d48;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -614,7 +614,7 @@ td:last-child {
 
     <div class="form-group">
       <label for="claveDocente">CLAVE DE ACCESO DOCENTE</label>
-      <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off">
+      <input id="claveDocente" type="password" class="input-field" placeholder="••••••" autocomplete="off" onkeydown="if(event.key === 'Enter') { reproducirSonido('exito'); validarAccesoDocente(); }">
     </div>
 
     <button class="primary-btn" type="button" onclick="reproducirSonido('exito'); validarAccesoDocente();">INGRESAR AL PANEL</button>
@@ -635,8 +635,11 @@ td:last-child {
       </div>
     </div>
 
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">15.000 LDS</strong></div>
-<div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">15.000 LDS</strong></div>
+    <div class="admin-stats-box">
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
+    </div>
+  </div>
 
   <section class="layout">
     <div class="panel">
@@ -1053,6 +1056,24 @@ function llamarAPI(parametros, callback) {
   document.body.appendChild(script);
 }
 
+// Saludo dinámico por horario (Estilo bancario elegante)
+function obtenerSaludoHorario() {
+  const hora = new Date().getHours();
+  if (hora < 12) {
+    return "Buenos días";
+  } else if (hora < 19) {
+    return "Buenas tardes";
+  } else {
+    return "Buenas noches";
+  }
+}
+
+function darBienvenidaInstitucional() {
+  const saludo = obtenerSaludoHorario();
+  const mensaje = `${saludo}, estimada Miss. Le damos la bienvenida al Sistema Financiero Banco LDS 360 de la Corporación La Salle. Por favor, seleccione su perfil en pantalla e ingrese su clave de seguridad para iniciar operaciones de caja.`;
+  hablarVoz(mensaje);
+}
+
 function seleccionarMiseVisual(valor) {
   docenteSeleccionadoGlobal = valor;
   const select = document.getElementById("docenteSelect");
@@ -1068,7 +1089,8 @@ function seleccionarMiseVisual(valor) {
     "ANGHY": "Miss Anghy Reyes",
     "KARIN": "Miss Karin Molero"
   };
-  hablarVoz("Seleccionada " + (nombresAcceso[valor] || valor) + ". Ingrese su clave de acceso.");
+  const nombreMiss = nombresAcceso[valor] || valor;
+  hablarVoz("Perfil de " + nombreMiss + " seleccionado. Por favor, digite su clave de acceso.");
 }
 
 function validarAccesoDocente() {
@@ -1316,7 +1338,6 @@ function actualizarPanelAdmin() {
       if (res.cuenta) {
         document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra || 0);
         document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 0);
-        document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
       renderTablaMovimientos(todosLosMovimientosGlobales);
@@ -1810,15 +1831,18 @@ function imprimirConsolidadoGrupal() {
   window.print();
 }
 
+// Carga inicial: Saludo automático por horario y configuración de inputs
 window.addEventListener('DOMContentLoaded', () => {
   sessionStorage.removeItem("maestraActiva");
-  document.getElementById("loginView").style.display = "flex";
-  document.getElementById("panelView").style.display = "none";
+  const loginView = document.getElementById("loginView");
+  const panelView = document.getElementById("panelView");
 
-  document.getElementById("loginView").addEventListener('click', function initVozLogin() {
-    hablarVoz("Seleccione su nombre dando clic en su foto.");
-    document.getElementById("loginView").removeEventListener('click', initVozLogin);
-  }, { once: true });
+  if (loginView) loginView.style.display = "flex";
+  if (panelView) panelView.style.display = "none";
+
+  setTimeout(() => {
+    darBienvenidaInstitucional();
+  }, 600);
 });
 </script>
 
