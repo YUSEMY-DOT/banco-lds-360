@@ -636,8 +636,8 @@ td:last-child {
     </div>
 
     <div class="admin-stats-box">
-      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">30.050 LDS</strong></div>
-      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">30.050 LDS</strong></div>
+      <div class="stat-pill stat-abono"><span>ABONO INICIAL</span><strong id="saldoInicialMise">0 LDS</strong></div>
+      <div class="stat-pill stat-disponible"><span>SALDO DISPONIBLE</span><strong id="saldoDisponibleMise">0 LDS</strong></div>
       <div class="stat-pill"><span>MOVIMIENTOS</span><strong id="contadorMovimientos">0</strong></div>
     </div>
   </div>
@@ -859,7 +859,6 @@ let seccionListaActual = "";
 let listaEstudiantesGoogleSheets = [];
 let html5QrCodeScanner = null;
 
-// MOTOR DE VOZ Y SONIDOS NATIVOS
 function hablarVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -899,18 +898,26 @@ const FOTOS_DOCENTES = {
   "MISS LILY MELO AZAÑERO": "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE",
   "MISS KIARA MORALES ELGUERA": "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O",
   "MISS ANGHY REYES MELO": "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U",
-  "MISS KARIN MOLERO ROMANI": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv"
+  "MISS KARIN ISDENKA MOLERO ROMANI": "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv",
+  "MISTER ANDREW REYES MELO": "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW"
 };
 
 const CODIGOS_MISE = {
   "MISS LILY MELO AZAÑERO": "LDS-DOC-001",
   "MISS KIARA MORALES ELGUERA": "LDS-DOC-002",
   "MISS ANGHY REYES MELO": "LDS-DOC-003",
-  "MISS KARIN MOLERO ROMANI": "LDS-DOC-004",
+  "MISS KARIN ISDENKA MOLERO ROMANI": "LDS-DOC-004",
+  "MISTER ANDREW REYES MELO": "LDS-DOC-005",
   "LILY": "LDS-DOC-001",
   "KIARA": "LDS-DOC-002",
   "ANGHY": "LDS-DOC-003",
-  "KARIN": "LDS-DOC-004"
+  "KARIN": "LDS-DOC-004",
+  "ANDREW": "LDS-DOC-005",
+  "CAJA LILY": "LDS-DOC-001",
+  "CAJA KIARA": "LDS-DOC-002",
+  "CAJA ANGHY": "LDS-DOC-003",
+  "CAJA KARIN": "LDS-DOC-004",
+  "CAJA ANDREW": "LDS-DOC-005"
 };
 
 let MAPA_USUARIOS = {
@@ -918,7 +925,14 @@ let MAPA_USUARIOS = {
   "LDS-DOC-002": { nombre: "KIARA YESABELLA MORALES ELGUERA", rol: "COORDINADORA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
   "LDS-DOC-003": { nombre: "ANGHY MARIANA REYES MELO", rol: "COORDINADORA", foto: "https://lh3.googleusercontent.com/d/1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U" },
   "LDS-DOC-004": { nombre: "KARIN ISDENKA MOLERO ROMANI", rol: "DOCENTE", foto: "https://lh3.googleusercontent.com/d/1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv" },
-  "LDS-DOC-005": { nombre: "ANDREW TECSUO REYES MELO", rol: "GERENTE GENERAL", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" }
+  "LDS-DOC-005": { nombre: "ANDREW TECSUO REYES MELO", rol: "GERENTE GENERAL", foto: "https://lh3.googleusercontent.com/d/1peqW5fEckoSGPSoKCoIcZOjHSyeDm3vW" },
+  "LDS-EST-001": { nombre: "DANY SMITH FRANCISCO CRIOLLO", rol: "ALUMNO", grado: "TERCERO", seccion: "LOS DIVERGENTES", foto: "https://lh3.googleusercontent.com/d/1jNx6nx6wCDaYdcnSKGbzj_uCfb2cDbdl" },
+  "LDS-EST-002": { nombre: "ADAM STUARD PINEDA ELGUERA", rol: "ALUMNO", grado: "QUINTO", seccion: "LOS TECNOLOGICOS", foto: "https://lh3.googleusercontent.com/d/1jf5ch769iUpYqAKJ-Hx1HIUPDaRBJgwd" },
+  "LDS-EST-003": { nombre: "CAMILA PIZARRO MENDOZA", rol: "ALUMNO", grado: "SEGUNDO", seccion: "LOS AMABLES", foto: "https://lh3.googleusercontent.com/d/1sqVFTBMqMT1pNIG7y1edplv8SvFTWiHg" },
+  "LDS-EST-004": { nombre: "ANA PAULA QUISPE FLORES", rol: "ALUMNO", grado: "QUINTO", seccion: "LOS TECNOLOGICOS", foto: "https://lh3.googleusercontent.com/d/19KV30WDkKReEo5vBbx9ia4bebrPpyWPw" },
+  "LDS-EST-005": { nombre: "MARCOS MANUEL ROMERO SIESQUEN", rol: "ALUMNO", grado: "PRIMERO", seccion: "LOS OBSERVADORES", foto: "https://lh3.googleusercontent.com/d/1NT-x1ycdUiVXL0Au4xekdVx4sZ3BFWfU" },
+  "LDS-EST-006": { nombre: "VASCO CARDENAS QUISPE", rol: "ALUMNO", grado: "QUINTO", seccion: "LOS TECNOLOGICOS", foto: "" },
+  "LDS-EST-007": { nombre: "MARCHELO PIZARRO MENDOZA", rol: "ALUMNO", grado: "SECUNDARIA", seccion: "LOS VOLADORES", foto: "" }
 };
 
 let CATALOGO_EXCEL = {
@@ -960,7 +974,7 @@ let CATALOGO_EXCEL = {
     { concepto: "Pago por copias extras", monto: 100 },
     { concepto: "Comprar stickers", monto: 20 },
     { concepto: "Pagar para una actividad extra", monto: 100 },
-    { concepto: "Pagar por jugar 10 minutos más", monto: 150 }
+    { concepto: "Pagar para jugar 10 minutos más", monto: 150 }
   ],
   "SANCIONES_Y_MULTAS": [
     { concepto: "Multa por llevar mal el uniforme o incompleto", monto: 150 },
@@ -1092,7 +1106,7 @@ function validarAccesoDocente() {
     "LILY": "MISS LILY MELO AZAÑERO",
     "KIARA": "MISS KIARA MORALES ELGUERA",
     "ANGHY": "MISS ANGHY REYES MELO",
-    "KARIN": "MISS KARIN MOLERO ROMANI"
+    "KARIN": "MISS KARIN ISDENKA MOLERO ROMANI"
   };
 
   const nombreMaestra = NOMBRES_MAP[docenteVal] || docenteVal;
@@ -1303,39 +1317,15 @@ function actualizarPanelAdmin() {
     if (res && res.ok) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
-      // Sincronización exacta y dinámica conectada con la hoja CUENTAS de Google Sheets
-      let abonoInicial = 30050;
-      let saldoDisponible = 30050;
-
       if (res.cuenta) {
-        if (res.cuenta.totalEntregadoMaestra !== undefined && res.cuenta.totalEntregadoMaestra !== "") {
-          abonoInicial = parseMontoLDS(res.cuenta.totalEntregadoMaestra);
-        }
-        if (res.cuenta.saldoActual !== undefined && res.cuenta.saldoActual !== "") {
-          saldoDisponible = parseMontoLDS(res.cuenta.saldoActual);
-        }
+        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra || 0);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 0);
+        document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
-
-      // Cálculo de respaldo en tiempo real para la cajera activa
-      if (codConsulta === codMise) {
-        let totalEgresos = 0;
-        let totalIngresos = 0;
-        todosLosMovimientosGlobales.forEach(m => {
-          const t = String(m.tipo || "").toUpperCase();
-          const monto = parseMontoLDS(m.monto);
-          if (t === "EGRESO" || t === "PAGO") totalEgresos += monto;
-          if (t === "INGRESO" || t === "COBRO") totalIngresos += monto;
-        });
-        saldoDisponible = abonoInicial + totalIngresos - totalEgresos;
-      }
-
-      document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicial);
-      document.getElementById("saldoDisponibleMise").textContent = formatearLDS(saldoDisponible);
-      document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
 
       renderTablaMovimientos(todosLosMovimientosGlobales);
 
-      msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO CON GOOGLE SHEETS.";
+      msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO.";
       msg.className = "message ok";
     } else {
       msg.textContent = "⚠️ " + ((res && res.mensaje) || "ERROR AL CONSULTAR REGISTROS.");
@@ -1374,7 +1364,7 @@ function renderTablaMovimientos(lista) {
     const tr = document.createElement("tr");
     const montoVal = parseMontoLDS(m.monto);
     const tipoVal = String(m.tipo || "EGRESO").toUpperCase();
-    const esEgreso = (tipoVal === "EGRESO" || tipoVal === "PAGO");
+    const esEgreso = (tipoVal === "EGRESO");
     const esAviso = (tipoVal === "RECORDATORIO");
 
     const rawFecha = m.fechaTexto || m.fecha || "";
@@ -1729,7 +1719,7 @@ function imprimirEstadoCuentaIndividual() {
       <div>
         <h3 style="margin:0; font-size:14px; color:#0c1e30;">${usuarioInfo.nombre}</h3>
         <p style="margin:2px 0; font-size:11px;">CÓDIGO: <strong>${cod}</strong> · ROL: <strong>${usuarioInfo.rol || 'DOCENTE'}</strong></p>
-        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '30.050 LDS'}</strong></p>
+        <p style="margin:0; font-size:11px; color:#15803d;">SALDO DISPONIBLE EN CAJA: <strong>${document.getElementById("saldoDisponibleMise").textContent || '0 LDS'}</strong></p>
       </div>
     </div>
 
