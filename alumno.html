@@ -304,7 +304,7 @@
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
             <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
-            <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">0 LDS</span></p>
+            <p class="saldo-sub">INGRESOS / ABONOS: <span id="montoInicialLDS">0 LDS</span></p>
           </div>
 
           <div class="avatar-wrap">
@@ -520,6 +520,24 @@
       } catch (e) {}
     }
 
+    // Saludo dinámico por horario (Estilo bancario elegante para el estudiante)
+    function obtenerSaludoHorario() {
+      const hora = new Date().getHours();
+      if (hora < 12) {
+        return "Buenos días";
+      } else if (hora < 19) {
+        return "Buenas tardes";
+      } else {
+        return "Buenas noches";
+      }
+    }
+
+    function darBienvenidaEstudiante(nombre, saldo) {
+      const saludo = obtenerSaludoHorario();
+      const mensaje = `${saludo}, estimado estudiante ${nombre}. Le damos la bienvenida al Portal Estudiantil del Banco LDS 360 de la Corporación La Salle. Su saldo actual disponible en caja es de ${saldo} Nuevos Soles Lasallistas.`;
+      hablarVoz(mensaje);
+    }
+
     const CATALOGO_TARIFAS = {
       "INGRESOS_Y_SUELDOS": [
         { concepto: "Ingreso Sueldo Base Mensual", monto: 1130 },
@@ -688,7 +706,8 @@
 
           renderizarMovimientos(movimientosGlobales);
 
-          hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
+          // Saludo formal bancario automático al cargar el código (ya sea por URL, QR o manual)
+          darBienvenidaEstudiante(nom, saldo);
 
         } else {
           document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
