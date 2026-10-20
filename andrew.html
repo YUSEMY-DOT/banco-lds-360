@@ -473,10 +473,10 @@ button{cursor:pointer;}
           <label class="small-label">MISS DESTINO</label>
           <select id="miseDestino">
             <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI</option>
           </select>
 
           <label class="small-label">MONTO LDS</label>
@@ -510,10 +510,10 @@ button{cursor:pointer;}
           <label class="small-label">MISS QUE DEVUELVE</label>
           <select id="miseOrigen">
             <option value="">SELECCIONA UNA MISS</option>
-            <option value="CAJA-LILY">MISS LILY MELO AZAÑERO</option>
-            <option value="CAJA-KIARA">MISS KIARA MORALES ELGUERA</option>
-            <option value="CAJA-ANGHY">MISS ANGHY REYES MELO</option>
-            <option value="CAJA-KARIN">MISS KARIN MOLERO ROMANI</option>
+            <option value="LDS-DOC-001">MISS LILY MELO AZAÑERO</option>
+            <option value="LDS-DOC-002">MISS KIARA MORALES ELGUERA</option>
+            <option value="LDS-DOC-003">MISS ANGHY REYES MELO</option>
+            <option value="LDS-DOC-004">MISS KARIN MOLERO ROMANI</option>
           </select>
 
           <label class="small-label">MONTO LDS</label>
@@ -650,16 +650,16 @@ button{cursor:pointer;}
 <script src="notificaciones.js"></script>
 
 <script>
-const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyILAwlAUD1RUFd9hqyRZVi-J8w1GZSjE8vpp8cTnVlW-pTxQ8xfUA-MiqEoOD41BYZIA/exec";
+const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCIc5yP-tY-DqCRnq5HEnu_ul6xKfHPKBxcA64JnkVn-5k5IRCNIeIV8gSv03QvLHS/exec";
 const CLAVE_ANDREW = "360LDS@@@";
-const CODIGO_ANDREW = "CAJA-ANDREW";
+const CODIGO_ANDREW = "LDS-DOC-005";
 const NOMBRE_ANDREW = "MISTER ANDREW";
 
 const MISES = {
-  "CAJA-LILY": "MISS LILY MELO AZAÑERO",
-  "CAJA-KIARA": "MISS KIARA MORALES ELGUERA",
-  "CAJA-ANGHY": "MISS ANGHY REYES MELO",
-  "CAJA-KARIN": "MISS KARIN MOLERO ROMANI"
+  "LDS-DOC-001": "MISS LILY MELO AZAÑERO",
+  "LDS-DOC-002": "MISS KIARA MORALES ELGUERA",
+  "LDS-DOC-003": "MISS ANGHY REYES MELO",
+  "LDS-DOC-004": "MISS KARIN MOLERO ROMANI"
 };
 
 function formato(n){ return "S/ " + Number(n || 0).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -1251,10 +1251,10 @@ function cargarTodo(silencioso=false){
     renderListaAlumnosRapida(movimientos);
 
     const fotosMises={
-      "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
-      "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
-      "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
-      "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
+      "LDS-DOC-001":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+      "LDS-DOC-002":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+      "LDS-DOC-003":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+      "LDS-DOC-004":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
     };
 
     const mises=Object.keys(MISES).map(codigo=>({
@@ -1873,10 +1873,10 @@ async function imprimirReporteColectivo(){
   if(!w) return;
 
   const fotosMisesReporte={
-    "CAJA-LILY":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
-    "CAJA-KIARA":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
-    "CAJA-ANGHY":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
-    "CAJA-KARIN":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
+    "LDS-DOC-001":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+    "LDS-DOC-002":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+    "LDS-DOC-003":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+    "LDS-DOC-004":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
   };
 
   const saldoMises=mapaSaldosMisesAndrew(movimientos);
