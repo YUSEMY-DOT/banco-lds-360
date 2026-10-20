@@ -200,25 +200,12 @@ main {
   padding: 7px 12px;
   text-align: center;
   min-width: 90px;
-  position: relative;
-}
-
-.stat-pill::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 6px;
-  background: #0b2f67;
 }
 
 .stat-pill.stat-abono { border-color: #fbbf24; background: linear-gradient(135deg,#3b2f12,#111827); }
-.stat-pill.stat-abono::before { background: #fbbf24; }
 .stat-pill.stat-abono strong { color: #fde68a; font-size: 1.25rem; }
-
 .stat-pill.stat-disponible { border-color: #22c55e; background: linear-gradient(135deg,#052e16,#0f172a); }
-.stat-pill.stat-disponible::before { background: #22c55e; }
 .stat-pill.stat-disponible strong { color: #86efac; font-size: 1.25rem; }
-
 .stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
 .stat-pill strong { font-size: 0.9rem; color: #fff; font-weight: 800; }
 
@@ -872,6 +859,7 @@ let seccionListaActual = "";
 let listaEstudiantesGoogleSheets = [];
 let html5QrCodeScanner = null;
 
+// MOTOR DE VOZ Y SONIDOS NATIVOS
 function hablarVoz(texto) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
@@ -923,22 +911,6 @@ const CODIGOS_MISE = {
   "KIARA": "LDS-DOC-002",
   "ANGHY": "LDS-DOC-003",
   "KARIN": "LDS-DOC-004"
-};
-
-// Claves oficiales sincronizadas con Google Sheets
-const CLAVES_MISES = {
-  "LDS-DOC-001": "360LDS@",
-  "LDS-DOC-002": "360LDS@",
-  "LDS-DOC-003": "360LDS@",
-  "LDS-DOC-004": "360LDS@"
-};
-
-// Saldos iniciales oficiales por defecto registrados en la hoja CUENTAS de Google Sheets
-const SALDOS_INICIALES_SHEETS = {
-  "LDS-DOC-001": 30050,
-  "LDS-DOC-002": 30010,
-  "LDS-DOC-003": 30000,
-  "LDS-DOC-004": 30000
 };
 
 let MAPA_USUARIOS = {
@@ -1110,6 +1082,11 @@ function validarAccesoDocente() {
     hablarVoz("Ingrese su clave de acceso docente.");
     return; 
   }
+  if (claveVal !== "360LDS@") { 
+    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; 
+    hablarVoz("Clave incorrecta.");
+    return; 
+  }
 
   const NOMBRES_MAP = {
     "LILY": "MISS LILY MELO AZAÑERO",
@@ -1119,15 +1096,6 @@ function validarAccesoDocente() {
   };
 
   const nombreMaestra = NOMBRES_MAP[docenteVal] || docenteVal;
-  const codigoDocente = CODIGOS_MISE[nombreMaestra] || CODIGOS_MISE[docenteVal];
-  const claveEsperada = CLAVES_MISES[codigoDocente];
-
-  if (!claveEsperada || claveVal !== claveEsperada) { 
-    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; 
-    hablarVoz("Clave incorrecta.");
-    return; 
-  }
-
   sessionStorage.setItem("maestraActiva", nombreMaestra);
   desbloquearPanel(nombreMaestra);
 }
@@ -1154,14 +1122,7 @@ function desbloquearPanel(nombreMaestra) {
   cargarEstudiantesDesdeServidor();
   cargarMiCajaDiaria();
 
-  const horaActual = new Date().getHours();
-  let saludoHora = "Buenos días";
-  if (horaActual >= 12 && horaActual < 19) {
-    saludoHora = "Buenas tardes";
-  } else if (horaActual >= 19 || horaActual < 5) {
-    saludoHora = "Buenas noches";
-  }
-  hablarVoz(saludoHora + ", estimada " + nombreMaestra + ". Sistema listo para operar.");
+  hablarVoz("Bienvenida al panel administrativo, " + nombreMaestra + ". Sistema listo para operar.");
 }
 
 function cargarEstudiantesDesdeServidor(callbackDone) {
@@ -1322,7 +1283,7 @@ function cambiarModuloOperacion(modulo) {
 
   document.getElementById("tabPagosBtn").classList.toggle("active", modulo === 'PAGOS');
   document.getElementById("tabPrestamosBtn").classList.toggle("active", modulo === 'PRESTAMOS');
-  document.getElementById("tabIncidenciasBtn", document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS'));
+  document.getElementById("tabIncidenciasBtn").classList.toggle("active", modulo === 'INCIDENCIAS');
 
   if (modulo === 'INCIDENCIAS') {
     alCambiarIncidenciaFalta();
@@ -1342,9 +1303,9 @@ function actualizarPanelAdmin() {
     if (res && res.ok) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
-      // Sincronización exacta de saldos conectados con Google Sheets (CUENTAS)
-      let abonoInicial = SALDOS_INICIALES_SHEETS[codConsulta] || 30050;
-      let saldoDisponible = abonoInicial;
+      // Sincronización exacta y dinámica conectada con la hoja CUENTAS de Google Sheets
+      let abonoInicial = 30050;
+      let saldoDisponible = 30050;
 
       if (res.cuenta) {
         if (res.cuenta.totalEntregadoMaestra !== undefined && res.cuenta.totalEntregadoMaestra !== "") {
@@ -1355,7 +1316,7 @@ function actualizarPanelAdmin() {
         }
       }
 
-      // Si es consulta propia de la cajera, calculamos en base a su abono inicial y sus movimientos
+      // Cálculo de respaldo en tiempo real para la cajera activa
       if (codConsulta === codMise) {
         let totalEgresos = 0;
         let totalIngresos = 0;
