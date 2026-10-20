@@ -260,7 +260,7 @@ button{cursor:pointer;}
 #andrewApp .andrew-identidad-text strong{color:#0b2f67;font-size:clamp(1rem,1.35vw,1.18rem);font-weight:900;}
 #andrewApp .andrew-identidad-text span{color:#64748b;font-size:.7rem;font-weight:900;margin-top:5px;}
 #andrewApp .resumen-metrica{border:2px solid #dbe3ee;border-radius:14px;min-height:92px;padding:12px 14px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.08);position:relative;overflow:hidden;}
-#andrewApp .resumen-metrica::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:#0b2f67;}
+#andrewApp .resumen-metrica::before{content:"absolute";inset:0 auto 0 0;width:6px;background:#0b2f67;}
 #andrewApp .resumen-metrica span{font-size:.64rem;color:#475569;font-weight:900;letter-spacing:.04em;}
 #andrewApp .resumen-metrica strong{font-size:clamp(1.08rem,1.65vw,1.45rem);margin-top:5px;font-weight:900;}
 #andrewApp .resumen-metrica:nth-child(2){background:linear-gradient(135deg,#edf4ff 0%,#ffffff 100%)!important;border-color:#2563eb!important;}
@@ -391,7 +391,7 @@ button{cursor:pointer;}
               </div>
               <div class="andrew-identidad-text">
                 <strong>MISTER ANDREW</strong>
-                <span>CAJA-ANDREW · CAJA GENERAL</span>
+                <span>LDS-DOC-005 · CAJA GENERAL</span>
               </div>
             </div>
             <div class="resumen-metrica">
@@ -765,9 +765,19 @@ function hablarAndrew(texto){
   }
 }
 
+function saludoDinamicoAndrew(){
+  const hora = new Date().getHours();
+  let saludo = "Buenos días";
+  if (hora >= 12 && hora < 18) {
+    saludo = "Buenas tardes";
+  } else if (hora >= 18 || hora < 5) {
+    saludo = "Buenas noches";
+  }
+  hablarAndrew(`${saludo}, Míster Andrew, gerente general del banco LDS 360.`);
+}
+
 function bienvenidaAndrew(){
   sonidoAndrew("ok");
-  hablarAndrew("Bienvenido, Mister Andrew. La Caja General del Banco LDS 360 está lista para trabajar.");
 }
 
 function limpiarCampoClaveAndrew(){
@@ -788,7 +798,10 @@ function prepararCampoClaveAndrew(input){
   }
 }
 
-window.addEventListener("pageshow",()=>limpiarCampoClaveAndrew());
+window.addEventListener("pageshow", () => {
+  limpiarCampoClaveAndrew();
+  saludoDinamicoAndrew();
+});
 
 let qrAndrewScanner=null;
 let qrAndrewLibraryPromise=null;
