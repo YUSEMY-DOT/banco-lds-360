@@ -1336,15 +1336,19 @@ function actualizarPanelAdmin() {
     if (res && res.ok) {
       todosLosMovimientosGlobales = res.movimientos || [];
 
+      // Sincronización exacta de saldos conectados con Google Sheets
       if (res.cuenta) {
-        document.getElementById("saldoInicialMise").textContent = formatearLDS(res.cuenta.totalEntregadoMaestra || 15000);
-        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(res.cuenta.saldoActual || 15000);
+        const abonoInicial = res.cuenta.totalEntregadoMaestra !== undefined ? res.cuenta.totalEntregadoMaestra : 30050;
+        const saldoDisp = res.cuenta.saldoActual !== undefined ? res.cuenta.saldoActual : abonoInicial;
+
+        document.getElementById("saldoInicialMise").textContent = formatearLDS(abonoInicial);
+        document.getElementById("saldoDisponibleMise").textContent = formatearLDS(saldoDisp);
         document.getElementById("contadorMovimientos").textContent = String(todosLosMovimientosGlobales.length);
       }
 
       renderTablaMovimientos(todosLosMovimientosGlobales);
 
-      msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO.";
+      msg.textContent = "✅ LIBRO DE CAJA ACTUALIZADO Y SINCRONIZADO CON GOOGLE SHEETS.";
       msg.className = "message ok";
     } else {
       msg.textContent = "⚠️ " + ((res && res.mensaje) || "ERROR AL CONSULTAR REGISTROS.");
