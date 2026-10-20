@@ -6,7 +6,13 @@
   <title>BANCO LDS 360 - PORTAL ESTUDIANTIL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: uppercase; }
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
+    }
     
     body {
       background: linear-gradient(135deg, #06111f 0%, #0c1e30 50%, #040d18 100%);
@@ -297,8 +303,8 @@
         <div class="saldo-top">
           <div class="saldo-box-dorado">
             <p class="saldo-title">SALDO DISPONIBLE</p>
-            <h3 class="saldo-amount"><span id="saldoLDS">1.080</span> LDS</h3>
-            <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">1.130 LDS</span></p>
+            <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
+            <p class="saldo-sub">SUELDO BASE / INGRESOS: <span id="montoInicialLDS">0 LDS</span></p>
           </div>
 
           <div class="avatar-wrap">
@@ -307,8 +313,8 @@
         </div>
 
         <div class="alumno-info-box">
-          <p id="alumnoNombre" class="alumno-nombre" onclick="reproducirSonido('clic'); cambiarCodigoManual();" title="CLIC PARA CAMBIAR CÓDIGO">DANY SMITH FRANCISCO CRIOLLO</p>
-          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">TERCERO LOS DIVERGENTES</span></p>
+          <p id="alumnoNombre" class="alumno-nombre" onclick="reproducirSonido('clic'); cambiarCodigoManual();" title="CLIC PARA CAMBIAR CÓDIGO">ESTUDIANTE</p>
+          <p class="alumno-grado">🎓 <span id="textoGradoSeccion">AULA</span></p>
         </div>
 
         <div class="actions-grid">
@@ -479,7 +485,6 @@
     let cuentaGlobal = null;
     let movimientosGlobales = [];
 
-    // MOTOR DE SÍNTESIS DE VOZ Y AUDIO AUTOMÁTICO
     function hablarVoz(texto) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -666,7 +671,7 @@
           document.getElementById('textoGradoSeccion').textContent = gradoText;
           
           const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
-          const baseIngresos = parseMontoLDS(cuentaGlobal.totalIngresos || cuentaGlobal.totalEntregadoMaestra || 1130);
+          const baseIngresos = parseMontoLDS(cuentaGlobal.totalIngresos || cuentaGlobal.totalEntregadoMaestra || 0);
 
           document.getElementById('saldoLDS').textContent = saldo.toLocaleString("de-DE");
           document.getElementById('montoInicialLDS').textContent = baseIngresos.toLocaleString("de-DE") + " LDS";
@@ -683,7 +688,6 @@
 
           renderizarMovimientos(movimientosGlobales);
 
-          // Saludo automático por voz al cargar los datos del alumno
           hablarVoz("Bienvenido al Banco L D S 360, " + nom + ". Tu saldo disponible es de " + saldo + " Nuevos Soles Lasallistas.");
 
         } else {
