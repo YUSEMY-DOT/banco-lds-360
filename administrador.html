@@ -200,12 +200,25 @@ main {
   padding: 7px 12px;
   text-align: center;
   min-width: 90px;
+  position: relative;
+}
+
+.stat-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: #0b2f67;
 }
 
 .stat-pill.stat-abono { border-color: #fbbf24; background: linear-gradient(135deg,#3b2f12,#111827); }
+.stat-pill.stat-abono::before { background: #fbbf24; }
 .stat-pill.stat-abono strong { color: #fde68a; font-size: 1.25rem; }
+
 .stat-pill.stat-disponible { border-color: #22c55e; background: linear-gradient(135deg,#052e16,#0f172a); }
+.stat-pill.stat-disponible::before { background: #22c55e; }
 .stat-pill.stat-disponible strong { color: #86efac; font-size: 1.25rem; }
+
 .stat-pill span { display: block; font-size: 0.55rem; color: #cbd5e1; font-weight: 700; }
 .stat-pill strong { font-size: 0.9rem; color: #fff; font-weight: 800; }
 
@@ -913,6 +926,14 @@ const CODIGOS_MISE = {
   "KARIN": "LDS-DOC-004"
 };
 
+// Claves de acceso individuales y seguras para cada Miss
+const CLAVES_MISES = {
+  "LDS-DOC-001": "360LDS1@@@", // Miss Lily
+  "LDS-DOC-002": "360LDS2@@@", // Miss Kiara
+  "LDS-DOC-003": "360LDS3@@@", // Miss Anghy
+  "LDS-DOC-004": "360LDS4@@@"  // Miss Karin
+};
+
 let MAPA_USUARIOS = {
   "LDS-DOC-001": { nombre: "LILY SANDRA MELO AZAÑERO", rol: "GERENTE", foto: "https://lh3.googleusercontent.com/d/1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE" },
   "LDS-DOC-002": { nombre: "KIARA YESABELLA MORALES ELGUERA", rol: "COORDINADORA", foto: "https://lh3.googleusercontent.com/d/1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O" },
@@ -976,7 +997,7 @@ let CATALOGO_EXCEL = {
     { concepto: "No ponerse al día en sus pendientes o cuadernos", monto: 300 },
     { concepto: "Malograr los cuadernos u objetos personales del compañero", monto: 350 },
     { concepto: "Faltar a la verdad", monto: 500 },
-    {cuno: "Llevarse objetos del compañero y/o institución", monto: 1000 }
+    { concepto: "Llevarse objetos del compañero y/o institución", monto: 1000 }
   ],
   "COSTOS_Y_OTROS": [
     { concepto: "Impuesto escolar mensual por uso de instalaciones", monto: 150 },
@@ -1052,7 +1073,6 @@ function seleccionarMiseVisual(valor) {
     btn.classList.toggle('activa', btn.dataset.mise === valor);
   });
 
-  // HABLADA INMEDIATA AL SELECCIONAR LA FOTO EN EL LOGIN
   const nombresAcceso = {
     "LILY": "Miss Lily Melo",
     "KIARA": "Miss Kiara Morales",
@@ -1083,11 +1103,6 @@ function validarAccesoDocente() {
     hablarVoz("Ingrese su clave de acceso docente.");
     return; 
   }
-  if (claveVal !== "360LDS@") { 
-    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; 
-    hablarVoz("Clave incorrecta.");
-    return; 
-  }
 
   const NOMBRES_MAP = {
     "LILY": "MISS LILY MELO AZAÑERO",
@@ -1097,6 +1112,15 @@ function validarAccesoDocente() {
   };
 
   const nombreMaestra = NOMBRES_MAP[docenteVal] || docenteVal;
+  const codigoDocente = CODIGOS_MISE[nombreMaestra] || CODIGOS_MISE[docenteVal];
+  const claveEsperada = CLAVES_MISES[codigoDocente];
+
+  if (!claveEsperada || claveVal !== claveEsperada) { 
+    if (errorEl) errorEl.textContent = "❌ CLAVE INCORRECTA."; 
+    hablarVoz("Clave incorrecta.");
+    return; 
+  }
+
   sessionStorage.setItem("maestraActiva", nombreMaestra);
   desbloquearPanel(nombreMaestra);
 }
@@ -1123,7 +1147,15 @@ function desbloquearPanel(nombreMaestra) {
   cargarEstudiantesDesdeServidor();
   cargarMiCajaDiaria();
 
-  hablarVoz("Bienvenida al panel administrativo, " + nombreMaestra + ". Sistema listo para operar.");
+  // Saludo institucional por voz adaptado según la hora del día
+  const horaActual = new Date().getHours();
+  let saludoHora = "Buenos días";
+  if (horaActual >= 12 && horaActual < 19) {
+    saludoHora = "Buenas tardes";
+  } else if (horaActual >= 19 || horaActual < 5) {
+    saludoHora = "Buenas noches";
+  }
+  hablarVoz(saludoHora + ", estimada " + nombreMaestra + ". Sistema listo para operar.");
 }
 
 function cargarEstudiantesDesdeServidor(callbackDone) {
@@ -1807,7 +1839,6 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById("loginView").style.display = "flex";
   document.getElementById("panelView").style.display = "none";
 
-  // Desbloquea y anuncia el inicio al primer toque o clic de la docente en el login
   document.getElementById("loginView").addEventListener('click', function initVozLogin() {
     hablarVoz("Seleccione su nombre dando clic en su foto.");
     document.getElementById("loginView").removeEventListener('click', initVozLogin);
