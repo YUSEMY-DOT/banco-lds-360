@@ -304,8 +304,8 @@
       <!-- TARJETA BASE DE LA IMAGEN -->
       <div class="saldo-card">
         <div class="saldo-top">
-          <!-- BOTÓN PRINCIPAL "ALUMNO" QUE ACTIVA EL AUDIO CON EL SALUDO Y HORARIO EXACTO -->
-          <div class="saldo-box-dorado" onclick="reproducirSonido('exito'); activarSaludoAlumnoPrincipal();" title="CLIC AQUÍ PARA REPRODUCIR SALUDO">
+          <!-- BOTÓN PRINCIPAL "ALUMNO" CONECTADO DIRECTAMENTE AL MOTOR DE VOZ Y HORARIO -->
+          <div class="saldo-box-dorado" onclick="activarSaludoAlumnoPrincipal();" title="CLIC AQUÍ PARA REPRODUCIR SALUDO">
             <p class="saldo-title">🔊 ALUMNO / SALDO DISPONIBLE</p>
             <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
             <p class="saldo-sub">INGRESOS / ABONOS: <span id="montoInicialLDS">0 LDS</span></p>
@@ -524,7 +524,7 @@
       } catch (e) {}
     }
 
-    // Regla horaria estricta y unificada (<12: días, <19: tardes, >=19: noches)
+    // Regla horaria estricta y unificada
     function obtenerSaludoHorario() {
       const hora = new Date().getHours();
       if (hora < 12) {
@@ -542,15 +542,13 @@
       hablarVoz(mensaje);
     }
 
-    // Función directa vinculada al botón principal "ALUMNO"
+    // Activación directa desde el botón principal con respaldo dinámico
     function activarSaludoAlumnoPrincipal() {
-      if (estudianteGlobal && cuentaGlobal) {
-        const nom = estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigoEstudianteActual;
-        const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
-        darBienvenidaEstudiante(nom, saldo);
-      } else {
-        hablarVoz("Por favor espere a que carguen los datos del estudiante desde Google Sheets.");
-      }
+      reproducirSonido('exito');
+      const nom = (estudianteGlobal && (estudianteGlobal.nombreCompleto || estudianteGlobal.nombre)) || document.getElementById('alumnoNombre').textContent || codigoEstudianteActual;
+      const saldoTxt = document.getElementById('saldoLDS').textContent || "0";
+      const saldo = parseMontoLDS(saldoTxt);
+      darBienvenidaEstudiante(nom, saldo);
     }
 
     const CATALOGO_TARIFAS = {
