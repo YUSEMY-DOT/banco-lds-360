@@ -38,7 +38,7 @@
     .school-title h1 { font-size: 1.1rem; color: #ffffff; font-weight: 800; margin: 0; }
     .school-title p { font-size: 0.75rem; color: #f59e0b; font-weight: 700; margin: 0; }
     
-    .header-btns { display: flex; gap: 8px; align-items: center; }
+    .header-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
     .btn-actualizar-top {
       background: linear-gradient(135deg, #059669, #047857);
@@ -56,6 +56,23 @@
       transition: all 0.2s ease;
     }
     .btn-actualizar-top:hover { transform: scale(1.04); background: #10b981; }
+
+    .btn-voz-top {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      border: 2px solid #fde68a;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-voz-top:hover { transform: scale(1.04); background: #f59e0b; }
 
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
@@ -291,6 +308,7 @@
     </div>
     <div class="header-btns">
       <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual);" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
+      <button onclick="reproducirSonido('clic'); repetirBienvenidaVoz();" class="btn-voz-top" title="Reproducir saludo de bienvenida por voz">🔊 ESCUCHAR SALUDO</button>
       <a href="./" class="inicio-btn" onclick="reproducirSonido('clic')">← INICIO</a>
     </div>
   </header>
@@ -520,7 +538,7 @@
       } catch (e) {}
     }
 
-    // Saludo dinámico por horario (Estilo bancario elegante para el estudiante)
+    // Saludo unificado con idéntica regla horaria en todo el sistema (Mañana <12, Tarde <19, Noche >=19)
     function obtenerSaludoHorario() {
       const hora = new Date().getHours();
       if (hora < 12) {
@@ -536,6 +554,16 @@
       const saludo = obtenerSaludoHorario();
       const mensaje = `${saludo}, estimado estudiante ${nombre}. Le damos la bienvenida al Portal Estudiantil del Banco LDS 360 de la Corporación La Salle. Su saldo actual disponible en caja es de ${saldo} Nuevos Soles Lasallistas.`;
       hablarVoz(mensaje);
+    }
+
+    function repetirBienvenidaVoz() {
+      if (estudianteGlobal && cuentaGlobal) {
+        const nom = estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigoEstudianteActual;
+        const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
+        darBienvenidaEstudiante(nom, saldo);
+      } else {
+        hablarVoz("Por favor espere a que carguen los datos del estudiante.");
+      }
     }
 
     const CATALOGO_TARIFAS = {
@@ -706,7 +734,7 @@
 
           renderizarMovimientos(movimientosGlobales);
 
-          // Saludo formal bancario automático al cargar el código (ya sea por URL, QR o manual)
+          // Saludo automático sincronizado con Google Sheets y el reloj horario
           darBienvenidaEstudiante(nom, saldo);
 
         } else {
