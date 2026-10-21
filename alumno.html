@@ -57,23 +57,6 @@
     }
     .btn-actualizar-top:hover { transform: scale(1.04); background: #10b981; }
 
-    .btn-voz-top {
-      background: linear-gradient(135deg, #d97706, #b45309);
-      border: 2px solid #fde68a;
-      color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-weight: 800;
-      font-size: 0.75rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
-      transition: all 0.2s ease;
-    }
-    .btn-voz-top:hover { transform: scale(1.04); background: #f59e0b; }
-
     .inicio-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid #f59e0b;
@@ -308,7 +291,6 @@
     </div>
     <div class="header-btns">
       <button onclick="reproducirSonido('clic'); consultarDatosEstudiante(codigoEstudianteActual);" class="btn-actualizar-top">🔄 ACTUALIZAR SALDO</button>
-      <button onclick="reproducirSonido('clic'); repetirBienvenidaVoz();" class="btn-voz-top" title="Reproducir saludo de bienvenida por voz">🔊 ESCUCHAR SALUDO</button>
       <a href="./" class="inicio-btn" onclick="reproducirSonido('clic')">← INICIO</a>
     </div>
   </header>
@@ -319,8 +301,9 @@
       <!-- TARJETA BASE DE LA IMAGEN -->
       <div class="saldo-card">
         <div class="saldo-top">
-          <div class="saldo-box-dorado">
-            <p class="saldo-title">SALDO DISPONIBLE</p>
+          <!-- BOTÓN PRINCIPAL "ALUMNO" QUE ACTIVA EL AUDIO CON EL SALUDO Y HORARIO EXACTO -->
+          <div class="saldo-box-dorado" onclick="reproducirSonido('exito'); activarSaludoAlumnoPrincipal();" style="cursor: pointer;" title="CLIC AQUÍ PARA REPRODUCIR SALUDO DE ALUMNO">
+            <p class="saldo-title">🔊 ALUMNO / SALDO DISPONIBLE</p>
             <h3 class="saldo-amount"><span id="saldoLDS">0</span> LDS</h3>
             <p class="saldo-sub">INGRESOS / ABONOS: <span id="montoInicialLDS">0 LDS</span></p>
           </div>
@@ -538,7 +521,7 @@
       } catch (e) {}
     }
 
-    // Saludo unificado con idéntica regla horaria en todo el sistema (Mañana <12, Tarde <19, Noche >=19)
+    // Regla horaria estricta y unificada
     function obtenerSaludoHorario() {
       const hora = new Date().getHours();
       if (hora < 12) {
@@ -556,13 +539,14 @@
       hablarVoz(mensaje);
     }
 
-    function repetirBienvenidaVoz() {
+    // Activación directa desde el botón principal "ALUMNO"
+    function activarSaludoAlumnoPrincipal() {
       if (estudianteGlobal && cuentaGlobal) {
         const nom = estudianteGlobal.nombreCompleto || estudianteGlobal.nombre || codigoEstudianteActual;
         const saldo = parseMontoLDS(cuentaGlobal.saldoActual);
         darBienvenidaEstudiante(nom, saldo);
       } else {
-        hablarVoz("Por favor espere a que carguen los datos del estudiante.");
+        hablarVoz("Por favor espere a que carguen los datos del estudiante desde Google Sheets.");
       }
     }
 
@@ -733,9 +717,6 @@
           }
 
           renderizarMovimientos(movimientosGlobales);
-
-          // Saludo automático sincronizado con Google Sheets y el reloj horario
-          darBienvenidaEstudiante(nom, saldo);
 
         } else {
           document.getElementById('alumnoNombre').textContent = "ESTUDIANTE NO ENCONTRADO (CLIC AQUÍ)";
