@@ -51,164 +51,39 @@ button,input,select,textarea{font:inherit}
 #loginAndrew .login-action:hover{filter:brightness(1.05);transform:translateY(-1px)}
 #loginAndrew .login-home:hover{background:#f1f5f9!important}
 
-/* NOTIFICACIONES DE CADA MOVIMIENTO — PANEL ANDREW */
 .andrew-notification-toast{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:200000;
-  width:min(430px,calc(100vw - 36px));
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  padding:13px 14px;
-  border:2px solid #f5b400;
-  border-radius:14px;
-  background:linear-gradient(135deg,#061b3f,#12366f);
-  color:#fff;
-  box-shadow:0 18px 45px rgba(0,0,0,.30);
-  opacity:0;
-  transform:translateY(18px) scale(.98);
-  pointer-events:none;
+  position:fixed;right:18px;bottom:18px;z-index:200000;
+  width:min(430px,calc(100vw - 36px));display:flex;align-items:flex-start;gap:10px;
+  padding:13px 14px;border:2px solid #f5b400;border-radius:14px;
+  background:linear-gradient(135deg,#061b3f,#12366f);color:#fff;
+  box-shadow:0 18px 45px rgba(0,0,0,.30);opacity:0;
+  transform:translateY(18px) scale(.98);pointer-events:none;
   transition:opacity .22s ease,transform .22s ease;
 }
-.andrew-notification-toast.visible{
-  opacity:1;
-  transform:translateY(0) scale(1);
-}
-.andrew-notification-icon{
-  width:34px;
-  height:34px;
-  flex:0 0 34px;
-  display:grid;
-  place-items:center;
-  border-radius:10px;
-  background:#fff3c4;
-  color:#0b2f67;
-  font-size:18px;
-}
-.andrew-notification-content{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.andrew-notification-content strong{
-  color:#ffd23f;
-  font-size:.78rem;
-  line-height:1.15;
-  font-weight:900;
-}
-.andrew-notification-content span{
-  color:#fff;
-  font-size:.72rem;
-  line-height:1.35;
-  font-weight:800;
-  overflow-wrap:anywhere;
-}
-.andrew-notification-close{
-  margin-left:auto;
-  width:28px;
-  height:28px;
-  flex:0 0 28px;
-  border:0;
-  border-radius:8px;
-  background:rgba(255,255,255,.13);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
+.andrew-notification-toast.visible{opacity:1;transform:translateY(0) scale(1);}
+.andrew-notification-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:#fff3c4;color:#0b2f67;font-size:18px;}
+.andrew-notification-content{min-width:0;display:flex;flex-direction:column;gap:3px;}
+.andrew-notification-content strong{color:#ffd23f;font-size:.78rem;line-height:1.15;font-weight:900;}
+.andrew-notification-content span{color:#fff;font-size:.72rem;line-height:1.35;font-weight:800;overflow-wrap:anywhere;}
+.andrew-notification-close{margin-left:auto;width:28px;height:28px;flex:0 0 28px;border:0;border-radius:8px;background:rgba(255,255,255,.13);color:#fff;font-weight:900;cursor:pointer;}
 .andrew-notification-close:hover{background:rgba(255,255,255,.22);}
-@media (max-width:560px){
-  .andrew-notification-toast{
-    right:10px;
-    bottom:10px;
-    width:calc(100vw - 20px);
-    padding:11px 12px;
-  }
-}
 
-#loginAndrew .login-or{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:6px 0 4px;
-  color:#64748b;
-  font-size:.62rem;
-  font-weight:900;
-}
-#loginAndrew .login-or::before,
-#loginAndrew .login-or::after{
-  content:"";
-  height:1px;
-  flex:1;
-  background:#dbe3ec;
-}
+#loginAndrew .login-or{position:relative;display:flex;align-items:center;justify-content:center;margin:6px 0 4px;color:#64748b;font-size:.62rem;font-weight:900;}
+#loginAndrew .login-or::before,#loginAndrew .login-or::after{content:"";height:1px;flex:1;background:#dbe3ec;}
 #loginAndrew .login-or span{padding:0 6px;}
-#loginAndrew .login-qr{
-  min-height:38px!important;
-  margin-top:0!important;
-  border:1.5px solid #0f766e!important;
-  color:#0f766e!important;
-  background:#ecfeff!important;
-  font-size:.78rem!important;
-  border-radius:8px!important;
-}
+#loginAndrew .login-qr{min-height:38px!important;margin-top:0!important;border:1.5px solid #0f766e!important;color:#0f766e!important;background:#ecfeff!important;font-size:.78rem!important;border-radius:8px!important;}
 #loginAndrew .login-qr:hover{background:#dffcfb!important;}
 
-.qr-login-modal{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:rgba(3,12,28,.78);
-  z-index:100001;
-}
+.qr-login-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,12,28,.78);z-index:100001;}
 .qr-login-modal.open{display:flex;}
-.qr-login-card{
-  width:min(480px,94vw);
-  background:#fff;
-  border:2px solid #f5b400;
-  border-radius:18px;
-  box-shadow:0 25px 70px rgba(0,0,0,.45);
-  overflow:hidden;
-}
-.qr-login-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:16px 18px;
-  background:linear-gradient(135deg,#061b3f,#12366f);
-  color:#fff;
-}
+.qr-login-card{width:min(480px,94vw);background:#fff;border:2px solid #f5b400;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.45);overflow:hidden;}
+.qr-login-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;background:linear-gradient(135deg,#061b3f,#12366f);color:#fff;}
 .qr-login-head h3{margin:0;font-size:1rem;}
 .qr-login-head p{margin:4px 0 0;font-size:.72rem;color:#dbeafe;font-weight:700;}
-.btn-close-qr{
-  width:38px;height:38px;padding:0;border:0;border-radius:10px;
-  background:#fff;color:#0b2f67;font-size:1.1rem;font-weight:900;cursor:pointer;
-}
+.btn-close-qr{width:38px;height:38px;padding:0;border:0;border-radius:10px;background:#fff;color:#0b2f67;font-size:1.1rem;font-weight:900;cursor:pointer;}
 .qr-login-body{padding:16px;}
-#readerAndrew{
-  width:100%;
-  max-width:360px;
-  margin:0 auto;
-  border:1px solid #dbe3ec;
-  border-radius:12px;
-  overflow:hidden;
-  background:#f8fafc;
-}
-.qr-login-help{
-  margin:10px 0 0;
-  text-align:center;
-  color:#64748b;
-  font-size:.68rem;
-  font-weight:700;
-}
-
+#readerAndrew{width:100%;max-width:360px;margin:0 auto;border:1px solid #dbe3ec;border-radius:12px;overflow:hidden;background:#f8fafc;}
+.qr-login-help{margin:10px 0 0;text-align:center;color:#64748b;font-size:.68rem;font-weight:700;}
 
 body.login-screen > #appHeader,
 body.login-screen > #andrewApp,
@@ -220,13 +95,12 @@ header{background:#081a34;color:#fff;padding:12px 20px;border-bottom:2px solid v
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:15px}
 .topbar .brand{display:flex;align-items:center;gap:10px}.topbar .brand img{width:48px;height:48px;object-fit:contain}.brand-title{font-size:1.4rem;font-weight:900}.brand-subtitle{font-size:.72rem;color:#ffd23f;font-weight:900}
 .btn{border:0;border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}.btn-outline{background:#fff;border:1px solid #cbd5e1;color:#0b2f67}.btn-gold{background:linear-gradient(135deg,#ffd23f,#f2a900);color:#08214a;border:1px solid #fcd34d}
-main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel.accordion-panel{transition:box-shadow .2s ease,transform .2s ease}.right-stack .panel.accordion-panel.is-open{box-shadow:0 8px 24px rgba(0,0,0,.16)}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0;animation:accordionIn .18s ease}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}@keyframes accordionIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+main{max-width:1600px;width:100%;margin:0 auto;padding:16px;display:none}.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:15px}.right-stack{display:flex;flex-direction:column;gap:10px}.right-stack .panel{background:#fff;border:2px solid var(--dorado);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);overflow:hidden}.right-stack .panel-head.accordion-head{padding:12px 14px;border:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#fff,#f8fafc);cursor:pointer;user-select:none;min-height:48px}.right-stack .panel-head.accordion-head:hover{background:#fffdf4}.right-stack .panel-head h3{margin:0;color:#0b2f67;font-size:.86rem;font-weight:900;line-height:1.25}.accordion-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.accordion-hint{font-size:.58rem;color:#64748b;font-weight:800;letter-spacing:.2px;white-space:nowrap}.accordion-arrow{width:30px;height:30px;flex:0 0 30px;border-radius:9px;background:#eef2f7;color:#0b2f67;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;transition:transform .22s ease,background .22s ease}.accordion-panel.is-open .accordion-arrow{transform:rotate(180deg);background:#fff3c4}.right-stack .panel-body.accordion-body{padding:0 16px 16px;border-top:1px solid #e2e8f0}.right-stack .panel:not(.is-open) .panel-body.accordion-body{display:none}
 .panel-head{padding:12px 18px;border-bottom:1.5px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f8fafc}.panel-head h3{margin:0;color:#0b2f67;font-size:.9rem;font-weight:900}.panel-body{padding:18px}
 .table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;font-size:.7rem}.table-wrap th,.table-wrap td{padding:7px;border-bottom:1px solid #e2e8f0;text-align:left}
 select,input,textarea{width:100%;border:1.5px solid #cbd5e1;border-radius:8px;padding:9px;background:#f8fafc;color:#14213d;font-weight:700}
 .message{margin-top:8px;padding:8px 12px;border-radius:6px;font-size:.8rem;font-weight:700}.message.ok{background:#ecfdf5;color:#047857}.message.error{background:#fef2f2;color:#b91c1c}
 .consulta-rapida{margin-top:14px;border:1px solid #d9e2ec;border-radius:12px;background:#f8fafc;overflow:hidden}.consulta-rapida-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:linear-gradient(135deg,#eef5ff,#f8fafc);color:#0b2f67}.consulta-rapida-head strong{font-size:.78rem}.consulta-rapida-head span{font-size:.58rem;color:#64748b;font-weight:900}.consulta-busqueda{width:100%;margin:0;padding:10px 12px;border:0;border-top:1px solid #d9e2ec;border-bottom:1px solid #d9e2ec;background:#fff;color:#14213d;font-weight:800;outline:none}.consulta-tabla-wrap{max-height:280px;overflow:auto;background:#fff}.consulta-tabla{min-width:680px;width:100%;border-collapse:collapse;font-size:.66rem}.consulta-tabla th{position:sticky;top:0;z-index:2;background:#0b2f67;color:#fff;padding:7px;text-align:left}.consulta-tabla td{padding:7px;border-bottom:1px solid #e2e8f0;color:#14213d;font-weight:700}.consulta-tabla tr:hover td{background:#fffdf1}.consulta-saldo{font-weight:900;color:#008f68;white-space:nowrap}.consulta-ver{border:0;border-radius:9px;padding:6px 10px;background:linear-gradient(135deg,#1e3a8a,#0b2f67);color:#fff;font-weight:900;cursor:pointer;font-size:.62rem}.consulta-vacia{text-align:center!important;color:#64748b!important;padding:14px!important}.consulta-busqueda:focus{box-shadow:inset 0 0 0 2px #f59e0b}
-
 
 button, a, input, select, textarea{pointer-events:auto;}
 button{cursor:pointer;}
@@ -272,9 +146,6 @@ button{cursor:pointer;}
 #andrewApp .resumen-metrica:nth-child(4){background:linear-gradient(135deg,#fff7ed 0%,#ffffff 100%)!important;border-color:#f59e0b!important;}
 #andrewApp .resumen-metrica:nth-child(4)::before{background:#f59e0b;}
 #andrewApp .resumen-metrica:nth-child(4) strong{color:#b45309!important;font-size:clamp(1.25rem,2vw,1.8rem)!important;}
-#andrewApp .movement-actions .btn-report{background:linear-gradient(135deg,#0b2f67,#1d4ed8)!important;color:#fff!important;border:1px solid #1d4ed8!important;box-shadow:0 3px 8px rgba(29,78,216,.22);}
-#andrewApp .movement-actions .btn-outline{background:linear-gradient(135deg,#ecfeff,#ffffff)!important;color:#0f766e!important;border:1px solid #14b8a6!important;box-shadow:0 3px 8px rgba(20,184,166,.16);}
-#andrewApp .movement-actions .btn:hover{transform:translateY(-1px);}
 #andrewApp .inner-panel{margin-top:14px;border:2px solid #e5a000;border-radius:14px;background:#fff;box-shadow:none;}
 #andrewApp .inner-panel .panel-head{padding:11px 14px;}
 #andrewApp .inner-panel .panel-body{padding:13px;}
@@ -305,14 +176,7 @@ button{cursor:pointer;}
 @media (max-width:560px){#andrewApp .resumen-identidad-andrew{gap:14px!important;padding:12px 14px!important;}#andrewApp .andrew-mini-photo{width:96px;height:96px;flex-basis:96px;}#andrewApp .andrew-identidad-text strong{font-size:1rem;}#andrewApp .andrew-identidad-text span{font-size:.64rem;}}
 
 .print-area-andrew{display:none;}
-/* REPORTES LDS 360 — PRESENTACIÓN RESPONSIVA E IMPRESIÓN A4 */
 @media print{
-  @page{size:A4 landscape;margin:8mm;}
-}
-@media print and (orientation:portrait){
-  @page{size:A4 portrait;margin:8mm;}
-}
-@media print and (orientation:landscape){
   @page{size:A4 landscape;margin:8mm;}
 }
 .report-window{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#14213d;min-height:100vh;padding:18px;}
@@ -327,10 +191,7 @@ button{cursor:pointer;}
 .report-person{display:grid;grid-template-columns:98px 1fr;gap:16px;align-items:center;border:1px solid #dbe3ec;border-radius:14px;background:#f8fafc;padding:12px;margin-bottom:14px;}.report-person-photo{width:86px;height:86px;object-fit:cover;border-radius:50%;border:3px solid #e5a000;background:#fff;}.report-person-name{margin:0;color:#0b2f67;font-size:18px;font-weight:900;}.report-person-detail{margin-top:4px;color:#64748b;font-size:11px;font-weight:800;}
 .report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 16px;}.report-summary-card{border:1px solid #dbe3ec;border-radius:12px;padding:10px;background:#f8fafc;}.report-summary-card span{display:block;color:#64748b;font-size:9px;font-weight:900;}.report-summary-card strong{display:block;margin-top:3px;color:#0b2f67;font-size:15px;}
 .report-table-wrap{width:100%;overflow-x:auto;}.report-table{width:100%;border-collapse:collapse;font-size:9px;}.report-table th,.report-table td{border:1px solid #cbd5e1;padding:5px 6px;text-align:left;vertical-align:top;}.report-table th{background:#eef2f7;color:#0b2f67;font-weight:900;}.report-table td.amount{font-weight:900;white-space:nowrap;}
-.report-student-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;}.report-footer{border-top:2px solid #e5a000;margin-top:16px;padding-top:8px;display:flex;justify-content:space-between;gap:10px;color:#64748b;font-size:9px;font-weight:800;}.report-loading{padding:30px;text-align:center;color:#64748b;font-weight:900;}
-@media (max-width:900px){.report-window{padding:12px;}.report-school-head{grid-template-columns:64px 1fr;gap:10px;}.report-meta{grid-column:1/-1;text-align:left;}.report-logo{width:58px;height:58px;}.report-school-name{font-size:16px;}.report-title{display:block;}.report-badge{display:inline-block;margin-top:8px;}.report-summary{grid-template-columns:1fr;}}
-@media (max-width:560px){.report-window{padding:8px;}.report-person{grid-template-columns:72px 1fr;gap:10px;}.report-person-photo{width:64px;height:64px;}.report-person-name{font-size:15px;}.report-table{font-size:8px;}.report-table th,.report-table td{padding:4px;}.report-footer{display:block;}}
-
+.report-student-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;}.report-footer{border-top:2px solid #e5a000;margin-top:16px;padding-top:8px;display:flex;justify-content:space-between;gap:10px;color:#64748b;font-size:9px;font-weight:800;}
 </style>
 </head>
 <body class="login-screen">
@@ -346,21 +207,13 @@ button{cursor:pointer;}
   <button class="btn btn-outline" onclick="window.location.href='index.html'">⌂ INICIO</button>
 </header>
 
-
-<div id="andrewNotificationToast"
-     class="andrew-notification-toast"
-     role="status"
-     aria-live="polite"
-     aria-atomic="true">
+<div id="andrewNotificationToast" class="andrew-notification-toast" role="status" aria-live="polite" aria-atomic="true">
   <div class="andrew-notification-icon">🔔</div>
   <div class="andrew-notification-content">
     <strong id="andrewNotificationTitle">BANCO LDS 360</strong>
     <span id="andrewNotificationText"></span>
   </div>
-  <button type="button"
-          class="andrew-notification-close"
-          onclick="cerrarNotificacionAndrew()"
-          aria-label="Cerrar notificación">✕</button>
+  <button type="button" class="andrew-notification-close" onclick="cerrarNotificacionAndrew()" aria-label="Cerrar notificación">✕</button>
 </div>
 
 <main id="andrewApp" style="display:none;">
@@ -609,15 +462,7 @@ button{cursor:pointer;}
     <div class="panel-body">
       <p style="font-weight:800;color:#334155;margin-bottom:10px;">INGRESE LA CLAVE DEL CAJERO GENERAL PARA ABRIR LA CAJA GENERAL LDS 360.</p>
       <label class="small-label">CLAVE DE ACCESO</label>
-      <input id="claveAndrew"
-        name="andrew-access-credential"
-        type="password"
-        placeholder="INGRESE LA CLAVE"
-        autocomplete="new-password"
-        autocapitalize="off"
-        spellcheck="false"
-        readonly
-        onfocus="prepararCampoClaveAndrew(this)">
+      <input id="claveAndrew" name="andrew-access-credential" type="password" placeholder="INGRESE LA CLAVE" autocomplete="new-password" autocapitalize="off" spellcheck="false" readonly onfocus="prepararCampoClaveAndrew(this)">
       <button type="button" class="btn btn-gold login-action" onclick="entrarAndrew()">INGRESAR A CAJA GENERAL</button>
       <div class="login-or"><span>O</span></div>
       <button type="button" class="btn btn-outline login-qr" onclick="abrirEscanerQRAndrew()">📷 INGRESAR CON QR</button>
@@ -625,7 +470,6 @@ button{cursor:pointer;}
       <div id="errorLogin" class="message"></div>
     </div>
   </div>
-
 </div>
 
 <div id="qrLoginAndrewModal" class="qr-login-modal" aria-hidden="true">
@@ -676,25 +520,19 @@ function llamarAPI(params,callback){
 }
 
 let audioAndrew=null;
-
 function activarAudioAndrew(){
   try{
     const AC=window.AudioContext||window.webkitAudioContext;
     if(!AC) return null;
     if(!audioAndrew) audioAndrew=new AC();
     return audioAndrew;
-  }catch(e){
-    return null;
-  }
+  }catch(e){ return null; }
 }
 
 function programarSonidoAndrew(ac,tipo){
   if(!ac) return;
   const ahora=ac.currentTime;
-  const notas=tipo==="error"?[220,165]
-    :tipo==="click"?[520]
-    :[523,659,784];
-
+  const notas=tipo==="error"?[220,165]:tipo==="click"?[520]:[523,659,784];
   notas.forEach((f,i)=>{
     const o=ac.createOscillator();
     const g=ac.createGain();
@@ -704,22 +542,16 @@ function programarSonidoAndrew(ac,tipo){
     g.gain.setValueAtTime(0,inicio);
     g.gain.linearRampToValueAtTime(0.065,inicio+0.015);
     g.gain.exponentialRampToValueAtTime(0.001,inicio+0.20);
-    o.connect(g);
-    g.connect(ac.destination);
-    o.start(inicio);
-    o.stop(inicio+0.21);
+    o.connect(g); g.connect(ac.destination);
+    o.start(inicio); o.stop(inicio+0.21);
   });
 }
 
 function sonidoAndrew(tipo="ok"){
   const ac=activarAudioAndrew();
   if(!ac) return;
-
   try{
-    if(ac.state==="suspended"){
-      ac.resume().then(()=>programarSonidoAndrew(ac,tipo)).catch(()=>{});
-      return;
-    }
+    if(ac.state==="suspended"){ ac.resume().then(()=>programarSonidoAndrew(ac,tipo)).catch(()=>{}); return; }
     programarSonidoAndrew(ac,tipo);
   }catch(e){}
 }
@@ -729,73 +561,45 @@ function hablarAndrew(texto){
   try{
     const ss=window.speechSynthesis;
     ss.cancel();
-
     const emitir=()=>{
       try{
         const u=new SpeechSynthesisUtterance(String(texto));
-        u.lang="es-PE";
-        u.rate=.92;
-        u.pitch=1;
-        u.volume=1;
-
-        const voces=ss.getVoices ? ss.getVoices() : [];
+        u.lang="es-PE"; u.rate=.92; u.pitch=1; u.volume=1;
+        const voces=ss.getVoices?ss.getVoices():[];
         const voz=voces.find(v=>/^es(-|_)/i.test(String(v.lang||"")))
-          || voces.find(v=>/spanish|español/i.test(String(v.name||"")))
-          || voces.find(v=>String(v.lang||"").toLowerCase().includes("es"));
+          ||voces.find(v=>/spanish|español/i.test(String(v.name||"")))
+          ||voces.find(v=>String(v.lang||"").toLowerCase().includes("es"));
         if(voz) u.voice=voz;
-        u.onerror=()=>{};
         ss.speak(u);
       }catch(e){}
     };
-
-    if(ss.getVoices && ss.getVoices().length){
-      emitir();
-    }else{
-      ss.onvoiceschanged=()=>{
-        ss.onvoiceschanged=null;
-        emitir();
-      };
-      setTimeout(()=>{
-        if(!ss.speaking) emitir();
-      },120);
+    if(ss.getVoices&&ss.getVoices().length){ emitir(); }
+    else{
+      ss.onvoiceschanged=()=>{ ss.onvoiceschanged=null; emitir(); };
+      setTimeout(()=>{ if(!ss.speaking) emitir(); },120);
     }
     return true;
-  }catch(e){
-    return false;
-  }
+  }catch(e){ return false; }
 }
 
 function saludoDinamicoAndrew(){
   const hora = new Date().getHours();
   let saludo = "Buenos días";
-  if (hora >= 12 && hora < 18) {
-    saludo = "Buenas tardes";
-  } else if (hora >= 18 || hora < 5) {
-    saludo = "Buenas noches";
-  }
+  if (hora >= 12 && hora < 18) saludo = "Buenas tardes";
+  else if (hora >= 18 || hora < 5) saludo = "Buenas noches";
   hablarAndrew(`${saludo}, Míster Andrew, gerente general del banco LDS 360.`);
 }
 
-function bienvenidaAndrew(){
-  sonidoAndrew("ok");
-}
+function bienvenidaAndrew(){ sonidoAndrew("ok"); }
 
 function limpiarCampoClaveAndrew(){
   const input=document.getElementById("claveAndrew");
-  if(input){
-    input.value="";
-    input.setAttribute("readonly","");
-    input.dataset.liberado="0";
-  }
+  if(input){ input.value=""; input.setAttribute("readonly",""); input.dataset.liberado="0"; }
 }
 
 function prepararCampoClaveAndrew(input){
   if(!input) return;
-  if(input.dataset.liberado!=="1"){
-    input.value="";
-    input.removeAttribute("readonly");
-    input.dataset.liberado="1";
-  }
+  if(input.dataset.liberado!=="1"){ input.value=""; input.removeAttribute("readonly"); input.dataset.liberado="1"; }
 }
 
 window.addEventListener("pageshow", () => {
@@ -809,7 +613,6 @@ let qrAndrewLibraryPromise=null;
 function cargarLibreriaQRAndrew(){
   if(window.Html5Qrcode) return Promise.resolve();
   if(qrAndrewLibraryPromise) return qrAndrewLibraryPromise;
-
   qrAndrewLibraryPromise=new Promise((resolve,reject)=>{
     const existente=document.querySelector('script[data-qr-andrew="1"]');
     if(existente){
@@ -817,42 +620,27 @@ function cargarLibreriaQRAndrew(){
       existente.addEventListener("error",()=>reject(new Error("No se pudo cargar el lector QR.")),{once:true});
       return;
     }
-
     const script=document.createElement("script");
     script.src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js";
-    script.async=true;
-    script.dataset.qrAndrew="1";
+    script.async=true; script.dataset.qrAndrew="1";
     script.onload=()=>resolve();
     script.onerror=()=>reject(new Error("No se pudo cargar el lector QR."));
     document.head.appendChild(script);
   });
-
   return qrAndrewLibraryPromise;
 }
 
 function extraerCredencialQRAndrew(texto){
   const raw=String(texto||"").trim();
   if(!raw) return "";
-
   const limpio=raw.toUpperCase();
-
   if(limpio===CLAVE_ANDREW) return CLAVE_ANDREW;
   if(limpio===CODIGO_ANDREW) return CLAVE_ANDREW;
-
   try{
     const url=new URL(raw);
-    const candidatos=[
-      url.searchParams.get("clave"),
-      url.searchParams.get("password"),
-      url.searchParams.get("codigo"),
-      url.searchParams.get("usuario")
-    ].map(v=>String(v||"").trim().toUpperCase());
-
-    for(const v of candidatos){
-      if(v===CLAVE_ANDREW || v===CODIGO_ANDREW) return CLAVE_ANDREW;
-    }
+    const candidatos=[url.searchParams.get("clave"),url.searchParams.get("password"),url.searchParams.get("codigo"),url.searchParams.get("usuario")].map(v=>String(v||"").trim().toUpperCase());
+    for(const v of candidatos){ if(v===CLAVE_ANDREW||v===CODIGO_ANDREW) return CLAVE_ANDREW; }
   }catch(e){}
-
   return "";
 }
 
@@ -860,76 +648,43 @@ async function abrirEscanerQRAndrew(){
   sonidoAndrew("click");
   prepararNotificacionesAndrew();
   hablarAndrew("Abriendo cámara para escanear el código QR de acceso.");
-
   const modal=document.getElementById("qrLoginAndrewModal");
   const mensaje=document.getElementById("qrLoginAndrewMensaje");
   if(modal) modal.classList.add("open");
   if(modal) modal.setAttribute("aria-hidden","false");
   if(mensaje) mostrarMensaje("qrLoginAndrewMensaje","PREPARANDO CÁMARA...","ok");
-
   try{
     await cargarLibreriaQRAndrew();
-
     if(!window.Html5Qrcode) throw new Error("Lector QR no disponible.");
-
     if(qrAndrewScanner){
       try{ await qrAndrewScanner.stop(); }catch(e){}
       try{ qrAndrewScanner.clear(); }catch(e){}
       qrAndrewScanner=null;
     }
-
     qrAndrewScanner=new Html5Qrcode("readerAndrew");
-
-    const config={
-      fps:10,
-      qrbox:{width:230,height:230},
-      aspectRatio:1.0
-    };
-
+    const config={fps:10,qrbox:{width:230,height:230},aspectRatio:1.0};
     const exito=(decodedText)=>{
       const credencial=extraerCredencialQRAndrew(decodedText);
-
       if(!credencial){
         sonidoAndrew("error");
         hablarAndrew("El código QR no corresponde a la Caja General de Mister Andrew.");
         if(mensaje) mostrarMensaje("qrLoginAndrewMensaje","QR NO VÁLIDO PARA MISTER ANDREW.","error");
         return;
       }
-
       try{ qrAndrewScanner.stop(); }catch(e){}
       try{ qrAndrewScanner.clear(); }catch(e){}
       qrAndrewScanner=null;
-
       if(modal) modal.classList.remove("open");
       if(modal) modal.setAttribute("aria-hidden","true");
-
       const input=document.getElementById("claveAndrew");
-      if(input){
-        input.removeAttribute("readonly");
-        input.dataset.liberado="1";
-        input.value=credencial;
-      }
-
+      if(input){ input.removeAttribute("readonly"); input.dataset.liberado="1"; input.value=credencial; }
       entrarAndrew(true);
     };
-
-    await qrAndrewScanner.start(
-      {facingMode:"environment"},
-      config,
-      exito
-    );
-
+    await qrAndrewScanner.start({facingMode:"environment"},config,exito);
     if(mensaje) mostrarMensaje("qrLoginAndrewMensaje","APUNTA LA CÁMARA AL CÓDIGO QR.","ok");
-
   }catch(error){
-    try{
-      if(qrAndrewScanner){
-        await qrAndrewScanner.stop();
-        qrAndrewScanner.clear();
-      }
-    }catch(e){}
+    try{ if(qrAndrewScanner){ await qrAndrewScanner.stop(); qrAndrewScanner.clear(); } }catch(e){}
     qrAndrewScanner=null;
-
     sonidoAndrew("error");
     hablarAndrew("No se pudo abrir la cámara para leer el código QR.");
     if(mensaje) mostrarMensaje("qrLoginAndrewMensaje","NO SE PUDO ACCEDER A LA CÁMARA. VERIFICA LOS PERMISOS DEL NAVEGADOR.","error");
@@ -954,21 +709,11 @@ let andrewNotificationSWRegistration=null;
 async function prepararNotificacionesAndrew(){
   try{
     if(typeof NotificacionesLDS !== "undefined"){
-      if(typeof NotificacionesLDS.registrarServiceWorker === "function"){
-        andrewNotificationSWRegistration =
-          await NotificacionesLDS.registrarServiceWorker();
-      }
-      if(typeof NotificacionesLDS.solicitarPermiso === "function"){
-        await NotificacionesLDS.solicitarPermiso();
-      }
+      if(typeof NotificacionesLDS.registrarServiceWorker==="function"){ andrewNotificationSWRegistration=await NotificacionesLDS.registrarServiceWorker(); }
+      if(typeof NotificacionesLDS.solicitarPermiso==="function"){ await NotificacionesLDS.solicitarPermiso(); }
     }else if("serviceWorker" in navigator){
-      try{
-        andrewNotificationSWRegistration =
-          await navigator.serviceWorker.register("sw.js");
-      }catch(_){}
-      if("Notification" in window && Notification.permission === "default"){
-        try{ await Notification.requestPermission(); }catch(_){}
-      }
+      try{ andrewNotificationSWRegistration=await navigator.serviceWorker.register("sw.js"); }catch(_){}
+      if("Notification" in window && Notification.permission==="default"){ try{ await Notification.requestPermission(); }catch(_){} }
     }
   }catch(_){}
 }
@@ -977,57 +722,30 @@ function cerrarNotificacionAndrew(){
   const toast=document.getElementById("andrewNotificationToast");
   if(!toast) return;
   toast.classList.remove("visible");
-  if(andrewNotificationTimer){
-    clearTimeout(andrewNotificationTimer);
-    andrewNotificationTimer=null;
-  }
+  if(andrewNotificationTimer){ clearTimeout(andrewNotificationTimer); andrewNotificationTimer=null; }
 }
 
 function mostrarNotificacionAndrew(titulo,texto){
   const toast=document.getElementById("andrewNotificationToast");
   const title=document.getElementById("andrewNotificationTitle");
   const body=document.getElementById("andrewNotificationText");
-
-  if(!toast || !title || !body) return;
-
+  if(!toast||!title||!body) return;
   title.textContent=String(titulo||"BANCO LDS 360");
   body.textContent=String(texto||"Movimiento registrado correctamente.");
-
   toast.classList.add("visible");
-
   if(andrewNotificationTimer) clearTimeout(andrewNotificationTimer);
-  andrewNotificationTimer=setTimeout(
-    ()=>toast.classList.remove("visible"),
-    7000
-  );
+  andrewNotificationTimer=setTimeout(()=>toast.classList.remove("visible"),7000);
 }
 
 async function enviarNotificacionNavegadorAndrew(titulo,opciones){
   try{
     if(!("Notification" in window)) return;
-
     if(Notification.permission!=="granted") return;
-
-    if(!andrewNotificationSWRegistration && "serviceWorker" in navigator){
-      try{
-        andrewNotificationSWRegistration=await navigator.serviceWorker.ready;
-      }catch(_){}
-    }
-
-    if(andrewNotificationSWRegistration &&
-       typeof andrewNotificationSWRegistration.showNotification === "function"){
-      await andrewNotificationSWRegistration.showNotification(
-        titulo,
-        Object.assign({
-          icon:"assets/insignia.png?v=20261003-2",
-          badge:"assets/insignia.png?v=20261003-2",
-          tag:"banco-lds-360-andrew-movimiento",
-          renotify:true
-        },opciones||{})
-      );
+    if(!andrewNotificationSWRegistration&&"serviceWorker" in navigator){ try{ andrewNotificationSWRegistration=await navigator.serviceWorker.ready; }catch(_){} }
+    if(andrewNotificationSWRegistration&&typeof andrewNotificationSWRegistration.showNotification==="function"){
+      await andrewNotificationSWRegistration.showNotification(titulo,Object.assign({icon:"assets/insignia.png?v=20261003-2",badge:"assets/insignia.png?v=20261003-2",tag:"banco-lds-360-andrew-movimiento",renotify:true},opciones||{}));
       return;
     }
-
     new Notification(titulo,opciones||{});
   }catch(_){}
 }
@@ -1038,62 +756,24 @@ function notificarMovimientoAndrew(datos){
   const monto=formato(Number(datos?.monto||0));
   const destino=String(datos?.destino||"").trim();
   const observacion=String(datos?.observacion||"").trim();
-
-  const texto=tipo==="EGRESO"
-    ? `${operacion}. ${monto}.${destino ? " DESTINO: "+destino+"." : ""}`
-    : `${operacion}. ${monto}.${destino ? " ORIGEN: "+destino+"." : ""}`;
-
-  mostrarNotificacionAndrew(
-    "🔔 MOVIMIENTO REGISTRADO",
-    `${texto}${observacion ? " "+observacion : ""}`
-  );
-
+  const texto=tipo==="EGRESO"?`${operacion}. ${monto}.${destino?" DESTINO: "+destino+".":""}`:`${operacion}. ${monto}.${destino?" ORIGEN: "+destino+".":""}`;
+  mostrarNotificacionAndrew("🔔 MOVIMIENTO REGISTRADO",`${texto}${observacion?" "+observacion:""}`);
   sonidoAndrew("ok");
-  hablarAndrew(
-    tipo==="EGRESO"
-      ? `Movimiento registrado. Egreso de ${monto}.`
-      : `Movimiento registrado. Ingreso de ${monto}.`
-  );
-
-  enviarNotificacionNavegadorAndrew(
-    "BANCO LDS 360 · MOVIMIENTO REGISTRADO",
-    {
-      body:`${operacion} · ${monto}${destino ? " · "+destino : ""}`,
-      data:{
-        codigo:CODIGO_ANDREW,
-        tipo,
-        monto:Number(datos?.monto||0),
-        fecha:new Date().toISOString()
-      }
-    }
-  );
+  hablarAndrew(tipo==="EGRESO"?`Movimiento registrado. Egreso de ${monto}.`:`Movimiento registrado. Ingreso de ${monto}.`);
+  enviarNotificacionNavegadorAndrew("BANCO LDS 360 · MOVIMIENTO REGISTRADO",{body:`${operacion} · ${monto}${destino?" · "+destino:""}`,data:{codigo:CODIGO_ANDREW,tipo,monto:Number(datos?.monto||0),fecha:new Date().toISOString()}});
 }
 
 function entrarAndrew(desdeQR=false){
   if(!desdeQR) prepararNotificacionesAndrew();
-
   const inputClave = document.getElementById("claveAndrew");
   if(!inputClave) return;
-
   const clave = inputClave.value.trim();
-
-  if(!clave){
-    mostrarMensaje("errorLogin", "INGRESE SU CLAVE O UTILICE SU QR.", "error");
-    sonidoAndrew("error");
-    hablarAndrew("Ingrese su clave de acceso o utilice su código QR.");
-    return;
-  }
-
+  if(!clave){ mostrarMensaje("errorLogin", "INGRESE SU CLAVE O UTILICE SU QR.", "error"); sonidoAndrew("error"); hablarAndrew("Ingrese su clave de acceso o utilice su código QR."); return; }
   if(clave !== CLAVE_ANDREW){
-    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error");
-    sonidoAndrew("error");
-    hablarAndrew("La clave es incorrecta. Por favor, inténtalo nuevamente.");
-    inputClave.value="";
-    inputClave.setAttribute("readonly","");
-    inputClave.dataset.liberado="0";
+    mostrarMensaje("errorLogin", "CLAVE INCORRECTA.", "error"); sonidoAndrew("error"); hablarAndrew("La clave es incorrecta. Por favor, inténtalo nuevamente.");
+    inputClave.value=""; inputClave.setAttribute("readonly",""); inputClave.dataset.liberado="0";
     return;
   }
-
   bienvenidaAndrew();
   sessionStorage.setItem("andrew360", "1");
   document.body.classList.remove("login-screen");
@@ -1106,99 +786,32 @@ function entrarAndrew(desdeQR=false){
 
 document.addEventListener("DOMContentLoaded", () => {
   limpiarCampoClaveAndrew();
-
   const inputClave = document.getElementById("claveAndrew");
-  if(inputClave){
-    inputClave.addEventListener("keydown", function(e){
-      if(e.key === "Enter"){
-        e.preventDefault();
-        entrarAndrew(false);
-      }
-    });
-  }
+  if(inputClave){ inputClave.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); entrarAndrew(false); } }); }
 });
 
 function normalizarTipoAndrew(m, codigoCuenta){
-  const tipoDirecto=String(m?.tipo ?? m?.tipoMovimiento ?? '').trim().toUpperCase();
-  if(tipoDirecto==='INGRESO' || tipoDirecto==='EGRESO') return tipoDirecto;
+  const tipoDirecto=String(m?.tipo??m?.tipoMovimiento??'').trim().toUpperCase();
+  if(tipoDirecto==='INGRESO'||tipoDirecto==='EGRESO') return tipoDirecto;
   const obs=String(m?.observacion||'').toUpperCase();
   const cuenta=String(codigoCuenta||'').trim().toUpperCase();
-  const origen=(obs.match(/CUENTA_ORIGEN=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  const destino=(obs.match(/CUENTA_DESTINO=([^|]+)/)||[])[1]?.trim().toUpperCase() || '';
-  if(origen && destino){
+  const origen=(obs.match(/CUENTA_ORIGEN=([^|]+)/)||[])[1]?.trim().toUpperCase()||'';
+  const destino=(obs.match(/CUENTA_DESTINO=([^|]+)/)||[])[1]?.trim().toUpperCase()||'';
+  if(origen&&destino){
     if(origen===cuenta) return 'EGRESO';
     if(destino===cuenta) return 'INGRESO';
   }
   const concepto=String(m?.concepto||'').trim().toUpperCase();
-  if(cuenta===CODIGO_ANDREW && concepto.includes('FONDO GENERAL')) return 'INGRESO';
+  if(cuenta===CODIGO_ANDREW&&concepto.includes('FONDO GENERAL')) return 'INGRESO';
   return '';
 }
 
 function montoVisibleAndrew(m){
   const codigo=String(m?.codigo||m?.codigoQR||'').trim().toUpperCase();
   const concepto=String(m?.concepto||'').trim().toUpperCase();
-  const monto=parseMontoLDS(m?.monto ?? m?.montoLDS ?? 0);
-  if(codigo===CODIGO_ANDREW && concepto.includes('FONDO GENERAL') && (monto===200 || monto===200.00)) return 200000;
+  const monto=parseMontoLDS(m?.monto??m?.montoLDS??0);
+  if(codigo===CODIGO_ANDREW&&concepto.includes('FONDO GENERAL')&&(monto===200||monto===200.00)) return 200000;
   return monto;
-}
-
-function calcularSaldoCuentaAndrew(movimientos, codigoCuenta){
-  const codigo=String(codigoCuenta||"").trim().toUpperCase();
-  let saldo = (codigo === CODIGO_ANDREW) ? 200000 : 0;
-
-  (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
-    if(String(m?.estado||"ACTIVO").trim().toUpperCase()==='ANULADO') return;
-
-    const mcodigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
-    const categoria=String(m?.categoria||"").trim().toUpperCase();
-    const concepto=String(m?.concepto||"").trim().toUpperCase();
-    const monto=montoVisibleAndrew(m);
-
-    const esTransferencia =
-      categoria==="TRANSFERENCIA_CAJA_MISE" ||
-      concepto.includes("TRANSFERENCIA") ||
-      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
-
-    const esDevolucion =
-      categoria==="DEVOLUCION_CAJA_GENERAL" ||
-      concepto.includes("DEVOLUCIÓN") ||
-      concepto.includes("DEVOLUCION");
-
-    if(codigo===CODIGO_ANDREW){
-      if(esTransferencia) saldo-=monto;
-      else if(esDevolucion) saldo+=monto;
-      else if(mcodigo===codigo){
-        const tipo=normalizarTipoAndrew(m,codigo);
-        if(tipo==='INGRESO') saldo+=monto;
-        else if(tipo==='EGRESO') saldo-=monto;
-      }
-      return;
-    }
-
-    if(mcodigo!==codigo) return;
-
-    if(esTransferencia){
-      saldo+=monto;
-      return;
-    }
-
-    if(esDevolucion){
-      saldo-=monto;
-      return;
-    }
-
-    const tipo=normalizarTipoAndrew(m,codigo);
-    if(tipo==='INGRESO') saldo+=monto;
-    else if(tipo==='EGRESO') saldo-=monto;
-  });
-
-  return Math.round((saldo+Number.EPSILON)*100)/100;
-}
-
-function mapaSaldosMisesAndrew(movimientos){
-  const mapa={};
-  Object.keys(MISES).forEach(codigo=>{ mapa[codigo]=calcularSaldoCuentaAndrew(movimientos,codigo); });
-  return mapa;
 }
 
 let movimientosBancoAndrewActuales=[];
@@ -1219,11 +832,9 @@ function actualizarVistaTrasMovimientoAndrew(movimiento){
   if(!movimiento) return;
   movimientosBancoAndrewActuales.push(movimiento);
   movimientosAndrewActuales.push(movimiento);
-
   const categoria=String(movimiento.categoria||"").trim().toUpperCase();
   const codigo=String(movimiento.codigo||"").trim().toUpperCase();
   const monto=Number(movimiento.monto||0);
-
   if(categoria==="TRANSFERENCIA_CAJA_MISE"){
     saldoAndrewActual-=monto;
     if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)) saldosMisesAndrewActuales[codigo]+=monto;
@@ -1231,7 +842,6 @@ function actualizarVistaTrasMovimientoAndrew(movimiento){
     saldoAndrewActual+=monto;
     if(Object.prototype.hasOwnProperty.call(saldosMisesAndrewActuales,codigo)) saldosMisesAndrewActuales[codigo]-=monto;
   }
-
   saldoAndrewActual=Math.round((saldoAndrewActual+Number.EPSILON)*100)/100;
   document.getElementById("saldoCuenta").textContent=formato(saldoAndrewActual);
   document.getElementById("contadorMovimientos").textContent=movimientosAndrewActuales.length;
@@ -1240,71 +850,88 @@ function actualizarVistaTrasMovimientoAndrew(movimiento){
   renderTablaAndrew(movimientosAndrewActuales);
 }
 
-function sincronizarAndrewEnSegundoPlano(){
-  window.setTimeout(()=>cargarTodo(true),1200);
-}
+function sincronizarAndrewEnSegundoPlano(){ window.setTimeout(()=>cargarTodo(true),1200); }
 
+// --- AQUÍ SE INTEGRA AMBAS HOJAS: CUENTAS PARA SALDOS Y MOVIMIENTOS PARA EL HISTORIAL ---
 function cargarTodo(silencioso=false){
   const anio=document.getElementById("anio").value;
   document.getElementById("metaAnio").textContent=anio;
-  if(!silencioso) mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL...","ok");
+  if(!silencioso) mostrarMensaje("mensaje","ACTUALIZANDO CAJA GENERAL Y CUENTAS DESDE GOOGLE SHEETS...","ok");
 
-  llamarAPI({accion:"movimientos",anio},function(rMov){
-    const movimientos=(rMov && rMov.ok && Array.isArray(rMov.movimientos))
-      ? rMov.movimientos
-      : [];
+  // 1. Consultar la hoja CUENTAS para obtener los saldos oficiales autorizados
+  llamarAPI({accion:"cuentas",anio}, function(rCuentas){
+    const listaCuentas = (rCuentas && rCuentas.ok && Array.isArray(rCuentas.cuentas)) ? rCuentas.cuentas : [];
+    const mapaSaldosCuentas = {};
+    listaCuentas.forEach(c => {
+      const cod = String(c.codigo || "").trim().toUpperCase();
+      mapaSaldosCuentas[cod] = parseMontoLDS(c.saldoActual);
+    });
 
-    const saldoAndrew=calcularSaldoCuentaAndrew(movimientos,CODIGO_ANDREW);
-    saldoAndrewActual=saldoAndrew;
-    document.getElementById("saldoCuenta").textContent=formato(saldoAndrew);
+    // 2. Consultar la hoja MOVIMIENTOS para el libro diario / historial
+    llamarAPI({accion:"movimientos",anio}, function(rMov){
+      const movimientos = (rMov && rMov.ok && Array.isArray(rMov.movimientos)) ? rMov.movimientos : [];
+      movimientosBancoAndrewActuales = movimientos.slice();
 
-    const saldosMises=mapaSaldosMisesAndrew(movimientos);
-    saldosMisesAndrewActuales=Object.assign({},saldosMises);
-    movimientosBancoAndrewActuales=movimientos.slice();
-    renderListaAlumnosRapida(movimientos);
+      // Saldo de Mister Andrew desde CUENTAS (o respaldo con cálculo)
+      saldoAndrewActual = (mapaSaldosCuentas[CODIGO_ANDREW] !== undefined) 
+        ? mapaSaldosCuentas[CODIGO_ANDREW] 
+        : 200000;
+      document.getElementById("saldoCuenta").textContent = formato(saldoAndrewActual);
 
-    const fotosMises={
-      "LDS-DOC-001":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
-      "LDS-DOC-002":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
-      "LDS-DOC-003":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
-      "LDS-DOC-004":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
-    };
+      // Saldos de las Mises directamente de CUENTAS (con respaldo si no existieran en cuentas)
+      const saldosMises = {};
+      Object.keys(MISES).forEach(codigo => {
+        saldosMises[codigo] = mapaSaldosCuentas[codigo] !== undefined 
+          ? mapaSaldosCuentas[codigo] 
+          : 0;
+      });
 
-    const mises=Object.keys(MISES).map(codigo=>({
-      codigo,
-      nombre:MISES[codigo],
-      saldoActual:Number(saldosMises[codigo])||0
-    }));
+      saldosMisesAndrewActuales = Object.assign({}, saldosMises);
+      renderListaAlumnosRapida(movimientos);
 
-    document.getElementById("cuentasMises").innerHTML=mises.map(c=>{
-      const foto=fotosMises[c.codigo]||"";
-      return `
-        <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
-          <div class="mise-card-top">
-            <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" loading="lazy" decoding="async" onerror="this.style.display='none';">
-            <div style="min-width:0;">
-              <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
-              <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
+      const fotosMises={
+        "LDS-DOC-001":"https://drive.google.com/thumbnail?id=1aIbJ1395NgNqnq-6PSFzvvVAKd5hK_JE&sz=w180",
+        "LDS-DOC-002":"https://drive.google.com/thumbnail?id=1woi2Haubh4ZTL_GL45nEZ5gvzMm0mY9O&sz=w180",
+        "LDS-DOC-003":"https://drive.google.com/thumbnail?id=1isTuM2MaV9EaVQeZNHCSKAW_ScFwwg2U&sz=w180",
+        "LDS-DOC-004":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
+      };
+
+      const mises = Object.keys(MISES).map(codigo => ({
+        codigo,
+        nombre: MISES[codigo],
+        saldoActual: Number(saldosMises[codigo]) || 0
+      }));
+
+      document.getElementById("cuentasMises").innerHTML = mises.map(c => {
+        const foto = fotosMises[c.codigo] || "";
+        return `
+          <div style="border:2px solid #e5a000;border-radius:14px;padding:13px;background:#f8fafc;">
+            <div class="mise-card-top">
+              <img class="mise-card-photo" src="${foto}" alt="${escapar(c.nombre)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #e5a000;background:#fff;" loading="lazy" decoding="async" onerror="this.style.display='none';">
+              <div style="min-width:0;">
+                <div class="mise-card-name" style="font-weight:900;color:#14213d;font-size:.78rem;">${escapar(c.nombre)}</div>
+                <div class="mise-card-code" style="font-size:.72rem;color:#64748b;font-weight:800;">${escapar(c.codigo)}</div>
+              </div>
             </div>
-          </div>
-          <div class="mise-saldo-andrew" data-caja-mise="${escapar(c.codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
-        </div>`;
-    }).join("");
+            <div class="mise-saldo-andrew" data-caja-mise="${escapar(c.codigo)}" style="font-size:1.2rem;color:#008f68;font-weight:900;margin-top:9px;">${formato(c.saldoActual)}</div>
+          </div>`;
+      }).join("");
 
-    const movAndrew=movimientos.filter(esMovimientoAndrew);
-    movimientosAndrewActuales=movAndrew.slice();
-    document.getElementById("contadorMovimientos").textContent=movAndrew.length;
-    renderTablaAndrew(movAndrew);
+      const movAndrew = movimientos.filter(esMovimientoAndrew);
+      movimientosAndrewActuales = movAndrew.slice();
+      document.getElementById("contadorMovimientos").textContent = movAndrew.length;
+      renderTablaAndrew(movAndrew);
 
-    if(!silencioso) mostrarMensaje("mensaje","CAJA GENERAL ACTUALIZADA CORRECTAMENTE.","ok");
+      if(!silencioso) mostrarMensaje("mensaje","CAJA GENERAL Y SALDOS DE MISES ACTUALIZADOS DESDE GOOGLE SHEETS.","ok");
+    });
   });
 }
+
 function esMovimientoAndrew(m){
   const codigo=String(m?.codigo||"").trim().toUpperCase();
   const obs=String(m?.observacion||"").toUpperCase();
   const estudiante=String(m?.estudiante||"").trim().toUpperCase();
   const concepto=String(m?.concepto||"").trim().toUpperCase();
-
   return codigo===CODIGO_ANDREW
     || obs.includes("CUENTA="+CODIGO_ANDREW)
     || estudiante===NOMBRE_ANDREW
@@ -1320,41 +947,21 @@ function renderTablaAndrew(mov){
     tbody.innerHTML='<tr><td colspan="9" class="empty">NO HAY MOVIMIENTOS DE CAJA GENERAL PARA EL AÑO SELECCIONADO.</td></tr>';
     return;
   }
-
   const anioSeleccionado=String(document.getElementById("anio")?.value||"");
-
   tbody.innerHTML=mov.map(m=>{
     const fecha=String(m?.fechaTexto||"");
     const matchAnio=fecha.match(/20\d{2}/);
     const anioVisible=m?.anio || (matchAnio ? matchAnio[0] : anioSeleccionado);
-
     let tipoVisible=normalizarTipoAndrew(m,m?.codigo);
     const concepto=String(m?.concepto||"").toUpperCase();
-
     if(!tipoVisible){
-      if(concepto.includes("DEVOLUCIÓN") || concepto.includes("DEVOLUCION")){
-        tipoVisible="INGRESO";
-      }else if(concepto.includes("TRANSFERENCIA") || concepto.includes("FONDO PARA PAGOS")){
-        tipoVisible="EGRESO";
-      }
+      if(concepto.includes("DEVOLUCIÓN")||concepto.includes("DEVOLUCION")) tipoVisible="INGRESO";
+      else if(concepto.includes("TRANSFERENCIA")||concepto.includes("FONDO PARA PAGOS")) tipoVisible="EGRESO";
     }
-
-    const esTransferencia =
-      concepto.includes("TRANSFERENCIA") ||
-      concepto.includes("FONDO PARA PAGOS A ALUMNOS");
-
-    const esDevolucion =
-      concepto.includes("DEVOLUCIÓN") ||
-      concepto.includes("DEVOLUCION");
-
-    const cuentaVisible=(esTransferencia || esDevolucion)
-      ? NOMBRE_ANDREW
-      : (m?.estudiante || NOMBRE_ANDREW);
-
-    const gradoVisible=(esTransferencia || esDevolucion)
-      ? "CAJA GENERAL"
-      : (m?.grado || "CAJA GENERAL");
-
+    const esTransferencia=concepto.includes("TRANSFERENCIA")||concepto.includes("FONDO PARA PAGOS A ALUMNOS");
+    const esDevolucion=concepto.includes("DEVOLUCIÓN")||concepto.includes("DEVOLUCION");
+    const cuentaVisible=(esTransferencia||esDevolucion)?NOMBRE_ANDREW:(m?.estudiante||NOMBRE_ANDREW);
+    const gradoVisible=(esTransferencia||esDevolucion)?"CAJA GENERAL":(m?.grado||"CAJA GENERAL");
     return `
     <tr>
       <td>${escapar(anioVisible)}</td>
@@ -1371,39 +978,25 @@ function renderTablaAndrew(mov){
 }
 
 function parseMontoLDS(valor){
-  if(valor===null || valor===undefined || valor==="") return 0;
-  if(typeof valor==="number") return Number.isFinite(valor) ? valor : 0;
-
+  if(valor===null||valor===undefined||valor==="") return 0;
+  if(typeof valor==="number") return Number.isFinite(valor)?valor:0;
   let texto=String(valor).trim();
   if(!texto) return 0;
-
   texto=texto.replace(/[^\d,\.\-]/g,"");
-
   const tienePunto=texto.indexOf(".")!==-1;
   const tieneComa=texto.indexOf(",")!==-1;
-
-  if(tienePunto && !tieneComa){
+  if(tienePunto&&!tieneComa){
     const partes=texto.split(".");
-    if(partes.length===2 && partes[1].length===3){
-      texto=partes[0]+partes[1];
-    }
+    if(partes.length===2&&partes[1].length===3) texto=partes[0]+partes[1];
   }
-
-  if(tieneComa && !tienePunto){
+  if(tieneComa&&!tienePunto){
     const partes=texto.split(",");
-    if(partes.length===2 && partes[1].length===3){
-      texto=partes[0]+partes[1];
-    }else{
-      texto=partes.join(".");
-    }
+    if(partes.length===2&&partes[1].length===3) texto=partes[0]+partes[1];
+    else texto=partes.join(".");
   }
-
-  if(tienePunto && tieneComa){
-    texto=texto.replace(/\./g,"").replace(",",".");
-  }
-
+  if(tienePunto&&tieneComa) texto=texto.replace(/\./g,"").replace(",",".");
   const n=Number(texto);
-  return Number.isFinite(n) ? n : 0;
+  return Number.isFinite(n)?n:0;
 }
 
 function mostrarTodos(){
@@ -1411,30 +1004,13 @@ function mostrarTodos(){
   if(!panel) return;
   panel.style.display="block";
   const mov=movimientosBancoAndrewActuales||[];
-  document.getElementById("tablaTodo").innerHTML=mov.length ? mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join("") : '<tr><td colspan="10" class="empty">SIN MOVIMIENTOS.</td></tr>';
+  document.getElementById("tablaTodo").innerHTML=mov.length?mov.map(m=>`<tr><td>${escapar(m.anio)}</td><td>${escapar(m.fechaTexto)}</td><td>${escapar(m.codigo)}</td><td>${escapar(m.estudiante)}</td><td>${escapar(m.grado)}</td><td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td><td>${escapar(m.concepto)}</td><td>${formato(montoVisibleAndrew(m))}</td><td>${escapar(m.responsable)}</td><td>${escapar(m.observacion)}</td></tr>`).join(""): '<tr><td colspan="10" class="empty">SIN MOVIMIENTOS.</td></tr>';
   setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);
 }
 
-function cerrarTodo(){
-  const panel=document.getElementById("panelTodo");
-  if(panel) panel.style.display="none";
-}
-
-function abrirReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden","false");
-  }
-}
-
-function cerrarReportes(){
-  const modal=document.getElementById("reportesModal");
-  if(modal){
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden","true");
-  }
-}
+function cerrarTodo(){ const panel=document.getElementById("panelTodo"); if(panel) panel.style.display="none"; }
+function abrirReportes(){ const modal=document.getElementById("reportesModal"); if(modal){ modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); } }
+function cerrarReportes(){ const modal=document.getElementById("reportesModal"); if(modal){ modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); } }
 
 function urlAbsolutaAndrew(ruta){
   const s=String(ruta||"").trim();
@@ -1452,411 +1028,77 @@ function fotoReporteURL(valor){
 
 function escribirVentanaReporte(w,html,orientation){
   if(!w) return;
-
-  const orient = orientation === "portrait" ? "portrait" : "landscape";
-
-  const css = `
+  const orient=orientation==="portrait"?"portrait":"landscape";
+  const css=`
     @page{size:A4 ${orient};margin:8mm;}
-
     *{box-sizing:border-box;}
-    html,body{
-      margin:0!important;
-      padding:0!important;
-      width:100%!important;
-      min-height:100%!important;
-      background:#fff!important;
-      color:#14213d!important;
-      font-family:Arial,Helvetica,sans-serif!important;
-    }
-    body{
-      -webkit-print-color-adjust:exact;
-      print-color-adjust:exact;
-    }
-    .report-window{
-      width:100%;
-      min-height:100vh;
-      margin:0;
-      padding:8px;
-      background:#fff!important;
-      color:#14213d!important;
-    }
-    .report-sheet{
-      width:100%;
-      max-width:none;
-      margin:0 auto;
-      background:#fff!important;
-    }
-
-    .report-school-head{
-      display:grid;
-      grid-template-columns:64px minmax(0,1fr) auto;
-      gap:12px;
-      align-items:center;
-      border-bottom:3px solid #e5a000;
-      padding:0 0 8px;
-      margin:0 0 10px;
-    }
-    .report-logo{
-      width:58px;
-      height:58px;
-      object-fit:contain;
-      border-radius:12px;
-      background:#fff;
-      border:2px solid #e5a000;
-      padding:3px;
-      display:block;
-    }
-    .report-school-name{
-      margin:0;
-      color:#0b2f67;
-      font-size:18px;
-      line-height:1.15;
-      font-weight:900;
-    }
-    .report-school-sub{
-      margin:3px 0 0;
-      color:#64748b;
-      font-size:10px;
-      line-height:1.2;
-      font-weight:800;
-    }
-    .report-meta{
-      text-align:right;
-      min-width:150px;
-    }
-    .report-meta strong{
-      display:block;
-      color:#0b2f67;
-      font-size:12px;
-      line-height:1.2;
-      font-weight:900;
-    }
-    .report-meta span{
-      display:block;
-      color:#64748b;
-      font-size:9px;
-      line-height:1.2;
-      margin-top:3px;
-      font-weight:800;
-    }
-
-    .report-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:12px;
-      margin:4px 0 9px;
-    }
-    .report-title h1{
-      margin:0;
-      color:#0b2f67;
-      font-size:17px;
-      line-height:1.15;
-      font-weight:900;
-    }
-    .report-title p{
-      margin:3px 0 0;
-      color:#64748b;
-      font-size:9px;
-      line-height:1.2;
-      font-weight:800;
-    }
-    .report-badge{
-      padding:6px 9px;
-      border-radius:9px;
-      background:#eef8f3;
-      color:#008f68;
-      font-size:10px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-
-    .report-person{
-      display:grid;
-      grid-template-columns:78px minmax(0,1fr);
-      gap:12px;
-      align-items:center;
-      border:1px solid #dbe3ec;
-      border-radius:10px;
-      background:#f8fafc;
-      padding:8px;
-      margin-bottom:9px;
-      break-inside:avoid;
-    }
-    .report-person-photo{
-      width:70px;
-      height:70px;
-      object-fit:cover;
-      border-radius:50%;
-      border:2px solid #e5a000;
-      background:#fff;
-      display:block;
-    }
-    .report-person-name{
-      margin:0;
-      color:#0b2f67;
-      font-size:15px;
-      line-height:1.15;
-      font-weight:900;
-    }
-    .report-person-detail{
-      margin-top:4px;
-      color:#64748b;
-      font-size:9px;
-      line-height:1.2;
-      font-weight:800;
-    }
-
-    .report-summary{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:7px;
-      margin:7px 0 10px;
-      break-inside:avoid;
-    }
-    .report-summary-card{
-      border:1px solid #dbe3ec;
-      border-radius:8px;
-      padding:7px 9px;
-      background:#f8fafc;
-    }
-    .report-summary-card span{
-      display:block;
-      color:#64748b;
-      font-size:8px;
-      line-height:1.1;
-      font-weight:900;
-    }
-    .report-summary-card strong{
-      display:block;
-      margin-top:3px;
-      color:#0b2f67;
-      font-size:12px;
-      line-height:1.15;
-      font-weight:900;
-    }
-
-    .report-cashier-title{
-      margin:7px 0 6px;
-      color:#0b2f67;
-      font-size:11px;
-      font-weight:900;
-      break-after:avoid;
-    }
-    .report-cashier-grid{
-      display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
-      gap:6px;
-      margin:0 0 10px;
-      break-inside:avoid;
-    }
-    .report-cashier-card{
-      border:1px solid #dbe3ec;
-      border-radius:8px;
-      background:#f8fafc;
-      padding:6px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      min-width:0;
-    }
-    .report-cashier-photo{
-      width:34px;
-      height:34px;
-      flex:0 0 34px;
-      object-fit:cover;
-      object-position:center;
-      border-radius:50%;
-      border:2px solid #e5a000;
-      background:#fff;
-      display:block;
-    }
-    .report-cashier-name{
-      color:#14213d;
-      font-size:8px;
-      line-height:1.15;
-      font-weight:900;
-      overflow-wrap:anywhere;
-    }
-    .report-cashier-meta{
-      margin-top:2px;
-      color:#64748b;
-      font-size:7px;
-      line-height:1.15;
-      font-weight:800;
-    }
-    .report-cashier-balance{
-      margin-top:2px;
-      color:#008f68;
-      font-size:8px;
-      line-height:1.15;
-      font-weight:900;
-    }
-
-    .report-section-title{
-      margin:8px 0 5px;
-      color:#0b2f67;
-      font-size:11px;
-      line-height:1.15;
-      font-weight:900;
-      break-after:avoid;
-    }
-
-    .report-table-wrap{
-      width:100%;
-      overflow:visible;
-      margin-bottom:8px;
-    }
-    .report-table{
-      width:100%;
-      border-collapse:collapse;
-      table-layout:auto;
-      font-size:7.6px;
-      color:#14213d;
-    }
-    .report-table th,
-    .report-table td{
-      border:1px solid #cbd5e1;
-      padding:3px 4px;
-      text-align:left;
-      vertical-align:middle;
-      line-height:1.15;
-    }
-    .report-table th{
-      background:#eef2f7;
-      color:#0b2f67;
-      font-weight:900;
-    }
-    .report-table td.amount{
-      font-weight:900;
-      white-space:nowrap;
-    }
-    .report-student-photo{
-      width:31px;
-      height:31px;
-      border-radius:50%;
-      object-fit:cover;
-      object-position:center;
-      border:2px solid #e5a000;
-      background:#fff;
-      display:block;
-    }
-    .report-empty-photo{
-      width:31px;
-      height:31px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      background:#eef2f7;
-      color:#94a3b8;
-      border:1px solid #cbd5e1;
-      font-size:12px;
-      font-weight:900;
-    }
-    .report-footer{
-      border-top:2px solid #e5a000;
-      margin-top:10px;
-      padding-top:6px;
-      display:flex;
-      justify-content:space-between;
-      gap:8px;
-      color:#64748b;
-      font-size:7.5px;
-      line-height:1.2;
-      font-weight:800;
-      break-inside:avoid;
-    }
-    .report-loading{
-      padding:30px;
-      text-align:center;
-      color:#64748b;
-      font-weight:900;
-      border:1px solid #dbe3ec;
-      border-radius:10px;
-    }
-
-    @media screen and (max-width:900px){
-      .report-window{padding:8px;}
-      .report-school-head{grid-template-columns:52px minmax(0,1fr);}
-      .report-logo{width:48px;height:48px;}
-      .report-meta{grid-column:1/-1;text-align:left;min-width:0;}
-      .report-school-name{font-size:15px;}
-      .report-school-sub{font-size:9px;}
-      .report-title{display:block;}
-      .report-badge{display:inline-block;margin-top:6px;}
-      .report-cashier-grid{grid-template-columns:1fr 1fr;}
-      .report-summary{grid-template-columns:1fr;}
-    }
-
+    html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100%!important;background:#fff!important;color:#14213d!important;font-family:Arial,Helvetica,sans-serif!important;}
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .report-window{width:100%;min-height:100vh;margin:0;padding:8px;background:#fff!important;color:#14213d!important;}
+    .report-sheet{width:100%;max-width:none;margin:0 auto;background:#fff!important;}
+    .report-school-head{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;border-bottom:3px solid #e5a000;padding:0 0 8px;margin:0 0 10px;}
+    .report-logo{width:58px;height:58px;object-fit:contain;border-radius:12px;background:#fff;border:2px solid #e5a000;padding:3px;display:block;}
+    .report-school-name{margin:0;color:#0b2f67;font-size:18px;line-height:1.15;font-weight:900;}
+    .report-school-sub{margin:3px 0 0;color:#64748b;font-size:10px;line-height:1.2;font-weight:800;}
+    .report-meta{text-align:right;min-width:150px;}
+    .report-meta strong{display:block;color:#0b2f67;font-size:12px;line-height:1.2;font-weight:900;}
+    .report-meta span{display:block;color:#64748b;font-size:9px;line-height:1.2;margin-top:3px;font-weight:800;}
+    .report-title{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:4px 0 9px;}
+    .report-title h1{margin:0;color:#0b2f67;font-size:17px;line-height:1.15;font-weight:900;}
+    .report-title p{margin:3px 0 0;color:#64748b;font-size:9px;line-height:1.2;font-weight:800;}
+    .report-badge{padding:6px 9px;border-radius:9px;background:#eef8f3;color:#008f68;font-size:10px;font-weight:900;white-space:nowrap;}
+    .report-person{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;align-items:center;border:1px solid #dbe3ec;border-radius:10px;background:#f8fafc;padding:8px;margin-bottom:9px;break-inside:avoid;}
+    .report-person-photo{width:70px;height:70px;object-fit:cover;border-radius:50%;border:2px solid #e5a000;background:#fff;display:block;}
+    .report-person-name{margin:0;color:#0b2f67;font-size:15px;line-height:1.15;font-weight:900;}
+    .report-person-detail{margin-top:4px;color:#64748b;font-size:9px;line-height:1.2;font-weight:800;}
+    .report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:7px 0 10px;break-inside:avoid;}
+    .report-summary-card{border:1px solid #dbe3ec;border-radius:8px;padding:7px 9px;background:#f8fafc;}
+    .report-summary-card span{display:block;color:#64748b;font-size:8px;line-height:1.1;font-weight:900;}
+    .report-summary-card strong{display:block;margin-top:3px;color:#0b2f67;font-size:12px;line-height:1.15;font-weight:900;}
+    .report-cashier-title{margin:7px 0 6px;color:#0b2f67;font-size:11px;font-weight:900;break-after:avoid;}
+    .report-cashier-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:0 0 10px;break-inside:avoid;}
+    .report-cashier-card{border:1px solid #dbe3ec;border-radius:8px;background:#f8fafc;padding:6px;display:flex;align-items:center;gap:6px;min-width:0;}
+    .report-cashier-photo{width:34px;height:34px;flex:0 0 34px;object-fit:cover;object-position:center;border-radius:50%;border:2px solid #e5a000;background:#fff;display:block;}
+    .report-cashier-name{color:#14213d;font-size:8px;line-height:1.15;font-weight:900;overflow-wrap:anywhere;}
+    .report-cashier-meta{margin-top:2px;color:#64748b;font-size:7px;line-height:1.15;font-weight:800;}
+    .report-cashier-balance{margin-top:2px;color:#008f68;font-size:8px;line-height:1.15;font-weight:900;}
+    .report-section-title{margin:8px 0 5px;color:#0b2f67;font-size:11px;line-height:1.15;font-weight:900;break-after:avoid;}
+    .report-table-wrap{width:100%;overflow:visible;margin-bottom:8px;}
+    .report-table{width:100%;border-collapse:collapse;table-layout:auto;font-size:7.6px;color:#14213d;}
+    .report-table th,.report-table td{border:1px solid #cbd5e1;padding:3px 4px;text-align:left;vertical-align:middle;line-height:1.15;}
+    .report-table th{background:#eef2f7;color:#0b2f67;font-weight:900;}
+    .report-table td.amount{font-weight:900;white-space:nowrap;}
+    .report-student-photo{width:31px;height:31px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid #e5a000;background:#fff;display:block;}
+    .report-empty-photo{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#eef2f7;color:#94a3b8;border:1px solid #cbd5e1;font-size:12px;font-weight:900;}
+    .report-footer{border-top:2px solid #e5a000;margin-top:10px;padding-top:6px;display:flex;justify-content:space-between;gap:8px;color:#64748b;font-size:7.5px;line-height:1.2;font-weight:800;break-inside:avoid;}
     @media print{
-      html,body{
-        background:#fff!important;
-        color:#14213d!important;
-      }
-      .report-window{
-        padding:0!important;
-        min-height:0!important;
-      }
-      .report-school-head,
-      .report-person,
-      .report-summary,
-      .report-cashier-grid,
-      .report-footer,
-      tr{
-        break-inside:avoid;
-      }
-      thead{
-        display:table-header-group;
-      }
-      img{
-        -webkit-print-color-adjust:exact;
-        print-color-adjust:exact;
-      }
+      html,body{background:#fff!important;color:#14213d!important;}
+      .report-window{padding:0!important;min-height:0!important;}
     }
   `;
-
   w.document.open();
-  w.document.write(
-    `<!doctype html>
-     <html lang="es">
-     <head>
-       <meta charset="utf-8">
-       <meta name="viewport" content="width=device-width,initial-scale=1">
-       <title>BANCO LDS 360 — REPORTE</title>
-       <style>${css}</style>
-     </head>
-     <body class="report-window">
-       <main class="report-sheet">${html}</main>
-     </body>
-     </html>`
-  );
+  w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>BANCO LDS 360 — REPORTE</title><style>${css}</style></head><body class="report-window"><main class="report-sheet">${html}</main></body></html>`);
   w.document.close();
 }
 
 function abrirReporteAndrew(titulo,subtitulo,contenido,orientation){
   const w=window.open("","_blank","width=1200,height=850");
-  if(!w){mostrarMensaje("mensaje","EL NAVEGADOR BLOQUEÓ EL REPORTE. PERMITE LAS VENTANAS EMERGENTES PARA ESTE SITIO.","error");return null;}
+  if(!w){mostrarMensaje("mensaje","EL NAVEGADOR BLOQUEÓ EL REPORTE. PERMITE LAS VENTANAS EMERGENTES.","error");return null;}
   const logo=urlAbsolutaAndrew("assets/insignia.png?v=20261003-2");
-  const encabezado=`<section class="report-school-head"><img class="report-logo" src="${escapar(logo)}" alt="Insignia I.E.P. La Salle del Sur"><div><h2 class="report-school-name">I.E.P. LA SALLE DEL SUR</h2><p class="report-school-sub">BANCO LDS 360 · SISTEMA FINANCIERO ESCOLAR</p></div><div class="report-meta"><strong>${escapar(titulo)}</strong><span>${escapar(subtitulo)}</span></div></section>`;
+  const encabezado=`<section class="report-school-head"><img class="report-logo" src="${escapar(logo)}" alt="Insignia"><div><h2 class="report-school-name">I.E.P. LA SALLE DEL SUR</h2><p class="report-school-sub">BANCO LDS 360 · SISTEMA FINANCIERO ESCOLAR</p></div><div class="report-meta"><strong>${escapar(titulo)}</strong><span>${escapar(subtitulo)}</span></div></section>`;
   escribirVentanaReporte(w,encabezado+contenido,orientation||"landscape");
   return w;
 }
-function consultarAlumnoParaReporte(codigo,anio){
-  return new Promise(resolve=>llamarAPI({accion:"estudiante",codigo,anio},r=>resolve(r&&r.ok?r:null)));
-}
 
-function consultarCuentasParaReporte(anio){
-  return new Promise(resolve=>{
-    llamarAPI({accion:"cuentas",anio},r=>{
-      resolve(r&&r.ok&&Array.isArray(r.cuentas)?r.cuentas:[]);
-    });
-  });
-}
+function consultarAlumnoParaReporte(codigo,anio){ return new Promise(resolve=>llamarAPI({accion:"estudiante",codigo,anio},r=>resolve(r&&r.ok?r:null))); }
+function consultarCuentasParaReporte(anio){ return new Promise(resolve=>{ llamarAPI({accion:"cuentas",anio},r=>{ resolve(r&&r.ok&&Array.isArray(r.cuentas)?r.cuentas:[]); }); }); }
+
 async function esperarImagenesReporte(w){
   if(!w||!w.document) return;
   const imgs=[...w.document.images];
   await Promise.all(imgs.map(img=>new Promise(resolve=>{if(img.complete){resolve();return;}img.onload=resolve;img.onerror=resolve;})));
 }
+
 async function imprimirReporteIndividual(){
   cerrarReportes();
   const anio=document.getElementById("anio").value;
@@ -1876,13 +1118,7 @@ async function imprimirReporteColectivo(){
   cerrarReportes();
   const anio=document.getElementById("anio").value;
   const movimientos=Array.isArray(movimientosBancoAndrewActuales)?movimientosBancoAndrewActuales:[];
-
-  const w=abrirReporteAndrew(
-    "REPORTE COLECTIVO",
-    `MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,
-    `<div class="report-loading">PREPARANDO REPORTE COLECTIVO, ALUMNOS, MISES Y FOTOGRAFÍAS...</div>`,
-    "landscape"
-  );
+  const w=abrirReporteAndrew("REPORTE COLECTIVO",`MOVIMIENTOS GENERALES DEL BANCO · AÑO ${anio}`,`<div class="report-loading">PREPARANDO REPORTE COLECTIVO, ALUMNOS Y SALDOS DESDE CUENTAS...</div>`,"landscape");
   if(!w) return;
 
   const fotosMisesReporte={
@@ -1892,28 +1128,14 @@ async function imprimirReporteColectivo(){
     "LDS-DOC-004":"https://drive.google.com/thumbnail?id=1uzcd26MKqtkPAu8DoGIToSxanZEwtxvv&sz=w180"
   };
 
-  const saldoMises=mapaSaldosMisesAndrew(movimientos);
-
   const personalCaja=[
-    {
-      codigo:CODIGO_ANDREW,
-      nombre:NOMBRE_ANDREW,
-      foto:urlAbsolutaAndrew("assets/ANDREW.png?v=20261003-2"),
-      saldo:saldoAndrewActual
-    },
-    ...Object.keys(MISES).map(codigo=>({
-      codigo,
-      nombre:MISES[codigo],
-      foto:fotosMisesReporte[codigo]||"",
-      saldo:Number(saldoMises[codigo])||0
-    }))
+    { codigo:CODIGO_ANDREW, nombre:NOMBRE_ANDREW, foto:urlAbsolutaAndrew("assets/ANDREW.png?v=20261003-2"), saldo:saldoAndrewActual },
+    ...Object.keys(MISES).map(codigo=>({ codigo, nombre:MISES[codigo], foto:fotosMisesReporte[codigo]||"", saldo:Number(saldosMisesAndrewActuales[codigo])||0 }))
   ];
 
   const personalHtml=personalCaja.map(p=>`
     <div class="report-cashier-card">
-      ${p.foto
-        ? `<img class="report-cashier-photo" src="${escapar(p.foto)}" alt="${escapar(p.nombre)}" referrerpolicy="no-referrer">`
-        : `<div class="report-empty-photo">👤</div>`}
+      ${p.foto?`<img class="report-cashier-photo" src="${escapar(p.foto)}" alt="${escapar(p.nombre)}" referrerpolicy="no-referrer">`:`<div class="report-empty-photo">👤</div>`}
       <div style="min-width:0;">
         <div class="report-cashier-name">${escapar(p.nombre)}</div>
         <div class="report-cashier-meta">${escapar(p.codigo)}</div>
@@ -1927,160 +1149,57 @@ async function imprimirReporteColectivo(){
     .filter(c=>String(c?.codigo||"").trim().toUpperCase().startsWith("LDS-EST-"))
     .sort((a,b)=>String(a.codigo||"").localeCompare(String(b.codigo||""),undefined,{numeric:true}));
 
-  if(!alumnos.length){
-    const codigosRespaldo=[...new Set(
-      movimientos
-        .map(m=>String(m?.codigo||"").trim().toUpperCase())
-        .filter(c=>c.startsWith("LDS-EST-"))
-    )];
-    alumnos=codigosRespaldo.map(codigo=>({codigo}));
-  }
-
   const detalleAlumnos=[];
-  const bloque=5;
-  for(let i=0;i<alumnos.length;i+=bloque){
-    const lote=alumnos.slice(i,i+bloque);
-    const respuestas=await Promise.all(
-      lote.map(a=>consultarAlumnoParaReporte(String(a.codigo||"").trim().toUpperCase(),anio))
-    );
-
-    respuestas.forEach((r,j)=>{
-      const base=lote[j]||{};
-      const est=(r&&r.estudiante)||{};
-      const codigo=String(base.codigo||est.codigo||"").trim().toUpperCase();
-      if(!codigo) return;
-
-      const nombre=est.nombreCompleto||est.nombre||base.nombre||codigo;
-      const grado=est.grado||base.grado||"";
-      const seccion=est.seccion||base.seccion||"";
-      const foto=fotoReporteURL(est.fotoUrl||est.foto||base.fotoUrl||base.foto||"");
-      const saldo=Number(
-        base.saldoActual ??
-        (r&&r.cuenta&&r.cuenta.saldoActual) ??
-        (r&&r.estudiante&&r.estudiante.saldoActual) ??
-        calcularSaldoCuentaAndrew(movimientos,codigo)
-      )||0;
-
-      detalleAlumnos.push({codigo,nombre,grado,seccion,foto,saldo});
-    });
+  for(const a of alumnos){
+    const codigo=String(a.codigo||"").trim().toUpperCase();
+    const saldo=parseMontoLDS(a.saldoActual);
+    detalleAlumnos.push({codigo,nombre:a.usuario||codigo,grado:a.grado||"",seccion:"",foto:"",saldo});
   }
 
-  const alumnosUnicos=[];
-  const vistos=new Set();
-  detalleAlumnos.sort((a,b)=>a.codigo.localeCompare(b.codigo,undefined,{numeric:true}));
-  detalleAlumnos.forEach(a=>{
-    if(vistos.has(a.codigo)) return;
-    vistos.add(a.codigo);
-    alumnosUnicos.push(a);
-  });
-
-  const alumnosRows=alumnosUnicos.map((a,i)=>`
+  const alumnosRows=detalleAlumnos.map((a,i)=>`
     <tr>
       <td>${i+1}</td>
-      <td>
-        ${a.foto
-          ? `<img class="report-student-photo" src="${escapar(a.foto)}" alt="${escapar(a.nombre)}" referrerpolicy="no-referrer">`
-          : `<div class="report-empty-photo">👤</div>`}
-      </td>
+      <td><div class="report-empty-photo">👤</div></td>
       <td>${escapar(a.codigo)}</td>
       <td>${escapar(a.nombre)}</td>
       <td>${escapar(a.grado)}</td>
       <td>${escapar(a.seccion)}</td>
       <td class="amount">${formato(a.saldo)}</td>
     </tr>
-  `).join("") || `
-    <tr>
-      <td colspan="7">NO HAY ALUMNOS DISPONIBLES PARA EL AÑO SELECCIONADO.</td>
-    </tr>
-  `;
+  `).join("") || `<tr><td colspan="7">NO HAY ALUMNOS DISPONIBLES.</td></tr>`;
 
-  const rows=movimientos.length
-    ? movimientos.map(m=>`
-      <tr>
-        <td>${escapar(m.anio)}</td>
-        <td>${escapar(m.fechaTexto)}</td>
-        <td>${escapar(m.codigo)}</td>
-        <td>${escapar(m.estudiante)}</td>
-        <td>${escapar(m.grado)}</td>
-        <td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td>
-        <td>${escapar(m.concepto)}</td>
-        <td class="amount">${formato(montoVisibleAndrew(m))}</td>
-        <td>${escapar(m.responsable)}</td>
-        <td>${escapar(m.observacion)}</td>
-      </tr>
-    `).join("")
-    : `<tr><td colspan="10">NO HAY MOVIMIENTOS PARA EL AÑO SELECCIONADO.</td></tr>`;
+  const rows=movimientos.length?movimientos.map(m=>`
+    <tr>
+      <td>${escapar(m.anio)}</td>
+      <td>${escapar(m.fechaTexto)}</td>
+      <td>${escapar(m.codigo)}</td>
+      <td>${escapar(m.estudiante)}</td>
+      <td>${escapar(m.grado)}</td>
+      <td>${escapar(normalizarTipoAndrew(m,m.codigo))}</td>
+      <td>${escapar(m.concepto)}</td>
+      <td class="amount">${formato(montoVisibleAndrew(m))}</td>
+      <td>${escapar(m.responsable)}</td>
+      <td>${escapar(m.observacion)}</td>
+    </tr>
+  `).join("") : `<tr><td colspan="10">NO HAY MOVIMIENTOS.</td></tr>`;
 
   const contenido=`
     <div class="report-title">
-      <div>
-        <h1>REPORTE COLECTIVO — BANCO LDS 360</h1>
-        <p>ALUMNOS, SALDOS, MISES Y MOVIMIENTOS DEL AÑO SELECCIONADO</p>
-      </div>
+      <div><h1>REPORTE COLECTIVO — BANCO LDS 360</h1><p>ALUMNOS, SALDOS DE CUENTAS Y MOVIMIENTOS</p></div>
       <div class="report-badge">AÑO ${escapar(anio)}</div>
     </div>
-
     <div class="report-summary">
-      <div class="report-summary-card">
-        <span>ALUMNOS</span>
-        <strong>${alumnosUnicos.length}</strong>
-      </div>
-      <div class="report-summary-card">
-        <span>MOVIMIENTOS</span>
-        <strong>${movimientos.length}</strong>
-      </div>
-      <div class="report-summary-card">
-        <span>CAJA GENERAL</span>
-        <strong>SALDO ${formato(saldoAndrewActual)}</strong>
-      </div>
+      <div class="report-summary-card"><span>ALUMNOS</span><strong>${detalleAlumnos.length}</strong></div>
+      <div class="report-summary-card"><span>MOVIMIENTOS</span><strong>${movimientos.length}</strong></div>
+      <div class="report-summary-card"><span>CAJA GENERAL</span><strong>SALDO ${formato(saldoAndrewActual)}</strong></div>
     </div>
-
     <div class="report-cashier-title">👥 PERSONAL DE CAJA — ANDREW Y MISES</div>
     <div class="report-cashier-grid">${personalHtml}</div>
-
-    <div class="report-section-title">🎓 ALUMNOS Y SALDOS</div>
-    <div class="report-table-wrap">
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>FOTO</th>
-            <th>CÓDIGO</th>
-            <th>ALUMNO</th>
-            <th>GRADO</th>
-            <th>SECCIÓN</th>
-            <th>SALDO</th>
-          </tr>
-        </thead>
-        <tbody>${alumnosRows}</tbody>
-      </table>
-    </div>
-
+    <div class="report-section-title">🎓 ALUMNOS Y SALDOS (DESDE CUENTAS)</div>
+    <div class="report-table-wrap"><table class="report-table"><thead><tr><th>#</th><th>FOTO</th><th>CÓDIGO</th><th>ALUMNO</th><th>GRADO</th><th>SECCIÓN</th><th>SALDO</th></tr></thead><tbody>${alumnosRows}</tbody></table></div>
     <div class="report-section-title">📋 MOVIMIENTOS DEL BANCO</div>
-    <div class="report-table-wrap">
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>AÑO</th>
-            <th>FECHA</th>
-            <th>CÓDIGO</th>
-            <th>CUENTA / ESTUDIANTE</th>
-            <th>GRADO</th>
-            <th>TIPO</th>
-            <th>CONCEPTO</th>
-            <th>MONTO LDS</th>
-            <th>CAJERO(A)</th>
-            <th>OBSERVACIÓN</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-
-    <div class="report-footer">
-      <span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span>
-      <span>REPORTE COLECTIVO OFICIAL · ${escapar(anio)}</span>
-    </div>
+    <div class="report-table-wrap"><table class="report-table"><thead><tr><th>AÑO</th><th>FECHA</th><th>CÓDIGO</th><th>CUENTA / ESTUDIANTE</th><th>GRADO</th><th>TIPO</th><th>CONCEPTO</th><th>MONTO LDS</th><th>CAJERO(A)</th><th>OBSERVACIÓN</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="report-footer"><span>BANCO LDS 360 · I.E.P. LA SALLE DEL SUR</span><span>REPORTE COLECTIVO OFICIAL</span></div>
   `;
 
   w.document.querySelector(".report-sheet").innerHTML=contenido;
@@ -2093,14 +1212,8 @@ function toggleAndrewPanel(head){
   const panel=head.closest(".accordion-panel");
   const body=panel.querySelector(".accordion-body");
   const abrir=!panel.classList.contains("is-open");
-  document.querySelectorAll(".accordion-panel").forEach(p=>{
-    p.classList.remove("is-open");
-    p.querySelector(".accordion-body").hidden=true;
-  });
-  if(abrir){
-    panel.classList.add("is-open");
-    body.hidden=false;
-  }
+  document.querySelectorAll(".accordion-panel").forEach(p=>{ p.classList.remove("is-open"); p.querySelector(".accordion-body").hidden=true; });
+  if(abrir){ panel.classList.add("is-open"); body.hidden=false; }
 }
 
 function transferirAMise(){
@@ -2110,33 +1223,11 @@ function transferirAMise(){
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"EGRESO",categoria:"TRANSFERENCIA_CAJA_MISE",concepto:document.getElementById("conceptoTransferencia").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsTransferencia").value},function(r){
     if(r&&r.ok){
       mostrarMensaje("mensajeTransferencia","TRANSFERENCIA REGISTRADA.","ok");
-      notificarMovimientoAndrew({
-        tipo:"EGRESO",
-        operacion:document.getElementById("conceptoTransferencia").value,
-        monto:monto,
-        destino:MISES[codigo] || codigo,
-        observacion:document.getElementById("obsTransferencia").value
-      });
-      const movimientoLocal={
-        anio:document.getElementById("anio").value,
-        fechaTexto:new Date().toLocaleString("es-PE"),
-        codigo:codigo,
-        estudiante:NOMBRE_ANDREW,
-        grado:"CAJA GENERAL",
-        tipo:"EGRESO",
-        concepto:document.getElementById("conceptoTransferencia").value,
-        monto:monto,
-        responsable:NOMBRE_ANDREW,
-        observacion:document.getElementById("obsTransferencia").value,
-        categoria:"TRANSFERENCIA_CAJA_MISE",
-        estado:"ACTIVO"
-      };
-      actualizarVistaTrasMovimientoAndrew(movimientoLocal);
+      notificarMovimientoAndrew({tipo:"EGRESO",operacion:document.getElementById("conceptoTransferencia").value,monto:monto,destino:MISES[codigo]||codigo,observacion:document.getElementById("obsTransferencia").value});
       document.getElementById("montoTransferencia").value="";
       document.getElementById("obsTransferencia").value="";
       sincronizarAndrewEnSegundoPlano();
-    }
-    else {
+    }else{
       mostrarMensaje("mensajeTransferencia",r?.mensaje||"ERROR.","error");
       sonidoAndrew("error");
       hablarAndrew((r&&r.mensaje)||"No se pudo registrar la transferencia.");
@@ -2151,33 +1242,11 @@ function recibirDevolucion(){
   llamarAPI({accion:"registrarMovimiento",codigo,anio:document.getElementById("anio").value,tipo:"INGRESO",categoria:"DEVOLUCION_CAJA_GENERAL",concepto:document.getElementById("conceptoDevolucion").value,monto,responsable:NOMBRE_ANDREW,responsableClave:CLAVE_ANDREW,observacion:document.getElementById("obsDevolucion").value},function(r){
     if(r&&r.ok){
       mostrarMensaje("mensajeDevolucion","DEVOLUCIÓN REGISTRADA.","ok");
-      notificarMovimientoAndrew({
-        tipo:"INGRESO",
-        operacion:document.getElementById("conceptoDevolucion").value,
-        monto:monto,
-        destino:MISES[codigo] || codigo,
-        observacion:document.getElementById("obsDevolucion").value
-      });
-      const movimientoLocal={
-        anio:document.getElementById("anio").value,
-        fechaTexto:new Date().toLocaleString("es-PE"),
-        codigo:codigo,
-        estudiante:NOMBRE_ANDREW,
-        grado:"CAJA GENERAL",
-        tipo:"INGRESO",
-        concepto:document.getElementById("conceptoDevolucion").value,
-        monto:monto,
-        responsable:NOMBRE_ANDREW,
-        observacion:document.getElementById("obsDevolucion").value,
-        categoria:"DEVOLUCION_CAJA_GENERAL",
-        estado:"ACTIVO"
-      };
-      actualizarVistaTrasMovimientoAndrew(movimientoLocal);
+      notificarMovimientoAndrew({tipo:"INGRESO",operacion:document.getElementById("conceptoDevolucion").value,monto:monto,destino:MISES[codigo]||codigo,observacion:document.getElementById("obsDevolucion").value});
       document.getElementById("montoDevolucion").value="";
       document.getElementById("obsDevolucion").value="";
       sincronizarAndrewEnSegundoPlano();
-    }
-    else {
+    }else{
       mostrarMensaje("mensajeDevolucion",r?.mensaje||"ERROR.","error");
       sonidoAndrew("error");
       hablarAndrew((r&&r.mensaje)||"No se pudo registrar la devolución.");
@@ -2188,61 +1257,41 @@ function recibirDevolucion(){
 function consultarCuenta(){
   const codigo=document.getElementById("codigoConsulta").value.trim().toUpperCase();
   const anio=document.getElementById("anio").value;
-  if(!codigo){
-    mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error");
-    sonidoAndrew("error");
-    hablarAndrew("Ingresa un código de cuenta.");
-    return;
-  }
+  if(!codigo){ mostrarMensaje("resultadoConsulta","INGRESA UN CÓDIGO.","error"); sonidoAndrew("error"); hablarAndrew("Ingresa un código de cuenta."); return; }
   mostrarMensaje("resultadoConsulta","CONSULTANDO...","ok");
-  sonidoAndrew("click");
-  hablarAndrew("Consultando la cuenta seleccionada.");
+  sonidoAndrew("click"); hablarAndrew("Consultando la cuenta seleccionada.");
   llamarAPI({accion:"estudiante",codigo,anio},function(r){
     if(!r||!r.ok){
       mostrarMensaje("resultadoConsulta",(r&&r.mensaje)||"NO ENCONTRADO.","error");
-      sonidoAndrew("error");
-      hablarAndrew((r&&r.mensaje)||"Cuenta no encontrada.");
+      sonidoAndrew("error"); hablarAndrew((r&&r.mensaje)||"Cuenta no encontrada.");
       return;
     }
-    const c=r.cuenta||{};
-    const e=r.estudiante||{};
-    mostrarMensaje("resultadoConsulta",(e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual)+" · MOVIMIENTOS: "+Number(c.movimientos||0),"ok");
-    sonidoAndrew("ok");
-    hablarAndrew((e.nombreCompleto||e.nombre||codigo)+". Saldo actual: "+formato(c.saldoActual)+".");
+    const c=r.cuenta||{}; const e=r.estudiante||{};
+    mostrarMensaje("resultadoConsulta",(e.nombreCompleto||e.nombre||codigo)+" · SALDO: "+formato(c.saldoActual),"ok");
+    sonidoAndrew("ok"); hablarAndrew((e.nombreCompleto||e.nombre||codigo)+". Saldo actual: "+formato(c.saldoActual)+".");
   });
 }
 
 function renderListaAlumnosRapida(movimientos){
   const tbody=document.getElementById("listaAlumnosRapida");
   if(!tbody) return;
-
   const mapa={};
   (Array.isArray(movimientos)?movimientos:[]).forEach(m=>{
     const codigo=String(m?.codigo||m?.codigoQR||"").trim().toUpperCase();
     if(!codigo.startsWith("LDS-EST-")) return;
     if(String(m?.estado||"ACTIVO").trim().toUpperCase()==="ANULADO") return;
-
     const nombre=String(m?.estudiante||m?.nombreCompleto||"").trim();
     const grado=String(m?.grado||"").trim();
-    if(!mapa[codigo]){
-      mapa[codigo]={codigo,nombre,grado};
-    }else{
+    if(!mapa[codigo]){ mapa[codigo]={codigo,nombre,grado}; }
+    else{
       if(!mapa[codigo].nombre && nombre) mapa[codigo].nombre=nombre;
       if(!mapa[codigo].grado && grado) mapa[codigo].grado=grado;
     }
   });
-
-  const alumnos=Object.values(mapa).sort((a,b)=>
-    a.codigo.localeCompare(b.codigo,undefined,{numeric:true})
-  );
-
-  if(!alumnos.length){
-    tbody.innerHTML='<tr><td colspan="6" class="consulta-vacia">NO HAY ALUMNOS CON MOVIMIENTOS EN EL AÑO SELECCIONADO.</td></tr>';
-    return;
-  }
-
+  const alumnos=Object.values(mapa).sort((a,b)=>a.codigo.localeCompare(b.codigo,undefined,{numeric:true}));
+  if(!alumnos.length){ tbody.innerHTML='<tr><td colspan="6" class="consulta-vacia">NO HAY ALUMNOS REGISTRADOS.</td></tr>'; return; }
   tbody.innerHTML=alumnos.map((a,i)=>{
-    const saldo=calcularSaldoCuentaAndrew(movimientos,a.codigo);
+    const saldo=saldosMisesAndrewActuales[a.codigo]||0;
     const busqueda=escapar((a.codigo+" "+a.nombre+" "+a.grado).toUpperCase());
     return `<tr data-consulta-search="${busqueda}">
       <td>${i+1}</td>
@@ -2268,13 +1317,8 @@ function renderListaAlumnosRapida(movimientos){
 
 function seleccionarAlumnoRapido(codigo){
   const input=document.getElementById("codigoConsulta");
-  if(input){
-    input.value=String(codigo||"").trim().toUpperCase();
-    input.focus();
-  }
-  sonidoAndrew("click");
-  hablarAndrew("Consultando estudiante.");
-  consultarCuenta();
+  if(input){ input.value=String(codigo||"").trim().toUpperCase(); input.focus(); }
+  sonidoAndrew("click"); hablarAndrew("Consultando estudiante."); consultarCuenta();
 }
 
 document.getElementById("anio").addEventListener("change",cargarTodo);
@@ -2290,43 +1334,6 @@ document.addEventListener("click",function(ev){
   else if(accion==="imprimir-individual") imprimirReporteIndividual();
   else if(accion==="imprimir-colectivo") imprimirReporteColectivo();
 });
-
-document.addEventListener("click",function(ev){
-  const b=ev.target.closest("#andrewApp button, #andrewApp .accordion-head");
-  if(!b) return;
-
-  sonidoAndrew("click");
-
-  let texto="";
-  if(b.matches(".accordion-head")){
-    const titulo=b.querySelector("h3")?.textContent?.trim() || "";
-    if(/TRANSFERIR FONDO/i.test(titulo)){
-      texto="Transferir fondo a una Miss. Presiona para abrir las opciones de transferencia.";
-    }else if(/DEVOLUCIÓN/i.test(titulo)){
-      texto="Recibir devolución de una Miss. Presiona para abrir las opciones de devolución.";
-    }else if(/CONSULTAR CUENTA/i.test(titulo)){
-      texto="Consultar cuenta. Presiona para abrir la consulta.";
-    }
-  }else if(/ACTUALIZAR/i.test(b.textContent)){
-    texto="Actualizando la Caja General y los saldos del Banco LDS 360.";
-  }else if(/REPORTES/i.test(b.textContent)){
-    texto="Reportes. Selecciona el reporte que deseas imprimir.";
-  }else if(/VER TODO EL BANCO/i.test(b.textContent)){
-    texto="Mostrando todos los movimientos del Banco LDS 360.";
-  }else if(/TRANSFERIR A MISS/i.test(b.textContent)){
-    texto="Procesando la transferencia a la Miss.";
-  }else if(/REGISTRAR DEVOLUCIÓN/i.test(b.textContent)){
-    texto="Procesando la devolución a la Caja General.";
-  }else if(/CONSULTAR/i.test(b.textContent)){
-    texto="Consultando la cuenta seleccionada.";
-  }else if(/CERRAR/i.test(b.textContent)){
-    texto="Cerrando la vista de movimientos generales.";
-  }
-
-  if(texto) hablarAndrew(texto);
-});
 </script>
-<div id="printAreaAndrew" class="print-area-andrew" aria-hidden="true"></div>
-
 </body>
 </html>
