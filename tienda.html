@@ -397,6 +397,53 @@ actualizarBotonMusica();
     window.setTimeout(reproducirSaludo, 250);
   }
 })();
+  <!-- ... Todo el contenido HTML previo de la tienda ... -->
+
+    <!-- AGREGA ESTE BLOQUE AL FINAL DEL ARCHIVO, ANTES DE </body> -->
+    <script>
+      let categoriaSeleccionada = null;
+
+      function mostrarCategoria(cat, btn) {
+        // Desactivar botones de categoría previos
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Actualizar la vista de la categoría
+        categoriaSeleccionada = cat;
+        const info = categorias[cat];
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('categoryView').style.display = 'block';
+        document.getElementById('categoryTitle').textContent = info.label;
+        document.getElementById('categoryIcon').textContent = info.icon;
+        
+        // Asignar imagen del catálogo según categoría
+        if (imagenes && imagenes[cat]) {
+          document.getElementById('productImage').src = imagenes[cat];
+        } else {
+          document.getElementById('productImage').src = 'assets/CATALOGO.png';
+        }
+      }
+
+      function volverCategorias() {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('categoryView').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
+
+      function abrirAmpliacion() {
+        const imgSrc = document.getElementById('productImage').src;
+        if (imgSrc) {
+          document.getElementById('modalImage').src = imgSrc;
+          document.getElementById('modal').classList.add('show');
+        }
+      }
+
+      function cerrarAmpliacion() {
+        document.getElementById('modal').classList.remove('show');
+      }
+    </script>
+  </body>
+</html>
 </script>
 </body>
 </html>
