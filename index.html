@@ -1,4 +1,6 @@
 ```
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -278,11 +280,13 @@ function confirmarCodigoManual() {
                 const hashClave = await sha256HexLDS360(
                     claveValor + "|" + (pre.salt || "")
                 );
+                const hashPin = await sha256HexLDS360(claveValor);
                 pedirJSONPLDS360(
                     {
                         accion: "LOGINALUMNO",
                         codigo: codigo,
-                        hashClave: hashClave
+                        hashClave: hashClave,
+                        hashPin: hashPin
                     },
                     function(res) {
                         if (res && res.ok === true) {
