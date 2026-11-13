@@ -266,7 +266,7 @@ function confirmarCodigoManual() {
             codigo: codigo
         },
         async function(pre) {
-            if (!pre || pre.ok !== true || !pre.salt) {
+            if (!pre || pre.ok !== true) {
                 alert(
                     (pre && pre.mensaje) ||
                     "Código de estudiante no encontrado."
@@ -276,13 +276,15 @@ function confirmarCodigoManual() {
             }
             try {
                 const hashClave = await sha256HexLDS360(
-                    claveValor + "|" + pre.salt
+                    claveValor + "|" + (pre.salt || "")
                 );
+                const hashPin = await sha256HexLDS360(claveValor);
                 pedirJSONPLDS360(
                     {
                         accion: "LOGINALUMNO",
                         codigo: codigo,
-                        hashClave: hashClave
+                        hashClave: hashClave,
+                        hashPin: hashPin
                     },
                     function(res) {
                         if (res && res.ok === true) {
